@@ -1,4 +1,4 @@
-﻿**Moduleregistret** är en webbplats för underhåll av data om
+﻿**Modulregistret** är en webbplats för underhåll av data om
 modelljärnvägsmoduler i vilken skala som helst.
 Detta är en webbplats endast för inbjudna användare.
 #### Existerande användare?
