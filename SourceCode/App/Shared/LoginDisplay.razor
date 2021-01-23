@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@using ModulesRegistry.Services.Extensions
+<AuthorizeView>
+    <Authorized>
+        @Localizer["SignedInAs"] @context.User.Name()
+        <a href="MicrosoftIdentity/Account/SignOut">@Localizer["LogOut"]</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="MicrosoftIdentity/Account/SignIn">@Localizer["LogIn"]</a>
+    </NotAuthorized>
+</AuthorizeView>

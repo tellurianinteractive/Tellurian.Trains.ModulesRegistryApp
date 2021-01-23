@@ -1,0 +1,70 @@
+﻿@page "/Persons/Edit/{id:int}"
+@attribute [Authorize(Policy = "Admin")]
+@inject IStringLocalizer<App> Localizer
+@inject IPersonService PersonService
+
+<h1>@Localizer["EditPerson"]</h1>
+
+@if (Person is null)
+{
+
+}
+else
+{
+    <EditForm Model="@Person">
+        <FluentValidationValidator />
+        <ValidationSummary />
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="firstname">@Localizer["FirstName"]</label>
+                <InputText Class="form-control" id="firstname" @bind-Value="@Person.FirstName" />
+                <ValidationMessage For="@(() => Person.FirstName)" />
+            </div>
+            <div class="form-group">
+                <label for="middlename">@Localizer["MiddleName"]</label>
+                <InputText Class="form-control" id="middlename" @bind-Value="@Person.MiddleName" />
+                <ValidationMessage For="@(() => Person.MiddleName)" />
+            </div>
+            <div class="form-group">
+                <label for="lastName">@Localizer["LastName"]</label>
+                <InputText Class="form-control" id="lastName" @bind-Value="@Person.LastName" />
+                <ValidationMessage For="@(() => Person.LastName)" />
+            </div>
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="cityname">@Localizer["CityName"]</label>
+                <InputText Class="form-control" id="lastName" @bind-Value="@Person.CityName" />
+                <ValidationMessage For="@(() => Person.CityName)" />
+            </div>
+            <div class="form-group">
+                <label for="countryid">@Localizer["CityName"]</label>
+                <InputSelect Class="form-control" id="countryid" TValue="int" @bind-Value="@Person.CountryId" >
+
+                </InputSelect>
+                <ValidationMessage For="@(() => Person.CountryId)" />
+            </div>
+
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="email">@Localizer["Email"]</label>
+                <InputText Class="form-control" id="email" @bind-Value="@Person.EmailAddresses" />
+                <ValidationMessage For="@(() => Person.EmailAddresses)" />
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+    </EditForm>
+}
+@code {
+    [Parameter] public int? Id { get; set; }
+    private Person? Person;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (Id is null || Id == 0) Person = new Person();
+        else Person = await PersonService.FindAsync(Id.Value);
+        //StateHasChanged();
+    }
+}

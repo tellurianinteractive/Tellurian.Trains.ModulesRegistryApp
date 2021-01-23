@@ -1,0 +1,51 @@
+﻿@page "/Persons/Index"
+@attribute [Authorize(Policy = "Admin")]
+@inject IStringLocalizer<App> Localizer
+@inject IPersonService PersonService
+
+
+<h1>@Localizer["Users"]</h1>
+@if (People is null)
+{
+    @Localizer["Loading data. Please wait..."]
+}
+else
+{
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>@Localizer["FirstName"]</th>
+                <th>@Localizer["LastName"]</th>
+                <th>@Localizer["Email"]</th>
+                <th>@Localizer["City"]</th>
+                <th>@Localizer["IsUser"]</th>
+                <th>@Localizer["Action"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in People)
+            {
+            <tr>
+                <td>@person.FirstName</td>
+                <td>@person.LastName</td>
+                <td>@person.EmailAddresses</td>
+                <td>@person.CityName</td>
+                <td>@((person.UserId > 0).AsYesNo())</td>
+                <td><a class="btn btn-sm btn-secondary" href="persons/edit/@person.Id">@Localizer["Edit"]</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    private IEnumerable<Person>? People;
+
+    protected async override Task OnInitializedAsync()
+    {
+        People = await PersonService.GetAllAsync(1);
+    }
+
+}

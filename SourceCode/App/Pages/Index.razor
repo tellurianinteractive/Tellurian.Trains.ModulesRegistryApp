@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject IStringLocalizer<App> Localizer
+@using System.Security.Claims
+
+<AuthorizeView Policy="User">
+    <Authorized>
+        <h1>@Localizer["Welcome"] @User?.GivenName()</h1>
+        <ContentView ContentName="HomeUser"></ContentView>
+    </Authorized>
+    <Authorizing>
+        <h1>@Localizer["Welcome"]</h1>
+        @Localizer["AuthenticationInProgress"]
+    </Authorizing>
+    <NotAuthorized>
+        <h1>@Localizer["Welcome"]</h1>
+        @if (User?.Identity?.IsAuthenticated == true)
+        {
+            <ContentView ContentName="HomeNoUser"></ContentView>
+        }
+        else
+        {
+            <ContentView ContentName="HomeNotAuthorized"></ContentView>
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    private ClaimsPrincipal? User;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        User = await authenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+}

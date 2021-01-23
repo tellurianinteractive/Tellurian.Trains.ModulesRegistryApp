@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/TellurianTrains",
+      "type": "secrets.keyVault",
+      "connectionId": "ConnectionStrings--TimetablePlanningDatabase",
+      "secretStore": "AzureAppSettings"
+    },
+    "signalr1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/ModuleRegistry",
+      "type": "signalr.azure",
+      "connectionId": "Azure__SignalR__ConnectionString",
+      "secretStore": "AzureKeyVault"
+    },
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/telluriantrains/databases/Tellurian.Trains.Database",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings--TimetablePlanningDatabase",
+      "secretStore": "AzureKeyVault"
+    }
+  }
+}
