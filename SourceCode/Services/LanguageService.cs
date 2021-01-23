@@ -15,7 +15,7 @@ namespace ModulesRegistry.Services
              new Dictionary<Language, CultureInfo>() {
                  { Language.English, new CultureInfo("en") },
                  { Language.Swedish, new CultureInfo("sv") },
-                 //{ Language.Danish, new CultureInfo("da") },
+                 { Language.Danish, new CultureInfo("da") }
                  //{ Language.Norwegian, new CultureInfo("no") },
                  //{ Language.German, new CultureInfo("de") },
                  //{ Language.Polish, new CultureInfo("pl") },

@@ -20,6 +20,7 @@ using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 
 namespace ModulesRegistry
 {
@@ -34,6 +35,10 @@ namespace ModulesRegistry
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddRequestLocalization(options =>
+                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray()));
+
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
             services.AddControllersWithViews()
@@ -44,9 +49,6 @@ namespace ModulesRegistry
                 options.AddPolicy("User", policy => policy.RequireClaim("User"));
             });
 
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddRequestLocalization(options =>
-            options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray()));
             services.AddAuthorization(options =>
             {
                 // By default, all incoming requests will be authorized according to the default policy
@@ -78,16 +80,18 @@ namespace ModulesRegistry
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseRequestLocalization();
-
+            app.UseRequestLocalization(options =>
+            {
+                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                options.AddSupportedUICultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultCulture);
+                options.FallBackToParentCultures = true;
+            });
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

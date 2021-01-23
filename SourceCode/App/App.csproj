@@ -12,6 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Content\Markdown\HomeNotAuthorized.da.md" />
+    <None Remove="Content\Markdown\HomeNotAuthorized.sv.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\Markdown\HomeNotAuthorized.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Markdown\HomeNotAuthorized.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Markdown\HomeNotAuthorized.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -39,6 +50,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Content\Markdown\HomeNoUser.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HomeNoUser.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HomeUser.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HomeUser.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shared\MainLayout.razor.css" CssScope="MainLayout" />
     <None Update="Shared\NavMenu.razor.css" CssScope="NavMenu" />
   </ItemGroup>

@@ -8,6 +8,10 @@
 
     <div class="main">
         <div class="top-row px-4 auth">
+            <div>
+                @System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName  : @LanguageService.CurrentCulture.TwoLetterISOLanguageName
+
+            </div>
             <LoginDisplay />
             <NavLink class="nav-link" href="Contact">
                 @Localizer["Contact"]

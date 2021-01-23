@@ -177,4 +177,7 @@
   <data name="Contact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Moduler</value>
+  </data>
 </root>
