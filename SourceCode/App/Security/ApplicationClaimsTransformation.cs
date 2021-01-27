@@ -47,12 +47,12 @@ namespace ModulesRegistry.Security
         {
             var result = new List<Claim>(20)
             {
-                Claim("User", $"{user.Id}")
+                Claim(AppClaimTypes.UserId, user.Id)
             };
             AddGlobalAdministratorClaim(user, result);
             AddCookieConsentTimeClaim(user, result);
             var person = await PersonService.GetByAsync(user.Id);
-            AddPersonalClaims(result, person); return result;
+            AddPersonalClaims(user, person, result); return result;
 
             static void AddCookieConsentTimeClaim(User user, List<Claim> result) =>
                 result.Add(CookieConsentTimeClaim(user));
@@ -63,20 +63,26 @@ namespace ModulesRegistry.Security
 
             static void AddGlobalAdministratorClaim(User user, List<Claim> result)
             {
-                if (user.IsGlobalAdministrator) result.Add(Claim("Administrator", "Global"));
+                if (user.IsGlobalAdministrator) result.Add(Claim(AppClaimTypes.GlobalAdministrator, true));
             }
 
-            static void AddPersonalClaims(List<Claim> result, Person? person)
+            static void AddPersonalClaims(User user, Person? person, List<Claim> result)
             {
                 if (person is not null)
                 {
-                    result.Add(Claim("Person", $"{person.Id}"));
+                    result.Add(Claim(AppClaimTypes.PersonId, person.Id));
                     result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
                     result.Add(Claim(ClaimTypes.Surname, person.LastName));
                     result.Add(Claim(ClaimTypes.Email, person.EmailAddresses));
+                    if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, person.CountryId));
                 }
             }
+
         }
-        private static Claim Claim(string type, string value) => new Claim(type, value, null, nameof(ModulesRegistry));
+        private static Claim Claim(string type, object value) =>
+            new Claim(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
+        private static Claim Claim(string type, string value) =>
+            new Claim(type, value, null, nameof(ModulesRegistry));
+
     }
 }

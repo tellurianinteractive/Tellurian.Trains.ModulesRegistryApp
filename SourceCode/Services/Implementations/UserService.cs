@@ -28,22 +28,6 @@ namespace ModulesRegistry.Services.Implementations
             return null;
         }
 
-        public async Task<IEnumerable<Claim>> GetUserClaimsAsync(User user)
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var result = new List<Claim>(20);
-            if (user.IsGlobalAdministrator) result.Add(Claim("Administrator", "Global"));
-            var person = await dbContext.People.Where(p => p.UserId == user.Id).SingleOrDefaultAsync();
-            if (person is not null)
-            {
-                result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
-                result.Add(Claim(ClaimTypes.Surname, person.LastName));
-                result.Add(Claim(ClaimTypes.Email, person.EmailAddresses));
-            }
-            return result;
-
-            static Claim Claim(string type, string value) => new Claim(type, value, null, nameof(ModulesRegistry));
-        }
 
         public async Task<User?> FindOrCreateAsync(string? objectId, string? emailAddress)
         {

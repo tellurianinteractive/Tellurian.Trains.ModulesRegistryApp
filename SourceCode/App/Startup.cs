@@ -21,6 +21,7 @@ using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
+using ModulesRegistry.Services.Extensions;
 
 namespace ModulesRegistry
 {
@@ -45,8 +46,8 @@ namespace ModulesRegistry
                 .AddMicrosoftIdentityUI();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireClaim("Administrator", "Global"));
-                options.AddPolicy("User", policy => policy.RequireClaim("User"));
+                options.AddPolicy(PolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.GlobalAdministrator, "True"));
+                options.AddPolicy(PolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId));
             });
 
             services.AddAuthorization(options =>
