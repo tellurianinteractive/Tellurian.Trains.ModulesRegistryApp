@@ -12,5 +12,7 @@ namespace ModulesRegistry.Services
         Task<IEnumerable<Person>> GetAllAsync(int inCountryId);
         Task<Person?> FindAsync(int id);
         Task<Person?> GetByAsync(int userId);
+        Task<(int Count, string Message, Person? Person)> SaveAsync(Person person);
+        Task<(int Count, string Message)> DeleteAsync(int id);
     }
 }

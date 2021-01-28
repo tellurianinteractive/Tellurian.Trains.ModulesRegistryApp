@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Deleted successfully.</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Delete failed!</value>
+  </data>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>May not be deleted.</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Nothing to delete.</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Save failed!</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

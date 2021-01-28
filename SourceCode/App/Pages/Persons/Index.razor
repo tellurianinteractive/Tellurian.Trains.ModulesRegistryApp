@@ -2,16 +2,31 @@
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
+@inject ICountryService CountryService
 
 
 <h1>@Localizer["Users"]</h1>
+@if (Items is not null)
+{
+    <div class="input-group col-md-3">
+        <select class="form-control " id="countryid" @bind="@CurrentCountryId" @onselect="OnSelectedCountry">
+            <option value="0">Select</option>
+            @foreach (var item in Items)
+            {
+                <option value="@item.Id">@item.Description</option>
+            }
+        </select>
+        <button disabled="@(CurrentCountryId == 0)" class="btn btn-primary" @onclick="OnSelectedCountry">Fetch</button>
+    </div>
+}
+
 @if (People is null)
 {
-    @Localizer["Loading data. Please wait..."]
+    @if (IsLoading)@Localizer["GettingData"];
 }
 else
 {
-    <table class="table table-responsive table-striped">
+    <table class="table table-striped table-responsive-sm">
         <thead>
             <tr>
                 <th>@Localizer["FirstName"]</th>
@@ -25,27 +40,53 @@ else
         <tbody>
             @foreach (var person in People)
             {
-            <tr>
-                <td>@person.FirstName</td>
-                <td>@person.LastName</td>
-                <td>@person.EmailAddresses</td>
-                <td>@person.CityName</td>
-                <td>@((person.UserId > 0).AsYesNo())</td>
-                <td><a class="btn btn-sm btn-secondary" href="persons/edit/@person.Id">@Localizer["Edit"]</a></td>
-            </tr>
+                <tr>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                    <td>@person.EmailAddresses</td>
+                    <td>@person.CityName</td>
+                    <td style="text-align: center">@((person.UserId > 0).AsYesNo())</td>
+                    <td style="white-space: nowrap !important;">
+                        <a class="btn btn-sm btn-secondary" href="persons/edit/@person.Id">@Localizer["Edit"]</a>
+                        @if (person.User is null)
+                        {
+                            <a class="btn btn-sm btn-warning" href="persons/delete/@person.Id">@Localizer["Delete"]</a>
+                        }
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
-
 }
 
-
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     private IEnumerable<Person>? People;
+    private IEnumerable<ListboxItem> Items = Array.Empty<ListboxItem>();
+    private int CurrentCountryId;
+    private bool IsLoading;
 
     protected async override Task OnInitializedAsync()
     {
-        People = await PersonService.GetAllAsync(1);
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Items = await CountryService.ListboxItemsAsync(principal);
+        if (Items.Count() == 1) CurrentCountryId = Items.First().Id;
+        await GetPersons();
     }
 
+    private async Task OnSelectedCountry(EventArgs e)
+    {
+        await GetPersons();
+    }
+
+    private async Task GetPersons()
+    {
+        if (CurrentCountryId > 0)
+        {
+            IsLoading = true;
+            StateHasChanged();
+            People = await PersonService.GetAllAsync(CurrentCountryId);
+            IsLoading = false;
+        }
+    }
 }

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import.Tests", "TestCode\Im
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,8 +52,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = SingleSheet
-		RESX_NeutralResourcesLanguage = en-GB
 		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
+		RESX_NeutralResourcesLanguage = en-GB
+		RESX_ExcelExportMode = SingleSheet
 	EndGlobalSection
 EndGlobal

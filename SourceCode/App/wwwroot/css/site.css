@@ -48,3 +48,33 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+
+/*.fixed-header {
+    width: 95%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}*/
+
+.fixed-header tbody {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    height: 600px;
+}
+
+.fixed-header thead tr {
+/*    display: block;
+*/}
+
+/*.fixed-header thead {
+    background: black;
+    color: #fff;
+}
+*/
+/*.fixed-header th,
+.fixed-header td {
+    padding: 2px;
+    
+}
+*/

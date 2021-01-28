@@ -55,8 +55,11 @@ namespace ModulesRegistry
                 // By default, all incoming requests will be authorized according to the default policy
                 options.FallbackPolicy = options.DefaultPolicy;
             });
-            services.AddDbContextFactory<ModulesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")));
+            services.AddDbContextFactory<ModulesDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"));
+            });
             services.AddScoped<IContentService, ContentService>();
+            services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();

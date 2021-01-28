@@ -42,5 +42,8 @@ namespace ModulesRegistry.Services.Extensions
             if (admin is null) return 0;
             return int.Parse(admin.Value, NumberStyles.Integer);
         }
+
+        public static bool IsGlobalAdministrator(this ClaimsPrincipal me) =>
+            me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
     }
 }

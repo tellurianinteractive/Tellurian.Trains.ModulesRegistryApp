@@ -1,0 +1,46 @@
+﻿@page "/Persons/Delete/{id:int}"
+@attribute [Authorize(Policy = "Admin")]
+@inject NavigationManager Navigation
+@inject IStringLocalizer<App> Localizer
+@inject IPersonService PersonService
+
+<h1>@Localizer["Delete"]?</h1>
+<ConfirmationMessage ResourceKey="@Message"/>
+@if (Person is null)
+{
+
+}
+else
+{
+<div>
+    @Person.FirstName @Person.LastName, @Person.CityName
+</div>
+}
+
+<button class="btn btn-danger" @onclick="OnDelete">@Localizer["Delete"]</button>
+@code {
+    [Parameter] public int? Id { get; set; }
+    private Person? Person;
+    private string? Message;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (Id.IsNotSet()) return;
+        Person = await PersonService.FindAsync(Id.Value);
+    }
+
+
+    private async Task OnDelete()
+    {
+        if (Id.IsNotSet()) return;
+        var result = await PersonService.DeleteAsync(Id.Value);
+        Message = result.Message;
+        StateHasChanged();
+        if (result.Count > 0)
+        {
+            await Task.Delay(3000);
+            Navigation.NavigateTo("/Persons/Index");
+        }
+
+    }
+}

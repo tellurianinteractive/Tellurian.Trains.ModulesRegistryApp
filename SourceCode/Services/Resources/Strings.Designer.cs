@@ -61,11 +61,65 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deleted successfully..
+        /// </summary>
+        internal static string DeletedSuccessfully {
+            get {
+                return ResourceManager.GetString("DeletedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete failed!.
+        /// </summary>
+        internal static string DeleteFailed {
+            get {
+                return ResourceManager.GetString("DeleteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to May not be deleted..
+        /// </summary>
+        internal static string MayNotBeDeleted {
+            get {
+                return ResourceManager.GetString("MayNotBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to delete..
+        /// </summary>
+        internal static string NothingToDelete {
+            get {
+                return ResourceManager.GetString("NothingToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved..
+        /// </summary>
+        internal static string Saved {
+            get {
+                return ResourceManager.GetString("Saved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed!.
+        /// </summary>
+        internal static string SaveFailed {
+            get {
+                return ResourceManager.GetString("SaveFailed", resourceCulture);
             }
         }
         

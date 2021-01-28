@@ -123,4 +123,22 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>Må ikke slettes.</value>
+  </data>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Slettet.</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Sletning mislykkedes!</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Intet at slette.</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Gemt.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Lagring mislykkedes!</value>
+  </data>
 </root>

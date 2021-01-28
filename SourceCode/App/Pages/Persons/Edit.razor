@@ -2,16 +2,17 @@
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
+@inject ICountryService CountryService
 
 <h1>@Localizer["EditPerson"]</h1>
-
+<ConfirmationMessage ResourceKey="@Message" />
 @if (Person is null)
 {
 
 }
 else
 {
-    <EditForm Model="@Person">
+    <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit">
         <FluentValidationValidator />
         <ValidationSummary />
         <div class="input-group input-group-sm">
@@ -38,33 +39,61 @@ else
                 <ValidationMessage For="@(() => Person.CityName)" />
             </div>
             <div class="form-group">
-                <label for="countryid">@Localizer["CityName"]</label>
-                <InputSelect Class="form-control" id="countryid" TValue="int" @bind-Value="@Person.CountryId" >
-
+                <label for="countryid">@Localizer["Country"]</label>
+                <InputSelect Class="form-control" id="countryid" TValue="int" @bind-Value="@Person.CountryId">
+                    <option value="0">@Localizer["SelectCountry"]</option>
+                    @if (CountriesItems is not null)
+                    {
+                        foreach (var item in CountriesItems)
+                        {
+                            <option value="@item.Id">@item.Description</option>
+                        }
+                    }
                 </InputSelect>
                 <ValidationMessage For="@(() => Person.CountryId)" />
             </div>
 
         </div>
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-lg">
             <div class="form-group">
-                <label for="email">@Localizer["Email"]</label>
+                <label for="email">@Localizer[nameof(Person.EmailAddresses)]</label>
                 <InputText Class="form-control" id="email" @bind-Value="@Person.EmailAddresses" />
                 <ValidationMessage For="@(() => Person.EmailAddresses)" />
             </div>
-
         </div>
         <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
     </EditForm>
 }
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
     [Parameter] public int? Id { get; set; }
     private Person? Person;
+    private IEnumerable<ListboxItem>? CountriesItems;
+    private string Message = string.Empty;
 
     protected async override Task OnParametersSetAsync()
     {
-        if (Id is null || Id == 0) Person = new Person();
-        else Person = await PersonService.FindAsync(Id.Value);
-        //StateHasChanged();
+        Reset();
+        CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+        Person = await GetOrCreatePersonAsync();
+    }
+
+    private async Task OnValidSumbit()
+    {
+        Reset();
+        if (Person is null) return;
+        var result = await PersonService.SaveAsync(Person);
+        Person = result.Person;
+        Message = result.Message;
+    }
+
+    private async Task<Person> GetOrCreatePersonAsync() =>
+        Id.IsNotSet() ? new Person() : await PersonService.FindAsync(Id.Value) ?? new Person();
+
+    private void Reset()
+    {
+        Message = string.Empty;
     }
 }

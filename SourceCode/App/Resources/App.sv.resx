@@ -120,9 +120,6 @@
   <data name="Home" xml:space="preserve">
     <value>Hem</value>
   </data>
-  <data name="L" xml:space="preserve">
-    <value>Moduler</value>
-  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Välkommen</value>
   </data>
@@ -139,9 +136,9 @@
     <value>Förnamn</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last name</value>
+    <value>Efernamn</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="EmailAddresses" xml:space="preserve">
     <value>E-post</value>
   </data>
   <data name="City" xml:space="preserve">
@@ -179,5 +176,14 @@
   </data>
   <data name="Modules" xml:space="preserve">
     <value>Moduler</value>
+  </data>
+  <data name="GettingData" xml:space="preserve">
+    <value>Hämtar data. Vänligen vänta...</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Radera</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Lägg till ny</value>
   </data>
 </root>

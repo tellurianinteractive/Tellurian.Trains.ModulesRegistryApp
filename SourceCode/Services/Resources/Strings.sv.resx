@@ -123,4 +123,22 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>Får inte tas bort.</value>
+  </data>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Raderat.</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Radering misslyckades!</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Inget att radera.</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Sparat.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Det gick inte att spara!</value>
+  </data>
 </root>

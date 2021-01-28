@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModulesInventory.Services;
 using ModulesRegistry.Data;
 using System;
 using System.Collections.Generic;

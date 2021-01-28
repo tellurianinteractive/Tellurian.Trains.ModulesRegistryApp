@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModulesInventory.Services
+namespace ModulesRegistry.Services
 {
     public record ListboxItem(int Id, string Description);
 }

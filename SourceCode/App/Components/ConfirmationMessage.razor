@@ -1,0 +1,28 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Text is not null || ResourceKey is not null)
+{
+    <div class="@CssClass">
+
+        @if (Text is not null)
+        {
+            @Text
+        }
+        else if (ResourceKey is not null)
+        {
+            @Localizer[ResourceKey]
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string? ResourceKey { get; set; }
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public string? CssClass { get; set; } = "alert alert-info";
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (Text is not null && Text.EndsWith('!')) CssClass = "alert alert-warning";
+        return Task.CompletedTask;
+    }
+}

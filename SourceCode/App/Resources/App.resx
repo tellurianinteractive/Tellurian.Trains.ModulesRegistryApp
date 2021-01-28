@@ -120,9 +120,6 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="L" xml:space="preserve">
-    <value>Modules</value>
-  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
@@ -144,7 +141,7 @@
   <data name="LastName" xml:space="preserve">
     <value>Last name</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="EmailAddresses" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="City" xml:space="preserve">
@@ -179,5 +176,14 @@
   </data>
   <data name="Modules" xml:space="preserve">
     <value>Modules</value>
+  </data>
+  <data name="GettingData" xml:space="preserve">
+    <value>Fetching data. Please wait...</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Add new</value>
   </data>
 </root>

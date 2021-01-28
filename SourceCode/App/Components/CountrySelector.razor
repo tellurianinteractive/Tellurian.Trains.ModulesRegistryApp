@@ -1,0 +1,34 @@
+﻿@*@inject ICountryService CountryService*@
+
+@if (Items is null || Items.Count() == 0)
+{
+}
+@*else if (Items.Count() == 1)
+{
+    @OnSelectedCountry.InvokeAsync(Items.First().Id)
+}*@
+else 
+{
+        <select Class="form-control" id="countryid">
+            <option value="0">Select Country</option>
+            @foreach (var item in Items)
+            {
+                <option onselect="@OnSelectedCountry.InvokeAsync(item.Id)" value="@item.Id">@item.Description</option>
+            }
+        </select>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public EventCallback<int> OnSelectedCountry { get; set; }
+
+    private IEnumerable<ListboxItem>? Items;
+    private int Id;
+    private ListboxItem Current = new ListboxItem(0, "Select");
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (Items is null)
+            Items = await Task.FromResult( new[] { new ListboxItem(1, "Sverige"), new ListboxItem(2, "Norge") });
+        // if (Items is null)             Items = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+    }
+}
