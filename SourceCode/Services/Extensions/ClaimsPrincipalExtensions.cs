@@ -36,12 +36,15 @@ namespace ModulesRegistry.Services.Extensions
         public static string? GivenName(this ClaimsPrincipal me) =>
             me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(ClaimTypes.GivenName, StringComparison.OrdinalIgnoreCase))?.Value;
 
-        public static int AdministersCountryId(this ClaimsPrincipal me)
+        public static int AdministersId(this ClaimsPrincipal me, string claimType)
         {
-            var admin = me.Claims.SingleOrDefault(c => c.Type.Equals(AppClaimTypes.CountryAdministrator));
+            var admin = me.Claims.SingleOrDefault(c => c.Type.Equals(claimType));
             if (admin is null) return 0;
             return int.Parse(admin.Value, NumberStyles.Integer);
         }
+
+        public static bool IsAuthorised(this ClaimsPrincipal principal, int id) =>
+            principal.IsGlobalAdministrator() || id == principal.AdministersId(AppClaimTypes.CountryAdministrator);
 
         public static bool IsGlobalAdministrator(this ClaimsPrincipal me) =>
             me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);

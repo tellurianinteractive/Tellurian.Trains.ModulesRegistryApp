@@ -61,6 +61,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Community.
+        /// </summary>
+        internal static string Community {
+            get {
+                return ResourceManager.GetString("Community", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleted successfully..
         /// </summary>
         internal static string DeletedSuccessfully {
@@ -93,6 +102,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-profit association.
+        /// </summary>
+        internal static string NonProfitAssociation {
+            get {
+                return ResourceManager.GetString("NonProfitAssociation", resourceCulture);
             }
         }
         

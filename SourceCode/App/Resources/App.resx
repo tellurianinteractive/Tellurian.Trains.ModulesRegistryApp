@@ -144,7 +144,7 @@
   <data name="EmailAddresses" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="City" xml:space="preserve">
+  <data name="CityName" xml:space="preserve">
     <value>City</value>
   </data>
   <data name="IsUser" xml:space="preserve">
@@ -185,5 +185,32 @@
   </data>
   <data name="AddNew" xml:space="preserve">
     <value>Add new</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Community</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Non-profit association</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
 </root>

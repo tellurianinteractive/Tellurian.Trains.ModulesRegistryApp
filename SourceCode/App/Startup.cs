@@ -62,6 +62,8 @@ namespace ModulesRegistry
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IGroupCategoryService, GroupCategoryService>();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 
             services.AddRazorPages(options =>

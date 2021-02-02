@@ -21,6 +21,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<ExternalStation> ExternalStations { get; set; }
         public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<Person> People { get; set; }
@@ -105,11 +106,13 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Group");
 
+                entity.Property(e => e.CityName).HasMaxLength(50);
+
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Purpose)
+                entity.Property(e => e.Category)
                     .IsRequired()
                     .HasMaxLength(20);
 
@@ -120,6 +123,22 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Group_Country");
+            });
+
+            modelBuilder.Entity<GroupMember>(entity =>
+            {
+                entity.ToTable("GroupMember");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.GroupMembers)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK_GroupMember_Group");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.GroupMembers)
+                    .HasForeignKey(d => d.PersonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupMember_Person");
             });
 
             modelBuilder.Entity<Module>(entity =>

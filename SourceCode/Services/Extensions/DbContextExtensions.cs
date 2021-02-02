@@ -12,5 +12,7 @@ namespace ModulesRegistry.Services.Extensions
     {
         public static EntityState GetState(this int id) => id > 0 ? EntityState.Modified : EntityState.Added;
        public static bool IsNotSet([NotNullWhen(false )] this int? me) => me is null || me <= 0;
+        public static bool IsSet([NotNullWhen(true)] this int? me) => me is not null && me > 0;
+
     }
 }

@@ -22,10 +22,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal is null) return Array.Empty<ListboxItem>();
             using var dbContext = Factory.CreateDbContext();
             var countries = await dbContext.Countries.ToListAsync();
-            return countries.Where(c => IsAuthorised(principal, c)).Select(c => new ListboxItem(c.Id, c.EnglishName)).ToList();
-        }
-
-        private static bool IsAuthorised(ClaimsPrincipal principal, Country c) => 
-            principal.IsGlobalAdministrator() || c.Id == principal.AdministersCountryId();
+            return countries.AsEnumerable().Where(c => principal.IsAuthorised(c.Id)).Select(c => new ListboxItem(c.Id, c.EnglishName)).ToList();
+        }       
     }
 }

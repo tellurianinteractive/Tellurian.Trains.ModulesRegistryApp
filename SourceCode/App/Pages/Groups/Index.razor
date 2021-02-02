@@ -1,0 +1,75 @@
+﻿@page "/Groups/Index"
+@attribute [Authorize(Policy = "Admin")]
+@inject IStringLocalizer<App> Localizer
+@inject IGroupService GroupService
+@inject ICountryService CountryService
+
+<h1>@Localizer["Groups"]</h1>
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" />
+@if (Groups is null)
+{
+    @if (IsLoading)@Localizer["GettingData"];
+}
+else
+{
+    <a class="btn btn-sm btn-secondary" href="groups/edit/0">@Localizer["Add"]</a>
+    <table class="table table-striped table-responsive-sm">
+        <thead>
+            <tr>
+                <th>@Localizer["ShortName"]</th>
+                <th>@Localizer["FullName"]</th>
+                <th>@Localizer["CityName"]</th>
+                <th>@Localizer["Category"]</th>
+                <th>@Localizer["Action"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Groups)
+            {
+            <tr>
+                <td>@item.ShortName</td>
+                <td>@item.FullName</td>
+                <td>@item.CityName</td>
+                <td>@Localizer[item.Category]</td>
+                <td style="white-space: nowrap !important;">
+                    <a class="btn btn-sm btn-primary" href="groups/edit/@item.Id">@Localizer["Edit"]</a>
+                    <a class="btn btn-sm btn-info" href="groups/members/@item.Id">@Localizer["Members"]</a>
+                    <a class="btn btn-sm btn-warning" href="groups/delete/@item.Id">@Localizer["Delete"]</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    private IEnumerable<Group>? Groups;
+    private IEnumerable<ListboxItem>? Countries;
+    private bool IsLoading;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(principal);
+        if (Countries.Count() == 1) await GetGroups(Countries.First().Id);
+    }
+
+
+    private async Task OnSelectedCountry(int id)
+    {
+        await GetGroups(id);
+    }
+
+    private async Task GetGroups(int id)
+    {
+        if (id > 0)
+        {
+            IsLoading = true;
+            StateHasChanged();
+            Groups = await GroupService.GetAllInCountryAsync(id);
+            IsLoading = false;
+        }
+    }
+
+
+}

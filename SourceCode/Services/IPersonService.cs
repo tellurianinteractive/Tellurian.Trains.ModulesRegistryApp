@@ -9,7 +9,7 @@ namespace ModulesRegistry.Services
 {
     public interface IPersonService
     {
-        Task<IEnumerable<Person>> GetAllAsync(int inCountryId);
+        Task<IEnumerable<Person>> GetAllInCountryAsync(int inCountryId);
         Task<Person?> FindAsync(int id);
         Task<Person?> GetByAsync(int userId);
         Task<(int Count, string Message, Person? Person)> SaveAsync(Person person);

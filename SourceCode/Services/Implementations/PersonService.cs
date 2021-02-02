@@ -16,7 +16,7 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
-        public async Task<IEnumerable<Person>> GetAllAsync(int inCountryId)
+        public async Task<IEnumerable<Person>> GetAllInCountryAsync(int inCountryId)
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People

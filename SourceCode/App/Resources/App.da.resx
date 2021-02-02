@@ -186,4 +186,31 @@
   <data name="AddNew" xml:space="preserve">
     <value>Tilføj ny</value>
   </data>
+  <data name="CityName" xml:space="preserve">
+    <value>Bynavn</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Non-profit organisation</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Forkortelse</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Grupper</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Fulde navn</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Fællesskab</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Land</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
 </root>

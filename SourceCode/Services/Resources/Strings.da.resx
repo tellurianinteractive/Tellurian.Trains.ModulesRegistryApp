@@ -141,4 +141,10 @@
   <data name="SaveFailed" xml:space="preserve">
     <value>Lagring mislykkedes!</value>
   </data>
+  <data name="Community" xml:space="preserve">
+    <value>Fællesskab</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Non-profit organisation</value>
+  </data>
 </root>

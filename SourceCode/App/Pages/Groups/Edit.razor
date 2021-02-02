@@ -1,0 +1,104 @@
+﻿@page "/Groups/Edit/{id:int}"
+@attribute [Authorize(Policy = "Admin")]
+@inject IStringLocalizer<App> Localizer
+@inject IGroupService GroupService
+@inject ICountryService CountryService
+@inject IGroupCategoryService GroupCategoryService
+
+<h1>@Localizer.AddOrEdit("Group", Id == 0) </h1>
+<ConfirmationMessage ResourceKey="@Message" />
+@if (Group is null)
+{
+
+}
+else
+{
+<EditForm Model="@Group" OnValidSubmit="@OnValidSumbit">
+    <FluentValidationValidator />
+    <ValidationSummary />
+    <div class="input-group">
+        <div class="form-group">
+            <label for="shortname">@Localizer["ShortName"]</label>
+            <InputText Class="form-control" id="shortname" @bind-Value="@Group.ShortName" />
+            <ValidationMessage For="@(() => Group.ShortName)" />
+        </div>
+        <div class="form-group">
+            <label for="fullname">@Localizer["FullName"]</label>
+            <InputText Class="form-control" id="fullname" @bind-Value="@Group.FullName" />
+            <ValidationMessage For="@(() => Group.FullName)" />
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="form-group">
+            <label for="cityname">@Localizer["CityName"]</label>
+            <InputText Class="form-control" id="lastName" @bind-Value="@Group.CityName" />
+            <ValidationMessage For="@(() => Group.CityName)" />
+        </div>
+        <div class="form-group">
+            <label for="countryid">@Localizer["Country"]</label>
+            <InputSelect Class="form-control" id="countryid" TValue="int" @bind-Value="@Group.CountryId">
+                <option value="0">@Localizer["SelectCountry"]</option>
+                @if (CountriesItems is not null)
+                {
+                    foreach (var item in CountriesItems)
+                    {
+                        <option value="@item.Id">@item.Description</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Group.Country)" />
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="form-group">
+            <label for="category">@Localizer["Category"]</label>
+            <InputSelect class="form-control w-25" id="category" TValue="string" @bind-Value="@Group.Category">
+                <option value="">@Localizer["Select"]</option>
+                @foreach (var item in GroupCategories ?? Array.Empty<(string, string)>())
+                {
+                    <option value="@item.Value">@item.Desciption</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Group.Category)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+</EditForm>
+}
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    [Parameter] public int? Id { get; set; }
+    private Group? Group;
+    private IEnumerable<ListboxItem>? CountriesItems;
+    private IEnumerable<(string Value, string Desciption)>? GroupCategories;
+    private string Message = string.Empty;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Reset();
+        GroupCategories = await GroupCategoryService.AllAsync();
+        CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+        Group = await GetOrCreateAsync();
+    }
+
+
+    private async Task OnValidSumbit()
+    {
+        Reset();
+        if (Group is null) return;
+        var result = await GroupService.SaveAsync(Group);
+        Group = result.Group;
+        Message = result.Message;
+    }
+
+    private async Task<Group> GetOrCreateAsync() =>
+        Id.IsSet() ? await GroupService.FindAsync(Id.Value) ?? new Group() : new Group();
+
+    private void Reset()
+    {
+        Message = string.Empty;
+    }
+}

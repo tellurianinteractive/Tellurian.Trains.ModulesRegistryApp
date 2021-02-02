@@ -9,6 +9,7 @@ namespace ModulesRegistry.Data
     {
         public Person()
         {
+            GroupMembers = new HashSet<GroupMember>();
             ModuleOwnerships = new HashSet<ModuleOwnership>();
         }
 
@@ -23,6 +24,7 @@ namespace ModulesRegistry.Data
 
         public virtual Country Country { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
         public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     }
 }

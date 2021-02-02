@@ -4,7 +4,7 @@
 @inject IPersonService PersonService
 @inject ICountryService CountryService
 
-<h1>@Localizer["EditPerson"]</h1>
+<h1>@Localizer.AddOrEdit("Person", Id == 0) </h1>
 <ConfirmationMessage ResourceKey="@Message" />
 @if (Person is null)
 {
@@ -52,7 +52,6 @@ else
                 </InputSelect>
                 <ValidationMessage For="@(() => Person.CountryId)" />
             </div>
-
         </div>
         <div class="input-group input-group-lg">
             <div class="form-group">
@@ -96,4 +95,5 @@ else
     {
         Message = string.Empty;
     }
+
 }

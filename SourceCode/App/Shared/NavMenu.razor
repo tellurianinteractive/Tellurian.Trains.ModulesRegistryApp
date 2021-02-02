@@ -24,7 +24,12 @@
         <AuthorizeView Policy="@PolicyNames.Admin">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Persons/Index">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span>@Localizer["Users"]
+                    <span class="oi oi-person" aria-hidden="true"></span>@Localizer["Users"]
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="Groups/Index">
+                    <span class="oi oi-people" aria-hidden="true"></span>@Localizer["Groups"]
                 </NavLink>
             </li>
         </AuthorizeView>
