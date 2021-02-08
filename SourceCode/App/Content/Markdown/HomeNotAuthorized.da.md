@@ -1,4 +1,6 @@
-﻿**Moduleregistret** er et sted til vedligeholdelse af data om
+﻿> **BEMÆRK! Hjemmesiden er under udvikling. I øjeblikket er det kun specielt inviterede testere, der kan bruge webstedet.**
+
+**Moduleregistret** er et sted til vedligeholdelse af data om
 model jernbanemoduler i enhver skala.
 Dette er kun et sted for inviterede brugere.
 #### Eksisterende bruger?

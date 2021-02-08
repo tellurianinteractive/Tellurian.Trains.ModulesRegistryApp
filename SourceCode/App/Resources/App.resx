@@ -213,4 +213,22 @@
   <data name="City" xml:space="preserve">
     <value>City</value>
   </data>
+  <data name="IsGroupAdministrator" xml:space="preserve">
+    <value>Is group admin</value>
+  </data>
+  <data name="IsDataAdministrator" xml:space="preserve">
+    <value>Is data admin</value>
+  </data>
+  <data name="MembersIn" xml:space="preserve">
+    <value>Members in</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddMemberIn" xml:space="preserve">
+    <value>Add member in</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Members</value>
+  </data>
 </root>

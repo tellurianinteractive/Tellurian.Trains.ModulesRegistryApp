@@ -1,6 +1,6 @@
 ﻿#### Syfte
 Denna applikation är avsedd för att hålla ett register över alla *modelljärnvägsmoduler*,
-inklusive alla detaljer som behövs för planering av layouter och scheman.
+inklusive alla detaljer som behövs för planering av layouter och tidtabeller.
 
 #### Avsedda användare
 Alla som är intresserade av att underhålla strukturerad data om *modelljärnvägsmoduler*.

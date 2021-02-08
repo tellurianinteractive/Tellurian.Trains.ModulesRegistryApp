@@ -10,7 +10,7 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status January 2021
+## Status February 2021
 A very light [first version](https://moduleregistry.azurewebsites.net/) is up an running inclucing the database.
 The purpose with this version is to verify than users can be invited and log in.
 The administrator functions is under development but not available for normal users.

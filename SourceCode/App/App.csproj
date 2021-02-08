@@ -5,28 +5,11 @@
     <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
     <AssemblyName>ModulesRegistry</AssemblyName>
     <RootNamespace>ModulesRegistry</RootNamespace>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Content\Markdown\HomeNotAuthorized.da.md" />
-    <None Remove="Content\Markdown\HomeNotAuthorized.sv.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Content\Markdown\HomeNotAuthorized.da.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Markdown\HomeNotAuthorized.sv.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Markdown\HomeNotAuthorized.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.2" />
@@ -50,48 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Content\Markdown\HomeNoUser.da.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeNoUser.sv.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeUser.da.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeUser.sv.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shared\MainLayout.razor.css" CssScope="MainLayout" />
-    <None Update="Shared\NavMenu.razor.css" CssScope="NavMenu" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Content\Markdown\About.da.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\About.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\About.sv.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\Contact.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeNotAuthorized.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeNoUser.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Markdown\HomeUser.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Update="Shared/MainLayout.razor.css" CssScope="MainLayout" />
+    <None Update="Shared/NavMenu.razor.css" CssScope="NavMenu" />
   </ItemGroup>
 
 </Project>

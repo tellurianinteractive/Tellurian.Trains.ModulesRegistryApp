@@ -136,7 +136,7 @@
     <value>Förnamn</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Efernamn</value>
+    <value>Efternamn</value>
   </data>
   <data name="EmailAddresses" xml:space="preserve">
     <value>E-post</value>
@@ -212,5 +212,23 @@
   </data>
   <data name="Country" xml:space="preserve">
     <value>Land</value>
+  </data>
+  <data name="IsGroupAdministrator" xml:space="preserve">
+    <value>Är grupp admin</value>
+  </data>
+  <data name="IsDataAdministrator" xml:space="preserve">
+    <value>Är data admin</value>
+  </data>
+  <data name="MembersIn" xml:space="preserve">
+    <value>Medlemmar i</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Lägg till</value>
+  </data>
+  <data name="AddMemberIn" xml:space="preserve">
+    <value>Lägg till medlem i</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Medlemmar</value>
   </data>
 </root>

@@ -1,0 +1,76 @@
+﻿@page "/Groups/{groupid:int}/AddMember/"
+@attribute [Authorize(Policy = "Admin")]
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+@inject IGroupService GroupService
+@inject IPersonService PersonService
+
+<h3>@Heading</h3>
+ 
+
+<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit">
+    <FluentValidationValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="personid">@Localizer["Person"]</label>
+        <InputSelect Class="form-control" id="personid" TValue="int" @bind-Value="@GroupMember.PersonId">
+            <option value="0">@Localizer["Select"]</option>
+            @if (Persons is not null)
+            {
+                foreach (var item in Persons)
+                {
+                    <option value="@item.Id">@item.Description</option>
+                }
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => GroupMember.Person)" />
+    </div>
+    <div class="form-group">
+        <label for="groupadmin">@Localizer["IsGroupAdministrator"]</label>
+        <InputCheckbox Class="form-check" id="groupadmin" @bind-Value="@GroupMember.IsGroupAdministrator"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="dataadmin">@Localizer["IsDataAdministrator"]</label>
+        <InputCheckbox Class="form-check" id="dataadmin" @bind-Value="@GroupMember.IsDataAdministrator"></InputCheckbox>
+    </div>
+    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+
+</EditForm>
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int? GroupId { get; set; }
+
+    private Group? Group;
+    private GroupMember GroupMember = new GroupMember();
+    private IEnumerable<ListboxItem>? Persons;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await RefreshData();
+    }
+
+    protected async Task RefreshData()
+    {
+        if (GroupId.IsSet())
+        {
+            Group = await GroupService.FindAsync(GroupId.Value);
+            if (Group is not null)
+            {
+                Persons = await PersonService.ListboxItemsAsync(Group.CountryId);
+                GroupMember.GroupId = Group.Id;
+            }
+            // TODO: Filter away persons that already is member in the group.
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        var result = await GroupService.AddMemberAsync(GroupMember);
+        if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
+    }
+
+    private string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
+
+}

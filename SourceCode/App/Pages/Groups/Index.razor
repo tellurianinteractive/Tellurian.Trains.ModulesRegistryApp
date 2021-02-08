@@ -32,9 +32,10 @@ else
                 <td>@item.CityName</td>
                 <td>@Localizer[item.Category]</td>
                 <td style="white-space: nowrap !important;">
-                    <a class="btn btn-sm btn-primary" href="groups/edit/@item.Id">@Localizer["Edit"]</a>
-                    <a class="btn btn-sm btn-info" href="groups/members/@item.Id">@Localizer["Members"]</a>
-                    <a class="btn btn-sm btn-warning" href="groups/delete/@item.Id">@Localizer["Delete"]</a>
+                    <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Members"]</a>
+                    <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Modules"]</a>
+                    <a class="btn btn-sm btn-primary" href="groups/@item.Id/edit">@Localizer["Edit"]</a>
+                    <a class="btn btn-sm btn-warning" href="groups/@item.Id/delete">@Localizer["Delete"]</a>
                 </td>
             </tr>
             }

@@ -16,6 +16,17 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
+        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int countryId)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var items = await dbContext.People
+                .Where(p => p.CountryId == countryId)
+                .ToListAsync();
+            return items
+                .Select(p => new ListboxItem(p.Id, p.FirstName + " " + p.LastName))
+                .OrderBy(li => li.Description)
+                .ToList();
+        }
         public async Task<IEnumerable<Person>> GetAllInCountryAsync(int inCountryId)
         {
             using var dbContext = Factory.CreateDbContext();

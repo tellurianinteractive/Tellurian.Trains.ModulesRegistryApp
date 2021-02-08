@@ -10,6 +10,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "SourceCode\Services\Services.csproj", "{6AD8E781-90D7-4F82-99AA-5930C7217971}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5941055C-D2E9-4640-A78B-C5B349AE6F84}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		RELEASENOTES.md = RELEASENOTES.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import.Tests", "TestCode\Import.Tests\Import.Tests.csproj", "{6F1B2610-39CD-45BE-890B-C1D66BD72B24}"
 EndProject

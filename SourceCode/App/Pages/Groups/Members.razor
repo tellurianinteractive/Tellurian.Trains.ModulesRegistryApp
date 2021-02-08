@@ -1,6 +1,57 @@
-﻿@page "/Groups/Members/{id:int}"
-<h3>Members</h3>
+﻿@page "/Groups/{groupid:int}/Members"
+@inject IStringLocalizer<App> Localizer
+@inject IGroupService GroupService
+@inject ICountryService CountryService
 
+<h3>@Heading</h3>
+@if (Group is null)
+{
+
+}
+else
+{
+    <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/addmember">@Localizer["Add"]</a>
+    <table class="table table-striped table-responsive-sm">
+        <thead>
+            <tr>
+                <th>@Localizer["FirstName"]</th>
+                <th>@Localizer["LastName"]</th>
+                <th>@Localizer["IsGroupAdministrator"]</th>
+                <th>@Localizer["IsDataAdministrator"]</th>
+                <th>@Localizer["Action"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Group.GroupMembers)
+            {
+                <tr>
+                    <td>@item.Person.FirstName</td>
+                    <td>@item.Person.LastName</td>
+                    <td>@item.IsGroupAdministrator.AsYesNo()</td>
+                    <td>@item.IsDataAdministrator.AsYesNo()</td>
+                    <td style="white-space: nowrap !important;">
+                        <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/editmember/@item.Id">@Localizer["Edit"]</a>
+                        <a class="btn btn-sm btn-warning" href="groups/@item.GroupId/deletemember/@item.Id">@Localizer["Delete"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int? GroupId { get; set; }
+
+    private Group? Group;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (GroupId.IsSet())
+        {
+            Group = await GroupService.FindAsync(GroupId.Value);
+        }
+    }
+
+    private string Heading => Localizer["MembersIn"] + " " + Group?.FullName;
 
 }

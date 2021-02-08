@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
     <AssemblyName>ModulesRegistry.Services.Tests</AssemblyName>
-
     <RootNamespace>ModulesRegistry.Services.Tests</RootNamespace>
+    <Version>0.1.2</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

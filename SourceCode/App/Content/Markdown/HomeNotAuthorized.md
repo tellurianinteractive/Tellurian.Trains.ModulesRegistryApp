@@ -1,4 +1,7 @@
-﻿The **Modules Registry** is a site for maintaining data about
+﻿> **NOTE! The website is under development. Currently, only specially invited testers can be allowed to use the site.**
+
+
+The **Modules Registry** is a site for maintaining data about
 model railway modules in any scale.
 This is a site only for invited users.
 #### Existing user?

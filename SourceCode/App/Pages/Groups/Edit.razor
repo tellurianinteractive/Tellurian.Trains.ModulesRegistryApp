@@ -1,4 +1,4 @@
-﻿@page "/Groups/Edit/{id:int}"
+﻿@page "/Groups/{id:int}/Edit"
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
@@ -67,10 +67,9 @@ else
 }
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
+
     private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
     private IEnumerable<(string Value, string Desciption)>? GroupCategories;
