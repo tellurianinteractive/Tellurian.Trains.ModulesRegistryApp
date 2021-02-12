@@ -147,4 +147,19 @@
   <data name="NonProfitAssociation" xml:space="preserve">
     <value>Ideell förening</value>
   </data>
+  <data name="Sweden" xml:space="preserve">
+    <value>Sverige</value>
+  </data>
+  <data name="Denmark" xml:space="preserve">
+    <value>Danmark</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Tyskland</value>
+  </data>
+  <data name="Norway" xml:space="preserve">
+    <value>Norge</value>
+  </data>
+  <data name="Switzerland" xml:space="preserve">
+    <value>Schweiz</value>
+  </data>
 </root>

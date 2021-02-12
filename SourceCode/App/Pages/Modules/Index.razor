@@ -1,5 +1,5 @@
 ﻿@page "/Modules/Index"
-@attribute [Authorize(Policy = "User")]
+@attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 <h1>@Localizer["Modules"]</h1>
 

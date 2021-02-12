@@ -1,6 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @inject IStringLocalizer<App> Localizer
 
+<BlazoredToasts RemoveToastsOnNavigation="true"
+                Timeout="3"
+                IconType="IconType.FontAwesome"
+                InfoIcon="fa fa-info-circle"
+                SuccessIcon="fa fa-check-circle"
+                WarningIcon="fa fa-exclamation-triangle"
+                ErrorIcon="fa fa-exclamation-circle" />
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />

@@ -231,4 +231,7 @@
   <data name="Members" xml:space="preserve">
     <value>Medlemmar</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Välj</value>
+  </data>
 </root>

@@ -1,24 +1,25 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject UserState UserState
 
 @if (Items is not null)
 {
-    <div class="input-group col-md-3">
-        <select class="form-control " id="countryid" @bind="@Id" @onselect="OnSelectedItem">
-            <option value="0">Select</option>
-            @foreach (var item in Items)
+<div class="form-group">
+    <select class="form-control-sm " id="countryid" @bind="Id" @onselect="OnSelectedItem">
+        <option value="0">@Label</option>
+        @foreach (var item in Items)
+        {
+            @if (IsSelected(item))
             {
-                @if (IsSelected)
-                {
-                    <option selected value="@item.Id">@item.Description</option>
-                }
-                else
-                {
-                    <option value="@item.Id">@item.Description</option>
-                }
+                <option selected value="@item.Id">@item.Description</option>
             }
-        </select>
-        <button disabled="@(Id == 0)" class="btn btn-primary" @onclick="OnSelectedItem">@Localizer["Ok"]</button>
-    </div>
+            else
+            {
+                <option value="@item.Id">@item.Description</option>
+            }
+        }
+    </select>
+    <button disabled="@(Id == 0)" class="btn btn-primary" @onclick="OnSelectedItem">@Localizer["Ok"]</button>
+</div>
 }
 
 
@@ -27,10 +28,17 @@
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     private int Id;
 
+    protected override void OnInitialized()
+    {
+        Id = UserState.SelectedCountryId;
+    }
+
     private async Task OnSelectedItem()
     {
+        UserState.SelectedCountryId = Id;
         await OnSelected.InvokeAsync(Id);
     }
 
-    private bool IsSelected => Items is not null && Items.Count() == 1;
+    private bool IsSelected(ListboxItem item) => Items is not null && (item.Id == Id || Items.Count() == 1);
+    private string Label => $"{Localizer["Select"]} {Localizer["Country"].Value.ToLowerInvariant()}";
 }

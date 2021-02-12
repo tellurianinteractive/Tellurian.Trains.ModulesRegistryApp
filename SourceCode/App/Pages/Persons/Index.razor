@@ -4,9 +4,8 @@
 @inject IPersonService PersonService
 @inject ICountryService CountryService
 
-
 <h1>@Localizer["Users"]</h1>
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries"  />
 
 @if (People is null)
 {

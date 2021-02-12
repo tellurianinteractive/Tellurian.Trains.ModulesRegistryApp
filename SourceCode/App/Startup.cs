@@ -22,6 +22,7 @@ using ModulesRegistry.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using ModulesRegistry.Services.Extensions;
+using Blazored.Toast;
 
 namespace ModulesRegistry
 {
@@ -58,6 +59,8 @@ namespace ModulesRegistry
             services.AddDbContextFactory<ModulesDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"));
             });
+            services.AddBlazoredToast();
+            services.AddSingleton<UserState>();
             services.AddScoped<IContentService, ContentService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService, UserService>();

@@ -13,16 +13,17 @@
     <ValidationSummary />
     <div class="form-group">
         <label for="personid">@Localizer["Person"]</label>
-        <InputSelect Class="form-control" id="personid" TValue="int" @bind-Value="@GroupMember.PersonId">
-            <option value="0">@Localizer["Select"]</option>
-            @if (Persons is not null)
-            {
-                foreach (var item in Persons)
-                {
-                    <option value="@item.Id">@item.Description</option>
+        <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true">
+            <SelectedTemplate Context="personId">
+                @{ 
+                    var selectedPerson = SelectedPerson(personId);
+                    <text>@selectedPerson?.Description</text>
                 }
-            }
-        </InputSelect>
+            </SelectedTemplate>
+            <ResultTemplate Context="person">
+                @person.Description
+            </ResultTemplate>
+        </BlazoredTypeahead>
         <ValidationMessage For="@(() => GroupMember.Person)" />
     </div>
     <div class="form-group">
@@ -64,6 +65,14 @@
             // TODO: Filter away persons that already is member in the group.
         }
     }
+
+    private async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
+    {
+        return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
+        Persons.Where(p => p.Description.ToLowerInvariant().StartsWith(searchText.ToLowerInvariant())).ToList());
+    }
+    private int ConvertPerson(ListboxItem person) => person.Id;
+    private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 
     private async Task OnValidSubmit()
     {

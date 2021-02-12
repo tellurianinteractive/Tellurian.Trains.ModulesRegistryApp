@@ -88,6 +88,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Denmark.
+        /// </summary>
+        internal static string Denmark {
+            get {
+                return ResourceManager.GetString("Denmark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Germany.
+        /// </summary>
+        internal static string Germany {
+            get {
+                return ResourceManager.GetString("Germany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May not be deleted..
         /// </summary>
         internal static string MayNotBeDeleted {
@@ -115,6 +133,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Norway.
+        /// </summary>
+        internal static string Norway {
+            get {
+                return ResourceManager.GetString("Norway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nothing to delete..
         /// </summary>
         internal static string NothingToDelete {
@@ -138,6 +165,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string SaveFailed {
             get {
                 return ResourceManager.GetString("SaveFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sweden.
+        /// </summary>
+        internal static string Sweden {
+            get {
+                return ResourceManager.GetString("Sweden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switzerland.
+        /// </summary>
+        internal static string Switzerland {
+            get {
+                return ResourceManager.GetString("Switzerland", resourceCulture);
             }
         }
         

@@ -147,4 +147,19 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Sweden" xml:space="preserve">
+    <value>Sweden</value>
+  </data>
+  <data name="Denmark" xml:space="preserve">
+    <value>Denmark</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="Norway" xml:space="preserve">
+    <value>Norway</value>
+  </data>
+  <data name="Switzerland" xml:space="preserve">
+    <value>Switzerland</value>
+  </data>
 </root>

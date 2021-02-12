@@ -12,7 +12,7 @@
 }
 else
 {
-    <a class="btn btn-sm btn-secondary" href="groups/edit/0">@Localizer["Add"]</a>
+    <a class="btn btn-sm btn-secondary" href="groups/0/edit">@Localizer["Add"]</a>
     <table class="table table-striped table-responsive-sm">
         <thead>
             <tr>
@@ -26,18 +26,18 @@ else
         <tbody>
             @foreach (var item in Groups)
             {
-            <tr>
-                <td>@item.ShortName</td>
-                <td>@item.FullName</td>
-                <td>@item.CityName</td>
-                <td>@Localizer[item.Category]</td>
-                <td style="white-space: nowrap !important;">
-                    <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Members"]</a>
-                    <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Modules"]</a>
-                    <a class="btn btn-sm btn-primary" href="groups/@item.Id/edit">@Localizer["Edit"]</a>
-                    <a class="btn btn-sm btn-warning" href="groups/@item.Id/delete">@Localizer["Delete"]</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.ShortName</td>
+                    <td>@item.FullName</td>
+                    <td>@item.CityName</td>
+                    <td>@Localizer[item.Category]</td>
+                    <td style="white-space: nowrap !important;">
+                        <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Members"]</a>
+                        <a class="btn btn-sm btn-info" href="groups/@item.Id/members">@Localizer["Modules"]</a>
+                        <a class="btn btn-sm btn-primary" href="groups/@item.Id/edit">@Localizer["Edit"]</a>
+                        <a class="btn btn-sm btn-warning" href="groups/@item.Id/delete">@Localizer["Delete"]</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
