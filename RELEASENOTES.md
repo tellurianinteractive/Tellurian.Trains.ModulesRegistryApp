@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.1.3
+Release 2021-02-12
+
+Improved editing.
+
 ## Version 0.1.2
 Release 2021-02-08
 
