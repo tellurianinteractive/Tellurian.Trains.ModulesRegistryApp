@@ -5,7 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>ModulesRegistry.Imports.Tests</AssemblyName>
     <RootNamespace>ModulesRegistry.Imports.Tests</RootNamespace>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
