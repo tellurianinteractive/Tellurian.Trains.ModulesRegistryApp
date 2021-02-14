@@ -162,10 +162,10 @@
   <data name="SignedInAs" xml:space="preserve">
     <value>Inloggad som</value>
   </data>
-  <data name="LogIn" xml:space="preserve">
+  <data name="Login" xml:space="preserve">
     <value>Logga in</value>
   </data>
-  <data name="LogOut" xml:space="preserve">
+  <data name="Logout" xml:space="preserve">
     <value>Logga ut</value>
   </data>
   <data name="About" xml:space="preserve">
@@ -233,5 +233,11 @@
   </data>
   <data name="Select" xml:space="preserve">
     <value>Välj</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>E-postadress</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Lösenord</value>
   </data>
 </root>

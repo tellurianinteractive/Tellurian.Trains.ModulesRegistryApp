@@ -1,28 +1,21 @@
-using ModulesRegistry.Data;
+using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Data;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Localization;
 using ModulesRegistry.Services.Extensions;
-using Blazored.Toast;
+using ModulesRegistry.Services.Implementations;
+using System.Linq;
+using System.Net.Http;
 
 namespace ModulesRegistry
 {
@@ -37,28 +30,28 @@ namespace ModulesRegistry
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddRequestLocalization(options =>
-                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray()));
-
-            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
-            services.AddControllersWithViews()
-                .AddMicrosoftIdentityUI();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.GlobalAdministrator, "True"));
                 options.AddPolicy(PolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId));
             });
-
-            services.AddAuthorization(options =>
+            services.AddDbContextFactory<ModulesDbContext>(options =>
             {
-                // By default, all incoming requests will be authorized according to the default policy
-                options.FallbackPolicy = options.DefaultPolicy;
-            });
-            services.AddDbContextFactory<ModulesDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"));
             });
+
             services.AddBlazoredToast();
             services.AddSingleton<UserState>();
             services.AddScoped<IContentService, ContentService>();
@@ -69,12 +62,9 @@ namespace ModulesRegistry
             services.AddScoped<IGroupCategoryService, GroupCategoryService>();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 
-            services.AddRazorPages(options =>
-            {
-                options.Conventions.AllowAnonymousToFolder("/");
-            });
-            services.AddServerSideBlazor()
-                .AddMicrosoftIdentityConsentHandler();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddRequestLocalization(options =>
+                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -89,21 +79,21 @@ namespace ModulesRegistry
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseRequestLocalization(options =>
+             {
+                 options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                 options.AddSupportedUICultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                 options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultCulture);
+                 options.FallBackToParentCultures = true;
+             });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseRequestLocalization(options =>
-            {
-                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
-                options.AddSupportedUICultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
-                options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultCulture);
-                options.FallBackToParentCultures = true;
-            });
             app.UseRouting();
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

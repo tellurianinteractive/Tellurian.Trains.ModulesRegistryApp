@@ -29,7 +29,7 @@ namespace ModulesRegistry.Security
             if (newIdentity is null) return principal;
             var objectId = principal.ObjectId();
             if (objectId is null) return principal;
-            var user = await UserService.FindOrCreateAsync(objectId, principal.EmailAddess());
+            var user = await UserService.FindOrCreateAsync(principal.EmailAddess(), objectId);
             if (user is null) return principal;
 
             foreach (var claim in await GetUserClaimsAsync(user))
@@ -56,6 +56,7 @@ namespace ModulesRegistry.Security
 
             static void AddCookieConsentTimeClaim(User user, List<Claim> result) =>
                 result.Add(CookieConsentTimeClaim(user));
+
             static Claim CookieConsentTimeClaim(User user) =>
                 user.LastTermsOfUseAcceptTime is null ?
                 Claim(nameof(user.LastTermsOfUseAcceptTime), DateTimeOffset.MinValue.ToString("o")) :

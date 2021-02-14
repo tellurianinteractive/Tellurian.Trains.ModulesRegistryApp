@@ -162,10 +162,10 @@
   <data name="SignedInAs" xml:space="preserve">
     <value>Signed in as</value>
   </data>
-  <data name="LogIn" xml:space="preserve">
+  <data name="Login" xml:space="preserve">
     <value>Log in</value>
   </data>
-  <data name="LogOut" xml:space="preserve">
+  <data name="Logout" xml:space="preserve">
     <value>Log out</value>
   </data>
   <data name="About" xml:space="preserve">
@@ -233,5 +233,11 @@
   </data>
   <data name="Select" xml:space="preserve">
     <value>Select</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
   </data>
 </root>

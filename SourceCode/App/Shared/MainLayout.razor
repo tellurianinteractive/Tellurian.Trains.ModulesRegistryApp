@@ -1,22 +1,22 @@
 ﻿@inherits LayoutComponentBase
 @inject IStringLocalizer<App> Localizer
+@using System.Web;
 
-<BlazoredToasts RemoveToastsOnNavigation="true"
+@*<BlazoredToasts RemoveToastsOnNavigation="true"
                 Timeout="3"
                 IconType="IconType.FontAwesome"
                 InfoIcon="fa fa-info-circle"
                 SuccessIcon="fa fa-check-circle"
                 WarningIcon="fa fa-exclamation-triangle"
-                ErrorIcon="fa fa-exclamation-circle" />
+                ErrorIcon="fa fa-exclamation-circle" />*@
 
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
-
     <div class="main">
         <div class="top-row px-4 auth">
-            <LoginDisplay />
+            <LoginControl/>
             <NavLink class="nav-link" href="Contact">
                 @Localizer["Contact"]
             </NavLink>
@@ -24,7 +24,6 @@
                 @Localizer["About"]
             </NavLink>
         </div>
-
         <div class="content px-4">
             @Body
         </div>

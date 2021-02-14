@@ -17,6 +17,7 @@ namespace ModulesRegistry.Services.Extensions
         public const string CountryAdministrator = nameof(CountryAdministrator);
         public const string PersonId = nameof(PersonId);
         public const string UserId = nameof(UserId);
+        public const string ObjectId = nameof(ObjectId);
 
     }
 
@@ -28,10 +29,10 @@ namespace ModulesRegistry.Services.Extensions
         public static string PreferredUserName(this ClaimsPrincipal me) =>
             me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value ?? string.Empty;
         public static string EmailAddess(this ClaimsPrincipal me) =>
-            me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value ?? string.Empty;
+            me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(ClaimTypes.Email, StringComparison.OrdinalIgnoreCase))?.Value ?? string.Empty;
 
         public static string? ObjectId(this ClaimsPrincipal me) =>
-           me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals("http://schemas.microsoft.com/identity/claims/objectidentifier", StringComparison.OrdinalIgnoreCase))?.Value;
+           me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(AppClaimTypes.ObjectId, StringComparison.OrdinalIgnoreCase))?.Value;
 
         public static string? GivenName(this ClaimsPrincipal me) =>
             me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(ClaimTypes.GivenName, StringComparison.OrdinalIgnoreCase))?.Value;

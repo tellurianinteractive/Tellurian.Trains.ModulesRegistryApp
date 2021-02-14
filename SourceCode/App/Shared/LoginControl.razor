@@ -1,0 +1,24 @@
+﻿@using System.Web;
+@inject IStringLocalizer<App> Localizer
+<AuthorizeView>
+    <Authorized>
+        <b>@Localizer["Welcome"], @context.User.GivenName()</b>
+        <a class="ml-md-auto btn btn-primary"
+           href="/logout?returnUrl=/"
+           target="_top">@Localizer["Logout"]</a>
+    </Authorized>
+    <NotAuthorized>
+        <input type="text" @bind="Username" placeholder="@Localizer["Username"]"/>
+        &nbsp;&nbsp;
+        <input type="password"  @bind="Password" placeholder="@Localizer["Password"]"/>
+        <a class="ml-md-auto btn btn-primary"
+           href="/login?username=@encode(Username)&password=@encode(Password)"
+           target="_top">@Localizer["Login"]</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    string? Username { get; set; }
+    string? Password { get; set; }
+    private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
+}

@@ -1,10 +1,29 @@
 ﻿using Markdig;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Services.Extensions
 {
     public static class StringExtensions
     {
+        public static bool HasValue([NotNullWhen(true)] this string? me) => 
+            !string.IsNullOrWhiteSpace(me);
+
+        public static bool HasNoValue([NotNullWhen(false)] this string? me) => 
+            string.IsNullOrWhiteSpace(me);
+
+        public static bool IsEmailAddress([NotNullWhen(true)] this string? me) => 
+            me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+
+       public static string[] Items(this string? value, char separator = ';') =>
+            string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
+            value.Split(separator);
+
+        #region Special string conversions
+
         public static string FromMarkdown(this string? markdown)
         {
             if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
@@ -25,8 +44,47 @@ namespace ModulesRegistry.Services.Extensions
             return null;
         }
 
-        public static string[] Items(this string? value, char separator = ';') =>
-            string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
-            value.Split(separator);
+        public static Guid AsGuidOrNew(this string? me)
+        {
+            var guid = me.AsGuid();
+            return guid is null ? Guid.NewGuid() : guid.Value;
+        }
+
+        #endregion
+
+        #region Password hashing
+
+        public static string AsHashedPassword(this string clearTextPassword)
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            return Hash(clearTextPassword, salt);
+        }
+
+        private static string Hash(string clearTextPassword, byte[] salt)
+        {
+            byte[] hashed = KeyDerivation.Pbkdf2(
+                password: clearTextPassword,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8);
+            return $"{Convert.ToBase64String(salt)} {Convert.ToBase64String(hashed)}";
+        }
+
+        public static bool IsSamePasswordAs(this string clearTextPassword, string? hashedPassword)
+        {
+            if (string.IsNullOrWhiteSpace(hashedPassword)) return false;
+            var hashedPasswordItems = hashedPassword.Items(' ');
+            if (hashedPasswordItems.Length != 2) return false;
+            var salt = Convert.FromBase64String(hashedPasswordItems[0]);
+            var hashedClearTextPassword = Hash(clearTextPassword, salt);
+            return hashedClearTextPassword.Equals(hashedPassword, StringComparison.Ordinal);
+        }
+
+        #endregion
     }
 }

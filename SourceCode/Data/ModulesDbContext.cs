@@ -310,7 +310,7 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
-
+                entity.Property(e => e.ObjectId).IsRequired();
                 entity.Property(e => e.EmailAddress).IsRequired();
             });
 

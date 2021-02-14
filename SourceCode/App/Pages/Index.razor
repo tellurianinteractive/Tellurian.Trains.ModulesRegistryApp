@@ -2,7 +2,7 @@
 @inject IStringLocalizer<App> Localizer
 @using System.Security.Claims
 
-<AuthorizeView Policy="User">
+<AuthorizeView>
     <Authorized>
         <h1>@Localizer["Welcome"] @User?.GivenName()</h1>
         <ContentView ContentName="HomeUser"></ContentView>
