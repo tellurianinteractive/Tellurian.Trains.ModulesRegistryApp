@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace ModulesRegistry.Data
 {
+#nullable disable
+
     public partial class Person
     {
         public Person()

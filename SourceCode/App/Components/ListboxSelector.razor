@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @inject UserState UserState
 
-@if (Items is not null)
+@if (IsVisible && Items is not null)
 {
 <div class="form-group">
     <select class="form-control-sm " id="countryid" @bind="Id" @onselect="OnSelectedItem">
@@ -22,10 +22,11 @@
 </div>
 }
 
-
 @code {
+    [Parameter] public string? ItemType { get; set; }
     [Parameter] public EventCallback<int> OnSelected { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
     private int Id;
 
     protected override void OnInitialized()
@@ -35,10 +36,9 @@
 
     private async Task OnSelectedItem()
     {
-        UserState.SelectedCountryId = Id;
         await OnSelected.InvokeAsync(Id);
     }
 
     private bool IsSelected(ListboxItem item) => Items is not null && (item.Id == Id || Items.Count() == 1);
-    private string Label => $"{Localizer["Select"]} {Localizer["Country"].Value.ToLowerInvariant()}";
+    private string Label => $"{Localizer["Select"]} {ItemType?.ToLowerInvariant()}";
 }

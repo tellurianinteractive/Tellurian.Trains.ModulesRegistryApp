@@ -5,6 +5,8 @@ Release date 2021-02-15
 
 - Removed dependency of *Azure Active Directory B2C*. 
 User validation is now made against the users in the database.
+- Added preliminary *Terms of Use*.
+- Improved user interface for selecting country.
 
 ## Version 0.1.3
 Release 2021-02-12

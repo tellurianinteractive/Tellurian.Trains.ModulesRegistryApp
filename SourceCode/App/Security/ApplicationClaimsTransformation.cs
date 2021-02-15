@@ -49,12 +49,12 @@ namespace ModulesRegistry.Security
             {
                 Claim(AppClaimTypes.UserId, user.Id)
             };
-            AddGlobalAdministratorClaim(user, result);
-            AddCookieConsentTimeClaim(user, result);
+            AddAdministratorClaims(user, result);
+            AddLastTermsOfUseAcceptTimeClaim(user, result);
             var person = await PersonService.GetByAsync(user.Id);
             AddPersonalClaims(user, person, result); return result;
 
-            static void AddCookieConsentTimeClaim(User user, List<Claim> result) =>
+            static void AddLastTermsOfUseAcceptTimeClaim(User user, List<Claim> result) =>
                 result.Add(CookieConsentTimeClaim(user));
 
             static Claim CookieConsentTimeClaim(User user) =>
@@ -62,9 +62,10 @@ namespace ModulesRegistry.Security
                 Claim(nameof(user.LastTermsOfUseAcceptTime), DateTimeOffset.MinValue.ToString("o")) :
                 Claim(nameof(user.LastTermsOfUseAcceptTime), user.LastTermsOfUseAcceptTime.Value.ToString("o"));
 
-            static void AddGlobalAdministratorClaim(User user, List<Claim> result)
+            static void AddAdministratorClaims(User user, List<Claim> result)
             {
                 if (user.IsGlobalAdministrator) result.Add(Claim(AppClaimTypes.GlobalAdministrator, true));
+                if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, true));
             }
 
             static void AddPersonalClaims(User user, Person? person, List<Claim> result)
@@ -75,7 +76,7 @@ namespace ModulesRegistry.Security
                     result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
                     result.Add(Claim(ClaimTypes.Surname, person.LastName));
                     result.Add(Claim(ClaimTypes.Email, person.EmailAddresses));
-                    if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, person.CountryId));
+                    if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
                 }
             }
 

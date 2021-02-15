@@ -44,7 +44,7 @@ namespace ModulesRegistry
             services.AddScoped<HttpClient>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(PolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.GlobalAdministrator, "True"));
+                options.AddPolicy(PolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.CountryAdministrator, "True"));
                 options.AddPolicy(PolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId));
             });
             services.AddDbContextFactory<ModulesDbContext>(options =>
@@ -53,7 +53,7 @@ namespace ModulesRegistry
             });
 
             services.AddBlazoredToast();
-            services.AddSingleton<UserState>();
+            services.AddScoped<UserState>();
             services.AddScoped<IContentService, ContentService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService, UserService>();

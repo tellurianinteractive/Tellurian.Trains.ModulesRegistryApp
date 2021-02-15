@@ -64,16 +64,18 @@ else
     </EditForm>
 }
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+        [CascadingParameter]
+        private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
-    [Parameter] public int? Id { get; set; }
+        [Parameter] public int? Id { get; set; }
     private Person? Person;
     private IEnumerable<ListboxItem>? CountriesItems;
     private string Message = string.Empty;
 
     protected async override Task OnParametersSetAsync()
     {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+
         Reset();
         CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
         Person = await GetOrCreatePersonAsync();
@@ -89,11 +91,13 @@ else
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Id.IsNotSet() ? new Person() : await PersonService.FindAsync(Id.Value) ?? new Person();
+        Id.IsNotSet() ? new Person() { CountryId = DefaultCountryId } : await PersonService.FindAsync(Id.Value) ?? new Person();
 
     private void Reset()
     {
         Message = string.Empty;
     }
+
+    private int DefaultCountryId => CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
 
 }

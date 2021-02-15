@@ -18,6 +18,7 @@ namespace ModulesRegistry.Services.Extensions
         public const string PersonId = nameof(PersonId);
         public const string UserId = nameof(UserId);
         public const string ObjectId = nameof(ObjectId);
+        public const string CountryId = nameof(CountryId);
 
     }
 
@@ -45,7 +46,7 @@ namespace ModulesRegistry.Services.Extensions
         }
 
         public static bool IsAuthorised(this ClaimsPrincipal principal, int id) =>
-            principal.IsGlobalAdministrator() || id == principal.AdministersId(AppClaimTypes.CountryAdministrator);
+            principal.IsGlobalAdministrator() || id == principal.AdministersId(AppClaimTypes.CountryId);
 
         public static bool IsGlobalAdministrator(this ClaimsPrincipal me) =>
             me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);

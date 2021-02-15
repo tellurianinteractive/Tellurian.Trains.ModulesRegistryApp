@@ -108,12 +108,14 @@ else
     }
 
     private async Task<Group> GetOrCreateAsync() =>
-        Id.IsSet() ? await GroupService.FindAsync(Id.Value) ?? new Group() : new Group();
-
+        Id.IsSet() ? await GroupService.FindAsync(Id.Value) ?? NewGroup : NewGroup;
+    private Group NewGroup => new Group { CountryId = DefaultCountryId };
     private void Reset()
     {
         Message = string.Empty;
     }
 
     private string SelectCategoryLabel => $"{Localizer["Select"]} {Localizer["Category"].Value.ToLowerInvariant()}";
+    private int DefaultCountryId => CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
+
 }

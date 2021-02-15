@@ -5,7 +5,7 @@
 @inject ICountryService CountryService
 
 <h1>@Localizer["Groups"]</h1>
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />
 @if (Groups is null)
 {
     @if (IsLoading)@Localizer["GettingData"];
@@ -55,7 +55,6 @@ else
         if (Countries.Count() == 1) await GetGroups(Countries.First().Id);
     }
 
-
     private async Task OnSelectedCountry(int id)
     {
         await GetGroups(id);
@@ -72,5 +71,6 @@ else
         }
     }
 
+    private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
 }
