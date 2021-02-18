@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.2.1
+Release date 2021-02-18
+
+Added invitation of persons, mail sending and confirmation with setting password.
+
 ## Version 0.2.0
 Release date 2021-02-15
 

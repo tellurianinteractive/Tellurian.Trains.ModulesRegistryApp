@@ -61,6 +61,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Module Registry.
+        /// </summary>
+        internal static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Community.
         /// </summary>
         internal static string Community {
@@ -147,6 +156,33 @@ namespace ModulesRegistry.Services.Resources {
         internal static string NothingToDelete {
             get {
                 return ResourceManager.GetString("NothingToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password does not meet policy requirements..
+        /// </summary>
+        internal static string PasswordInvalid {
+            get {
+                return ResourceManager.GetString("PasswordInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum length {0} characters, consisting of minimum {1} letters {2}, {3} digits {4} and {5} special characters {6}..
+        /// </summary>
+        internal static string PasswordPolicy {
+            get {
+                return ResourceManager.GetString("PasswordPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password and confirmed password don&apos;t match..
+        /// </summary>
+        internal static string PasswordsDontMatch {
+            get {
+                return ResourceManager.GetString("PasswordsDontMatch", resourceCulture);
             }
         }
         

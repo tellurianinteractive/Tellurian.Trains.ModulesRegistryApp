@@ -1,0 +1,72 @@
+﻿@using System.Text
+@using System.Net.Mail;
+@page "/Persons/Invite/{id:int}"
+
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+@inject IPersonService PersonService
+@inject IUserService UserService
+@inject IContentService ContentService
+@inject IMailSender MailSender
+
+<h1>@Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
+@if (CanSend)
+{
+
+    <h2>@Localizer["Message"]</h2>
+    <hr />
+    @((MarkupString)Html)
+    <hr />
+    <button class="btn btn-primary" @onclick="Send">@Localizer["Send"]</button>
+}
+
+
+@code {
+        [Parameter] public int Id { get; set; }
+    private Person? Person;
+    private User? User;
+    private string Html = string.Empty;
+
+    override protected async Task OnInitializedAsync()
+    {
+        Person = await PersonService.FindAsync(Id);
+        if (PersonHasEmail)
+        {
+            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
+            if (User is null) return;
+            Html = await GetMessageHtml();
+        }
+
+    }
+
+    private async Task Send()
+    {
+        var message = new MailMessage();
+        message.To.Add(new MailAddress(User!.EmailAddress, $"{Person!.FirstName} {Person!.LastName}"));
+        message.Subject = Localizer["InvitationToModuleRegistry"];
+        message.Body = Html;
+        message.IsBodyHtml = true;
+        var count = await MailSender.SendMailMessageAsync(message);
+    }
+
+    private bool CanSend => PersonHasEmail && User is not null && User.HashedPassword.HasNoValue();
+    private bool PersonHasEmail => Person is not null && Person.EmailAddresses.HasValue();
+    private string PrimaryEmail(Person person) =>  person.EmailAddresses.Split(';')[0];
+
+    private string ConfirmationLink => $"{Navigator.BaseUri}/users/confirm?email={PrimaryEmail(Person!)}&objectid={User?.ObjectId}";
+    private string ConfirmationLinkTag => $"<a href=\"{ConfirmationLink}\">{Localizer["CreatePassword"]}</a>";
+
+    private async Task<string> GetMessageHtml()
+    {
+        var text = new StringBuilder(1000);
+        var markdown = await ContentService.GetTextContent("Invitation");
+        text.Append("<h1>");
+        text.Append(Localizer["Hello"]);
+        text.Append(' ');
+        text.Append(Person!.FirstName);
+        text.AppendLine("</h1>");
+        text.AppendLine(markdown.AsHtml);
+        text.AppendLine(ConfirmationLinkTag);
+        return text.ToString();
+    }
+}

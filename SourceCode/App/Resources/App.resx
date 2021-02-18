@@ -243,4 +243,46 @@
   <data name="TermsOfUse" xml:space="preserve">
     <value>Terms of use</value>
   </data>
+  <data name="UserConfirmationFailed" xml:space="preserve">
+    <value>User confirmation failed!</value>
+  </data>
+  <data name="NoEmailProvided" xml:space="preserve">
+    <value>No email address provided</value>
+  </data>
+  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
+    <value>No registration ID is provided</value>
+  </data>
+  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
+    <value>No user found with email '{0}' and registration ID '{1}'</value>
+  </data>
+  <data name="UserConfirmed" xml:space="preserve">
+    <value>User confirmed</value>
+  </data>
+  <data name="UserWelcome" xml:space="preserve">
+    <value>{0}, welcome!</value>
+  </data>
+  <data name="YouMayNowLogin" xml:space="preserve">
+    <value>You may now login</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Create password</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Invite" xml:space="preserve">
+    <value>Invite</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
 </root>

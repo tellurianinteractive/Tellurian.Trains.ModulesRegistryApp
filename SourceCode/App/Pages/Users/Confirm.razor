@@ -1,0 +1,73 @@
+﻿@page "/Users/Confirm/"
+
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+@inject IUserService UserService
+
+
+@if (User is null)
+{
+    <h1>@Localizer["UserConfirmationFailed"]</h1>
+    @if (EmailAddress is null)
+    {
+        <p>@Localizer["NoEmailProvided"].</p>
+    }
+    @if (ObjectId is null)
+    {
+        <p>@Localizer["NoRegistrationIdIsProvided"].</p>
+    }
+    @if (EmailAddress.HasValue() && ObjectId.HasValue())
+    {
+        <p>@string.Format(Localizer["NoUserFoundWithEmailAndRegistrationId"].Value, EmailAddress, ObjectId).</p>
+    }
+}
+else if (PasswordCreated)
+{
+    <h1>@Localizer["UserConfirmed"]</h1>
+    <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
+    <p>@Localizer["YouMayNowLogin"].</p>
+}
+else
+{
+    <h1>@Localizer["CreatePassword"]</h1>
+    <p>@Policy.ToString()</p>
+    <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label for="password">@Localizer["Password"]</label>
+            <InputText Class="form-control" id="password" @bind-Value="@Password.Value" />
+            <ValidationMessage For="@(() => Password.Value)" />
+        </div>
+        <div class="form-group">
+            <label for="confirmpassword">@Localizer["ConfirmPassword"]</label>
+            <InputText Class="form-control" id="confirmpassword" @bind-Value="@Password.ConfirmValue" />
+            <ValidationMessage For="@(() => Password.ConfirmValue)" />
+        </div>
+        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+    </EditForm>
+}
+@code {
+    private string? ObjectId;
+    private string? EmailAddress;
+    private User? User;
+    private Password Password = new Password();
+    private PasswordPolicy Policy = new PasswordPolicy();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hasObjectId = Navigator.TryGetQueryStringValue<string?>("objectid", out ObjectId);
+        var hasEmail = Navigator.TryGetQueryStringValue<string?>("email", out EmailAddress);
+        if (hasEmail && hasObjectId)
+        {
+            User = await UserService.FindOrCreateAsync(EmailAddress, ObjectId);
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
+    }
+
+    private bool PasswordCreated => User is not null && User.HashedPassword.HasValue();
+}

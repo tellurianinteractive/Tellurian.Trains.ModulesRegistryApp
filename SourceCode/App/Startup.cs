@@ -21,19 +21,22 @@ namespace ModulesRegistry
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
+            services.Configure<CloudMailSenderSettings>(Configuration.GetSection("SendGrid"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
             services.AddRazorPages();
@@ -54,6 +57,8 @@ namespace ModulesRegistry
 
             services.AddBlazoredToast();
             services.AddScoped<UserState>();
+            if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
+            if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
             services.AddScoped<IContentService, ContentService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IUserService, UserService>();

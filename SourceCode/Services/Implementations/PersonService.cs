@@ -33,6 +33,7 @@ namespace ModulesRegistry.Services.Implementations
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People
                 .Where(p => p.CountryId == inCountryId)
+                .Include(p => p.User)
                 .OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
                 .ToListAsync();
         }

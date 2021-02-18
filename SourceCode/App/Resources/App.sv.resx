@@ -240,4 +240,49 @@
   <data name="Password" xml:space="preserve">
     <value>Lösenord</value>
   </data>
+  <data name="Invite" xml:space="preserve">
+    <value>Bjud in</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Meddelande</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Skicka</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hej</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Bekräfta lösenord</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Skapa lösenord</value>
+  </data>
+  <data name="NoEmailProvided" xml:space="preserve">
+    <value>Ingen e-postadress angiven</value>
+  </data>
+  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
+    <value>Inget registrerings-ID angivet</value>
+  </data>
+  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
+    <value>Ingen användare hittades med e-postadressen '{0}' och registrerings-ID '{1}'</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Användarvillkor</value>
+  </data>
+  <data name="UserConfirmationFailed" xml:space="preserve">
+    <value>Användarbekräftelsen misslyckades!</value>
+  </data>
+  <data name="UserConfirmed" xml:space="preserve">
+    <value>Användaren bekräftad</value>
+  </data>
+  <data name="UserWelcome" xml:space="preserve">
+    <value>{0}, välkommen!</value>
+  </data>
+  <data name="YouMayNowLogin" xml:space="preserve">
+    <value>Du kan nu logga in</value>
+  </data>
 </root>

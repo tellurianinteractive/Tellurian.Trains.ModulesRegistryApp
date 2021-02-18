@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ModulesRegistry.Services;
 using System;
 using System.Resources;
@@ -33,7 +34,12 @@ namespace ModulesRegistry
                     if (context.HostingEnvironment.IsDevelopment())
                     {
                         config.AddUserSecrets<Program>();
-                    }     
+                    }
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

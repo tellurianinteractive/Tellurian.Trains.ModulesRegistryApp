@@ -34,6 +34,10 @@ else
                     <td style="text-align: center">@((person.UserId > 0).AsYesNo())</td>
                     <td style="white-space: nowrap !important;">
                         <a class="btn btn-sm btn-secondary" href="persons/edit/@person.Id">@Localizer["Edit"]</a>
+                        @if (person.User is null || person.User.HashedPassword.HasNoValue())
+                        {                          
+                            <a class="btn btn-sm btn-info" href="persons/invite/@person.Id">@Localizer["Invite"]</a> 
+                        }
                         @if (person.UserId is null)
                         {
                             <a class="btn btn-sm btn-warning" href="persons/delete/@person.Id">@Localizer["Delete"]</a>
