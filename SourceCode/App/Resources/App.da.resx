@@ -288,4 +288,7 @@
   <data name="InvitationSent" xml:space="preserve">
     <value>Invitation sendt</value>
   </data>
+  <data name="ModuleOwners" xml:space="preserve">
+    <value>Modulejere</value>
+  </data>
 </root>

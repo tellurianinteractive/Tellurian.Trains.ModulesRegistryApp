@@ -288,4 +288,7 @@
   <data name="Home" xml:space="preserve">
     <value>Hjem</value>
   </data>
+  <data name="ModuleOwners" xml:space="preserve">
+    <value>Moduleiere</value>
+  </data>
 </root>
