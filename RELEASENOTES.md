@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.2.2
+Release date 2021-02-19
+- Added transtaltions to German and Norwegian.
+- Invitation now sent in receivers language.
+- Added confirmation of sent invitation.
+ 
 ## Version 0.2.1
 Release date 2021-02-18
 

@@ -160,7 +160,7 @@
     <value>Modulregistret</value>
   </data>
   <data name="SignedInAs" xml:space="preserve">
-    <value>Inloggad som</value>
+    <value>Inloggad som {0}</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Logga in</value>
@@ -217,7 +217,7 @@
     <value>Är grupp admin</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
-    <value>Är data admin</value>
+    <value>Är data admin?</value>
   </data>
   <data name="MembersIn" xml:space="preserve">
     <value>Medlemmar i</value>
@@ -284,5 +284,8 @@
   </data>
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>Du kan nu logga in</value>
+  </data>
+  <data name="InvitationSent" xml:space="preserve">
+    <value>Inbjudan skickad</value>
   </data>
 </root>

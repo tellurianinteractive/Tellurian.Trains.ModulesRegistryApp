@@ -1,6 +1,6 @@
 ﻿#### You are invited to the Modules Registry
 
-The Modules Inventory is a webb application for maintaining data about model railway modules. 
+The Modules Registry is a webb application for maintaining data about model railway modules. 
 You can maintain your own modules and help others by mainating modules for members in the same group as you.
 
 You are invited to become a user. 

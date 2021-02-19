@@ -162,4 +162,13 @@
   <data name="Switzerland" xml:space="preserve">
     <value>Schweiz</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Modulregistret</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Minsta längd på {0} tecken, bestående av minst {1} bokstäver {2}, {3} siffror {4} och {5} specialtecken {6}.</value>
+  </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Lösenordet uppfyller inte policykraven.</value>
+  </data>
 </root>

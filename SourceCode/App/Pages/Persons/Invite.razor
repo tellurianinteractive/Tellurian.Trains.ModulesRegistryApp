@@ -8,6 +8,7 @@
 @inject IUserService UserService
 @inject IContentService ContentService
 @inject IMailSender MailSender
+@inject ICountryService CountryService
 
 <h1>@Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
 @if (CanSend)
@@ -19,13 +20,20 @@
     <hr />
     <button class="btn btn-primary" @onclick="Send">@Localizer["Send"]</button>
 }
+@if (IsSent)
+{
+    <div class="alert alert-success">
+        @Localizer["InvitationSent"]
+    </div>
+}
 
 
 @code {
-        [Parameter] public int Id { get; set; }
+    [Parameter] public int Id { get; set; }
     private Person? Person;
     private User? User;
     private string Html = string.Empty;
+    private bool IsSent;
 
     override protected async Task OnInitializedAsync()
     {
@@ -34,7 +42,9 @@
         {
             User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
             if (User is null) return;
-            Html = await GetMessageHtml();
+            var userCountry = await CountryService.FindById(Person!.CountryId);
+            if (userCountry is null) return;
+            Html = await GetMessageHtml(userCountry.Languages.Items()[0]);
         }
 
     }
@@ -47,19 +57,20 @@
         message.Body = Html;
         message.IsBodyHtml = true;
         var count = await MailSender.SendMailMessageAsync(message);
+        IsSent = count > 0;
     }
 
     private bool CanSend => PersonHasEmail && User is not null && User.HashedPassword.HasNoValue();
     private bool PersonHasEmail => Person is not null && Person.EmailAddresses.HasValue();
-    private string PrimaryEmail(Person person) =>  person.EmailAddresses.Split(';')[0];
+    private string PrimaryEmail(Person person) => person.EmailAddresses.Split(';')[0];
 
     private string ConfirmationLink => $"{Navigator.BaseUri}/users/confirm?email={PrimaryEmail(Person!)}&objectid={User?.ObjectId}";
     private string ConfirmationLinkTag => $"<a href=\"{ConfirmationLink}\">{Localizer["CreatePassword"]}</a>";
 
-    private async Task<string> GetMessageHtml()
+    private async Task<string> GetMessageHtml(string? userLanguage = null)
     {
         var text = new StringBuilder(1000);
-        var markdown = await ContentService.GetTextContent("Invitation");
+        var markdown = await ContentService.GetTextContent("Invitation", userLanguage);
         text.Append("<h1>");
         text.Append(Localizer["Hello"]);
         text.Append(' ');

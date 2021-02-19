@@ -61,7 +61,7 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Module Registry.
+        ///   Looks up a localized string similar to The Module Registry.
         /// </summary>
         internal static string AppName {
             get {
@@ -88,7 +88,7 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete failed!.
+        ///   Looks up a localized string similar to Deletion failed!.
         /// </summary>
         internal static string DeleteFailed {
             get {
@@ -196,7 +196,7 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save failed!.
+        ///   Looks up a localized string similar to Saving failed!.
         /// </summary>
         internal static string SaveFailed {
             get {

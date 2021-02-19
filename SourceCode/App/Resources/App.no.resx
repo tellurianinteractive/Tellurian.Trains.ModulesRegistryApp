@@ -117,175 +117,175 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
+  <data name="About" xml:space="preserve">
+    <value>Om</value>
   </data>
   <data name="AuthenticationInProgress" xml:space="preserve">
-    <value>Authentication in progress...</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Autentisering pågår ...</value>
   </data>
   <data name="Person" xml:space="preserve">
     <value>Person</value>
   </data>
-  <data name="EditPerson" xml:space="preserve">
-    <value>Edit person</value>
-  </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First name</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Last name</value>
+    <value>Fornavn</value>
   </data>
   <data name="EmailAddresses" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="CityName" xml:space="preserve">
-    <value>City</value>
+    <value>E-post</value>
   </data>
   <data name="IsUser" xml:space="preserve">
-    <value>Is user?</value>
-  </data>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
+    <value>Er bruker?</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="AppName" xml:space="preserve">
-    <value>The Modules Registry</value>
+    <value>Brukere</value>
   </data>
   <data name="SignedInAs" xml:space="preserve">
-    <value>Signed in as {0}</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Log in</value>
+    <value>Logget på som {0}</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Log out</value>
-  </data>
-  <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>Logg ut</value>
   </data>
   <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
-  </data>
-  <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>Kontakt</value>
   </data>
   <data name="GettingData" xml:space="preserve">
-    <value>Fetching data. Please wait...</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Henter data. Vennligst vent...</value>
   </data>
   <data name="AddNew" xml:space="preserve">
-    <value>Add new</value>
-  </data>
-  <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Legg til ny</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
-  </data>
-  <data name="Group" xml:space="preserve">
-    <value>Group</value>
+    <value>Fullt navn</value>
   </data>
   <data name="Groups" xml:space="preserve">
-    <value>Groups</value>
-  </data>
-  <data name="ShortName" xml:space="preserve">
-    <value>Abbreviation</value>
+    <value>Grupper</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
-  </data>
-  <data name="Community" xml:space="preserve">
-    <value>Community</value>
+    <value>Land</value>
   </data>
   <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Non-profit association</value>
-  </data>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+    <value>Ideell forening</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Is group admin</value>
-  </data>
-  <data name="IsDataAdministrator" xml:space="preserve">
-    <value>Is data admin?</value>
+    <value>Er gruppeadministrator</value>
   </data>
   <data name="MembersIn" xml:space="preserve">
-    <value>Members in</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Mitglieder in</value>
   </data>
   <data name="AddMemberIn" xml:space="preserve">
-    <value>Add member in</value>
-  </data>
-  <data name="Members" xml:space="preserve">
-    <value>Members</value>
+    <value>Legg til medlem i</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Email address</value>
+    <value>Velg</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="TermsOfUse" xml:space="preserve">
-    <value>Terms of use</value>
+    <value>Passord</value>
   </data>
   <data name="UserConfirmationFailed" xml:space="preserve">
-    <value>User confirmation failed!</value>
-  </data>
-  <data name="NoEmailProvided" xml:space="preserve">
-    <value>No email address provided</value>
+    <value>Brukerbekreftelse mislyktes!</value>
   </data>
   <data name="NoRegistrationIdIsProvided" xml:space="preserve">
-    <value>No registration ID is provided</value>
-  </data>
-  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
-    <value>No user found with email '{0}' and registration ID '{1}'</value>
+    <value>Ingen registrerings-ID er oppgitt</value>
   </data>
   <data name="UserConfirmed" xml:space="preserve">
-    <value>User confirmed</value>
-  </data>
-  <data name="UserWelcome" xml:space="preserve">
-    <value>{0}, welcome!</value>
+    <value>Bruker bekreftet</value>
   </data>
   <data name="YouMayNowLogin" xml:space="preserve">
-    <value>You may now login</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Create password</value>
+    <value>Du kan nå logge på</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Invite</value>
+    <value>Bekreft passord</value>
   </data>
   <data name="Message" xml:space="preserve">
-    <value>Message</value>
+    <value>Beskjed</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Lagre</value>
+  </data>
+  <data name="InvitationSent" xml:space="preserve">
+    <value>Invitasjon sendt</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hei</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Invite" xml:space="preserve">
+    <value>Inviter</value>
   </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello</value>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Lag passord</value>
   </data>
-  <data name="InvitationSent" xml:space="preserve">
-    <value>Invitation sent</value>
+  <data name="UserWelcome" xml:space="preserve">
+    <value>{0}, velkommen!</value>
+  </data>
+  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
+    <value>Ingen brukere funnet med e-postadressen '{0}' og registrerings-ID '{1}'</value>
+  </data>
+  <data name="NoEmailProvided" xml:space="preserve">
+    <value>Ingen e-postadresse oppgitt</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Vilkår for bruk</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Epostadresse</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Medlemmer</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Legg til</value>
+  </data>
+  <data name="IsDataAdministrator" xml:space="preserve">
+    <value>Er dataadministrator?</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Hjemsted</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Samfunnsorganisasjon</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Forkortelse</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slett</value>
+  </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Moduler</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Logg Inn</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Moduleregisteret</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="CityName" xml:space="preserve">
+    <value>Hjemsted</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="EditPerson" xml:space="preserve">
+    <value>Rediger person</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Velkommen</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hjem</value>
   </data>
 </root>

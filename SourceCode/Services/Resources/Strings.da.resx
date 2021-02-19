@@ -162,4 +162,13 @@
   <data name="Switzerland" xml:space="preserve">
     <value>Schweiz</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Modulregistret</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Minimumslængde {0} tegn, der består af mindst {1} bogstaver {2}, {3} cifre {4} og {5} specialtegn {6}.</value>
+  </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Adgangskode opfylder ikke politikkrav.</value>
+  </data>
 </root>

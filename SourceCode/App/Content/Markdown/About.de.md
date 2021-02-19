@@ -9,5 +9,5 @@ Daher kann ein Benutzer auch Daten für Module anderer Personen verwalten, wenn 
 Es ist auch möglich, eine Gruppe von Personen zu haben, die eine beliebige Anzahl von Modulen verwaltet.
 
 #### Technische Übersicht
-Die Anwendung wurde als *Open Source* entwickelt und wird von **Tellurian Interactive** gesponsert.
+Die Anwendung wurde als *Open Source* entwickelt und wird von der schwedischen Firma *Tellurian Interactive AB* gesponsert.
 Code ist in C #, HTML, CSS und SQL geschrieben. Es wird in Microsoft Azure ausgeführt.

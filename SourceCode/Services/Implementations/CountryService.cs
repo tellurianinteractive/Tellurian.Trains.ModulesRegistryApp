@@ -20,6 +20,12 @@ namespace ModulesRegistry.Services.Implementations
             ResourceManager = Resources.Strings.ResourceManager;
         }
 
+        public async Task<Country?> FindById(int id)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Countries.FindAsync(id);
+        }
+
         public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal)
         {
             if (principal is null) return Array.Empty<ListboxItem>();

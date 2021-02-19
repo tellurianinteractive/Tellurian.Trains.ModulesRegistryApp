@@ -9,5 +9,5 @@ Därför kan en användare också underhålla data för andra persones moduler o
 Det är också möjligt att ha en grupp människor som underhåller valfritt antal moduler.
 
 #### Teknisk översikt
-Applikationen är utvecklad som *öppen källkod* och sponsras av **Tellurian Interactive**.
+Applikationen är utvecklad som *öppen källkod* och sponsras av *Tellurian Interactive AB*.
 Koden är skriven i C #, HTML, CSS och SQL. Den körs i Microsoft Azure.

@@ -124,7 +124,7 @@
     <value>Deleted successfully.</value>
   </data>
   <data name="DeleteFailed" xml:space="preserve">
-    <value>Delete failed!</value>
+    <value>Deletion failed!</value>
   </data>
   <data name="MayNotBeDeleted" xml:space="preserve">
     <value>May not be deleted.</value>
@@ -142,7 +142,7 @@
     <value>Saved.</value>
   </data>
   <data name="SaveFailed" xml:space="preserve">
-    <value>Save failed!</value>
+    <value>Saving failed!</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
@@ -163,7 +163,7 @@
     <value>Switzerland</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>Module Registry</value>
+    <value>The Module Registry</value>
   </data>
   <data name="PasswordPolicy" xml:space="preserve">
     <value>Minimum length {0} characters, consisting of minimum {1} letters {2}, {3} digits {4} and {5} special characters {6}.</value>

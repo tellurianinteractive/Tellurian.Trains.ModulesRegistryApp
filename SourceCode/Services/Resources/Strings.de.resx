@@ -117,175 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
-  </data>
-  <data name="AuthenticationInProgress" xml:space="preserve">
-    <value>Authentication in progress...</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
-  </data>
-  <data name="EditPerson" xml:space="preserve">
-    <value>Edit person</value>
-  </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>First name</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Last name</value>
-  </data>
-  <data name="EmailAddresses" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="CityName" xml:space="preserve">
-    <value>City</value>
-  </data>
-  <data name="IsUser" xml:space="preserve">
-    <value>Is user?</value>
-  </data>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
   <data name="AppName" xml:space="preserve">
-    <value>The Modules Registry</value>
-  </data>
-  <data name="SignedInAs" xml:space="preserve">
-    <value>Signed in as {0}</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Log out</value>
-  </data>
-  <data name="About" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
-  </data>
-  <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
-  </data>
-  <data name="GettingData" xml:space="preserve">
-    <value>Fetching data. Please wait...</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="AddNew" xml:space="preserve">
-    <value>Add new</value>
-  </data>
-  <data name="Category" xml:space="preserve">
-    <value>Category</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
-  </data>
-  <data name="Group" xml:space="preserve">
-    <value>Group</value>
-  </data>
-  <data name="Groups" xml:space="preserve">
-    <value>Groups</value>
-  </data>
-  <data name="ShortName" xml:space="preserve">
-    <value>Abbreviation</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Die Modulregistrierung</value>
   </data>
   <data name="Community" xml:space="preserve">
-    <value>Community</value>
+    <value>Samfunnsgruppe</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Mindestlänge {0} Zeichen, bestehend aus den Mindestzeichen {1} {2}, {3} Ziffern {4} und {5} Sonderzeichen {6}.</value>
+  </data>
+  <data name="Switzerland" xml:space="preserve">
+    <value>Schweiz</value>
+  </data>
+  <data name="Norway" xml:space="preserve">
+    <value>Norwegen</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Deutschland</value>
+  </data>
+  <data name="Denmark" xml:space="preserve">
+    <value>Dänemark</value>
+  </data>
+  <data name="Sweden" xml:space="preserve">
+    <value>Schweden</value>
+  </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Das Passwort entspricht nicht den Richtlinienanforderungen.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Gespeichert.</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Nichts zu löschen.</value>
   </data>
   <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Non-profit association</value>
+    <value>Gemeinnütziger Verein</value>
   </data>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
   </data>
-  <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Is group admin</value>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>Darf nicht gelöscht werden.</value>
   </data>
-  <data name="IsDataAdministrator" xml:space="preserve">
-    <value>Is data admin?</value>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Löschen fehlgeschlagen!</value>
   </data>
-  <data name="MembersIn" xml:space="preserve">
-    <value>Members in</value>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Erfolgreich gelöscht.</value>
   </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="AddMemberIn" xml:space="preserve">
-    <value>Add member in</value>
-  </data>
-  <data name="Members" xml:space="preserve">
-    <value>Members</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Email address</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="TermsOfUse" xml:space="preserve">
-    <value>Terms of use</value>
-  </data>
-  <data name="UserConfirmationFailed" xml:space="preserve">
-    <value>User confirmation failed!</value>
-  </data>
-  <data name="NoEmailProvided" xml:space="preserve">
-    <value>No email address provided</value>
-  </data>
-  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
-    <value>No registration ID is provided</value>
-  </data>
-  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
-    <value>No user found with email '{0}' and registration ID '{1}'</value>
-  </data>
-  <data name="UserConfirmed" xml:space="preserve">
-    <value>User confirmed</value>
-  </data>
-  <data name="UserWelcome" xml:space="preserve">
-    <value>{0}, welcome!</value>
-  </data>
-  <data name="YouMayNowLogin" xml:space="preserve">
-    <value>You may now login</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Create password</value>
-  </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Invite</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello</value>
-  </data>
-  <data name="InvitationSent" xml:space="preserve">
-    <value>Invitation sent</value>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Speichern fehlgeschlagen!</value>
   </data>
 </root>
