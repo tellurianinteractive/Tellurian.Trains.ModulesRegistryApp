@@ -65,19 +65,19 @@
     private string PrimaryEmail(Person person) => person.EmailAddresses.Split(';')[0];
 
     private string ConfirmationLink => $"{Navigator.BaseUri}/users/confirm?email={PrimaryEmail(Person!)}&objectid={User?.ObjectId}";
-    private string ConfirmationLinkTag => $"<a href=\"{ConfirmationLink}\">{Localizer["CreatePassword"]}</a>";
+    private string ConfirmationLinkTag(string userLanguage) => $"<a href=\"{ConfirmationLink}\">{LanguageService.GetString("CreatePassword", userLanguage)}</a>";
 
     private async Task<string> GetMessageHtml(string? userLanguage = null)
     {
         var text = new StringBuilder(1000);
         var markdown = await ContentService.GetTextContent("Invitation", userLanguage);
         text.Append("<h1>");
-        text.Append(Localizer["Hello"]);
+        text.Append(LanguageService.GetString("Hello", userLanguage));
         text.Append(' ');
         text.Append(Person!.FirstName);
         text.AppendLine("</h1>");
         text.AppendLine(markdown.AsHtml);
-        text.AppendLine(ConfirmationLinkTag);
+        text.AppendLine(ConfirmationLinkTag(userLanguage));
         return text.ToString();
     }
 }

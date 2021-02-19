@@ -171,4 +171,13 @@
   <data name="SaveFailed" xml:space="preserve">
     <value>Speichern fehlgeschlagen!</value>
   </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Passwort erstellen</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Passwort und bestätigtes Passwort stimmen nicht überein.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hallo</value>
+  </data>
 </root>

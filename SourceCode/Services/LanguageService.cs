@@ -1,7 +1,9 @@
-﻿using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Resources;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Resources;
 
 namespace ModulesRegistry.Services
 {
@@ -10,6 +12,23 @@ namespace ModulesRegistry.Services
         public const string DefaultLanguage = "en";
         public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
         public static CultureInfo DefaultCulture => new CultureInfo(DefaultLanguage);
+
+        public static string GetString(string resourceName, string? language)
+        {
+            var culture = CurrentCulture;
+            if (language.HasValue())
+            {
+                try
+                {
+                    culture = new CultureInfo(language);
+                }
+                catch (CultureNotFoundException)
+                {
+                }
+            }
+            var result = Strings.ResourceManager.GetString(resourceName, culture);
+            return result is null ? resourceName : result;
+        }
         public static IList<CultureInfo> SupportedCultures => LanguageCultureMap.Values.ToArray();
         private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
              new Dictionary<Language, CultureInfo>() {

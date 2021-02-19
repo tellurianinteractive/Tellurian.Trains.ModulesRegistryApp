@@ -174,4 +174,10 @@
   <data name="PasswordsDontMatch" xml:space="preserve">
     <value>Password and confirmed password don't match.</value>
   </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Create password</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
 </root>

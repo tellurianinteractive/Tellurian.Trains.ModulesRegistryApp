@@ -171,4 +171,13 @@
   <data name="SaveFailed" xml:space="preserve">
     <value>Lagring mislyktes!</value>
   </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Oprett passord</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Passord og bekreftet passord samsvarer ikke.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hallo</value>
+  </data>
 </root>

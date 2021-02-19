@@ -171,4 +171,13 @@
   <data name="PasswordInvalid" xml:space="preserve">
     <value>Lösenordet uppfyller inte policykraven.</value>
   </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Skapa lösenord</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Lösenord och bekräftat lösenord matchar inte.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hej</value>
+  </data>
 </root>

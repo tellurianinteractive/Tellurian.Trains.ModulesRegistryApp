@@ -171,4 +171,13 @@
   <data name="PasswordInvalid" xml:space="preserve">
     <value>Adgangskode opfylder ikke politikkrav.</value>
   </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Opret adgangskode</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Adgangskode og bekræftet adgangskode stemmer ikke overens.</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hej</value>
+  </data>
 </root>
