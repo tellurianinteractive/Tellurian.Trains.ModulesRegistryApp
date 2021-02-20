@@ -26,7 +26,7 @@ else
     protected async override Task OnParametersSetAsync()
     {
         if (Id.IsNotSet()) return;
-        Person = await PersonService.FindAsync(Id.Value);
+        Person = await PersonService.FindByIdAsync(Id.Value);
     }
 
 

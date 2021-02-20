@@ -17,7 +17,7 @@ namespace ModulesRegistry.Services
         /// <param name="emailAddress">The email used as user identity in Azure AD. This must match the email for an existing <see cref="Person"/></param>
         /// <returns></returns>
         Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId);
-
+        Task<User?> FindByIdAsync(int id);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<User?> AcceptTermsOfUse(string? objectId);
         Task<User?> FindByEmailAsync(string? emailAddress);

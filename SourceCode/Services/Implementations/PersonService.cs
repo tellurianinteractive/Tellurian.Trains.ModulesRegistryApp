@@ -38,13 +38,13 @@ namespace ModulesRegistry.Services.Implementations
                 .ToListAsync();
         }
 
-        public async Task<Person?> FindAsync(int id)
+        public async Task<Person?> FindByIdAsync(int id)
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People.FindAsync(id);
         }
 
-        public async Task<Person?> GetByAsync(int userId)
+        public async Task<Person?> FindByUserIdAsync(int userId)
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People.SingleOrDefaultAsync(p => p.UserId == userId);

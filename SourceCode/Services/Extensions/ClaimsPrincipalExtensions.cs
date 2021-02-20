@@ -38,6 +38,9 @@ namespace ModulesRegistry.Services.Extensions
         public static string? GivenName(this ClaimsPrincipal me) =>
             me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(ClaimTypes.GivenName, StringComparison.OrdinalIgnoreCase))?.Value;
 
+        public static int? UserId(this ClaimsPrincipal me) =>
+            int.TryParse(me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(AppClaimTypes.UserId, StringComparison.OrdinalIgnoreCase))?.Value, out var userId) ? userId : null;
+
         public static int AdministersId(this ClaimsPrincipal me, string claimType)
         {
             var admin = me.Claims.SingleOrDefault(c => c.Type.Equals(claimType));

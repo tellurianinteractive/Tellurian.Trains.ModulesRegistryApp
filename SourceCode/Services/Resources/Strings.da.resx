@@ -180,4 +180,7 @@
   <data name="Hello" xml:space="preserve">
     <value>Hej</value>
   </data>
+  <data name="BestRegards" xml:space="preserve">
+    <value>Med venlig hilsen</value>
+  </data>
 </root>

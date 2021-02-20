@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.2.3
+Release date 2021.02.19
+
+- Inviter of person is now always the logged in user.
+- Inviitation text is refined.
+
 ## Version 0.2.2
 Release date 2021-02-19
 - Added transtaltions to German and Norwegian.

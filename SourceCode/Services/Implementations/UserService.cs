@@ -16,6 +16,12 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
+        public async Task<User?> FindByIdAsync(int id)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Users.Where(u => u.Id == id).Include(u => u.Person).SingleOrDefaultAsync();
+        }
+
         public async Task<User?> FindByEmailAsync(string? emailAddress)
         {
             if (string.IsNullOrWhiteSpace(emailAddress)) return null;

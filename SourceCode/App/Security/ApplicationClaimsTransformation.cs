@@ -51,7 +51,7 @@ namespace ModulesRegistry.Security
             };
             AddAdministratorClaims(user, result);
             AddLastTermsOfUseAcceptTimeClaim(user, result);
-            var person = await PersonService.GetByAsync(user.Id);
+            var person = await PersonService.FindByUserIdAsync(user.Id);
             AddPersonalClaims(user, person, result); return result;
 
             static void AddLastTermsOfUseAcceptTimeClaim(User user, List<Claim> result) =>

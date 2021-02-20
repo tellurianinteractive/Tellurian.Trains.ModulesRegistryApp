@@ -29,7 +29,9 @@
 
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    private Person? Inviter;
     private Person? Person;
     private User? User;
     private string Html = string.Empty;
@@ -37,7 +39,11 @@
 
     override protected async Task OnInitializedAsync()
     {
-        Person = await PersonService.FindAsync(Id);
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        var userId = principal?.UserId();
+        if (principal is null || userId is null ) return;
+        Inviter = await PersonService.FindByUserIdAsync(userId.Value);
+        Person = await PersonService.FindByIdAsync(Id);
         if (PersonHasEmail)
         {
             User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
@@ -46,7 +52,6 @@
             if (userCountry is null) return;
             Html = await GetMessageHtml(userCountry.Languages.Items()[0]);
         }
-
     }
 
     private async Task Send()
@@ -65,10 +70,11 @@
     private string PrimaryEmail(Person person) => person.EmailAddresses.Split(';')[0];
 
     private string ConfirmationLink => $"{Navigator.BaseUri}/users/confirm?email={PrimaryEmail(Person!)}&objectid={User?.ObjectId}";
-    private string ConfirmationLinkTag(string userLanguage) => $"<a href=\"{ConfirmationLink}\">{LanguageService.GetString("CreatePassword", userLanguage)}</a>";
+    private string ConfirmationLinkTag(string? userLanguage) => $"<p><a href=\"{ConfirmationLink}\">{LanguageService.GetString("CreatePassword", userLanguage)}</a></p>";
 
     private async Task<string> GetMessageHtml(string? userLanguage = null)
     {
+        if (Inviter is null) return string.Empty;
         var text = new StringBuilder(1000);
         var markdown = await ContentService.GetTextContent("Invitation", userLanguage);
         text.Append("<h1>");
@@ -78,6 +84,8 @@
         text.AppendLine("</h1>");
         text.AppendLine(markdown.AsHtml);
         text.AppendLine(ConfirmationLinkTag(userLanguage));
+        text.Append($"<p>{LanguageService.GetString("BestRegards", userLanguage)}</p>");
+        text.Append($"<p>{Inviter.FirstName} {Inviter.LastName}</p>");
         return text.ToString();
     }
 }

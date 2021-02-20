@@ -70,6 +70,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Best regards.
+        /// </summary>
+        internal static string BestRegards {
+            get {
+                return ResourceManager.GetString("BestRegards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Community.
         /// </summary>
         internal static string Community {
