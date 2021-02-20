@@ -16,6 +16,6 @@ The purpose with this version is to verify than users can be invited and log in.
 The administrator functions is under development but not available for normal users.
 
 The following item are now available for administrators:
-- Emailing invitation of a person to the site.
 - Add module owners (but not yet modules).
-- Add groups and add module owners to groups.
+- Invite module owner to become a user. Invitation is emailed and in the language of residence of the invited person.
+- Add groups and add module owners to groups. Groups are units for collective module data administration.
