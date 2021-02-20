@@ -1,7 +1,16 @@
 # Release Notes
 
+## Version 0.2.4
+Release date 2021-02-20
+
+- Improved user login status.
+- Improved module owner state.
+- Added user permissions filtering to *PersonService*.
+- Bug fix of password policy (thanks to Uwe Stegemann).
+- Correct app name for making broser shortcun (thanks to Uwe Stegemann).
+
 ## Version 0.2.3
-Release date 2021.02.19
+Release date 2021-02-19
 
 - Inviter of person is now always the logged in user.
 - Inviitation text is refined.

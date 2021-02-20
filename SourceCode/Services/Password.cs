@@ -15,7 +15,7 @@ namespace ModulesRegistry.Services
     public class PasswordPolicy : ValidationAttribute
     {
         public int MinimumLength { get; set; } = 10;
-        public (int Minimum, string Characters) Letters { get; set; } = (4, "aAbBcCdDeEfFgGhHiIJjkKlLmMnNPpQqRrSsTtUuVvxxyYzZ");
+        public (int Minimum, string Characters) Letters { get; set; } = (4, "aAbBcCdDeEfFgGhHiIJjkKlLmMnNPpQqRrSsTtuUvVwWxXyYzZüÜåÅäÄöÖæÆøØ");
         public (int Minimum, string Characters) Digits { get; set; } = (1, "0123456789");
         public (int Minimum, string Characters) Special { get; set; } = (1, "!#¤%&?§()[]+*");
 

@@ -35,12 +35,12 @@ else
         <DataAnnotationsValidator />
         <div class="form-group">
             <label for="password">@Localizer["Password"]</label>
-            <InputText Class="form-control" id="password" @bind-Value="@Password.Value" />
+            <InputText type="password" Class="form-control" id="password" @bind-Value="@Password.Value" />
             <ValidationMessage For="@(() => Password.Value)" />
         </div>
         <div class="form-group">
             <label for="confirmpassword">@Localizer["ConfirmPassword"]</label>
-            <InputText Class="form-control" id="confirmpassword" @bind-Value="@Password.ConfirmValue" />
+            <InputText  type="password"  Class="form-control" id="confirmpassword" @bind-Value="@Password.ConfirmValue" />
             <ValidationMessage For="@(() => Password.ConfirmValue)" />
         </div>
         <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
