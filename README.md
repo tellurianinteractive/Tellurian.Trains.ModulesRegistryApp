@@ -14,3 +14,8 @@ for maintaning data about *model railway modules* with the following qualities:
 A very light [first version](https://moduleregistry.azurewebsites.net/) is up an running inclucing the database.
 The purpose with this version is to verify than users can be invited and log in.
 The administrator functions is under development but not available for normal users.
+
+The following item are now available for administrators:
+- Emailing invitation of a person to the site.
+- Add module owners (but not yet modules).
+- Add groups and add module owners to groups.
