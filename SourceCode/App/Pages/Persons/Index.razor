@@ -1,4 +1,5 @@
-﻿@page "/Persons/Index"
+﻿@using System.Security.Claims
+@page "/Persons/Index"
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
@@ -20,7 +21,7 @@ else
                 <th>@Localizer["Name"]</th>
                 <th>@Localizer["Email"]</th>
                 <th>@Localizer["City"]</th>
-                <th>@Localizer["IsUser"]</th>
+                <th style="text-align: center">@Localizer["IsUser"]</th>
                 <th>@Localizer["Action"]</th>
             </tr>
         </thead>
@@ -31,7 +32,7 @@ else
                     <td>@Name(person)</td>
                     <td>@person.EmailAddresses</td>
                     <td>@person.CityName</td>
-                    <td style="text-align: center">@((person.UserId > 0).AsYesNo())</td>
+                    <td style="text-align: center">@UserStatus(person)</td>
                     <td style="white-space: nowrap !important;">
                         <a class="btn btn-sm btn-secondary" href="persons/edit/@person.Id">@Localizer["Edit"]</a>
                         @if (person.User is null || person.User.HashedPassword.HasNoValue())
@@ -54,6 +55,7 @@ else
     private IEnumerable<Person>? People;
     private IEnumerable<ListboxItem>? Countries;
     private bool IsLoading;
+    private ClaimsPrincipal? Principal;
 
     private async Task OnSelectedCountry(int id)
     {
@@ -62,8 +64,8 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Countries = await CountryService.ListboxItemsAsync(principal);
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal);
         if (Countries.Count() == 1) await GetPersons(Countries.First().Id);
     }
 
@@ -73,12 +75,17 @@ else
         {
             IsLoading = true;
             StateHasChanged();
-            People = await PersonService.GetAllInCountryAsync(id);
+            People = await PersonService.GetAllInCountryAsync(Principal, id);
             IsLoading = false;
         }
     }
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+    private string? UserStatus(Person person) => 
+        person.User is null ? Localizer["No"] : 
+        person.User.HashedPassword.HasNoValue() ? Localizer["Invited"] : 
+        person.User.LastSignInTime.HasValue ? string.Format(LanguageService.CurrentCulture, "{0:g}", person.User.LastSignInTime) : 
+        Localizer["Yes"];
 
     private string Name(Person person) => person.MiddleName.HasNoValue() ? $"{person.FirstName} {person.LastName}" : $"{person.FirstName} {person.MiddleName} {person.LastName}";
 }

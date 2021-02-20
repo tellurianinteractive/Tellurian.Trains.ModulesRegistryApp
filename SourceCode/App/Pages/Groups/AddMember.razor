@@ -43,6 +43,7 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? GroupId { get; set; }
 
+    private ClaimsPrincipal? Principal;
     private Group? Group;
     private GroupMember GroupMember = new GroupMember();
     private IEnumerable<ListboxItem>? Persons;
@@ -54,12 +55,13 @@
 
     protected async Task RefreshData()
     {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (GroupId.IsSet())
         {
             Group = await GroupService.FindAsync(GroupId.Value);
             if (Group is not null)
             {
-                Persons = await PersonService.ListboxItemsAsync(Group.CountryId);
+                Persons = await PersonService.ListboxItemsAsync(Principal, Group.CountryId);
                 GroupMember.GroupId = Group.Id;
             }
             // TODO: Filter away persons that already is member in the group.

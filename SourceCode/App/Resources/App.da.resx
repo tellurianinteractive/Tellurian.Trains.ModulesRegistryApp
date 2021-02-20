@@ -291,4 +291,22 @@
   <data name="ModuleOwners" xml:space="preserve">
     <value>Modulejere</value>
   </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Inviteret</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logget ind som</value>
+  </data>
+  <data name="GlobalAdministrator" xml:space="preserve">
+    <value>Global administrator</value>
+  </data>
+  <data name="CountryAdministrator" xml:space="preserve">
+    <value>Landeadministrator</value>
+  </data>
 </root>

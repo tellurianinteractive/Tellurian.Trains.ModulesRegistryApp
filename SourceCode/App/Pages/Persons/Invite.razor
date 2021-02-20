@@ -40,10 +40,10 @@
     override protected async Task OnInitializedAsync()
     {
         var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        var userId = principal?.UserId();
-        if (principal is null || userId is null ) return;
-        Inviter = await PersonService.FindByUserIdAsync(userId.Value);
-        Person = await PersonService.FindByIdAsync(Id);
+        if (principal is null) return;
+        var userId = principal.UserId();
+        Inviter = await PersonService.FindByUserIdAsync(principal, userId);
+        Person = await PersonService.FindByIdAsync(principal, Id);
         if (PersonHasEmail)
         {
             User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);

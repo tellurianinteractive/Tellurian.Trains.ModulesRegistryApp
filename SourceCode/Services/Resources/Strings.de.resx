@@ -183,4 +183,7 @@
   <data name="BestRegards" xml:space="preserve">
     <value>Freundliche Grüße</value>
   </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>Nicht genehmigt</value>
+  </data>
 </root>

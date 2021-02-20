@@ -47,8 +47,8 @@ namespace ModulesRegistry
             services.AddScoped<HttpClient>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(PolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.CountryAdministrator, "True"));
-                options.AddPolicy(PolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId));
+                options.AddPolicy(AppPolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.CountryAdministrator, "True"));
+                options.AddPolicy(AppPolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId));
             });
             services.AddDbContextFactory<ModulesDbContext>(options =>
             {

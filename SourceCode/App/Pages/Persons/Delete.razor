@@ -19,21 +19,25 @@ else
 
 <button class="btn btn-danger" @onclick="OnDelete">@Localizer["Delete"]</button>
 @code {
+    [CascadingParameter]    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
+    private ClaimsPrincipal? Principal;
+
     private Person? Person;
     private string? Message;
 
     protected async override Task OnParametersSetAsync()
     {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (Id.IsNotSet()) return;
-        Person = await PersonService.FindByIdAsync(Id.Value);
+        Person = await PersonService.FindByIdAsync(Principal, Id.Value);
     }
 
 
     private async Task OnDelete()
     {
         if (Id.IsNotSet()) return;
-        var result = await PersonService.DeleteAsync(Id.Value);
+        var result = await PersonService.DeleteAsync(Principal, Id.Value);
         Message = result.Message;
         StateHasChanged();
         if (result.Count > 0)

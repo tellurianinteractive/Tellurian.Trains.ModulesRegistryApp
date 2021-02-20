@@ -1,8 +1,9 @@
 ﻿@using System.Web;
+@using System.Security.Claims;
 @inject IStringLocalizer<App> Localizer
 <AuthorizeView>
     <Authorized>
-        <b>@Localizer["Welcome"], @context.User.GivenName()</b>
+        <b>@UserLoginStatus(context.User)</b>
         <a class="ml-md-auto btn btn-primary"
            href="/logout?returnUrl=/"
            target="_top">@Localizer["Logout"]</a>
@@ -21,4 +22,9 @@
     string? Username { get; set; }
     string? Password { get; set; }
     private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
+    private string UserLoginStatus(ClaimsPrincipal principal) =>
+        $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()}{AdministratorStatus(principal).ToLowerInvariant()}";
+
+     private string AdministratorStatus(ClaimsPrincipal principal) =>
+        principal.IsGlobalAdministrator() ? ", " + Localizer["GlobalAdministrator"].Value : principal.IsCountryAdministrator() ? ", " + Localizer["CountryAdministrator"].Value : string.Empty;
 }

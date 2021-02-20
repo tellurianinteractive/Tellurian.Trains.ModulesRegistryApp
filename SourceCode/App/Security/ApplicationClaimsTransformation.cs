@@ -7,29 +7,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Security
 {
     public class ApplicationClaimsTransformation : IClaimsTransformation
     {
-        private readonly IUserService UserService;
-        private readonly IPersonService PersonService;
+        private readonly IDbContextFactory<ModulesDbContext> Factory;
 
-        public ApplicationClaimsTransformation(IUserService userService, IPersonService personService)
+        public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory)
         {
-            UserService = userService;
-            PersonService = personService;
+            Factory = factory;
         }
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
+            using var db = Factory.CreateDbContext();
             var clonedPrincipal = principal.Clone();
             if (clonedPrincipal is null) return principal;
             var newIdentity = (ClaimsIdentity?)clonedPrincipal.Identity;
             if (newIdentity is null) return principal;
             var objectId = principal.ObjectId();
             if (objectId is null) return principal;
-            var user = await UserService.FindOrCreateAsync(principal.EmailAddess(), objectId);
+            var objectGuid = Guid.Parse(objectId);
+            var user = await db.Users.Where(u => u.ObjectId == objectGuid).SingleOrDefaultAsync();
             if (user is null) return principal;
 
             foreach (var claim in await GetUserClaimsAsync(user))
@@ -45,14 +46,21 @@ namespace ModulesRegistry.Security
         /// <returns></returns>
         private async Task<IEnumerable<Claim>> GetUserClaimsAsync(User user)
         {
+            using var db = Factory.CreateDbContext();
+
             var result = new List<Claim>(20)
             {
                 Claim(AppClaimTypes.UserId, user.Id)
             };
             AddAdministratorClaims(user, result);
             AddLastTermsOfUseAcceptTimeClaim(user, result);
-            var person = await PersonService.FindByUserIdAsync(user.Id);
-            AddPersonalClaims(user, person, result); return result;
+
+            var person = await db.People.SingleOrDefaultAsync(p => p.UserId == user.Id);
+            if (person is not null)
+            {
+                AddPersonalClaims(person, result);
+            }
+            return result;
 
             static void AddLastTermsOfUseAcceptTimeClaim(User user, List<Claim> result) =>
                 result.Add(CookieConsentTimeClaim(user));
@@ -68,7 +76,7 @@ namespace ModulesRegistry.Security
                 if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, true));
             }
 
-            static void AddPersonalClaims(User user, Person? person, List<Claim> result)
+            static void AddPersonalClaims(Person? person, List<Claim> result)
             {
                 if (person is not null)
                 {
@@ -76,7 +84,7 @@ namespace ModulesRegistry.Security
                     result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
                     result.Add(Claim(ClaimTypes.Surname, person.LastName));
                     result.Add(Claim(ClaimTypes.Email, person.EmailAddresses));
-                    if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
+                    result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
                 }
             }
 

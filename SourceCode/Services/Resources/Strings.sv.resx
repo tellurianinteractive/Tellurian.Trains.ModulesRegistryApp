@@ -183,4 +183,7 @@
   <data name="BestRegards" xml:space="preserve">
     <value>Vänliga hälsningar</value>
   </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>Inte behörig</value>
+  </data>
 </root>

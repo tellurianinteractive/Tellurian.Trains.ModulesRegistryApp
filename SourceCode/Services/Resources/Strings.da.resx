@@ -183,4 +183,7 @@
   <data name="BestRegards" xml:space="preserve">
     <value>Med venlig hilsen</value>
   </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>Ikke autoriseret</value>
+  </data>
 </root>
