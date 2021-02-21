@@ -1,10 +1,10 @@
 # Release Notes
 
 ## Version 0.3.0
-Release date 2021-02-31
+Release date 2021-02-21
 
 - Added user permission filtering to all services.
-- Prepared services for adding modules.
+- Prepared services and database for adding modules.
 - Start page for logged in users now shows *release notes*.
 
 ## Version 0.2.4
