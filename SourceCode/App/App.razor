@@ -1,13 +1,21 @@
+@inject IStringLocalizer<App> Localizer
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-
+                <NotAuthorized>
+                    <div class="alert alert-danger">
+                        <h2><span class="oi oi-circle-x" /> @Localizer["YouAreNotAuthorizedToViewThisPage"]</h2>
+                    </div>
+                </NotAuthorized>
             </AuthorizeRouteView>
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
+                <div class="alert alert-warning">
+                    <h2><span class="oi oi-link-broken" /> @Localizer["SorryNothingToDisplayHere"]</h2>
+                </div>
             </LayoutView>
         </NotFound>
     </Router>
