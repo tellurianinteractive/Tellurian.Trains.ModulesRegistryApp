@@ -1,11 +1,13 @@
 ﻿@page "/Groups/{groupid:int}/AddMember/"
+@attribute [Authorize(Policy = "User")]
+
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
 @inject IPersonService PersonService
 
 <h3>@Heading</h3>
- 
+
 
 <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit">
     <FluentValidationValidator />
@@ -14,7 +16,7 @@
         <label for="personid">@Localizer["Person"]</label>
         <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true">
             <SelectedTemplate Context="personId">
-                @{ 
+                @{
                     var selectedPerson = SelectedPerson(personId);
                     <text>@selectedPerson?.Description</text>
                 }

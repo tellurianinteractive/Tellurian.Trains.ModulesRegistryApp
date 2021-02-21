@@ -1,4 +1,6 @@
 ﻿@page "/Modules/Edit/{id:int}"
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IModuleService ModuleService
 

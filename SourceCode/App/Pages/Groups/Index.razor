@@ -1,4 +1,6 @@
 ﻿@page "/Groups/Index"
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
 @inject ICountryService CountryService

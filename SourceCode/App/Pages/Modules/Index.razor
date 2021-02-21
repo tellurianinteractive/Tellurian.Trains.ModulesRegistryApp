@@ -1,4 +1,6 @@
 ﻿@page "/Modules/Index"
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IModuleService ModuleService
 
@@ -17,7 +19,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach(var module in Modules)
+            @foreach (var module in Modules)
             {
                 <tr>
                     <td>@module.FullName</td>
