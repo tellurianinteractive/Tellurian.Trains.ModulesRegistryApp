@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services
 {
-    public interface IModuleService
+    public interface IModuleService : IDataService<Module>
     {
-        Task<Module> GetModuleAsync(int id);
-        IAsyncEnumerable<Module> GetModulesAsync();
+        Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal);
     }
 }

@@ -24,7 +24,7 @@ namespace ModulesRegistry.Services.Extensions
 
         #region Special string conversions
 
-        public static string FromMarkdown(this string? markdown)
+        public static string HtmlFromMarkdown(this string? markdown)
         {
             if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
             return Markdown.ToHtml(markdown, Pipeline());

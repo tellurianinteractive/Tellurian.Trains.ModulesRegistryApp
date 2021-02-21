@@ -1,5 +1,4 @@
 ﻿@page "/Groups/Index"
-@attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
 @inject ICountryService CountryService
@@ -44,14 +43,16 @@ else
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private ClaimsPrincipal? Principal;
     private IEnumerable<Group>? Groups;
     private IEnumerable<ListboxItem>? Countries;
     private bool IsLoading;
 
     protected async override Task OnInitializedAsync()
     {
-        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Countries = await CountryService.ListboxItemsAsync(principal);
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal);
         if (Countries.Count() == 1) await GetGroups(Countries.First().Id);
     }
 
@@ -66,7 +67,7 @@ else
         {
             IsLoading = true;
             StateHasChanged();
-            Groups = await GroupService.GetAllInCountryAsync(id);
+            Groups = await GroupService.GetAllInCountryAsync(Principal, id);
             IsLoading = false;
         }
     }

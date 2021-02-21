@@ -1,16 +1,14 @@
 ﻿using ModulesRegistry.Data;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services
 {
-    public interface IGroupService
+    public interface IGroupService : IDataService<Group>
     {
-        Task<IEnumerable<Group>> GetAllInCountryAsync(int countryId);
-        Task<Group?> FindAsync(int id);
-        Task<(int Count, Group? Group, string Message)> SaveAsync(Group group);
-        Task<(int Count, string Message)> DeleteAsync(int id);
-        Task<(int Count, GroupMember? GroupMember, string Message)> AddMemberAsync(GroupMember groupMember);
-        Task<(int Count, GroupMember? GroupMember, string Message)> RemoveMemberAsync(int groupId, int personId);
+        Task<IEnumerable<Group>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId);
+        Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember);
+        Task<(int Count, string Message)> RemoveMemberAsync(ClaimsPrincipal? principal, int groupId, int personId);
     }
 }

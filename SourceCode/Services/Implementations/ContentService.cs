@@ -1,5 +1,7 @@
 ﻿using ModulesRegistry.Services.Extensions;
+using System;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -7,6 +9,11 @@ namespace ModulesRegistry.Services.Implementations
     public class ContentService : IContentService
     {
         private const string MarkdownPath = "content/markdown";
+        private readonly IHttpClientFactory ClientFactory;
+        public ContentService(IHttpClientFactory clientFactory)
+        {
+            ClientFactory = clientFactory;
+        }
         public async Task<TextContent> GetTextContent(string content) =>
             await LanguageService.CurrentCulture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
 
@@ -23,6 +30,13 @@ namespace ModulesRegistry.Services.Implementations
             {
                 return await GetTextContent(content);
             }
+        }
+
+        public async Task<TextContent> GetRemoteTextContent(string href)
+        {
+            using var client = ClientFactory.CreateClient();
+            var markdown = await client.GetStringAsync(href);
+            return new TextContent(markdown, "MD",  DateTimeOffset.Now );
         }
     }
 }

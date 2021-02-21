@@ -186,4 +186,10 @@
   <data name="NotAuthorized" xml:space="preserve">
     <value>Ikke autorisert</value>
   </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>Eksisterer allerede</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Ikke funnet</value>
+  </data>
 </root>

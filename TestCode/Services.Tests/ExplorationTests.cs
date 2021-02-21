@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Services.Tests
 {
@@ -16,8 +17,7 @@ namespace ModulesRegistry.Services.Tests
 
         }
 
- 
-       
+      
 
         private static IDbContextFactory<ModulesDbContext> CreateFactory()
         {

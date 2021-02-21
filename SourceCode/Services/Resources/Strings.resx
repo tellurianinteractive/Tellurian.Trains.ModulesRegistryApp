@@ -186,4 +186,10 @@
   <data name="NotAuthorized" xml:space="preserve">
     <value>Not authorized</value>
   </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>Already exists</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
 </root>

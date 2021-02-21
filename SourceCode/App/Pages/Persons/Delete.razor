@@ -29,7 +29,7 @@ else
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Id.IsNotSet()) return;
+        if (Principal is null || Id.IsNotSet()) return;
         Person = await PersonService.FindByIdAsync(Principal, Id.Value);
     }
 

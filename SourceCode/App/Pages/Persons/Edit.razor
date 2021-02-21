@@ -76,7 +76,6 @@ else
 protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-
         Reset();
         CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
         Person = await GetOrCreatePersonAsync();
@@ -85,14 +84,14 @@ protected async override Task OnParametersSetAsync()
     private async Task OnValidSumbit()
     {
         Reset();
-        if (Person is null) return;
+        if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person);
-        Person = result.Person;
+        Person = result.Entity;
         Message = result.Message;
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Id.IsNotSet() ? new Person() { CountryId = DefaultCountryId } : await PersonService.FindByIdAsync(Principal, Id.Value) ?? new Person();
+        Principal is null || Id.IsNotSet() ? new Person() { CountryId = DefaultCountryId } : await PersonService.FindByIdAsync(Principal, Id.Value) ?? new Person();
 
     private void Reset()
     {

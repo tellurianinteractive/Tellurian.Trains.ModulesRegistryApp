@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -33,7 +37,33 @@ namespace ModulesRegistry.Services.Extensions
 
         public static bool IsGlobalAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
         public static bool IsCountryAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
-        public static bool IsAuthorisedInCountry(this ClaimsPrincipal? principal, int countryId) => principal is not null && (principal.IsGlobalAdministrator() || countryId == principal.CountryId());
+
+        public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId) => 
+            me is not null && (me.IsGlobalAdministrator() || countryId == me.CountryId());
+        public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId, int personId) =>
+             me is not null && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId == me.CountryId());
+
+
+        public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>
+            me.MayRead(me.PersonId());
+        public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId) =>
+             me is not null && (entityOwnerId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+
+        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me) =>
+            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId) =>
+            me is not null && (entityOwnerId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+
+        public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me) =>
+            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId, bool userMayDelete = false) =>
+            me is not null && ((userMayDelete && entityOwnerId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+
+        public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
+            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsGroupAdministrator));
+
+        public static bool IsGroupDataAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
+            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsDataAdministrator));
 
         private static string? GetString(this ClaimsPrincipal? me, string claimType, string? defaultValue = null) =>
             me is not null ? me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase))?.Value : defaultValue;

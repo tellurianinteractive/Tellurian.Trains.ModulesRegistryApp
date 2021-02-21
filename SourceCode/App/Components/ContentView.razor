@@ -12,12 +12,23 @@ else
 @code {
     [Parameter] public string? ContentName { get; set; }
     [Parameter] public string? Language { get; set; } = null;
+    [Parameter] public string? Href { get; set; } = null;
 
     TextContent? Content;
 
     protected async override Task OnParametersSetAsync()
     {
-        if (ContentName is null) Content = TextContent.Empty;
-        else Content = await ContentService.GetTextContent(ContentName, Language);
+        if (Href is not null)
+        {
+            Content = await ContentService.GetRemoteTextContent(Href);
+        }
+        else if (ContentName is not null)
+        {
+            Content = await ContentService.GetTextContent(ContentName, Language);
+        }
+        else
+        {
+            Content = TextContent.Empty;
+        }
     }
 }

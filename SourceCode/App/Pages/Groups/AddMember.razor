@@ -1,5 +1,4 @@
 ﻿@page "/Groups/{groupid:int}/AddMember/"
-@attribute [Authorize(Policy = "Admin")]
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
@@ -58,7 +57,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (GroupId.IsSet())
         {
-            Group = await GroupService.FindAsync(GroupId.Value);
+            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
             if (Group is not null)
             {
                 Persons = await PersonService.ListboxItemsAsync(Principal, Group.CountryId);
@@ -78,7 +77,7 @@
 
     private async Task OnValidSubmit()
     {
-        var result = await GroupService.AddMemberAsync(GroupMember);
+        var result = await GroupService.AddMemberAsync(Principal, GroupMember);
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 

@@ -1,12 +1,43 @@
 ﻿@page "/Modules/Index"
-@attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
+@inject IModuleService ModuleService
+
 <h1>@Localizer["Modules"]</h1>
 
+@if (Modules is null)
+{
+
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var module in Modules)
+            {
+                <tr>
+                    <td>@module.FullName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
+    ClaimsPrincipal? Principal;
+    IEnumerable<Module>? Modules;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Modules = await ModuleService.GetAllAsync(Principal);
+    }
 
 }

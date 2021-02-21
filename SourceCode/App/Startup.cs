@@ -65,6 +65,7 @@ namespace ModulesRegistry
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGroupCategoryService, GroupCategoryService>();
+            services.AddScoped<IModuleService, ModuleService>();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");

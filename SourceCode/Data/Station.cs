@@ -18,8 +18,9 @@ namespace ModulesRegistry.Data
         public string FullName { get; set; }
         public string Signature { get; set; }
         public bool IsShadow { get; set; }
-        public bool IsJunction { get; set; }
+        public bool IsEnd { get; set; }
         public int? RegionId { get; set; }
+        public byte[] PdfInstruction { get; set; }
 
         public virtual Region Region { get; set; }
         public virtual ICollection<Module> Modules { get; set; }

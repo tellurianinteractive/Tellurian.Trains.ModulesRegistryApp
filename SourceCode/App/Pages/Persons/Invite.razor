@@ -1,6 +1,7 @@
 ﻿@using System.Text
 @using System.Net.Mail;
 @page "/Persons/Invite/{id:int}"
+@attribute [Authorize(Policy = "Admin")]
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer

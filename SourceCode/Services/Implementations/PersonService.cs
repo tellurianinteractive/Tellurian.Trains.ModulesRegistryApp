@@ -56,11 +56,14 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<Person?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
-            using var dbContext = Factory.CreateDbContext();
-            var person = await dbContext.People.FindAsync(id);
-            if (principal.IsAuthorisedInCountry(person.CountryId) || person.Id == principal.PersonId())
+            if (principal.MayRead(id))
             {
-                return person;
+                using var dbContext = Factory.CreateDbContext();
+                var person = await dbContext.People.FindAsync(id);
+                if (principal.MayRead(person.Id))
+                {
+                    return person;
+                }
             }
             return null;
         }
@@ -69,42 +72,45 @@ namespace ModulesRegistry.Services.Implementations
         {
             using var dbContext = Factory.CreateDbContext();
             var person = await dbContext.People.SingleOrDefaultAsync(p => p.UserId == userId);
-            if (principal.IsAuthorisedInCountry(person.CountryId) || person.Id == principal.PersonId())
+            if (principal.MayRead(person.Id))
             {
                 return person;
             }
             return null;
         }
 
-        public async Task<(int, string, Person?)> SaveAsync(ClaimsPrincipal? principal, Person person)
+        public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity)
         {
-            if (principal.IsAuthorisedInCountry(person.CountryId) || person.Id == principal.PersonId())
+            if (principal.MaySave(entity.Id))
             {
                 using var dbContext = Factory.CreateDbContext();
-                dbContext.People.Attach(person);
-                dbContext.Entry(person).State = person.Id.GetState();
+                dbContext.People.Attach(entity);
+                dbContext.Entry(entity).State = entity.Id.GetState();
                 var count = await dbContext.SaveChangesAsync();
-                return count > 0 ? (count, Strings.Saved, person) : (0, Strings.SaveFailed, null);
+                return count.SaveResult(entity);
             }
-            return (0, Strings.NotAuthorized, null);
+            return principal.SaveNotAuthorised<Person>();
         }
 
         public async Task<(int, string)> DeleteAsync(ClaimsPrincipal? principal, int id)
         {
-            using var dbContext = Factory.CreateDbContext();
-            var isUser = await dbContext.Users.AnyAsync(u => u.Person.Id == id);
-            var hasModules = dbContext.ModuleOwnerships.Any(mo => mo.PersonId == id);
-            if (isUser || hasModules) return (0, Strings.MayNotBeDeleted);
-
-            var person = await dbContext.People.FindAsync(id);
-            if (principal.IsAuthorisedInCountry(person.CountryId))
+            if (principal.MayDelete(principal.PersonId()))
             {
-                if (person is null) return (0, Strings.NothingToDelete);
-                dbContext.Remove(person);
-                var count = await dbContext.SaveChangesAsync();
-                return (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
+                using var dbContext = Factory.CreateDbContext();
+                var isUser = await dbContext.Users.AnyAsync(u => u.Person.Id == id);
+                var hasModules = dbContext.ModuleOwnerships.Any(mo => mo.PersonId == id);
+                if (isUser || hasModules) return (0, Strings.MayNotBeDeleted);
+
+                var person = await dbContext.People.FindAsync(id);
+                if (principal.IsAuthorisedInCountry(person.CountryId))
+                {
+                    if (person is null) return (0, Strings.NothingToDelete);
+                    dbContext.Remove(person);
+                    var count = await dbContext.SaveChangesAsync();
+                    return count.DeleteResult();
+                }
             }
-            return (0, Strings.NotAuthorized);
+            return principal.DeleteNotAuthorized<Person>();
         }
     }
 }

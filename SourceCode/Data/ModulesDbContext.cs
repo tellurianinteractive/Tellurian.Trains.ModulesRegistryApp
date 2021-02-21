@@ -8,15 +8,12 @@ namespace ModulesRegistry.Data
 {
     public partial class ModulesDbContext : DbContext
     {
-        //public ModulesDbContext()
-        //{
-        //}
-
         public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
             : base(options)
         {
         }
 
+        public virtual DbSet<Cargo> Cargos { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<ExternalStation> ExternalStations { get; set; }
         public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
@@ -24,8 +21,10 @@ namespace ModulesRegistry.Data
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
+        public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Scale> Scales { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<StationCustomer> StationCustomers { get; set; }
         public virtual DbSet<StationTrack> StationTracks { get; set; }
@@ -42,6 +41,26 @@ namespace ModulesRegistry.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Finnish_Swedish_CI_AS");
+
+            modelBuilder.Entity<Cargo>(entity =>
+            {
+                entity.ToTable("Cargo");
+
+                entity.Property(e => e.CargoUnitId).HasDefaultValueSql("((4))");
+
+                entity.Property(e => e.DefaultClasses).HasMaxLength(10);
+
+                entity.Property(e => e.En)
+                    .HasMaxLength(50)
+                    .HasColumnName("en");
+
+                entity.Property(e => e.Nhmcode).HasColumnName("NHMCode");
+
+                entity.Property(e => e.Sv)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("sv");
+            });
 
             modelBuilder.Entity<Country>(entity =>
             {
@@ -106,15 +125,15 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Group");
 
+                entity.Property(e => e.Category)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.CityName).HasMaxLength(50);
 
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.Category)
-                    .IsRequired()
-                    .HasMaxLength(20);
 
                 entity.Property(e => e.ShortName).HasMaxLength(10);
 
@@ -147,11 +166,37 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.FullName).HasMaxLength(50);
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.HasNormalGauge)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Is2R)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Note).HasMaxLength(255);
 
                 entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Scale).HasDefaultValueSql("((87))");
+
+                entity.Property(e => e.Theme).HasMaxLength(50);
+
+                entity.HasOne(d => d.ScaleNavigation)
+                    .WithMany(p => p.Modules)
+                    .HasForeignKey(d => d.Scale)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Module_Scale");
+
+                entity.HasOne(d => d.StandardNavigation)
+                    .WithMany(p => p.Modules)
+                    .HasForeignKey(d => d.Standard)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Module_ModuleStandard");
 
                 entity.HasOne(d => d.Station)
                     .WithMany(p => p.Modules)
@@ -188,6 +233,35 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_ModuleOwnership_Person");
             });
 
+            modelBuilder.Entity<ModuleStandard>(entity =>
+            {
+                entity.ToTable("ModuleStandard");
+
+                entity.Property(e => e.AcceptedNorm).HasMaxLength(255);
+
+                entity.Property(e => e.Couplings).HasMaxLength(20);
+
+                entity.Property(e => e.Electricity).HasMaxLength(20);
+
+                entity.Property(e => e.NarrowGauge).HasColumnType("decimal(2, 1)");
+
+                entity.Property(e => e.NormalGauge).HasColumnType("decimal(2, 1)");
+
+                entity.Property(e => e.PreferredTheme).HasMaxLength(20);
+
+                entity.Property(e => e.ShortName).HasMaxLength(10);
+
+                entity.Property(e => e.TrackSystem).HasMaxLength(20);
+
+                entity.Property(e => e.Wheelset).HasMaxLength(20);
+
+                entity.HasOne(d => d.ScaleNavigation)
+                    .WithMany(p => p.ModuleStandards)
+                    .HasForeignKey(d => d.Scale)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ModuleStandard_Scale");
+            });
+
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.ToTable("Person");
@@ -210,12 +284,11 @@ namespace ModulesRegistry.Data
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Person_Country1");
+                    .HasConstraintName("FK_Person_Country");
 
                 entity.HasOne(d => d.User)
-                    .WithOne(p => p.Person)
+                    .WithOne(u => u.Person)
                     .HasForeignKey<Person>(d => d.UserId)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_Person_User");
             });
 
@@ -250,6 +323,15 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_Region_Country");
             });
 
+            modelBuilder.Entity<Scale>(entity =>
+            {
+                entity.ToTable("Scale");
+
+                entity.Property(e => e.ShortName)
+                    .IsRequired()
+                    .HasMaxLength(10);
+            });
+
             modelBuilder.Entity<Station>(entity =>
             {
                 entity.ToTable("Station");
@@ -281,7 +363,9 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TrackOrArea)
+                entity.Property(e => e.TrackOrArea).HasMaxLength(50);
+
+                entity.Property(e => e.TrackOrAreaColor)
                     .HasMaxLength(10)
                     .IsFixedLength(true);
 
@@ -299,7 +383,7 @@ namespace ModulesRegistry.Data
                     .IsRequired()
                     .HasMaxLength(5);
 
-                entity.Property(e => e.UsageNote).HasMaxLength(50);
+                entity.Property(e => e.UsageNote).HasMaxLength(20);
 
                 entity.HasOne(d => d.Station)
                     .WithMany(p => p.StationTracks)
@@ -310,8 +394,17 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
-                entity.Property(e => e.ObjectId).IsRequired();
-                entity.Property(e => e.EmailAddress).IsRequired();
+
+                entity.HasIndex(e => e.EmailAddress, "IX_User_EmailAddress")
+                    .IsUnique();
+
+                entity.Property(e => e.EmailAddress)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.HashedPassword).HasMaxLength(255);
+
+                entity.Property(e => e.RegistrationTime).HasDefaultValueSql("(getdate())");
             });
 
             OnModelCreatingPartial(modelBuilder);

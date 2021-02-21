@@ -13,6 +13,7 @@ namespace ModulesRegistry.Data
         public string CustomerName { get; set; }
         public string Comment { get; set; }
         public string TrackOrArea { get; set; }
+        public string TrackOrAreaColor { get; set; }
         public short? OpenedYear { get; set; }
         public short? ClosedYear { get; set; }
 

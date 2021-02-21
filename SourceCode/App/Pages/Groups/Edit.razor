@@ -84,6 +84,7 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
 
+    private ClaimsPrincipal? Principal;
     private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
     private IEnumerable<(string Value, string Desciption)>? GroupCategories;
@@ -91,6 +92,7 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Reset();
         GroupCategories = await GroupCategoryService.AllAsync();
         CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
@@ -102,13 +104,13 @@ else
     {
         Reset();
         if (Group is null) return;
-        var result = await GroupService.SaveAsync(Group);
-        Group = result.Group;
+        var result = await GroupService.SaveAsync(Principal, Group);
+        Group = result.Entity;
         Message = result.Message;
     }
 
     private async Task<Group> GetOrCreateAsync() =>
-        Id.IsSet() ? await GroupService.FindAsync(Id.Value) ?? NewGroup : NewGroup;
+        Id.IsSet() ? await GroupService.FindByIdAsync(Principal, Id.Value) ?? NewGroup : NewGroup;
     private Group NewGroup => new Group { CountryId = DefaultCountryId };
     private void Reset()
     {

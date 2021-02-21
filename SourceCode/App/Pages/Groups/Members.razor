@@ -42,13 +42,15 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? GroupId { get; set; }
 
+    private ClaimsPrincipal? Principal;
     private Group? Group;
 
     protected async override Task OnParametersSetAsync()
     {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (GroupId.IsSet())
         {
-            Group = await GroupService.FindAsync(GroupId.Value);
+            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
         }
     }
 

@@ -186,4 +186,10 @@
   <data name="NotAuthorized" xml:space="preserve">
     <value>Inte behörig</value>
   </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>Existerar redan</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Hittades inte</value>
+  </data>
 </root>
