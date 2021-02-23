@@ -1,0 +1,80 @@
+﻿@page "/ModuleStandards/Index"
+@attribute [Authorize(Policy = "User")]
+
+
+@inject IStringLocalizer<App> Localizer
+@inject IModuleStandardService ModuleStandardService
+
+<h1>@Localizer["ModuleStandards"]</h1>
+
+@if (Principal.IsAnyAdministrator() && ModuleStandards is not null)
+{
+    <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit">@Localizer["Add"]</a>
+}
+
+@if (ModuleStandards is null)
+{
+
+}
+else
+{
+    <table class="table table-striped table-responsive-sm">
+        <thead>
+            <tr>
+                <th>@Localizer["Scale"]</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["PreferredTheme"]</th>
+                <th>@Localizer["TrackSystem"]</th>
+                <th>@Localizer["Wheelset"]</th>
+                <th>@Localizer["NormalGauge"]</th>
+                <th>@Localizer["NarrowGauge"]</th>
+                <th>@Localizer["ElectricSystem"]</th>
+                <th>@Localizer["Couplings"]</th>
+                @if (Principal.IsAnyAdministrator())
+                {
+                    <th>@Localizer["Actions"]</th>
+
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var standard in ModuleStandards)
+            {
+            <tr>
+                <td>@Scale(standard.Scale)</td>
+                <td>@standard.ShortName</td>
+                <td>@standard.PreferredTheme</td>
+                <td>@standard.TrackSystem</td>
+                <td>@standard.Wheelset</td>
+                <td>@Gauge(standard.NormalGauge)</td>
+                <td>@Gauge(standard.NarrowGauge)</td>
+                <td>@standard.Electricity</td>
+                <td>@standard.Couplings</td>
+                @if (Principal.IsAnyAdministrator())
+                {
+                    <td>Edit</td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private ClaimsPrincipal? Principal;
+    private IEnumerable<ModuleStandard>? ModuleStandards;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (Principal is not null)
+        {
+            ModuleStandards = await ModuleStandardService.All(Principal);
+        }
+    }
+
+    private string Scale(Scale it) => $"{it.ShortName} 1:{it.Denominator}";
+    private string Gauge(double? it) => it.HasValue ? string.Format("{0:F1} mm", it) : string.Empty;
+}

@@ -9,14 +9,12 @@ namespace ModulesRegistry.Validators
         public GroupMemberValidator(IStringLocalizer<App> localizer)
         {
             RuleFor(gm => gm.GroupId)
-                .GreaterThan(0)
-                .WithName(n => localizer[nameof(n.Group)])
-                .WithMessage(gm => localizer["IsRequired"]);
+                .MustBeSelected(localizer)
+                .WithName(n => localizer[nameof(n.Group)]);
 
             RuleFor(gm => gm.PersonId)
-               .GreaterThan(0)
-               .WithName(n => localizer[nameof(n.Person)])
-               .WithMessage(gm => localizer["IsRequired"]);
+                .MustBeSelected(localizer)
+                .WithName(n => localizer[nameof(n.Person)]);
         }
     }
 }

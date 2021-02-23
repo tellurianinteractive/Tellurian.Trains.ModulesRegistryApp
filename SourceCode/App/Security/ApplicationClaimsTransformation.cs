@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Data;
-using ModulesRegistry.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

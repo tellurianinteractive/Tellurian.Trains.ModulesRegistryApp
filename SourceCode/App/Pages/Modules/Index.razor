@@ -6,29 +6,7 @@
 
 <h1>@Localizer["Modules"]</h1>
 
-@if (Modules is null)
-{
-
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var module in Modules)
-            {
-                <tr>
-                    <td>@module.FullName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
+<ModulesList Modules="Modules" MayEdit="MayEdit"/>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
@@ -42,4 +20,5 @@ else
         Modules = await ModuleService.GetAllAsync(Principal);
     }
 
+    private bool MayEdit => Principal is not null;
 }

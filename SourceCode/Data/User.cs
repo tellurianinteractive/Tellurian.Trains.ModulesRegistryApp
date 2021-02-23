@@ -21,6 +21,5 @@ namespace ModulesRegistry.Data
         public bool IsGlobalAdministrator { get; set; }
         public bool IsCountryAdministrator { get; set; }
         public string HashedPassword { get; set; }
-
     }
 }

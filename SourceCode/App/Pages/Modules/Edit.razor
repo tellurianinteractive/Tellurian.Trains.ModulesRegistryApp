@@ -1,21 +1,224 @@
-﻿@page "/Modules/Edit/{id:int}"
+﻿@page "/Modules/{id:int}/Edit"
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IModuleService ModuleService
+@inject IScaleService ScaleService
+@inject IModuleStandardService ModuleStandardService
+
+<h1>@Heading</h1>
+@if (Module is null)
+{
+
+}
+else
+{
+    <EditForm Model="Module" OnValidSubmit="OnValidSubmit">
+        <FluentValidationValidator />
+        <ValidationSummary />
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="name">@Localizer["Name"]</label>
+                <InputText Class="form-control" id="name" @bind-Value="@Module.FullName" />
+                <ValidationMessage For="@(() => Module.FullName)" />
+            </div>
+            <div class="form-group">
+                <label for="scale">@Localizer["Scale"]</label>
+                <InputSelect Class="form-control" id="scale" TValue="int" @bind-Value="@Module.ScaleId">
+                    <option value="0">@SelectScaleLabel</option>
+                    @if (ScaleItems is not null)
+                    {
+                        foreach (var item in ScaleItems)
+                        {
+                            if (item.Id == Module.ScaleId)
+                            {
+                                <option selected value="@item.Id">@item.Description</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Description</option>
+                            }
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Module.ScaleId)" />
+            </div>
+            <div class="form-group">
+                <label for="standard">@Localizer["Standard"]</label>
+                <InputSelect Class="form-control" id="standard" TValue="int" @bind-Value="@Module.StandardId">
+                    <option value="0">@SelectStandardLabel</option>
+                    @if (ModuleStandardItems is not null)
+                    {
+                        foreach (var item in ModuleStandardItems)
+                        {
+                            if (item.Id == Module.StandardId)
+                            {
+                                <option selected value="@item.Id">@item.Description</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Description</option>
+                            }
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Module.StandardId)" />
+            </div>
+            <div class="form-group">
+                <label for="FREMONumber">@Localizer["FREMONumber"]</label>
+                <InputNumber TValue="int?" Class="form-control" id="FREMONumber" @bind-Value="@Module.FREMONumber" />
+                <ValidationMessage For="@(() => Module.FREMONumber)" />
+            </div>
+
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="theme">@Localizer["ThemeNote"]</label>
+                <InputText Class="form-control" id="theme" @bind-Value="@Module.Theme" />
+                <ValidationMessage For="@(() => Module.Theme)" />
+            </div>
+            <div class="form-group">
+                <label for="fromyear">@Localizer["FromYear"]</label>
+                <InputNumber Class="form-control" id="fromyear" @bind-Value="@Module.RepresentsFromYear" />
+                <ValidationMessage For="@(() => Module.RepresentsFromYear)" />
+            </div>
+            <div class="form-group">
+                <label for="uptoyear">@Localizer["UptoYear"]</label>
+                <InputNumber Class="form-control" id="uptoyear" @bind-Value="@Module.RepresentsUptoYear" />
+                <ValidationMessage For="@(() => Module.RepresentsUptoYear)" />
+            </div>
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label for="functionalstate">@Localizer["FunctionalState"]</label>
+                <InputSelect Class="form-control" id="functionalstate" TValue="ModuleFunctionalState" @bind-Value="@Module.FunctionalState">
+                    @foreach (var item in EnumExtensions.ModuleFunctionalStateListboxItems())
+                    {
+                        if (item.Id == (int)Module.FunctionalState)
+                        {
+                            <option selected value="@item.Id">@item.Description</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Description</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Module.FunctionalState)" />
+            </div>
+            <div class="form-group">
+                <label for="landscapestate">@Localizer["LandscapeState"]</label>
+                <InputSelect Class="form-control" id="landscapestate" TValue="ModuleLandscapeState" @bind-Value="@Module.LandscapeState">
+                    @foreach (var item in EnumExtensions.ModuleLandscapeStateListboxItems())
+                    {
+                        if (item.Id == (int)Module.LandscapeState)
+                        {
+                            <option selected value="@item.Id">@item.Description</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Description</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Module.FunctionalState)" />
+            </div>
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-group">
+                <label class="form-label" for="radius">@Localizer["Radius"]</label>
+                <InputNumber TValue="double?" Class="form-control" id="radius" @bind-Value="@Module.Radius" />
+                <ValidationMessage For="@(() => Module.Radius)" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="angle">@Localizer["Angle"]</label>
+                <InputNumber TValue="double?" Class="form-control" id="angle" @bind-Value="@Module.Angle" />
+                <ValidationMessage For="@(() => Module.Angle)" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="length">@Localizer["Length"]</label>
+                <InputNumber TValue="double" Class="form-control" id="length" @bind-Value="@Module.Length" />
+                <ValidationMessage For="@(() => Module.Length)" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="NumberOfThroughTracks">@Localizer["NumberOfThroughTracks"]</label>
+                <InputNumber TValue="short" Class="form-control" id="NumberOfThroughTracks" @bind-Value="@Module.NumberOfThroughTracks" />
+                <ValidationMessage For="@(() => Module.NumberOfThroughTracks)" />
+            </div>
+
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-check">
+                <label class="form-check-label" for="normaltrack">@Localizer["HasNormalGauge"]</label>
+                <InputCheckbox id="normaltrack" @bind-Value="Module.HasNormalGauge" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="narrowtrack">@Localizer["HasNarrowGauge"]</label>
+                <InputCheckbox id="narrowtrack" @bind-Value="Module.HasNarrowGauge" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="is2R">@Localizer["Is2R"]</label>
+                <InputCheckbox id="is2R" @bind-Value="Module.Is2R" />
+            </div>
+            <div class="form-group">
+                <label class="form-check-label" for="is3R">@Localizer["Is3R"]</label>
+                <InputCheckbox id="is3R" @bind-Value="Module.Is3R" />
+            </div>
+        </div>
+        <div class="input-group input-group-sm">
+            <div class="form-check">
+                <label class="form-check-label" for="issignal">@Localizer["IsSignal"]</label>
+                <InputCheckbox id="issignal" @bind-Value="Module.IsSignal" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="isturntable">@Localizer["IsTurntable"]</label>
+                <InputCheckbox id="isturntable" @bind-Value="Module.IsTurntable" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="isduckunder">@Localizer["IsDuckunder"]</label>
+                <InputCheckbox id="isduckunder" @bind-Value="Module.IsDuckunder" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="isjunction">@Localizer["IsJunction"]</label>
+                <InputCheckbox id="isjunction" @bind-Value="Module.IsJunction" />
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="isstation">@Localizer["IsStation"]</label>
+                <InputCheckbox id="isstation" @bind-Value="Module.IsStation" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+    </EditForm>
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
     Module? Module;
+    IEnumerable<ListboxItem>? ScaleItems;
+    IEnumerable<ListboxItem>? ModuleStandardItems;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is not null && Id > 0)
+        if (Principal is not null)
         {
-            Module = await ModuleService.FindByIdAsync(Principal, Id);
+            ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
+            ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
+            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1 };
         }
     }
+
+    private async Task OnValidSubmit()
+    {
+        if (Module is not null)
+        {
+            var result = await ModuleService.SaveAsync(Principal, Module);
+        }
+    }
+
+    private string Heading => Id == 0 ? $"{Localizer["CreateModule"]}" : $"{Localizer["EditModule"]}";
+    private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
+    private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
 }

@@ -12,21 +12,21 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(10)
-                .NameIsCapitalizedCorrectly()
+                .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.ShortName)]);
 
             RuleFor(group => group.FullName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .NameIsCapitalizedCorrectly()
+                .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FullName)]);
 
             RuleFor(group => group.CityName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .NameIsCapitalizedCorrectly()
+                .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.CityName)]);
 
             RuleFor(group => group.Category)
@@ -36,7 +36,7 @@ namespace ModulesRegistry.Validators
                 .WithName(n => localizer[nameof(n.Category)]);
 
             RuleFor(group => group.CountryId)
-                .GreaterThan(0)
+                .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Country)]);
 
         }

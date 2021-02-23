@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 0.4.0
+Release date 2021-02-23
+
+- User can now view, create and edit *personal modules*.
+- Administrators can now add and edit *module standards*.
+- The most common *scales* are added.
+- All *functional*- and *landscape* states are implemented.
+
 ## Version 0.3.0
 Release date 2021-02-21
 

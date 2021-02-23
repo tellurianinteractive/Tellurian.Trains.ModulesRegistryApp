@@ -29,16 +29,12 @@
     [Parameter] public bool IsVisible { get; set; }
     private int Id;
 
-    protected override void OnInitialized()
-    {
-        Id = UserState.SelectedCountryId;
-    }
-
     private async Task OnSelectedItem()
     {
         await OnSelected.InvokeAsync(Id);
     }
 
     private bool IsSelected(ListboxItem item) => Items is not null && (item.Id == Id || Items.Count() == 1);
-    private string Label => $"{Localizer["Select"]} {ItemType?.ToLowerInvariant()}";
+    private string Label => $"{Localizer["Select"]} {LocalizedItemType.ToLowerInvariant()}";
+    private string LocalizedItemType => ItemType is null ? string.Empty : Localizer[ItemType].Value;
 }

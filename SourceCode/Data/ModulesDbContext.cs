@@ -14,19 +14,28 @@ namespace ModulesRegistry.Data
         }
 
         public virtual DbSet<Cargo> Cargos { get; set; }
+        public virtual DbSet<CargoDirection> CargoDirections { get; set; }
+        public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
+        public virtual DbSet<CargoRelation> CargoRelations { get; set; }
+        public virtual DbSet<CargoUnit> CargoUnits { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<ExternalStation> ExternalStations { get; set; }
         public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
+        public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
+        public virtual DbSet<OperatingBasicDay> OperatingBasicDays { get; set; }
+        public virtual DbSet<OperatingDay> OperatingDays { get; set; }
+        public virtual DbSet<Operator> Operators { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Scale> Scales { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<StationCustomer> StationCustomers { get; set; }
+        public virtual DbSet<StationCustomerCargo> StationCustomerCargos { get; set; }
         public virtual DbSet<StationTrack> StationTracks { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -46,8 +55,6 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Cargo");
 
-                entity.Property(e => e.CargoUnitId).HasDefaultValueSql("((4))");
-
                 entity.Property(e => e.DefaultClasses).HasMaxLength(10);
 
                 entity.Property(e => e.En)
@@ -60,6 +67,80 @@ namespace ModulesRegistry.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("sv");
+
+                entity.HasOne(d => d.CargoUnit)
+                    .WithMany(p => p.Cargos)
+                    .HasForeignKey(d => d.CargoUnitId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Cargo_CargoUnit");
+            });
+
+            modelBuilder.Entity<CargoDirection>(entity =>
+            {
+                entity.ToTable("CargoDirection");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.ShortName)
+                    .IsRequired()
+                    .HasMaxLength(4);
+            });
+
+            modelBuilder.Entity<CargoReadyTime>(entity =>
+            {
+                entity.ToTable("CargoReadyTime");
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.ShortName)
+                    .IsRequired()
+                    .HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<CargoRelation>(entity =>
+            {
+                entity.ToTable("CargoRelation");
+
+                entity.HasOne(d => d.ConsumerStationCustomerCargo)
+                    .WithMany(p => p.CargoRelationConsumerStationCustomerCargos)
+                    .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
+
+                entity.HasOne(d => d.OperatingDay)
+                    .WithMany(p => p.CargoRelations)
+                    .HasForeignKey(d => d.OperatingDayId)
+                    .HasConstraintName("FK_CargoRelation_OperatingDay");
+
+                entity.HasOne(d => d.Operator)
+                    .WithMany(p => p.CargoRelations)
+                    .HasForeignKey(d => d.OperatorId)
+                    .HasConstraintName("FK_CargoRelation_Operator");
+
+                entity.HasOne(d => d.SupplierStationCustomerCargo)
+                    .WithMany(p => p.CargoRelationSupplierStationCustomerCargos)
+                    .HasForeignKey(d => d.SupplierStationCustomerCargoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Supplier");
+            });
+
+            modelBuilder.Entity<CargoUnit>(entity =>
+            {
+                entity.ToTable("CargoUnit");
+
+                entity.Property(e => e.Designation)
+                    .IsRequired()
+                    .HasMaxLength(6);
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(12);
             });
 
             modelBuilder.Entity<Country>(entity =>
@@ -121,6 +202,42 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_ExternalStationCustomer_ExternalStation");
             });
 
+            modelBuilder.Entity<ExternalStationCustomerCargo>(entity =>
+            {
+                entity.ToTable("ExternalStationCustomerCargo");
+
+                entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
+
+                entity.HasOne(d => d.Cargo)
+                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .HasForeignKey(d => d.CargoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_Cargo");
+
+                entity.HasOne(d => d.Direction)
+                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .HasForeignKey(d => d.DirectionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_CargoDirection");
+
+                entity.HasOne(d => d.ExternalStationCustomer)
+                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .HasForeignKey(d => d.ExternalStationCustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_StationCustomer");
+
+                entity.HasOne(d => d.OperatingDay)
+                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .HasForeignKey(d => d.OperatingDayId)
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_OperatingDay");
+
+                entity.HasOne(d => d.QuantityUnit)
+                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .HasForeignKey(d => d.QuantityUnitId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_CargoUnit");
+            });
+
             modelBuilder.Entity<Group>(entity =>
             {
                 entity.ToTable("Group");
@@ -164,37 +281,36 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Module");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.HasNormalGauge)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
+                    .IsRequired();
 
                 entity.Property(e => e.Is2R)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
+                    .IsRequired();
 
                 entity.Property(e => e.Note).HasMaxLength(255);
 
-                entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Scale).HasDefaultValueSql("((87))");
 
                 entity.Property(e => e.Theme).HasMaxLength(50);
 
-                entity.HasOne(d => d.ScaleNavigation)
+                entity.Property(e => e.FunctionalState)
+                    .HasConversion<int>();
+
+                entity.Property(e => e.LandscapeState)
+                     .HasConversion<int>();
+
+                entity.HasOne(d => d.Scale)
                     .WithMany(p => p.Modules)
-                    .HasForeignKey(d => d.Scale)
+                    .HasForeignKey(d => d.ScaleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Module_Scale");
 
-                entity.HasOne(d => d.StandardNavigation)
+                entity.HasOne(d => d.Standard)
                     .WithMany(p => p.Modules)
-                    .HasForeignKey(d => d.Standard)
+                    .HasForeignKey(d => d.StandardId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Module_ModuleStandard");
 
@@ -243,10 +359,6 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.Electricity).HasMaxLength(20);
 
-                entity.Property(e => e.NarrowGauge).HasColumnType("decimal(2, 1)");
-
-                entity.Property(e => e.NormalGauge).HasColumnType("decimal(2, 1)");
-
                 entity.Property(e => e.PreferredTheme).HasMaxLength(20);
 
                 entity.Property(e => e.ShortName).HasMaxLength(10);
@@ -255,11 +367,57 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.Wheelset).HasMaxLength(20);
 
-                entity.HasOne(d => d.ScaleNavigation)
+                entity.HasOne(d => d.Scale)
                     .WithMany(p => p.ModuleStandards)
-                    .HasForeignKey(d => d.Scale)
+                    .HasForeignKey(d => d.ScaleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ModuleStandard_Scale");
+            });
+
+            modelBuilder.Entity<OperatingBasicDay>(entity =>
+            {
+                entity.HasKey(e => new { e.OperatingDayId, e.BasicDayId })
+                    .HasName("PK_OperatingDayId_BasicDayId");
+
+                entity.ToTable("OperatingBasicDay");
+
+                entity.HasOne(d => d.BasicDay)
+                    .WithMany(p => p.OperatingBasicDayBasicDays)
+                    .HasForeignKey(d => d.BasicDayId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OperatingBasicDay_BasicDays");
+
+                entity.HasOne(d => d.OperatingDay)
+                    .WithMany(p => p.OperatingBasicDayOperatingDays)
+                    .HasForeignKey(d => d.OperatingDayId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OperatingBasicDay_OperatingDays");
+            });
+
+            modelBuilder.Entity<OperatingDay>(entity =>
+            {
+                entity.ToTable("OperatingDay");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ShortName)
+                    .IsRequired()
+                    .HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<Operator>(entity =>
+            {
+                entity.ToTable("Operator");
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Signature)
+                    .IsRequired()
+                    .HasMaxLength(6);
             });
 
             modelBuilder.Entity<Person>(entity =>
@@ -287,7 +445,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_Person_Country");
 
                 entity.HasOne(d => d.User)
-                    .WithOne(u => u.Person)
+                    .WithOne(p => p.Person)
                     .HasForeignKey<Person>(d => d.UserId)
                     .HasConstraintName("FK_Person_User");
             });
@@ -373,6 +531,47 @@ namespace ModulesRegistry.Data
                     .WithMany(p => p.StationCustomers)
                     .HasForeignKey(d => d.StationId)
                     .HasConstraintName("FK_StationCustomer_Station");
+            });
+
+            modelBuilder.Entity<StationCustomerCargo>(entity =>
+            {
+                entity.ToTable("StationCustomerCargo");
+
+                entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
+
+                entity.Property(e => e.TrackOrArea).HasMaxLength(10);
+
+                entity.Property(e => e.TrackOrAreaColor)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.HasOne(d => d.Cargo)
+                    .WithMany(p => p.StationCustomerCargos)
+                    .HasForeignKey(d => d.CargoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoCustomer_Cargo");
+
+                entity.HasOne(d => d.Direction)
+                    .WithMany(p => p.StationCustomerCargos)
+                    .HasForeignKey(d => d.DirectionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoCustomer_CargoDirection");
+
+                entity.HasOne(d => d.OperatingDay)
+                    .WithMany(p => p.StationCustomerCargos)
+                    .HasForeignKey(d => d.OperatingDayId)
+                    .HasConstraintName("FK_CargoCustomer_OperatingDay");
+
+                entity.HasOne(d => d.ReadyTime)
+                    .WithMany(p => p.StationCustomerCargos)
+                    .HasForeignKey(d => d.ReadyTimeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoCustomer_CargoReadyTime");
+
+                entity.HasOne(d => d.StationCustomer)
+                    .WithMany(p => p.StationCustomerCargos)
+                    .HasForeignKey(d => d.StationCustomerId)
+                    .HasConstraintName("FK_CargoCustomer_StationCustomer");
             });
 
             modelBuilder.Entity<StationTrack>(entity =>

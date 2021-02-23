@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class CountryService : ICountryService
+    public sealed class CountryService : ICountryService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         private readonly ResourceManager ResourceManager;

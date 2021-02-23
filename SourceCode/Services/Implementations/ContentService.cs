@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class ContentService : IContentService
+    public sealed class ContentService : IContentService
     {
         private const string MarkdownPath = "content/markdown";
         private readonly IHttpClientFactory ClientFactory;

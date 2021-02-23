@@ -315,4 +315,112 @@
   <data name="SorryNothingToDisplayHere" xml:space="preserve">
     <value>Tyvärr, inget att visa här.</value>
   </data>
+  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
+    <value>måste börja med en stor bokstav</value>
+  </data>
+  <data name="MustBeSelected" xml:space="preserve">
+    <value>måste väljas.</value>
+  </data>
+  <data name="MustBeYearBetween" xml:space="preserve">
+    <value>måste vara ett år mellan {0} och {1}.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Skala</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="ThemeNote" xml:space="preserve">
+    <value>Temanotering</value>
+  </data>
+  <data name="FromYear" xml:space="preserve">
+    <value>Från år</value>
+  </data>
+  <data name="UptoYear" xml:space="preserve">
+    <value>Upp till år</value>
+  </data>
+  <data name="FunctionalState" xml:space="preserve">
+    <value>Funktionellt tillstånd</value>
+  </data>
+  <data name="LandscapeState" xml:space="preserve">
+    <value>Landskapstillstånd</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Okänd</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radie</value>
+  </data>
+  <data name="Angle" xml:space="preserve">
+    <value>Vinkel</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Längd</value>
+  </data>
+  <data name="Is2R" xml:space="preserve">
+    <value>Är 2R?</value>
+  </data>
+  <data name="Is3R" xml:space="preserve">
+    <value>Är 3R?</value>
+  </data>
+  <data name="IsSignal" xml:space="preserve">
+    <value>Är signal?</value>
+  </data>
+  <data name="IsTurntable" xml:space="preserve">
+    <value>Är vändskiva?</value>
+  </data>
+  <data name="IsDuckunder" xml:space="preserve">
+    <value>Är duckunder?</value>
+  </data>
+  <data name="IsJunction" xml:space="preserve">
+    <value>Är förgrening?</value>
+  </data>
+  <data name="IsStation" xml:space="preserve">
+    <value>Är station?</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Modul</value>
+  </data>
+  <data name="HasNarrowGauge" xml:space="preserve">
+    <value>Har smalspår?</value>
+  </data>
+  <data name="HasNormalGauge" xml:space="preserve">
+    <value>Har normalspår?</value>
+  </data>
+  <data name="NumberOfThroughTracks" xml:space="preserve">
+    <value>Antal genomgående spår</value>
+  </data>
+  <data name="PreferredTheme" xml:space="preserve">
+    <value>Föredraget tema</value>
+  </data>
+  <data name="ModuleStandards" xml:space="preserve">
+    <value>Modulstandarder</value>
+  </data>
+  <data name="TrackSystem" xml:space="preserve">
+    <value>Spårsystem</value>
+  </data>
+  <data name="NormalGauge" xml:space="preserve">
+    <value>Normalspår</value>
+  </data>
+  <data name="NarrowGauge" xml:space="preserve">
+    <value>Smalspår</value>
+  </data>
+  <data name="ElectricSystem" xml:space="preserve">
+    <value>Elektriskt system</value>
+  </data>
+  <data name="Couplings" xml:space="preserve">
+    <value>Koppel</value>
+  </data>
+  <data name="NoRecordsToDisplay" xml:space="preserve">
+    <value>Inga poster att visa</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>Skapa modul</value>
+  </data>
+  <data name="EditModule" xml:space="preserve">
+    <value>Ändra modul</value>
+  </data>
 </root>

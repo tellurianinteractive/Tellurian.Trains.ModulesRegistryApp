@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class CloudMailSender : IMailSender
+    public sealed class CloudMailSender : IMailSender
     {
         public CloudMailSender(IOptions<CloudMailSenderSettings> options)
         {

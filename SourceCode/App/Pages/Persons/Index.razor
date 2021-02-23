@@ -6,7 +6,7 @@
 @inject ICountryService CountryService
 
 <h1>@Localizer["ModuleOwners"]</h1>
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible"  />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible"  />
 
 @if (People is null)
 {

@@ -79,6 +79,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved.
+        /// </summary>
+        internal static string Approved {
+            get {
+                return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Best regards.
         /// </summary>
         internal static string BestRegards {
@@ -129,6 +138,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Denmark {
             get {
                 return ResourceManager.GetString("Denmark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully applied, detailed.
+        /// </summary>
+        internal static string FullyAppliedDetailed {
+            get {
+                return ResourceManager.GetString("FullyAppliedDetailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully applied, simple.
+        /// </summary>
+        internal static string FullyAppliedSimple {
+            get {
+                return ResourceManager.GetString("FullyAppliedSimple", resourceCulture);
             }
         }
         
@@ -187,6 +214,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not applicable.
+        /// </summary>
+        internal static string NotApplicable {
+            get {
+                return ResourceManager.GetString("NotApplicable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not authorized.
         /// </summary>
         internal static string NotAuthorized {
@@ -214,6 +250,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Partially applied.
+        /// </summary>
+        internal static string PartiallyApplied {
+            get {
+                return ResourceManager.GetString("PartiallyApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password does not meet policy requirements..
         /// </summary>
         internal static string PasswordInvalid {
@@ -237,6 +282,33 @@ namespace ModulesRegistry.Services.Resources {
         internal static string PasswordsDontMatch {
             get {
                 return ResourceManager.GetString("PasswordsDontMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planned.
+        /// </summary>
+        internal static string Planned {
+            get {
+                return ResourceManager.GetString("Planned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing.
+        /// </summary>
+        internal static string Preparing {
+            get {
+                return ResourceManager.GetString("Preparing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready to test.
+        /// </summary>
+        internal static string ReadyToTest {
+            get {
+                return ResourceManager.GetString("ReadyToTest", resourceCulture);
             }
         }
         
@@ -273,6 +345,42 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Switzerland {
             get {
                 return ResourceManager.GetString("Switzerland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tested.
+        /// </summary>
+        internal static string Tested {
+            get {
+                return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under construction.
+        /// </summary>
+        internal static string UnderConstruction {
+            get {
+                return ResourceManager.GetString("UnderConstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under repair.
+        /// </summary>
+        internal static string UnderRepair {
+            get {
+                return ResourceManager.GetString("UnderRepair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        internal static string Unknown {
+            get {
+                return ResourceManager.GetString("Unknown", resourceCulture);
             }
         }
         

@@ -192,4 +192,40 @@
   <data name="NotFound" xml:space="preserve">
     <value>Hittades inte</value>
   </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Okänt</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planerad</value>
+  </data>
+  <data name="UnderConstruction" xml:space="preserve">
+    <value>Under byggnad</value>
+  </data>
+  <data name="UnderRepair" xml:space="preserve">
+    <value>Under reparation</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Redo att testa</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkänd</value>
+  </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Testad</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ej tillämpbart</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Förbereds</value>
+  </data>
+  <data name="PartiallyApplied" xml:space="preserve">
+    <value>Delvis påfört</value>
+  </data>
+  <data name="FullyAppliedSimple" xml:space="preserve">
+    <value>Fullt påfört, enkelt</value>
+  </data>
+  <data name="FullyAppliedDetailed" xml:space="preserve">
+    <value>Fullt påfört, detaljerat</value>
+  </data>
 </root>

@@ -1,0 +1,56 @@
+﻿@inject IStringLocalizer<App> Localizer
+@if (Modules is not null && MayEdit)
+{
+    <div>
+        <a class="btn btn-secondary" href="/Modules/0/Edit">@Localizer["Add"]</a>
+    </div>
+}
+@if (Modules is null)
+{
+
+}
+else if (Modules.Count() == 0)
+{
+    <div class="alert alert-info">@Localizer["NoRecordsToDisplay"]</div>
+}
+else
+{
+
+    <table class="table table-striped table-responsive-sm">
+        <thead>
+            <tr>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Scale"]</th>
+                <th>@Localizer["Standard"]</th>
+                <th>@Localizer["Owners"]</th>
+                <th>@Localizer["IsStation"]</th>
+                <th>@Localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var module in Modules)
+            {
+                <tr>
+                    <td>@module.FullName</td>
+                    <td>@module.Scale.ShortName</td>
+                    <td>@module.Standard.ShortName</td>
+                    <td>@PersonalOwners(module.ModuleOwnerships)</td>
+                    <td>@((module.StationId is not null).AsYesNo())</td>
+                    <td>
+                        @if (MayEdit)
+                        {
+                            <a class="btn btn-secondary" href="/Modules/@module.Id/Edit">@Localizer["Edit"]</a>
+                        }
+                        &nbsp;
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter] public IEnumerable<Module>? Modules { get; set; }
+    [Parameter] public bool MayEdit { get; set; }
+    private string PersonalOwners(IEnumerable<ModuleOwnership> owners) => string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));
+}

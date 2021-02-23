@@ -192,4 +192,40 @@
   <data name="NotFound" xml:space="preserve">
     <value>Ikke funnet</value>
   </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Ukjent</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planlagt</value>
+  </data>
+  <data name="UnderConstruction" xml:space="preserve">
+    <value>Under opbygning</value>
+  </data>
+  <data name="UnderRepair" xml:space="preserve">
+    <value>Under reparasjon</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Klar til å teste</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkjent</value>
+  </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Testet</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ikke aktuelt</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Forberedes</value>
+  </data>
+  <data name="PartiallyApplied" xml:space="preserve">
+    <value>Delvis påført</value>
+  </data>
+  <data name="FullyAppliedSimple" xml:space="preserve">
+    <value>Fullt påført, enkelt</value>
+  </data>
+  <data name="FullyAppliedDetailed" xml:space="preserve">
+    <value>Fult påført, detaljert</value>
+  </data>
 </root>

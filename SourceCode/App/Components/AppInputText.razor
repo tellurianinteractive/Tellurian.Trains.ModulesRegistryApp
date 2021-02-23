@@ -1,0 +1,24 @@
+﻿@using System.Linq.Expressions;
+@inject IStringLocalizer<App> Localizer
+
+<div class="form-group">
+    <label for="@Label">@Localizer[Label]</label>
+    <InputText Class="form-control" id="@Label" @bind-Value="@Value" /> &nbsp;
+    <ValidationMessage For="@(() => ValidationMessage)" />
+</div>
+
+
+@code {
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public Func<string>? Validation { get; set; }
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+
+    private string ValidationMessage => Validation is null ? string.Empty : Validation.Invoke();
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString();
+        return ValueChanged.InvokeAsync(Value);
+    }
+}

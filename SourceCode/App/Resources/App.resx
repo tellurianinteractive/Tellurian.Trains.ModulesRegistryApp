@@ -315,4 +315,112 @@
   <data name="SorryNothingToDisplayHere" xml:space="preserve">
     <value>Sorry, nothing to display here.</value>
   </data>
+  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
+    <value>must begin with a capital letter</value>
+  </data>
+  <data name="MustBeSelected" xml:space="preserve">
+    <value>must be selected.</value>
+  </data>
+  <data name="MustBeYearBetween" xml:space="preserve">
+    <value>must be a year between {0} and {1}.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="ThemeNote" xml:space="preserve">
+    <value>Theme note</value>
+  </data>
+  <data name="FromYear" xml:space="preserve">
+    <value>From year</value>
+  </data>
+  <data name="UptoYear" xml:space="preserve">
+    <value>Up to year</value>
+  </data>
+  <data name="FunctionalState" xml:space="preserve">
+    <value>Functional state</value>
+  </data>
+  <data name="LandscapeState" xml:space="preserve">
+    <value>Landscape state</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="Angle" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="Is2R" xml:space="preserve">
+    <value>Is 2R?</value>
+  </data>
+  <data name="Is3R" xml:space="preserve">
+    <value>Is 3R?</value>
+  </data>
+  <data name="IsSignal" xml:space="preserve">
+    <value>Is signal?</value>
+  </data>
+  <data name="IsTurntable" xml:space="preserve">
+    <value>Is turntable?</value>
+  </data>
+  <data name="IsDuckunder" xml:space="preserve">
+    <value>Is duckunder?</value>
+  </data>
+  <data name="IsJunction" xml:space="preserve">
+    <value>Is junction?</value>
+  </data>
+  <data name="IsStation" xml:space="preserve">
+    <value>Is station?</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="HasNarrowGauge" xml:space="preserve">
+    <value>Has narrow gauge?</value>
+  </data>
+  <data name="HasNormalGauge" xml:space="preserve">
+    <value>Has normal gauge?</value>
+  </data>
+  <data name="NumberOfThroughTracks" xml:space="preserve">
+    <value>Number of through tracks</value>
+  </data>
+  <data name="PreferredTheme" xml:space="preserve">
+    <value>Preferred theme</value>
+  </data>
+  <data name="ModuleStandards" xml:space="preserve">
+    <value>Module standards</value>
+  </data>
+  <data name="TrackSystem" xml:space="preserve">
+    <value>Track system</value>
+  </data>
+  <data name="NormalGauge" xml:space="preserve">
+    <value>Normal gauge</value>
+  </data>
+  <data name="NarrowGauge" xml:space="preserve">
+    <value>Narrow gauge</value>
+  </data>
+  <data name="ElectricSystem" xml:space="preserve">
+    <value>Electric system</value>
+  </data>
+  <data name="Couplings" xml:space="preserve">
+    <value>Couplings</value>
+  </data>
+  <data name="NoRecordsToDisplay" xml:space="preserve">
+    <value>No records to display</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>Create module</value>
+  </data>
+  <data name="EditModule" xml:space="preserve">
+    <value>Edit module</value>
+  </data>
 </root>

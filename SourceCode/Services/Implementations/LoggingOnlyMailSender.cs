@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class LoggingOnlyMailSender : IMailSender
+    public sealed class LoggingOnlyMailSender : IMailSender
     {
         public LoggingOnlyMailSender(ILogger<LoggingOnlyMailSender> logger)
         {

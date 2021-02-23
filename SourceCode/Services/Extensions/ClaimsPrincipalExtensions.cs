@@ -38,6 +38,8 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsGlobalAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
         public static bool IsCountryAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
 
+        public static bool IsAnyAdministrator(this ClaimsPrincipal? me) => me is not null && ( me.IsGlobalAdministrator() || me.IsCountryAdministrator());
+
         public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId) => 
             me is not null && (me.IsGlobalAdministrator() || countryId == me.CountryId());
         public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId, int personId) =>
