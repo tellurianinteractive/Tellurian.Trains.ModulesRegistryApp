@@ -25,12 +25,14 @@ namespace ModulesRegistry.Data
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
+        public virtual DbSet<ModuleGable> ModuleGables { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
         public virtual DbSet<OperatingBasicDay> OperatingBasicDays { get; set; }
         public virtual DbSet<OperatingDay> OperatingDays { get; set; }
         public virtual DbSet<Operator> Operators { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Scale> Scales { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
@@ -54,6 +56,8 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<Cargo>(entity =>
             {
                 entity.ToTable("Cargo");
+
+                entity.Property(e => e.CargoUnitId).HasDefaultValueSql("((4))");
 
                 entity.Property(e => e.DefaultClasses).HasMaxLength(10);
 
@@ -281,26 +285,27 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Module");
 
+                entity.Property(e => e.ConfigurationLabel).HasMaxLength(10);
+
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.HasNormalGauge)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Is2R)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Note).HasMaxLength(255);
 
+                entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.PackageLabel).HasMaxLength(10);
 
                 entity.Property(e => e.Theme).HasMaxLength(50);
-
-                entity.Property(e => e.FunctionalState)
-                    .HasConversion<int>();
-
-                entity.Property(e => e.LandscapeState)
-                     .HasConversion<int>();
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.Modules)
@@ -319,6 +324,27 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.StationId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Module_Station");
+            });
+
+            modelBuilder.Entity<ModuleGable>(entity =>
+            {
+                entity.ToTable("ModuleGable");
+
+                entity.Property(e => e.Label)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Module)
+                    .WithMany(p => p.ModuleGables)
+                    .HasForeignKey(d => d.ModuleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ModuleGable_Module");
+
+                entity.HasOne(d => d.TypeProperty)
+                    .WithMany(p => p.ModuleGables)
+                    .HasForeignKey(d => d.TypePropertyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ModuleGable_Property");
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>
@@ -365,7 +391,7 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.TrackSystem).HasMaxLength(20);
 
-                entity.Property(e => e.Wheelset).HasMaxLength(20);
+                entity.Property(e => e.Wheelset).HasMaxLength(50);
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.ModuleStandards)
@@ -397,7 +423,9 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<OperatingDay>(entity =>
             {
                 entity.ToTable("OperatingDay");
+
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -448,6 +476,22 @@ namespace ModulesRegistry.Data
                     .WithOne(p => p.Person)
                     .HasForeignKey<Person>(d => d.UserId)
                     .HasConstraintName("FK_Person_User");
+            });
+
+            modelBuilder.Entity<Property>(entity =>
+            {
+                entity.ToTable("Property");
+
+                entity.HasIndex(e => new { e.Name, e.Value }, "IX_Property_Unique")
+                    .IsUnique();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Region>(entity =>
@@ -536,6 +580,8 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<StationCustomerCargo>(entity =>
             {
                 entity.ToTable("StationCustomerCargo");
+
+                entity.Property(e => e.QuantityUnitId).HasDefaultValueSql("((4))");
 
                 entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 

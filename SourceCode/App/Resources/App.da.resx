@@ -423,4 +423,19 @@
   <data name="EditModule" xml:space="preserve">
     <value>Redigér modul</value>
   </data>
+  <data name="RepresentsFromYear" xml:space="preserve">
+    <value>Repræsenterer fra år</value>
+  </data>
+  <data name="RepresentsToYear" xml:space="preserve">
+    <value>Repræsenterer til år</value>
+  </data>
+  <data name="FremoNumber" xml:space="preserve">
+    <value>FREMO nr.</value>
+  </data>
+  <data name="PackageLabel" xml:space="preserve">
+    <value>Boks mærkning</value>
+  </data>
+  <data name="ConfigurationLabel" xml:space="preserve">
+    <value>Variant</value>
+  </data>
 </root>

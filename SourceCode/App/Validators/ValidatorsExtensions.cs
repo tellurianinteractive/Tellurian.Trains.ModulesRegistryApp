@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Runtime;
 
 namespace ModulesRegistry.Validators
 {
@@ -33,6 +34,6 @@ namespace ModulesRegistry.Validators
         private static int MinYear => 1900;
         private static int MaxYear => DateTimeOffset.Now.Year;
 
-
+       
     }
 }

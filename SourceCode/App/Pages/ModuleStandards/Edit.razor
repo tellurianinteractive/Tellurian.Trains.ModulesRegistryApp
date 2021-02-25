@@ -2,8 +2,11 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService Toast
 @inject IScaleService ScaleService
 @inject IModuleStandardService ModuleStandardService
+
+<h1>@Localizer.AddOrEdit("ModuleStandard", Id == 0) </h1>
 
 @if (ModuleStandard is null)
 {
@@ -11,18 +14,17 @@
 }
 else
 {
-<EditForm Model="ModuleStandard" OnValidSubmit="OnValidSubmit">
-    <FluentValidationValidator />
-    <ValidationSummary />
-    <div class="input-group input-group-sm">
-        <div class="form-group">
-            <label for="ShortName">@Localizer["Name"]</label>
+    <EditForm Model="ModuleStandard" OnValidSubmit="OnValidSubmit" Class="row g-3">
+        <FluentValidationValidator />
+        <ValidationSummary />
+        <div class="col-md-2">
+            <label class="form-label" for="ShortName">@Localizer["ShortName"]</label>
             <InputText Class="form-control" id="ShortName" @bind-Value="@ModuleStandard.ShortName" />
             <ValidationMessage For="@(() => ModuleStandard.ShortName)" />
         </div>
-        <div class="form-group">
-            <label for="scale">@Localizer["Scale"]</label>
-            <InputSelect Class="form-control" id="scale" TValue="int" @bind-Value="@ModuleStandard.ScaleId">
+        <div class="col-md-2">
+            <label class="form-label" for="scale">@Localizer["Scale"]</label>
+            <InputSelect Class="form-select" id="scale" TValue="int" @bind-Value="@ModuleStandard.ScaleId">
                 <option value="0">@SelectScaleLabel</option>
                 @if (ScaleItems is not null)
                 {
@@ -41,63 +43,61 @@ else
             </InputSelect>
             <ValidationMessage For="@(() => ModuleStandard.ScaleId)" />
         </div>
-    </div>
-    <div class="form-group">
-        <label for="PreferredTheme">@Localizer["PreferredTheme"]</label>
-        <InputText Class="form-control" id="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
-        <ValidationMessage For="@(() => ModuleStandard.PreferredTheme)" />
-    </div>
-    <div class="input-group input-group-sm">
-        <div class="form-group">
-            <label for="TrackSystem">@Localizer["TrackSystem"]</label>
+        <div class="col-md-3">
+            <label class="form-label" for="PreferredTheme">@Localizer["PreferredTheme"]</label>
+            <InputText Class="form-control" id="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
+            <ValidationMessage For="@(() => ModuleStandard.PreferredTheme)" />
+        </div>
+        <div class="col-md-5">
+            &nbsp;
+        </div>
+        <div class="col-md-2">
+            <label class="form-label" for="TrackSystem">@Localizer["TrackSystem"]</label>
             <InputText Class="form-control" id="TrackSystem" @bind-Value="@ModuleStandard.TrackSystem" />
             <ValidationMessage For="@(() => ModuleStandard.TrackSystem)" />
         </div>
-        <div class="form-group">
-            <label for="NormalGauge">@Localizer["NormalGauge"]</label>
-            <InputNumber TValue="double?" Class="form-control" id="NormalGauge" @bind-Value="@ModuleStandard.NormalGauge" />
+        <div class="col-md-2">
+            <label class="form-label" for="NormalGauge">@Localizer["NormalGauge"]</label>
+            <InputNumber TValue="double?" Class="form-control" id="NormalGauge" @bind-Value="@ModuleStandard.NormalGauge" @bind-Value:format="F1" />
             <ValidationMessage For="@(() => ModuleStandard.NormalGauge)" />
         </div>
-        <div class="form-group">
-            <label for="NarrowGauge">@Localizer["NarrowGauge"]</label>
-            <InputNumber TValue="double?" Class="form-control" id="NarrowGauge" @bind-Value="@ModuleStandard.NarrowGauge" />
+        <div class="col-md-2">
+            <label class="form-label" for="NarrowGauge">@Localizer["NarrowGauge"]</label>
+            <InputNumber TValue="double?" Class="form-control" id="NarrowGauge" @bind-Value="@ModuleStandard.NarrowGauge" @bind-Value:format="F1" />
             <ValidationMessage For="@(() => ModuleStandard.NarrowGauge)" />
         </div>
-    </div>
-
-    <div class="input-group input-group-sm">
-        <div class="form-group">
-            <label for="Wheelset">@Localizer["Wheelset"]</label>
+        <div class="col-md-4">
+            <label class="form-label" for="Wheelset">@Localizer["Wheelset"]</label>
             <InputText Class="form-control" id="Wheelset" @bind-Value="@ModuleStandard.Wheelset" />
             <ValidationMessage For="@(() => ModuleStandard.Wheelset)" />
         </div>
-        <div class="form-group">
-            <label for="Couplings">@Localizer["Couplings"]</label>
+        <div class="col-md-3">
+            <label class="form-label" for="Couplings">@Localizer["Couplings"]</label>
             <InputText Class="form-control" id="Couplings" @bind-Value="@ModuleStandard.Couplings" />
             <ValidationMessage For="@(() => ModuleStandard.Couplings)" />
         </div>
-        <div class="form-group">
-            <label for="Electricity">@Localizer["ElectricSystem"]</label>
+        <div class="col-md-2">
+            <label class="form-label" for="Electricity">@Localizer["ElectricSystem"]</label>
             <InputText Class="form-control" id="Electricity" @bind-Value="@ModuleStandard.Electricity" />
             <ValidationMessage For="@(() => ModuleStandard.Electricity)" />
         </div>
-
-    </div>
-    <div class="form-group">
-        <label for="AcceptedNorm">@Localizer["AcceptedNorm"]</label>
-        <InputText Class="form-control" id="AcceptedNorm" @bind-Value="@ModuleStandard.AcceptedNorm" />
-        <ValidationMessage For="@(() => ModuleStandard.AcceptedNorm)" />
-    </div>
-    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
-</EditForm>
+        <div class="form-group">
+            <label class="form-label" for="AcceptedNorm">@Localizer["AcceptedNorm"]</label>
+            <InputText Class="form-control" id="AcceptedNorm" @bind-Value="@ModuleStandard.AcceptedNorm" />
+            <ValidationMessage For="@(() => ModuleStandard.AcceptedNorm)" />
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        </div>
+    </EditForm>
 }
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int Id { get; set; }
-        ClaimsPrincipal? Principal;
-        ModuleStandard? ModuleStandard;
-        IEnumerable<ListboxItem>? ScaleItems;
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    ModuleStandard? ModuleStandard;
+    IEnumerable<ListboxItem>? ScaleItems;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -105,17 +105,18 @@ else
         if (Principal is not null)
         {
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
-            ModuleStandard = Id > 0 ? await ModuleStandardService.FindByIdAsync(Principal, Id) : new ModuleStandard() { NormalGauge = 16.0 };
+            ModuleStandard = Id > 0 ? await ModuleStandardService.FindByIdAsync(Principal, Id) : new ModuleStandard() { NormalGauge = 16.5 };
         }
     }
 
     private async Task OnValidSubmit()
     {
-        if( ModuleStandard is not null)
+        if (ModuleStandard is not null)
         {
             var result = await ModuleStandardService.SaveAsync(Principal, ModuleStandard);
             ModuleStandard = result.Entity;
             Id = ModuleStandard?.Id ?? 0;
+            Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
         }
     }
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";

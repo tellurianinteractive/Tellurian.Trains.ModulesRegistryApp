@@ -35,7 +35,7 @@ else
                     <td>@module.Scale.ShortName</td>
                     <td>@module.Standard.ShortName</td>
                     <td>@PersonalOwners(module.ModuleOwnerships)</td>
-                    <td>@((module.StationId is not null).AsYesNo())</td>
+                    <td>@((module.IsStation).AsYesNo())</td>
                     <td>
                         @if (MayEdit)
                         {

@@ -9,6 +9,7 @@ namespace ModulesRegistry.Data
     {
         public Module()
         {
+            ModuleGables = new HashSet<ModuleGable>();
             ModuleOwnerships = new HashSet<ModuleOwnership>();
         }
 
@@ -32,18 +33,20 @@ namespace ModulesRegistry.Data
         public bool IsDuckunder { get; set; }
         public bool IsJunction { get; set; }
         public bool IsStation { get; set; }
-        public ModuleFunctionalState FunctionalState { get; set; }
-        public ModuleLandscapeState LandscapeState { get; set; }
+        public int FunctionalState { get; set; }
+        public int LandscapeState { get; set; }
         public byte[] DxfDrawing { get; set; }
         public byte[] PdfDocumentation { get; set; }
         public string Note { get; set; }
         public int? StationId { get; set; }
-        public int? FREMONumber { get; set; }
-
+        public int? FremoNumber { get; set; }
+        public string PackageLabel { get; set; }
+        public string ConfigurationLabel { get; set; }
 
         public virtual Scale Scale { get; set; }
         public virtual ModuleStandard Standard { get; set; }
         public virtual Station Station { get; set; }
+        public virtual ICollection<ModuleGable> ModuleGables { get; set; }
         public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     }
 }

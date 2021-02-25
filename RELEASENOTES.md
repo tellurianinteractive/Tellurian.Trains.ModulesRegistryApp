@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 0.4.1
+Release date 2021-02-25
+
+- Improved appearence of forms.
+- Added *variant* and *box label* to *module*.
+- Some minor bug fixes.
+-
 ## Version 0.4.0
 Release date 2021-02-23
 

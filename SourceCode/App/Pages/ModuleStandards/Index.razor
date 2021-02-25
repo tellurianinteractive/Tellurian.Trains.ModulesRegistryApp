@@ -40,21 +40,23 @@ else
         <tbody>
             @foreach (var standard in ModuleStandards)
             {
-            <tr>
-                <td>@Scale(standard.Scale)</td>
-                <td>@standard.ShortName</td>
-                <td>@standard.PreferredTheme</td>
-                <td>@standard.TrackSystem</td>
-                <td>@standard.Wheelset</td>
-                <td>@Gauge(standard.NormalGauge)</td>
-                <td>@Gauge(standard.NarrowGauge)</td>
-                <td>@standard.Electricity</td>
-                <td>@standard.Couplings</td>
-                @if (Principal.IsAnyAdministrator())
-                {
-                    <td>Edit</td>
-                }
-            </tr>
+                <tr>
+                    <td>@Scale(standard.Scale)</td>
+                    <td>@standard.ShortName</td>
+                    <td>@standard.PreferredTheme</td>
+                    <td>@standard.TrackSystem</td>
+                    <td>@standard.Wheelset</td>
+                    <td>@Gauge(standard.NormalGauge)</td>
+                    <td>@Gauge(standard.NarrowGauge)</td>
+                    <td>@standard.Electricity</td>
+                    <td>@standard.Couplings</td>
+                    @if (Principal.IsAnyAdministrator())
+                    {
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit">@Localizer["Edit"]</a>
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>
