@@ -1,66 +1,62 @@
 ﻿@page "/Persons/Edit/{id:int}"
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
+@inject IToastService Toast
 @inject IPersonService PersonService
 @inject ICountryService CountryService
 
 <h1>@Localizer.AddOrEdit("Person", Id == 0) </h1>
-<ConfirmationMessage ResourceKey="@Message" />
 @if (Person is null)
 {
 
 }
 else
 {
-    <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit">
+    <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
         <FluentValidationValidator />
         <ValidationSummary />
-        <div class="input-group input-group-sm">
-            <div class="form-group">
-                <label for="firstname">@Localizer["FirstName"]</label>
-                <InputText Class="form-control" id="firstname" @bind-Value="@Person.FirstName" />
-                <ValidationMessage For="@(() => Person.FirstName)" />
-            </div>
-            <div class="form-group">
-                <label for="middlename">@Localizer["MiddleName"]</label>
-                <InputText Class="form-control" id="middlename" @bind-Value="@Person.MiddleName" />
-                <ValidationMessage For="@(() => Person.MiddleName)" />
-            </div>
-            <div class="form-group">
-                <label for="lastName">@Localizer["LastName"]</label>
-                <InputText Class="form-control" id="lastName" @bind-Value="@Person.LastName" />
-                <ValidationMessage For="@(() => Person.LastName)" />
-            </div>
+        <div class="col-md-2">
+            <label class="form-label" for="firstname">@Localizer["FirstName"]</label>
+            <InputText Class="form-control" id="firstname" @bind-Value="@Person.FirstName" />
+            <ValidationMessage For="@(() => Person.FirstName)" />
         </div>
-        <div class="input-group input-group-sm">
-            <div class="form-group">
-                <label for="cityname">@Localizer["CityName"]</label>
-                <InputText Class="form-control" id="lastName" @bind-Value="@Person.CityName" />
-                <ValidationMessage For="@(() => Person.CityName)" />
-            </div>
-            <div class="form-group">
-                <label for="countryid">@Localizer["Country"]</label>
-                <InputSelect Class="form-control" id="countryid" TValue="int" @bind-Value="@Person.CountryId">
-                    <option value="0">@Localizer["SelectCountry"]</option>
-                    @if (CountriesItems is not null)
+        <div class="col-md-2">
+            <label class="form-label" for="middlename">@Localizer["MiddleName"]</label>
+            <InputText Class="form-control" id="middlename" @bind-Value="@Person.MiddleName" />
+            <ValidationMessage For="@(() => Person.MiddleName)" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label" for="lastName">@Localizer["LastName"]</label>
+            <InputText Class="form-control" id="lastName" @bind-Value="@Person.LastName" />
+            <ValidationMessage For="@(() => Person.LastName)" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label" for="cityname">@Localizer["CityName"]</label>
+            <InputText Class="form-control" id="lastName" @bind-Value="@Person.CityName" />
+            <ValidationMessage For="@(() => Person.CityName)" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label" for="countryid">@Localizer["Country"]</label>
+            <InputSelect Class="form-select" id="countryid" TValue="int" @bind-Value="@Person.CountryId">
+                <option value="0">@Localizer["SelectCountry"]</option>
+                @if (CountriesItems is not null)
+                {
+                    foreach (var item in CountriesItems)
                     {
-                        foreach (var item in CountriesItems)
-                        {
-                            <option value="@item.Id">@item.Description</option>
-                        }
+                        <option value="@item.Id">@item.Description</option>
                     }
-                </InputSelect>
-                <ValidationMessage For="@(() => Person.CountryId)" />
-            </div>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Person.CountryId)" />
         </div>
-        <div class="input-group input-group-lg">
-            <div class="form-group">
-                <label for="email">@Localizer[nameof(Person.EmailAddresses)]</label>
-                <InputText Class="form-control" id="email" @bind-Value="@Person.EmailAddresses" />
-                <ValidationMessage For="@(() => Person.EmailAddresses)" />
-            </div>
+        <div class="col-md-6">
+            <label class="form-label" for="email">@Localizer[nameof(Person.EmailAddresses)]</label>
+            <InputText Class="form-control" id="email" @bind-Value="@Person.EmailAddresses" />
+            <ValidationMessage For="@(() => Person.EmailAddresses)" />
         </div>
-        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        </div>
     </EditForm>
 }
 @code {
@@ -70,33 +66,26 @@ else
     [Parameter] public int? Id { get; set; }
     private Person? Person;
     private IEnumerable<ListboxItem>? CountriesItems;
-    private string Message = string.Empty;
     private ClaimsPrincipal? Principal;
 
-protected async override Task OnParametersSetAsync()
+    protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Reset();
         CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
         Person = await GetOrCreatePersonAsync();
     }
 
     private async Task OnValidSumbit()
     {
-        Reset();
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person);
         Person = result.Entity;
-        Message = result.Message;
+        Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
         Principal is null || Id.IsNotSet() ? new Person() { CountryId = DefaultCountryId } : await PersonService.FindByIdAsync(Principal, Id.Value) ?? new Person();
 
-    private void Reset()
-    {
-        Message = string.Empty;
-    }
 
     private int DefaultCountryId => CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
 

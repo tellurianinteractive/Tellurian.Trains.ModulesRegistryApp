@@ -19,7 +19,6 @@ else
         <thead>
             <tr>
                 <th>@Localizer["Name"]</th>
-                <th>@Localizer["Email"]</th>
                 <th>@Localizer["City"]</th>
                 <th style="text-align: center">@Localizer["IsUser"]</th>
                 <th>@Localizer["Action"]</th>
@@ -30,7 +29,6 @@ else
             {
                 <tr>
                     <td>@Name(person)</td>
-                    <td>@person.EmailAddresses</td>
                     <td>@person.CityName</td>
                     <td style="text-align: center">@UserStatus(person)</td>
                     <td style="white-space: nowrap !important;">
