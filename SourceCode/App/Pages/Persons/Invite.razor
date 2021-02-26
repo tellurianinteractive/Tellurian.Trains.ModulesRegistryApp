@@ -11,7 +11,7 @@
 @inject IMailSender MailSender
 @inject ICountryService CountryService
 
-<h1>@Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
+<h1><span class="fa fa-user" /> @Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
 @if (CanSend)
 {
     <h2>@Localizer["Message"]</h2>

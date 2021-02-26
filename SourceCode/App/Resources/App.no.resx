@@ -441,4 +441,10 @@
   <data name="MiddleName" xml:space="preserve">
     <value>Mellomnavn</value>
   </data>
+  <data name="ModulesOwnedBy" xml:space="preserve">
+    <value>Moduler eid av {0}</value>
+  </data>
+  <data name="For" xml:space="preserve">
+    <value>For</value>
+  </data>
 </root>

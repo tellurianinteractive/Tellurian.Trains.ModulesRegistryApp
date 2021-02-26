@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -19,7 +18,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal is null) return Array.Empty<Module>();
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Modules
+            return await dbContext.Modules.AsNoTracking()
                 .Where(mo => mo.ModuleOwnerships
                 .Any(mo => mo.PersonId == principal.PersonId()))
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
@@ -28,22 +27,44 @@ namespace ModulesRegistry.Services.Implementations
                 .ToListAsync();
         }
 
-        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id)
+        public async Task<IEnumerable<Module>> GetForOwningPerson(ClaimsPrincipal? principal, int personId)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var countryId = dbContext.People.Find(personId)?.CountryId;
+            if (principal.IsAuthorisedInCountry(countryId, personId))
+            {
+                return await dbContext.Modules.AsNoTracking()
+                    .Where(m => m.ModuleOwnerships
+                    .Any(mo => mo.PersonId == personId))
+                    .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                    .Include(m => m.Scale)
+                    .Include(m => m.Standard)
+                    .ToListAsync();
+            }
+            return Array.Empty<Module>();
+        }
+        public Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>
+            FindByIdAsync(principal, id, 0);
+
+        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, int owningPersionId)
         {
             if (principal is not null)
             {
+                var ownerId = owningPersionId > 0 ? owningPersionId : principal.PersonId();
                 using var dbContext = Factory.CreateDbContext();
-                var module = await dbContext.Modules.Include(m => m.ModuleOwnerships).SingleOrDefaultAsync(m => m.Id == id);
+                var module = await dbContext.Modules.AsNoTracking().Include(m => m.ModuleOwnerships).SingleOrDefaultAsync(m => m.Id == id);
                 if (module is null) return null;
-                if (module.ModuleOwnerships.Any(mo => mo.PersonId == principal.PersonId())) return module;
+                if (module.ModuleOwnerships.Any(mo => mo.PersonId == ownerId)) return module;
             }
             return null;
         }
+        public Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity) =>
+            SaveAsync(principal, entity, 0);
 
-        public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity)
+        public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, int owningPersonId)
         {
             // TODO: Make it possible for group data administrator to create and edit other persons module.
-            var ownerId = principal.PersonId();
+            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
             // TODO: Check if principal is data administrator in same group as owner.
             if (principal.MaySave(ownerId))
             {

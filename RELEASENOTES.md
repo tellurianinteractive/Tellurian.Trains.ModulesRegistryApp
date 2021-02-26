@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 0.5.0
+Release date 2021-02-27
+- Administrators can now add and edit modules.
+- Edit group member now works.
+- List any person's modules now works
+- Additional improvements of style.
+
 ## Version 0.4.2
 Release date 2021-02-26
 

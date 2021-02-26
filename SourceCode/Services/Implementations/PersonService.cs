@@ -60,6 +60,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var person = await dbContext.People.FindAsync(id);
+                if (person is null) return null;
                 if (principal.MayRead(person.Id))
                 {
                     return person;

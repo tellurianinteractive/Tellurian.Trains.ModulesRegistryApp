@@ -1,13 +1,17 @@
-﻿@page "/Modules/{id:int}/Edit"
+﻿@using System.Text
+
+@page "/Modules/{id:int}/Edit" 
+@page "/Modules/{id:int}/Edit/{ownerid:int}"
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService Toast
+@inject IToastService ToastService
+@inject IPersonService PersonService 
 @inject IModuleService ModuleService
 @inject IScaleService ScaleService
 @inject IModuleStandardService ModuleStandardService
 
-<h1>@Localizer.AddOrEdit("Module", Id == 0) </h1>
+<h1><span class="fa fa-boxes" aria-hidden="true" /> @GetHeading() </h1>
 
 @if (Module is null)
 {
@@ -224,7 +228,9 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    [Parameter] public int OwnerId { get; set; }
     ClaimsPrincipal? Principal;
+    Person? Owner;
     Module? Module;
     IEnumerable<ListboxItem>? ScaleItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
@@ -236,10 +242,11 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (Principal is not null)
         {
+            Owner = await PersonService.FindByIdAsync(Principal, OwnerId);
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
             ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
-            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1 };
+            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerId) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length=1000};
         }
     }
 
@@ -247,12 +254,24 @@ else
     {
         if (Module is not null)
         {
-            var result = await ModuleService.SaveAsync(Principal, Module);
-            Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+            var result = await ModuleService.SaveAsync(Principal, Module, OwnerId);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
         }
     }
 
-    private string Heading => Id == 0 ? $"{Localizer["CreateModule"]}" : $"{Localizer["EditModule"]}";
+    private string GetHeading()
+    {
+        var text = new StringBuilder(100);
+        text.Append(Id == 0 && OwnerId == 0 ? $"{Localizer["CreateModule"]}" : $"{Localizer["EditModule"]}");
+        if (Owner is not null)
+        {
+            text.Append(' ');
+            text.Append(Localizer["For"].Value.ToLowerInvariant());
+            text.Append(' ');
+            text.Append(Owner.FirstName);
+        }
+        return text.ToString();
+    }
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
     private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
 }

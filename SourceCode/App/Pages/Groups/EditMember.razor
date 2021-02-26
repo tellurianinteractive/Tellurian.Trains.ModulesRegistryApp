@@ -1,0 +1,55 @@
+﻿@page "/Groups/{groupid:int}/Members/{memberid:int}/edit"
+@attribute [Authorize(Policy = "User")]
+
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject IGroupService GroupService
+
+<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false)</h1>
+@if (GroupMember is null)
+{
+
+}
+else
+{
+    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
+        <FluentValidationValidator />
+        <ValidationSummary />
+
+        <div class="col-md-2">
+            <InputCheckbox Class="form-check-input" id="groupadmin" @bind-Value="@GroupMember.IsGroupAdministrator"></InputCheckbox>
+            <label class="form-check-label" for="groupadmin">@Localizer["IsGroupAdministrator"]</label>
+        </div>
+        <div class="col-md-2">
+            <InputCheckbox Class="form-check-input" id="dataadmin" @bind-Value="@GroupMember.IsDataAdministrator"></InputCheckbox>
+            <label class="form-check-label" for="dataadmin">@Localizer["IsDataAdministrator"]</label>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int GroupId { get; set; }
+    [Parameter] public int MemberId { get; set; }
+
+    private ClaimsPrincipal? Principal;
+    private GroupMember? GroupMember;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        GroupMember = await GroupService.FindMemberByIdAsync(Principal, MemberId);
+    }
+    private async Task OnValidSubmit()
+    {
+        if (GroupMember is null) return;
+        var result = await GroupService.SaveMemberAsync(Principal, GroupMember);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        await Task.Delay(3000);
+        if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
+    }
+}

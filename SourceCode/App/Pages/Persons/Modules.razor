@@ -1,0 +1,30 @@
+﻿@page "/Persons/{id:int}/Modules"
+@attribute [Authorize(Policy = "Admin")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IPersonService PersonService
+@inject IModuleService ModuleService
+@preservewhitespace true
+
+<h1><span class="fa fa-boxes"/> @Heading</h1>
+
+<ModulesList Modules="OwnedModules" MayEdit="true" OwningPersonId="OwningPersonId"/>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    private ClaimsPrincipal? Principal;
+    private Person? Owner;
+    private IEnumerable<Module>? OwnedModules;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Owner = await PersonService.FindByIdAsync(Principal, Id);
+        if (Owner is null) return;
+        OwnedModules = await ModuleService.GetForOwningPerson(Principal, Owner.Id);
+    }
+
+    private int OwningPersonId => Owner?.Id ?? 0;
+    private string Heading => Owner is null ? Localizer["Modules"].Value : string.Format(Localizer["ModulesOwnedBy"].Value, Owner.FirstName);
+}

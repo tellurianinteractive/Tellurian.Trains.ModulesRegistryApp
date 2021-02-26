@@ -1,19 +1,19 @@
-﻿@page "/Groups/{groupid:int}/AddMember/"
+﻿@page "/Groups/{groupid:int}/members/add"
 @attribute [Authorize(Policy = "User")]
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject IGroupService GroupService
 @inject IPersonService PersonService
 
-<h3>@Heading</h3>
+<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Heading</h1>
 
-
-<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
     <FluentValidationValidator />
     <ValidationSummary />
     <div class="form-group">
-        <label for="personid">@Localizer["Person"]</label>
+        <label class="form-label" for="personid">@Localizer["Person"]</label>
         <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true">
             <SelectedTemplate Context="personId">
                 @{
@@ -27,20 +27,21 @@
         </BlazoredTypeahead>
         <ValidationMessage For="@(() => GroupMember.Person)" />
     </div>
-    <div class="form-group">
-        <label for="groupadmin">@Localizer["IsGroupAdministrator"]</label>
-        <InputCheckbox Class="form-check" id="groupadmin" @bind-Value="@GroupMember.IsGroupAdministrator"></InputCheckbox>
+    <div class="col-md-2">
+        <InputCheckbox Class="form-check-input" id="groupadmin" @bind-Value="@GroupMember.IsGroupAdministrator"></InputCheckbox>
+        <label class="form-check-label" for="groupadmin">@Localizer["IsGroupAdministrator"]</label>
     </div>
-    <div class="form-group">
-        <label for="dataadmin">@Localizer["IsDataAdministrator"]</label>
-        <InputCheckbox Class="form-check" id="dataadmin" @bind-Value="@GroupMember.IsDataAdministrator"></InputCheckbox>
+    <div class="col-md-2">
+        <InputCheckbox Class="form-check-input" id="dataadmin" @bind-Value="@GroupMember.IsDataAdministrator"></InputCheckbox>
+        <label class="form-check-label" for="dataadmin">@Localizer["IsDataAdministrator"]</label>
     </div>
-    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+    <div class="col-12">
+        <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+    </div>
 
 </EditForm>
 
 @code {
-
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? GroupId { get; set; }
 
@@ -72,17 +73,18 @@
     private async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
     {
         return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
-        Persons.Where(p => p.Description.ToLowerInvariant().StartsWith(searchText.ToLowerInvariant())).ToList());
+        Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().StartsWith(searchText.ToLowerInvariant())).ToList());
     }
-    private int ConvertPerson(ListboxItem person) => person.Id;
-    private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 
     private async Task OnValidSubmit()
     {
         var result = await GroupService.AddMemberAsync(Principal, GroupMember);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        await Task.Delay(3000);
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
     private string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
-
+    private int ConvertPerson(ListboxItem person) => person.Id;
+    private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 }

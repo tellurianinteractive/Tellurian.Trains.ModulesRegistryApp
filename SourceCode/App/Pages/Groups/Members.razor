@@ -5,22 +5,22 @@
 @inject IGroupService GroupService
 @inject ICountryService CountryService
 
-<h3>@Heading</h3>
+<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Heading</h1>
 @if (Group is null)
 {
 
 }
 else
 {
-    <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/addmember"><span class="fa fa-user-plus" />@Localizer["Add"]</a>
-    <table class="table table-striped table-responsive-sm">
+    <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="fa fa-user-plus" />@Localizer["Add"]</a>
+    <table class="table table-sm table-striped">
         <thead>
             <tr>
                 <th>@Localizer["FirstName"]</th>
                 <th>@Localizer["LastName"]</th>
                 <th>@Localizer["IsGroupAdministrator"]</th>
                 <th>@Localizer["IsDataAdministrator"]</th>
-                <th>@Localizer["Action"]</th>
+                <th>@Localizer["Actions"]</th>
             </tr>
         </thead>
         <tbody>
@@ -32,8 +32,9 @@ else
                     <td>@item.IsGroupAdministrator.AsYesNo()</td>
                     <td>@item.IsDataAdministrator.AsYesNo()</td>
                     <td style="white-space: nowrap !important;">
-                        <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/editmember/@item.Id"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                        <a class="btn btn-sm btn-danger" href="groups/@item.GroupId/deletemember/@item.Id"><span class="fa fa-trash" />@Localizer["Delete"]</a>
+                        <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                        <a class="btn btn-sm btn-info" href="persons/@item.Person.Id/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
+                        <a class="btn btn-sm btn-warning" href="groups/@item.GroupId/members/@item.Id/remove"><span class="fa fa-trash" />@Localizer["Remove"]</a>
                     </td>
                 </tr>
             }

@@ -15,7 +15,7 @@
 }
 else
 {
-    <a class="btn btn-sm btn-secondary" href="persons/edit/0">@Localizer["Add"]</a>
+    <a class="btn btn-sm btn-secondary" href="persons/0/edit">@Localizer["Add"]</a>
     <table class="table table-sm table-striped">
         <thead>
             <tr>
@@ -55,10 +55,10 @@ else
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    private ClaimsPrincipal? Principal;
     private IEnumerable<Person>? People;
     private IEnumerable<ListboxItem>? Countries;
     private bool IsLoading;
-    private ClaimsPrincipal? Principal;
 
     private async Task OnSelectedCountry(int id)
     {

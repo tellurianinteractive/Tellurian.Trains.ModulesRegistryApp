@@ -2,7 +2,7 @@
 @if (Modules is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-sm btn-secondary" href="/Modules/0/Edit"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+        <a class="btn btn-sm btn-secondary" href="/Modules/0/Edit/@OwningPersonId"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
 }
 @if (Modules is null)
@@ -39,7 +39,7 @@ else
                     <td>
                         @if (MayEdit)
                         {
-                            <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                            <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         }
                         &nbsp;
                     </td>
@@ -52,5 +52,6 @@ else
 @code {
     [Parameter] public IEnumerable<Module>? Modules { get; set; }
     [Parameter] public bool MayEdit { get; set; }
-    private string PersonalOwners(IEnumerable<ModuleOwnership> owners) => string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));
+    [Parameter] public int OwningPersonId { get; set; }
+    private string PersonalOwners(IEnumerable<ModuleOwnership>? owners) => owners is null ? string.Empty : string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));
 }

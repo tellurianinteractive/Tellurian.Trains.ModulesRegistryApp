@@ -10,5 +10,7 @@ namespace ModulesRegistry.Services
         Task<IEnumerable<Group>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId);
         Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember);
         Task<(int Count, string Message)> RemoveMemberAsync(ClaimsPrincipal? principal, int groupId, int personId);
+        Task<GroupMember?> FindMemberByIdAsync(ClaimsPrincipal? principal, int memberId);
+        Task<(int Count, string Message, GroupMember? Entity)> SaveMemberAsync(ClaimsPrincipal? principal, GroupMember entity);
     }
 }

@@ -2,7 +2,6 @@
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Resources;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -23,7 +22,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthorisedInCountry(countryId))
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Groups
+                return await dbContext.Groups.AsNoTracking()
                     .Where(g => g.CountryId == countryId)
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
@@ -31,7 +30,7 @@ namespace ModulesRegistry.Services.Implementations
             else
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Groups
+                return await dbContext.Groups.AsNoTracking()
                     .Where(g => g.GroupMembers
                     .Any(gm => (gm.IsGroupAdministrator || gm.IsDataAdministrator) && gm.PersonId == principal.PersonId()))
                     .OrderBy(g => g.FullName)
@@ -42,12 +41,39 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<Group?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
             using var dbContext = Factory.CreateDbContext();
-            var group = await dbContext.Groups
+            var group = await dbContext.Groups.AsNoTracking()
                 .Include(g => g.GroupMembers)
                 .ThenInclude(gm => gm.Person)
                 .SingleOrDefaultAsync(g => g.Id == id);
             if (principal.IsAuthorisedInCountry(group.CountryId)) return group;
             return null;
+        }
+
+        public async Task<GroupMember?> FindMemberByIdAsync(ClaimsPrincipal? principal, int memberId)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var groupMember = await dbContext.GroupMembers.AsNoTracking()
+                .Where(gm => gm.Id == memberId)
+                .Include(gm => gm.Group)
+                .Include(gm => gm.Person)
+                .SingleOrDefaultAsync();
+            if (groupMember is null) return null;
+            if (await IsGroupAdministrator(principal, groupMember.GroupId, groupMember.Group.CountryId)) return groupMember;
+            return null;
+        }
+
+        private async Task<bool> IsGroupAdministrator(ClaimsPrincipal? pricipal, int groupId, int? countryId)
+        {
+            if (pricipal.IsAuthorisedInCountry(countryId))
+            {
+                return true;
+            }
+            else
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.GroupMembers.AsNoTracking()
+                    .AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == pricipal.PersonId() && gm.IsDataAdministrator);
+            }
         }
 
         public async Task<(int Count, string Message, Group? Entity)> SaveAsync(ClaimsPrincipal? principal, Group group)
@@ -63,6 +89,20 @@ namespace ModulesRegistry.Services.Implementations
             return principal.SaveNotAuthorised<Group>();
         }
 
+        public async Task<(int Count, string Message, GroupMember? Entity)> SaveMemberAsync(ClaimsPrincipal? principal, GroupMember entity)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var countryId = (await dbContext.Groups.AsNoTracking().SingleOrDefaultAsync(g => g.Id == entity.GroupId))?.CountryId;
+            if (await IsGroupAdministrator(principal, entity.GroupId, countryId))
+            {
+                dbContext.GroupMembers.Attach(entity);
+                dbContext.Entry(entity).State = entity.Id.GetState();
+                var count = await dbContext.SaveChangesAsync();
+                return count.SaveResult(entity);
+            }
+            return principal.SaveNotAuthorised<GroupMember>();
+        }
+
         public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
         {
             if (principal.MayDelete())
@@ -76,7 +116,7 @@ namespace ModulesRegistry.Services.Implementations
                 return count.DeleteResult();
             }
             return principal.DeleteNotAuthorized<Group>();
-       }
+        }
 
         public async Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember)
         {
@@ -95,9 +135,10 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<(int Count, string Message)> RemoveMemberAsync(ClaimsPrincipal? principal, int groupId, int personId)
         {
             using var dbContext = Factory.CreateDbContext();
-            if (principal.IsGroupMemberAdministrator(dbContext.GroupMembers.Where(gm => gm.GroupId == groupId)))
+            var countryId = (await dbContext.Groups.AsNoTracking().SingleOrDefaultAsync(g => g.Id == groupId))?.CountryId;
+            if (countryId.HasValue && await IsGroupAdministrator(principal, groupId, countryId.Value))
             {
-                var existing = dbContext.GroupMembers.SingleOrDefault(gm => gm.PersonId == personId && gm.GroupId == groupId);
+                var existing = await dbContext.GroupMembers.SingleOrDefaultAsync(gm => gm.PersonId == personId && gm.GroupId == groupId);
                 if (existing is null) return existing.NotFound();
                 dbContext.GroupMembers.Remove(existing);
                 var result = await dbContext.SaveChangesAsync();
@@ -106,4 +147,4 @@ namespace ModulesRegistry.Services.Implementations
             return principal.DeleteNotAuthorized<GroupMember>();
         }
     }
-}
+}   

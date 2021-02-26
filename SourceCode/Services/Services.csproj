@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>ModulesRegistry.Services</AssemblyName>
     <RootNamespace>ModulesRegistry.Services</RootNamespace>
-    <Version>0.4.0</Version>
+    <Version>0.5.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
