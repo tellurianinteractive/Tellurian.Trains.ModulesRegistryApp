@@ -1,11 +1,11 @@
-﻿@page "/Persons/Delete/{id:int}"
+﻿@page "/Persons/{id:int}/Delete"
 @attribute [Authorize(Policy = "Admin")]
 @inject NavigationManager Navigation
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject IPersonService PersonService
 
 <h1>@Localizer["Delete"]?</h1>
-<ConfirmationMessage ResourceKey="@Message"/>
 @if (Person is null)
 {
 
@@ -17,14 +17,13 @@ else
 </div>
 }
 
-<button class="btn btn-danger" @onclick="OnDelete">@Localizer["Delete"]</button>
+<button class="btn btn-danger" @onclick="OnDelete"><span class="fa fa-trash" />@Localizer["Delete"]</button>
 @code {
     [CascadingParameter]    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
     private ClaimsPrincipal? Principal;
 
     private Person? Person;
-    private string? Message;
 
     protected async override Task OnParametersSetAsync()
     {
@@ -33,18 +32,12 @@ else
         Person = await PersonService.FindByIdAsync(Principal, Id.Value);
     }
 
-
     private async Task OnDelete()
     {
         if (Id.IsNotSet()) return;
         var result = await PersonService.DeleteAsync(Principal, Id.Value);
-        Message = result.Message;
-        StateHasChanged();
-        if (result.Count > 0)
-        {
-            await Task.Delay(3000);
-            Navigation.NavigateTo("/Persons/Index");
-        }
-
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        await Task.Delay(3000);
+        Navigation.NavigateTo("/Persons/Index");
     }
 }

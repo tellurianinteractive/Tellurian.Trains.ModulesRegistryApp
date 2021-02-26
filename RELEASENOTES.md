@@ -1,5 +1,14 @@
 # Release Notes
 
+## Version 0.4.2
+Release date 2021-02-26
+
+- Upgraded to Boostrap 5.
+- Upgraded to Font Awesome 5.
+- Toasts showing action results for *save* and *delete*.
+- Additional styling of lists and forms.
+- Improved user rights filtering on content.
+
 ## Version 0.4.1
 Release date 2021-02-25
 

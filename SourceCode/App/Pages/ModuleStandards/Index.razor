@@ -5,7 +5,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject IModuleStandardService ModuleStandardService
 
-<h1>@Localizer["ModuleStandards"]</h1>
+<h1><span class="fa fa-pencil-ruler" aria-hidden="true" /> @Localizer["ModuleStandards"]</h1>
 
 @if (Principal.IsAnyAdministrator() && ModuleStandards is not null)
 {
@@ -53,7 +53,7 @@ else
                     @if (Principal.IsAnyAdministrator())
                     {
                         <td>
-                            <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit">@Localizer["Edit"]</a>
+                            <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         </td>
                     }
                 </tr>

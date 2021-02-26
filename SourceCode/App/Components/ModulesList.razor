@@ -2,7 +2,7 @@
 @if (Modules is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-secondary" href="/Modules/0/Edit">@Localizer["Add"]</a>
+        <a class="btn btn-sm btn-secondary" href="/Modules/0/Edit"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
 }
 @if (Modules is null)
@@ -11,7 +11,7 @@
 }
 else if (Modules.Count() == 0)
 {
-    <div class="alert alert-info">@Localizer["NoRecordsToDisplay"]</div>
+    <div class="alert alert-info"><span class="fa fa-exclamation" />@Localizer["NoRecordsToDisplay"]</div>
 }
 else
 {
@@ -39,7 +39,7 @@ else
                     <td>
                         @if (MayEdit)
                         {
-                            <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit">@Localizer["Edit"]</a>
+                            <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         }
                         &nbsp;
                     </td>

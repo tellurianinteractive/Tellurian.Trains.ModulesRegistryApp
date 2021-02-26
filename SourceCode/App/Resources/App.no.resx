@@ -267,8 +267,8 @@
   <data name="AppName" xml:space="preserve">
     <value>Moduleregisteret</value>
   </data>
-  <data name="Action" xml:space="preserve">
-    <value>Handling</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Handlinger</value>
   </data>
   <data name="CityName" xml:space="preserve">
     <value>Hjemsted</value>
@@ -437,5 +437,8 @@
   </data>
   <data name="ConfigurationLabel" xml:space="preserve">
     <value>Variant</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Mellomnavn</value>
   </data>
 </root>

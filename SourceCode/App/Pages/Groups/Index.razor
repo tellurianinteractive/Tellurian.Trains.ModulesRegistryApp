@@ -4,8 +4,9 @@
 @inject IStringLocalizer<App> Localizer
 @inject IGroupService GroupService
 @inject ICountryService CountryService
+@preservewhitespace true
 
-<h1>@Localizer["Groups"]</h1>
+<h1><span class="fa fa-users" aria-hidden="true" /> @Localizer["Groups"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />
 @if (Groups is null)
 {
@@ -21,7 +22,7 @@ else
                 <th>@Localizer["FullName"]</th>
                 <th>@Localizer["CityName"]</th>
                 <th>@Localizer["Category"]</th>
-                <th>@Localizer["Action"]</th>
+                <th>@Localizer["Actions"]</th>
             </tr>
         </thead>
         <tbody>

@@ -1,7 +1,7 @@
-﻿@page "/Persons/Edit/{id:int}"
+﻿@page "/Persons/{id:int}/Edit"
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
-@inject IToastService Toast
+@inject IToastService ToastService
 @inject IPersonService PersonService
 @inject ICountryService CountryService
 
@@ -10,7 +10,7 @@
 {
 
 }
-else
+else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 {
     <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
         <FluentValidationValidator />
@@ -55,9 +55,15 @@ else
             <ValidationMessage For="@(() => Person.EmailAddresses)" />
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
         </div>
     </EditForm>
+}
+else
+{
+    <div class="alert alert-danger">
+        @Localizer["NotAuthorized"]
+    </div>
 }
 @code {
     [CascadingParameter]
@@ -80,13 +86,12 @@ else
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person);
         Person = result.Entity;
-        Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Principal is null || Id.IsNotSet() ? new Person() { CountryId = DefaultCountryId } : await PersonService.FindByIdAsync(Principal, Id.Value) ?? new Person();
+        Principal is null || Id.IsNotSet() ? DefaultPerson: await PersonService.FindByIdAsync(Principal, Id.Value) ?? DefaultPerson;
 
-
-    private int DefaultCountryId => CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
-
+    private int DefaultCountryId => Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
+    private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
 }

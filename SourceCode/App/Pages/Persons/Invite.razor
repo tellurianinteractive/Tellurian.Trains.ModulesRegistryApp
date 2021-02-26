@@ -1,6 +1,6 @@
 ﻿@using System.Text
 @using System.Net.Mail;
-@page "/Persons/Invite/{id:int}"
+@page "/Persons/{id:int}/Invite"
 @attribute [Authorize(Policy = "Admin")]
 
 @inject NavigationManager Navigator
@@ -14,12 +14,15 @@
 <h1>@Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
 @if (CanSend)
 {
-
     <h2>@Localizer["Message"]</h2>
     <hr />
     @((MarkupString)Html)
     <hr />
-    <button class="btn btn-primary" @onclick="Send">@Localizer["Send"]</button>
+    <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope"/>@Localizer["Send"]</button>
+}
+else
+{
+    @Localizer["InvitedPersonHasNoEmail"];
 }
 @if (IsSent)
 {
@@ -37,14 +40,15 @@
     private User? User;
     private string Html = string.Empty;
     private bool IsSent;
+    ClaimsPrincipal? Principal;
 
     override protected async Task OnInitializedAsync()
     {
-        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (principal is null) return;
-        var userId = principal.UserId();
-        Inviter = await PersonService.FindByUserIdAsync(principal, userId);
-        Person = await PersonService.FindByIdAsync(principal, Id);
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (Principal is null) return;
+        var userId = Principal.UserId();
+        Inviter = await PersonService.FindByUserIdAsync(Principal, userId);
+        Person = await PersonService.FindByIdAsync(Principal, Id);
         if (PersonHasEmail)
         {
             User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);

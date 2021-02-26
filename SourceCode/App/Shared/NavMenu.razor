@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
 <div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">@Localizer["AppName"] @AppService.AppVersion</a>
+    <a class="navbar-brand" style="margin-left:20px" href="">@Localizer["AppName"] @AppService.AppVersion</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -11,30 +11,30 @@
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span>@Localizer["Home"]
+                <span class="fa fa-home" aria-hidden="true"/>@Localizer["Home"]
             </NavLink>
         </li>
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Modules/Index">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span>@Localizer["Modules"]
+                    <span class="fa fa-boxes" aria-hidden="true"/>@Localizer["Modules"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Groups/Index">
-                    <span class="oi oi-people" aria-hidden="true"></span>@Localizer["Groups"]
+                    <span class="fa fa-users" aria-hidden="true"/>@Localizer["Groups"]
                 </NavLink>
             </li>
         </AuthorizeView>
         <AuthorizeView Policy="@AppPolicyNames.Admin">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Persons/Index">
-                    <span class="oi oi-person" aria-hidden="true"></span>@Localizer["ModuleOwners"]
+                    <span class="fa fa-user-friends" aria-hidden="true"/>@Localizer["ModuleOwners"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="ModuleStandards/Index">
-                    <span class="oi oi-person" aria-hidden="true"></span>@Localizer["ModuleStandards"]
+                    <span class="fa fa-pencil-ruler" aria-hidden="true"/>@Localizer["ModuleStandards"]
                 </NavLink>
             </li>
         </AuthorizeView>

@@ -150,8 +150,8 @@
   <data name="IsUser" xml:space="preserve">
     <value>Is user?</value>
   </data>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Users</value>
@@ -437,5 +437,8 @@
   </data>
   <data name="ConfigurationLabel" xml:space="preserve">
     <value>Variant</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle name</value>
   </data>
 </root>

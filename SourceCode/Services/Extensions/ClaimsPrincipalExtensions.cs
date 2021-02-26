@@ -35,15 +35,15 @@ namespace ModulesRegistry.Services.Extensions
         public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
         public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
 
-        public static bool IsGlobalAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
-        public static bool IsCountryAdministrator(this ClaimsPrincipal me) => me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
+        public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
+        public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
 
-        public static bool IsAnyAdministrator(this ClaimsPrincipal? me) => me is not null && ( me.IsGlobalAdministrator() || me.IsCountryAdministrator());
+        public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && ( me.IsGlobalAdministrator() || me.IsCountryAdministrator());
 
-        public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId) => 
-            me is not null && (me.IsGlobalAdministrator() || countryId == me.CountryId());
-        public static bool IsAuthorisedInCountry(this ClaimsPrincipal? me, int countryId, int personId) =>
-             me is not null && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId == me.CountryId());
+        public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) => 
+            me is not null && countryId.HasValue && (me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
+        public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
+             me is not null && countryId.HasValue && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
 
 
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>

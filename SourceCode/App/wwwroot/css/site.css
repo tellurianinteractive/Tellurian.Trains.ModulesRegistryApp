@@ -49,39 +49,10 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-
-/*.fixed-header {
-    width: 95%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}*/
-
-.fixed-header tbody {
-    display: block;
-    width: 100%;
-    overflow: auto;
-    height: 600px;
+.blazored-toast-container {
+    margin-top: 30px;
 }
 
-.fixed-header thead tr {
-/*    display: block;
-*/}
-
-/*.fixed-header thead {
-    background: black;
-    color: #fff;
-}
-*/
-/*.fixed-header th,
-.fixed-header td {
-    padding: 2px;
-    
-}
-*/
-
-.form-group {
-    padding-right: 5px;
-}
-.form-check {
-    padding-right: 10px;
+.fa {
+    padding-right: 4pt;
 }

@@ -267,8 +267,8 @@
   <data name="AppName" xml:space="preserve">
     <value>Die Modulregistrierung</value>
   </data>
-  <data name="Action" xml:space="preserve">
-    <value>Aktion</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Aktionen</value>
   </data>
   <data name="CityName" xml:space="preserve">
     <value>Wohnort</value>
@@ -437,5 +437,8 @@
   </data>
   <data name="ConfigurationLabel" xml:space="preserve">
     <value>Variant</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Zweiter Vorname</value>
   </data>
 </root>

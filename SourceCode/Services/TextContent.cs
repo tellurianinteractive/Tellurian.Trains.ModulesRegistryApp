@@ -7,8 +7,6 @@ namespace ModulesRegistry.Services
     {
         public string AsHtml => Text.HtmlFromMarkdown();
 
-        public static TextContent Empty => new TextContent(string.Empty, string.Empty, DateTimeOffset.MinValue);
+        public static TextContent Empty => new(string.Empty, string.Empty, DateTimeOffset.MinValue);
     }
-
-
 }
