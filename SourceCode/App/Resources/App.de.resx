@@ -391,7 +391,7 @@
     <value>Hat Normalspur?</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Anzahl der Durchgangsspuren</value>
+    <value>Durchgangsspuren</value>
   </data>
   <data name="PreferredTheme" xml:space="preserve">
     <value>Bevorzugtes Thema</value>
@@ -446,5 +446,29 @@
   </data>
   <data name="For" xml:space="preserve">
     <value>Von</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Passwortrichtlinie</value>
+  </data>
+  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
+    <value>Das Passwort muss mindestens {0} Zeichen enthalten</value>
+  </data>
+  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
+    <value>Das Passwort muss folgende Anforderungen erfüllen:</value>
+  </data>
+  <data name="PasswordMinimumOfThese" xml:space="preserve">
+    <value>Minimum {0} von diesen {2}: {1}</value>
+  </data>
+  <data name="Letters" xml:space="preserve">
+    <value>Buchstaben</value>
+  </data>
+  <data name="Digits" xml:space="preserve">
+    <value>Ziffern</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Spezielle Charaktere</value>
+  </data>
+  <data name="LinkToExternalContent" xml:space="preserve">
+    <value>Link zu externen Inhalten</value>
   </data>
 </root>

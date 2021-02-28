@@ -1,24 +1,38 @@
 ﻿@using System.Linq.Expressions;
+@using System.Diagnostics.CodeAnalysis;
+
+@inherits InputBase<string>
 @inject IStringLocalizer<App> Localizer
 
-<div class="form-group">
-    <label for="@Label">@Localizer[Label]</label>
-    <InputText Class="form-control" id="@Label" @bind-Value="@Value" /> &nbsp;
-    <ValidationMessage For="@(() => ValidationMessage)" />
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label" for="@Label">@Localizer[Label]</label>
+    }
+    <input type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
 </div>
 
-
 @code {
-    [Parameter] public string Label { get; set; } = string.Empty;
-    [Parameter] public string? Value { get; set; }
-    [Parameter] public Func<string>? Validation { get; set; }
-    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public string? Placeholder { get; set; }
+    [Parameter] public string? InputType { get; set; }
 
-    private string ValidationMessage => Validation is null ? string.Empty : Validation.Invoke();
-
-    private Task OnValueChanged(ChangeEventArgs e)
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        Value = e.Value?.ToString();
-        return ValueChanged.InvokeAsync(Value);
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
     }
+
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string Type => string.IsNullOrWhiteSpace(InputType) ? "text" : InputType.ToLowerInvariant();
+    string PlaceholderText => string.IsNullOrWhiteSpace(Placeholder) ? string.Empty : Localizer[Placeholder].Value;
 }

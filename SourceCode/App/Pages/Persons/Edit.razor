@@ -12,52 +12,19 @@
 }
 else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 {
-    <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
-        <div class="col-md-2">
-            <label class="form-label" for="firstname">@Localizer["FirstName"]</label>
-            <InputText Class="form-control" id="firstname" @bind-Value="@Person.FirstName" />
-            <ValidationMessage For="@(() => Person.FirstName)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="middlename">@Localizer["MiddleName"]</label>
-            <InputText Class="form-control" id="middlename" @bind-Value="@Person.MiddleName" />
-            <ValidationMessage For="@(() => Person.MiddleName)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="lastName">@Localizer["LastName"]</label>
-            <InputText Class="form-control" id="lastName" @bind-Value="@Person.LastName" />
-            <ValidationMessage For="@(() => Person.LastName)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="cityname">@Localizer["CityName"]</label>
-            <InputText Class="form-control" id="lastName" @bind-Value="@Person.CityName" />
-            <ValidationMessage For="@(() => Person.CityName)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="countryid">@Localizer["Country"]</label>
-            <InputSelect Class="form-select" id="countryid" TValue="int" @bind-Value="@Person.CountryId">
-                <option value="0">@Localizer["SelectCountry"]</option>
-                @if (CountriesItems is not null)
-                {
-                    foreach (var item in CountriesItems)
-                    {
-                        <option value="@item.Id">@item.Description</option>
-                    }
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => Person.CountryId)" />
-        </div>
-        <div class="col-md-6">
-            <label class="form-label" for="email">@Localizer[nameof(Person.EmailAddresses)]</label>
-            <InputText Class="form-control" id="email" @bind-Value="@Person.EmailAddresses" />
-            <ValidationMessage For="@(() => Person.EmailAddresses)" />
-        </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
-        </div>
-    </EditForm>
+<EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
+    <FluentValidationValidator />
+    <ValidationSummary />
+    <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
+    <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
+    <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
+    <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
+    <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
+    <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
+    </div>
+</EditForm>
 }
 else
 {

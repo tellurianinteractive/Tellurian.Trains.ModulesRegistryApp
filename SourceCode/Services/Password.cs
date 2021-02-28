@@ -14,10 +14,10 @@ namespace ModulesRegistry.Services
 
     public class PasswordPolicy : ValidationAttribute
     {
-        public int MinimumLength { get; set; } = 10;
-        public (int Minimum, string Characters) Letters { get; set; } = (4, "aAbBcCdDeEfFgGhHiIJjkKlLmMnNPpQqRrSsTtuUvVwWxXyYzZüÜåÅäÄöÖæÆøØ");
-        public (int Minimum, string Characters) Digits { get; set; } = (1, "0123456789");
-        public (int Minimum, string Characters) Special { get; set; } = (1, "!#¤%&?§()[]+*");
+        public static int MinimumLength { get; set; } = 10;
+        public static (int Minimum, string Characters) Letters { get; set; } = (4, "ABCDEFGHIJKLMNOPQRSTUÜVXYZÅÄÆÖØabcdefghijklmnopqrstuüvxyzåäæöø");
+        public static (int Minimum, string Characters) Digits { get; set; } = (1, "0123456789");
+        public static (int Minimum, string Characters) Special { get; set; } = (1, "!#¤%&?§()[]+*_");
 
         public override bool IsValid(object? value)
         {
@@ -46,5 +46,7 @@ namespace ModulesRegistry.Services
                 Letters.Minimum, Letters.Characters,
                 Digits.Minimum, Digits.Characters,
                 Special.Minimum, Special.Characters);
+
+
     }
 }

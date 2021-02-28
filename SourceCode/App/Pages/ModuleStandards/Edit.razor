@@ -17,75 +17,17 @@ else
     <EditForm Model="ModuleStandard" OnValidSubmit="OnValidSubmit" Class="row g-3">
         <FluentValidationValidator />
         <ValidationSummary />
-        <div class="col-md-2">
-            <label class="form-label" for="ShortName">@Localizer["ShortName"]</label>
-            <InputText Class="form-control" id="ShortName" @bind-Value="@ModuleStandard.ShortName" />
-            <ValidationMessage For="@(() => ModuleStandard.ShortName)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="scale">@Localizer["Scale"]</label>
-            <InputSelect Class="form-select" id="scale" TValue="int" @bind-Value="@ModuleStandard.ScaleId">
-                <option value="0">@SelectScaleLabel</option>
-                @if (ScaleItems is not null)
-                {
-                    foreach (var item in ScaleItems)
-                    {
-                        if (item.Id == ModuleStandard.ScaleId)
-                        {
-                            <option selected value="@item.Id">@item.Description</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Id">@item.Description</option>
-                        }
-                    }
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => ModuleStandard.ScaleId)" />
-        </div>
-        <div class="col-md-3">
-            <label class="form-label" for="PreferredTheme">@Localizer["PreferredTheme"]</label>
-            <InputText Class="form-control" id="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
-            <ValidationMessage For="@(() => ModuleStandard.PreferredTheme)" />
-        </div>
-        <div class="col-md-5">
-            &nbsp;
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="TrackSystem">@Localizer["TrackSystem"]</label>
-            <InputText Class="form-control" id="TrackSystem" @bind-Value="@ModuleStandard.TrackSystem" />
-            <ValidationMessage For="@(() => ModuleStandard.TrackSystem)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="NormalGauge">@Localizer["NormalGauge"]</label>
-            <InputNumber TValue="double?" Class="form-control" id="NormalGauge" @bind-Value="@ModuleStandard.NormalGauge" @bind-Value:format="F1" />
-            <ValidationMessage For="@(() => ModuleStandard.NormalGauge)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="NarrowGauge">@Localizer["NarrowGauge"]</label>
-            <InputNumber TValue="double?" Class="form-control" id="NarrowGauge" @bind-Value="@ModuleStandard.NarrowGauge" @bind-Value:format="F1" />
-            <ValidationMessage For="@(() => ModuleStandard.NarrowGauge)" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="Wheelset">@Localizer["Wheelset"]</label>
-            <InputText Class="form-control" id="Wheelset" @bind-Value="@ModuleStandard.Wheelset" />
-            <ValidationMessage For="@(() => ModuleStandard.Wheelset)" />
-        </div>
-        <div class="col-md-3">
-            <label class="form-label" for="Couplings">@Localizer["Couplings"]</label>
-            <InputText Class="form-control" id="Couplings" @bind-Value="@ModuleStandard.Couplings" />
-            <ValidationMessage For="@(() => ModuleStandard.Couplings)" />
-        </div>
-        <div class="col-md-2">
-            <label class="form-label" for="Electricity">@Localizer["ElectricSystem"]</label>
-            <InputText Class="form-control" id="Electricity" @bind-Value="@ModuleStandard.Electricity" />
-            <ValidationMessage For="@(() => ModuleStandard.Electricity)" />
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="AcceptedNorm">@Localizer["AcceptedNorm"]</label>
-            <InputText Class="form-control" id="AcceptedNorm" @bind-Value="@ModuleStandard.AcceptedNorm" />
-            <ValidationMessage For="@(() => ModuleStandard.AcceptedNorm)" />
-        </div>
+        <AppInputText Width="2" Label="ShortName" @bind-Value="ModuleStandard.ShortName" />
+        <AppInputSelect Width="2" Label="Scale" @bind-Value="ModuleStandard.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+        <AppInputText Width="3" Label="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
+        <AppInputFill Width="5" />
+        <AppInputText Width="2" Label="TrackSystem" @bind-Value="ModuleStandard.TrackSystem" />
+        <AppInputNumber Width="2" Label="NormalGauge" TValue="double?" @bind-Value="ModuleStandard.NormalGauge" Format="F1" Step="0.1" Unit="mm" />
+        <AppInputNumber Width="2" Label="NarrowGauge" TValue="double?" @bind-Value="ModuleStandard.NarrowGauge" Format="F1" Step="0.1" Unit="mm" />
+        <AppInputText Width="4" Label="Wheelset" @bind-Value="ModuleStandard.Wheelset" />
+        <AppInputText Width="3" Label="Couplings" @bind-Value="ModuleStandard.Couplings" />
+        <AppInputText Width="2" Label="ElectricSystem" @bind-Value="ModuleStandard.Electricity" />
+        <AppInputText Width="12" Label="AcceptedNorm" @bind-Value="ModuleStandard.AcceptedNorm" Placeholder="LinkToExternalContent" />
         <div class="col-12">
             <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
         </div>
@@ -120,6 +62,4 @@ else
         }
     }
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
-
-
 }

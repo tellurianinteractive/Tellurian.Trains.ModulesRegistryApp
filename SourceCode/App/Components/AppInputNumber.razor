@@ -1,0 +1,72 @@
+﻿@using System.Linq.Expressions;
+@using System.Diagnostics.CodeAnalysis;
+@using System.Globalization;
+
+@typeparam TValue
+@inherits InputBase<TValue>
+@inject IStringLocalizer<App> Localizer
+
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label" for="@Label">@LabelText</label>
+    }
+    <input type="number" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" step="@NumberStep" />
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public string? Format { get; set; }
+    [Parameter] public string? Step { get; set; }
+    [Parameter] public string? Unit { get; set; }
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TValue result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        var type = typeof(TValue);
+        if (type is null)
+        {
+            result = default;
+            validationErrorMessage = Localizer["UnsupportedValueType"].Value;
+            return false;
+        }
+
+        else if (IsInt)
+        {
+            int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
+            result = (TValue)(object)parsedValue;
+            validationErrorMessage = null;
+            return true;
+        }
+        else if (IsDouble)
+        {
+            double.TryParse(value, NumberStyles.Float, CultureInfo.CurrentCulture, out var parsedValue);
+            result = (TValue)(object)parsedValue;
+            validationErrorMessage = null;
+            return true;
+        }
+        throw new InvalidOperationException($"{GetType()} does not support the type '{typeof(TValue)}'.");
+    }
+
+    protected override string FormatValueAsString(TValue? value)
+    {
+        if (value is null) return string.Empty;
+        if (Format is null) return value.ToString() ?? string.Empty;
+        if (Unit is null) return string.Format($"{{0:{Format}}}", value);
+        return string.Format($"{{0:{Format}}} {{1}}", value, Unit);
+    }
+
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string NumberStep => Step is null ? "1" : Step;
+    string? LabelText => string.IsNullOrWhiteSpace(Label) ? null : string.IsNullOrWhiteSpace(Unit) ? Localizer[Label] : $"{Localizer[Label]} ({Unit})";
+
+    private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);
+    private bool IsDouble => typeof(TValue) == typeof(double) || typeof(TValue) == typeof(double?);
+}

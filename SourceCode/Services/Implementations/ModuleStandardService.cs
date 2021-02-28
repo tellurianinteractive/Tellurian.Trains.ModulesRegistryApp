@@ -54,6 +54,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal.MaySave())
             {
+                if (entity.Scale is not null && entity.ScaleId != entity.Scale.Id) entity.Scale = null;
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.ModuleStandards.Attach(entity);
                 dbContext.Entry(entity).State = entity.Id.GetState();

@@ -16,42 +16,12 @@ else
 <EditForm Model="@Group" OnValidSubmit="@OnValidSumbit" Class="row g-3">
     <FluentValidationValidator />
     <ValidationSummary />
-    <div class="col-md-2">
-        <label class="form-label" for="ShortName">@Localizer["ShortName"]</label>
-        <InputText Class="form-control" id="ShortName" @bind-Value="@Group.ShortName" />
-        <ValidationMessage For="@(() => Group.ShortName)" />
-    </div>
-    <div class="col-md-4">
-        <label class="form-label" for="FullName">@Localizer["FullName"]</label>
-        <InputText Class="form-control" id="FullName" @bind-Value="@Group.FullName" />
-        <ValidationMessage For="@(() => Group.FullName)" />
-    </div>
-    <div class="col-md-2">
-        <label class="form-label" for="cityname">@Localizer["CityName"]</label>
-        <InputText Class="form-control" id="lastName" @bind-Value="@Group.CityName" />
-        <ValidationMessage For="@(() => Group.CityName)" />
-    </div>
-    <div class="col-md-2">
-        <label class="form-label" for="countryid">@Localizer["Country"]</label>
-        <InputSelect Class="form-select" id="countryid" TValue="int" @bind-Value="@Group.CountryId">
-            <option value="0">@Localizer["SelectCountry"]</option>
-            @if (CountriesItems is not null)
-            {
-                foreach (var item in CountriesItems)
-                {
-                    if (item.Id == Group.CountryId)
-                    {
-                        <option selected value="@item.Id">@item.Description</option>
-                    }
-                    else
-                    {
-                        <option value="@item.Id">@item.Description</option>
-                    }
-                }
-            }
-        </InputSelect>
-        <ValidationMessage For="@(() => Group.Country)" />
-    </div>
+
+    <AppInputText Width="2" Label="ShortName" @bind-Value="Group.ShortName" />
+    <AppInputText Width="2" Label="FullName" @bind-Value="Group.FullName" />
+    <AppInputText Width="2" Label="CityName" @bind-Value="Group.CityName" />
+    <AppInputSelect Width="2" Label="Country" @bind-Value="Group.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
+
     <div class="col-md-2">
         <label class="form-label" for="category">@SelectCategoryLabel</label>
         <InputSelect class="form-select" id="category" TValue="string" @bind-Value="@Group.Category">

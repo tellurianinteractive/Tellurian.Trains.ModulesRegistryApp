@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.5.1
+Release date 2021-02-28
+- Bug fix of *password policy* (thanks to Daniel Bergqvist)
+- Password policy translated and formatted for better readability.
+- Less content in *module standard* list so lines dont break.
+
 ## Version 0.5.0
 Release date 2021-02-27
 - Administrators can now add and edit modules.

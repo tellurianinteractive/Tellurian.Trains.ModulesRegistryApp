@@ -13,22 +13,16 @@
 }
 else
 {
-    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
+<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
+    <FluentValidationValidator />
+    <ValidationSummary />
 
-        <div class="col-md-2">
-            <InputCheckbox Class="form-check-input" id="groupadmin" @bind-Value="@GroupMember.IsGroupAdministrator"></InputCheckbox>
-            <label class="form-check-label" for="groupadmin">@Localizer["IsGroupAdministrator"]</label>
-        </div>
-        <div class="col-md-2">
-            <InputCheckbox Class="form-check-input" id="dataadmin" @bind-Value="@GroupMember.IsDataAdministrator"></InputCheckbox>
-            <label class="form-check-label" for="dataadmin">@Localizer["IsDataAdministrator"]</label>
-        </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
-        </div>
-    </EditForm>
+    <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
+    <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+    <div class="col-12">
+        <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+    </div>
+</EditForm>
 }
 
 @code {

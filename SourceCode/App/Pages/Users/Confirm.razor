@@ -30,20 +30,14 @@ else if (PasswordCreated)
 else
 {
     <h1>@Localizer["CreatePassword"]</h1>
-    <p>@Policy.ToString()</p>
-    <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit">
+    <PasswordPolicyView/>
+    <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <DataAnnotationsValidator />
-        <div class="form-group">
-            <label for="password">@Localizer["Password"]</label>
-            <InputText type="password" Class="form-control" id="password" @bind-Value="@Password.Value" />
-            <ValidationMessage For="@(() => Password.Value)" />
+        <AppInputText Width="2" Label="Password" @bind-Value="Password.Value" InputType="password" />
+        <AppInputText Width="2" Label="ConfirmPassword" @bind-Value="Password.ConfirmValue" InputType="password" />
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
         </div>
-        <div class="form-group">
-            <label for="confirmpassword">@Localizer["ConfirmPassword"]</label>
-            <InputText  type="password"  Class="form-control" id="confirmpassword" @bind-Value="@Password.ConfirmValue" />
-            <ValidationMessage For="@(() => Password.ConfirmValue)" />
-        </div>
-        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
     </EditForm>
 }
 @code {
@@ -51,7 +45,7 @@ else
     private string? EmailAddress;
     private User? User;
     private Password Password = new Password();
-    private PasswordPolicy Policy = new PasswordPolicy();
+    private Services.PasswordPolicy Policy = new PasswordPolicy();
 
 
     protected override async Task OnInitializedAsync()

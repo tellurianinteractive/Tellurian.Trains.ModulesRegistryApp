@@ -25,9 +25,6 @@ else
                 <th>@Localizer["Name"]</th>
                 <th>@Localizer["PreferredTheme"]</th>
                 <th>@Localizer["TrackSystem"]</th>
-                <th>@Localizer["Wheelset"]</th>
-                <th>@Localizer["NormalGauge"]</th>
-                <th>@Localizer["NarrowGauge"]</th>
                 <th>@Localizer["ElectricSystem"]</th>
                 <th>@Localizer["Couplings"]</th>
                 @if (Principal.IsAnyAdministrator())
@@ -45,9 +42,6 @@ else
                     <td>@standard.ShortName</td>
                     <td>@standard.PreferredTheme</td>
                     <td>@standard.TrackSystem</td>
-                    <td>@standard.Wheelset</td>
-                    <td>@Gauge(standard.NormalGauge)</td>
-                    <td>@Gauge(standard.NarrowGauge)</td>
                     <td>@standard.Electricity</td>
                     <td>@standard.Couplings</td>
                     @if (Principal.IsAnyAdministrator())

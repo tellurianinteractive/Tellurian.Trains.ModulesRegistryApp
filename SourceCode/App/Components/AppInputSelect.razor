@@ -1,0 +1,58 @@
+﻿@using System.Linq.Expressions;
+@using System.Diagnostics.CodeAnalysis;
+@using System.Globalization;
+
+@inherits InputBase<int>
+@inject IStringLocalizer<App> Localizer
+
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label" for="@Label">@Localizer[Label]</label>
+    }
+    <select class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+        @if (ShowPleaseSelect)
+        {
+            <option value="0">@PleaseSelectText</option>
+        }
+        @if (Items is not null)
+        {
+            foreach (var item in Items)
+            {
+                if (item.Id == CurrentValue)
+                {
+                    <option selected value="@item.Id">@item.Description</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Description</option>
+                }
+            }
+        }
+    </select>
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
+    [Parameter] public bool ShowPleaseSelect { get; set; }
+
+    string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
+        result = parsedValue;
+        validationErrorMessage = null;
+        return true;
+    }
+}

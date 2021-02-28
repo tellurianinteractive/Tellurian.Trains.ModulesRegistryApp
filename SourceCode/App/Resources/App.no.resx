@@ -391,7 +391,7 @@
     <value>Har normalspor?</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Antall gjennomgående spor</value>
+    <value>Gjennomgående spor</value>
   </data>
   <data name="PreferredTheme" xml:space="preserve">
     <value>Foretrukket tema</value>
@@ -446,5 +446,29 @@
   </data>
   <data name="For" xml:space="preserve">
     <value>For</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Passordpolicy</value>
+  </data>
+  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
+    <value>Passordet må inneholde minst {0} tegn</value>
+  </data>
+  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
+    <value>Passordet må oppfylle disse kravene:</value>
+  </data>
+  <data name="PasswordMinimumOfThese" xml:space="preserve">
+    <value>Minimum {0} av disse {2}: {1}</value>
+  </data>
+  <data name="Letters" xml:space="preserve">
+    <value>Bokstaver</value>
+  </data>
+  <data name="Digits" xml:space="preserve">
+    <value>Sifre</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Spesialkarakterer</value>
+  </data>
+  <data name="LinkToExternalContent" xml:space="preserve">
+    <value>Lenke til eksternt innhold</value>
   </data>
 </root>

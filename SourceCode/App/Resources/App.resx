@@ -391,7 +391,7 @@
     <value>Has normal gauge?</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Number of through tracks</value>
+    <value>Through tracks</value>
   </data>
   <data name="PreferredTheme" xml:space="preserve">
     <value>Preferred theme</value>
@@ -446,5 +446,29 @@
   </data>
   <data name="For" xml:space="preserve">
     <value>For</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Password policy</value>
+  </data>
+  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
+    <value>Password must have minimum {0} characters</value>
+  </data>
+  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
+    <value>Password must fulfil these requirements:</value>
+  </data>
+  <data name="PasswordMinimumOfThese" xml:space="preserve">
+    <value>Minimum {0} of these {2}: {1}</value>
+  </data>
+  <data name="Letters" xml:space="preserve">
+    <value>Letters</value>
+  </data>
+  <data name="Digits" xml:space="preserve">
+    <value>Digits</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Special characters</value>
+  </data>
+  <data name="LinkToExternalContent" xml:space="preserve">
+    <value>Link to external content</value>
   </data>
 </root>
