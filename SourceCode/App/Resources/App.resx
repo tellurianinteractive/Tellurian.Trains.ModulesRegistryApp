@@ -475,7 +475,7 @@
     <value>This content was modified {0:d} {0:t}</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Please read and accept. </value>
+    <value>Please read and accept.</value>
   </data>
   <data name="Gables" xml:space="preserve">
     <value>Gables</value>
@@ -491,5 +491,8 @@
   </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Number of sections</value>
+  </data>
+  <data name="ModuleGables" xml:space="preserve">
+    <value>Module gables</value>
   </data>
 </root>

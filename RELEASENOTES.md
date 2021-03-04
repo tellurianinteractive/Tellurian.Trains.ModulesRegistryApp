@@ -6,6 +6,7 @@ Release date 2021-03-04
 - User now required to accept *terms of use* in order to use application.
 - Additional data about modules: *catenary description*, *number of sections*
 and *gables* with *direction* and *type of gable*.
+- Administration of gable types.
 
 ## Version 0.5.1
 Release date 2021-02-28

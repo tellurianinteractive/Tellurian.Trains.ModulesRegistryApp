@@ -1,0 +1,48 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject IPropertyService PropertyService
+
+<h1>@Heading</h1>
+@if (Name is null || Items is null)
+{
+
+}
+else
+{
+    @foreach (var item in Items)
+    {
+        <div>
+            @item.Description
+        </div>
+    }
+    <div class="col-md-2">
+        <input type="text" @bind="Value" />
+    </div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="Add">@Localizer["Add"]</button>
+    </div>
+}
+
+
+@code {
+    [Parameter] public string? Name { get; set; }
+
+    IEnumerable<ListboxItem>? Items;
+    string? Value;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Name is not null)
+        {
+            Items = await PropertyService.GetListboxItemsAsync(Name);
+        }
+    }
+
+    async Task Add()
+    {
+        if (Name is not null && Value is not null)
+            Items = await PropertyService.AddProperty(Name, Value);
+    }
+
+    string Heading => Name is null ? string.Empty : Localizer[Name].Value;
+
+}

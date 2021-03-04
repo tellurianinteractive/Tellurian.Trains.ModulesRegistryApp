@@ -17,14 +17,14 @@ namespace ModulesRegistry.Services.Implementations
         public Task<IEnumerable<ListboxItem>> AddGableType(string value) => AddProperty(GableType, value);
 
 
-        private async Task<IEnumerable<ListboxItem>> GetListboxItemsAsync(string name)
+        public async Task<IEnumerable<ListboxItem>> GetListboxItemsAsync(string name)
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Properties.AsNoTracking().Where(p => p.Name.Equals(name)).Select(p => new ListboxItem(p.Id, p.Value)).ToListAsync();
             return items.OrderBy(i => i.Description);
         }
 
-        private async Task<IEnumerable<ListboxItem>> AddProperty(string name, string value)
+        public async Task<IEnumerable<ListboxItem>> AddProperty(string name, string value)
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Properties.SingleOrDefaultAsync(p => p.Name == name && p.Value == value);

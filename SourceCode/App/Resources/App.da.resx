@@ -489,4 +489,10 @@
   <data name="NumberOfSections" xml:space="preserve">
     <value>Antal sektioner</value>
   </data>
+  <data name="ModuleGables" xml:space="preserve">
+    <value>Modul gavler</value>
+  </data>
+  <data name="ThisContentWasModified" xml:space="preserve">
+    <value>Dette indhold blev ændret {0:d} {0:t}</value>
+  </data>
 </root>

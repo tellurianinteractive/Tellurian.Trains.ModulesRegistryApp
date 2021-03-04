@@ -8,6 +8,8 @@ namespace ModulesRegistry.Services
 {
     public interface IPropertyService
     {
+        Task<IEnumerable<ListboxItem>> AddProperty(string name, string value);
         Task<IEnumerable<ListboxItem>> GetGableTypeListboxItemsAsync();
+        Task<IEnumerable<ListboxItem>> GetListboxItemsAsync(string name);
     }
 }
