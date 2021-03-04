@@ -30,19 +30,15 @@ namespace ModulesRegistry.Pages
             var user = await UserService.FindByEmailAsync(username);
             if (user is not null && user.Person is not null && password.IsSamePasswordAs(user.HashedPassword))
             {
-                var person = user.Person;
                 var claims = new List<Claim>
                 {
                     new Claim(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
                     new Claim(ClaimTypes.Email, user.EmailAddress),
-                    new Claim(ClaimTypes.Name, $"{person.FirstName} {person.LastName}"),
-                    new Claim(ClaimTypes.Country, person.CountryId.ToString(CultureInfo.InvariantCulture))
                 };
                 await TrySignIn(user, claims);
             }
 
             return LocalRedirect(returnUrl);
-
 
             async Task TrySignIn(User user, List<Claim> claims)
             {
@@ -65,7 +61,7 @@ namespace ModulesRegistry.Pages
                     {
                         string error = ex.Message;
                     }
-                    _ = await UserService.UpdateLastSignInTimee(user.Id, DateTimeOffset.Now);
+                    _ = await UserService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
                 }
             }
 

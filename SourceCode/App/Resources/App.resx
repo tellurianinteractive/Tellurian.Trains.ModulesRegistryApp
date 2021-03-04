@@ -471,4 +471,10 @@
   <data name="LinkToExternalContent" xml:space="preserve">
     <value>Link to external content</value>
   </data>
+  <data name="ThisContentWasModified" xml:space="preserve">
+    <value>This content was modified {0:d} {0:t}</value>
+  </data>
+  <data name="PleaseReadAndAccept" xml:space="preserve">
+    <value>Please read and accept. </value>
+  </data>
 </root>

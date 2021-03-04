@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services
 {
@@ -7,5 +8,6 @@ namespace ModulesRegistry.Services
         Task<TextContent> GetRemoteTextContent(string href);
         Task<TextContent> GetTextContent(string content);
         Task<TextContent> GetTextContent(string content, string? language);
+        Task<DateTimeOffset> GetLastModifiedTimeOfTextContent(string content);
     }
 }

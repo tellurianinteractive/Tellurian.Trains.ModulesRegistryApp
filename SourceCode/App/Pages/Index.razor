@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @using System.Security.Claims
 
@@ -12,7 +13,7 @@
     </Authorizing>
     <NotAuthorized>
         <h1>@Localizer["Welcome"]</h1>
-        @if (User?.Identity?.IsAuthenticated == true)
+        @if (Principal?.Identity?.IsAuthenticated == true)
         {
             <ContentView ContentName="HomeNoUser"></ContentView>
         }
@@ -24,13 +25,16 @@
 </AuthorizeView>
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    private ClaimsPrincipal? User;
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    private ClaimsPrincipal? Principal;
 
     protected async override Task OnParametersSetAsync()
     {
-        User = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        if (!Principal.IsLatestTermsOfUseAccepted())
+        {
+            Navigator.NavigateTo("/TermsOfUse");
+        }
     }
 
 }

@@ -1,9 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Tests
 {
@@ -14,7 +9,7 @@ namespace ModulesRegistry.Services.Tests
         public void IsValidPasswords()
         {
             var policy = new PasswordPolicy();
-            Assert.IsTrue(policy.IsValid("DonjDonj891mm!"));
+            Assert.IsTrue(policy.IsValid("FonjMonj899cc!"));
         }
     }
 }

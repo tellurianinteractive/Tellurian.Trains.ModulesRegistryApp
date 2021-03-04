@@ -83,7 +83,7 @@ namespace ModulesRegistry.Services.Implementations
             return (count == 1) ? user : null;
         }
 
-        public async Task<User?> UpdateLastSignInTimee(int userId, DateTimeOffset time)
+        public async Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time)
         {
             using var dbContext = Factory.CreateDbContext();
             var user = await dbContext.Users.FindAsync(userId);

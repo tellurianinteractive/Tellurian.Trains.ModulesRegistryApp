@@ -22,6 +22,6 @@ namespace ModulesRegistry.Services
         Task<User?> AcceptTermsOfUse(string? objectId);
         Task<User?> FindByEmailAsync(string? emailAddress);
         Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password);
-        Task<User?> UpdateLastSignInTimee(int userId, DateTimeOffset time);
+        Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time);
     }
 }

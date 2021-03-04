@@ -7,16 +7,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Services;
 
 namespace ModulesRegistry.Security
 {
     public class ApplicationClaimsTransformation : IClaimsTransformation
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
+        private readonly IContentService ContentService;
 
-        public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory)
+        public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, IContentService contentService)
         {
             Factory = factory;
+            ContentService = contentService;
         }
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
@@ -52,8 +55,14 @@ namespace ModulesRegistry.Security
                 Claim(AppClaimTypes.UserId, user.Id)
             };
             AddAdministratorClaims(user, result);
-            AddLastTermsOfUseAcceptTimeClaim(user, result);
-
+            if (user.LastTermsOfUseAcceptTime is not null)
+            {
+                var lastTermsOfUseChanged = await ContentService.GetLastModifiedTimeOfTextContent("TermsOfUse");
+                if (lastTermsOfUseChanged < user.LastTermsOfUseAcceptTime)
+                {
+                    result.Add(Claim(AppClaimTypes.LastTermsOfUseAcceptTime, true));
+                }
+            }
             var person = await db.People.SingleOrDefaultAsync(p => p.UserId == user.Id);
             if (person is not null)
             {
@@ -61,13 +70,6 @@ namespace ModulesRegistry.Security
             }
             return result;
 
-            static void AddLastTermsOfUseAcceptTimeClaim(User user, List<Claim> result) =>
-                result.Add(CookieConsentTimeClaim(user));
-
-            static Claim CookieConsentTimeClaim(User user) =>
-                user.LastTermsOfUseAcceptTime is null ?
-                Claim(nameof(user.LastTermsOfUseAcceptTime), DateTimeOffset.MinValue.ToString("o")) :
-                Claim(nameof(user.LastTermsOfUseAcceptTime), user.LastTermsOfUseAcceptTime.Value.ToString("o"));
 
             static void AddAdministratorClaims(User user, List<Claim> result)
             {
@@ -79,10 +81,10 @@ namespace ModulesRegistry.Security
             {
                 if (person is not null)
                 {
-                    result.Add(Claim(AppClaimTypes.PersonId, person.Id));
                     result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
                     result.Add(Claim(ClaimTypes.Surname, person.LastName));
-                    result.Add(Claim(ClaimTypes.Email, person.EmailAddresses));
+                    result.Add(Claim(ClaimTypes.Name, $"{person.FirstName} {person.LastName}"));
+                    result.Add(Claim(AppClaimTypes.PersonId, person.Id));
                     result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
                 }
             }

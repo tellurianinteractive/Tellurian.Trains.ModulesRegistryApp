@@ -7,12 +7,17 @@
 }
 else
 {
+    if (ShowModificationTime)
+    {
+        <div class="alert alert-info">@string.Format(Localizer["ThisContentWasModified"].Value, Content.LastModified)</div>
+    }
     @((MarkupString)Content.AsHtml)
 }
 @code {
     [Parameter] public string? ContentName { get; set; }
     [Parameter] public string? Language { get; set; } = null;
     [Parameter] public string? Href { get; set; } = null;
+    [Parameter] public bool ShowModificationTime { get; set; }
 
     TextContent? Content;
 

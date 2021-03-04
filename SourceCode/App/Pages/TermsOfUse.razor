@@ -1,4 +1,44 @@
 ﻿@page "/TermsOfUse"
+@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
+@inject IUserService UserService
+
 <h1>@Localizer["TermsOfUse"]</h1>
-<ContentView ContentName="TermsOfUse" />
+<AuthorizeView>
+    <Authorized>
+        @if (!Principal.IsLatestTermsOfUseAccepted())
+        {
+        <div class="alert alert-warning">
+            @Localizer["PleaseReadAndAccept"]
+        </div>
+        }
+    </Authorized>
+</AuthorizeView>
+<ContentView ContentName="TermsOfUse" ShowModificationTime="true" />
+<AuthorizeView>
+    <Authorized>
+        <div class="col-12">
+            <button class="btn btn-primary" @onclick="OnAccept">@Localizer["Accept"]</button>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    private ClaimsPrincipal? Principal;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    private async Task OnAccept()
+    {
+        var result = await UserService.AcceptTermsOfUse(Principal.ObjectId());
+        if (result is not null)
+        {
+            Navigator.NavigateTo(Navigator.BaseUri, true);
+        }
+    }
+
+}

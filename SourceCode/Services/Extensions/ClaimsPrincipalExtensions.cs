@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ModulesRegistry.Data;
+﻿using ModulesRegistry.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 
@@ -23,18 +21,19 @@ namespace ModulesRegistry.Services.Extensions
         public const string UserId = nameof(UserId);
         public const string ObjectId = nameof(ObjectId);
         public const string CountryId = nameof(CountryId);
+        public const string LastTermsOfUseAcceptTime = nameof(LastTermsOfUseAcceptTime);
     }
 
     public static class ClaimsPrincipalExtensions
     {
         public static string EmailAddess(this ClaimsPrincipal me) => me.GetString(ClaimTypes.Email) ?? string.Empty;
-        public static string? ObjectId(this ClaimsPrincipal me) => me.GetString(AppClaimTypes.ObjectId);
+        public static string? ObjectId(this ClaimsPrincipal? me) => me is null ? null: me.GetString(AppClaimTypes.ObjectId);
         public static string? GivenName(this ClaimsPrincipal me) => me.GetString(ClaimTypes.GivenName);
         public static string? Surname(this ClaimsPrincipal me) => me.GetString(ClaimTypes.Surname);
         public static int UserId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.UserId);
         public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
         public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
-
+        public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type.Equals(AppClaimTypes.LastTermsOfUseAcceptTime));
         public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
         public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
 
@@ -44,7 +43,6 @@ namespace ModulesRegistry.Services.Extensions
             me is not null && countryId.HasValue && (me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
              me is not null && countryId.HasValue && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
-
 
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me.MayRead(me.PersonId());

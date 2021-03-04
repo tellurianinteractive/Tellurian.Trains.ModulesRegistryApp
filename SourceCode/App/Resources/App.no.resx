@@ -471,4 +471,7 @@
   <data name="LinkToExternalContent" xml:space="preserve">
     <value>Lenke til eksternt innhold</value>
   </data>
+  <data name="PleaseReadAndAccept" xml:space="preserve">
+    <value>Vennligst les og godta.</value>
+  </data>
 </root>
