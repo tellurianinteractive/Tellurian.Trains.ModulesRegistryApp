@@ -292,16 +292,13 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(50);
 
                 entity.Property(e => e.HasNormalGauge)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
+                    .IsRequired();
 
                 entity.Property(e => e.Is2R)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
+                    .IsRequired();
 
                 entity.Property(e => e.Note).HasMaxLength(255);
 
-                entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PackageLabel).HasMaxLength(10);
 
@@ -340,11 +337,6 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ModuleGable_Module");
 
-                entity.HasOne(d => d.TypeProperty)
-                    .WithMany(p => p.ModuleGables)
-                    .HasForeignKey(d => d.TypePropertyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ModuleGable_Property");
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>

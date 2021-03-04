@@ -31,7 +31,7 @@
     protected async override Task OnParametersSetAsync()
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
-        if (!Principal.IsLatestTermsOfUseAccepted())
+        if (Principal.IsAuthenticated() && !Principal.IsLatestTermsOfUseAccepted())
         {
             Navigator.NavigateTo("/TermsOfUse");
         }

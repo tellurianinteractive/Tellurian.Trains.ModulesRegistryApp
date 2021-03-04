@@ -474,4 +474,7 @@
   <data name="PleaseReadAndAccept" xml:space="preserve">
     <value>Vennligst les og godta.</value>
   </data>
+  <data name="Gables" xml:space="preserve">
+    <value>Gavler</value>
+  </data>
 </root>

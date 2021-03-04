@@ -68,6 +68,7 @@ namespace ModulesRegistry
             services.AddScoped<IModuleService, ModuleService>();
             services.AddScoped<IScaleService, ScaleService>();
             services.AddScoped<IModuleStandardService, ModuleStandardService>();
+            services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");

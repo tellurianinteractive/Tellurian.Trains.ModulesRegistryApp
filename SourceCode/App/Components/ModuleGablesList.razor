@@ -1,0 +1,64 @@
+﻿
+@inject IStringLocalizer<App> Localizer
+@inject IPropertyService PropertyService
+
+@if (Module is null)
+{
+
+}
+else
+{
+    <h3 class="mt-3">@Localizer["Gables"]</h3>
+    @foreach (var gable in Module.ModuleGables)
+    {
+        <AppInputText Width="2" Placeholder="Label" @bind-Value="gable.Label" />
+        <AppInputSelect Width="2" @bind-Value="gable.TypePropertyId" Items="GableStandardItems" ShowPleaseSelect="true"  />
+        <div class="col-md-2"><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(gable.Id))">@Localizer["Delete"]</button></div>
+        <div class="col-md-6" />
+    }
+    @if (Gable is not null)
+    {
+        <AppInputText Width="2" Placeholder="Label" @bind-Value="Gable.Label" />
+        <AppInputSelect Width="2" @bind-Value="Gable.TypePropertyId" Items="GableStandardItems" ShowPleaseSelect="false" />
+        <div class="col-md-2"><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Save(0))">@Localizer["Add"]</button></div>
+    }
+}
+
+@code {
+    [Parameter] public Module? Module { get; set; }
+    IEnumerable<ListboxItem>? GableStandardItems;
+    ModuleGable? Gable;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        GableStandardItems = await PropertyService.GetGableTypeListboxItemsAsync();
+        Gable = new ModuleGable();
+    }
+
+    int? CurrentEditedGableId;
+    void ToggleGableEdit(int id)
+    {
+        if (CurrentEditedGableId is null) CurrentEditedGableId = id;
+        if (CurrentEditedGableId.Value == id) CurrentEditedGableId = null;
+        CurrentEditedGableId = id;
+    }
+    void Save(int id)
+    {
+        if (Module is not null && Gable is not null && id == 0 && !Module.ModuleGables.Any(mg => mg.Label.Equals(Gable.Label)))
+        {
+            Module.ModuleGables.Add(Gable);
+            Gable = new ModuleGable();
+            StateHasChanged();
+        }
+    }
+    void Delete(int id)
+    {
+        if (Module is not null && Gable is not null && id > 0)
+        {
+            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.Id != id).ToList();
+            StateHasChanged();
+        }
+    }
+
+    ListboxItem TypePropertyValue(int id) => GableStandardItems is null ? new ListboxItem(0, "") : GableStandardItems.Single(i => i.Id == id);
+}

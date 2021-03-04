@@ -27,13 +27,14 @@ namespace ModulesRegistry.Services.Extensions
     public static class ClaimsPrincipalExtensions
     {
         public static string EmailAddess(this ClaimsPrincipal me) => me.GetString(ClaimTypes.Email) ?? string.Empty;
-        public static string? ObjectId(this ClaimsPrincipal? me) => me is null ? null: me.GetString(AppClaimTypes.ObjectId);
+        public static string? ObjectId(this ClaimsPrincipal? me) => me?.GetString(AppClaimTypes.ObjectId);
         public static string? GivenName(this ClaimsPrincipal me) => me.GetString(ClaimTypes.GivenName);
         public static string? Surname(this ClaimsPrincipal me) => me.GetString(ClaimTypes.Surname);
         public static int UserId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.UserId);
         public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
         public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
         public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type.Equals(AppClaimTypes.LastTermsOfUseAcceptTime));
+        public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.HasClaim(c => c.Type == AppClaimTypes.ObjectId);
         public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
         public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
 

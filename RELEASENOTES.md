@@ -3,7 +3,7 @@
 ## Version 0.6.0
 Release date 2021-03-04
 - User now required to accept *terms of use* in order to use application.
-- 
+
 ## Version 0.5.1
 Release date 2021-02-28
 - Bug fix of *password policy* (thanks to Daniel Bergqvist)

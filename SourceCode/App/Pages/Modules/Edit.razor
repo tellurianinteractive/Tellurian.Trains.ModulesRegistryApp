@@ -53,10 +53,13 @@ else
         <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
         <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
 
+        <ModuleGablesList Module="Module" />
+
         <div class="col-12">
             <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
         </div>
     </EditForm>
+
 }
 
 @code {
@@ -66,6 +69,7 @@ else
     ClaimsPrincipal? Principal;
     Person? Owner;
     Module? Module;
+    ModuleGable? Gable;
     IEnumerable<ListboxItem>? ScaleItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
 
@@ -89,6 +93,7 @@ else
         if (Module is not null)
         {
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerId);
+            Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
         }
     }
@@ -106,6 +111,7 @@ else
         }
         return text.ToString();
     }
+
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
     private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";

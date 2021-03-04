@@ -46,15 +46,19 @@ namespace ModulesRegistry.Services.Implementations
         public Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>
             FindByIdAsync(principal, id, 0);
 
-        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, int owningPersionId)
+        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, int personalOwnerId)
         {
             if (principal is not null)
             {
-                var ownerId = owningPersionId > 0 ? owningPersionId : principal.PersonId();
+                var ownerPersonId = personalOwnerId > 0 ? personalOwnerId : principal.PersonId();
                 using var dbContext = Factory.CreateDbContext();
-                var module = await dbContext.Modules.AsNoTracking().Include(m => m.ModuleOwnerships).SingleOrDefaultAsync(m => m.Id == id);
-                if (module is null) return null;
-                if (module.ModuleOwnerships.Any(mo => mo.PersonId == ownerId)) return module;
+                return await dbContext.Modules.AsNoTracking()
+                    .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerPersonId))
+                    .Include(m => m.ModuleOwnerships)
+                    .Include(m => m.ModuleGables)
+                    .SingleOrDefaultAsync();
+                //if (module is null) return null;
+                //if (module.ModuleOwnerships.Any(mo => mo.PersonId == ownerPersonId)) return module;
             }
             return null;
         }
@@ -69,8 +73,32 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.MaySave(ownerId))
             {
                 using var dbContext = Factory.CreateDbContext();
-                dbContext.Modules.Attach(entity);
-                dbContext.Entry(entity).State = entity.Id.GetState();
+                var existing = await dbContext.Modules.Include(m => m.ModuleGables).FirstOrDefaultAsync(m => m.Id == entity.Id);
+                if (existing is null)
+                {
+                    dbContext.Add(entity);
+                }
+                else
+                {
+                    dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                    foreach (var gable in entity.ModuleGables)
+                    {
+                        var existingGable = existing.ModuleGables.AsQueryable().FirstOrDefault(g => g.Id == gable.Id);
+                        if (existingGable is null)
+                        {
+                            existing.ModuleGables.Add(gable);
+                        }
+                        else
+                        {
+                            dbContext.Entry(existingGable).CurrentValues.SetValues(gable);
+                        }
+                    }
+                    foreach (var gable in existing.ModuleGables)
+                    {
+                        if (!entity.ModuleGables.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
+                    }
+                }
+
                 var result = await dbContext.SaveChangesAsync();
                 if (entity.ModuleOwnerships.Count == 0)
                 {
