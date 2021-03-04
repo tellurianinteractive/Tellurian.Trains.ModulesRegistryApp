@@ -26,6 +26,7 @@ namespace ModulesRegistry.Data
         public short NumberOfThroughTracks { get; set; }
         public bool HasNormalGauge { get; set; }
         public bool HasNarrowGauge { get; set; }
+        public string CatenaryDescription { get; set; }
         public bool Is2R { get; set; }
         public bool Is3R { get; set; }
         public bool IsSignal { get; set; }
@@ -40,6 +41,7 @@ namespace ModulesRegistry.Data
         public string Note { get; set; }
         public int? StationId { get; set; }
         public int? FremoNumber { get; set; }
+        public int? NumberOfSections { get; set; }
         public string PackageLabel { get; set; }
         public string ConfigurationLabel { get; set; }
 

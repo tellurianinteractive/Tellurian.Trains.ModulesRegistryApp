@@ -2,13 +2,16 @@
 
 ## Version 0.6.0
 Release date 2021-03-04
+- *Terms of use* updated.
 - User now required to accept *terms of use* in order to use application.
+- Additional data about modules: *catenary description*, *number of sections*
+and *gables* with *direction* and *type of gable*.
 
 ## Version 0.5.1
 Release date 2021-02-28
 - Bug fix of *password policy* (thanks to Daniel Bergqvist)
 - Password policy translated and formatted for better readability.
-- Less content in *module standard* list so lines dont break.
+- Less content in *module standard* list so lines don't break.
 
 ## Version 0.5.0
 Release date 2021-02-27

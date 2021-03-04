@@ -9,9 +9,9 @@
 <div class="@BootstrapWrapperCss">
     @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="form-control-label" for="@Label">@LabelText</label>
+        <label class="form-control-label text-end" for="@Label">@((MarkupString)LabelText)</label>
     }
-    <input type="number" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" step="@NumberStep" />
+    <input type="number" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" step="@NumberStep" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -65,7 +65,7 @@
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
     string NumberStep => Step is null ? "1" : Step;
-    string? LabelText => string.IsNullOrWhiteSpace(Label) ? null : string.IsNullOrWhiteSpace(Unit) ? Localizer[Label] : $"{Localizer[Label]} ({Unit})";
+    string LabelText => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? Localizer[Label] : $"{Localizer[Label]}&nbsp;({Unit})";
 
     private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);
     private bool IsDouble => typeof(TValue) == typeof(double) || typeof(TValue) == typeof(double?);

@@ -480,4 +480,16 @@
   <data name="Gables" xml:space="preserve">
     <value>Gables</value>
   </data>
+  <data name="Direction" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="GableType" xml:space="preserve">
+    <value>Type of gable</value>
+  </data>
+  <data name="CatenaryDescription" xml:space="preserve">
+    <value>Catenary description</value>
+  </data>
+  <data name="NumberOfSections" xml:space="preserve">
+    <value>Number of sections</value>
+  </data>
 </root>

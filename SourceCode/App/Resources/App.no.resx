@@ -477,4 +477,16 @@
   <data name="Gables" xml:space="preserve">
     <value>Gavler</value>
   </data>
+  <data name="Direction" xml:space="preserve">
+    <value>Retning</value>
+  </data>
+  <data name="GableType" xml:space="preserve">
+    <value>Type gavl</value>
+  </data>
+  <data name="CatenaryDescription" xml:space="preserve">
+    <value>Beskrivelse av kontaktledning</value>
+  </data>
+  <data name="NumberOfSections" xml:space="preserve">
+    <value>Antall seksjoner</value>
+  </data>
 </root>

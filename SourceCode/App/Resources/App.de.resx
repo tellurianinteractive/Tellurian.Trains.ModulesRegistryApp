@@ -477,4 +477,16 @@
   <data name="Gables" xml:space="preserve">
     <value>Giebel</value>
   </data>
+  <data name="Direction" xml:space="preserve">
+    <value>Richtung</value>
+  </data>
+  <data name="GableType" xml:space="preserve">
+    <value>Art des Giebels</value>
+  </data>
+  <data name="CatenaryDescription" xml:space="preserve">
+    <value>Oberleitungsbeschreibung</value>
+  </data>
+  <data name="NumberOfSections" xml:space="preserve">
+    <value>Anzahl der Abschnitte</value>
+  </data>
 </root>

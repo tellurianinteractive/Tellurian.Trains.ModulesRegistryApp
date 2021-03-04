@@ -19,46 +19,49 @@
 }
 else
 {
-    <EditForm Model="Module" OnValidSubmit="OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
-        <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
-        <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-        <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
-        <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" />
-        <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" />
-        <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
+<EditForm Model="Module" OnValidSubmit="OnValidSubmit" Class="row g-3">
+    <FluentValidationValidator />
+    <ValidationSummary />
+    <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+    <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+    <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
+    <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" />
+    <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" />
+    <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
+    <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
 
-        <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
-        <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
-        <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
+    <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
+    <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
+    <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
 
-        <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
-        <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
-        <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
-        <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
-        <AppInputNumber Width="1" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="10" />
-        <AppInputNumber Width="1" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-        <AppInputFill Width="4" />
+    <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
+    <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
+    <AppInputText Width="8" Label="CatenaryDescription" @bind-Value="Module.CatenaryDescription" />
 
-        <AppInputCheck Width="2" Label="IsSignal" @bind-Value="Module.IsSignal" />
-        <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
-        <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
-        <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Module.IsJunction" />
-        <AppInputCheck Width="2" Label="IsStation" @bind-Value="Module.IsStation" />
-        <AppInputFill Width="4" />
+    <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
+    <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
+    <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="10" />
+    <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
+    <AppInputFill Width="6" />
 
-        <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
-        <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
-        <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
-        <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
+    <AppInputCheck Width="2" Label="IsSignal" @bind-Value="Module.IsSignal" />
+    <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
+    <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
+    <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Module.IsJunction" />
+    <AppInputCheck Width="2" Label="IsStation" @bind-Value="Module.IsStation" />
+    <AppInputFill Width="2" />
 
-        <ModuleGablesList Module="Module" />
+    <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
+    <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
+    <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
+    <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
 
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
-        </div>
-    </EditForm>
+    <ModuleGablesList Module="Module" />
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
+    </div>
+</EditForm>
 
 }
 
