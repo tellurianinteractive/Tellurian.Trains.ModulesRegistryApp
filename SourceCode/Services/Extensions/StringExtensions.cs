@@ -1,8 +1,11 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Localization;
+using ModulesRegistry.Data;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Services.Extensions
@@ -86,5 +89,8 @@ namespace ModulesRegistry.Services.Extensions
         }
 
         #endregion
+
+
+        
     }
 }

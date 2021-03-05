@@ -11,7 +11,7 @@
 @inject IScaleService ScaleService
 @inject IModuleStandardService ModuleStandardService
 
-<h1><span class="fa fa-boxes" aria-hidden="true" /> @GetHeading() </h1>
+<h1><span class="fa fa-boxes" aria-hidden="true" /> @Heading </h1>
 
 @if (Module is null)
 {
@@ -25,36 +25,38 @@ else
     <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
     <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
     <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
-    <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" />
-    <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" />
+    <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue()" />
+    <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
     <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
     <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
 
-    <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
-    <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
-    <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
-
     <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
     <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
-    <AppInputText Width="8" Label="CatenaryDescription" @bind-Value="Module.CatenaryDescription" />
+    <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
+    <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
+    <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
 
     <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
     <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
     <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="10" />
+    <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="10"/>
     <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-    <AppInputFill Width="6" />
+    <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
+    <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
 
-    <AppInputCheck Width="2" Label="IsSignal" @bind-Value="Module.IsSignal" />
     <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
     <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
     <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Module.IsJunction" />
     <AppInputCheck Width="2" Label="IsStation" @bind-Value="Module.IsStation" />
-    <AppInputFill Width="2" />
+    <AppInputFill Width="4" />
 
     <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
     <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
     <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
     <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
+    <AppInputFill Width="4" />
+
+    <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
 
     <ModuleGablesList Module="Module" />
 
@@ -100,19 +102,8 @@ else
         }
     }
 
-    private string GetHeading()
-    {
-        var text = new StringBuilder(100);
-        text.Append(Id == 0 && OwnerId == 0 ? $"{Localizer["CreateModule"]}" : $"{Localizer["EditModule"]}");
-        if (Owner is not null)
-        {
-            text.Append(' ');
-            text.Append(Localizer["For"].Value.ToLowerInvariant());
-            text.Append(' ');
-            text.Append(Owner.FirstName);
-        }
-        return text.ToString();
-    }
+    private string Heading => Localizer.Heading(Id == 0 && OwnerId == 0, "Module", Owner);
+    
 
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";

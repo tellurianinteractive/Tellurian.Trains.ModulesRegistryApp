@@ -1,0 +1,81 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject IPropertyService PropertyService
+
+@if (Station is null)
+{
+
+}
+else
+{
+    <h3 class="mt-3">@Localizer["Tracks"]</h3>
+    @foreach (var track in Station.StationTracks)
+    {
+        <div class="row g-3" style="border-bottom: 1px solid gray">
+
+            <AppInputText Width="1" Label="Number" @bind-Value="track.Designation" />
+            <AppInputNumber Width="1" Label="DisplayOrder" TValue="short" @bind-Value="track.DisplayOrder" />
+            <AppInputNumber Width="2" Label="MaxTrainLength" TValue="double" @bind-Value="track.MaxTrainLength" Unit="m" Step="0.1" />
+            <AppInputNumber Width="2" Label="PlatformLength" TValue="double?" @bind-Value="track.PlatformLength" Unit="m" Step="0.1" />
+            <AppInputNumber Width="2" Label="SpeedLimit" TValue="short?" @bind-Value="track.SpeedLimit" Unit="km/h" Step="10" />
+            <AppInputFill Width="4" />
+
+            <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="track.IsThroughTrack" />
+            <AppInputCheck Width="2" Label="IsSiding" @bind-Value="track.IsSiding" />
+            <AppInputCheck Width="2" Label="IsScheduled" @bind-Value="track.IsScheduled" />
+            <AppInputFill Width="6" />
+
+            <AppInputText Width="6" Label="Usage" @bind-Value="track.UsageNote" />
+
+            <div class="col-md-2"><br /><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))">@Localizer["Delete"]</button></div>
+            <div class="col-md-6" />
+        </div>
+    }
+    @if (Track is not null)
+    {
+        <div class="row g-3 bg-light">
+            <AppInputText Width="1" Label="Number" @bind-Value="Track.Designation" />
+            <AppInputNumber Width="1" Label="DisplayOrder" TValue="short" @bind-Value="Track.DisplayOrder" />
+            <AppInputNumber Width="2" Label="MaxTrainLength" TValue="double" @bind-Value="Track.MaxTrainLength" Unit="m" Step="0.1" />
+            <AppInputNumber Width="2" Label="PlatformLength" TValue="double?" @bind-Value="Track.PlatformLength" Unit="m" Step="0.1" />
+            <AppInputNumber Width="2" Label="SpeedLimit" TValue="short?" @bind-Value="Track.SpeedLimit" Unit="km/h" Step="10" />
+            <AppInputFill Width="4" />
+
+            <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="Track.IsThroughTrack" />
+            <AppInputCheck Width="2" Label="IsSiding" @bind-Value="Track.IsSiding" />
+            <AppInputCheck Width="2" Label="IsScheduled" @bind-Value="Track.IsScheduled" />
+            <AppInputFill Width="6" />
+
+            <AppInputText Width="6" Label="Usage" @bind-Value="Track.UsageNote" />
+            <div class="col-md-2"><br /><div class="form-control-label" /><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Save(0))">@Localizer["Add"]</button></div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public Station? Station { get; set; }
+    StationTrack? Track;
+
+    protected override Task OnParametersSetAsync()
+    {
+        Track = new StationTrack();
+        return Task.CompletedTask;
+    }
+
+    void Save(int id)
+    {
+        if (Station is not null && Track is not null && id == 0 && !Station.StationTracks.Any(mg => mg.Designation.Equals(Track.Designation)))
+        {
+            Station.StationTracks.Add(Track);
+            Track = new StationTrack();
+            StateHasChanged();
+        }
+    }
+    void Delete(int id)
+    {
+        if (Station is not null && Track is not null && id > 0)
+        {
+            Station.StationTracks = Station.StationTracks.Where(st => st.Id != id).ToList();
+            StateHasChanged();
+        }
+    }
+}

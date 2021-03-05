@@ -483,9 +483,6 @@
   <data name="GableType" xml:space="preserve">
     <value>Art des Giebels</value>
   </data>
-  <data name="CatenaryDescription" xml:space="preserve">
-    <value>Oberleitungsbeschreibung</value>
-  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Anzahl der Abschnitte</value>
   </data>
@@ -494,5 +491,44 @@
   </data>
   <data name="ThisContentWasModified" xml:space="preserve">
     <value>Dieser Inhalt wurde geändert {0:d} {0:t}</value>
+  </data>
+  <data name="SignalFeature" xml:space="preserve">
+    <value>Hat Signal?</value>
+  </data>
+  <data name="OverheadLineFeature" xml:space="preserve">
+    <value>Hat Oberleitung?</value>
+  </data>
+  <data name="MaxSpeed" xml:space="preserve">
+    <value>Höchstgeschwindigkeit</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>Signatur</value>
+  </data>
+  <data name="IsEndStation" xml:space="preserve">
+    <value>Ist Endstation?</value>
+  </data>
+  <data name="IsShadowStation" xml:space="preserve">
+    <value>Ist Schattenbanhof?</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Angezeigte Reihenfolge</value>
+  </data>
+  <data name="IsScheduled" xml:space="preserve">
+    <value>Ist geplant?</value>
+  </data>
+  <data name="IsSiding" xml:space="preserve">
+    <value>Ist Abstellgleis?</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Verwendung</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>Höchstgeschwindigkeit</value>
+  </data>
+  <data name="MaxTrainLength" xml:space="preserve">
+    <value>Maximale Zuglänge</value>
+  </data>
+  <data name="PlatformLength" xml:space="preserve">
+    <value>Plattformlänge</value>
   </data>
 </root>

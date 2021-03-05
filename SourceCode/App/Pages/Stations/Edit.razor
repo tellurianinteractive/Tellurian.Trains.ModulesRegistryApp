@@ -1,0 +1,69 @@
+﻿@page "/Stations/{id:int}/Edit"
+@page "/Stations/{id:int}/Edit/{ownerid:int}"
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject IModuleService ModuleService
+@inject IStationService StationService
+@inject IPersonService PersonService
+
+<h1><span class="fa fa-school" /> @Heading</h1>
+
+<EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
+    <Inputs>
+        <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" />
+        <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
+        <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
+        <AppInputFill Width="5" />
+        <AppInputCheck Width="2" Label="IsEnd" @bind-Value="Station.IsEnd" />
+        <AppInputCheck Width="2" Label="IsShadow" @bind-Value="Station.IsShadow" />
+        <StationTracksList Station="Station" />
+    </Inputs>
+</EditTemplate>
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int OwnerId { get; set; }
+    ClaimsPrincipal? Principal;
+    Person? Owner;
+    Station? Station;
+    int ModuleId;
+
+    IEnumerable<ListboxItem>? ModulesItems;
+
+    private string Heading => Localizer.Heading(Id == 0 && OwnerId == 0, "Station", Owner);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        ModulesItems = await ModuleService.ModuleItems(Principal);
+        Station = new Station();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (OwnerId > 0)
+        {
+            Owner = await PersonService.FindByIdAsync(Principal, OwnerId);
+        }
+        if (Id > 0)
+        {
+            Station = await StationService.FindByIdAsync(Principal, Id, OwnerId);
+            if (Station is not null) ModuleId = Station.Modules.First().Id;
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Station is not null)
+        {
+            var result = await StationService.SaveAsync(Principal, Station, 0, ModuleId);
+            Station = result.Entity;
+            if (Station is not null) ModuleId = Station.Modules.First().Id;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        }
+    }
+}

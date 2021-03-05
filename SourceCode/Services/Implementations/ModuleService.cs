@@ -14,6 +14,20 @@ namespace ModulesRegistry.Services.Implementations
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
+        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal)
+        {
+            if (principal is not null)
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var modules = await dbContext.Modules.AsNoTracking()
+                    .Where(mo => mo.ModuleOwnerships
+                    .Any(mo => mo.PersonId == principal.PersonId()))
+                    .ToListAsync();
+                return modules.Select(m => new ListboxItem(m.Id, $"{m.FullName} {m.ConfigurationLabel}{m.PackageLabel} {m.FremoNumber}".Trim())).OrderBy(l => l.Description);
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
         public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal)
         {
             if (principal is null) return Array.Empty<Module>();
@@ -57,8 +71,6 @@ namespace ModulesRegistry.Services.Implementations
                     .Include(m => m.ModuleOwnerships)
                     .Include(m => m.ModuleGables)
                     .SingleOrDefaultAsync();
-                //if (module is null) return null;
-                //if (module.ModuleOwnerships.Any(mo => mo.PersonId == ownerPersonId)) return module;
             }
             return null;
         }
@@ -68,8 +80,8 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, int owningPersonId)
         {
             // TODO: Make it possible for group data administrator to create and edit other persons module.
-            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
             // TODO: Check if principal is data administrator in same group as owner.
+            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
             if (principal.MaySave(ownerId))
             {
                 using var dbContext = Factory.CreateDbContext();
@@ -105,7 +117,8 @@ namespace ModulesRegistry.Services.Implementations
                     dbContext.ModuleOwnerships.Add(new ModuleOwnership { ModuleId = entity.Id, PersonId = ownerId, OwnedShare = 1 });
                     result += await dbContext.SaveChangesAsync();
                 }
-                return result.SaveResult(entity);
+                
+                return result.SaveResult(existing ?? entity);
             }
             return principal.SaveNotAuthorised<Module>();
         }

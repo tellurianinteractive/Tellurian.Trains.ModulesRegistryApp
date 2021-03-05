@@ -17,12 +17,17 @@
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Modules/Index">
-                    <span class="fa fa-boxes" aria-hidden="true"/>@Localizer["Modules"]
+                    <span class="fa fa-boxes" aria-hidden="true" />@Localizer["Modules"]
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="Stations/Index">
+                    <span class="fa fa-school" aria-hidden="true" />@Localizer["Stations"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Groups/Index">
-                    <span class="fa fa-users" aria-hidden="true"/>@Localizer["Groups"]
+                    <span class="fa fa-users" aria-hidden="true" />@Localizer["Groups"]
                 </NavLink>
             </li>
         </AuthorizeView>

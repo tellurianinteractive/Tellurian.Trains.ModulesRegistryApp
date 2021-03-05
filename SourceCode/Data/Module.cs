@@ -26,10 +26,13 @@ namespace ModulesRegistry.Data
         public short NumberOfThroughTracks { get; set; }
         public bool HasNormalGauge { get; set; }
         public bool HasNarrowGauge { get; set; }
-        public string CatenaryDescription { get; set; }
+        public string Note { get; set; }
         public bool Is2R { get; set; }
         public bool Is3R { get; set; }
+        [Obsolete("Replaced by SignalOption")]
         public bool IsSignal { get; set; }
+        public int SignalFeature { get; set; }
+        public int OverheadLineFeature { get; set; }
         public bool IsTurntable { get; set; }
         public bool IsDuckunder { get; set; }
         public bool IsJunction { get; set; }
@@ -38,12 +41,12 @@ namespace ModulesRegistry.Data
         public int LandscapeState { get; set; }
         public byte[] DxfDrawing { get; set; }
         public byte[] PdfDocumentation { get; set; }
-        public string Note { get; set; }
         public int? StationId { get; set; }
         public int? FremoNumber { get; set; }
-        public int? NumberOfSections { get; set; }
+        public short? NumberOfSections { get; set; }
         public string PackageLabel { get; set; }
         public string ConfigurationLabel { get; set; }
+        public short? SpeedLimit { get; set; }
 
         public virtual Scale Scale { get; set; }
         public virtual ModuleStandard Standard { get; set; }

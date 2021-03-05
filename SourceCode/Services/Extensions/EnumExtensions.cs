@@ -14,5 +14,9 @@ namespace ModulesRegistry.Services.Extensions
             Enum.GetValues<ModuleFunctionalState>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
         public static IEnumerable<ListboxItem> ModuleLandscapeStateListboxItems() =>
            Enum.GetValues<ModuleLandscapeState>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+        public static IEnumerable<ListboxItem> OverheadLineFeatureListboxItems() =>
+           Enum.GetValues<OverheadLineFeature>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+        public static IEnumerable<ListboxItem> SignalFeatureListboxItems() =>
+           Enum.GetValues<SignalFeature>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
     }
 }

@@ -9,56 +9,41 @@
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
 
-@if (People is null)
-{
-    @if (IsLoading)@Localizer["GettingData"];
-}
-else
-{
-    <a class="btn btn-sm btn-secondary" href="persons/0/edit">@Localizer["Add"]</a>
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["City"]</th>
-                <th style="text-align: center">@Localizer["IsUser"]</th>
-                <th>@Localizer["Actions"]</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var person in People)
+<TableTemplate Items="People" HideNoRecordsToDisplay="true">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["City"]</th>
+        <th style="text-align: center">@Localizer["IsUser"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="person">
+        <td>@Name(person)</td>
+        <td>@person.CityName</td>
+        <td style="text-align: center">@UserStatus(person)</td>
+        <td style="white-space: nowrap !important;">
+            @if (Principal.IsAuthorisedInCountry(person.CountryId))
             {
-                <tr>
-                    <td>@Name(person)</td>
-                    <td>@person.CityName</td>
-                    <td style="text-align: center">@UserStatus(person)</td>
-                    <td style="white-space: nowrap !important;">
-                        @if (Principal.IsAuthorisedInCountry(person.CountryId))
-                        {
-                            <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="fa fa-edit"/>@Localizer["Edit"]</a>
-                            <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="fa fa-list"/>@Localizer["Modules"]</a>
-                            @if (person.User is null || person.User.HashedPassword.HasNoValue())
-                            {
-                                <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="fa fa-envelope"/>@Localizer["Invite"]</a>
-                            }
-                            @if (person.UserId is null)
-                            {
-                                <a class="btn btn-sm btn-danger" href="persons/@person.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>
-                            }
-                        }
-                    </td>
-                </tr>
+                <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="fa fa-list" />@Localizer["Modules"]</a>
+                @if (person.User is null || person.User.HashedPassword.HasNoValue())
+                {
+                    <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="fa fa-envelope" />@Localizer["Invite"]</a>
+                }
+                @if (person.UserId is null)
+                {
+                    <a class="btn btn-sm btn-danger" href="persons/@person.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>
+                }
             }
-        </tbody>
-    </table>
-}
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     private ClaimsPrincipal? Principal;
-    private IEnumerable<Person>? People;
+    private IEnumerable<Person>? People = Array.Empty<Person>();
     private IEnumerable<ListboxItem>? Countries;
-    private bool IsLoading;
 
     private async Task OnSelectedCountry(int id)
     {
@@ -76,10 +61,9 @@ else
     {
         if (id > 0)
         {
-            IsLoading = true;
+            People = null;
             StateHasChanged();
             People = await PersonService.GetAllInCountryAsync(Principal, id);
-            IsLoading = false;
         }
     }
 

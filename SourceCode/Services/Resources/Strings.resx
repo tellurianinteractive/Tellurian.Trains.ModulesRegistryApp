@@ -228,4 +228,16 @@
   <data name="FullyAppliedDetailed" xml:space="preserve">
     <value>Fully applied, detailed</value>
   </data>
+  <data name="OnlyPosts" xml:space="preserve">
+    <value>Only posts</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="Removable" xml:space="preserve">
+    <value>Removable</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
 </root>

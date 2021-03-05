@@ -66,6 +66,7 @@ namespace ModulesRegistry
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGroupCategoryService, GroupCategoryService>();
             services.AddScoped<IModuleService, ModuleService>();
+            services.AddScoped<IStationService, StationService>();
             services.AddScoped<IScaleService, ScaleService>();
             services.AddScoped<IModuleStandardService, ModuleStandardService>();
             services.AddScoped<IPropertyService, PropertyService>();

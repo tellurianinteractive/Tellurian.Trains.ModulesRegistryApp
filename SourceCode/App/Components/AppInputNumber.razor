@@ -52,6 +52,13 @@
             validationErrorMessage = null;
             return true;
         }
+        else if (IsShort)
+        {
+            short.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
+            result = (TValue)(object)parsedValue;
+            validationErrorMessage = null;
+            return true;
+        }
         throw new InvalidOperationException($"{GetType()} does not support the type '{typeof(TValue)}'.");
     }
 
@@ -69,4 +76,6 @@
 
     private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);
     private bool IsDouble => typeof(TValue) == typeof(double) || typeof(TValue) == typeof(double?);
+    private bool IsShort => typeof(TValue) == typeof(short) || typeof(TValue) == typeof(short?);
+
 }

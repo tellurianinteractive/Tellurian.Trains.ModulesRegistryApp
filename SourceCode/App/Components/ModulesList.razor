@@ -6,52 +6,34 @@
         <a class="btn btn-sm btn-secondary" href="/Modules/0/Edit/@OwningPersonId"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
 }
-@if (Modules is null)
-{
 
-}
-else if (Modules.Count() == 0)
-{
-    <div class="alert alert-info"><span class="fa fa-exclamation" />@Localizer["NoRecordsToDisplay"]</div>
-}
-else
-{
-
-    <table class="table table-striped table-responsive-sm">
-        <thead>
-            <tr>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["Scale"]</th>
-                <th>@Localizer["Standard"]</th>
-                <th>@Localizer["Owners"]</th>
-                <th>@Localizer["IsStation"]</th>
-                <th>@Localizer["Actions"]</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var module in Modules)
+<TableTemplate Items="Modules" >
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Scale"]</th>
+        <th>@Localizer["Standard"]</th>
+        <th>@Localizer["Owners"]</th>
+        <th>@Localizer["IsStation"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="module">
+        <td>@module.FullName</td>
+        <td>@module.Scale.ShortName</td>
+        <td>@module.Standard.ShortName</td>
+        <td>@PersonalOwners(module.ModuleOwnerships)</td>
+        <td>@((module.IsStation).AsYesNo())</td>
+        <td>
+            @if (MayEdit)
             {
-                <tr>
-                    <td>@module.FullName</td>
-                    <td>@module.Scale.ShortName</td>
-                    <td>@module.Standard.ShortName</td>
-                    <td>@PersonalOwners(module.ModuleOwnerships)</td>
-                    <td>@((module.IsStation).AsYesNo())</td>
-                    <td>
-                        @if (MayEdit)
-                        {
-                            <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                        }
-                        &nbsp;
-                    </td>
-                </tr>
+                <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
             }
-        </tbody>
-    </table>
-}
+            &nbsp;
+        </td>
+    </RowTemplate>
+</TableTemplate>
 
 @code {
-    [Parameter] public IEnumerable<Module>? Modules { get; set; }
+    [Parameter] public IEnumerable<Module>? Modules { get; set; } 
     [Parameter] public bool MayEdit { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     private string PersonalOwners(IEnumerable<ModuleOwnership>? owners) => owners is null ? string.Empty : string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));

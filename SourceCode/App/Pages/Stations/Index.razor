@@ -1,9 +1,24 @@
 ﻿@page "/Stations/Index"
 
 @inject IStringLocalizer<App> Localizer
+@inject IStationService StationService
 
-<h1>@Localizer</h1>
+<h1><span class="fa fa-school" aria-hidden="true" /> @Localizer["Stations"] </h1>
+
+<StationsList Stations="Stations" MayEdit="MayEdit" />
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
+    ClaimsPrincipal? Principal;
+    IEnumerable<Station>? Stations;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Stations = await StationService.GetAllAsync(Principal);
+    }
+
+    private bool MayEdit => Principal is not null;
 }
+

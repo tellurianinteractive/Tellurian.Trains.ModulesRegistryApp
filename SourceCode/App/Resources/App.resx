@@ -486,13 +486,49 @@
   <data name="GableType" xml:space="preserve">
     <value>Type of gable</value>
   </data>
-  <data name="CatenaryDescription" xml:space="preserve">
-    <value>Catenary description</value>
-  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Number of sections</value>
   </data>
   <data name="ModuleGables" xml:space="preserve">
     <value>Module gables</value>
+  </data>
+  <data name="SignalFeature" xml:space="preserve">
+    <value>Has signal?</value>
+  </data>
+  <data name="OverheadLineFeature" xml:space="preserve">
+    <value>Has overhead line?</value>
+  </data>
+  <data name="MaxSpeed" xml:space="preserve">
+    <value>Max speed</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="IsEndStation" xml:space="preserve">
+    <value>Is end station?</value>
+  </data>
+  <data name="IsShadowStation" xml:space="preserve">
+    <value>Is shadow station?</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Displayed order</value>
+  </data>
+  <data name="IsScheduled" xml:space="preserve">
+    <value>Is scheduled?</value>
+  </data>
+  <data name="IsSiding" xml:space="preserve">
+    <value>Is siding?</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>Max speed</value>
+  </data>
+  <data name="MaxTrainLength" xml:space="preserve">
+    <value>Max train length</value>
+  </data>
+  <data name="PlatformLength" xml:space="preserve">
+    <value>Platform length</value>
   </data>
 </root>

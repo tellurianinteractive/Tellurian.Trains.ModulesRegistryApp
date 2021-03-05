@@ -1,5 +1,16 @@
 # Release Notes
 
+## Version 0.7.0
+Release date 2021-04-05
+- **Stations** and **Tracks** can now be added and edited
+- **Note** as a free text is added on module.
+- **Signal Feature** which may be *No*, *Optional* or *Fixed*. Replaces **Is Signal**.
+- **Overhead Line Feature** which may be *No*, *Optional*, *Only Posts* or *Fixed*. Replaces **Catenary Description**. 
+Any notes on type of catenary should be entered in new *Note* field.
+- **Max Speed** of trains passing module is added. When the module is added to a *layout*, the max speed can be lowered but not exceeded.
+- **Version** and **Box Label** fields for *modules* are now mutual exclusive. Only one of the two fields may be entered.
+- **Bug fix** of module represents year. (Thanks to Jérôme Chavel).
+
 ## Version 0.6.0
 Release date 2021-03-04
 - *Terms of use* updated.

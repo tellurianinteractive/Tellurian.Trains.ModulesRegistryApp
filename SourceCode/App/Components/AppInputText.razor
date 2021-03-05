@@ -9,7 +9,14 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-    <input type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    @if (IsDisabled)
+    {
+        <input disabled type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    }
+    else
+    {
+        <input type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    }
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -24,6 +31,7 @@
     [Parameter] public int? Width { get; set; }
     [Parameter] public string? Placeholder { get; set; }
     [Parameter] public string? InputType { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
@@ -35,4 +43,5 @@
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
     string Type => string.IsNullOrWhiteSpace(InputType) ? "text" : InputType.ToLowerInvariant();
     string PlaceholderText => string.IsNullOrWhiteSpace(Placeholder) ? string.Empty : Localizer[Placeholder].Value;
+    string Disabled => IsDisabled ? "disabled" : string.Empty;
 }

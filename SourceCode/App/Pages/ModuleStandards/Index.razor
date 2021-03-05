@@ -12,49 +12,35 @@
     <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit">@Localizer["Add"]</a>
 }
 
-@if (ModuleStandards is null)
-{
+<TableTemplate Items="ModuleStandards">
+    <TableHeader>
+        <th>@Localizer["Scale"]</th>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["PreferredTheme"]</th>
+        <th>@Localizer["TrackSystem"]</th>
+        <th>@Localizer["ElectricSystem"]</th>
+        <th>@Localizer["Couplings"]</th>
+        @if (Principal.IsAnyAdministrator())
+        {
+            <th>@Localizer["Actions"]</th>
 
-}
-else
-{
-    <table class="table table-striped table-responsive-sm">
-        <thead>
-            <tr>
-                <th>@Localizer["Scale"]</th>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["PreferredTheme"]</th>
-                <th>@Localizer["TrackSystem"]</th>
-                <th>@Localizer["ElectricSystem"]</th>
-                <th>@Localizer["Couplings"]</th>
-                @if (Principal.IsAnyAdministrator())
-                {
-                    <th>@Localizer["Actions"]</th>
-
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var standard in ModuleStandards)
-            {
-                <tr>
-                    <td>@Scale(standard.Scale)</td>
-                    <td>@standard.ShortName</td>
-                    <td>@standard.PreferredTheme</td>
-                    <td>@standard.TrackSystem</td>
-                    <td>@standard.Electricity</td>
-                    <td>@standard.Couplings</td>
-                    @if (Principal.IsAnyAdministrator())
-                    {
-                        <td>
-                            <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                        </td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        }
+    </TableHeader>
+    <RowTemplate Context="standard">
+        <td>@Scale(standard.Scale)</td>
+        <td>@standard.ShortName</td>
+        <td>@standard.PreferredTheme</td>
+        <td>@standard.TrackSystem</td>
+        <td>@standard.Electricity</td>
+        <td>@standard.Couplings</td>
+        @if (Principal.IsAnyAdministrator())
+        {
+            <td>
+                <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+            </td>
+        }
+    </RowTemplate>
+</TableTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

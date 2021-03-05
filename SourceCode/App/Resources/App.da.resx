@@ -483,9 +483,6 @@
   <data name="GableType" xml:space="preserve">
     <value>Type gavl</value>
   </data>
-  <data name="CatenaryDescription" xml:space="preserve">
-    <value>Køreledningsbeskrivelse</value>
-  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Antal sektioner</value>
   </data>
@@ -494,5 +491,44 @@
   </data>
   <data name="ThisContentWasModified" xml:space="preserve">
     <value>Dette indhold blev ændret {0:d} {0:t}</value>
+  </data>
+  <data name="SignalFeature" xml:space="preserve">
+    <value>Har signal?</value>
+  </data>
+  <data name="OverheadLineFeature" xml:space="preserve">
+    <value>Har køreledning?</value>
+  </data>
+  <data name="MaxSpeed" xml:space="preserve">
+    <value>Maks. hastighed</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>Signatur</value>
+  </data>
+  <data name="IsEndStation" xml:space="preserve">
+    <value>Er slutstation?</value>
+  </data>
+  <data name="IsShadowStation" xml:space="preserve">
+    <value>Er skygge station?</value>
+  </data>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Viste rækkefølge</value>
+  </data>
+  <data name="IsScheduled" xml:space="preserve">
+    <value>Er køreplanlagt?</value>
+  </data>
+  <data name="IsSiding" xml:space="preserve">
+    <value>Er sidespor?</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Anvendelse</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>Højeste hastighed</value>
+  </data>
+  <data name="MaxTrainLength" xml:space="preserve">
+    <value>Maks. toglængde</value>
+  </data>
+  <data name="PlatformLength" xml:space="preserve">
+    <value>Platformens længde</value>
   </data>
 </root>

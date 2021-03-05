@@ -18,20 +18,20 @@ namespace ModulesRegistry.Validators
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Scale)]);
             RuleFor(m => m.ConfigurationLabel)
-                .MaximumLength(10)
-                .When(m => m.ConfigurationLabel is not null)
+                .MaximumLength(10).When(m => m.ConfigurationLabel is not null)
                 .WithName(n => localizer[nameof(n.ConfigurationLabel)]);
             RuleFor(m => m.PackageLabel)
-                .MaximumLength(10)
-                .When(m => m.PackageLabel is not null)
+                .MaximumLength(10).When(m => m.PackageLabel is not null)
                 .WithName(n => localizer[nameof(n.PackageLabel)]);
             RuleFor(m => m.FremoNumber)
-                .InclusiveBetween(1, 9999)
-                .When(m => m.FremoNumber.HasValue)
+                .InclusiveBetween(1, 9999).When(m => m.FremoNumber.HasValue)
                 .WithName(n => localizer[nameof(n.FremoNumber)]);
             RuleFor(m => m.StandardId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Standard)]);
+            RuleFor(m => m.Theme)
+                .MaximumLength(50).When(m => m.Theme is not null)
+                .WithName(n => localizer[nameof(n.Theme)]);
             RuleFor(m => m.RepresentsFromYear)
                 .MustBeValidYear(localizer)
                 .WithName(n => localizer["FromYear"]);
@@ -39,12 +39,10 @@ namespace ModulesRegistry.Validators
                .MustBeValidYear(localizer)
                .WithName(n => localizer["UptoYear"]);
             RuleFor(m => m.Radius)
-                .InclusiveBetween(0.0, 10000.0)
-                .When(m => m.Radius is not null)
+                .InclusiveBetween(500.0, 10000.0).When(m => m.Radius is not null)
                 .WithName(n => localizer[nameof(n.Radius)]);
             RuleFor(m => m.Angle)
-                .InclusiveBetween(0, 360)
-                .When(m => m.Angle is not null)
+                .InclusiveBetween(1, 360).When(m => m.Angle is not null)
                 .WithName(n => localizer[nameof(n.Angle)]);
             RuleFor(m => m.Length)
                 .InclusiveBetween(5, 50000)
@@ -52,12 +50,21 @@ namespace ModulesRegistry.Validators
             RuleFor(m => (int)m.NumberOfThroughTracks)
                 .InclusiveBetween(1, 4)
                 .WithName(n => localizer[nameof(n.NumberOfThroughTracks)]);
+            RuleFor(m => (int?)m.SpeedLimit)
+               .InclusiveBetween(10, 200).When(m => m.SpeedLimit.HasValue)
+               .WithName(n => localizer[nameof(n.SpeedLimit)]);
             RuleFor(m => m.FunctionalState)
                 .InclusiveBetween((int)ModuleFunctionalState.Unknown, (int)ModuleFunctionalState.Approved)
                 .WithName(n => localizer[nameof(n.FunctionalState)]);
             RuleFor(m => m.LandscapeState)
                 .InclusiveBetween((int)ModuleLandscapeState.Unknown, (int)ModuleLandscapeState.FullyAppliedDetailed)
                 .WithName(n => localizer[nameof(n.LandscapeState)]);
+            RuleFor(m => m.OverheadLineFeature)
+               .InclusiveBetween((int)OverheadLineFeature.No, (int)OverheadLineFeature.OnlyPosts)
+               .WithName(n => localizer[nameof(n.OverheadLineFeature)]);
+            RuleFor(m => m.SignalFeature)
+              .InclusiveBetween((int)SignalFeature.No, (int)SignalFeature.Fixed)
+              .WithName(n => localizer[nameof(n.SignalFeature)]);
         }
     }
 }

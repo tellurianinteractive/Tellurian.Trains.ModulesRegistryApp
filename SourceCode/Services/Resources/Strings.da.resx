@@ -228,4 +228,16 @@
   <data name="FullyAppliedDetailed" xml:space="preserve">
     <value>Fuldt implementeret, detaljeret</value>
   </data>
+  <data name="OnlyPosts" xml:space="preserve">
+    <value>Kun stolper</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="Removable" xml:space="preserve">
+    <value>Aftagelig</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Valgfri</value>
+  </data>
 </root>

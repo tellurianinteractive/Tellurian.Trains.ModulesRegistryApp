@@ -1,1 +1,37 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@if (Stations is not null && MayEdit)
+{
+    <div>
+        <a class="btn btn-sm btn-secondary" href="/Stations/0/Edit/@OwningPersonId"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+    </div>
+}
+<TableTemplate Items="Stations">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Siganature"]</th>
+        <th>@Localizer["IsEnd"]</th>
+        <th>@Localizer["IsShadow"]</th>
+        <th>@Localizer["Actions"]</th>
+
+    </TableHeader>
+    <RowTemplate Context="station">
+        <td>@station.FullName</td>
+        <td>@station.Signature</td>
+        <td>@station.IsEnd.AsYesNo()</td>
+        <td>@station.IsShadow.AsYesNo()</td>
+        <td>
+            @if (MayEdit)
+            {
+                <a class="btn btn-sm btn-secondary" href="/Stations/@station.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+            }
+            &nbsp;
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+
+@code {
+    [Parameter] public IEnumerable<Station>? Stations { get; set; }
+    [Parameter] public bool MayEdit { get; set; }
+    [Parameter] public int OwningPersonId { get; set; }
+}

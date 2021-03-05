@@ -80,8 +80,3 @@ The *user* can get this consent in several ways:
 #### 3.3 Deleting Data
 For security reason, ordinary users cannot delete any data.
 You, as an *administrator*, *must* delete data for modules and their owners within one year after a personal written request. 
-
-### 4. Data Handling
-Data in *the application* is stored in an *Azure SQL Database* in *Microsoft Azure* on servers located within Europe.
-
-

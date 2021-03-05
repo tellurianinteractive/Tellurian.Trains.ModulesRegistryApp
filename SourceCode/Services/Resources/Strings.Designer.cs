@@ -142,6 +142,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        internal static string Fixed {
+            get {
+                return ResourceManager.GetString("Fixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fully applied, detailed.
         /// </summary>
         internal static string FullyAppliedDetailed {
@@ -250,6 +259,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only posts.
+        /// </summary>
+        internal static string OnlyPosts {
+            get {
+                return ResourceManager.GetString("OnlyPosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional.
+        /// </summary>
+        internal static string Optional {
+            get {
+                return ResourceManager.GetString("Optional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Partially applied.
         /// </summary>
         internal static string PartiallyApplied {
@@ -309,6 +336,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string ReadyToTest {
             get {
                 return ResourceManager.GetString("ReadyToTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removable.
+        /// </summary>
+        internal static string Removable {
+            get {
+                return ResourceManager.GetString("Removable", resourceCulture);
             }
         }
         
