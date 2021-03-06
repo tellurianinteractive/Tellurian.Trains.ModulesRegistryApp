@@ -9,6 +9,8 @@
 else
 {
     <EditForm Model="Item" OnValidSubmit="OnValidSubmit" Class="row g-3">
+        <FluentValidationValidator/>
+        <ValidationSummary/>
         @Inputs
         <div class="col-12">
             <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>

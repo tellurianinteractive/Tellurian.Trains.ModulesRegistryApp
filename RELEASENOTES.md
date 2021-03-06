@@ -1,8 +1,12 @@
 # Release Notes
 
+## Version 0.7.1
+Release date 2021-03-06
+- **Stations** and **Tracks** are now validated when user edits.
+
 ## Version 0.7.0
 Release date 2021-04-05
-- **Stations** and **Tracks** can now be added and edited
+- **Stations** and **Tracks** can now be added and edited.
 - **Note** as a free text is added on module.
 - **Signal Feature** which may be *No*, *Optional* or *Fixed*. Replaces **Is Signal**.
 - **Overhead Line Feature** which may be *No*, *Optional*, *Only Posts* or *Fixed*. Replaces **Catenary Description**. 
