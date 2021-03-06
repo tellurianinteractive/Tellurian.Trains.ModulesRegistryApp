@@ -12,6 +12,7 @@
 <TableTemplate Items="Modules">
     <TableHeader>
         <th>@Localizer["Name"]</th>
+        <th>@Localizer["FremoName"]</th>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Standard"]</th>
         <th>@Localizer["Owners"]</th>
@@ -20,10 +21,11 @@
     </TableHeader>
     <RowTemplate Context="module">
         <td>@module.FullName</td>
+        <td>@module.FremoName()</td>
         <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
         <td>@PersonalOwners(module.ModuleOwnerships)</td>
-        <td>@((module.IsStation).AsYesNo())</td>
+        <td>@((module.IsPartOfStation()).AsYesNo())</td>
         <td>
             @if (MayEdit)
             {
@@ -48,4 +50,6 @@
         ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
         Modules = await ModuleService.GetForOwningPerson(Principal, OwningPersonId);
     }
+
+    bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 }

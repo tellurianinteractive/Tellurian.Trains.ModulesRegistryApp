@@ -540,4 +540,7 @@
   <data name="Clone" xml:space="preserve">
     <value>Clone</value>
   </data>
+  <data name="FremoName" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

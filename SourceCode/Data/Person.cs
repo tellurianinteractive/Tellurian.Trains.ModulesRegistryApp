@@ -21,6 +21,7 @@ namespace ModulesRegistry.Data
         public string CityName { get; set; }
         public int CountryId { get; set; }
         public int? UserId { get; set; }
+        public string FremoOwnerSignature { get; set; }
 
         public virtual Country Country { get; set; }
         public virtual User User { get; set; }

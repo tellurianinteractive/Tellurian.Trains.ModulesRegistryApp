@@ -20,6 +20,8 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
     <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
     <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
     <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
+    <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
+
     <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
     <div class="col-12">
         <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>

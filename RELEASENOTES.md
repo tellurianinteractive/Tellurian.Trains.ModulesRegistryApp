@@ -4,6 +4,7 @@
 Release date 2021-03-06
 - **Stations** and **Tracks** are now validated when user edits.
 - **Modules** can be cloned for easier create similar modules.
+- **FREMO Owner Prefix** can now be entered for FREMO members. 
 
 ## Version 0.7.0
 Release date 2021-04-05

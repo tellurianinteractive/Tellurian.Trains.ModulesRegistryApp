@@ -43,6 +43,10 @@ namespace ModulesRegistry.Validators
             RuleFor(person => person.CountryId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Country)]);
+
+            RuleFor(person => person.FremoOwnerSignature)
+                .MaximumLength(10)
+                .WithName(n => localizer[nameof(n.FremoOwnerSignature)]);
         }
     }
 }

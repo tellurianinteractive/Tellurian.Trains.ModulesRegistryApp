@@ -217,16 +217,16 @@
     <value>Unzutreffend</value>
   </data>
   <data name="Preparing" xml:space="preserve">
-    <value>Vorbereiten</value>
+    <value>Vorbereitet</value>
   </data>
   <data name="PartiallyApplied" xml:space="preserve">
     <value>Teilweise implementiert</value>
   </data>
   <data name="FullyAppliedSimple" xml:space="preserve">
-    <value>Voll angewendet, einfach</value>
+    <value>Vollendet, einfach</value>
   </data>
   <data name="FullyAppliedDetailed" xml:space="preserve">
-    <value>Voll angewendet, detailliert</value>
+    <value>Vollendet, detailliert</value>
   </data>
   <data name="OnlyPosts" xml:space="preserve">
     <value>Nur Pfosten</value>
