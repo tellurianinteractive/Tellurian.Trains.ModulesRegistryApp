@@ -541,6 +541,9 @@
     <value>Clone</value>
   </data>
   <data name="FremoName" xml:space="preserve">
-    <value></value>
+    <value>FREMO name</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Is global administrator?</value>
   </data>
 </root>

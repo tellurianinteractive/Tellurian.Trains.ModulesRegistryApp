@@ -1,4 +1,41 @@
 ﻿@page "/Contact"
 @inject IStringLocalizer<App> Localizer
-<h1>@Localizer["Contact"]</h1>
-<ContentView ContentName="Contact"/>
+@inject IUserService UserService
+
+<h1><span class="fa fa-mail-bulk" />@Localizer["Contact"]</h1>
+
+@if (ContactPersons is null)
+{
+}
+else
+{
+    <ContentView ContentName="Contact" />
+    <TableTemplate Items="ContactPersons.OrderBy(cp => LanguageService.GetString(cp.Person.Country.EnglishName, null))" HideNoRecordsToDisplay="true">
+        <TableHeader>
+            <th>@Localizer["Country"]</th>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["IsGlobalAdministrator"]</th>
+        </TableHeader>
+        <RowTemplate Context="contact">
+            <th>@LanguageService.GetString(contact.Person.Country.EnglishName, null)</th>
+            <th>@contact.Person.Name()</th>
+            <td>@contact.IsGlobalAdministrator.AsYesNo()</td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+
+@code
+{
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<User>? ContactPersons;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        ContactPersons = await UserService.GetCountryAdministratorsAsync();
+    }
+
+}

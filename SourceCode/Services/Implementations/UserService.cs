@@ -98,7 +98,14 @@ namespace ModulesRegistry.Services.Implementations
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Users.Include(u => u.Person).ToListAsync();
         }
+
+        public async Task<IEnumerable<User>> GetCountryAdministratorsAsync()
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Users.AsNoTracking()
+                .Where(u => u.IsCountryAdministrator || u.IsGlobalAdministrator)
+                .Include(u => u.Person).ThenInclude(p => p.Country)
+                .ToListAsync();
+        }
     }
-
-
 }

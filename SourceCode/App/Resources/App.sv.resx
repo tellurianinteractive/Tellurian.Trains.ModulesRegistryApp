@@ -540,4 +540,10 @@
   <data name="Clone" xml:space="preserve">
     <value>Klona</value>
   </data>
+  <data name="FremoName" xml:space="preserve">
+    <value>FREMO-namn</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Är global administratör?</value>
+  </data>
 </root>

@@ -23,5 +23,6 @@ namespace ModulesRegistry.Services
         Task<User?> FindByEmailAsync(string? emailAddress);
         Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password);
         Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time);
+        Task<IEnumerable<User>> GetCountryAdministratorsAsync();
     }
 }

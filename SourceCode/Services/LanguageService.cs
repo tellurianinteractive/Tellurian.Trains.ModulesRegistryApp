@@ -11,7 +11,7 @@ namespace ModulesRegistry.Services
     {
         public const string DefaultLanguage = "en";
         public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
-        public static CultureInfo DefaultCulture => new CultureInfo(DefaultLanguage);
+        public static CultureInfo DefaultCulture => new(DefaultLanguage);
 
         public static string GetString(string resourceName, string? language)
         {

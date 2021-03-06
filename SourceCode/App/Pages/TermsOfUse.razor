@@ -3,7 +3,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject IUserService UserService
 
-<h1>@Localizer["TermsOfUse"]</h1>
+<h1><span class="fa fa-file-signature"/>@Localizer["TermsOfUse"]</h1>
 <AuthorizeView>
     <Authorized>
         @if (!Principal.IsLatestTermsOfUseAccepted())
