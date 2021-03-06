@@ -240,4 +240,10 @@
   <data name="Optional" xml:space="preserve">
     <value>Valgfri</value>
   </data>
+  <data name="CloningFailed" xml:space="preserve">
+    <value>Kloning mislyktes</value>
+  </data>
+  <data name="ClonedSuccessfully" xml:space="preserve">
+    <value>Klonet</value>
+  </data>
 </root>

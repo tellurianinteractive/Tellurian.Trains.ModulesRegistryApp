@@ -97,6 +97,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cloned successfully.
+        /// </summary>
+        internal static string ClonedSuccessfully {
+            get {
+                return ResourceManager.GetString("ClonedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cloning failed.
+        /// </summary>
+        internal static string CloningFailed {
+            get {
+                return ResourceManager.GetString("CloningFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Community.
         /// </summary>
         internal static string Community {

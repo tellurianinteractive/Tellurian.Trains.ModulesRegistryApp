@@ -1,4 +1,6 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject IModuleService ModuleService
 
 @if (Modules is not null && MayEdit)
 {
@@ -7,7 +9,7 @@
     </div>
 }
 
-<TableTemplate Items="Modules" >
+<TableTemplate Items="Modules">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Scale"]</th>
@@ -26,6 +28,7 @@
             @if (MayEdit)
             {
                 <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-edit" />@Localizer["Clone"]</button>
             }
             &nbsp;
         </td>
@@ -33,8 +36,16 @@
 </TableTemplate>
 
 @code {
-    [Parameter] public IEnumerable<Module>? Modules { get; set; } 
+    [Parameter] public IEnumerable<Module>? Modules { get; set; }
     [Parameter] public bool MayEdit { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public ClaimsPrincipal? Principal { get; set; }
     private string PersonalOwners(IEnumerable<ModuleOwnership>? owners) => owners is null ? string.Empty : string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));
+
+    async Task Clone(int id)
+    {
+        var result = await ModuleService.CloneAsync(Principal, id, OwningPersonId);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        Modules = await ModuleService.GetForOwningPerson(Principal, OwningPersonId);
+    }
 }

@@ -3,6 +3,7 @@
 ## Version 0.7.1
 Release date 2021-03-06
 - **Stations** and **Tracks** are now validated when user edits.
+- **Modules** can be cloned for easier create similar modules.
 
 ## Version 0.7.0
 Release date 2021-04-05

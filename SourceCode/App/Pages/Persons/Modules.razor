@@ -8,7 +8,7 @@
 
 <h1><span class="fa fa-boxes"/> @Heading</h1>
 
-<ModulesList Modules="OwnedModules" MayEdit="true" OwningPersonId="OwningPersonId"/>
+<ModulesList Modules="OwnedModules" MayEdit="true" OwningPersonId="OwningPersonId" Principal="Principal"/>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

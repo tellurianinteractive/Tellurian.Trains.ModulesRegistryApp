@@ -240,4 +240,10 @@
   <data name="Optional" xml:space="preserve">
     <value>Valbar</value>
   </data>
+  <data name="CloningFailed" xml:space="preserve">
+    <value>Kloning misslyckades</value>
+  </data>
+  <data name="ClonedSuccessfully" xml:space="preserve">
+    <value>Klonades</value>
+  </data>
 </root>

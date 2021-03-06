@@ -12,6 +12,7 @@ namespace ModulesRegistry.Services.Implementations
     public sealed class ModuleService : IModuleService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
+        private readonly Random Random = new();
         public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
         public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal)
@@ -43,13 +44,14 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<Module>> GetForOwningPerson(ClaimsPrincipal? principal, int personId)
         {
+            var ownerId = personId == 0 ? principal.PersonId() : personId;
             using var dbContext = Factory.CreateDbContext();
-            var countryId = dbContext.People.Find(personId)?.CountryId;
-            if (principal.IsAuthorisedInCountry(countryId, personId))
+            var countryId = dbContext.People.Find(ownerId)?.CountryId;
+            if (principal.IsAuthorisedInCountry(countryId, ownerId))
             {
                 return await dbContext.Modules.AsNoTracking()
                     .Where(m => m.ModuleOwnerships
-                    .Any(mo => mo.PersonId == personId))
+                    .Any(mo => mo.PersonId == ownerId))
                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                     .Include(m => m.Scale)
                     .Include(m => m.Standard)
@@ -117,7 +119,7 @@ namespace ModulesRegistry.Services.Implementations
                     dbContext.ModuleOwnerships.Add(new ModuleOwnership { ModuleId = entity.Id, PersonId = ownerId, OwnedShare = 1 });
                     result += await dbContext.SaveChangesAsync();
                 }
-                
+
                 return result.SaveResult(existing ?? entity);
             }
             return principal.SaveNotAuthorised<Module>();
@@ -138,6 +140,36 @@ namespace ModulesRegistry.Services.Implementations
                 }
             }
             return principal.DeleteNotAuthorized<Module>();
+        }
+
+        public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, int owningPersonId)
+        {
+            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
+
+            if (principal.MaySave(ownerId))
+            {
+                var clone = await FindByIdAsync(principal, id, ownerId);
+                if (clone is null) return principal.NotFound();
+                clone.FullName = CloneFullName(Random, clone);
+                clone.Id = 0;
+                clone.Station = null;
+                clone.StationId = null;
+                foreach (var gable in clone.ModuleGables) gable.Id = 0;
+                foreach (var ownership in clone.ModuleOwnerships) ownership.Id = 0;
+                using var dbContext = Factory.CreateDbContext();
+                dbContext.Modules.Add(clone);
+                var result = await dbContext.SaveChangesAsync();
+                return result.CloneResult();
+            }
+            return (0, "Not authorized.");  //TODO: Fix extension with transplations.
+
+            static string CloneFullName(Random random, Module module)
+            {
+                var appended = $"-{random.Next(1,1000)}";
+                var totalLength = module.FullName.Length + appended.Length;
+                if (totalLength <= 50) return $"{module.FullName}{appended}";
+                return $"{module.FullName.Substring(0, 50 - appended.Length)}{appended}";
+            }
         }
     }
 }

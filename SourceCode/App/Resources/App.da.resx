@@ -531,4 +531,13 @@
   <data name="PlatformLength" xml:space="preserve">
     <value>Platformens længde</value>
   </data>
+  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
+    <value>Udfyld nyt spor, og klik på Tilføj, før du gemmer.</value>
+  </data>
+  <data name="IsThroughTrack" xml:space="preserve">
+    <value>Er spor igennem?</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Klon</value>
+  </data>
 </root>

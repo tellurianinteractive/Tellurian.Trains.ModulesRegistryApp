@@ -21,6 +21,8 @@ namespace ModulesRegistry.Services.Extensions
 
         public static (int Count, string Message) DeleteResult(this int count) => 
             (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
+        public static (int Count, string Message) CloneResult(this int count) =>
+            (count, count > 0 ? Strings.ClonedSuccessfully : Strings.CloningFailed);
 
         public static (int Count, string Message) DeleteNotAuthorized<T>(this ClaimsPrincipal? me) => 
             (0, Strings.NotAuthorized);

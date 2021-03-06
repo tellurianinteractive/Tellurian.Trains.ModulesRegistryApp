@@ -531,4 +531,13 @@
   <data name="PlatformLength" xml:space="preserve">
     <value>Platform length</value>
   </data>
+  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
+    <value>Fill out new track and click Add before saving.</value>
+  </data>
+  <data name="IsThroughTrack" xml:space="preserve">
+    <value>Is through track?</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
+  </data>
 </root>
