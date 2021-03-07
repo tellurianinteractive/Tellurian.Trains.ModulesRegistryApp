@@ -28,5 +28,7 @@ namespace ModulesRegistry.Extensions
             me[objectName].ToString() :
             $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}";
  
+        public static string SearchObject(this IStringLocalizer me, string objectName) =>
+            $"{me["Search"]} {me[objectName].Value.ToLowerInvariant()}";
     }
 }

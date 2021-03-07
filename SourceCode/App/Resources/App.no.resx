@@ -552,4 +552,7 @@
   <data name="Stations" xml:space="preserve">
     <value>Stasjoner</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Søk</value>
+  </data>
 </root>

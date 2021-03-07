@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 0.7.2
+Release date 2021-03-07
+- **Contact page** now shows all administrators and in which country they are located.
+- **Bug fix** of saving unmodified *module* or *station* (thanks to Daniel Bergkqvist).
+- **Improved translations** (thanks Jérôme Chavel for German suggestions).
+- 
+
 ## Version 0.7.1
 Release date 2021-03-06
 - **Stations** and **Tracks** are now validated when user edits.

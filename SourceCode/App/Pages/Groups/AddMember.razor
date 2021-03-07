@@ -13,9 +13,9 @@
     <FluentValidationValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-        <label class="form-label" for="personid">@Localizer["Person"]</label>
-        <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true">
+    <div class="col-md-2">
+        <label class="form-control-label" for="personid">@SearchLabel</label>
+        <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
             <SelectedTemplate Context="personId">
                 @{
                     var selectedPerson = SelectedPerson(personId);
@@ -28,6 +28,7 @@
         </BlazoredTypeahead>
         <ValidationMessage For="@(() => GroupMember.Person)" />
     </div>
+    <AppInputFill Width="10"/> 
     <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
     <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
     <div class="col-12">
@@ -68,7 +69,7 @@
     private async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
     {
         return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
-        Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().StartsWith(searchText.ToLowerInvariant())).ToList());
+        Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(searchText.ToLowerInvariant())).ToList());
     }
 
     private async Task OnValidSubmit()
@@ -80,6 +81,7 @@
     }
 
     private string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
+    private string SearchLabel => Localizer.SearchObject("Person");
     private int ConvertPerson(ListboxItem person) => person.Id;
     private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 }
