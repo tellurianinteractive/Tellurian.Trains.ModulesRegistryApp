@@ -2,6 +2,7 @@
 @page "/Persons/{id:int}/Edit/{countryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
+@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject IPersonService PersonService
@@ -57,6 +58,9 @@ else
         var result = await PersonService.SaveAsync(Principal, Person);
         Person = result.Entity;
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        await Task.Delay(3000);
+        Navigator.NavigateTo($"/Persons/Index/{CountryId}");
+
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>

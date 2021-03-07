@@ -1,5 +1,7 @@
 ﻿@using System.Security.Claims
 @page "/Persons/Index"
+@page "/Persons/Index/{countryId:int}"
+
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
@@ -9,10 +11,10 @@
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
 
-@if (SelectedCountryId > 0)
+@if (CountryId > 0)
 {
     <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@SelectedCountryId"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@CountryId"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
     </div>
 }
 
@@ -50,14 +52,14 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
     private ClaimsPrincipal? Principal;
     private IEnumerable<Person>? People = Array.Empty<Person>();
     private IEnumerable<ListboxItem>? Countries;
-    private int SelectedCountryId;
 
     private async Task OnSelectedCountry(int id)
     {
-        SelectedCountryId = id;
+        CountryId = id;
         await GetPersons(id);
     }
 
@@ -65,7 +67,8 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        if (Countries.Count() == 1) await GetPersons(Countries.First().Id);
+        var countryId = CountryId > 0 ? CountryId : Countries.Count() == 1 ? Countries.First().Id : 0;
+        await GetPersons(countryId);
     }
 
     private async Task GetPersons(int id)
