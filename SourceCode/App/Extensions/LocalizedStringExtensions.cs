@@ -41,7 +41,7 @@ namespace ModulesRegistry.Extensions
         private static string Name(this object? me) =>
             me switch
             {
-                Person p => p.Name(),
+                Person p => p.FullName(),
                 Group g => g.FullName,
                 _ => string.Empty
             };

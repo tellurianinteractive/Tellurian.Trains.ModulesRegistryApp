@@ -18,7 +18,7 @@ else
         </TableHeader>
         <RowTemplate Context="contact">
             <th>@LanguageService.GetString(contact.Person.Country.EnglishName, null)</th>
-            <th>@contact.Person.Name()</th>
+            <th>@contact.Person.FullName()</th>
             <td>@contact.IsGlobalAdministrator.AsYesNo()</td>
         </RowTemplate>
     </TableTemplate>
