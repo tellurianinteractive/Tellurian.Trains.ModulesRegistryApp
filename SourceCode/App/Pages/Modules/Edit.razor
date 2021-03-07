@@ -93,11 +93,11 @@ else
         {
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerId);
             Module = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
-    private string Heading => Localizer.Heading(Id == 0 && OwnerId == 0, "Module", Owner);
+    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Module", Owner);
     
 
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);

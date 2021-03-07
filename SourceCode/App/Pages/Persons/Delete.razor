@@ -36,7 +36,7 @@ else
     {
         if (Id.IsNotSet()) return;
         var result = await PersonService.DeleteAsync(Principal, Id.Value);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
         Navigation.NavigateTo("/Persons/Index");
     }

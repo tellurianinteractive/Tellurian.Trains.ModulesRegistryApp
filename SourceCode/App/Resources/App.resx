@@ -441,8 +441,8 @@
   <data name="MiddleName" xml:space="preserve">
     <value>Middle name</value>
   </data>
-  <data name="ModulesOwnedBy" xml:space="preserve">
-    <value>Modules owned by {0}</value>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>owned by</value>
   </data>
   <data name="For" xml:space="preserve">
     <value>For</value>
@@ -545,5 +545,11 @@
   </data>
   <data name="IsGlobalAdministrator" xml:space="preserve">
     <value>Is global administrator?</value>
+  </data>
+  <data name="Station" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Stations</value>
   </data>
 </root>

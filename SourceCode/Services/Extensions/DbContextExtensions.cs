@@ -14,7 +14,7 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsSet([NotNullWhen(true)] this int? me) => me is not null && me > 0;
 
         public static (int Count, string Message, T? Entity) SaveResult<T>(this int count, T entity) => 
-            (count, count > 0 ? Strings.Saved : Strings.SaveFailed, count > 0 ? entity : default);
+            (count, count <0 ? Strings.NoModification : count > 0 ? Strings.Saved : Strings.SaveFailed, count != 0 ? entity : default);
 
         public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? me) => 
             (0, Strings.NotAuthorized, default);

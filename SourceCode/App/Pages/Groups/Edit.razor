@@ -69,7 +69,7 @@ else
         if (Group is null) return;
         var result = await GroupService.SaveAsync(Principal, Group);
         Group = result.Entity;
-        Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        Toast.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     private async Task<Group> GetOrCreateAsync() =>

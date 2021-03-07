@@ -55,7 +55,7 @@ else
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person);
         Person = result.Entity;
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>

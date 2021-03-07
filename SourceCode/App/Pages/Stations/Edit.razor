@@ -34,7 +34,7 @@
 
     IEnumerable<ListboxItem>? ModulesItems;
 
-    private string Heading => Localizer.Heading(Id == 0 && OwnerId == 0, "Station", Owner);
+    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Station", Owner);
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,7 +63,7 @@
             var result = await StationService.SaveAsync(Principal, Station, 0, ModuleId);
             Station = result.Entity;
             if (Station is not null) ModuleId = Station.Modules.First().Id;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 }

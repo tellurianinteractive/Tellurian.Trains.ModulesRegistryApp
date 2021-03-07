@@ -47,8 +47,8 @@
     async Task Clone(int id)
     {
         var result = await ModuleService.CloneAsync(Principal, id, OwningPersonId);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
-        Modules = await ModuleService.GetForOwningPerson(Principal, OwningPersonId);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        Modules = await ModuleService.GetAllAsync(Principal, OwningPersonId);
     }
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;

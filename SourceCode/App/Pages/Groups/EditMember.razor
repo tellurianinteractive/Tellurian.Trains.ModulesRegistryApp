@@ -42,7 +42,7 @@ else
     {
         if (GroupMember is null) return;
         var result = await GroupService.SaveMemberAsync(Principal, GroupMember);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }

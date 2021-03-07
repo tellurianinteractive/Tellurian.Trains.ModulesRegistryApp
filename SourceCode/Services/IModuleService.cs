@@ -13,7 +13,7 @@ namespace ModulesRegistry.Services
         Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, int owningPersonId);
         Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, int owningPersionId);
         Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal);
-        Task<IEnumerable<Module>> GetForOwningPerson(ClaimsPrincipal? principal, int personId);
+        Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, int personId);
         Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal);
         Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, int owningPersonId);
     }

@@ -31,12 +31,13 @@ namespace ModulesRegistry.Services.Implementations
             }
             return null;
         }
+        public Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, 0);
 
-        public async Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, int owningPersonId)
         {
             if (principal is not null)
             {
-                var ownerId = principal.PersonId();
+                var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Stations.AsNoTracking()
                     .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownerId)))
@@ -46,50 +47,53 @@ namespace ModulesRegistry.Services.Implementations
             }
             return Array.Empty<Station>();
         }
- 
+
         public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, int owningPersonId, int moduleId)
         {
             var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
             if (principal.MaySave(ownerId))
             {
                 using var dbContext = Factory.CreateDbContext();
-                var existing = await dbContext.Stations.Include(s => s.StationTracks).FirstOrDefaultAsync(s => s.Id == entity.Id);
-                if (existing is null)
+                var existing = await dbContext.Stations
+                    .Include(s => s.StationTracks)
+                    .Include(s => s.Modules)
+                    .FirstOrDefaultAsync(s => s.Id == entity.Id);
+                return (existing is null) ?
+                    await AddNew(dbContext, principal, entity, moduleId) :
+                    await UpdateExisting(dbContext, entity, existing, moduleId);
+            }
+            return principal.SaveNotAuthorised<Station>();
+
+            static async Task<(int Count, string Message, Station? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station entity, int moduleId)
+            {
+                dbContext.Add(entity);
+                var module = await dbContext.Modules.FindAsync(moduleId);
+                if (module is null) return principal.SaveNotAuthorised<Station>();
+                entity.Modules.Add(module);
+                var result = await dbContext.SaveChangesAsync();
+                return result.SaveResult(entity);
+            }
+
+            static async Task<(int Count, string Message, Station? Entity)> UpdateExisting(ModulesDbContext dbContext, Station entity, Station existing, int moduleId)
+            {
+                dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                AddOrRemoveTracks(dbContext, entity, existing);
+
+                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                var result = await dbContext.SaveChangesAsync();
+                return result.SaveResult(existing);
+
+                static void AddOrRemoveTracks(ModulesDbContext dbContext, Station entity, Station existing)
                 {
-                    dbContext.Add(entity);
-                    var module = await dbContext.Modules.FindAsync(moduleId);
-                    if (module is null) return principal.SaveNotAuthorised<Station>();
-                    entity.Modules.Add(module);
-                }
-                else
-                {
-                    dbContext.Entry(existing).CurrentValues.SetValues(entity);
                     foreach (var track in entity.StationTracks)
                     {
                         var existingTrack = existing.StationTracks.AsQueryable().FirstOrDefault(t => t.Id == track.Id);
-                        if (existingTrack is null)
-                        {
-                            existing.StationTracks.Add(track);
-                        }
-                        else
-                        {
-                            dbContext.Entry(existingTrack).CurrentValues.SetValues(track);
-                        }
+                        if (existingTrack is null) existing.StationTracks.Add(track);
+                        else dbContext.Entry(existingTrack).CurrentValues.SetValues(track);
                     }
-                    foreach (var track in existing.StationTracks)
-                    {
-                        if (!entity.StationTracks.Any(st => st.Id == track.Id)) dbContext.Remove(track);
-                    }
-                    var existingModule = await dbContext.Modules.FindAsync(moduleId);
-                    if (existingModule is null)
-                    {
-                        existing.Modules.Add(new Module { Id = moduleId, StationId = existing.Id });
-                    }
+                    foreach (var track in existing.StationTracks) if (!entity.StationTracks.Any(st => st.Id == track.Id)) dbContext.Remove(track);
                 }
-                var result = await dbContext.SaveChangesAsync();
-                return result.SaveResult(existing ?? entity);
             }
-            return principal.SaveNotAuthorised<Station>();
         }
 
 

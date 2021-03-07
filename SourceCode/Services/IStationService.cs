@@ -12,6 +12,7 @@ namespace ModulesRegistry.Services
     {
         Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, int personalOwnerId);
         Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal);
+        Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, int owningPersonId);
         Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, int owningPersonId, int moduleId);
     }
 }

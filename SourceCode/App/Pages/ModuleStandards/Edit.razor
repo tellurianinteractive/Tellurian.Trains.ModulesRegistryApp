@@ -58,7 +58,7 @@ else
             var result = await ModuleStandardService.SaveAsync(Principal, ModuleStandard);
             ModuleStandard = result.Entity;
             Id = ModuleStandard?.Id ?? 0;
-            Toast.ShowSuccessOrFailure(Localizer, result.Count > 0, result.Message);
+            Toast.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";

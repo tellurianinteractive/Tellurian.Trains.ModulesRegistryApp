@@ -160,6 +160,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fault.
+        /// </summary>
+        internal static string Fault {
+            get {
+                return ResourceManager.GetString("Fault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
         internal static string Fixed {
@@ -205,6 +214,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May not be deleted..
         /// </summary>
         internal static string MayNotBeDeleted {
@@ -219,6 +237,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No modification.
+        /// </summary>
+        internal static string NoModification {
+            get {
+                return ResourceManager.GetString("NoModification", resourceCulture);
             }
         }
         
@@ -381,6 +408,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string SaveFailed {
             get {
                 return ResourceManager.GetString("SaveFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
         

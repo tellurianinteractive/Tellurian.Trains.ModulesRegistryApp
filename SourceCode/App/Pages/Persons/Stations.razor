@@ -1,30 +1,29 @@
-﻿@page "/Persons/{id:int}/Modules"
-@attribute [Authorize(Policy = "Admin")]
+﻿@page "/Persons/{id:int}/Stations"
 
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
-@inject IModuleService ModuleService
-@preservewhitespace true
+@inject IStationService StationService
 
-<h1><span class="fa fa-boxes"/> @Heading</h1>
+<h1><span class="fa fa-school" /> @Heading</h1>
 
-<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" Principal="Principal"/>
+<StationsList Stations="OwnedStations" OwningPersonId="OwningPersonId" MayEdit="MayEdit" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
-    private IEnumerable<Module>? OwnedModules;
+    private IEnumerable<Station>? OwnedStations;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await PersonService.FindByIdAsync(Principal, Id);
-        OwnedModules = Owner is null ? Array.Empty<Module>() : await ModuleService.GetAllAsync(Principal, Owner.Id);
+        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, Owner.Id);
     }
 
     private int OwningPersonId => Owner?.Id ?? 0;
-    private string Heading => Localizer.HeadingWithOwner("Modules", Owner);
+    private string Heading => Localizer.HeadingWithOwner("Stations", Owner);
     private bool MayEdit => Principal.MaySave(OwningPersonId);
+
 }
