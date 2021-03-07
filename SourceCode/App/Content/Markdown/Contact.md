@@ -7,6 +7,4 @@ A global administrator can assist you in any country.
 
 We don't publish contact information. 
 You propably already know how to contact the persons in your country.
-Otherwise, you can make contact through: 
-- the [FREMO-forum](https://forum.fremo-net.eu/) or,
-- in Sweden also through [Svenskt Modulfourm](https://www.modulsyd.se/forum).
+Otherwise, you can make contact through the [FREMO-forum](https://forum.fremo-net.eu/)

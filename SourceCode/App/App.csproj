@@ -43,6 +43,18 @@
     <None Update="Content\Markdown\About.no.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Markdown\Contact.de.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\Contact.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\Contact.no.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\Contact.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Markdown\HomeNotAuthorized.no.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
