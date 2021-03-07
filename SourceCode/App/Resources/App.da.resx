@@ -366,9 +366,6 @@
   <data name="Is3R" xml:space="preserve">
     <value>Er 3R?</value>
   </data>
-  <data name="IsSignal" xml:space="preserve">
-    <value>Er signal?</value>
-  </data>
   <data name="IsTurntable" xml:space="preserve">
     <value>Er vendeskive?</value>
   </data>

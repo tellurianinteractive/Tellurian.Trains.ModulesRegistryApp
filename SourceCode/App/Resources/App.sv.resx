@@ -366,9 +366,6 @@
   <data name="Is3R" xml:space="preserve">
     <value>Är 3R?</value>
   </data>
-  <data name="IsSignal" xml:space="preserve">
-    <value>Är signal?</value>
-  </data>
   <data name="IsTurntable" xml:space="preserve">
     <value>Är vändskiva?</value>
   </data>
@@ -505,7 +502,7 @@
     <value>Signatur</value>
   </data>
   <data name="IsEndStation" xml:space="preserve">
-    <value>Är ändstation?</value>
+    <value>Är säckstation?</value>
   </data>
   <data name="IsShadowStation" xml:space="preserve">
     <value>Är skuggstation?</value>
@@ -514,7 +511,7 @@
     <value>Visad ordning</value>
   </data>
   <data name="IsScheduled" xml:space="preserve">
-    <value>Är trafikspår?</value>
+    <value>Kan tidtabellsläggas?</value>
   </data>
   <data name="IsSiding" xml:space="preserve">
     <value>Är sidospår?</value>
