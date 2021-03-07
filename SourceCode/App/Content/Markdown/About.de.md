@@ -1,6 +1,10 @@
 ﻿#### Zweck
-Diese Anwendung dient zur Führung eines Registers aller *Modelleisenbahnmodule*,
-einschließlich aller Details, die für die Planung von Layouts und Fahrpläne erforderlich sind.
+Diese Anwendung soll die Planung von *Modultreffen* verbessern.
+auch mit Teilnehmern aus mehreren europäischen Ländern.
+
+Die Hauptmerkmale sind die Führung aller *Modelleisenbahnmodule*,
+einschließlich aller Details, die für die Planung von Layouts und Zeitplänen erforderlich sind,
+und Besprechungsplanung mit Einreichung von Modulen.
 
 #### Beabsichtigte Benutzer
 Alle, die strukturierte Daten zu *Modelleisenbahnmodulen* pflegen möchten.

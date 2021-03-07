@@ -1,6 +1,10 @@
 ﻿#### Formål
-Denne applikation er beregnet til at føre et register over alle *modeljernbanemoduler*,
-inklusiv alle detaljer, der er nødvendige for planlægning af layout og køreplaner.
+Denne applikation er beregnet til at forbedre planlægningen af *modultræf*,
+også med deltagere fra flere europæiske lande.
+
+De vigtigste funktioner er at føre et register over alle *modeljernbane moduler*,
+inklusiv alle detaljer, der er nødvendige for planlægning af layout og tidsplaner,
+og mødeplanlægning med tilmeldning af moduler.
 
 #### Tilsigtede brugere
 Enhver, der er interesseret i at vedligeholde strukturerede data om *modeljernbanemoduler*.

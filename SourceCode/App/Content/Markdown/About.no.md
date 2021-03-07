@@ -1,6 +1,10 @@
 ﻿#### Hensikt
-Denne applikasjonen er ment for å føre et register over alle *modelljernbanemoduler*,
-som inkluderer alle detaljer som er nødvendige for planlegging av oppsett og tidsplaner.
+Denne applikasjonen er ment å forbedre planleggingen av *modultreff*,
+også med deltakere fra flere europeiske land.
+
+De viktigste funksjonene er å føre et register over alle *modelljernbanemoduler*,
+inkludert alle detaljer som er nødvendige for planleggingsplanlegging og tidsplaner,
+og møteplanlegging med registrering av moduler.
 
 #### Tiltenkte brukere
 Alle som er interessert i å opprettholde strukturerte data om *modelljernbanemoduler*.

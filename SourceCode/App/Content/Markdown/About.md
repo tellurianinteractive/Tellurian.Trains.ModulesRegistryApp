@@ -1,6 +1,10 @@
 ﻿#### Purpose
-This applocation is intended for keeping a registry of all *model railway modules*, 
-inclucing all details necessary for planning layouts and schedules.
+This applocation is intended to improve planning of *module meetings*, 
+also with participants from several Eurpoean countries.
+
+The main features are keeping a registry of all *model railway modules*, 
+inclucing all details necessary for planning layouts and schedules,
+and meeting planning with submission of modules.
 
 #### Intended Users
 Anyone that are interested in maintaining structured data about *model railway modules*.
