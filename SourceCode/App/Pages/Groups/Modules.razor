@@ -1,0 +1,24 @@
+﻿@page "/Groups/{id:int}/Modules"
+
+@inject IStringLocalizer<App> Localizer
+@inject IModuleService ModuleService
+@inject IGroupService GroupService 
+
+<h1><span class="fa fa-boxes"/> @Localizer.ObjectOwnerByOwner("Modules", Owner)</h1>
+<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="false"  />
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<Module>? OwnedModules;
+    Group? Owner;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Owner = await GroupService.FindByIdAsync(Principal, Id);
+        OwnedModules =  Array.Empty<Module>() ;
+    }
+}

@@ -3,9 +3,10 @@
 ## Version 0.7.2
 Release date 2021-03-07
 - **Contact page** now shows all administrators and in which country they are located.
-- **Bug fix** of saving unmodified *module* or *station* (thanks to Daniel Bergkqvist).
+- **Bug fix** of wrong message shown when saving unmodified *module* or *station* (thanks to Daniel Bergkqvist).
+- **Bug fix** of search person for adding as group member.
 - **Improved translations** (thanks Jérôme Chavel for German suggestions).
-- 
+- **Improved navigation** with new buttons to quicker find your way around.
 
 ## Version 0.7.1
 Release date 2021-03-06

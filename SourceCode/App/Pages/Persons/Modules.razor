@@ -6,7 +6,7 @@
 @inject IModuleService ModuleService
 @preservewhitespace true
 
-<h1><span class="fa fa-boxes"/> @Heading</h1>
+<h1><span class="fa fa-boxes" /> @Localizer.ObjectOwnerByOwner("Modules", Owner);</h1>
 
 <ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" Principal="Principal"/>
 
@@ -25,6 +25,5 @@
     }
 
     private int OwningPersonId => Owner?.Id ?? 0;
-    private string Heading => Localizer.HeadingWithOwner("Modules", Owner);
     private bool MayEdit => Principal.MaySave(OwningPersonId);
 }

@@ -9,26 +9,41 @@ namespace ModulesRegistry.Extensions
         public static string AddOrEdit(this IStringLocalizer me, string objectName, bool isAdd) =>
             (isAdd ? me["Add"].Value : me["Edit"].Value) + " " + me[objectName].ToString().ToLowerInvariant();
 
-        public static string HeadingAddOrEdit(this IStringLocalizer me, bool isCreate, string objectName, Person? person)
+        public static string HeadingAddOrEdit(this IStringLocalizer me, bool isCreate, string objectName, object? owner)
         {
             var text = new StringBuilder(100);
             text.Append(me.AddOrEdit(objectName, isCreate));
-            if (person is not null)
+            if (owner is not null)
             {
                 text.Append(' ');
                 text.Append(me["For"].Value.ToLowerInvariant());
                 text.Append(' ');
-                text.Append(person.FirstName);
+                text.Append(owner.Name());
             }
             return text.ToString();
         }
 
-        public static string HeadingWithOwner(this IStringLocalizer me, string objectName, Person? owner) =>
-            owner is null ?
-            me[objectName].ToString() :
-            $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}";
- 
+        public static string ObjectOwnerByOwner(this IStringLocalizer me, string objectName, object? owner) =>
+            owner switch
+            {
+                Person => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
+                Group => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
+                _ => me[objectName].ToString()
+            };
+
+
         public static string SearchObject(this IStringLocalizer me, string objectName) =>
             $"{me["Search"]} {me[objectName].Value.ToLowerInvariant()}";
+
+        public static string EditObject(this IStringLocalizer me, string objectName) =>
+           $"{me["Edit"]} {me[objectName].Value.ToLowerInvariant()}";
+
+        private static string Name(this object? me) =>
+            me switch
+            {
+                Person p => p.Name(),
+                Group g => g.FullName,
+                _ => string.Empty
+            };
     }
 }

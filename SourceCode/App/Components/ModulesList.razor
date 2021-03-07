@@ -2,6 +2,8 @@
 @inject IToastService ToastService
 @inject IModuleService ModuleService
 
+@preservewhitespace true
+
 @if (Modules is not null && MayEdit)
 {
     <div>
@@ -24,13 +26,17 @@
         <td>@module.FremoName()</td>
         <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
-        <td>@PersonalOwners(module.ModuleOwnerships)</td>
+        <td>@Owners(module.ModuleOwnerships)</td>
         <td>@((module.IsPartOfStation()).AsYesNo())</td>
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-secondary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-edit" />@Localizer["Clone"]</button>
+                <a class="btn btn-sm btn-primary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-clone" />@Localizer["Clone"]</button>
+                @if (module.IsPartOfStation())
+                {
+                    <a class="btn btn-sm btn-secondary" href="/Stations/@module.StationId/Edit/@OwningPersonId"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                }
             }
             &nbsp;
         </td>
@@ -41,8 +47,11 @@
     [Parameter] public IEnumerable<Module>? Modules { get; set; }
     [Parameter] public bool MayEdit { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public int OwningGroupId { get; set; }
     [Parameter] public ClaimsPrincipal? Principal { get; set; }
-    private string PersonalOwners(IEnumerable<ModuleOwnership>? owners) => owners is null ? string.Empty : string.Join(", ", owners.Select(o => $"{o.Person.FirstName} {o.Person.LastName}"));
+    private string Owners(IEnumerable<ModuleOwnership>? owners) => owners is null ? 
+        string.Empty : 
+        string.Join(", ", owners.Select(o => o.Group is not null ? $"{o.Group.FullName}" : o.Person is not null ? $"{o.Person.FirstName} {o.Person.LastName}" : string.Empty));
 
     async Task Clone(int id)
     {
