@@ -9,7 +9,7 @@
 
 @if (Principal.IsAnyAdministrator() && ModuleStandards is not null)
 {
-    <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit">@Localizer["Add"]</a>
+    <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
 }
 
 <TableTemplate Items="ModuleStandards">

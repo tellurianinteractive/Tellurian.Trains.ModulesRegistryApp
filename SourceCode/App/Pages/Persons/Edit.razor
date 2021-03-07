@@ -1,4 +1,6 @@
 ﻿@page "/Persons/{id:int}/Edit"
+@page "/Persons/{id:int}/Edit/{countryId:int}"
+
 @attribute [Authorize(Policy = "Admin")]
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
@@ -12,21 +14,21 @@
 }
 else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 {
-<EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
-    <FluentValidationValidator />
-    <ValidationSummary />
-    <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
-    <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
-    <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
-    <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
-    <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
-    <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
+    <EditForm Model="@Person" OnValidSubmit="@OnValidSumbit" Class="row g-3">
+        <FluentValidationValidator />
+        <ValidationSummary />
+        <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
+        <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
+        <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
+        <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
+        <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
+        <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
 
-    <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
-    </div>
-</EditForm>
+        <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
+        </div>
+    </EditForm>
 }
 else
 {
@@ -35,10 +37,9 @@ else
     </div>
 }
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-
+    [CascadingParameter]     private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
+    [Parameter] public int CountryId { get; set; }
     private Person? Person;
     private IEnumerable<ListboxItem>? CountriesItems;
     private ClaimsPrincipal? Principal;
@@ -59,8 +60,8 @@ else
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Principal is null || Id.IsNotSet() ? DefaultPerson: await PersonService.FindByIdAsync(Principal, Id.Value) ?? DefaultPerson;
+        Principal is null || Id.IsNotSet() ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id.Value) ?? DefaultPerson;
 
-    private int DefaultCountryId => Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
+    private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
 }

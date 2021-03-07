@@ -552,4 +552,7 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="FremoPrefix" xml:space="preserve">
+    <value>FREMO module prefix</value>
+  </data>
 </root>

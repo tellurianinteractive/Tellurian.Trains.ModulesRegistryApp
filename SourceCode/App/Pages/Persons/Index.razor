@@ -9,6 +9,14 @@
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
 
+@if (SelectedCountryId > 0)
+{
+    <div class="col-12">
+        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@SelectedCountryId"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+    </div>
+}
+
+
 <TableTemplate Items="People" HideNoRecordsToDisplay="true">
     <TableHeader>
         <th>@Localizer["Name"]</th>
@@ -45,9 +53,11 @@
     private ClaimsPrincipal? Principal;
     private IEnumerable<Person>? People = Array.Empty<Person>();
     private IEnumerable<ListboxItem>? Countries;
+    private int SelectedCountryId;
 
     private async Task OnSelectedCountry(int id)
     {
+        SelectedCountryId = id;
         await GetPersons(id);
     }
 
