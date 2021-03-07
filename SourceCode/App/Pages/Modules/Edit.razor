@@ -2,7 +2,8 @@
 
 @page "/Modules/{id:int}/Edit"
 @page "/Modules/{id:int}/Edit/{ownerid:int}"
-@page "/Modules/{id:int}/Edit/{ownerGroupId:int}"
+@page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
+@page "/Modules/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
@@ -72,7 +73,8 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerId { get; set; }
-    [Parameter] public int OwnerGroupId { get; set; }
+    [Parameter] public int OwnerGroupId { get; set; } // Not in use yet
+    [Parameter] public int OwnerPersonId { get; set; } // Not in use yet
     ClaimsPrincipal? Principal;
     Person? Owner;
     Module? Module;
