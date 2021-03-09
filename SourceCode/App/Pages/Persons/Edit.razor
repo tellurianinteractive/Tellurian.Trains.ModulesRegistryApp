@@ -1,12 +1,14 @@
 ﻿@page "/Persons/{id:int}/Edit"
 @page "/Persons/{id:int}/Edit/{countryId:int}"
+@page "/Persons/{id:int}/EditGroup/{groupId:int}"
 
-@attribute [Authorize(Policy = "Admin")]
+@attribute [Authorize(Policy = "User")]
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject IPersonService PersonService
 @inject ICountryService CountryService
+@inject IGroupService GroupService
 
 <h1><span class="fa fa-user" /> @Localizer.AddOrEdit("Person", Id == 0) </h1>
 @if (Person is null)
@@ -38,9 +40,10 @@ else
     </div>
 }
 @code {
-    [CascadingParameter]     private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [Parameter] public int GroupId { get; set; }
     private Person? Person;
     private IEnumerable<ListboxItem>? CountriesItems;
     private ClaimsPrincipal? Principal;
@@ -57,9 +60,13 @@ else
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person);
         Person = result.Entity;
+        if (IsNotGroupMember)
+        {
+            var addresult = await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = Person!.Id });
+        }
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
-        Navigator.NavigateTo($"/Persons/Index/{CountryId}");
+        Navigator.NavigateTo(AfterSaveHref);
 
     }
 
@@ -68,4 +75,7 @@ else
 
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
+    private string AfterSaveHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"/Persons/Index/{CountryId}";
+    private bool IsNotGroupMember => GroupId <= 0 || Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId);
+
 }

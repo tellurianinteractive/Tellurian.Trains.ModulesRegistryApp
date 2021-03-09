@@ -25,10 +25,18 @@
             <ResultTemplate Context="person">
                 @person.Description
             </ResultTemplate>
+            <NotFoundTemplate>
+                <div>
+                    <span>
+                        @Localizer["NotFound"]
+                        <a class="btn btn-link" href="persons/0/editgroup/@GroupId">@Localizer["Add"]</a>
+                    </span>
+                </div>
+            </NotFoundTemplate>
         </BlazoredTypeahead>
         <ValidationMessage For="@(() => GroupMember.Person)" />
     </div>
-    <AppInputFill Width="10"/> 
+    <AppInputFill Width="10" />
     <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
     <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
     <div class="col-12">
