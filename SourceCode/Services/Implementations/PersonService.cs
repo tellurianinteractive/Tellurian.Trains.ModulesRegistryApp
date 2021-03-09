@@ -21,15 +21,18 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int countryId)
         {
-            if (!principal.IsAuthorisedInCountry(countryId)) return Array.Empty<ListboxItem>();
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.People
-                .Where(p => p.CountryId == countryId)
-                .ToListAsync();
-            return items
-                .Select(p => new ListboxItem(p.Id, p.FirstName + " " + p.LastName))
-                .OrderBy(li => li.Description)
-                .ToList();
+            if (principal.IsAuthorisedInCountry(countryId))
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.People
+                    .Where(p => p.CountryId == countryId)
+                    .ToListAsync();
+                return items
+                    .Select(p => new ListboxItem(p.Id, p.FirstName + " " + p.LastName))
+                    .OrderBy(li => li.Description)
+                    .ToList();
+            }
+            return Array.Empty<ListboxItem>();
         }
 
         public async Task<IEnumerable<Person>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId)
@@ -82,7 +85,8 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity)
         {
-            if (principal.MaySave(entity.Id))
+            var ownerRef = ModuleOwnershipRef.Person(entity.Id);
+            if (principal.MaySave(ownerRef))
             {
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.People.Attach(entity);
@@ -95,7 +99,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int, string)> DeleteAsync(ClaimsPrincipal? principal, int id)
         {
-            if (principal.MayDelete(principal.PersonId()))
+            if (principal.MayDelete(principal.OwnerRef()))
             {
                 using var dbContext = Factory.CreateDbContext();
                 var isUser = await dbContext.Users.AnyAsync(u => u.Person.Id == id);

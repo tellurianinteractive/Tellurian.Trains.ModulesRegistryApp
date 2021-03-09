@@ -50,8 +50,8 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, int owningPersonId, int moduleId)
         {
-            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
-            if (principal.MaySave(ownerId))
+            var ownerRef = ModuleOwnershipRef.Person( owningPersonId > 0 ? owningPersonId : principal.PersonId());
+            if (principal.MaySave(ownerRef))
             {
                 using var dbContext = Factory.CreateDbContext();
                 var existing = await dbContext.Stations
@@ -99,7 +99,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
         {
-            if (principal.MayDelete(principal.PersonId()))
+            if (principal.MayDelete(principal.OwnerRef()))
             {
                 var entity = await FindByIdAsync(principal, id);
                 using var dbContext = Factory.CreateDbContext();

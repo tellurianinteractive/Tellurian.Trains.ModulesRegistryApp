@@ -29,70 +29,125 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<ListboxItem>();
         }
 
-        public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, 0);
+        public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
 
-        public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, int owningPersonId)
+        public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
-            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
             using var dbContext = Factory.CreateDbContext();
-            var countryId = dbContext.People.Find(ownerId)?.CountryId;
-            if (principal.IsAuthorisedInCountry(countryId, ownerId))
+            if (ownerRef.IsGroup)
             {
-                return await dbContext.Modules.AsNoTracking()
-                    .Where(m => m.ModuleOwnerships
-                    .Any(mo => mo.PersonId == ownerId))
-                    .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                    .Include(m => m.Scale)
-                    .Include(m => m.Standard)
-                    .ToListAsync();
+                bool isAdministrator = await IsGroupOrDataAdministrator(dbContext, principal, ownerRef);
+                if (isAdministrator)
+                {
+                    return await dbContext.Modules.AsNoTracking()
+                        .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
+                        .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                        .Include(m => m.Scale)
+                        .Include(m => m.Standard)
+                        .ToListAsync();
+                }
+            }
+            else
+            {
+                var ownerId = ownerRef.IsPerson ? ownerRef.PersonId : principal.PersonId();
+                var countryId = dbContext.People.Find(ownerId)?.CountryId;
+                if (principal.IsAuthorisedInCountry(countryId, ownerId))
+                {
+                    return await dbContext.Modules.AsNoTracking()
+                        .Where(m => m.ModuleOwnerships
+                        .Any(mo => mo.PersonId == ownerId))
+                        .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                        .Include(m => m.Scale)
+                        .Include(m => m.Standard)
+                        .ToListAsync();
+                }
             }
             return Array.Empty<Module>();
         }
-        public Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>
-            FindByIdAsync(principal, id, 0);
 
-        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, int personalOwnerId)
+        private static async Task<bool> IsGroupOrDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
+            return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator));
+        }
+
+        public Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>
+            FindByIdAsync(principal, id, ModuleOwnershipRef.None);
+
+        public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
+        {
+            using var dbContext = Factory.CreateDbContext();
             if (principal is not null)
             {
-                var ownerPersonId = personalOwnerId > 0 ? personalOwnerId : principal.PersonId();
-                using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Modules.AsNoTracking()
-                    .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerPersonId))
-                    .Include(m => m.ModuleOwnerships)
-                    .Include(m => m.ModuleGables)
-                    .SingleOrDefaultAsync();
+                if (ownerRef.IsGroup)
+                {
+                    var isAdministrator = await IsGroupOrDataAdministrator(dbContext, principal, ownerRef);
+                    if (isAdministrator)
+                    {
+                        return await dbContext.Modules.AsNoTracking()
+                         .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
+                         .Include(m => m.ModuleOwnerships)
+                         .Include(m => m.ModuleGables)
+                         .SingleOrDefaultAsync();
+                    }
+                }
+                else
+                {
+                    var ownerId = ownerRef.IsPerson ? ownerRef.PersonId : principal.PersonId();
+                    return await dbContext.Modules.AsNoTracking()
+                        .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerId))
+                        .Include(m => m.ModuleOwnerships)
+                        .Include(m => m.ModuleGables)
+                        .SingleOrDefaultAsync();
+                }
             }
             return null;
         }
         public Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity) =>
-            SaveAsync(principal, entity, 0);
+            SaveAsync(principal, entity, ModuleOwnershipRef.None);
 
-        public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, int owningPersonId)
+        public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
         {
-            // TODO: Make it possible for group data administrator to create and edit other persons module.
-            // TODO: Check if principal is data administrator in same group as owner.
-            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
-            if (principal.MaySave(ownerId))
+            using var dbContext = Factory.CreateDbContext();
+            if (principal.MaySave(ownerRef))
             {
-                using var dbContext = Factory.CreateDbContext();
+                return await AddOrUpdate(dbContext, entity, ownerRef);
+            }
+            else if (ownerRef.IsGroup)
+            {
+                bool isPrincipalGroupsDataAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
+                return isPrincipalGroupsDataAdministrator ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
+            }
+            else if (ownerRef.IsPersonInGroup)
+            {
+                var isAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
+                var isMember = await IsOwnerMemberOfGroup(ownerRef, dbContext);
+                return isAdministrator && isMember ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
+            }
+            return principal.SaveNotAuthorised<Module>();
+
+            static async Task<(int Count, string Message, Module? Entity)> AddOrUpdate(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
+            {
                 var existing = await dbContext.Modules
                     .Include(m => m.ModuleGables)
                     .FirstOrDefaultAsync(m => m.Id == entity.Id);
 
-                return (existing is null) ? 
-                    await AddNew(dbContext, entity, ownerId) : 
+                return (existing is null) ?
+                    await AddNew(dbContext, entity, ownerRef) :
                     await UpdateExisting(dbContext, entity, existing);
             }
-            return principal.SaveNotAuthorised<Module>();
 
-
-            static async Task<(int Count, string Message, Module? Entity)> AddNew(ModulesDbContext dbContext, Module entity, int ownerId)
+            static async Task<(int Count, string Message, Module? Entity)> AddNew(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
             {
-                if (entity.ModuleOwnerships.Count == 0) entity.ModuleOwnerships.Add(new ModuleOwnership { ModuleId = entity.Id, PersonId = ownerId, OwnedShare = 1 });
+                if (entity.ModuleOwnerships.Count == 0) entity.ModuleOwnerships.Add(CreateModuleOwnership(ownerRef));
                 dbContext.Add(entity);
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(entity);
+
+                static ModuleOwnership CreateModuleOwnership(ModuleOwnershipRef ownerRef)
+                {
+                    if (ownerRef.IsGroup) return new ModuleOwnership { GroupId = ownerRef.GroupId, OwnedShare = 1 };
+                    return new ModuleOwnership { PersonId = ownerRef.PersonId, OwnedShare = 1 };
+                }
             }
 
             static async Task<(int Count, string Message, Module? Entity)> UpdateExisting(ModulesDbContext dbContext, Module entity, Module existing)
@@ -114,13 +169,25 @@ namespace ModulesRegistry.Services.Implementations
                     foreach (var gable in existing.ModuleGables) if (!entity.ModuleGables.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
                 }
             }
+
+            static async Task<bool> IsPrincipalGroupsDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+            {
+                return await dbContext.GroupMembers.AsNoTracking()
+                    .AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId());
+            }
+
+            static async Task<bool> IsOwnerMemberOfGroup(ModuleOwnershipRef ownerRef, ModulesDbContext dbContext)
+            {
+                return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == ownerRef.PersonId);
+            }
         }
 
-        public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
+        public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int moduleId)
         {
-            if (principal.MayDelete(principal.PersonId()))
+            var ownerRef = ModuleOwnershipRef.Person(principal.PersonId());
+            if (principal.MayDelete(ownerRef))
             {
-                var entity = await FindByIdAsync(principal, id);
+                var entity = await FindByIdAsync(principal, moduleId);
                 if (entity is not null && entity.ModuleOwnerships.Any(mo => mo.PersonId == principal.PersonId()))
                 {
                     using var dbContext = Factory.CreateDbContext();
@@ -133,13 +200,11 @@ namespace ModulesRegistry.Services.Implementations
             return principal.DeleteNotAuthorized<Module>();
         }
 
-        public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, int owningPersonId)
+        public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
         {
-            var ownerId = owningPersonId > 0 ? owningPersonId : principal.PersonId();
-
-            if (principal.MaySave(ownerId))
+            if (principal.MaySave(ownerRef))
             {
-                var clone = await FindByIdAsync(principal, id, ownerId);
+                var clone = await FindByIdAsync(principal, id, ownerRef);
                 if (clone is null) return principal.NotFound();
                 clone.FullName = CloneFullName(Random, clone);
                 clone.Id = 0;

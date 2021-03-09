@@ -7,7 +7,7 @@
 @if (Modules is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-sm btn-secondary" href="/Modules/0/Edit/@OwningPersonId"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+        <a class="btn btn-sm btn-secondary" href="@ModuleEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
 }
 
@@ -31,11 +31,14 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-primary" href="/Modules/@module.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-clone" />@Localizer["Clone"]</button>
-                @if (module.IsPartOfStation())
+                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                @if (module.StationId.HasValue)
                 {
-                    <a class="btn btn-sm btn-secondary" href="/Stations/@module.StationId/Edit/@OwningPersonId"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                    <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                }
+                @if (module.Id > 0)
+                {
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-clone" />@Localizer["Clone"]</button>
                 }
             }
             &nbsp;
@@ -49,16 +52,24 @@
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
     [Parameter] public ClaimsPrincipal? Principal { get; set; }
-    private string Owners(IEnumerable<ModuleOwnership>? owners) => owners is null ? 
-        string.Empty : 
+    private string Owners(IEnumerable<ModuleOwnership>? owners) => owners is null ?
+        string.Empty :
         string.Join(", ", owners.Select(o => o.Group is not null ? $"{o.Group.FullName}" : o.Person is not null ? $"{o.Person.FirstName} {o.Person.LastName}" : string.Empty));
 
     async Task Clone(int id)
     {
-        var result = await ModuleService.CloneAsync(Principal, id, OwningPersonId);
+        var ownerRef = OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) : ModuleOwnershipRef.Person(OwningPersonId);
+        var result = await ModuleService.CloneAsync(Principal, id, ownerRef);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        Modules = await ModuleService.GetAllAsync(Principal, OwningPersonId);
+        Modules = await ModuleService.GetAllAsync(Principal, ownerRef);
     }
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
+    string ModuleEditHref(int id) => OwningGroupId > 0 ?
+        $"/Modules/{id}/Edit/GroupOwned/{OwningGroupId}" :
+        $"/Modules/{id}/Edit/PersonOwned/{OwningPersonId}";
+    string StationEditHref(int id) => OwningGroupId > 0 ?
+        $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
+        $"/Stations/{id}/Edit/{OwningPersonId}";
+
 }

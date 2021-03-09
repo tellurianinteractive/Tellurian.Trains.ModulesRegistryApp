@@ -70,7 +70,7 @@ else
         {
             IsLoading = true;
             StateHasChanged();
-            Groups = await GroupService.GetAllInCountryAsync(Principal, id);
+            Groups = await GroupService.GetAllAsync(Principal, id);
             IsLoading = false;
         }
     }

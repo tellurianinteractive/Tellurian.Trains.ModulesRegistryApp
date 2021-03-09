@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace ModulesRegistry.Data
 {
@@ -12,6 +13,6 @@ namespace ModulesRegistry.Data
             me.ModuleOwnerships.First().Person.FremoOwnerSignature is not null ? 
             $"{me.ModuleOwnerships.First().Person.FremoOwnerSignature}{me.FremoNumber.Value}" : null;
 
-        public static bool IsPartOfStation(this Module me) => me.StationId.HasValue;
+        public static bool IsPartOfStation([NotNullWhen(true)]this Module me) => me.StationId.HasValue;
     }
 }

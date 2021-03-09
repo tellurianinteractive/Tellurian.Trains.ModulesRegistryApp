@@ -1,9 +1,11 @@
 ﻿@page "/Persons/{id:int}/Modules"
-@attribute [Authorize(Policy = "Admin")]
+@attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IPersonService PersonService
 @inject IModuleService ModuleService
+@inject IGroupService GroupService
+
 @preservewhitespace true
 
 <h1><span class="fa fa-boxes" /> @Localizer.ObjectOwnerByOwner("Modules", Owner)</h1>
@@ -16,14 +18,17 @@
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     private IEnumerable<Module>? OwnedModules;
+    bool IsDataAdministratorInSameGroupAsMember;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await PersonService.FindByIdAsync(Principal, Id);
-        OwnedModules = Owner is null ? Array.Empty<Module>() : await ModuleService.GetAllAsync(Principal, Owner.Id);
+        OwnedModules = Owner is null ? Array.Empty<Module>() : await ModuleService.GetAllAsync(Principal, OwnerRef);
+        if (Id > 0) IsDataAdministratorInSameGroupAsMember = await GroupService.IsDataAdministratorInSameGroupAsMember(Principal, Id);
     }
 
     private int OwningPersonId => Owner?.Id ?? 0;
-    private bool MayEdit => Principal.MaySave(OwningPersonId);
+    private bool MayEdit => Principal.MaySave(OwnerRef) || IsDataAdministratorInSameGroupAsMember;
+    private ModuleOwnershipRef OwnerRef => ModuleOwnershipRef.Person(OwningPersonId);
 }

@@ -92,7 +92,7 @@ else
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
             ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
-            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerId) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000 };
+            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000 };
         }
     }
 
@@ -100,7 +100,7 @@ else
     {
         if (Module is not null)
         {
-            var result = await ModuleService.SaveAsync(Principal, Module, OwnerId);
+            var result = await ModuleService.SaveAsync(Principal, Module, OwnerRef);
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
@@ -112,4 +112,5 @@ else
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
     private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
+    private ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
 }

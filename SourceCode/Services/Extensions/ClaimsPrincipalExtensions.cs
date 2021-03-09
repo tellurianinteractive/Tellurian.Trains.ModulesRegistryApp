@@ -32,16 +32,20 @@ namespace ModulesRegistry.Services.Extensions
         public static string? Surname(this ClaimsPrincipal me) => me.GetString(ClaimTypes.Surname);
         public static int UserId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.UserId);
         public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
-        public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
+        public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.CountryId);
+
+
         public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type.Equals(AppClaimTypes.LastTermsOfUseAcceptTime));
         public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.HasClaim(c => c.Type == AppClaimTypes.ObjectId);
         public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
         public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
+        public static bool IsCountryAdministratorInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) =>
+            me.IsGlobalAdministrator() || (me.IsCountryAdministrator() && countryId.HasValue && countryId.Value == me.CountryId());
 
-        public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && ( me.IsGlobalAdministrator() || me.IsCountryAdministrator());
+        public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && (me.IsGlobalAdministrator() || me.IsCountryAdministrator());
 
-        public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) => 
-            me is not null && countryId.HasValue && (me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
+        public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) =>
+            me is not null && (me.IsGlobalAdministrator() || (countryId.HasValue && countryId.Value == me.CountryId()));
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
              me is not null && countryId.HasValue && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
 
@@ -52,13 +56,15 @@ namespace ModulesRegistry.Services.Extensions
 
         public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
-        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId) =>
-            me is not null && (entityOwnerId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+
+        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
+            me is not null && (ownerRef.IsPerson && ownerRef.PersonId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
-        public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId, bool userMayDelete = false) =>
-            me is not null && ((userMayDelete && entityOwnerId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
+             me is not null && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        public static ModuleOwnershipRef OwnerRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
 
         public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsGroupAdministrator));

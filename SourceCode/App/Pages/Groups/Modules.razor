@@ -5,7 +5,7 @@
 @inject IGroupService GroupService 
 
 <h1><span class="fa fa-boxes"/> @Localizer.ObjectOwnerByOwner("Modules", Owner)</h1>
-<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="false"  />
+<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id"  />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -14,11 +14,16 @@
     ClaimsPrincipal? Principal;
     IEnumerable<Module>? OwnedModules;
     Group? Owner;
+    bool IsGroupDataAdministrator;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await GroupService.FindByIdAsync(Principal, Id);
-        OwnedModules =  Array.Empty<Module>() ;
+        IsGroupDataAdministrator = await GroupService.IsGroupDataAdministratorAsync(Principal, Id);
+        OwnedModules = await ModuleService.GetAllAsync(Principal, OwnerRef);
     }
+
+    bool MayEdit => IsGroupDataAdministrator;
+    ModuleOwnershipRef OwnerRef => ModuleOwnershipRef.Group(Id);
 }
