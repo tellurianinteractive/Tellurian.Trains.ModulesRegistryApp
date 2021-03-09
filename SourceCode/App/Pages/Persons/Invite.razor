@@ -19,6 +19,7 @@
     <hr />
     @((MarkupString)Html)
     <hr />
+    <input class="form-control" type="text" @bind="@PersonalMessage" @bind:event="oninput" @onkeyup="@UpdateMessage" />
     <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope" />@Localizer["Send"]</button>
 }
 else
@@ -42,6 +43,7 @@ else
     private User? User;
     private string? PersonLanguage;
     private string Html = string.Empty;
+    private string? PersonalMessage;
     private bool IsSent;
 
     override protected async Task OnInitializedAsync()
@@ -62,6 +64,12 @@ else
             PersonLanguage = userCountry.Languages.Items()[0];
             Html = await GetMessageHtml(PersonLanguage);
         }
+    }
+
+    async Task UpdateMessage()
+    {
+        Html = await GetMessageHtml(PersonLanguage);
+        StateHasChanged();
     }
 
     private async Task Send()
@@ -95,6 +103,7 @@ else
         text.Append(' ');
         text.Append(Person!.FirstName);
         text.AppendLine("</h1>");
+        if (PersonalMessage is not null) text.Append($"<p>{PersonalMessage}</p>");
         text.AppendLine(markdown.AsHtml);
         text.AppendLine(ConfirmationLinkTag(userLanguage));
         text.Append($"<p>{LanguageService.GetString("BestRegards", userLanguage)}</p>");
