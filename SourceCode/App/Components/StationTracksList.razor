@@ -34,24 +34,8 @@ else
     @if (Track is not null)
     {
         <div class="row g-3 bg-light">
-            <div class="alert alert-danger">
-                <span class="fa fa-exclamation" /> @Localizer["FillOutNewTrackAndClickAddBeforeSaving"]
-            </div>
-            <AppInputText Width="1" Label="Number" @bind-Value="Track.Designation" />
-            <AppInputNumber Width="1" Label="DisplayOrder" TValue="short" @bind-Value="Track.DisplayOrder" />
-            <AppInputNumber Width="2" Label="MaxTrainLength" TValue="double" @bind-Value="Track.MaxTrainLength" Unit="m" Step="0.1" />
-            <AppInputNumber Width="2" Label="PlatformLength" TValue="double?" @bind-Value="Track.PlatformLength" Unit="m" Step="0.1" />
-            <AppInputNumber Width="2" Label="SpeedLimit" TValue="short?" @bind-Value="Track.SpeedLimit" Unit="km/h" Step="10" />
-            <AppInputText Width="2" Label="Usage" @bind-Value="Track.UsageNote" />
-            <AppInputFill Width="2" />
-
-            <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="Track.IsThroughTrack" />
-            <AppInputCheck Width="2" Label="IsSiding" @bind-Value="Track.IsSiding" />
-            <AppInputCheck Width="2" Label="IsScheduled" @bind-Value="Track.IsScheduled" />
-            <AppInputFill Width="6" />
-
             <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Save(0))">@Localizer["Add"]</button>
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@Localizer["Add"]</button>
             </div>
         </div>
     }
@@ -67,15 +51,16 @@ else
         return Task.CompletedTask;
     }
 
-    void Save(int id)
+    void AddTrack()
     {
-        if (Station is not null && Track is not null && id == 0 && !Station.StationTracks.Any(mg => mg.Designation.Equals(Track.Designation)))
+        if (Station is not null)
         {
-            Station.StationTracks.Add(Track);
-            Track = new StationTrack();
+            Station.StationTracks.Add(DefaultStationTrack);
             StateHasChanged();
         }
+
     }
+
     void Delete(int id)
     {
         if (Station is not null && Track is not null && id > 0)
@@ -84,4 +69,7 @@ else
             StateHasChanged();
         }
     }
+
+    StationTrack DefaultStationTrack => new StationTrack { Designation = NextDisplayOrder.ToString(), DisplayOrder = NextDisplayOrder };
+    short NextDisplayOrder => (short)(Station is null || Station.StationTracks is null ? 1 : Station.StationTracks.Count + 1);
 }

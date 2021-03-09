@@ -1,18 +1,15 @@
 ﻿using ModulesRegistry.Data;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services
 {
     public interface IStationService 
     {
-        Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, int personalOwnerId);
+        Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef);
         Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal);
-        Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, int owningPersonId);
-        Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, int owningPersonId, int moduleId);
+        Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef);
+        Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownerRef, int moduleId);
     }
 }

@@ -14,7 +14,7 @@ namespace ModulesRegistry.Services
         Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef);
         Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal);
         Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef);
-        Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal);
+        Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef);
         Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef);
     }
 }

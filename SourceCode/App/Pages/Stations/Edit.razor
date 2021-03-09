@@ -1,5 +1,9 @@
 ﻿@page "/Stations/{id:int}/Edit"
 @page "/Stations/{id:int}/Edit/{ownerid:int}"
+@page "/Stations/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
+@page "/Stations/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
+
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
@@ -7,6 +11,7 @@
 @inject IModuleService ModuleService
 @inject IStationService StationService
 @inject IPersonService PersonService
+@inject IGroupService GroupService
 
 <h1><span class="fa fa-school" /> @Heading</h1>
 
@@ -27,43 +32,52 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerId { get; set; }
+    [Parameter] public int OwnerGroupId { get; set; } 
+    [Parameter] public int OwnerPersonId { get; set; } 
+
     ClaimsPrincipal? Principal;
-    Person? Owner;
+    object? Owner;
     Station? Station;
     int ModuleId;
 
     IEnumerable<ListboxItem>? ModulesItems;
 
-    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Station", Owner);
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        ModulesItems = await ModuleService.ModuleItems(Principal);
+        ModulesItems = await ModuleService.ModuleItems(Principal, OwnerRef);
         Station = new Station();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (OwnerId > 0)
+        if (OwnerRef.IsAny)
         {
-            Owner = await PersonService.FindByIdAsync(Principal, OwnerId);
+            await GetOwner();
         }
         if (Id > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, Id, OwnerId);
+            Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef);
             if (Station is not null) ModuleId = Station.Modules.First().Id;
         }
     }
+
+    private async Task GetOwner() =>
+        Owner = OwnerRef.IsGroup ? await GroupService.FindByIdAsync(Principal, OwnerRef.GroupId) : await PersonService.FindByIdAsync(Principal,OwnerRef.PersonId);
 
     async Task OnValidSubmit()
     {
         if (Station is not null)
         {
-            var result = await StationService.SaveAsync(Principal, Station, 0, ModuleId);
+            var result = await StationService.SaveAsync(Principal, Station, OwnerRef, ModuleId);
             Station = result.Entity;
             if (Station is not null) ModuleId = Station.Modules.First().Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Station", Owner);
+
+    ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
+
 }

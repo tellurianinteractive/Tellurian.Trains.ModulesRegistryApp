@@ -2,7 +2,7 @@
 @if (Stations is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-sm btn-secondary" href="/Stations/0/Edit/@OwningPersonId"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+        <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
 }
 <TableTemplate Items="Stations">
@@ -22,7 +22,7 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-secondary" href="/Stations/@station.Id/Edit/@OwningPersonId"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
             }
             &nbsp;
         </td>
@@ -34,4 +34,9 @@
     [Parameter] public IEnumerable<Station>? Stations { get; set; }
     [Parameter] public bool MayEdit { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public int OwningGroupId { get; set; }
+
+    string StationEditHref(int id) => OwningGroupId > 0 ?
+       $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
+       $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 }

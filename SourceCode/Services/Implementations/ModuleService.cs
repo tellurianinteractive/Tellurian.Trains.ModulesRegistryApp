@@ -15,14 +15,14 @@ namespace ModulesRegistry.Services.Implementations
         private readonly Random Random = new();
         public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
                 var modules = await dbContext.Modules.AsNoTracking()
                     .Where(mo => mo.ModuleOwnerships
-                    .Any(mo => mo.PersonId == principal.PersonId()))
+                    .Any(mo => mo.PersonId == principal.PersonOwnerId(ownerRef) || mo.GroupId == ownerRef.GroupId))
                     .ToListAsync();
                 return modules.Select(m => new ListboxItem(m.Id, $"{m.FullName} {m.ConfigurationLabel}{m.PackageLabel} {m.FremoNumber}".Trim())).OrderBy(l => l.Description);
             }

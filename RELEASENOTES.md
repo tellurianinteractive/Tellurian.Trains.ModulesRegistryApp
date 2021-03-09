@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.8.0
+Release date 2021-03-09
+- **Group Member Administrator** can now add members to a group.
+- **Group Data Administrator** can now add and edit all group members *modules* and *stations*.
+- **Group Data Administrator** can now add and edit the groups *modules* and *stations*.
+
 ## Version 0.7.3
 Release date 2021-03-09
 - **Bug fix** of invitation and registration.

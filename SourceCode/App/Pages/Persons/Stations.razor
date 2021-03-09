@@ -19,7 +19,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await PersonService.FindByIdAsync(Principal, Id);
-        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, Owner.Id);
+        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, OwnerRef);
     }
 
     private int OwningPersonId => Owner?.Id ?? 0;

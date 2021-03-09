@@ -70,6 +70,6 @@
         $"/Modules/{id}/Edit/PersonOwned/{OwningPersonId}";
     string StationEditHref(int id) => OwningGroupId > 0 ?
         $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
-        $"/Stations/{id}/Edit/{OwningPersonId}";
+        $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 
 }

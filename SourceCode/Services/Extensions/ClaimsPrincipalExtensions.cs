@@ -65,7 +65,7 @@ namespace ModulesRegistry.Services.Extensions
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
              me is not null && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
         public static ModuleOwnershipRef OwnerRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
-
+        public static int PersonOwnerId(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) => me is null ? 0 :ownerRef.IsPerson ? ownerRef.PersonId : me.PersonId();
         public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsGroupAdministrator));
 

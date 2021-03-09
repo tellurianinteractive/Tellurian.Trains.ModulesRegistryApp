@@ -21,6 +21,7 @@ namespace ModulesRegistry.Data
         public bool IsGroup => GroupId > 0 && !IsPerson;
         public bool IsPerson => PersonId > 0 && !IsGroup;
         public bool IsPersonInGroup => IsPerson && IsGroup;
+        public bool IsAny => IsPerson || IsGroup;
     }
 
 
