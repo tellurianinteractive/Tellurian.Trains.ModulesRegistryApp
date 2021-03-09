@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.7.3
+Release date 2021-03-09
+- **Bug fix** of invitation and regsistration.
+- **Bug fix** of invitation language when not supported in Azure.
+
 ## Version 0.7.2
 Release date 2021-03-07
 - **Contact page** now shows all administrators and in which country they are located.

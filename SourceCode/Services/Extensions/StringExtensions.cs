@@ -20,7 +20,7 @@ namespace ModulesRegistry.Services.Extensions
 
        public static string[] Items(this string? value, char separator = ';') =>
             string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
-            value.Split(separator);
+            value.Trim().Split(separator);
 
         #region Special string conversions
 

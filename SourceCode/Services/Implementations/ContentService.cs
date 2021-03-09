@@ -24,15 +24,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (string.IsNullOrWhiteSpace(language))
                 return await GetTextContent(content);
-            try
-            {
-                var culture = new CultureInfo(language);
-                return await culture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
-            }
-            catch (CultureNotFoundException)
-            {
-                return await GetTextContent(content);
-            }
+                return await language.GetMarkdownAsync(MarkdownPath, content); // To bypass unsupported Cultures in Azure.
         }
 
         public async Task<TextContent> GetRemoteTextContent(string href)

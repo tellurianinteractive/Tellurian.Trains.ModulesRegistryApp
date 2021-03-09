@@ -7,9 +7,12 @@ namespace ModulesRegistry.Services.Extensions
 {
     internal static class CultureInfoExtensions
     {
-        public async static Task<TextContent> GetMarkdownAsync(this CultureInfo culture, string path, string content)
+        public static Task<TextContent> GetMarkdownAsync(this CultureInfo culture, string path, string content) =>
+            GetMarkdownAsync(culture.TwoLetterISOLanguageName, path, content);
+
+        public async static Task<TextContent> GetMarkdownAsync(this string twoLetterISOLanguageName, string path, string content)
         {
-            var specificCultureFile = new FileInfo($"{path}/{content}.{culture.TwoLetterISOLanguageName}.md");
+            var specificCultureFile = new FileInfo($"{path}/{content}.{twoLetterISOLanguageName}.md");
             if (specificCultureFile.Exists) return new TextContent(await File.ReadAllTextAsync(specificCultureFile.FullName), "MD", specificCultureFile.LastWriteTimeUtc);
             var defaultCultureFile = new FileInfo($"{path}/{content}.md");
             if (defaultCultureFile.Exists) return new TextContent(await File.ReadAllTextAsync(defaultCultureFile.FullName), "MD", defaultCultureFile.LastWriteTimeUtc);

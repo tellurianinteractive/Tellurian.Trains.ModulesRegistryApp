@@ -5,6 +5,7 @@
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject IPersonService PersonService
 @inject IUserService UserService
 @inject IContentService ContentService
@@ -18,7 +19,7 @@
     <hr />
     @((MarkupString)Html)
     <hr />
-    <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope"/>@Localizer["Send"]</button>
+    <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope" />@Localizer["Send"]</button>
 }
 else
 {
@@ -35,12 +36,13 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
     private Person? Inviter;
     private Person? Person;
     private User? User;
+    private string? PersonLanguage;
     private string Html = string.Empty;
     private bool IsSent;
-    ClaimsPrincipal? Principal;
 
     override protected async Task OnInitializedAsync()
     {
@@ -51,26 +53,32 @@ else
         Person = await PersonService.FindByIdAsync(Principal, Id);
         if (PersonHasEmail)
         {
-            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
-            if (User is null) return;
+
             var userCountry = await CountryService.FindById(Person!.CountryId);
             if (userCountry is null) return;
-            Html = await GetMessageHtml(userCountry.Languages.Items()[0]);
+            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
+            if (User is null) return;
+
+            PersonLanguage = userCountry.Languages.Items()[0];
+            Html = await GetMessageHtml(PersonLanguage);
         }
     }
 
     private async Task Send()
     {
+        var count = 0;
+
         var message = new MailMessage();
         message.To.Add(new MailAddress(User!.EmailAddress, $"{Person!.FirstName} {Person!.LastName}"));
         message.Subject = Localizer["InvitationToModuleRegistry"];
         message.Body = Html;
         message.IsBodyHtml = true;
-        var count = await MailSender.SendMailMessageAsync(message);
+        count = await MailSender.SendMailMessageAsync(message);
         IsSent = count > 0;
+        ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
     }
 
-    private bool CanSend => PersonHasEmail && User is not null && User.HashedPassword.HasNoValue();
+    private bool CanSend => PersonHasEmail;
     private bool PersonHasEmail => Person is not null && Person.EmailAddresses.HasValue();
     private string PrimaryEmail(Person person) => person.EmailAddresses.Split(';')[0];
 
