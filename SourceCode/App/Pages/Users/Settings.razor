@@ -1,0 +1,49 @@
+﻿@page "/Users/Settings"
+
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+@inject IUserService UserService
+@inject IMailSender MailSender
+@inject IContentService ContentService
+
+<h1><span class="fa fa-user" /> @Localizer["UserSettings"]</h1>
+<AuthorizeView Policy="Admin">
+    <Authorized>
+    </Authorized>
+</AuthorizeView>
+<AuthorizeView>
+    <Authorized>
+    </Authorized>
+    <NotAuthorized>
+        <h3><span class="fa fa-key" /> @Localizer["ResetPassword"]</h3>
+        <ContentView ContentName="PasswordReset" />
+        <label>@Localizer["Email"]</label>
+        <input type="text" @bind="@EmailAddress" />
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" @onclick="OnRequestNewPassword" />
+        </div>
+    </NotAuthorized>
+
+</AuthorizeView>
+
+@code {
+
+    PasswordResetRequest? PasswordResetRequest;
+    string? EmailAddress;
+
+    async Task OnRequestNewPassword()
+    {
+        var requestor = await UserService.ResetPasswordAsync(EmailAddress);
+        if (requestor is null) return;
+        var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
+        PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["ResetPasswordHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
+        if (PasswordResetRequest.IsValid)
+        {
+            var message = PasswordResetRequest.AsMailMessage();
+            if (message is not null)
+            {
+                _ = await MailSender.SendMailMessageAsync(message);
+            }
+        }
+    }
+}

@@ -41,6 +41,18 @@ namespace ModulesRegistry.Services.Implementations
             return await FindByObjectIdAsync(dbContext, objectId);
         }
 
+        public async Task<User?> ResetPasswordAsync(string? emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress)) return null;
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(u => u.EmailAddress == emailAddress);
+            if (existing is null) return null;
+            existing.HashedPassword = null;
+            existing.ObjectId = Guid.NewGuid();
+            var result = await dbContext.SaveChangesAsync();
+            return result == 0 ? null : existing;
+        }
+
         private static async Task<User?> FindByObjectIdAsync(ModulesDbContext dbContext, string? objectId)
         {
             if (string.IsNullOrWhiteSpace(objectId)) return null;

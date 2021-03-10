@@ -564,4 +564,13 @@
   <data name="AdministersGroups" xml:space="preserve">
     <value>Administers groups</value>
   </data>
+  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
+    <value>Reset password has been requested</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>User settings</value>
+  </data>
 </root>

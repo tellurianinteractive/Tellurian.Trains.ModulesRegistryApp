@@ -1,7 +1,5 @@
-﻿@using System.Text
-@using System.Net.Mail;
-@page "/Persons/{id:int}/Invite"
-@attribute [Authorize(Policy = "Admin")]
+﻿@page "/Persons/{id:int}/Invite"
+@attribute [Authorize(Policy = "User")]
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
@@ -12,12 +10,12 @@
 @inject IMailSender MailSender
 @inject ICountryService CountryService
 
-<h1><span class="fa fa-user" /> @Localizer["Invite"] @Person?.FirstName @Person?.LastName</h1>
+<h1><span class="fa fa-user" /> @Localizer["Invite"] @Invitation?.Recipient.Person.FirstName @Invitation?.Recipient.Person.LastName</h1>
 @if (CanSend)
 {
     <h2>@Localizer["Message"]</h2>
     <hr />
-    @((MarkupString)Html)
+    @((MarkupString)DisplayedMessage)
     <hr />
     <input class="form-control" type="text" @bind="@PersonalMessage" @bind:event="oninput" @onkeyup="@UpdateMessage" />
     <div>
@@ -42,82 +40,60 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
-    private Person? Inviter;
-    private Person? Person;
-    private User? User;
-    private string? PersonLanguage;
-    private string Html = string.Empty;
+    UserInvitation? Invitation;
+    private string DisplayedMessage = string.Empty;
     private string? PersonalMessage;
     private bool IsReadOnly;
     private bool IsSent;
+    private bool CanSend;
 
     override protected async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (Principal is null) return;
         var userId = Principal.UserId();
-        Inviter = await PersonService.FindByUserIdAsync(Principal, userId);
-        Person = await PersonService.FindByIdAsync(Principal, Id);
-        if (PersonHasEmail)
+        var inviter = await PersonService.FindByUserIdAsync(Principal, userId);
+        if (inviter is null) return;
+        var invitedPerson = await PersonService.FindByIdAsync(Principal, Id);
+        if (invitedPerson.HasEmail())
         {
-
-            var userCountry = await CountryService.FindById(Person!.CountryId);
+            CanSend = true;
+            var userCountry = await CountryService.FindById(invitedPerson.CountryId);
             if (userCountry is null) return;
-            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null, IsReadOnly);
-            if (User is null) return;
-
-            PersonLanguage = userCountry.Languages.Items()[0];
-            Html = await GetMessageHtml(PersonLanguage);
+            var invited = await UserService.FindOrCreateAsync(invitedPerson.PrimaryEmail(), null, IsReadOnly);
+            if (invited is null) return;
+            var message = await ContentService.GetTextContent("Invitation", invited.PreferredLanguage());
+            Invitation = new UserInvitation(invited, inviter, Localizer["InvitationToModuleRegistry"].ToString(), message, Navigator.BaseUri) { PersonalMessage = PersonalMessage };
+            DisplayedMessage = Invitation.GetMessageHtml();
         }
     }
 
-    async Task UpdateMessage()
+    void UpdateMessage()
     {
-        Html = await GetMessageHtml(PersonLanguage);
-        StateHasChanged();
+        if (Invitation is not null)
+        {
+            Invitation = Invitation with { PersonalMessage = PersonalMessage };
+            StateHasChanged();
+        }
     }
 
     private async Task Send()
     {
         var count = 0;
-        if (User is not null)
+        if (Invitation is not null)
         {
-            User.IsReadOnly = IsReadOnly;
-            User = await UserService.UpdateAsync(User);
-            var message = new MailMessage();
-            message.To.Add(new MailAddress(User!.EmailAddress, $"{Person!.FirstName} {Person!.LastName}"));
-            message.Subject = Localizer["InvitationToModuleRegistry"];
-            message.Body = await GetMessageHtml(PersonLanguage);
-            message.IsBodyHtml = true;
-            count = await MailSender.SendMailMessageAsync(message);
+            Invitation.Recipient.IsReadOnly = IsReadOnly;
+            _ = await UserService.UpdateAsync(Invitation.Recipient);
+
+            var message = Invitation.AsMailMessage();
+            if (message is not null)
+            {
+                count = await MailSender.SendMailMessageAsync(message);
+            }
             IsSent = count > 0;
             ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
         }
-
     }
 
-    private bool CanSend => PersonHasEmail;
-    private bool PersonHasEmail => Person is not null && Person.EmailAddresses.HasValue();
-    private string PrimaryEmail(Person person) => person.EmailAddresses.Split(';')[0];
 
-    private string ConfirmationLink => $"{Navigator.BaseUri}/users/confirm?email={PrimaryEmail(Person!)}&objectid={User?.ObjectId}";
-    private string ConfirmationLinkTag(string? userLanguage) => $"<p><a href=\"{ConfirmationLink}\">{LanguageService.GetString("CreatePassword", userLanguage)}</a></p>";
-
-    private async Task<string> GetMessageHtml(string? userLanguage = null)
-    {
-        if (Inviter is null) return string.Empty;
-        var text = new StringBuilder(1000);
-        var markdown = await ContentService.GetTextContent("Invitation", userLanguage);
-        text.Append("<h1>");
-        text.Append(LanguageService.GetString("Hello", userLanguage));
-        text.Append(' ');
-        text.Append(Person!.FirstName);
-        text.AppendLine("</h1>");
-        if (PersonalMessage is not null) text.Append($"<p>{PersonalMessage}</p>");
-        text.AppendLine(markdown.AsHtml);
-        text.AppendLine(ConfirmationLinkTag(userLanguage));
-        text.Append($"<p>{LanguageService.GetString("BestRegards", userLanguage)}</p>");
-        text.Append($"<p>{Inviter.FirstName} {Inviter.LastName}</p>");
-        return text.ToString();
-    }
 }

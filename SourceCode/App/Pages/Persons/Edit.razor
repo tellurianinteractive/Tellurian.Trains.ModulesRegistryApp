@@ -76,6 +76,6 @@ else
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
     private string AfterSaveHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"/Persons/Index/{CountryId}";
-    private bool IsNotGroupMember => GroupId <= 0 || Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId);
+    private bool IsNotGroupMember => GroupId > 0 && ( Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId));
 
 }

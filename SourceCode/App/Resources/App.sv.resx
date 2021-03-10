@@ -564,4 +564,13 @@
   <data name="AdministersGroups" xml:space="preserve">
     <value>Administrerar grupper</value>
   </data>
+  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
+    <value>Återställ lösenord har begärts</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Återställ lösenord</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
 </root>

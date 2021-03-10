@@ -25,5 +25,6 @@ namespace ModulesRegistry.Services
         Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time);
         Task<IEnumerable<User>> GetCountryAdministratorsAsync();
         Task<User?> UpdateAsync(User user);
+        Task<User?> ResetPasswordAsync(string? emailAddress);
     }
 }
