@@ -25,7 +25,7 @@ Release date 2021-03-07
 - **Contact page** now shows all administrators and in which country they are located.
 - **Bug fix** of wrong message shown when saving unmodified *module* or *station* (thanks to Daniel Bergkqvist).
 - **Bug fix** of search person for adding as group member.
-- **Improved translations** (thanks Jérôme Chavel for German suggestions).
+- **Improved translations** (thanks JÃ©rÃ´me Chavel for German suggestions).
 - **Improved navigation** with new buttons to quicker find your way around.
 
 ## Version 0.7.1
@@ -43,7 +43,7 @@ Release date 2021-04-05
 Any notes on type of catenary should be entered in new *Note* field.
 - **Max Speed** of trains passing module is added. When the module is added to a *layout*, the max speed can be lowered but not exceeded.
 - **Version** and **Box Label** fields for *modules* are now mutual exclusive. Only one of the two fields may be entered.
-- **Bug fix** of module represents year. (Thanks to Jérôme Chavel).
+- **Bug fix** of module represents year. (Thanks to JÃ©rÃ´me Chavel).
 
 ## Version 0.6.0
 Release date 2021-03-04
@@ -104,17 +104,17 @@ Release date 2021-02-20
 - Improved module owner state.
 - Added user permissions filtering to *PersonService*.
 - Bug fix of password policy (thanks to Uwe Stegemann).
-- Correct app name for making broser shortcun (thanks to Uwe Stegemann).
+- Correct app name for making broser shortcut (thanks to Uwe Stegemann).
 
 ## Version 0.2.3
 Release date 2021-02-19
 
 - Inviter of person is now always the logged in user.
-- Inviitation text is refined.
+- Invitation text is refined.
 
 ## Version 0.2.2
 Release date 2021-02-19
-- Added transtaltions to German and Norwegian.
+- Added translations to German and Norwegian.
 - Invitation now sent in receivers language.
 - Added confirmation of sent invitation.
  
