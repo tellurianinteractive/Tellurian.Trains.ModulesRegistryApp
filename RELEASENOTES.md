@@ -5,6 +5,7 @@ Release date 2021-03-10
 - **Area of Resposibility** for administrators on contact page to help users to find the right administrator. 
 - **Group Membership** for groups that administrator also administer are now shown.
 - **About** page now contains links to find out more.
+- **Password reset** now available under *User settings*.
 - **Bug fix** of adding new person.
 
 Thanks to Daniel Bergkvist for the ideas to improve this information.
