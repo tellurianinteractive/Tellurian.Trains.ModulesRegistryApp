@@ -22,6 +22,9 @@ namespace ModulesRegistry.Services.Extensions
         public const string ObjectId = nameof(ObjectId);
         public const string CountryId = nameof(CountryId);
         public const string LastTermsOfUseAcceptTime = nameof(LastTermsOfUseAcceptTime);
+        public const string ReadOnly = nameof(ReadOnly);
+        public const string Demo = nameof(Demo);
+
     }
 
     public static class ClaimsPrincipalExtensions
@@ -33,19 +36,22 @@ namespace ModulesRegistry.Services.Extensions
         public static int UserId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.UserId);
         public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
         public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.CountryId);
+        public static bool IsDemo(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.Demo);
+        public static bool IsReadOnly(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.ReadOnly);
 
 
-        public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type.Equals(AppClaimTypes.LastTermsOfUseAcceptTime));
-        public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.HasClaim(c => c.Type == AppClaimTypes.ObjectId);
-        public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.GlobalAdministrator);
-        public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && me.Claims.Any(c => c.Type == AppClaimTypes.CountryAdministrator);
+        public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
+        public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.ObjectId);
+        public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.GlobalAdministrator);
+        public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.CountryAdministrator);
         public static bool IsCountryAdministratorInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) =>
             me.IsGlobalAdministrator() || (me.IsCountryAdministrator() && countryId.HasValue && countryId.Value == me.CountryId());
 
-        public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => me is not null && (me.IsGlobalAdministrator() || me.IsCountryAdministrator());
+        public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => 
+            me is not null && (me.IsGlobalAdministrator() || me.IsCountryAdministrator());
 
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) =>
-            me is not null && (me.IsGlobalAdministrator() || (countryId.HasValue && countryId.Value == me.CountryId()));
+            me is not null  && (me.IsGlobalAdministrator() || (countryId.HasValue && countryId.Value == me.CountryId()));
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
              me is not null && countryId.HasValue && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
 
@@ -55,15 +61,15 @@ namespace ModulesRegistry.Services.Extensions
              me is not null && (entityOwnerId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
         public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me) =>
-            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+            me is not null && !me.IsReadOnly() && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
         public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
-            me is not null && (ownerRef.IsPerson && ownerRef.PersonId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+            me is not null && !me.IsReadOnly() && (ownerRef.IsPerson && ownerRef.PersonId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me) =>
-            me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+            me is not null && !me.IsReadOnly() && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
-             me is not null && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+             me is not null && !me.IsReadOnly() && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
         public static ModuleOwnershipRef OwnerRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
         public static int PersonOwnerId(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) => me is null ? 0 :ownerRef.IsPerson ? ownerRef.PersonId : me.PersonId();
         public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
@@ -73,9 +79,17 @@ namespace ModulesRegistry.Services.Extensions
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsDataAdministrator));
 
         private static string? GetString(this ClaimsPrincipal? me, string claimType, string? defaultValue = null) =>
-            me is not null ? me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase))?.Value : defaultValue;
+            me is not null ? me.Claims.Claim(claimType)?.Value : defaultValue;
 
         private static int GetInt32(this ClaimsPrincipal? me, string claimType) =>
-            me is not null && int.TryParse(me.Claims.SingleOrDefault(c => c is not null && c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase))?.Value, out var value) ? value : 0;
+            me is not null && int.TryParse(me.Claims.Claim(claimType)?.Value, out var value) ? value : 0;
+
+        private static bool GetBool(this ClaimsPrincipal? me, string claimType) =>
+            me is not null && bool.TryParse(me.Claims.Claim(claimType)?.Value, out var value) && value;
+
+        private static Claim? Claim(this IEnumerable<Claim> us, string claimType) =>
+            us.SingleOrDefault(c => c is not null && c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase));
+
+        private static bool Any(this ClaimsPrincipal? me, string claimType) => me is not null && me.Claims.Any(c => c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase));
     }
 }

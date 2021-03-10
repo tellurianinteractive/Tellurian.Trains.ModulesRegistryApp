@@ -20,6 +20,10 @@
     @((MarkupString)Html)
     <hr />
     <input class="form-control" type="text" @bind="@PersonalMessage" @bind:event="oninput" @onkeyup="@UpdateMessage" />
+    <div>
+        <input class="form-check" type="checkbox" @bind="@IsReadOnly" />
+        <label class="form-check-label">@Localizer["IsReadOnly"]</label>
+    </div>
     <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope" />@Localizer["Send"]</button>
 }
 else
@@ -44,6 +48,7 @@ else
     private string? PersonLanguage;
     private string Html = string.Empty;
     private string? PersonalMessage;
+    private bool IsReadOnly;
     private bool IsSent;
 
     override protected async Task OnInitializedAsync()
@@ -58,7 +63,7 @@ else
 
             var userCountry = await CountryService.FindById(Person!.CountryId);
             if (userCountry is null) return;
-            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null);
+            User = await UserService.FindOrCreateAsync(PrimaryEmail(Person!), null, IsReadOnly);
             if (User is null) return;
 
             PersonLanguage = userCountry.Languages.Items()[0];
@@ -75,15 +80,20 @@ else
     private async Task Send()
     {
         var count = 0;
+        if (User is not null)
+        {
+            User.IsReadOnly = IsReadOnly;
+            User = await UserService.UpdateAsync(User);
+            var message = new MailMessage();
+            message.To.Add(new MailAddress(User!.EmailAddress, $"{Person!.FirstName} {Person!.LastName}"));
+            message.Subject = Localizer["InvitationToModuleRegistry"];
+            message.Body = await GetMessageHtml(PersonLanguage);
+            message.IsBodyHtml = true;
+            count = await MailSender.SendMailMessageAsync(message);
+            IsSent = count > 0;
+            ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
+        }
 
-        var message = new MailMessage();
-        message.To.Add(new MailAddress(User!.EmailAddress, $"{Person!.FirstName} {Person!.LastName}"));
-        message.Subject = Localizer["InvitationToModuleRegistry"];
-        message.Body = Html;
-        message.IsBodyHtml = true;
-        count = await MailSender.SendMailMessageAsync(message);
-        IsSent = count > 0;
-        ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
     }
 
     private bool CanSend => PersonHasEmail;

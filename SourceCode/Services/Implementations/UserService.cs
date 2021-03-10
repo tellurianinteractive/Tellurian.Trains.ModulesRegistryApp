@@ -51,7 +51,7 @@ namespace ModulesRegistry.Services.Implementations
             return null;
         }
 
-        public async Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId)
+        public async Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId, bool isReadOnly = false)
         {
             using var dbContext = Factory.CreateDbContext();
             User? existing = null;
@@ -65,12 +65,22 @@ namespace ModulesRegistry.Services.Implementations
             var person = dbContext.People.SingleOrDefault(p => p.EmailAddresses.Contains(emailAddress));
             if (person is null) return null;
 
-            User user = new() { ObjectId = objectGuid, EmailAddress = emailAddress, RegistrationTime = DateTimeOffset.Now };
+            User user = new() { ObjectId = objectGuid, EmailAddress = emailAddress, RegistrationTime = DateTimeOffset.Now, IsReadOnly = isReadOnly };
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync();
             person.UserId = user.Id;
             await dbContext.SaveChangesAsync();
             return dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(p => p.Person).Single();
+        }
+
+        public async Task<User?> UpdateAsync(User user)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.Users.FindAsync(user.Id);
+            if (existing is null) return null;
+            dbContext.Entry(existing).CurrentValues.SetValues(user);
+            await dbContext.SaveChangesAsync();
+            return existing;
         }
 
         public async Task<User?> AcceptTermsOfUse(string? objectId)
@@ -105,6 +115,7 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.Users.AsNoTracking()
                 .Where(u => u.IsCountryAdministrator || u.IsGlobalAdministrator)
                 .Include(u => u.Person).ThenInclude(p => p.Country)
+                .Include(u => u.Person).ThenInclude(p => p.GroupMembers).ThenInclude(gm => gm.Group)
                 .ToListAsync();
         }
     }

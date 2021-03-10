@@ -15,11 +15,15 @@ else
             <th>@Localizer["Country"]</th>
             <th>@Localizer["Name"]</th>
             <th>@Localizer["IsGlobalAdministrator"]</th>
+            <th>@Localizer["AreaOfResponsibility"]</th>
+            <th>@Localizer["AdministersGroups"]</th>
         </TableHeader>
         <RowTemplate Context="contact">
             <th>@LanguageService.GetString(contact.Person.Country.EnglishName, null)</th>
             <th>@contact.Person.FullName()</th>
             <td>@contact.IsGlobalAdministrator.AsYesNo()</td>
+            <td>@contact.AdministratorAreaOfResposibility</td>
+            <td>@GroupMemberships(contact.Person)</td>
         </RowTemplate>
     </TableTemplate>
 }
@@ -37,5 +41,7 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         ContactPersons = await UserService.GetCountryAdministratorsAsync();
     }
+
+    string GroupMemberships(Person person) => string.Join(", ", person.GroupMembers.Where(gm => gm.IsGroupAdministrator).Select(gm => gm.Group.FullName));
 
 }

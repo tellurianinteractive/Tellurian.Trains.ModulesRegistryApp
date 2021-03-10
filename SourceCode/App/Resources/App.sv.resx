@@ -555,4 +555,13 @@
   <data name="FremoPrefix" xml:space="preserve">
     <value>FREMO modulprefix</value>
   </data>
+  <data name="FindOutMore" xml:space="preserve">
+    <value>Få reda på mer</value>
+  </data>
+  <data name="AreaOfResponsibility" xml:space="preserve">
+    <value>Ansvarsområde</value>
+  </data>
+  <data name="AdministersGroups" xml:space="preserve">
+    <value>Administrerar grupper</value>
+  </data>
 </root>

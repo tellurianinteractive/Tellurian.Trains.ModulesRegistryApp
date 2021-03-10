@@ -7,11 +7,6 @@ namespace ModulesRegistry.Data
 {
     public partial class ModuleStandard
     {
-        public ModuleStandard()
-        {
-            Modules = new HashSet<Module>();
-        }
-
         public int Id { get; set; }
         public string ShortName { get; set; }
         public int ScaleId { get; set; }
@@ -25,6 +20,5 @@ namespace ModulesRegistry.Data
         public string AcceptedNorm { get; set; }
 
         public virtual Scale Scale { get; set; }
-        public virtual ICollection<Module> Modules { get; set; }
     }
 }

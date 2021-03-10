@@ -1,4 +1,29 @@
 ﻿@page "/About"
 @inject IStringLocalizer<App> Localizer
-<h1><span class="fa fa-info-circle"/>@Localizer["About"]</h1>
+<h1><span class="fa fa-info-circle" />@Localizer["About"]</h1>
 <ContentView ContentName="About" />
+<h3><span class="fa fa-map-signs" />@Localizer["FindOutMore"]!</h3>
+<div>
+    <span class="fa fa-external-link"/>
+    <a target="_blank" href="https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki">@Localizer["AppName"] GitHub WIKI</a>
+</div>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp">@Localizer["AppName"] GitHub Open Source</a>
+</div>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor">Blazor</a>
+</div>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://entityframeworkcore.com/">Entity Framework</a>
+</div>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://dotnet.microsoft.com/">.NET</a>
+</div>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://tellurian.se/">Tellurian Interactive AB, Sweden</a>
+</div>

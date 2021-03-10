@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 0.8.1
+Release date 2021-03-10
+- **Area of Resposibility** for administrators on contact page to help users to find the right administrator. 
+- **Group Membership** for groups that administrator also administer are now shown.
+- **About** page now contains links to find out more.
+
+Thanks to Daniel Bergkvist for the ideas to improve this information.
 ## Version 0.8.0
 Release date 2021-03-09
 - **Group Member Administrator** can now add members to a group.

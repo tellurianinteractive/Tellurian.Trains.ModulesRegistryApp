@@ -16,7 +16,7 @@ namespace ModulesRegistry.Services
         /// <param name="objectId">The Azure AD object ID. This is used to find an existing <see cref="User"/> or is assigned to a new <see cref="User"/>.</param>
         /// <param name="emailAddress">The email used as user identity in Azure AD. This must match the email for an existing <see cref="Person"/></param>
         /// <returns></returns>
-        Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId);
+        Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId, bool isReadOnly = false);
         Task<User?> FindByIdAsync(int id);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<User?> AcceptTermsOfUse(string? objectId);
@@ -24,5 +24,6 @@ namespace ModulesRegistry.Services
         Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password);
         Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time);
         Task<IEnumerable<User>> GetCountryAdministratorsAsync();
+        Task<User?> UpdateAsync(User user);
     }
 }

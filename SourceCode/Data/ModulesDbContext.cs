@@ -8,7 +8,7 @@ namespace ModulesRegistry.Data
 {
     public partial class ModulesDbContext : DbContext
     {
-        public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
+               public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
             : base(options)
         {
         }
@@ -19,6 +19,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<CargoRelation> CargoRelations { get; set; }
         public virtual DbSet<CargoUnit> CargoUnits { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<ExternalStation> ExternalStations { get; set; }
         public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
         public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
@@ -165,6 +166,18 @@ namespace ModulesRegistry.Data
                     .HasComment("A semicolon separated list of two-letter language codes.");
             });
 
+            modelBuilder.Entity<Document>(entity =>
+            {
+                entity.ToTable("Document");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.FileSuffix)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsFixedLength(true);
+            });
+
             modelBuilder.Entity<ExternalStation>(entity =>
             {
                 entity.ToTable("ExternalStation");
@@ -291,18 +304,24 @@ namespace ModulesRegistry.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.HasNormalGauge)
-                    .IsRequired();
-
-                entity.Property(e => e.Is2R)
-                    .IsRequired();
-
                 entity.Property(e => e.Note).HasMaxLength(255);
 
+                entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PackageLabel).HasMaxLength(10);
 
                 entity.Property(e => e.Theme).HasMaxLength(50);
+
+                entity.HasOne(d => d.DxfDrawingNavigation)
+                    .WithMany(p => p.ModuleDxfDrawingNavigations)
+                    .HasForeignKey(d => d.DxfDrawing)
+                    .HasConstraintName("FK_Module_DxfDocument");
+
+                entity.HasOne(d => d.PdfDocumentationNavigation)
+                    .WithMany(p => p.ModulePdfDocumentationNavigations)
+                    .HasForeignKey(d => d.PdfDocumentation)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Module_PdfDocument");
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.Modules)
@@ -310,13 +329,7 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Module_Scale");
 
-                entity.HasOne(d => d.Standard)
-                    .WithMany(p => p.Modules)
-                    .HasForeignKey(d => d.StandardId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Module_ModuleStandard");
-
-                entity.HasOne(d => d.Station)
+              entity.HasOne(d => d.Station)
                     .WithMany(p => p.Modules)
                     .HasForeignKey(d => d.StationId)
                     .OnDelete(DeleteBehavior.Cascade)
@@ -337,6 +350,11 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ModuleGable_Module");
 
+                entity.HasOne(d => d.TypeProperty)
+                    .WithMany(p => p.ModuleGables)
+                    .HasForeignKey(d => d.TypePropertyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ModuleGable_Property");
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>
@@ -451,6 +469,8 @@ namespace ModulesRegistry.Data
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.FremoOwnerSignature).HasMaxLength(10);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()

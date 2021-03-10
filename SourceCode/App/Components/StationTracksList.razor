@@ -31,25 +31,15 @@ else
             </div>
         </div>
     }
-    @if (Track is not null)
-    {
         <div class="row g-3 bg-light">
             <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@Localizer["Add"]</button>
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@Localizer["Add"] @Localizer["Track"]</button>
             </div>
         </div>
-    }
 }
 
 @code {
     [Parameter] public Station? Station { get; set; }
-    StationTrack? Track;
-
-    protected override Task OnParametersSetAsync()
-    {
-        Track = new StationTrack();
-        return Task.CompletedTask;
-    }
 
     void AddTrack()
     {
@@ -63,7 +53,7 @@ else
 
     void Delete(int id)
     {
-        if (Station is not null && Track is not null && id > 0)
+        if (Station is not null && id > 0)
         {
             Station.StationTracks = Station.StationTracks.Where(st => st.Id != id).ToList();
             StateHasChanged();
@@ -71,5 +61,5 @@ else
     }
 
     StationTrack DefaultStationTrack => new StationTrack { Designation = NextDisplayOrder.ToString(), DisplayOrder = NextDisplayOrder };
-    short NextDisplayOrder => (short)(Station is null || Station.StationTracks is null ? 1 : Station.StationTracks.Count + 1);
+    short NextDisplayOrder => (short)(Station is null || Station.StationTracks is null || Station.StationTracks.Count == 0 ? 1 : Station.StationTracks.Count + 1);
 }
