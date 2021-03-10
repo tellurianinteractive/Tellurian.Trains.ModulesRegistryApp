@@ -9,3 +9,7 @@ If you already have an account, please login.
 #### New user?
 You need an invitation. Please contact your country administrator.
 After you have an invitation, you may register and log in.
+
+#### Are you using iPhone or iPad
+It seems difficult to login using iOS devices.
+It does'nt matter which browseryou use, all of them are based on Safari.

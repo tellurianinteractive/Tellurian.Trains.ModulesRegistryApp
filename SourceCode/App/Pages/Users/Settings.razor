@@ -17,10 +17,14 @@
     <NotAuthorized>
         <h3><span class="fa fa-key" /> @Localizer["ResetPassword"]</h3>
         <ContentView ContentName="PasswordReset" />
-        <label>@Localizer["Email"]</label>
-        <input type="text" @bind="@EmailAddress" />
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary" @onclick="OnRequestNewPassword" />
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label class="form-control-label" for="email">@Localizer["Email"]</label>
+                <input class="form-control" id="email" type="text" @bind="@EmailAddress" />
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-sm" @onclick="OnRequestNewPassword"><span class="fa fa-paper-plane" /> @Localizer["Send"]</button>
+            </div>
         </div>
     </NotAuthorized>
 

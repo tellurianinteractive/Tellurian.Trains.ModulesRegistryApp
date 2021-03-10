@@ -7,7 +7,11 @@ Dette er et nettsted bare for inviterte brukere.
 
 #### Eksisterende bruker?
 Hvis du allerede har en konto, vennligst logg inn.
-#### Ny bruker?
 
+#### Ny bruker?
 Du trenger en invitasjon. Kontakt landadministratoren din.
 Etter at du har fått en invitasjon, kan du registrere deg og logge på.
+
+#### Bruker du iPhone eller iPad?
+Det virker vanskelig å logge på med iOS-enheter.
+Det spiller ingen rolle hvilken nettleser du bruker, alle er basert på Safari.
