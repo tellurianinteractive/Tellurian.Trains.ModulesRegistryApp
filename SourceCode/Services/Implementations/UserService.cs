@@ -38,6 +38,7 @@ namespace ModulesRegistry.Services.Implementations
             if (user is null) return null;
             user.HashedPassword = password.AsHashedPassword();
             user.LastEmailConfirmationTime = DateTimeOffset.Now;
+            user.PasswordResetAttempts = 0;
             await dbContext.SaveChangesAsync();
             return await FindByObjectIdAsync(dbContext, objectId);
         }

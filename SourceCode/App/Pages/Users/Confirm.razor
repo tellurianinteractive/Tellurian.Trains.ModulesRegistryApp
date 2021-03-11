@@ -63,5 +63,5 @@ else
         User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
     }
 
-    private bool PasswordCreated => User is not null && User.HashedPassword.HasValue();
+    private bool PasswordCreated => User is not null && User.PasswordResetAttempts == 0;
 }

@@ -13,7 +13,7 @@ namespace ModulesRegistry.Services.Extensions
 
         public static string ConfirmationLink(this User? me, string baseUri) =>
             me is null || me.Person is null ? string.Empty :
-                $"{baseUri}/users/confirm?email={me.PrimaryEmail()}&objectid={me.ObjectId}";
+                $"{baseUri}users/confirm?email={me.PrimaryEmail()}&objectid={me.ObjectId}";
 
         public static string ConfirmationLinkTag(this User? me, string baseUri) =>
             me is null ? string.Empty :
