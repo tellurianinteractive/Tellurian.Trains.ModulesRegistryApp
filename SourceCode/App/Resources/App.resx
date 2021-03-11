@@ -501,8 +501,8 @@
   <data name="Signature" xml:space="preserve">
     <value>Signature</value>
   </data>
-  <data name="IsEndStation" xml:space="preserve">
-    <value>Is end station?</value>
+  <data name="IsSackStation" xml:space="preserve">
+    <value>Is sack station?</value>
   </data>
   <data name="IsShadowStation" xml:space="preserve">
     <value>Is shadow station?</value>
