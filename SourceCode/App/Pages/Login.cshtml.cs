@@ -59,7 +59,7 @@ namespace ModulesRegistry.Pages
                     }
                     catch (Exception ex)
                     {
-                        string error = ex.Message;
+                        //string error = ex.Message;
                     }
                     _ = await UserService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
                 }

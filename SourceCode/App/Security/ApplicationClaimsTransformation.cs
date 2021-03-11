@@ -93,9 +93,9 @@ namespace ModulesRegistry.Security
 
         }
         private static Claim Claim(string type, object value) =>
-            new Claim(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
+            new(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
         private static Claim Claim(string type, string value) =>
-            new Claim(type, value, null, nameof(ModulesRegistry));
+            new(type, value, null, nameof(ModulesRegistry));
 
     }
 }

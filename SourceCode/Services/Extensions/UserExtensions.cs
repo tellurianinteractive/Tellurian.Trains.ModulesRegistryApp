@@ -106,7 +106,7 @@ namespace ModulesRegistry.Services.Extensions
     {
         public override string MessageHtml => this.GetMessageHtml();
         protected override bool IsInvalid => Recipient.PasswordResetAttempts > MaxRequests;
-        public static int MaxRequests = 3;
+        public const int MaxRequests = 3;
     }
 }
 
