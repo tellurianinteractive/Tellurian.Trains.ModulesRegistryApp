@@ -34,6 +34,9 @@ namespace ModulesRegistry.Services.Extensions
         public static bool HasEmail([NotNullWhen(true)] this Person? me) =>
             !string.IsNullOrWhiteSpace(me.PrimaryEmail());
 
+        public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? me) =>
+            me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
+
         public static string GetMessageHtml(this UserInvitation me)
         {
             if (!me.IsValid) return string.Empty;
@@ -86,8 +89,9 @@ namespace ModulesRegistry.Services.Extensions
 
     public abstract record UserMessage(User Recipient, string Subject, TextContent Message)
     {
-        public bool IsValid => Recipient.Person is not null;
+        public bool IsValid => Recipient.Person is not null && !IsInvalid;
         public virtual string MessageHtml => string.Empty;
+        protected virtual bool IsInvalid => false;
     }
 
     public record UserInvitation(User Recipient, Person Inviter, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
@@ -101,6 +105,8 @@ namespace ModulesRegistry.Services.Extensions
     public record PasswordResetRequest(User Recipient, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
     {
         public override string MessageHtml => this.GetMessageHtml();
+        protected override bool IsInvalid => Recipient.PasswordResetAttempts > MaxRequests;
+        public static int MaxRequests = 3;
     }
 }
 

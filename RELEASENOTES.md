@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.8.2
+Release date 2021-03-11
+- **Password reset** attemps are limited to a few times, and after that nothing will happen.
+
 ## Version 0.8.1
 Release date 2021-03-10
 - **Area of Resposibility** for administrators on contact page to help users to find the right administrator. 

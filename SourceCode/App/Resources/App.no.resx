@@ -573,4 +573,7 @@
   <data name="UserSettings" xml:space="preserve">
     <value>Brukerinstillinger</value>
   </data>
+  <data name="IHaveReadAndUnderstand" xml:space="preserve">
+    <value>Jeg har lest og forstått</value>
+  </data>
 </root>

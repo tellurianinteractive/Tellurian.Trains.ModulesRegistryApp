@@ -17,15 +17,24 @@
     <NotAuthorized>
         <h3><span class="fa fa-key" /> @Localizer["ResetPassword"]</h3>
         <ContentView ContentName="PasswordReset" />
-        <div class="row g-3">
-            <div class="col-md-5">
-                <label class="form-control-label" for="email">@Localizer["Email"]</label>
-                <input class="form-control" id="email" type="text" @bind="@EmailAddress" />
+        @if (HaveRead)
+        {
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-control-label" for="email">@Localizer["Email"]</label>
+                    <input class="form-control" id="email" type="text" @bind="@EmailAddress" />
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-sm" @onclick="OnRequestNewPassword"><span class="fa fa-paper-plane" /> @Localizer["Send"]</button>
+                </div>
             </div>
+        }
+        else
+        {
             <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-sm" @onclick="OnRequestNewPassword"><span class="fa fa-paper-plane" /> @Localizer["Send"]</button>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="IHaveRead"><span class="fa fa-user-check" /> @Localizer["IHaveReadAndUnderstand"]</button>
             </div>
-        </div>
+        }
     </NotAuthorized>
 
 </AuthorizeView>
@@ -34,20 +43,26 @@
 
     PasswordResetRequest? PasswordResetRequest;
     string? EmailAddress;
+    bool HaveRead;
 
     async Task OnRequestNewPassword()
     {
         var requestor = await UserService.ResetPasswordAsync(EmailAddress);
         if (requestor is null) return;
-        var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
-        PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["ResetPasswordHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
-        if (PasswordResetRequest.IsValid)
+        if (requestor.IsPasswordResetPermitted())
         {
-            var message = PasswordResetRequest.AsMailMessage();
-            if (message is not null)
+            var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
+            PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["ResetPasswordHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
+            if (PasswordResetRequest.IsValid)
             {
-                _ = await MailSender.SendMailMessageAsync(message);
+                var message = PasswordResetRequest.AsMailMessage();
+                if (message is not null)
+                {
+                    _ = await MailSender.SendMailMessageAsync(message);
+                }
             }
         }
     }
+
+    void IHaveRead() => HaveRead = true;
 }

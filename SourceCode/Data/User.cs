@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 #nullable disable
 
@@ -20,6 +19,7 @@ namespace ModulesRegistry.Data
         public bool IsReadOnly { get; set; }
         public bool IsDemo { get; set; }
         public string HashedPassword { get; set; }
+        public int PasswordResetAttempts { get; set; }
 
     }
 }

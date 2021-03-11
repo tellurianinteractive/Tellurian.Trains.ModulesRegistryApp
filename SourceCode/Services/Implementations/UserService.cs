@@ -37,6 +37,7 @@ namespace ModulesRegistry.Services.Implementations
             var user = await dbContext.Users.SingleOrDefaultAsync(u => u.EmailAddress == emailAddress && u.ObjectId == objectGuid);
             if (user is null) return null;
             user.HashedPassword = password.AsHashedPassword();
+            user.LastEmailConfirmationTime = DateTimeOffset.Now;
             await dbContext.SaveChangesAsync();
             return await FindByObjectIdAsync(dbContext, objectId);
         }
@@ -47,8 +48,8 @@ namespace ModulesRegistry.Services.Implementations
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(u => u.EmailAddress == emailAddress);
             if (existing is null) return null;
-            existing.HashedPassword = null;
-            existing.ObjectId = Guid.NewGuid();
+            if (existing.PasswordResetAttempts > PasswordResetRequest.MaxRequests) return existing;
+            existing.PasswordResetAttempts += 1;
             var result = await dbContext.SaveChangesAsync();
             return result == 0 ? null : existing;
         }
@@ -111,6 +112,7 @@ namespace ModulesRegistry.Services.Implementations
             var user = await dbContext.Users.FindAsync(userId);
             if (user is null) return null;
             user.LastSignInTime = time;
+            user.PasswordResetAttempts = 0;
             var count = await dbContext.SaveChangesAsync();
             return count == 0 ? null : user;
         }
