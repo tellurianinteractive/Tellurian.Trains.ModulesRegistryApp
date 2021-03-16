@@ -40,7 +40,7 @@
 
 @code {
     [Parameter] public string? Label { get; set; }
-    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
+    [Parameter] public Expression<Func<int>>? ValidationFor { get; set; }
     [Parameter] public int? Width { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool ShowPleaseSelect { get; set; }

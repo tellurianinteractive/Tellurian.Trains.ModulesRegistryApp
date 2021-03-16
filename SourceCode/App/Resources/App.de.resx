@@ -576,4 +576,16 @@
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Ich habe gelesen und verstanden</value>
   </data>
+  <data name="Gable" xml:space="preserve">
+    <value>Giebel</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Gleis</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Gleise</value>
+  </data>
+  <data name="TrackNumber" xml:space="preserve">
+    <value>Gleisnummer</value>
+  </data>
 </root>

@@ -8,34 +8,32 @@
 else
 {
     <h3 class="mt-3">@Localizer["Tracks"]</h3>
+    <div class="col-12">
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@AddTrackButtonText</button>
+    </div>
     @foreach (var track in Station.StationTracks)
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-
-            <AppInputText Width="1" Label="Number" @bind-Value="track.Designation" />
-            <AppInputNumber Width="1" Label="DisplayOrder" TValue="short" @bind-Value="track.DisplayOrder" />
+            <AppInputText Width="2" Label="TrackNumber" @bind-Value="track.Designation" />
+            <AppInputNumber Width="2" Label="DisplayOrder" TValue="short" @bind-Value="track.DisplayOrder" />
             <AppInputNumber Width="2" Label="MaxTrainLength" TValue="double" @bind-Value="track.MaxTrainLength" Unit="m" Step="0.1" />
             <AppInputNumber Width="2" Label="PlatformLength" TValue="double?" @bind-Value="track.PlatformLength" Unit="m" Step="0.1" />
             <AppInputNumber Width="2" Label="SpeedLimit" TValue="short?" @bind-Value="track.SpeedLimit" Unit="km/h" Step="10" />
             <AppInputText Width="2" Label="Usage" @bind-Value="track.UsageNote" />
-            <AppInputFill Width="2" />
 
             <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="track.IsThroughTrack" />
             <AppInputCheck Width="2" Label="IsSiding" @bind-Value="track.IsSiding" />
             <AppInputCheck Width="2" Label="IsScheduled" @bind-Value="track.IsScheduled" />
             <AppInputFill Width="6" />
+            @if (track.Id > 0)
+            {
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))">@Localizer["Delete"]</button>
+                </div>
 
-
-            <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))">@Localizer["Delete"]</button>
-            </div>
+            }
         </div>
     }
-        <div class="row g-3 bg-light">
-            <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@Localizer["Add"] @Localizer["Track"]</button>
-            </div>
-        </div>
 }
 
 @code {
@@ -62,4 +60,5 @@ else
 
     StationTrack DefaultStationTrack => new StationTrack { Designation = NextDisplayOrder.ToString(), DisplayOrder = NextDisplayOrder };
     short NextDisplayOrder => (short)(Station is null || Station.StationTracks is null || Station.StationTracks.Count == 0 ? 1 : Station.StationTracks.Count + 1);
+    string AddTrackButtonText => $"{Localizer["Add"]} {Localizer["Track"].ToString().ToLowerInvariant()}";
 }

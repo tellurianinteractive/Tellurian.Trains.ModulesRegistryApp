@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.8.3
+Release date 2021-03-16
+- **Bug fix** of error when adding *module gables*.
+- **Validation** added for *module gables*.
+- **Changed** layout for adding *module gables* and *station tracks*.
+
 ## Version 0.8.2
 Release date 2021-03-11
 - **Password reset** attemps are limited to a few times, and after that nothing will happen.

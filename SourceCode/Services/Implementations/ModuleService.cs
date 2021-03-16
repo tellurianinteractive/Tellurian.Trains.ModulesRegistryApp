@@ -154,7 +154,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 AddOrRemoveGables(dbContext, entity, existing);
-                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
 
@@ -168,6 +168,12 @@ namespace ModulesRegistry.Services.Implementations
                     }
                     foreach (var gable in existing.ModuleGables) if (!entity.ModuleGables.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
                 }
+
+                static bool IsUnchanged(ModulesDbContext dbContext, Module entity) =>
+                    dbContext.Entry(entity).State == EntityState.Unchanged &&
+                    entity.ModuleGables.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
+                    entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
+                    
             }
 
             static async Task<bool> IsPrincipalGroupsDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)

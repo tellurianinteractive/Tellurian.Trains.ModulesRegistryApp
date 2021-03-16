@@ -576,4 +576,16 @@
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Jag har läst och förstått</value>
   </data>
+  <data name="Gable" xml:space="preserve">
+    <value>Gavel</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Spår</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Spår</value>
+  </data>
+  <data name="TrackNumber" xml:space="preserve">
+    <value>Spårnummer</value>
+  </data>
 </root>

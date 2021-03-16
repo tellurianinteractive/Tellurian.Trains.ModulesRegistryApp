@@ -21,9 +21,8 @@
 }
 else
 {
-    <EditForm Model="Module" OnValidSubmit="OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
+<EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
+    <Inputs>
         <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
         <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
         <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
@@ -56,16 +55,15 @@ else
         <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
 
         <ModuleGablesList Module="Module" />
-
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>&nbsp;
-            @if (Module.StationId.HasValue)
+    </Inputs>
+    <Buttons>
+        @if (Module.StationId.HasValue)
             {
-                <a class="btn btn-secondary" href="Stations/@Module.StationId/Edit"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+            <a class="btn btn-secondary" href="Stations/@Module.StationId/Edit"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
             }
-        </div>
 
-    </EditForm>
+    </Buttons>
+</EditTemplate>
 
 }
 
@@ -100,6 +98,7 @@ else
     {
         if (Module is not null)
         {
+            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.TypePropertyId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerRef);
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
