@@ -16,3 +16,6 @@ Most functions for managing modules are now inplace, including:
 * Manage *groups* and *members* and member's *modules* and *stations*.
 * Administrators can manage *module standards* and *module gables*.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
+
+## Planned work
+You can now see the planned work under **Projects**.
