@@ -10,12 +10,9 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status February 2021
-A very light [first version](https://moduleregistry.azurewebsites.net/) is up an running inclucing the database.
-The purpose with this version is to verify than users can be invited and log in.
-The administrator functions is under development but not available for normal users.
-
-The following item are now available for administrators:
-- Add module owners (but not yet modules).
-- Invite module owner to become a user. Invitation is emailed and in the language of residence of the invited person.
-- Add groups and add module owners to groups. Groups are units for collective module data administration.
+## Status March 2021
+Most functions for managing modules are now inplace, including:
+* Managing your *modules* and *stations*.
+* Manage *groups* and *members* and member's *modules* and *stations*.
+* Administrators can manage *module standards* and *module gables*.
+* Supported languages: English, German, Danish, Swedish and Norwegian.
