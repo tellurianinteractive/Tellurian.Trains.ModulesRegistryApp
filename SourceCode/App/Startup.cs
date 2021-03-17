@@ -59,18 +59,19 @@ namespace ModulesRegistry
             services.AddScoped<UserState>();
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
             if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
+            services.AddScoped<ICargoService, CargoService>();
+            services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
             services.AddScoped<IContentService, ContentService>();
             services.AddScoped<ICountryService, CountryService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGroupCategoryService, GroupCategoryService>();
+            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IModuleService, ModuleService>();
+            services.AddScoped<IModuleStandardService, ModuleStandardService>();
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IStationService, StationService>();
             services.AddScoped<IScaleService, ScaleService>();
-            services.AddScoped<IModuleStandardService, ModuleStandardService>();
-            services.AddScoped<IPropertyService, PropertyService>();
-            services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>

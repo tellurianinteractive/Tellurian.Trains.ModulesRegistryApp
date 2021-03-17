@@ -12,11 +12,10 @@ namespace ModulesRegistry.Data
         }
 
         public int Id { get; set; }
-        public int CargoUnitId { get; set; }
         public string DefaultClasses { get; set; }
         public short? FromYear { get; set; }
         public short? UptoYear { get; set; }
-        public int? NhmCode { get; set; }
+        public int NhmCode { get; set; }
         public string DA { get; set; }
         public string DE { get; set; }
         public string EN { get; set; }

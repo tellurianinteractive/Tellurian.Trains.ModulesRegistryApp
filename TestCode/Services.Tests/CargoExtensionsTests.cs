@@ -13,7 +13,7 @@ namespace ModulesRegistry.Services.Tests
         {
             var target = new Cargo();
             var culture = new CultureInfo("da");
-            var actual = culture.LocalizedName(target);
+            var actual = target.LocalizedName(culture);
             Assert.IsNull(actual);
         }
 
@@ -22,7 +22,7 @@ namespace ModulesRegistry.Services.Tests
         {
             var target = new Cargo { DA="Dansk tekst."};
             var culture = new CultureInfo("da");
-            var actual = culture.LocalizedName(target);
+            var actual = target.LocalizedName(culture);
             Assert.IsNotNull(actual);
             Assert.AreEqual("da", actual.Language);
             Assert.AreEqual(target.DA, actual.Value);
@@ -33,7 +33,7 @@ namespace ModulesRegistry.Services.Tests
         {
             var target = new Cargo { EN = "English text." };
             var culture = new CultureInfo("da");
-            var actual = culture.LocalizedName(target);
+            var actual = target.LocalizedName(culture);
             Assert.IsNotNull(actual);
             Assert.AreEqual("en", actual.Language);
             Assert.AreEqual(target.EN, actual.Value);

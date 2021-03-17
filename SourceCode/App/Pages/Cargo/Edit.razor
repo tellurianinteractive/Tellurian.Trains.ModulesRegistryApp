@@ -1,0 +1,72 @@
+﻿@page "/Cargo/{id:int}/Edit"
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject ICargoService CargoService
+
+<h1><span class="fa fa-box-open"/> @Heading</h1>
+
+<EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
+    <Inputs>
+        <AppInputSelect Width="12" Label="NHMCode" Items="NextLevelNhmCodeItems" @bind-Value="Cargo.NhmCode" ShowPleaseSelect="true" />
+
+        <AppInputText Width="4" Label="DefaultClasses" @bind-Value="Cargo.DefaultClasses" />
+        <AppInputNumber Width="2" Label="FromYear" @bind-Value="Cargo.FromYear" />
+        <AppInputNumber Width="2" Label="ToYear" @bind-Value="Cargo.UptoYear" />
+        <AppInputFill Width="4" />
+
+        <AppInputText Width="4" Label="English" @bind-Value="Cargo.EN" />
+        <AppInputText Width="4" Label="German" @bind-Value="Cargo.DE" />
+        <AppInputText Width="4" Label="Dutch" @bind-Value="Cargo.NL" />
+
+        <AppInputText Width="4" Label="Polish" @bind-Value="Cargo.PL" />
+        <AppInputFill Width="8" />
+        <AppInputText Width="4" Label="Danish" @bind-Value="Cargo.DA" />
+        <AppInputText Width="4" Label="Swedish" @bind-Value="Cargo.SV" />
+        <AppInputText Width="4" Label="Norwegian" @bind-Value="Cargo.NO" />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    private ClaimsPrincipal? Principal;
+
+    Cargo? Cargo;
+    IEnumerable<ListboxItem>? TopLevelNhmCodeItems;
+    IEnumerable<ListboxItem>? NextLevelNhmCodeItems;
+    int LastTopLevelId;
+    int NextLevelId;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        TopLevelNhmCodeItems = await CargoService.GetNhmItems(Principal);
+        NextLevelNhmCodeItems = await CargoService.GetNhmItems(Principal, 0);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Cargo = Id > 0 ? await CargoService.FindByIdAsync(Principal, Id) ?? new Cargo() : new Cargo();
+    }
+
+    async Task OnValidSubmit() {
+        if (Cargo is null) return;
+        var result = await CargoService.SaveAsync(Principal, Cargo);
+        Cargo = result.Entity;
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+    }
+
+    async Task OnTopLevelNhmChanged(int id)
+    {
+
+        if (id > 0 && id != LastTopLevelId)
+            NextLevelNhmCodeItems = await CargoService.GetNhmItems(Principal, id);
+        LastTopLevelId = id;
+        //StateHasChanged();
+    }
+
+        private string Heading => Localizer.HeadingAddOrEdit(Id == 0 , "Cargo", null);
+
+}

@@ -1,0 +1,44 @@
+﻿@using ModulesRegistry.Services
+@page "/Cargo/Index"
+
+@inject IStringLocalizer<App> Localizer
+@inject ICargoService CargoService
+
+<h1><span class="fa fa-box-open" /> @Localizer["Cargo"]</h1>
+<div class="col-12">
+    <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+</div>
+
+<TableTemplate Items="Cargos">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["DefaultClasses"]</th>
+        <th>@Localizer["NHMCode"]</th>
+        <th>@Localizer["FromYear"]</th>
+        <th>@Localizer["ToYear"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="cargo">
+        <td>@cargo.LocalizedName()</td>
+        <td>@cargo.DefaultClasses</td>
+        <td>@cargo.NhmCode</td>
+        <td>@cargo.FromYear</td>
+        <td>@cargo.UptoYear</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="fa fa-edit" /> @Localizer["Edit"]</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    private ClaimsPrincipal? Principal;
+    private IEnumerable<Cargo>? Cargos;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Cargos = await CargoService.GetAll(Principal);
+    }
+}

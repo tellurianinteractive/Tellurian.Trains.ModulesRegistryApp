@@ -588,4 +588,34 @@
   <data name="TrackNumber" xml:space="preserve">
     <value>Spårnummer</value>
   </data>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Vagnklasser</value>
+  </data>
+  <data name="NHMCode" xml:space="preserve">
+    <value>NHM-kod</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Engelska</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>Tyska</value>
+  </data>
+  <data name="Dutch" xml:space="preserve">
+    <value>Holländska</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>Polska</value>
+  </data>
+  <data name="Danish" xml:space="preserve">
+    <value>Danska</value>
+  </data>
+  <data name="Swedish" xml:space="preserve">
+    <value>Svenska</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norska</value>
+  </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Gods</value>
+  </data>
 </root>

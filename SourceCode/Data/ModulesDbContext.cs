@@ -6,8 +6,8 @@ namespace ModulesRegistry.Data
 {
     public partial class ModulesDbContext : DbContext
     {
-               public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
-            : base(options)
+        public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
+     : base(options)
         {
         }
 
@@ -57,20 +57,37 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Cargo");
 
-                entity.Property(e => e.CargoUnitId).HasDefaultValueSql("((4))");
-
                 entity.Property(e => e.DefaultClasses).HasMaxLength(10);
+                entity.Property(e => e.NhmCode).HasColumnName("NHMCode");
 
                 entity.Property(e => e.EN)
                     .HasMaxLength(50)
-                    .HasColumnName("en");
+                    .HasColumnName("EN");
 
-                entity.Property(e => e.NhmCode).HasColumnName("NHMCode");
+                entity.Property(e => e.DA)
+                    .HasMaxLength(50)
+                    .HasColumnName("DA");
+
+                entity.Property(e => e.DE)
+                    .HasMaxLength(50)
+                    .HasColumnName("DE");
+
+                entity.Property(e => e.NL)
+                     .HasMaxLength(50)
+                     .HasColumnName("NL");
+
+                entity.Property(e => e.NO)
+                     .HasMaxLength(50)
+                     .HasColumnName("NO");
+
+                entity.Property(e => e.PL)
+                     .HasMaxLength(50)
+                     .HasColumnName("PL");
 
                 entity.Property(e => e.SV)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .HasColumnName("sv");
+                    .HasColumnName("SV");
 
                 entity.HasOne<NHM>()
                     .WithMany()
@@ -246,8 +263,8 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.OperatingDayId)
                     .HasConstraintName("FK_ExternalStationCustomerCargo_OperatingDay");
 
-                entity.HasOne(d => d.QuantityUnit)
-                    .WithMany(p => p.ExternalStationCustomerCargos)
+                entity.HasOne<CargoUnit>()
+                    .WithMany()
                     .HasForeignKey(d => d.QuantityUnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExternalStationCustomerCargo_CargoUnit");
@@ -327,11 +344,11 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Module_Scale");
 
-              entity.HasOne(d => d.Station)
-                    .WithMany(p => p.Modules)
-                    .HasForeignKey(d => d.StationId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Module_Station");
+                entity.HasOne(d => d.Station)
+                      .WithMany(p => p.Modules)
+                      .HasForeignKey(d => d.StationId)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasConstraintName("FK_Module_Station");
             });
 
             modelBuilder.Entity<ModuleGable>(entity =>
@@ -406,6 +423,11 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.ScaleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ModuleStandard_Scale");
+            });
+
+            modelBuilder.Entity<NHM>(entity =>
+            {
+                entity.ToTable("NHM");
             });
 
             modelBuilder.Entity<OperatingBasicDay>(entity =>

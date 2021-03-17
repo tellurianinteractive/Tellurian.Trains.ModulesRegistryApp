@@ -44,15 +44,26 @@
     [Parameter] public int? Width { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool ShowPleaseSelect { get; set; }
+    [Parameter] public Action<int>? OnSelected { get; set; }
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
-        result = parsedValue;
-        validationErrorMessage = null;
-        return true;
+        if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue))
+        {
+            result = parsedValue;
+            validationErrorMessage = null;
+            OnSelected?.Invoke(result);
+            return true;
+
+        }
+        else
+        {
+            result = 0;
+            validationErrorMessage = Localizer["NotANumber"].Value;
+            return false;
+        }
     }
 }

@@ -588,4 +588,34 @@
   <data name="TrackNumber" xml:space="preserve">
     <value>Gleisnummer</value>
   </data>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Wagenklassen</value>
+  </data>
+  <data name="NHMCode" xml:space="preserve">
+    <value>NHM-Code</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Englisch</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>Deutsch</value>
+  </data>
+  <data name="Dutch" xml:space="preserve">
+    <value>Niederländisch</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>Polnisch</value>
+  </data>
+  <data name="Danish" xml:space="preserve">
+    <value>Dänisch</value>
+  </data>
+  <data name="Swedish" xml:space="preserve">
+    <value>Schwedisch</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norwegisch</value>
+  </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Ladung</value>
+  </data>
 </root>

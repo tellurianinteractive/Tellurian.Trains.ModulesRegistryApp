@@ -43,6 +43,33 @@ namespace ModulesRegistry.Services
              };
 
         public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
+
+        public static LocalizedText LocalizedName(this object me, CultureInfo culture)
+        {
+            var language = culture.TwoLetterISOLanguageName;
+            var value = language.GetPropertyValue(me);
+            if (value is not null) return new LocalizedText(language, value);
+            return me.LocalizedNames().FirstOrDefault() ?? LocalizedText.Empty;
+
+        }
+
+        public static LocalizedText LocalizedName(this object me) => me.LocalizedName(CurrentCulture);
+
+
+        private static IEnumerable<LocalizedText> LocalizedNames(this object me)
+        {
+            foreach (var language in SupportedCultures)
+            {
+                var value = language.TwoLetterISOLanguageName.GetPropertyValue(me);
+                if (value is not null) yield return new LocalizedText(language.TwoLetterISOLanguageName, value);
+            }
+        }
+
+        private static string? GetPropertyValue(this string propertyName, object me)
+        {
+            var property = me.GetType().GetProperty(propertyName.ToUpperInvariant());
+            return property is null ? null : (string?)property.GetValue(me);
+        }
     }
 
     public enum Language
