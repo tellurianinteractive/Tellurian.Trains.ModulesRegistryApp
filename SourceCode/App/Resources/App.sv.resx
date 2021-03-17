@@ -511,7 +511,7 @@
     <value>Visad ordning</value>
   </data>
   <data name="IsScheduled" xml:space="preserve">
-    <value>Kan tidtabellsläggas?</value>
+    <value>Är tågspår?</value>
   </data>
   <data name="IsSiding" xml:space="preserve">
     <value>Är sidospår?</value>

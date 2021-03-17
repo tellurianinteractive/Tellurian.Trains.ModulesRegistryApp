@@ -511,7 +511,7 @@
     <value>Viste rækkefølge</value>
   </data>
   <data name="IsScheduled" xml:space="preserve">
-    <value>Er køreplanlagt?</value>
+    <value>Er trafikspor?</value>
   </data>
   <data name="IsSiding" xml:space="preserve">
     <value>Er sidespor?</value>

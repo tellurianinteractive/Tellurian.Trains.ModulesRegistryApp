@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -29,6 +27,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<ModuleGable> ModuleGables { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
+        public virtual DbSet<NHM> NhmCodes { get; set; }
         public virtual DbSet<OperatingBasicDay> OperatingBasicDays { get; set; }
         public virtual DbSet<OperatingDay> OperatingDays { get; set; }
         public virtual DbSet<Operator> Operators { get; set; }
@@ -62,22 +61,21 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.DefaultClasses).HasMaxLength(10);
 
-                entity.Property(e => e.En)
+                entity.Property(e => e.EN)
                     .HasMaxLength(50)
                     .HasColumnName("en");
 
-                entity.Property(e => e.Nhmcode).HasColumnName("NHMCode");
+                entity.Property(e => e.NhmCode).HasColumnName("NHMCode");
 
-                entity.Property(e => e.Sv)
+                entity.Property(e => e.SV)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("sv");
 
-                entity.HasOne(d => d.CargoUnit)
-                    .WithMany(p => p.Cargos)
-                    .HasForeignKey(d => d.CargoUnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Cargo_CargoUnit");
+                entity.HasOne<NHM>()
+                    .WithMany()
+                    .HasForeignKey(e => e.NhmCode);
+
             });
 
             modelBuilder.Entity<CargoDirection>(entity =>
@@ -225,8 +223,8 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 
-                entity.HasOne(d => d.Cargo)
-                    .WithMany(p => p.ExternalStationCustomerCargos)
+                entity.HasOne<Cargo>()
+                    .WithMany()
                     .HasForeignKey(d => d.CargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExternalStationCustomerCargo_Cargo");
@@ -603,8 +601,8 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(10)
                     .IsFixedLength(true);
 
-                entity.HasOne(d => d.Cargo)
-                    .WithMany(p => p.StationCustomerCargos)
+                entity.HasOne<Cargo>()
+                    .WithMany()
                     .HasForeignKey(d => d.CargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CargoCustomer_Cargo");

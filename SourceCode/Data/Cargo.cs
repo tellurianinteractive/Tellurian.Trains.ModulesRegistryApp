@@ -9,8 +9,6 @@ namespace ModulesRegistry.Data
     {
         public Cargo()
         {
-            ExternalStationCustomerCargos = new HashSet<ExternalStationCustomerCargo>();
-            StationCustomerCargos = new HashSet<StationCustomerCargo>();
         }
 
         public int Id { get; set; }
@@ -18,12 +16,14 @@ namespace ModulesRegistry.Data
         public string DefaultClasses { get; set; }
         public short? FromYear { get; set; }
         public short? UptoYear { get; set; }
-        public int? Nhmcode { get; set; }
-        public string En { get; set; }
-        public string Sv { get; set; }
+        public int? NhmCode { get; set; }
+        public string DA { get; set; }
+        public string DE { get; set; }
+        public string EN { get; set; }
+        public string NL { get; set; }
+        public string NO { get; set; }
+        public string PL { get; set; }
+        public string SV { get; set; }
 
-        public virtual CargoUnit CargoUnit { get; set; }
-        public virtual ICollection<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
-        public virtual ICollection<StationCustomerCargo> StationCustomerCargos { get; set; }
     }
 }

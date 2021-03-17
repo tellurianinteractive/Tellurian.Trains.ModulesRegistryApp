@@ -64,7 +64,7 @@ namespace ModulesRegistry.Data.Integration
 
 
         internal static SqlConnection LocalDestination() =>
-            new SqlConnection("Server=localhost;Database=TimetablePlanning;Trusted_Connection=True;");
+            new ("Server=localhost;Database=TimetablePlanning;Trusted_Connection=True;");
 
         internal static IMapper CreateMapper<T>()
         {
