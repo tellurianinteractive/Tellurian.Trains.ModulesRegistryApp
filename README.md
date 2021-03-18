@@ -18,4 +18,4 @@ Most functions for managing modules are now inplace, including:
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
 ## Planned work
-You can now see the planned work under **Projects**.
+You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/1). If the project does not appear, refrech the page.
