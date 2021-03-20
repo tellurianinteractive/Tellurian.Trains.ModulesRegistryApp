@@ -3,7 +3,7 @@ using ModulesRegistry.Services.Extensions;
 
 namespace ModulesRegistry.Services
 {
-    public record ModuleOwnershipRef
+    public class ModuleOwnershipRef
     {
         private ModuleOwnershipRef() { }
         public static ModuleOwnershipRef Person(int personId) => new() { _PersonId = personId };
@@ -20,10 +20,11 @@ namespace ModulesRegistry.Services
         private int _GroupId;
 
         public bool IsOwner(int id) => (PersonId > 0 && id == PersonId) || (GroupId > 0 && id == GroupId);
-        public bool IsGroup => GroupId > 0 && !IsPerson;
-        public bool IsPerson => PersonId > 0 && !IsGroup;
+        public bool IsGroup => _GroupId > 0 && !IsPerson;
+        public bool IsPerson => _PersonId > 0 && !IsGroup;
         public bool IsPersonInGroup => IsPerson && IsGroup;
         public bool IsAny => IsPerson || IsGroup;
+        public override string ToString() => $"";
     }
 
 
