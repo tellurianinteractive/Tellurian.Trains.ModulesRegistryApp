@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.8.4
+Release date 2021-03-20
+- **Bug fix** of issue #7 when saving new modules. Thanks to Johan Dahlgren.
+- **Type of Cargo** can now be managed in all supported languages.
+- **NHM-codes** levels 1 and 2 imported to classify *type of cargo*.
+
 ## Version 0.8.3
 Release date 2021-03-16
 - **Bug fix** of error when adding *module gables*.
