@@ -1,7 +1,9 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @if (Stations is not null && MayEdit)
 {
-    @Localizer["NOTE: Only existing modules can be extended to a station!"]
+<div class="col-md-6" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
+    <span class="fa fa-exclamation-circle"/> @Localizer["NOTE: Only existing modules can be extended to a station!"]
+</div>
     <div>
         <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
     </div>
