@@ -26,7 +26,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (string.IsNullOrWhiteSpace(emailAddress)) return null;
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Users.Where(u => u.EmailAddress == emailAddress).Include(u => u.Person).SingleOrDefaultAsync();
+            return await dbContext.Users.Where(u => u.EmailAddress == emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
         }
 
         public async Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password)
@@ -60,7 +60,7 @@ namespace ModulesRegistry.Services.Implementations
             if (string.IsNullOrWhiteSpace(objectId)) return null;
             if (Guid.TryParse(objectId, out var objectGuid))
             {
-                return await dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(u => u.Person).SingleOrDefaultAsync();
+                return await dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
             }
             return null;
         }
@@ -84,7 +84,7 @@ namespace ModulesRegistry.Services.Implementations
             await dbContext.SaveChangesAsync();
             person.UserId = user.Id;
             await dbContext.SaveChangesAsync();
-            return dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(p => p.Person).Single();
+            return dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(p => p.Person).ThenInclude(p => p.Country).Single();
         }
 
         public async Task<User?> UpdateAsync(User user)
