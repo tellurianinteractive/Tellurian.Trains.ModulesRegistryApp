@@ -17,12 +17,13 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
+            ownerRef = principal.UpdateFrom(ownerRef);
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
                 var modules = await dbContext.Modules.AsNoTracking()
                     .Where(mo => mo.ModuleOwnerships
-                    .Any(mo => mo.PersonId == principal.PersonOwnerId(ownerRef) || mo.GroupId == ownerRef.GroupId))
+                    .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
                     .ToListAsync();
                 return modules.Select(m => new ListboxItem(m.Id, $"{m.FullName} {m.ConfigurationLabel}{m.PackageLabel} {m.FremoNumber}".Trim())).OrderBy(l => l.Description);
             }
@@ -33,6 +34,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
+            ownerRef = principal.UpdateFrom(ownerRef);
             using var dbContext = Factory.CreateDbContext();
             if (ownerRef.IsGroup)
             {
@@ -49,13 +51,12 @@ namespace ModulesRegistry.Services.Implementations
             }
             else
             {
-                var ownerId = ownerRef.IsPerson ? ownerRef.PersonId : principal.PersonId();
-                var countryId = dbContext.People.Find(ownerId)?.CountryId;
-                if (principal.IsAuthorisedInCountry(countryId, ownerId))
+                var countryId = dbContext.People.Find(ownerRef.PersonId)?.CountryId;
+                if (principal.IsAuthorisedInCountry(countryId, ownerRef.PersonId))
                 {
                     return await dbContext.Modules.AsNoTracking()
                         .Where(m => m.ModuleOwnerships
-                        .Any(mo => mo.PersonId == ownerId))
+                        .Any(mo => mo.PersonId == ownerRef.PersonId))
                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                         .Include(m => m.Scale)
                         .Include(m => m.Standard)
@@ -75,6 +76,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
         {
+            ownerRef = principal.UpdateFrom(ownerRef);
             using var dbContext = Factory.CreateDbContext();
             if (principal is not null)
             {
@@ -92,9 +94,8 @@ namespace ModulesRegistry.Services.Implementations
                 }
                 else
                 {
-                    var ownerId = ownerRef.IsPerson ? ownerRef.PersonId : principal.PersonId();
                     return await dbContext.Modules.AsNoTracking()
-                        .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerId))
+                        .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
                         .Include(m => m.ModuleOwnerships)
                         .Include(m => m.ModuleGables)
                         .SingleOrDefaultAsync();
@@ -107,6 +108,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
         {
+            ownerRef = principal.UpdateFrom(ownerRef);
             using var dbContext = Factory.CreateDbContext();
             if (principal.MaySave(ownerRef))
             {
@@ -190,11 +192,11 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int moduleId)
         {
-            var ownerRef = ModuleOwnershipRef.Person(principal.PersonId());
+            var ownerRef = principal.AsModuleOwnershipRef();
             if (principal.MayDelete(ownerRef))
             {
                 var entity = await FindByIdAsync(principal, moduleId);
-                if (entity is not null && entity.ModuleOwnerships.Any(mo => mo.PersonId == principal.PersonId()))
+                if (entity is not null && entity.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
                 {
                     using var dbContext = Factory.CreateDbContext();
 
@@ -208,6 +210,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
         {
+            ownerRef = principal.UpdateFrom(ownerRef);
             if (principal.MaySave(ownerRef))
             {
                 var clone = await FindByIdAsync(principal, id, ownerRef);

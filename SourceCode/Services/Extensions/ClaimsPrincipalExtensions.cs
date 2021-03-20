@@ -54,6 +54,9 @@ namespace ModulesRegistry.Services.Extensions
             me is not null  && (me.IsGlobalAdministrator() || (countryId.HasValue && countryId.Value == me.CountryId()));
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
              me is not null && countryId.HasValue && (personId == me.PersonId() || me.IsGlobalAdministrator() || countryId.Value == me.CountryId());
+        public static ModuleOwnershipRef UpdateFrom(this ClaimsPrincipal? me, ModuleOwnershipRef original) =>
+            ModuleOwnershipRef.WithPrincipal(original, me);
+        public static ModuleOwnershipRef AsModuleOwnershipRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
 
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me.MayRead(me.PersonId());
