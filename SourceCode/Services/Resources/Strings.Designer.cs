@@ -232,6 +232,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Netherlands.
+        /// </summary>
+        internal static string Netherlands {
+            get {
+                return ResourceManager.GetString("Netherlands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {
@@ -462,6 +471,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string UnderRepair {
             get {
                 return ResourceManager.GetString("UnderRepair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to United Kingdom.
+        /// </summary>
+        internal static string United_Kingdom {
+            get {
+                return ResourceManager.GetString("United Kingdom", resourceCulture);
             }
         }
         

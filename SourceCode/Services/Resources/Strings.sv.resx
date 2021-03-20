@@ -258,4 +258,10 @@
   <data name="Fault" xml:space="preserve">
     <value>Fel</value>
   </data>
+  <data name="United Kingdom" xml:space="preserve">
+    <value>Storbritannien</value>
+  </data>
+  <data name="Netherlands" xml:space="preserve">
+    <value>Nederländerna</value>
+  </data>
 </root>

@@ -618,4 +618,7 @@
   <data name="Cargo" xml:space="preserve">
     <value>Cargo</value>
   </data>
+  <data name="NOTE: Only existing modules can be extended to a station!" xml:space="preserve">
+    <value>NOTE: Only existing modules can be extended to a station!</value>
+  </data>
 </root>
