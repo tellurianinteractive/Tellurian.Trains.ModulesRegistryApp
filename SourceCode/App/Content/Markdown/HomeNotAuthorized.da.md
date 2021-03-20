@@ -8,6 +8,8 @@ Hvis du allerede har en konto, skal du logge ind.
 #### Ny bruger?
 Du har brug for en invitation. Kontakt din landsadministrator.
 Når du har en invitation, kan du registrere dig og logge ind.
+#### Glemt din adgangskode?
+Klik på *Brugerindstillinger* for at nulstille det.
 #### Bruger du iPhone eller iPad?
 Det virker svært at logge ind ved hjælp af iOS-enheder.
 Det betyder ikke noget, hvilken browser du bruger, alle er baseret på Safari.

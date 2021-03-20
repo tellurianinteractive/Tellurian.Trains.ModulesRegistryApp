@@ -12,6 +12,9 @@ Hvis du allerede har en konto, vennligst logg inn.
 Du trenger en invitasjon. Kontakt landadministratoren din.
 Etter at du har fått en invitasjon, kan du registrere deg og logge på.
 
+#### Glemt passordet?
+Klikk på *Brukerinnstillinger* for å tilbakestille det.
+
 #### Bruker du iPhone eller iPad?
 Det virker vanskelig å logge på med iOS-enheter.
 Det spiller ingen rolle hvilken nettleser du bruker, alle er basert på Safari.
