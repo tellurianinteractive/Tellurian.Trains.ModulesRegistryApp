@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace ModulesRegistry.Pages
 {
     public class LoginModel : PageModel
     {
-        public LoginModel(IUserService userService) => UserService = userService;
+        public LoginModel(IUserService userService) { UserService = userService; }
         private readonly IUserService UserService;
         public string? ReturnUrl { get; set; }
 
@@ -52,16 +51,13 @@ namespace ModulesRegistry.Pages
                 {
                     try
                     {
-                        await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        authProperties);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                    _ = await UserService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
                     }
                     catch (Exception ex)
                     {
                         //string error = ex.Message;
                     }
-                    _ = await UserService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
                 }
             }
 

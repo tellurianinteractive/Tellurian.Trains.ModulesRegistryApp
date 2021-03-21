@@ -9,9 +9,9 @@
            target="_top">@Localizer["Logout"]</a>
     </Authorized>
     <NotAuthorized>
-        <input type="text" @bind="Username" placeholder="@Localizer["Username"]"/>
+        <input type="text" @bind="Username" placeholder="@Localizer["Username"]" />
         &nbsp;&nbsp;
-        <input type="password"  @bind="Password" placeholder="@Localizer["Password"]"/>
+        <input type="password" @bind="Password" placeholder="@Localizer["Password"]" />
         <a class="ml-md-auto btn btn-primary"
            href="/login?username=@encode(Username)&password=@encode(Password)"
            target="_top">@Localizer["Login"]</a>
@@ -21,10 +21,12 @@
 @code {
     string? Username { get; set; }
     string? Password { get; set; }
+
     private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
+
     private string UserLoginStatus(ClaimsPrincipal principal) =>
         $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()}{AdministratorStatus(principal).ToLowerInvariant()}";
 
-     private string AdministratorStatus(ClaimsPrincipal principal) =>
-        principal.IsGlobalAdministrator() ? ", " + Localizer["GlobalAdministrator"].Value : principal.IsCountryAdministrator() ? ", " + Localizer["CountryAdministrator"].Value : string.Empty;
+    private string AdministratorStatus(ClaimsPrincipal principal) =>
+       principal.IsGlobalAdministrator() ? ", " + Localizer["GlobalAdministrator"].Value : principal.IsCountryAdministrator() ? ", " + Localizer["CountryAdministrator"].Value : string.Empty;
 }

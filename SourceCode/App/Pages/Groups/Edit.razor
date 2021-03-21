@@ -23,7 +23,7 @@ else
     <AppInputSelect Width="2" Label="Country" @bind-Value="Group.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
 
     <div class="col-md-2">
-        <label class="form-label" for="category">@SelectCategoryLabel</label>
+        <label class="form-control-label" for="category">@SelectCategoryLabel</label>
         <InputSelect class="form-select" id="category" TValue="string" @bind-Value="@Group.Category">
             <option value="">@Localizer["Select"] </option>
             @foreach (var item in GroupCategories ?? Array.Empty<(string, string)>())
