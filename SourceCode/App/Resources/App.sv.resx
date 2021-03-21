@@ -618,7 +618,7 @@
   <data name="Cargo" xml:space="preserve">
     <value>Gods</value>
   </data>
-  <data name="NOTE: Only existing modules can be extended to a station!" xml:space="preserve">
-    <value>OBS! Endast befintliga moduler kan utökas till en station!</value>
+  <data name="NOTE: Add a module first in order to then add it as a station!" xml:space="preserve">
+    <value>OBS: Lägg först till en modul för att sedan lägga till den som en station!</value>
   </data>
 </root>

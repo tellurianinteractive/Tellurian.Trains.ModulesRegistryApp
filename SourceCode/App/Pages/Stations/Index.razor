@@ -2,21 +2,24 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IStationService StationService
+@inject IModuleService ModuleService
 
 <h1><span class="fa fa-school" aria-hidden="true" /> @Localizer["Stations"] </h1>
 
-<StationsList Stations="Stations" MayEdit="MayEdit" />
+<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules"/>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Station>? Stations;
+    bool AnyModules;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
         Stations = await StationService.GetAllAsync(Principal);
+        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal);
     }
 
     private bool MayEdit => Principal is not null;

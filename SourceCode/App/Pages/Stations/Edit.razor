@@ -46,7 +46,7 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        ModulesItems = await ModuleService.ModuleItems(Principal, OwnerRef);
+        ModulesItems = await ModuleService.ModuleItems(Principal, OwnerRef, true);
         Station = new Station();
     }
 

@@ -15,19 +15,37 @@ namespace ModulesRegistry.Services.Implementations
         private readonly Random Random = new();
         public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool onlyNonStations = false)
         {
             ownerRef = principal.UpdateFrom(ownerRef);
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
-                var modules = await dbContext.Modules.AsNoTracking()
-                    .Where(mo => mo.ModuleOwnerships
-                    .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
-                    .ToListAsync();
+                List<Module>? modules;
+                if (onlyNonStations)
+                {
+                    modules = await dbContext.Modules.AsNoTracking()
+                         .Where(m => !m.StationId.HasValue && m.ModuleOwnerships
+                         .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
+                         .ToListAsync();
+                }
+                else
+                {
+                    modules = await dbContext.Modules.AsNoTracking()
+                         .Where(m => m.ModuleOwnerships
+                         .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
+                         .ToListAsync();
+
+                }
                 return modules.Select(m => new ListboxItem(m.Id, $"{m.FullName} {m.ConfigurationLabel}{m.PackageLabel} {m.FremoNumber}".Trim())).OrderBy(l => l.Description);
             }
             return Array.Empty<ListboxItem>();
+        }
+
+        public async Task<bool> HasAnyNonStationAsync(ClaimsPrincipal? principal)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Modules.AnyAsync(m => !m.StationId.HasValue);
         }
 
         public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
@@ -175,7 +193,7 @@ namespace ModulesRegistry.Services.Implementations
                     dbContext.Entry(entity).State == EntityState.Unchanged &&
                     entity.ModuleGables.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
                     entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
-                    
+
             }
 
             static async Task<bool> IsPrincipalGroupsDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)

@@ -1,12 +1,20 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject IModuleService ModuleService
+
 @if (Stations is not null && MayEdit)
 {
-<div class="col-md-6" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
-    <span class="fa fa-exclamation-circle"/> @Localizer["NOTE: Only existing modules can be extended to a station!"]
-</div>
-    <div>
-        <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
-    </div>
+    if (AnyModules)
+    {
+        <div>
+            <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-6" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
+            <span class="fa fa-exclamation-circle" /> @Localizer["NOTE: Add a module first in order to then extend it by adding a station!"]
+        </div>
+    }
 }
 <TableTemplate Items="Stations">
     <TableHeader>
@@ -36,10 +44,11 @@
 @code {
     [Parameter] public IEnumerable<Station>? Stations { get; set; }
     [Parameter] public bool MayEdit { get; set; }
+    [Parameter] public bool AnyModules { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
 
     string StationEditHref(int id) => OwningGroupId > 0 ?
-       $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
-       $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
+   $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
+   $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 }
