@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 0.8.5
+Release date 2021-03-21
+- **Password reset** info added on start page.
+- **Adding stations** now are more strict. The must be a module first in order to extends it as a station.
+- **Countries** added: now persons in UK and NL can be added. No NL translation yet, though.
+- **Bug fix** of issie #11 misaligned field. Thanks to Alexander Ehn.
+- **Update** of system components.
+
 ## Version 0.8.4
 Release date 2021-03-20
 - **Bug fix** of issue #7 when saving new modules. Thanks to Johan Dahlgren.
