@@ -14,7 +14,8 @@ namespace ModulesRegistry.Services.Tests
             var target = new Cargo();
             var culture = new CultureInfo("da");
             var actual = target.LocalizedName(culture);
-            Assert.IsNull(actual);
+            Assert.AreEqual("", actual.Value);
+            Assert.AreEqual("", actual.Language);
         }
 
         [TestMethod]

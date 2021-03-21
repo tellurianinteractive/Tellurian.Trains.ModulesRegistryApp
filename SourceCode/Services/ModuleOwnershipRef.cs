@@ -20,11 +20,12 @@ namespace ModulesRegistry.Services
         private int _GroupId;
 
         public bool IsOwner(int id) => (PersonId > 0 && id == PersonId) || (GroupId > 0 && id == GroupId);
-        public bool IsGroup => _GroupId > 0 && !IsPerson;
-        public bool IsPerson => _PersonId > 0 && !IsGroup;
-        public bool IsPersonInGroup => IsPerson && IsGroup;
-        public bool IsAny => IsPerson || IsGroup;
-        public override string ToString() => $"";
+        public bool IsGroup => GroupId > 0 &&  PersonId == 0;
+        public bool IsPerson => PersonId > 0 && GroupId == 0;
+        public bool IsPersonInGroup => (PersonId > 0 && GroupId > 0);
+        public bool IsAny => IsPerson || IsGroup || IsPersonInGroup;
+        public bool IsNone => PersonId == 0 && GroupId == 0;
+        public override string ToString() => $"Person={PersonId},Group={GroupId}";
     }
 
 
