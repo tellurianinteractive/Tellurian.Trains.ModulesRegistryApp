@@ -92,7 +92,13 @@ namespace ModulesRegistry.Services.Implementations
 
         private static async Task<bool> IsGroupOrDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
-            return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator));
+            if (principal.IsGlobalAdministrator()) return true;
+            if (principal.IsCountryAdministrator())
+            {
+                if (await dbContext.Groups.AnyAsync(g => g.Id == ownerRef.GroupId && g.CountryId == principal.CountryId())) return true;              
+            }
+            return await dbContext.GroupMembers.AsNoTracking()
+                .AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator));
         }
 
         public Task<Module?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>

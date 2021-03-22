@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class GroupService 
+    public sealed class GroupService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public GroupService(IDbContextFactory<ModulesDbContext> factory)
@@ -64,10 +64,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<bool> IsGroupDataAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
         {
-            if (pricipal.IsCountryAdministratorInCountry(countryId))
-            {
-                return true;
-            }
+            if (pricipal.IsCountryAdministratorInCountry(countryId)) return true;
             else
             {
                 using var dbContext = Factory.CreateDbContext();
@@ -77,10 +74,7 @@ namespace ModulesRegistry.Services.Implementations
         }
         public async Task<bool> IsGroupMemberAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
         {
-            if (pricipal.IsCountryAdministratorInCountry(countryId))
-            {
-                return true;
-            }
+            if (pricipal.IsCountryAdministratorInCountry(countryId)) return true;
             else
             {
                 using var dbContext = Factory.CreateDbContext();
@@ -92,7 +86,11 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<bool> IsDataAdministratorInSameGroupAsMember(ClaimsPrincipal? pricipal, int memberPersonId)
         {
             using var dbContext = Factory.CreateDbContext();
-            var adminGroups = await dbContext.Groups.AsNoTracking().Include(g => g.GroupMembers).Where(g => g.GroupMembers.Any(gm => gm.IsDataAdministrator && gm.PersonId == pricipal.PersonId())).ToListAsync();
+            var adminGroups = await dbContext.Groups.AsNoTracking()
+                .Include(g => g.GroupMembers)
+                .Where(g => g.GroupMembers
+                .Any(gm => gm.IsDataAdministrator && gm.PersonId == pricipal.PersonId()))
+                .ToListAsync();
             if (adminGroups is null || adminGroups.Count == 0) return false;
             return adminGroups.Any(ag => ag.GroupMembers.Any(gm => gm.PersonId == memberPersonId));
         }

@@ -21,7 +21,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await GroupService.FindByIdAsync(Principal, Id);
-        IsGroupDataAdministrator = await GroupService.IsGroupDataAdministratorAsync(Principal, Id);
+        IsGroupDataAdministrator = await GroupService.IsGroupDataAdministratorAsync(Principal, Id, Owner?.CountryId);
         OwnedModules = await ModuleService.GetAllAsync(Principal, OwnerRef);
     }
 
