@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class GroupService : IGroupService
+    public sealed class GroupService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public GroupService(IDbContextFactory<ModulesDbContext> factory)

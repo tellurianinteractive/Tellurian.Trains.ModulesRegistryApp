@@ -1,8 +1,9 @@
 ﻿@page "/Users/Confirm/"
 
-@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
-@inject IUserService UserService
+@inject NavigationManager Navigator
+
+@inject UserService UserService
 
 
 @if (User is null)
@@ -30,7 +31,7 @@ else if (PasswordCreated)
 else
 {
     <h1>@Localizer["CreatePassword"]</h1>
-    <PasswordPolicyView/>
+    <PasswordPolicyView />
     <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <DataAnnotationsValidator />
         <AppInputText Width="2" Label="Password" @bind-Value="Password.Value" InputType="password" />

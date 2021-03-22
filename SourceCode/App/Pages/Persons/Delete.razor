@@ -1,9 +1,12 @@
 ﻿@page "/Persons/{id:int}/Delete"
+
 @attribute [Authorize(Policy = "Admin")]
-@inject NavigationManager Navigation
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IPersonService PersonService
+@inject NavigationManager Navigation
+
+@inject PersonService PersonService
 
 <h1><span class="fa fa-user" /> @Localizer["Delete"]?</h1>
 @if (Person is null)
@@ -12,14 +15,14 @@
 }
 else
 {
-<div>
-    @Person.FirstName @Person.LastName, @Person.CityName
-</div>
+    <div>
+        @Person.FirstName @Person.LastName, @Person.CityName
+    </div>
 }
 
 <button class="btn btn-danger" @onclick="OnDelete"><span class="fa fa-trash" />@Localizer["Delete"]</button>
 @code {
-    [CascadingParameter]    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
     private ClaimsPrincipal? Principal;
 

@@ -4,14 +4,13 @@ using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Resources;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class PersonService : IPersonService
+    public sealed class PersonService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public PersonService(IDbContextFactory<ModulesDbContext> factory)
@@ -97,7 +96,7 @@ namespace ModulesRegistry.Services.Implementations
             return principal.SaveNotAuthorised<Person>();
         }
 
-        public async Task<(int, string)> DeleteAsync(ClaimsPrincipal? principal, int id)
+        public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
         {
             if (principal.MayDelete(principal.OwnerRef()))
             {

@@ -1,10 +1,12 @@
 ﻿@page "/Groups/Index"
+
 @attribute [Authorize(Policy = "User")]
+@preservewhitespace true
 
 @inject IStringLocalizer<App> Localizer
-@inject IGroupService GroupService
-@inject ICountryService CountryService
-@preservewhitespace true
+
+@inject GroupService GroupService
+@inject CountryService CountryService
 
 <h1><span class="fa fa-users" aria-hidden="true" /> @Localizer["Groups"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />

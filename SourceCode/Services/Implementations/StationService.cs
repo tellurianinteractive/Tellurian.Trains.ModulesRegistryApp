@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class StationService : IStationService
+    public class StationService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public StationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;

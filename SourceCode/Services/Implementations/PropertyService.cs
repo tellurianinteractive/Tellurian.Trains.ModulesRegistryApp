@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class PropertyService : IPropertyService
+    public class PropertyService 
     {
         private const string GableType = "GableType";
         private readonly IDbContextFactory<ModulesDbContext> Factory;

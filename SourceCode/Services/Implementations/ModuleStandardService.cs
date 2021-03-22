@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ModuleStandardService : IModuleStandardService
+    public sealed class ModuleStandardService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public ModuleStandardService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;

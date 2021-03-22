@@ -2,7 +2,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject ICargoService CargoService
+@inject CargoService CargoService
 
 <h1><span class="fa fa-box-open"/> @Heading</h1>
 
@@ -37,7 +37,6 @@
     IEnumerable<ListboxItem>? TopLevelNhmCodeItems;
     IEnumerable<ListboxItem>? NextLevelNhmCodeItems;
     int LastTopLevelId;
-    int NextLevelId;
 
     protected async override Task OnInitializedAsync()
     {

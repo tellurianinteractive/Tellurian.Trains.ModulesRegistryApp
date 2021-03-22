@@ -1,9 +1,11 @@
 ﻿@page "/Groups/{groupid:int}/Members"
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IGroupService GroupService
-@inject ICountryService CountryService
+
+@inject GroupService GroupService
+@inject CountryService CountryService
 
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Heading</h1>
 @if (Group is null)

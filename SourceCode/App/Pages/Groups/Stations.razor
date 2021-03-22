@@ -1,8 +1,9 @@
 ﻿@page "/Groups/{id:int}/Stations"
 
 @inject IStringLocalizer<App> Localizer
-@inject IStationService StationService
-@inject IGroupService GroupService
+
+@inject StationService StationService
+@inject GroupService GroupService
 
 <h1><span class="fa fa-boxes" /> @Localizer.ObjectOwnerByOwner("Stations", Owner)</h1>
 <StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" />

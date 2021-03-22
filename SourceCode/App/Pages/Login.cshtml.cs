@@ -10,13 +10,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Pages
 {
     public class LoginModel : PageModel
     {
-        public LoginModel(IUserService userService) { UserService = userService; }
-        private readonly IUserService UserService;
+        public LoginModel(UserService userService) { UserService = userService; }
+        private readonly UserService UserService;
         public string? ReturnUrl { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string? username, string? password)
@@ -54,9 +55,9 @@ namespace ModulesRegistry.Pages
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
                     _ = await UserService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
-                        //string error = ex.Message;
+                       
                     }
                 }
             }

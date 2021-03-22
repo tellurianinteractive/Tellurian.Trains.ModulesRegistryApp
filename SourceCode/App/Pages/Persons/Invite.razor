@@ -1,14 +1,16 @@
 ﻿@page "/Persons/{id:int}/Invite"
+
 @attribute [Authorize(Policy = "User")]
 
-@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IPersonService PersonService
-@inject IUserService UserService
-@inject IContentService ContentService
 @inject IMailSender MailSender
-@inject ICountryService CountryService
+@inject NavigationManager Navigator
+
+@inject PersonService PersonService
+@inject UserService UserService
+@inject ContentService ContentService
+@inject CountryService CountryService
 
 <h1><span class="fa fa-user" /> @Localizer["Invite"] @Invitation?.Recipient.Person.FirstName @Invitation?.Recipient.Person.LastName</h1>
 @if (CanSend)

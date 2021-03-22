@@ -1,6 +1,5 @@
 ﻿using ModulesRegistry.Services.Extensions;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ContentService : IContentService
+    public sealed class ContentService 
     {
         private readonly string MarkdownPath = "content/markdown";
         private readonly IHttpClientFactory ClientFactory;

@@ -1,8 +1,9 @@
 ﻿@page "/Groups/{id:int}/Modules"
 
 @inject IStringLocalizer<App> Localizer
-@inject IModuleService ModuleService
-@inject IGroupService GroupService 
+
+@inject ModuleService ModuleService
+@inject GroupService GroupService 
 
 <h1><span class="fa fa-boxes"/> @Localizer.ObjectOwnerByOwner("Modules", Owner)</h1>
 <ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id"  />

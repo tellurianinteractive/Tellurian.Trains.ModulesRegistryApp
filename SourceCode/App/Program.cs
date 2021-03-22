@@ -8,6 +8,7 @@ using System.Resources;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using ModulesRegistry.Services.Implementations;
 
 [assembly: NeutralResourcesLanguage(LanguageService.DefaultLanguage)]
 namespace ModulesRegistry

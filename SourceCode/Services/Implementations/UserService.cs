@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class UserService : IUserService
+    public sealed class UserService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public UserService(IDbContextFactory<ModulesDbContext> factory)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ModuleService : IModuleService
+    public sealed class ModuleService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         private readonly Random Random = new();
@@ -44,8 +44,14 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<bool> HasAnyNonStationAsync(ClaimsPrincipal? principal)
         {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Modules.AnyAsync(m => !m.StationId.HasValue);
+            if (principal is not null)
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.Modules
+                    .Where(m => m.ModuleOwnerships.Any(mo => mo.PersonId == principal.PersonId()))
+                    .AnyAsync(m => !m.StationId.HasValue);
+            }
+            return false;
         }
 
         public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);

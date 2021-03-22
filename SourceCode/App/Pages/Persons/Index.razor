@@ -3,10 +3,12 @@
 @page "/Persons/Index/{countryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
-@inject IStringLocalizer<App> Localizer
-@inject IPersonService PersonService
-@inject ICountryService CountryService
 @preservewhitespace true
+
+@inject IStringLocalizer<App> Localizer
+
+@inject PersonService PersonService
+@inject CountryService CountryService
 
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />

@@ -1,7 +1,9 @@
 ﻿@page "/TermsOfUse"
+
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
-@inject IUserService UserService
+
+@inject UserService UserService
 
 <h1><span class="fa fa-file-signature"/>@Localizer["TermsOfUse"]</h1>
 <AuthorizeView>

@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.8.6
+Release date 2021-03-31
+* **Service release** with internal changes only. No functional changes. Please, report any problem!
+
 ## Version 0.8.5
 Release date 2021-03-21
 - **Password reset** info added on start page.

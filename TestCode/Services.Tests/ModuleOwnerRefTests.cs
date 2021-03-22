@@ -47,7 +47,20 @@ namespace ModulesRegistry.Services.Tests
         }
 
         [TestMethod]
-        public void IsClaimsPrincipalPersonId()
+        public void IsPersonInGroup()
+        {
+            var target = ModuleOwnershipRef.PersonInGroup(10, 11);
+            Assert.IsTrue(target.IsAny);
+            Assert.IsFalse(target.IsPerson);
+            Assert.IsFalse(target.IsGroup);
+            Assert.IsTrue(target.IsPersonInGroup);
+            Assert.IsFalse(target.IsNone);
+            Assert.AreEqual(10, target.PersonId);
+            Assert.AreEqual(11, target.GroupId);
+        }
+
+        [TestMethod]
+        public void IsPersonWithClaimsPrincipalOnly()
         {
             var principal = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(AppClaimTypes.PersonId, "11") }));
             var target = principal.AsModuleOwnershipRef();
@@ -61,17 +74,18 @@ namespace ModulesRegistry.Services.Tests
         }
 
         [TestMethod]
-        public void IsPersonInGroup()
+        public void IsGroupWithClaimsPrincipal()
         {
-            var target = ModuleOwnershipRef.PersonInGroup(10,11);
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(AppClaimTypes.PersonId, "11") }));
+            var target = ModuleOwnershipRef.Group(10);
+            target = principal.UpdateFrom(target);
             Assert.IsTrue(target.IsAny);
             Assert.IsFalse(target.IsPerson);
-            Assert.IsFalse(target.IsGroup);
-            Assert.IsTrue   (target.IsPersonInGroup);
+            Assert.IsTrue(target.IsGroup);
+            Assert.IsFalse(target.IsPersonInGroup);
             Assert.IsFalse(target.IsNone);
-            Assert.AreEqual(10, target.PersonId);
-            Assert.AreEqual(11, target.GroupId);
+            Assert.AreEqual(0, target.PersonId);
+            Assert.AreEqual(10, target.GroupId);
         }
-
     }
 }

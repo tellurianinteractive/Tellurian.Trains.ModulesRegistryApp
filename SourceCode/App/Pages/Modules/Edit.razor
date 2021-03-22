@@ -1,17 +1,17 @@
-﻿@using System.Text
-
-@page "/Modules/{id:int}/Edit"
+﻿@page "/Modules/{id:int}/Edit"
 @page "/Modules/{id:int}/Edit/{ownerid:int}"
 @page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Modules/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IPersonService PersonService
-@inject IModuleService ModuleService
-@inject IScaleService ScaleService
-@inject IModuleStandardService ModuleStandardService
+
+@inject PersonService PersonService
+@inject ModuleService ModuleService
+@inject ScaleService ScaleService
+@inject ModuleStandardService ModuleStandardService
 
 <h1><span class="fa fa-boxes" aria-hidden="true" /> @Heading </h1>
 

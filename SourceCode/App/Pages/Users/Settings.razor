@@ -1,10 +1,11 @@
 ﻿@page "/Users/Settings"
 
-@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
-@inject IUserService UserService
 @inject IMailSender MailSender
-@inject IContentService ContentService
+@inject NavigationManager Navigator
+@inject ContentService ContentService
+
+@inject UserService UserService
 
 <h1><span class="fa fa-user" /> @Localizer["UserSettings"]</h1>
 <AuthorizeView Policy="Admin">

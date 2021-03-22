@@ -3,15 +3,15 @@
 @page "/Stations/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Stations/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
 
-
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IModuleService ModuleService
-@inject IStationService StationService
-@inject IPersonService PersonService
-@inject IGroupService GroupService
+
+@inject ModuleService ModuleService
+@inject StationService StationService
+@inject PersonService PersonService
+@inject GroupService GroupService
 
 <h1><span class="fa fa-school" /> @Heading</h1>
 

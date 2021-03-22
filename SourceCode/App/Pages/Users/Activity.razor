@@ -1,6 +1,8 @@
 ﻿@page "/Users/Activity"
+
 @attribute [Authorize(Policy = "Admin")]
 @inject NavigationManager Navigation
+
 @inject IStringLocalizer<App> Localizer
 
 <h1><span class="fa fa"/></h1>

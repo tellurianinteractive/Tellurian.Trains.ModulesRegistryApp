@@ -56,22 +56,21 @@ namespace ModulesRegistry
             });
 
             services.AddBlazoredToast();
-            services.AddScoped<UserState>();
+            services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
             if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
-            services.AddScoped<ICargoService, CargoService>();
-            services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
-            services.AddScoped<IContentService, ContentService>();
-            services.AddScoped<ICountryService, CountryService>();
-            services.AddScoped<IGroupCategoryService, GroupCategoryService>();
-            services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IModuleService, ModuleService>();
-            services.AddScoped<IModuleStandardService, ModuleStandardService>();
-            services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IPropertyService, PropertyService>();
-            services.AddScoped<IStationService, StationService>();
-            services.AddScoped<IScaleService, ScaleService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<CargoService>();
+            services.AddScoped<ContentService>();
+            services.AddScoped<CountryService>();
+            services.AddScoped<GroupCategoryService>();
+            services.AddScoped<GroupService>();
+            services.AddScoped<ModuleService>();
+            services.AddScoped<ModuleStandardService>();
+            services.AddScoped<PersonService>();
+            services.AddScoped<PropertyService>();
+            services.AddScoped<StationService>();
+            services.AddScoped<ScaleService>();
+            services.AddScoped<UserService>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>

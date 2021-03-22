@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ScaleService : IScaleService
+    public sealed class ScaleService 
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public ScaleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;

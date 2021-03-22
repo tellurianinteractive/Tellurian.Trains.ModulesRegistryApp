@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -36,13 +33,13 @@ namespace ModulesRegistry.Services.Implementations
         }
 
         private MailAddress Sender =>
-            new MailAddress(Settings.SenderMailAddress, Resources.Strings.AppName);
+            new (Settings.SenderMailAddress, Resources.Strings.AppName);
 
         private SmtpClient Client =>
-            new SmtpClient("smtp.sendgrid.net", 587) { Credentials = NetworkCredential };
+            new ("smtp.sendgrid.net", 587) { Credentials = NetworkCredential };
 
         private NetworkCredential NetworkCredential =>
-            new NetworkCredential("apikey", Settings.ApiKey);
+            new ("apikey", Settings.ApiKey);
     }
 
     public class CloudMailSenderSettings

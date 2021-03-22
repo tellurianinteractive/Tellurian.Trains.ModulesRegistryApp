@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Implementations;
 using System.Globalization;
 
 namespace ModulesRegistry.Services.Tests

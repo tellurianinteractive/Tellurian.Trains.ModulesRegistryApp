@@ -1,10 +1,12 @@
 ﻿@page "/Persons/{id:int}/Modules"
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IPersonService PersonService
-@inject IModuleService ModuleService
-@inject IGroupService GroupService
+
+@inject PersonService PersonService
+@inject ModuleService ModuleService
+@inject GroupService GroupService
 
 @preservewhitespace true
 

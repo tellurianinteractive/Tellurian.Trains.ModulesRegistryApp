@@ -1,10 +1,12 @@
 ﻿@page "/ModuleStandards/{id:int}/Edit"
+
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService Toast
-@inject IScaleService ScaleService
-@inject IModuleStandardService ModuleStandardService
+
+@inject ScaleService ScaleService
+@inject ModuleStandardService ModuleStandardService
 
 <h1><span class="fa fa-pencil-ruler" aria-hidden="true" /> @Localizer.AddOrEdit("ModuleStandard", Id == 0) </h1>
 

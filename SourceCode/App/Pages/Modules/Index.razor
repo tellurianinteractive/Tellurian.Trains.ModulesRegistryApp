@@ -1,8 +1,10 @@
 ﻿@page "/Modules/Index"
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IModuleService ModuleService
+
+@inject ModuleService ModuleService
 
 <h1><span class="fa fa-boxes" aria-hidden="true"/>@Localizer["Modules"]</h1>
 

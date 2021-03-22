@@ -1,9 +1,10 @@
 ﻿@page "/ModuleStandards/Index"
+
 @attribute [Authorize(Policy = "User")]
 
-
 @inject IStringLocalizer<App> Localizer
-@inject IModuleStandardService ModuleStandardService
+
+@inject ModuleStandardService ModuleStandardService
 
 <h1><span class="fa fa-pencil-ruler" aria-hidden="true" /> @Localizer["ModuleStandards"]</h1>
 

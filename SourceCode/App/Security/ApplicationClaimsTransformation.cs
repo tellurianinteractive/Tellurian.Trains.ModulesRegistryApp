@@ -8,15 +8,16 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Services;
+using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Security
 {
     public class ApplicationClaimsTransformation : IClaimsTransformation
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
-        private readonly IContentService ContentService;
+        private readonly ContentService ContentService;
 
-        public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, IContentService contentService)
+        public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, ContentService contentService)
         {
             Factory = factory;
             ContentService = contentService;

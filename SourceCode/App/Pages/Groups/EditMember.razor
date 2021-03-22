@@ -1,10 +1,12 @@
 ﻿@page "/Groups/{groupid:int}/Members/{memberid:int}/edit"
+
 @attribute [Authorize(Policy = "User")]
 
-@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IGroupService GroupService
+
+@inject NavigationManager Navigator
+@inject GroupService GroupService
 
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false)</h1>
 @if (GroupMember is null)
@@ -13,16 +15,16 @@
 }
 else
 {
-<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
-    <FluentValidationValidator />
-    <ValidationSummary />
+    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
+        <FluentValidationValidator />
+        <ValidationSummary />
 
-    <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-    <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
-    </div>
-</EditForm>
+        <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
+        <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+        <div class="col-12">
+            <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+        </div>
+    </EditForm>
 }
 
 @code {

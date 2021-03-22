@@ -1,10 +1,12 @@
 ﻿@page "/Groups/{id:int}/Edit"
+
 @attribute [Authorize(Policy = "Admin")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService Toast
-@inject IGroupService GroupService
-@inject ICountryService CountryService
-@inject IGroupCategoryService GroupCategoryService
+@inject GroupService GroupService
+@inject CountryService CountryService
+@inject GroupCategoryService GroupCategoryService
 
 <h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Group", Id == 0) </h1>
 @if (Group is null)

@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Resources;
 
-namespace ModulesRegistry.Services
+namespace ModulesRegistry.Services.Implementations
 {
     public static class LanguageService
     {

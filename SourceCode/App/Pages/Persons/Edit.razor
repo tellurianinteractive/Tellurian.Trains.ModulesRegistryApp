@@ -3,12 +3,14 @@
 @page "/Persons/{id:int}/EditGroup/{groupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@inject NavigationManager Navigator
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject IPersonService PersonService
-@inject ICountryService CountryService
-@inject IGroupService GroupService
+@inject NavigationManager Navigator
+
+@inject PersonService PersonService
+@inject CountryService CountryService
+@inject GroupService GroupService
 
 <h1><span class="fa fa-user" /> @Localizer.AddOrEdit("Person", Id == 0) </h1>
 @if (Person is null)
@@ -76,6 +78,6 @@ else
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
     private string AfterSaveHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"/Persons/Index/{CountryId}";
-    private bool IsNotGroupMember => GroupId > 0 && ( Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId));
+    private bool IsNotGroupMember => GroupId > 0 && (Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId));
 
 }
