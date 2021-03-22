@@ -1,7 +1,7 @@
 # Release Notes
 
 ## Version 0.8.6
-Release date 2021-03-31
+Release date 2021-03-22
 - **Service release** with internal changes only. No functional changes. Please, report any problem!
 - **Added message** in user settings for logged in users.
 - **Bug fix** of rights in managing group owned modules.
