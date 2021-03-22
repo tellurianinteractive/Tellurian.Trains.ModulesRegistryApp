@@ -621,4 +621,7 @@
   <data name="NOTE: Add a module first in order to then add it as a station!" xml:space="preserve">
     <value>BEMÆRK: Tilføj først et modul for derefter at tilføje det som en station!</value>
   </data>
+  <data name="Nothing to se here yet!" xml:space="preserve">
+    <value>Intet at se her endnu!</value>
+  </data>
 </root>
