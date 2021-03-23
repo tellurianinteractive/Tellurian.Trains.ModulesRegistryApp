@@ -7,6 +7,7 @@ namespace ModulesRegistry.Validators
 {
     public class CargoValidator : AbstractValidator<Cargo>
     {
+        const int TranslatedLength = 25;
         public CargoValidator(IStringLocalizer<App> localizer)
         {
             RuleFor(m => m.DefaultClasses)
@@ -26,13 +27,13 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween((short)1900, (short)(DateTime.Now.Year))
                 .WithName(n => localizer[nameof(n.UptoYear)]);
 
-            RuleFor(m => m.EN).MaximumLength(20).WithName(n => localizer["English"]);
-            RuleFor(m => m.DE).MaximumLength(20).WithName(n => localizer["German"]);
-            RuleFor(m => m.DA).MaximumLength(20).WithName(n => localizer["Danish"]);
-            RuleFor(m => m.NL).MaximumLength(20).WithName(n => localizer["Dutch"]);
-            RuleFor(m => m.NO).MaximumLength(20).WithName(n => localizer["Norwegian"]);
-            RuleFor(m => m.PL).MaximumLength(20).WithName(n => localizer["Polish"]);
-            RuleFor(m => m.SV).MaximumLength(20).WithName(n => localizer["Swedish"]);
+            RuleFor(m => m.EN).MaximumLength(TranslatedLength).WithName(n => localizer["English"]);
+            RuleFor(m => m.DE).MaximumLength(TranslatedLength).WithName(n => localizer["German"]);
+            RuleFor(m => m.DA).MaximumLength(TranslatedLength).WithName(n => localizer["Danish"]);
+            RuleFor(m => m.NL).MaximumLength(TranslatedLength).WithName(n => localizer["Dutch"]);
+            RuleFor(m => m.NO).MaximumLength(TranslatedLength).WithName(n => localizer["Norwegian"]);
+            RuleFor(m => m.PL).MaximumLength(TranslatedLength).WithName(n => localizer["Polish"]);
+            RuleFor(m => m.SV).MaximumLength(TranslatedLength).WithName(n => localizer["Swedish"]);
         }
     }
 }
