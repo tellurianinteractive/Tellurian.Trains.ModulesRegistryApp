@@ -7,7 +7,7 @@
 
 <h1><span class="fa fa-school" /> @Heading</h1>
 
-<StationsList Stations="OwnedStations" OwningPersonId="OwningPersonId" MayEdit="MayEdit" />
+<StationsList Stations="OwnedStations" OwningPersonId="OwningPersonId" MayEdit="MayEdit" AnyModules="true" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

@@ -3,6 +3,7 @@
 @page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Modules/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
 
+@using System.Diagnostics.CodeAnalysis 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
@@ -59,7 +60,7 @@ else
     <Buttons>
         @if (Module.StationId.HasValue)
             {
-            <a class="btn btn-secondary" href="Stations/@Module.StationId/Edit"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+            <a class="btn btn-secondary" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
             }
 
     </Buttons>
@@ -107,9 +108,15 @@ else
 
     private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Module", Owner);
 
-
+    bool HasStation([NotNullWhen(true)]Module? module) =>  module is not null && module.StationId.HasValue;
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
     private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
     private ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
+    string StationEditLink => HasStation(Module) ? 
+        OwnerRef.IsPersonInGroup ? 
+        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" : 
+        OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" : 
+        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" : 
+        "";
 }
