@@ -3,7 +3,7 @@ using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 namespace ModulesRegistry.Validators
 {
-    public class ModuleGableValidator : AbstractValidator<ModuleGable>
+    public class ModuleGableValidator : AbstractValidator<ModuleEntry>
     {
         public ModuleGableValidator(IStringLocalizer<App> localizer)
         {
@@ -12,7 +12,7 @@ namespace ModulesRegistry.Validators
                 .MinimumLength(1)
                 .MaximumLength(20)
                 .WithName(n => localizer["Direction"]);
-            RuleFor(m => m.TypePropertyId)
+            RuleFor(m => m.GablePropertyId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer["GableType"]);
         }

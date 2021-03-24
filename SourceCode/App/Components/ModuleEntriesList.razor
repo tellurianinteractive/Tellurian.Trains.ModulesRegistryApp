@@ -15,7 +15,7 @@ else
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputText Width="2" Label="Direction" @bind-Value="gable.Label" />
-            <AppInputSelect Width="2" Label="GableType" @bind-Value="gable.TypePropertyId" Items="GableStandardItems" ShowPleaseSelect="true" />
+            <AppInputSelect Width="2" Label="GableType" @bind-Value="gable.GablePropertyId" Items="GableStandardItems" ShowPleaseSelect="true" />
             @if (gable.Id > 0)
             {
                 <div class="col-md-2"><br /><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(gable.Id))">@Localizer["Delete"]</button></div>
@@ -38,7 +38,7 @@ else
     {
         if (Module is not null)
         {
-            Module.ModuleGables.Add(new ModuleGable { Label = $"{Localizer["Gable"]}-{Module.ModuleGables.Count + 1}"});
+            Module.ModuleGables.Add(new ModuleEntry { Label = $"{Localizer["Gable"]}-{Module.ModuleGables.Count + 1}"});
             StateHasChanged();
         }
     }

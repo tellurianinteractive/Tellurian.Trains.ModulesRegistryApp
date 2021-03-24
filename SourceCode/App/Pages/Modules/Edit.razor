@@ -54,7 +54,7 @@ else
 
         <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
 
-        <ModuleGablesList Module="Module" />
+        <ModuleEntriesList Module="Module" />
     </Inputs>
     <Buttons>
         @if (Module.StationId.HasValue)
@@ -98,7 +98,7 @@ else
     {
         if (Module is not null)
         {
-            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.TypePropertyId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
+            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.GablePropertyId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerRef);
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);

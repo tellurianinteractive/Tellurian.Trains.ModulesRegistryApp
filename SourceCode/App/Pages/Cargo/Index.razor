@@ -9,7 +9,7 @@
     <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
 </div>
 
-<TableTemplate Items="Cargos">
+<TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["DefaultClasses"]</th>
@@ -21,7 +21,7 @@
     <RowTemplate Context="cargo">
         <td>@cargo.LocalizedName()</td>
         <td>@cargo.DefaultClasses</td>
-        <td>@cargo.NhmCode</td>
+        <td>@cargo.NhmCode.ToString("0000 0000")</td>
         <td>@cargo.FromYear</td>
         <td>@cargo.UptoYear</td>
         <td>
@@ -41,4 +41,6 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Cargos = await CargoService.GetAll(Principal);
     }
+
+    
 }
