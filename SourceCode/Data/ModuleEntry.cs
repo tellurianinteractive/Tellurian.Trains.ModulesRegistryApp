@@ -13,11 +13,4 @@ namespace ModulesRegistry.Data
         public virtual Module Module { get; set; }
         public virtual Property GableProperty { get; set; }
     }
-
-    public enum ModuleEntryDirection
-    {
-        Undefined = 0,
-        Westward = 1,
-        Eastward = 2
-    }
 }

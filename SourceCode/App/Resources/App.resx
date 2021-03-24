@@ -624,4 +624,7 @@
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Nothing to se here yet!</value>
   </data>
+  <data name="Designation" xml:space="preserve">
+    <value>Designation</value>
+  </data>
 </root>

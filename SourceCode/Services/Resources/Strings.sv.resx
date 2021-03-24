@@ -264,4 +264,13 @@
   <data name="Netherlands" xml:space="preserve">
     <value>Nederländerna</value>
   </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Odefinierad</value>
+  </data>
+  <data name="FromEast" xml:space="preserve">
+    <value>Från öster</value>
+  </data>
+  <data name="FromWest" xml:space="preserve">
+    <value>Från väster</value>
+  </data>
 </root>

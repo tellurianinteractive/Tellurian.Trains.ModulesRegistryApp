@@ -624,4 +624,7 @@
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Ingenting å se her ennå!</value>
   </data>
+  <data name="Designation" xml:space="preserve">
+    <value>Betegnelse</value>
+  </data>
 </root>

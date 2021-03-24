@@ -13,14 +13,15 @@ else
     </div>
     @foreach (var gable in Module.ModuleGables)
     {
-        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-            <AppInputText Width="2" Label="Direction" @bind-Value="gable.Label" />
-            <AppInputSelect Width="2" Label="GableType" @bind-Value="gable.GablePropertyId" Items="GableStandardItems" ShowPleaseSelect="true" />
-            @if (gable.Id > 0)
-            {
-                <div class="col-md-2"><br /><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(gable.Id))">@Localizer["Delete"]</button></div>
-            }
-        </div>
+<div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+    <AppInputSelect Width="2" Label="Direction" @bind-Value="gable.Direction" Items="EnumExtensions.StationEntryDirectionsListboxItems()" />
+    <AppInputText Width="2" Label="Designation" @bind-Value="gable.Label" />
+    <AppInputSelect Width="2" Label="GableType" @bind-Value="gable.GablePropertyId" Items="GableStandardItems" ShowPleaseSelect="true" />
+    @if (gable.Id > 0)
+    {
+        <div class="col-md-2"><br /><button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(gable.Id))">@Localizer["Delete"]</button></div>
+    }
+</div>
     }
 
 }

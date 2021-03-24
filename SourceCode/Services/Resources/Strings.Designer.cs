@@ -178,6 +178,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From east.
+        /// </summary>
+        internal static string FromEast {
+            get {
+                return ResourceManager.GetString("FromEast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From west.
+        /// </summary>
+        internal static string FromWest {
+            get {
+                return ResourceManager.GetString("FromWest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fully applied, detailed.
         /// </summary>
         internal static string FullyAppliedDetailed {
@@ -453,6 +471,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Tested {
             get {
                 return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undefined.
+        /// </summary>
+        internal static string Undefined {
+            get {
+                return ResourceManager.GetString("Undefined", resourceCulture);
             }
         }
         
