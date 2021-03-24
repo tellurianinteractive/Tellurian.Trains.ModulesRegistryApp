@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.8.7
+Release date 2021-03-24
+- **Database schema** changed. Thanks for idea from Jürgen Riedl.
+
 ## Version 0.8.6
 Release date 2021-03-22
 - **Service release** with internal changes only. No functional changes. Please, report any problem!
