@@ -140,4 +140,12 @@
     <None Update="Shared/NavMenu.razor.css" CssScope="NavMenu" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Content\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\Image1.jpg" />
+  </ItemGroup>
+
 </Project>

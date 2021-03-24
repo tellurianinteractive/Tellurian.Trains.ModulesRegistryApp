@@ -13,6 +13,7 @@
     </Authorizing>
     <NotAuthorized>
         <h1>@Localizer["Welcome"]</h1>
+        <img style="width: 100%; padding-bottom:10px" src="images/Image1.jpg"/>
         @if (Principal?.Identity?.IsAuthenticated == true)
         {
             <ContentView ContentName="HomeNoUser"></ContentView>

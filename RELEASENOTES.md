@@ -4,6 +4,7 @@
 Release date 2021-03-24
 - **Database schema** changed. Thanks for idea from Jürgen Riedl.
 - **Navigation improvements** between group members modules and stations.
+- **Added east/west** direction of module entry. [Read more...](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki/Module-Entries-and-Reachable-Tracks)
 - **Bug fix** of missing module drop-down in station edit form.
 
 ## Version 0.8.6
