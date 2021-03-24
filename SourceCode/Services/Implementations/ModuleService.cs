@@ -15,17 +15,17 @@ namespace ModulesRegistry.Services.Implementations
         private readonly Random Random = new();
         public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool onlyNonStations = false)
+        public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, int? stationId)
         {
             ownerRef = principal.UpdateFrom(ownerRef);
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
                 List<Module>? modules;
-                if (onlyNonStations)
+                if (stationId.HasValue)
                 {
                     modules = await dbContext.Modules.AsNoTracking()
-                         .Where(m => !m.StationId.HasValue && m.ModuleOwnerships
+                         .Where(m => (!m.StationId.HasValue || m.StationId.Value == stationId.Value) && m.ModuleOwnerships
                          .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
                          .ToListAsync();
                 }

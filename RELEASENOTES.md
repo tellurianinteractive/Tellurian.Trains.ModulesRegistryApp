@@ -3,6 +3,7 @@
 ## Version 0.8.7
 Release date 2021-03-24
 - **Database schema** changed. Thanks for idea from Jürgen Riedl.
+- **Bug fix** of missing module drop-down in station edit form.
 
 ## Version 0.8.6
 Release date 2021-03-22
