@@ -2,7 +2,8 @@
 
 ## Version 0.8.8
 Release date 2021-03-24
-- **Cargo types** added with a first set of common items, translated to supported languages and coded according to HHM. 
+- **Cargo types** added with a first set of common items, translated to supported languages and coded according to NHM.
+Administrators can edit and add cargo types. You should provide all translations. 
 
 ## Version 0.8.7
 Release date 2021-03-24

@@ -1,10 +1,12 @@
 ﻿@page "/Cargo/{id:int}/Edit"
 
+@attribute [Authorize(Policy = "Admin")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject CargoService CargoService
 
-<h1><span class="fa fa-box-open"/> @Heading</h1>
+<h1><span class="fa fa-box-open" /> @Heading</h1>
 
 <EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -50,7 +52,8 @@
         Cargo = Id > 0 ? await CargoService.FindByIdAsync(Principal, Id) ?? new Cargo() : new Cargo();
     }
 
-    async Task OnValidSubmit() {
+    async Task OnValidSubmit()
+    {
         if (Cargo is null) return;
         var result = await CargoService.SaveAsync(Principal, Cargo);
         Cargo = result.Entity;
@@ -66,6 +69,6 @@
         //StateHasChanged();
     }
 
-        private string Heading => Localizer.HeadingAddOrEdit(Id == 0 , "CargoType", null);
+    private string Heading => Localizer.HeadingAddOrEdit(Id == 0, "CargoType", null);
 
 }
