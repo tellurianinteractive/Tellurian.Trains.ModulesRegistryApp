@@ -501,7 +501,7 @@
   <data name="Signature" xml:space="preserve">
     <value>Signatur</value>
   </data>
-  <data name="IsSackStation" xml:space="preserve">
+  <data name="IsTerminus" xml:space="preserve">
     <value>Er sækstation?</value>
   </data>
   <data name="IsShadowStation" xml:space="preserve">
@@ -632,5 +632,8 @@
   </data>
   <data name="CargoType" xml:space="preserve">
     <value>Lasttype</value>
+  </data>
+  <data name="IsInvited" xml:space="preserve">
+    <value>Er inviteret?</value>
   </data>
 </root>

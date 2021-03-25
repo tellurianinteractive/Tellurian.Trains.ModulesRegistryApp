@@ -298,7 +298,7 @@
     <value>No</value>
   </data>
   <data name="Invited" xml:space="preserve">
-    <value>Invided</value>
+    <value>Invited</value>
   </data>
   <data name="LoggedInAs" xml:space="preserve">
     <value>Logged in as</value>
@@ -501,8 +501,8 @@
   <data name="Signature" xml:space="preserve">
     <value>Signature</value>
   </data>
-  <data name="IsSackStation" xml:space="preserve">
-    <value>Is sack station?</value>
+  <data name="IsTerminus" xml:space="preserve">
+    <value>Is terminus?</value>
   </data>
   <data name="IsShadowStation" xml:space="preserve">
     <value>Is shadow station?</value>
@@ -632,5 +632,8 @@
   </data>
   <data name="CargoType" xml:space="preserve">
     <value>Cargo type</value>
+  </data>
+  <data name="IsInvited" xml:space="preserve">
+    <value>Is invited?</value>
   </data>
 </root>

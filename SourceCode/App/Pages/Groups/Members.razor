@@ -34,7 +34,7 @@ else
                     <td>@item.Person.LastName</td>
                     <td>@item.IsGroupAdministrator.AsYesNo()</td>
                     <td>@item.IsDataAdministrator.AsYesNo()</td>
-                    <td>@item.Person.IsInvited().AsYesNo()</td>
+                    <td>@item.Person.IsInvited().AsYes()</td>
                     <td style="white-space: nowrap !important;">
                         <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         <a class="btn btn-sm btn-info" href="persons/@item.PersonId/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>

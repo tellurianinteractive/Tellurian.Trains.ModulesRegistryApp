@@ -43,6 +43,7 @@ namespace ModulesRegistry.Services.Implementations
              };
 
         public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
+        public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;
 
         public static LocalizedText LocalizedName(this object me, CultureInfo culture)
         {
