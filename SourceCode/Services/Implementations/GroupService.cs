@@ -42,8 +42,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             using var dbContext = Factory.CreateDbContext();
             var group = await dbContext.Groups.AsNoTracking()
-                .Include(g => g.GroupMembers)
-                .ThenInclude(gm => gm.Person)
+                .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
                 .SingleOrDefaultAsync(g => g.Id == id);
             if (principal.IsCountryAdministratorInCountry(group.CountryId) || await IsGroupMemberAdministratorAsync(principal, id)) return group;
             return null;

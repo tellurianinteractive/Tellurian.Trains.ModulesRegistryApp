@@ -37,6 +37,11 @@ else
                         <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         <a class="btn btn-sm btn-info" href="persons/@item.PersonId/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
                         <a class="btn btn-sm btn-info" href="persons/@item.PersonId/stations"><span class="fa fa-school" />@Localizer["Stations"]</a>
+                        @if (item.Person.IsNeverLoggedIn())
+                        {
+                            <a class="btn btn-sm btn-secondary" href="persons/@item.Person.Id/invite"><span class="fa fa-envelope" />@Localizer["Invite"]</a>
+
+                        }
                         @*<a class="btn btn-sm btn-warning" href="groups/@item.GroupId/members/@item.Id/remove"><span class="fa fa-trash" />@Localizer["Remove"]</a>*@
                     </td>
                 </tr>

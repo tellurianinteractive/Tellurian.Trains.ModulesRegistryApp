@@ -30,12 +30,6 @@ else
 {
     @Localizer["InvitedPersonHasNoEmail"];
 }
-@if (IsSent)
-{
-    <div class="alert alert-success">
-        @Localizer["InvitationSent"]
-    </div>
-}
 
 
 @code {
@@ -46,7 +40,6 @@ else
     private string DisplayedMessage = string.Empty;
     private string? PersonalMessage;
     private bool IsReadOnly;
-    private bool IsSent;
     private bool CanSend;
 
     override protected async Task OnInitializedAsync()
@@ -92,10 +85,7 @@ else
             {
                 count = await MailSender.SendMailMessageAsync(message);
             }
-            IsSent = count > 0;
             ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
         }
     }
-
-
 }

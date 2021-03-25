@@ -35,6 +35,9 @@ namespace ModulesRegistry.Services.Extensions
         public static bool HasEmail([NotNullWhen(true)] this Person? me) =>
             !string.IsNullOrWhiteSpace(me.PrimaryEmail());
 
+        public static bool IsNeverLoggedIn(this Person? me) =>
+            me is null || me.User is null || me.User.LastSignInTime is null;
+
         public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? me) =>
             me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
 
