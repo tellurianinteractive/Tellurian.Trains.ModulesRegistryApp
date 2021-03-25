@@ -627,4 +627,10 @@
   <data name="Designation" xml:space="preserve">
     <value>Betegnelse</value>
   </data>
+  <data name="CargoTypes" xml:space="preserve">
+    <value>Lastetyper</value>
+  </data>
+  <data name="CargoType" xml:space="preserve">
+    <value>Lastetype</value>
+  </data>
 </root>

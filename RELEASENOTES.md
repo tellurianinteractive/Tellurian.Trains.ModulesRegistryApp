@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.8.8
+Release date 2021-03-24
+- **Cargo types** added with a first set of common items, translated to supported languages and coded according to HHM. 
+
 ## Version 0.8.7
 Release date 2021-03-24
 - **Database schema** changed. Thanks for idea from Jürgen Riedl.

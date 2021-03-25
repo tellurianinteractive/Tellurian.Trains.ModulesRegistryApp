@@ -71,7 +71,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 if (subItemsToId.HasValue)
                 {
-                    if (subItemsToId.Value == 0) return await dbContext.NhmCodes.Where(c => c.LevelDigits == 4).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();
+                    if (subItemsToId.Value == 0) return await dbContext.NhmCodes.Where(c => c.LevelDigits <= 4).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();
                     var min = subItemsToId + 1;
                     var max = min + 999999;
                     return await dbContext.NhmCodes.Where(c => c.Id >= min && c.Id <= max).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();

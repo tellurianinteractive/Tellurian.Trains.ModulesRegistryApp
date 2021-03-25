@@ -15,9 +15,10 @@ namespace ModulesRegistry.Validators
                 .MaximumLength(10)
                 .WithName(n => localizer[nameof(n.DefaultClasses)]);
 
-            RuleFor(m => m.NhmCode)
-                .MustBeSelected(localizer)
-                .WithName(n => localizer[nameof(n.NhmCode)]);
+            // Temporary disabled to simplify entering of data.
+            //RuleFor(m => m.NhmCode)
+            //    .MustBeSelected(localizer)
+            //    .WithName(n => localizer[nameof(n.NhmCode)]);
 
             RuleFor(m => m.FromYear)
                 .InclusiveBetween((short)1900, (short)(DateTime.Now.Year) )
