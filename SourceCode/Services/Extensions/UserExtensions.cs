@@ -36,7 +36,7 @@ namespace ModulesRegistry.Services.Extensions
             !string.IsNullOrWhiteSpace(me.PrimaryEmail());
 
         public static string Name(this Person? me) =>
-            me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}";
+            me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}":string.Empty;
 
         public static bool IsNeverLoggedIn(this Person? me) =>
             me is null || me.User is null || me.User.LastSignInTime is null;
