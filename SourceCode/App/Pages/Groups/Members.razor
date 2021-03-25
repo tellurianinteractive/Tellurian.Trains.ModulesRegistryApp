@@ -22,6 +22,7 @@ else
                 <th>@Localizer["LastName"]</th>
                 <th>@Localizer["IsGroupAdministrator"]</th>
                 <th>@Localizer["IsDataAdministrator"]</th>
+                <th>@Localizer["IsInvited"]</th>
                 <th>@Localizer["Actions"]</th>
             </tr>
         </thead>
@@ -33,6 +34,7 @@ else
                     <td>@item.Person.LastName</td>
                     <td>@item.IsGroupAdministrator.AsYesNo()</td>
                     <td>@item.IsDataAdministrator.AsYesNo()</td>
+                    <td>@item.Person.IsInvited().AsYesNo()</td>
                     <td style="white-space: nowrap !important;">
                         <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                         <a class="btn btn-sm btn-info" href="persons/@item.PersonId/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
