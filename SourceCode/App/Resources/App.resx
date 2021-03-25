@@ -636,4 +636,7 @@
   <data name="IsInvited" xml:space="preserve">
     <value>Is invited?</value>
   </data>
+  <data name="Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
 </root>

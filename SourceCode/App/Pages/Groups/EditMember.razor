@@ -8,7 +8,7 @@
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 
-<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false)</h1>
+<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false) @GroupMember?.Person.Name()</h1>
 @if (GroupMember is null)
 {
 

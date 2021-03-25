@@ -18,8 +18,7 @@ else
     <table class="table table-sm table-striped">
         <thead>
             <tr>
-                <th>@Localizer["FirstName"]</th>
-                <th>@Localizer["LastName"]</th>
+                <th>@Localizer["Name"]</th>
                 <th>@Localizer["IsGroupAdministrator"]</th>
                 <th>@Localizer["IsDataAdministrator"]</th>
                 <th>@Localizer["IsInvited"]</th>
@@ -30,8 +29,7 @@ else
             @foreach (var item in Group.GroupMembers)
             {
                 <tr>
-                    <td>@item.Person.FirstName</td>
-                    <td>@item.Person.LastName</td>
+                    <td>@item.Person.Name()</td>
                     <td>@item.IsGroupAdministrator.AsYesNo()</td>
                     <td>@item.IsDataAdministrator.AsYesNo()</td>
                     <td>@item.Person.IsInvited().AsYes()</td>
