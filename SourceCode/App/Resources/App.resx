@@ -639,4 +639,7 @@
   <data name="Member" xml:space="preserve">
     <value>Member</value>
   </data>
+  <data name="Exits" xml:space="preserve">
+    <value>Exits</value>
+  </data>
 </root>

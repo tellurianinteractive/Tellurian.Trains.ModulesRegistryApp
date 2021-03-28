@@ -3,9 +3,9 @@ using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 namespace ModulesRegistry.Validators
 {
-    public class ModuleGableValidator : AbstractValidator<ModuleEntry>
+    public class ModuleExitValidator : AbstractValidator<ModuleExit>
     {
-        public ModuleGableValidator(IStringLocalizer<App> localizer)
+        public ModuleExitValidator(IStringLocalizer<App> localizer)
         {
             RuleFor(m => m.Label)
                 .NotEmpty()

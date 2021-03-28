@@ -9,7 +9,7 @@ namespace ModulesRegistry.Data
     {
         public Module()
         {
-            ModuleGables = new HashSet<ModuleEntry>();
+            ModuleExits = new HashSet<ModuleExit>();
             ModuleOwnerships = new HashSet<ModuleOwnership>();
         }
 
@@ -52,7 +52,7 @@ namespace ModulesRegistry.Data
         public virtual Scale Scale { get; set; }
         public virtual ModuleStandard Standard { get; set; }
         public virtual Station Station { get; set; }
-        public virtual ICollection<ModuleEntry> ModuleGables { get; set; }
+        public virtual ICollection<ModuleExit> ModuleExits { get; set; }
         public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     }
 }

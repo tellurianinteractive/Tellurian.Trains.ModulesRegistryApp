@@ -2,7 +2,7 @@
 
 namespace ModulesRegistry.Data
 {
-    public partial class ModuleEntry
+    public partial class ModuleExit
     {
         public int Id { get; set; }
         public int ModuleId { get; set; }

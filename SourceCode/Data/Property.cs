@@ -9,13 +9,13 @@ namespace ModulesRegistry.Data
     {
         public Property()
         {
-            ModuleGables = new HashSet<ModuleEntry>();
+            ModuleGables = new HashSet<ModuleExit>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
 
-        public virtual ICollection<ModuleEntry> ModuleGables { get; set; }
+        public virtual ICollection<ModuleExit> ModuleGables { get; set; }
     }
 }

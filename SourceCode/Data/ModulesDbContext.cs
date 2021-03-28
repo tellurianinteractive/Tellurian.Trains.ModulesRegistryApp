@@ -24,7 +24,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
-        public virtual DbSet<ModuleEntry> ModuleEntries { get; set; }
+        public virtual DbSet<ModuleExit> ModuleEntries { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
         public virtual DbSet<NHM> NhmCodes { get; set; }
@@ -351,25 +351,25 @@ namespace ModulesRegistry.Data
                       .HasConstraintName("FK_Module_Station");
             });
 
-            modelBuilder.Entity<ModuleEntry>(entity =>
+            modelBuilder.Entity<ModuleExit>(entity =>
             {
-                entity.ToTable("ModuleEntry");
+                entity.ToTable("ModuleExit");
 
                 entity.Property(e => e.Label)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.HasOne(d => d.Module)
-                    .WithMany(p => p.ModuleGables)
+                    .WithMany(p => p.ModuleExits)
                     .HasForeignKey(d => d.ModuleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ModuleEntry_Module");
+                    .HasConstraintName("FK_ModuleExit_Module");
 
                 entity.HasOne(d => d.GableProperty)
                     .WithMany(p => p.ModuleGables)
                     .HasForeignKey(d => d.GablePropertyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ModuleEntry_Property");
+                    .HasConstraintName("FK_ModuleExit_Property");
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>

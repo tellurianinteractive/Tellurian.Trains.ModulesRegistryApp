@@ -7,11 +7,11 @@
 }
 else
 {
-    <h3 class="mt-3">@Localizer["Gables"]</h3>
+    <h3 class="mt-3">@Localizer["Exits"]</h3>
     <div class="col-12">
         <button type="button" class="btn btn-sm btn-secondary" @onclick="Add">@Localizer["Add"]</button>
     </div>
-    @foreach (var gable in Module.ModuleGables)
+    @foreach (var gable in Module.ModuleExits)
     {
 <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
     <AppInputSelect Width="2" Label="Direction" @bind-Value="gable.Direction" Items="EnumExtensions.StationEntryDirectionsListboxItems()" />
@@ -39,7 +39,7 @@ else
     {
         if (Module is not null)
         {
-            Module.ModuleGables.Add(new ModuleEntry { Label = $"{Localizer["Gable"]}-{Module.ModuleGables.Count + 1}"});
+            Module.ModuleExits.Add(new ModuleExit { Label = $"{Localizer["Gable"]}-{Module.ModuleExits.Count + 1}"});
             StateHasChanged();
         }
     }
@@ -49,7 +49,7 @@ else
     {
         if (Module is not null)
         {
-            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.Id != id).ToList();
+            Module.ModuleExits = Module.ModuleExits.Where(mg => mg.Id != id).ToList();
             StateHasChanged();
         }
     }

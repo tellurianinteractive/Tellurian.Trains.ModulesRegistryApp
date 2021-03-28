@@ -129,7 +129,7 @@ namespace ModulesRegistry.Services.Implementations
                         return await dbContext.Modules.AsNoTracking()
                          .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
                          .Include(m => m.ModuleOwnerships)
-                         .Include(m => m.ModuleGables)
+                         .Include(m => m.ModuleExits)
                          .SingleOrDefaultAsync();
                     }
                 }
@@ -138,7 +138,7 @@ namespace ModulesRegistry.Services.Implementations
                     return await dbContext.Modules.AsNoTracking()
                         .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
                         .Include(m => m.ModuleOwnerships)
-                        .Include(m => m.ModuleGables)
+                        .Include(m => m.ModuleExits)
                         .SingleOrDefaultAsync();
                 }
             }
@@ -171,7 +171,7 @@ namespace ModulesRegistry.Services.Implementations
             static async Task<(int Count, string Message, Module? Entity)> AddOrUpdate(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
             {
                 var existing = await dbContext.Modules
-                    .Include(m => m.ModuleGables)
+                    .Include(m => m.ModuleExits)
                     .FirstOrDefaultAsync(m => m.Id == entity.Id);
 
                 return (existing is null) ?
@@ -203,18 +203,18 @@ namespace ModulesRegistry.Services.Implementations
 
                 static void AddOrRemoveGables(ModulesDbContext dbContext, Module entity, Module existing)
                 {
-                    foreach (var gable in entity.ModuleGables)
+                    foreach (var gable in entity.ModuleExits)
                     {
-                        var existingGable = existing.ModuleGables.AsQueryable().FirstOrDefault(g => g.Id == gable.Id);
-                        if (existingGable is null) existing.ModuleGables.Add(gable);
+                        var existingGable = existing.ModuleExits.AsQueryable().FirstOrDefault(g => g.Id == gable.Id);
+                        if (existingGable is null) existing.ModuleExits.Add(gable);
                         else dbContext.Entry(existingGable).CurrentValues.SetValues(gable);
                     }
-                    foreach (var gable in existing.ModuleGables) if (!entity.ModuleGables.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
+                    foreach (var gable in existing.ModuleExits) if (!entity.ModuleExits.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
                 }
 
                 static bool IsUnchanged(ModulesDbContext dbContext, Module entity) =>
                     dbContext.Entry(entity).State == EntityState.Unchanged &&
-                    entity.ModuleGables.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
+                    entity.ModuleExits.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
                     entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
 
             }
@@ -260,7 +260,7 @@ namespace ModulesRegistry.Services.Implementations
                 clone.Id = 0;
                 clone.Station = null;
                 clone.StationId = null;
-                foreach (var gable in clone.ModuleGables) gable.Id = 0;
+                foreach (var gable in clone.ModuleExits) gable.Id = 0;
                 foreach (var ownership in clone.ModuleOwnerships) ownership.Id = 0;
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.Modules.Add(clone);

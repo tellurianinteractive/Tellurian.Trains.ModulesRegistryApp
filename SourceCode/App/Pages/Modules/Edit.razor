@@ -40,8 +40,8 @@ else
 
         <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
         <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
-        <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="10" />
-        <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="10" />
+        <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
+        <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
         <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
         <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
         <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
@@ -55,7 +55,7 @@ else
 
         <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
 
-        <ModuleEntriesList Module="Module" />
+        <ModuleExitsList Module="Module" />
     </Inputs>
     <Buttons>
         @if (Module.StationId.HasValue)
@@ -99,7 +99,7 @@ else
     {
         if (Module is not null)
         {
-            Module.ModuleGables = Module.ModuleGables.Where(mg => mg.GablePropertyId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
+            Module.ModuleExits = Module.ModuleExits.Where(mg => mg.GablePropertyId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerRef);
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
