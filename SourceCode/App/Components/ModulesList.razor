@@ -66,9 +66,11 @@
     }
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
+
     string ModuleEditHref(int id) => OwningGroupId > 0 ?
         $"/Modules/{id}/Edit/GroupOwned/{OwningGroupId}" :
         $"/Modules/{id}/Edit/PersonOwned/{OwningPersonId}";
+    
     string StationEditHref(int id) => OwningGroupId > 0 ?
         $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
         $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";

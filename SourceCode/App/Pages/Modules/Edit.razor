@@ -1,6 +1,4 @@
-﻿@page "/Modules/{id:int}/Edit"
-@page "/Modules/{id:int}/Edit/{ownerid:int}"
-@page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
+﻿@page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Modules/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
 
 @using System.Diagnostics.CodeAnalysis 
@@ -10,6 +8,7 @@
 @inject IToastService ToastService
 
 @inject PersonService PersonService
+@inject GroupService GroupService
 @inject ModuleService ModuleService
 @inject ScaleService ScaleService
 @inject ModuleStandardService ModuleStandardService
@@ -71,11 +70,11 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
-    [Parameter] public int OwnerId { get; set; }
-    [Parameter] public int OwnerGroupId { get; set; } // Not in use yet
-    [Parameter] public int OwnerPersonId { get; set; } // Not in use yet
+    [Parameter] public int OwnerGroupId { get; set; } 
+    [Parameter] public int OwnerPersonId { get; set; } 
     ClaimsPrincipal? Principal;
-    Person? Owner;
+    Person? OwningPerson;
+    Group? OwningGroup;
     Module? Module;
     IEnumerable<ListboxItem>? ScaleItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
@@ -87,7 +86,8 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (Principal is not null)
         {
-            Owner = await PersonService.FindByIdAsync(Principal, OwnerId);
+            if (OwnerPersonId > 0) OwningPerson = await PersonService.FindByIdAsync(Principal, OwnerPersonId);
+            if (OwnerGroupId > 0) OwningGroup = await GroupService.FindByIdAsync(Principal, OwnerGroupId);
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
             ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
@@ -105,18 +105,20 @@ else
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
-
-    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Module", Owner);
+    private string Heading => Localizer.HeadingAddOrEdit(Id == 0, "Module", OwningGroup is null ? OwningPerson : OwningGroup);
 
     bool HasStation([NotNullWhen(true)]Module? module) =>  module is not null && module.StationId.HasValue;
+
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
     private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
-    private ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
-    string StationEditLink => HasStation(Module) ? 
-        OwnerRef.IsPersonInGroup ? 
-        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" : 
-        OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" : 
-        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" : 
-        "";
+
+    private ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : OwnerPersonId > 0 ? ModuleOwnershipRef.Person(OwnerPersonId) : Principal.AsModuleOwnershipRef();
+
+    string StationEditLink => HasStation(Module) ?
+    OwnerRef.IsPersonInGroup ?
+    $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
+    OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" :
+    $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
+    "";
 }
