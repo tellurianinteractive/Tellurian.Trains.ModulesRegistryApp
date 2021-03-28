@@ -20,7 +20,7 @@
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
         Stations = await StationService.GetAllAsync(Principal);
-        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal);
+        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, Principal.AsModuleOwnershipRef());
     }
 
     private bool MayEdit => Principal is not null;

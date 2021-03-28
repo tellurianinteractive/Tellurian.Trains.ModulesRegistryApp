@@ -42,14 +42,25 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<ListboxItem>();
         }
 
-        public async Task<bool> HasAnyNonStationAsync(ClaimsPrincipal? principal)
+        public async Task<bool> HasAnyNonStationAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
         {
             if (principal is not null)
             {
+                ownerRef = principal.UpdateFrom(ownerRef);
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Modules
-                    .Where(m => m.ModuleOwnerships.Any(mo => mo.PersonId == principal.PersonId()))
-                    .AnyAsync(m => !m.StationId.HasValue);
+                if (ownerRef.IsPerson || ownerRef.IsPersonInGroup)
+                {
+                    return await dbContext.Modules
+                        .Where(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
+                        .AnyAsync(m => !m.StationId.HasValue);
+                }
+                else if (ownerRef.IsGroup)
+                {
+                    return await dbContext.Modules
+                        .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
+                        .AnyAsync(m => !m.StationId.HasValue);
+
+                }
             }
             return false;
         }
@@ -95,7 +106,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsGlobalAdministrator()) return true;
             if (principal.IsCountryAdministrator())
             {
-                if (await dbContext.Groups.AnyAsync(g => g.Id == ownerRef.GroupId && g.CountryId == principal.CountryId())) return true;              
+                if (await dbContext.Groups.AnyAsync(g => g.Id == ownerRef.GroupId && g.CountryId == principal.CountryId())) return true;
             }
             return await dbContext.GroupMembers.AsNoTracking()
                 .AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator));

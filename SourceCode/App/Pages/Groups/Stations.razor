@@ -4,9 +4,10 @@
 
 @inject StationService StationService
 @inject GroupService GroupService
+@inject ModuleService ModuleService
 
 <h1><span class="fa fa-boxes" /> @Localizer.ObjectOwnerByOwner("Stations", Owner)</h1>
-<StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" />
+<StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" AnyModules="AnyModules"/>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -16,13 +17,15 @@
     IEnumerable<Station>? OwnedStations;
     Group? Owner;
     bool IsGroupDataAdministrator;
+    bool AnyModules;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await GroupService.FindByIdAsync(Principal, Id);
-        IsGroupDataAdministrator = await GroupService.IsGroupDataAdministratorAsync(Principal, Id);
+        IsGroupDataAdministrator = await GroupService.IsGroupDataAdministratorAsync(Principal, Id, Owner?.CountryId);
         OwnedStations = await StationService.GetAllAsync(Principal, OwnerRef);
+        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, ModuleOwnershipRef.Group(Id));
     }
 
     bool MayEdit => IsGroupDataAdministrator;
