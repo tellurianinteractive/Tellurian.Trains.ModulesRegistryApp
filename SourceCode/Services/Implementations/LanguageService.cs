@@ -13,7 +13,7 @@ namespace ModulesRegistry.Services.Implementations
         public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
         public static CultureInfo DefaultCulture => new(DefaultLanguage);
 
-        private static ResourceManager ResourceManager = Resources.Strings.ResourceManager;
+        private static readonly ResourceManager ResourceManager = Strings.ResourceManager;
 
         public static string GetString(string resourceName, string? language)
         {
@@ -47,12 +47,11 @@ namespace ModulesRegistry.Services.Implementations
         public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
         public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;
 
-        public static string Translated(this string? english)
+        public static string Localized(this string? english)
         {
             if (english is null) return string.Empty;
             var translated = ResourceManager.GetString(english);
             return string.IsNullOrEmpty(translated) ? english : translated;
-
         }
 
         public static LocalizedText LocalizedName(this object me, CultureInfo culture)
