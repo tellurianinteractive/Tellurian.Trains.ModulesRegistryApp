@@ -21,7 +21,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             using var dbContext = Factory.CreateDbContext();
             var id = countryId ?? principal.CountryId();
-            return await dbContext.Groups.AsNoTracking().Where(g => g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
+            return await dbContext.Groups.AsNoTracking().Where(g => principal.IsGlobalAdministrator() || g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
         }
 
         public async Task<IEnumerable<Group>> GetAllAsync(ClaimsPrincipal? principal, int countryId)

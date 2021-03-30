@@ -25,7 +25,7 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="meeting">
-        <td>@Localizer[meeting.OrganiserGroup.Country.EnglishName]</td>
+        <td>@meeting.OrganiserGroup.Country.EnglishName.Translated()</td>
         <td>@meeting.PlaceName</td>
         <td>@meeting.StartDate.ToString("d")</td>
         <td>@meeting.EndDate.ToString("d")</td>
