@@ -96,14 +96,16 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting entity)
         {
-            if (principal.IsCountryAdministratorInCountry(entity.OrganiserGroup.CountryId)) return true;
+            var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
+            if (principal.IsCountryAdministratorInCountry(countryId)) return true;
             using var dbContext = Factory.CreateDbContext();
             return await IsMeetingOrganiser(dbContext, principal, entity);
         }
 
         private static async Task<bool> IsMeetingOrganiser(ModulesDbContext dbContext, ClaimsPrincipal? principal, Meeting entity)
         {
-            if (principal.IsCountryAdministratorInCountry(entity.OrganiserGroup.CountryId)) return true;
+            var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
+            if (principal.IsCountryAdministratorInCountry(countryId)) return true;
             return await dbContext.GroupMembers.AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator);
 
         }

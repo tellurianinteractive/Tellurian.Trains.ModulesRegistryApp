@@ -7,7 +7,14 @@
 
 <h1><span class="fa fa-calendar" aria-hidden="true" />@Localizer["Meetings"]</h1>
 
-<TableTemplate Items="Meetings" >
+@if (Principal.IsAnyAdministrator())
+{
+    <div class="col-12">
+        <a class="btn btn-secondary btn-sm" href="Meetings/0/edit"><span class="fa fa-calendar" /> @Localizer["Add"]</a>
+    </div>
+}
+
+<TableTemplate Items="Meetings">
     <TableHeader>
         <th>@Localizer["Country"]</th>
         <th>@Localizer["Venue"]</th>
@@ -41,7 +48,7 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meetings = await MeetingService.GetAllAsync( CountryId);
+        Meetings = await MeetingService.GetAllAsync(CountryId);
     }
 
 }

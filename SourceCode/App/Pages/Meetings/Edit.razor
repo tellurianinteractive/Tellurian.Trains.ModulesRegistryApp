@@ -10,12 +10,12 @@
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
-        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" />
+        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="true" />
         <AppInputText Width="3" @bind-Value="Meeting.PlaceName" Label="Venue" />
         <AppInputText Width="5" @bind-Value="Meeting.Description" Label="Description" />
 
         <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" />
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="EndDate" />
+        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
         <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
     </Inputs>
@@ -76,10 +76,10 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = await MeetingService.FindByIdAsync(Id);
+        Meeting = Id>0 ? await MeetingService.FindByIdAsync(Id) : new Meeting();
         if (Meeting is not null)
         {
-            OrganiserItems = await GroupService.ListboxItemsAsync(Meeting.OrganiserGroup.CountryId);
+            OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
             MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
         }
     }

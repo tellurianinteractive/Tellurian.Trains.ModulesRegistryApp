@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.9.0
+Release date 2021-03-30
+- **Meetings and Layouts** now available.
+- **Bug fixes** of missing translations.
+
 ## Version 0.8.9
 Release date 2021-03-28
 - **Exits** new name of gables in module edit form.

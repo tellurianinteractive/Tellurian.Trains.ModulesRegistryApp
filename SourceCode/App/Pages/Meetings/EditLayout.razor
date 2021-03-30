@@ -51,7 +51,7 @@
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
-                ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Meeting.OrganiserGroup.CountryId);
+                ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
                 ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
                 OperatingDayItems = await OperatingDayService.BasicDaysListboxItemsAsync();
                 MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);

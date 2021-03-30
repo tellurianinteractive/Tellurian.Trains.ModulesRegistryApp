@@ -17,10 +17,11 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
-        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int countryId)
+        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId)
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Groups.AsNoTracking().Where(g => g.CountryId == countryId).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
+            var id = countryId ?? principal.CountryId();
+            return await dbContext.Groups.AsNoTracking().Where(g => g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
         }
 
         public async Task<IEnumerable<Group>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
