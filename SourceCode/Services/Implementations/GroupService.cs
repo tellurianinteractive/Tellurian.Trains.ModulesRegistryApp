@@ -17,6 +17,12 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
+        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int countryId)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Groups.AsNoTracking().Where(g => g.CountryId == countryId).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
+        }
+
         public async Task<IEnumerable<Group>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
         {
             if (principal.IsCountryAdministratorInCountry(countryId))

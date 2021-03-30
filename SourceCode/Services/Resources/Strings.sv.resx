@@ -273,4 +273,10 @@
   <data name="FromWest" xml:space="preserve">
     <value>Från väster</value>
   </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Inställt</value>
+  </data>
+  <data name="UnderApproval" xml:space="preserve">
+    <value>Under godkännande</value>
+  </data>
 </root>

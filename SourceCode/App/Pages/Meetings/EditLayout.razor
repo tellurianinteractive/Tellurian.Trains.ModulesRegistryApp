@@ -1,0 +1,86 @@
+﻿@page "/Meetings/{meetingid:int}/Layouts/{id:int}"
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject MeetingService MeetingService
+@inject GroupService GroupService 
+@inject ModuleStandardService ModuleStandardService
+@inject OperatingDayService OperatingDayService
+
+<h1><span class="fa fa-route" /> @Heading</h1>
+
+<EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
+    <Inputs>
+        <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
+        <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
+        <AppInputText Width="3" @bind-Value="Layout.Note" Label="Description" />
+        <AppInputFill Width="2" />
+        <h4>@Localizer["GameSettings"]</h4>
+        <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
+        <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
+        @*<AppInputSelect Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" />
+        <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
+        <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
+    </Inputs>
+    <Buttons>
+
+    </Buttons>
+</EditTemplate>
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int MeetingId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+    Layout? Layout;
+    IEnumerable<ListboxItem>? ResponsibleGroupItems;
+    IEnumerable<ListboxItem>? ModuleStandardItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+
+    bool MayEdit;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (MeetingId > 0)
+        {
+            Meeting = await MeetingService.FindByIdAsync(MeetingId);
+            if (Meeting is not null)
+            {
+                ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Meeting.OrganiserGroup.CountryId);
+                ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
+                OperatingDayItems = await OperatingDayService.BasicDaysListboxItemsAsync();
+                MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+                Layout = Id > 0 ? Meeting.Layouts.SingleOrDefault(l => l.Id == Id) ?? DefaultLayout(Meeting) : DefaultLayout(Meeting);
+            }
+            else
+            {
+                ToastService.ShowNotFound<Meeting>(Localizer);
+            }
+        }
+        else
+        {
+            ToastService.ShowNotFound<Meeting>(Localizer);
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Meeting is not null && Layout is not null)
+        {
+            if (Layout.Id == 0) Meeting.Layouts.Add(Layout);
+            var result = await MeetingService.SaveAsync(Principal, Meeting);
+            Meeting = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+
+        }
+    }
+
+    Layout DefaultLayout(Meeting meeting) => new Layout { MeetingId = MeetingId, ResponsibleGroupId = meeting.OrganiserGroupId };
+    string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Description} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
+
+}

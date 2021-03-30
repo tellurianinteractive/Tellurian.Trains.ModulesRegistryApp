@@ -321,9 +321,6 @@
   <data name="MustBeSelected" xml:space="preserve">
     <value>måste väljas.</value>
   </data>
-  <data name="MustBeYearBetween" xml:space="preserve">
-    <value>måste vara ett år mellan {0} och {1}.</value>
-  </data>
   <data name="Name" xml:space="preserve">
     <value>Namn</value>
   </data>
@@ -641,5 +638,80 @@
   </data>
   <data name="Exits" xml:space="preserve">
     <value>Utfarter</value>
+  </data>
+  <data name="Venue" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Startdatum</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Slutdatum</value>
+  </data>
+  <data name="Organiser" xml:space="preserve">
+    <value>Arrangör</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detaljer</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beskrivning</value>
+  </data>
+  <data name="Meeting" xml:space="preserve">
+    <value>Träff</value>
+  </data>
+  <data name="Owners" xml:space="preserve">
+    <value>Ägare</value>
+  </data>
+  <data name="Meetings" xml:space="preserve">
+    <value>Träffar</value>
+  </data>
+  <data name="MustBeBetween" xml:space="preserve">
+    <value>måste vara mellan {0} och {1}.</value>
+  </data>
+  <data name="IsFremo" xml:space="preserve">
+    <value>Är FREMO-träff?</value>
+  </data>
+  <data name="StartHour" xml:space="preserve">
+    <value>Starttimme</value>
+  </data>
+  <data name="EndHour" xml:space="preserve">
+    <value>Sluttimme</value>
+  </data>
+  <data name="StartWeekday" xml:space="preserve">
+    <value>Första veckodag</value>
+  </data>
+  <data name="FirstYear" xml:space="preserve">
+    <value>Första år</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Sista år</value>
+  </data>
+  <data name="PrimaryModuleStandard" xml:space="preserve">
+    <value>Primär modulstandard</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Spelinställningar</value>
+  </data>
+  <data name="Layouts" xml:space="preserve">
+    <value>Banor</value>
+  </data>
+  <data name="Layout" xml:space="preserve">
+    <value>Bana</value>
+  </data>
+  <data name="OperatingPeriod" xml:space="preserve">
+    <value>Driftperiod</value>
+  </data>
+  <data name="ResponsibleGroup" xml:space="preserve">
+    <value>Ansvarig grupp</value>
+  </data>
+  <data name="ModuleStandard" xml:space="preserve">
+    <value>Modulstandard</value>
+  </data>
+  <data name="RegisterModules" xml:space="preserve">
+    <value>Anmäl moduler</value>
   </data>
 </root>

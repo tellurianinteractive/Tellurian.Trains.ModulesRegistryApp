@@ -1,7 +1,6 @@
 ﻿@page "/Groups/Index"
 
 @attribute [Authorize(Policy = "User")]
-@preservewhitespace true
 
 @inject IStringLocalizer<App> Localizer
 
@@ -36,7 +35,7 @@ else
                     <td>@item.CityName</td>
                     <td>@Localizer[item.Category]</td>
                     <td style="white-space: nowrap !important;">
-                        <a class="btn btn-sm btn-info" href="groups/@item.Id/members"><span class="fa fa-users" /> @Localizer["Members"]</a>
+                        <a class="btn btn-sm btn-secondary" href="groups/@item.Id/members"><span class="fa fa-users" /> @Localizer["Members"]</a>
                         <a class="btn btn-sm btn-info" href="groups/@item.Id/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
                         <a class="btn btn-sm btn-info" href="groups/@item.Id/stations"><span class="fa fa-school" />@Localizer["Stations"]</a>
                         <a class="btn btn-sm btn-primary" href="groups/@item.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>

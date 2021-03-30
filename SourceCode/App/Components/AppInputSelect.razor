@@ -1,8 +1,7 @@
-﻿@using System.Linq.Expressions;
-@using System.Diagnostics.CodeAnalysis;
+﻿@using System.Diagnostics.CodeAnalysis;
 @using System.Globalization;
 
-@inherits InputBase<int>
+@inherits AppInputBase<int>
 @inject IStringLocalizer<App> Localizer
 
 <div class="@BootstrapWrapperCss">
@@ -10,7 +9,7 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-    <select class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+    <select disabled=@IsDisabled  class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
         @if (ShowPleaseSelect)
         {
             <option value="0">@PleaseSelectText</option>
@@ -39,9 +38,6 @@
 </div>
 
 @code {
-    [Parameter] public string? Label { get; set; }
-    [Parameter] public Expression<Func<int>>? ValidationFor { get; set; }
-    [Parameter] public int? Width { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool ShowPleaseSelect { get; set; }
     [Parameter] public Action<int>? OnSelected { get; set; }

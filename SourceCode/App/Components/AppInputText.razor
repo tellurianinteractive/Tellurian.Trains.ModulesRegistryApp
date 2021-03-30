@@ -1,7 +1,6 @@
-﻿@using System.Linq.Expressions;
-@using System.Diagnostics.CodeAnalysis;
+﻿@using System.Diagnostics.CodeAnalysis;
 
-@inherits InputBase<string>
+@inherits AppInputBase<string>
 @inject IStringLocalizer<App> Localizer
 
 <div class="@BootstrapWrapperCss">
@@ -9,14 +8,7 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-    @if (IsDisabled)
-    {
-        <input disabled type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
-    }
-    else
-    {
-        <input type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
-    }
+    <input disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -26,12 +18,8 @@
 </div>
 
 @code {
-    [Parameter] public string? Label { get; set; }
-    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
-    [Parameter] public int? Width { get; set; }
     [Parameter] public string? Placeholder { get; set; }
     [Parameter] public string? InputType { get; set; }
-    [Parameter] public bool IsDisabled { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {

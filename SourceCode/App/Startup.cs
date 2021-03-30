@@ -57,6 +57,7 @@ namespace ModulesRegistry
 
             services.AddBlazoredToast();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
+            services.AddScoped<ITimeProvider, SystemTimeProvider>();
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
             if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
             services.AddScoped<CargoService>();
@@ -64,8 +65,10 @@ namespace ModulesRegistry
             services.AddScoped<CountryService>();
             services.AddScoped<GroupCategoryService>();
             services.AddScoped<GroupService>();
+            services.AddScoped<MeetingService>();
             services.AddScoped<ModuleService>();
             services.AddScoped<ModuleStandardService>();
+            services.AddScoped<OperatingDayService>();
             services.AddScoped<PersonService>();
             services.AddScoped<PropertyService>();
             services.AddScoped<StationService>();

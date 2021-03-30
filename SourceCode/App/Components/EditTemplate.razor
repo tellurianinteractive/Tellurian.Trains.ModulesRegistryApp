@@ -9,13 +9,16 @@
 else
 {
     <EditForm Model="Item" OnValidSubmit="OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator/>
-        <ValidationSummary/>
+        <FluentValidationValidator />
+        <ValidationSummary />
         @Inputs
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
-            @Buttons
-        </div>
+    <div class="col-12">
+        @if (ShowSaveButton)
+        {
+            <button type="submit" class="btn btn-primary btn-sm"><span class="fa fa-save" />@Localizer["Save"]</button>
+        }
+        @Buttons
+    </div>
     </EditForm>
 }
 
@@ -24,5 +27,5 @@ else
     [Parameter] public RenderFragment? Inputs { get; set; }
     [Parameter] public RenderFragment? Buttons { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
-
+    [Parameter] public bool ShowSaveButton { get; set; } = true;
 }

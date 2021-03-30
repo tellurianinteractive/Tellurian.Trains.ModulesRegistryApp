@@ -14,6 +14,11 @@
                 <span class="fa fa-home" aria-hidden="true" />@Localizer["Home"]
             </NavLink>
         </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Meetings/Index" >
+                <span class="fa fa-calendar" aria-hidden="true" />@Localizer["Meetings"]
+            </NavLink>
+        </li>
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Modules/Index">

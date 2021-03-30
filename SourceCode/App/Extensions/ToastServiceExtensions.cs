@@ -6,7 +6,7 @@ namespace ModulesRegistry.Extensions
     public static class ToastServiceExtensions
     {
 
-       public static void ShowSuccessOrFailure(this IToastService me, IStringLocalizer localizer, int count, string message)
+        public static void ShowSuccessOrFailure(this IToastService me, IStringLocalizer localizer, int count, string message)
         {
             if (count > 0)
                 me.ShowSuccess(localizer[message], localizer["Success"].ToString());
@@ -14,6 +14,9 @@ namespace ModulesRegistry.Extensions
                 me.ShowInfo(localizer[message], localizer["Info"].ToString());
             else
                 me.ShowError(localizer[message], localizer["Fault"].ToString());
-        }     
+        }
+
+        public static void ShowNotFound<T>(this IToastService me, IStringLocalizer localizer) =>
+            me.ShowError(localizer.NotFound<T>());
     }
 }

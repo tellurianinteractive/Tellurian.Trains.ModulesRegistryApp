@@ -1,7 +1,7 @@
 ﻿@page "/Modules/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Modules/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
 
-@using System.Diagnostics.CodeAnalysis 
+@using System.Diagnostics.CodeAnalysis
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
@@ -21,57 +21,56 @@
 }
 else
 {
-<EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
-    <Inputs>
-        <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
-        <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-        <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
-        <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue()" />
-        <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
-        <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
-        <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
+    <EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+            <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+            <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
+            <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue()" />
+            <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
+            <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
+            <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
 
-        <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
-        <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
-        <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
-        <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
-        <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
+            <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
+            <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
+            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
+            <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
+            <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
 
-        <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
-        <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
-        <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
-        <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
-        <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-        <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
+            <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
+            <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
+            <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
+            <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
+            <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
+            <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
 
-        <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
-        <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
-        <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
-        <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
-        <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
-        <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
+            <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
+            <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
+            <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
+            <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
+            <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
+            <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
 
-        <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
+            <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
 
-        <ModuleExitsList Module="Module" />
-    </Inputs>
-    <Buttons>
-        @if (Module.StationId.HasValue)
-            {
-            <a class="btn btn-secondary" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
-            }
-
-    </Buttons>
-</EditTemplate>
+            <ModuleExitsList Module="Module" />
+        </Inputs>
+        <Buttons>
+            @if (Module.StationId.HasValue)
+                {
+                    <a class="btn btn-secondary" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                }
+        </Buttons>
+    </EditTemplate>
 
 }
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
-    [Parameter] public int OwnerGroupId { get; set; } 
-    [Parameter] public int OwnerPersonId { get; set; } 
+    [Parameter] public int OwnerGroupId { get; set; }
+    [Parameter] public int OwnerPersonId { get; set; }
     ClaimsPrincipal? Principal;
     Person? OwningPerson;
     Group? OwningGroup;
@@ -107,7 +106,7 @@ else
     }
     private string Heading => Localizer.HeadingAddOrEdit(Id == 0, "Module", OwningGroup is null ? OwningPerson : OwningGroup);
 
-    bool HasStation([NotNullWhen(true)]Module? module) =>  module is not null && module.StationId.HasValue;
+    bool HasStation([NotNullWhen(true)] Module? module) => module is not null && module.StationId.HasValue;
 
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
     private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";

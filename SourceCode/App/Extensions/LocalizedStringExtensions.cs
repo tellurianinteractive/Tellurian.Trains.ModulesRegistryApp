@@ -23,7 +23,7 @@ namespace ModulesRegistry.Extensions
             return text.ToString();
         }
 
-        public static string ObjectOwnerByOwner(this IStringLocalizer me, string objectName, object? owner) =>
+        public static string ObjectOwner(this IStringLocalizer me, string objectName, object? owner) =>
             owner switch
             {
                 Person => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
@@ -45,5 +45,9 @@ namespace ModulesRegistry.Extensions
                 Group g => g.FullName,
                 _ => string.Empty
             };
+
+        public static string NotFound<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["NotFound"].Value.ToLowerInvariant()}";
+        public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
+
     }
 }

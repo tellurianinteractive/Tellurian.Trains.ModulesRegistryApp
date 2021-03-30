@@ -97,6 +97,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Canceled.
+        /// </summary>
+        internal static string Canceled {
+            get {
+                return ResourceManager.GetString("Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cloned successfully.
         /// </summary>
         internal static string ClonedSuccessfully {
@@ -480,6 +489,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Undefined {
             get {
                 return ResourceManager.GetString("Undefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under approval.
+        /// </summary>
+        internal static string UnderApproval {
+            get {
+                return ResourceManager.GetString("UnderApproval", resourceCulture);
             }
         }
         

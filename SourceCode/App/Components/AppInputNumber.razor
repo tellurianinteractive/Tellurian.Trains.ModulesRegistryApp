@@ -1,9 +1,8 @@
-﻿@using System.Linq.Expressions;
-@using System.Diagnostics.CodeAnalysis;
+﻿@using System.Diagnostics.CodeAnalysis;
 @using System.Globalization;
 
 @typeparam TValue
-@inherits InputBase<TValue>
+@inherits AppInputBase<TValue>
 @inject IStringLocalizer<App> Localizer
 
 <div class="@BootstrapWrapperCss">
@@ -21,9 +20,6 @@
 </div>
 
 @code {
-    [Parameter] public string? Label { get; set; }
-    [Parameter] public Expression<Func<string>>? ValidationFor { get; set; }
-    [Parameter] public int? Width { get; set; }
     [Parameter] public string? Format { get; set; }
     [Parameter] public string? Step { get; set; }
     [Parameter] public string? Unit { get; set; }

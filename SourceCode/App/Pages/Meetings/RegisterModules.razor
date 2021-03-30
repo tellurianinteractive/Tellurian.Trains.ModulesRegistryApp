@@ -1,0 +1,14 @@
+﻿@page "/Meetings/{meetingid:int}/Layouts/{layoutid:int}/Modules"
+
+
+<h1><span class="fa fa-route" /> Register Modules</h1>
+
+<div class="alert alert-warning">
+    <span class="fa fa-warning"/> This page is not ready yet!
+</div>
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int LayoutId { get; set; }
+    [Parameter] public int MeetingId { get; set; }
+
+}

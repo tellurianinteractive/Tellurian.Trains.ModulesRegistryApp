@@ -23,6 +23,8 @@ namespace ModulesRegistry.Data
         public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
+        public virtual DbSet<Layout> Layouts { get; set; }
+        public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleExit> ModuleEntries { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
@@ -307,6 +309,41 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.PersonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GroupMember_Person");
+            });
+
+            modelBuilder.Entity<Layout>(entity =>
+            {
+                entity.Property(e => e.Note)
+                    .HasMaxLength(50);
+
+
+                entity.ToTable("Layout");
+
+                entity.HasOne(d => d.Meeting)
+                    .WithMany(p => p.Layouts)
+                    .HasForeignKey(d => d.MeetingId)
+                    .HasConstraintName("FK_Layout_Meeting");
+
+                entity.HasOne(d => d.ResponsibleGroup)
+                    .WithMany()
+                    .HasForeignKey(d => d.ResponsibleGroupId)
+                    .HasConstraintName("FK_Layout_Group");
+
+                entity.HasOne(d => d.PrimaryModuleStandard)
+                    .WithMany()
+                    .HasForeignKey(d => d.PrimaryModuleStandardId)
+                    .HasConstraintName("FK_Layout_ModuleStandard");
+
+            });
+
+            modelBuilder.Entity<Meeting>(entity =>
+            {
+                entity.ToTable("Meeting");
+
+                entity.HasOne(d => d.OrganiserGroup)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrganiserGroupId)
+                    .HasConstraintName("FK_Meeting_Group");
             });
 
             modelBuilder.Entity<Module>(entity =>

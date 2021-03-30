@@ -29,11 +29,16 @@ namespace ModulesRegistry.Validators
         private static bool IsSelected(this int id) => id > 0;
 
         public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-            builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeYearBetween"].Value, MinYear, MaxYear)}");
+            builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinYear, MaxYear)}");
         private static bool IsValidYear(this short? year) => year is null || (year >= MinYear && year <= MaxYear);
         private static int MinYear => 1900;
         private static int MaxYear => DateTimeOffset.Now.Year;
 
-       
+        public static IRuleBuilderOptions<T, short?> MustBeValidHour<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
+            builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinHour, MaxHour)}");
+
+        private static bool IsValidHour(this short? hour) => hour is null || (hour >= MinHour && hour <= MaxHour);
+        const short MinHour = 0;
+        const short MaxHour = 23;
     }
 }

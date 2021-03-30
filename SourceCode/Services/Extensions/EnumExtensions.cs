@@ -24,5 +24,10 @@ namespace ModulesRegistry.Services.Extensions
 
         public static IEnumerable<ListboxItem> StationEntryDirectionsListboxItems() =>
             Enum.GetValues<ModuleEntryDirection>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+
+        public static IEnumerable<ListboxItem> MeetingStatusListboxItems() =>
+            Enum.GetValues<MeetingStatus>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+        public static string MeetingStatus(this int id) => MeetingStatusListboxItems().Single(i => i.Id == id).Description;
+
     }
 }

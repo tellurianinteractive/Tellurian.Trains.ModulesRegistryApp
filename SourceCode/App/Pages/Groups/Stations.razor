@@ -6,7 +6,7 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<h1><span class="fa fa-boxes" /> @Localizer.ObjectOwnerByOwner("Stations", Owner)</h1>
+<h1><span class="fa fa-boxes" /> @Localizer.ObjectOwner("Stations", Owner)</h1>
 <StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" AnyModules="AnyModules"/>
 
 @code {

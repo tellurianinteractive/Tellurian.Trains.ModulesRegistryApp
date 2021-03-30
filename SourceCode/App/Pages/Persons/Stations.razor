@@ -24,7 +24,7 @@
     }
 
     private int OwningPersonId => Owner?.Id ?? 0;
-    private string Heading => Localizer.ObjectOwnerByOwner("Stations", Owner);
+    private string Heading => Localizer.ObjectOwner("Stations", Owner);
     private bool MayEdit => Principal.MaySave(OwnerRef);
     private ModuleOwnershipRef OwnerRef => ModuleOwnershipRef.Person(OwningPersonId);
 }

@@ -1,0 +1,100 @@
+﻿@page "/Meetings/{id:int}/Edit"
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject MeetingService MeetingService
+@inject GroupService GroupService
+
+<h1><span class="fa fa-calendar" aria-hidden="true" />@Heading</h1>
+
+<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
+    <Inputs>
+        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" />
+        <AppInputText Width="3" @bind-Value="Meeting.PlaceName" Label="Venue" />
+        <AppInputText Width="5" @bind-Value="Meeting.Description" Label="Description" />
+
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="EndDate" />
+        <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
+        <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
+    </Inputs>
+    <Buttons>
+
+    </Buttons>
+</EditTemplate>
+
+
+@if (Meeting is not null)
+{
+    <h3 style="margin-top:12pt"><span class="fa fa-route" /> @Localizer["Layouts"]</h3>
+    @if (MayEdit)
+    {
+        <div>
+            <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/0"><span class="fa fa-route" /> @Localizer.AddOrEdit("Layout", true)</a>
+
+        </div>
+    }
+    <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">
+        <TableHeader>
+            <th>@Localizer["ResponsibleGroup"]</th>
+            <th>@Localizer["PrimaryModuleStandard"]</th>
+            <th>@Localizer["Description"]</th>
+            <th>@Localizer["OperatingPeriod"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="meetinglayout">
+            <td>@meetinglayout.ResponsibleGroup.FullName</td>
+            <td>@meetinglayout.PrimaryModuleStandard.ShortName</td>
+            <td>@meetinglayout.Note</td>
+            <td>@OperatingPeriod(meetinglayout)</td>
+            <td>
+                @if (MayEdit)
+                    {
+                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id"><span class="fa fa-route" /> @Localizer["Edit"]</a>
+                    }
+                @if (Principal.IsAuthenticated())
+                    {
+                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id/Modules"><span class="fa fa-boxes" /> @Localizer["SubmitModules"]</a>
+
+                    }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+    IEnumerable<ListboxItem>? OrganiserItems;
+    bool MayEdit;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Meeting = await MeetingService.FindByIdAsync(Id);
+        if (Meeting is not null)
+        {
+            OrganiserItems = await GroupService.ListboxItemsAsync(Meeting.OrganiserGroup.CountryId);
+            MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Meeting is not null)
+        {
+            var result = await MeetingService.SaveAsync(Principal, Meeting);
+            Meeting = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+
+        }
+    }
+
+    string Heading => Meeting is null ? Localizer["Meeting"].ToString() : $"{Localizer["Meeting"]} {Meeting.Description} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
+    string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
+}

@@ -1,0 +1,47 @@
+﻿@page "/Meetings/Index"
+@page "/Meetings/{countryid:int}/Index"
+
+@inject IStringLocalizer<App> Localizer
+
+@inject MeetingService MeetingService
+
+<h1><span class="fa fa-calendar" aria-hidden="true" />@Localizer["Meetings"]</h1>
+
+<TableTemplate Items="Meetings" >
+    <TableHeader>
+        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Venue"]</th>
+        <th>@Localizer["StartDate"]</th>
+        <th>@Localizer["EndDate"]</th>
+        <th>@Localizer["Organiser"]</th>
+        <th>@Localizer["Status"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="meeting">
+        <td>@Localizer[meeting.OrganiserGroup.Country.EnglishName]</td>
+        <td>@meeting.PlaceName</td>
+        <td>@meeting.StartDate.ToString("d")</td>
+        <td>@meeting.EndDate.ToString("d")</td>
+        <td>@MeetingOrganiser(meeting)</td>
+        <td>@meeting.Status.MeetingStatus()</td>
+        <td>
+            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/Edit">@Localizer["Details"]</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<Meeting>? Meetings;
+    string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Meetings = await MeetingService.GetAllAsync( CountryId);
+    }
+
+}
