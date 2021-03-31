@@ -59,3 +59,7 @@ a, .btn-link {
 .btn {
     margin-right:5px;
 }
+.icon {
+    width: 32px;
+    height: 32px;
+}

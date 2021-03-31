@@ -59,10 +59,14 @@ else
         <Buttons>
             @if (Module.StationId.HasValue)
                 {
-                    <a class="btn btn-secondary" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                <a class="btn btn-secondary btn-sm" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
                 }
         </Buttons>
     </EditTemplate>
+
+    <h3 style="margin-top:20px"><span class="fa fa-upload" /> @Localizer["UploadDocuments"]</h3>
+    <UploadDocument FileExtension="dwg" DocumentedObject="Module" Label="Drawing" />
+    <UploadDocument FileExtension="pdf" DocumentedObject="Module" Label="Documentation" />
 
 }
 

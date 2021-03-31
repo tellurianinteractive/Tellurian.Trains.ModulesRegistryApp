@@ -49,5 +49,8 @@ namespace ModulesRegistry.Extensions
         public static string NotFound<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["NotFound"].Value.ToLowerInvariant()}";
         public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
 
+        public static string DocumentIconHref(this int? id, string fileExtension) =>
+            id.HasValue ? $"/images/{fileExtension}.png" : string.Empty;
+
     }
 }

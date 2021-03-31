@@ -1,0 +1,47 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject DocumentService DocumentService
+
+@if (MayUpload)
+{
+    <div style="display:flex; flex-direction:row">
+        <div class="col-md-3">
+            <img src="@IconImageSrc" class="icon" /><span style="font-weight: bold"> @Heading</span>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@Label').click()"><span class="fa fa-upload" /> @Localizer["SelectFile"]</button>
+            <InputFile Id="@Label" OnChange="LoadFile" accept="@Accept" hidden />
+        </div>
+    </div>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public string? FileExtension { get; set; }
+    [Parameter] public object? DocumentedObject { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public int? MaxFileSize { get; set; }
+
+    bool IsUploaded;
+    int? DocumentId;
+
+    protected override void OnParametersSet()
+    {
+        var owningObject = DocumentService.DocumentedObject(DocumentedObject, FileExtension);
+        DocumentId = owningObject.DocumentId;
+    }
+
+    async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        var result = await DocumentService.SaveDocumentAsync(principal, e.File, DocumentedObject, FileExtension);
+        ToastService.ShowSuccessOrFailure(Localizer, result, $"Upload of {e.File.Name}");
+    }
+
+    string IconImageSrc => $"/images/{FileExtension}.png";
+    bool MayUpload => FileExtension.IsPermittedFileExtension() && DocumentedObject.IsValidDocumentObject();
+    string Accept => $".{FileExtension}";
+    string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
+    string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
+
+}

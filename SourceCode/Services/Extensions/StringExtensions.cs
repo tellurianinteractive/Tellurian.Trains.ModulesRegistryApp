@@ -1,7 +1,9 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using ModulesRegistry.Services.Implementations;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
@@ -36,6 +38,9 @@ namespace ModulesRegistry.Services.Extensions
                 return builder.Build();
             }
         }
+
+        public static bool IsPermittedFileExtension(this string? it) =>
+            it is not null && DocumentService.PermittedFileExtenstions.Contains(it.ToLowerInvariant());
 
         public static Guid? AsGuid(this string? me)
         {

@@ -20,6 +20,7 @@
         <th>@Localizer["Standard"]</th>
         <th>@Localizer["Owners"]</th>
         <th>@Localizer["IsStation"]</th>
+        <th>@Localizer["Documents"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
@@ -29,6 +30,16 @@
         <td>@module.Standard.ShortName</td>
         <td>@Owners(module.ModuleOwnerships)</td>
         <td>@((module.IsPartOfStation()).AsYesNo())</td>
+        <td>
+            @if (module.PdfDocumentationId.HasValue)
+            {
+                <img src="images/pdf.png" class="icon" />
+            }
+            @if (module.DwgDrawingId.HasValue)
+            {
+                <img src="images/dwg.png" class="icon" />
+            }
+        </td>
         <td>
             @if (MayEdit)
             {

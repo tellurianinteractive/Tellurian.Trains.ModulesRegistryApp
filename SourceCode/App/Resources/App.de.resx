@@ -714,4 +714,22 @@
   <data name="RegisterModules" xml:space="preserve">
     <value>Module registrieren</value>
   </data>
+  <data name="UploadDocuments" xml:space="preserve">
+    <value>Dokumente hochladen</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Datei aussuchen</value>
+  </data>
+  <data name="Drawing" xml:space="preserve">
+    <value>Zeichnung</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Dokumentation</value>
+  </data>
+  <data name="OperatingInstructions" xml:space="preserve">
+    <value>Bedienungsanleitung</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
 </root>

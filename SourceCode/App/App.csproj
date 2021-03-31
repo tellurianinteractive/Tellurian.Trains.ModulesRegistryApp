@@ -5,7 +5,7 @@
     <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
     <AssemblyName>ModulesRegistry</AssemblyName>
     <RootNamespace>ModulesRegistry</RootNamespace>
-    <Version>0.9.0</Version>
+    <Version>0.9.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>

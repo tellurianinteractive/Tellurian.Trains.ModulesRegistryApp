@@ -35,8 +35,8 @@ namespace ModulesRegistry.Data
         public bool IsStation { get; set; }
         public int FunctionalState { get; set; }
         public int LandscapeState { get; set; }
-        public int? DxfDrawing { get; set; }
-        public int? PdfDocumentation { get; set; }
+        public int? DwgDrawingId { get; set; }
+        public int? PdfDocumentationId { get; set; }
         public string Note { get; set; }
         public int? StationId { get; set; }
         public int? FremoNumber { get; set; }
@@ -47,8 +47,8 @@ namespace ModulesRegistry.Data
         public int OverheadLineFeature { get; set; }
         public short? SpeedLimit { get; set; }
 
-        public virtual Document DxfDrawingNavigation { get; set; }
-        public virtual Document PdfDocumentationNavigation { get; set; }
+        public virtual Document DwgDrawing { get; set; }
+        public virtual Document PdfDocumentation { get; set; }
         public virtual Scale Scale { get; set; }
         public virtual ModuleStandard Standard { get; set; }
         public virtual Station Station { get; set; }

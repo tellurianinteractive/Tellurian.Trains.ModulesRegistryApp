@@ -21,6 +21,7 @@
         <th>@Localizer["Signature"]</th>
         <th>@Localizer["IsTerminus"]</th>
         <th>@Localizer["IsShadowStation"]</th>
+        <th>@Localizer["Documents"]</th>
         <th>@Localizer["Actions"]</th>
 
     </TableHeader>
@@ -30,13 +31,19 @@
         <td>@station.IsEnd.AsYesNo()</td>
         <td>@station.IsShadow.AsYesNo()</td>
         <td>
-            @if (MayEdit)
+            @if (station.PdfInstructionId.HasValue)
             {
-                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <img src="images/pdf.png" class="icon"/>
             }
-            &nbsp;
-        </td>
-    </RowTemplate>
+    </td>
+    <td>
+        @if (MayEdit)
+        {
+            <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+        }
+        &nbsp;
+    </td>
+</RowTemplate>
 </TableTemplate>
 
 

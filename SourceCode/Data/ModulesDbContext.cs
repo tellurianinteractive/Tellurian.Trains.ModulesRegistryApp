@@ -187,9 +187,7 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("Document");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.FileSuffix)
+                entity.Property(e => e.FileExtension)
                     .IsRequired()
                     .HasMaxLength(5)
                     .IsFixedLength(true);
@@ -364,14 +362,14 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.Theme).HasMaxLength(50);
 
-                entity.HasOne(d => d.DxfDrawingNavigation)
-                    .WithMany(p => p.ModuleDxfDrawingNavigations)
-                    .HasForeignKey(d => d.DxfDrawing)
-                    .HasConstraintName("FK_Module_DxfDocument");
+                entity.HasOne(d => d.DwgDrawing)
+                    .WithMany()
+                    .HasForeignKey(d => d.DwgDrawingId)
+                    .HasConstraintName("FK_Module_DwgDocument");
 
-                entity.HasOne(d => d.PdfDocumentationNavigation)
-                    .WithMany(p => p.ModulePdfDocumentationNavigations)
-                    .HasForeignKey(d => d.PdfDocumentation)
+                entity.HasOne(d => d.PdfDocumentation)
+                    .WithMany()
+                    .HasForeignKey(d => d.PdfDocumentationId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Module_PdfDocument");
 

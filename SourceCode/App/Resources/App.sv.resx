@@ -714,4 +714,22 @@
   <data name="RegisterModules" xml:space="preserve">
     <value>Anmäl moduler</value>
   </data>
+  <data name="UploadDocuments" xml:space="preserve">
+    <value>Ladda upp dokument</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Välj fil</value>
+  </data>
+  <data name="Drawing" xml:space="preserve">
+    <value>Ritning</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Dokumentation</value>
+  </data>
+  <data name="OperatingInstructions" xml:space="preserve">
+    <value>Bruksanvisning</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Uppdatera</value>
+  </data>
 </root>

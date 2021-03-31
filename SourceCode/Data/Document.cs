@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 #nullable disable
 
@@ -9,15 +8,12 @@ namespace ModulesRegistry.Data
     {
         public Document()
         {
-            ModuleDxfDrawingNavigations = new HashSet<Module>();
-            ModulePdfDocumentationNavigations = new HashSet<Module>();
         }
 
         public int Id { get; set; }
-        public string FileSuffix { get; set; }
+        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
         public byte[] Content { get; set; }
-
-        public virtual ICollection<Module> ModuleDxfDrawingNavigations { get; set; }
-        public virtual ICollection<Module> ModulePdfDocumentationNavigations { get; set; }
+        public DateTimeOffset? LastModifiedTime { get; set; }
     }
 }

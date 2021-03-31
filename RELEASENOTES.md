@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.9.1
+Release date 2021-03-31
+- **Upload** of *AutoCad* drawings of modules and PDF-documentation of modules and stations.
+
 ## Version 0.9.0
 Release date 2021-03-30
 - **Meetings and Layouts** now available.
