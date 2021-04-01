@@ -1,8 +1,10 @@
 # Release Notes
 
 ## Version 0.9.2
-Release date 2021-04-05
+Release date 2021-04-01
 - **Stricter validation** of text in fields where only ordinary text should be written.
+- **File upload** maximum file size now checked and aborted if file exceeds the limit.
+- **Component update** to latest releases.
 
 ## Version 0.9.1
 Release date 2021-03-31

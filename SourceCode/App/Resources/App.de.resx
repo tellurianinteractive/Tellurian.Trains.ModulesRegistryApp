@@ -735,4 +735,7 @@
   <data name="MayOnlyContainOrdinaryText" xml:space="preserve">
     <value>Darf nur normalen Text enthalten</value>
   </data>
+  <data name="FileExceedsMaxSizeOf" xml:space="preserve">
+    <value>Die Datei überschreitet die maximale Größe von {0} kB</value>
+  </data>
 </root>

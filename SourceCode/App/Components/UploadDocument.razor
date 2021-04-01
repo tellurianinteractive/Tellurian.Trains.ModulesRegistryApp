@@ -1,4 +1,5 @@
-﻿@inject IStringLocalizer<App> Localizer
+﻿
+@inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 
 @inject DocumentService DocumentService
@@ -20,7 +21,7 @@
     [Parameter] public string? FileExtension { get; set; }
     [Parameter] public object? DocumentedObject { get; set; }
     [Parameter] public string? Label { get; set; }
-    [Parameter] public int? MaxFileSize { get; set; }
+    [Parameter] public int? MaxFileSizeKb { get; set; }
 
     bool IsUploaded;
     int? DocumentId;
@@ -33,9 +34,17 @@
 
     async Task LoadFile(InputFileChangeEventArgs e)
     {
-        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        var result = await DocumentService.SaveDocumentAsync(principal, e.File, DocumentedObject, FileExtension);
-        ToastService.ShowSuccessOrFailure(Localizer, result, $"Upload of {e.File.Name}");
+        if (IsFileSizeWithinLimits(e.File))
+        {
+            var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+            var result = await DocumentService.SaveDocumentAsync(principal, e.File, DocumentedObject, FileExtension);
+            ToastService.ShowSuccessOrFailure(Localizer, result, $"Upload of {e.File.Name}");
+
+        }
+        else
+        {
+            ToastService.ShowWarning(string.Format(LanguageService.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSizeKb));
+        }
     }
 
     string IconImageSrc => $"/images/{FileExtension}.png";
@@ -43,5 +52,7 @@
     string Accept => $".{FileExtension}";
     string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
+
+    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb*1024;
 
 }

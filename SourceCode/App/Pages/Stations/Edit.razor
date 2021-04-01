@@ -28,7 +28,7 @@
 </EditTemplate>
 
 <h3 style="margin-top:20px"><span class="fa fa-upload" /> @Localizer["UploadDocuments"]</h3>
-<UploadDocument FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" />
+<UploadDocument FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
