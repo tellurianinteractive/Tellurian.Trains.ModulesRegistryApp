@@ -12,16 +12,19 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(3)
                 .MaximumLength(50)
+                .IsOrdinaryText(localizer)
                 .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FullName)]);
             RuleFor(m => m.ScaleId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Scale)]);
             RuleFor(m => m.ConfigurationLabel)
-                .MaximumLength(10).When(m => m.ConfigurationLabel is not null)
+                .MaximumLength(10)
+                .IsOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.ConfigurationLabel)]);
             RuleFor(m => m.PackageLabel)
-                .MaximumLength(10).When(m => m.PackageLabel is not null)
+                .MaximumLength(10)
+                .IsOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.PackageLabel)]);
             RuleFor(m => m.FremoNumber)
                 .InclusiveBetween(1, 9999).When(m => m.FremoNumber.HasValue)
@@ -30,7 +33,8 @@ namespace ModulesRegistry.Validators
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Standard)]);
             RuleFor(m => m.Theme)
-                .MaximumLength(50).When(m => m.Theme is not null)
+                .MaximumLength(50)
+                .IsOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.Theme)]);
             RuleFor(m => m.RepresentsFromYear)
                 .MustBeValidYear(localizer)
@@ -65,6 +69,10 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.SignalFeature)
               .InclusiveBetween((int)SignalFeature.No, (int)SignalFeature.Fixed)
               .WithName(n => localizer[nameof(n.SignalFeature)]);
+            RuleFor(m => m.Note)
+                .MaximumLength(50)
+                .IsOrdinaryText(localizer)
+                .WithName(n => localizer[nameof(n.Note)]);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.DefaultClasses)
                 .MinimumLength(1)
                 .MaximumLength(10)
+                .IsOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.DefaultClasses)]);
 
             // Temporary disabled to simplify entering of data.
@@ -28,13 +29,13 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween((short)1900, (short)(DateTime.Now.Year))
                 .WithName(n => localizer[nameof(n.UptoYear)]);
 
-            RuleFor(m => m.EN).MaximumLength(TranslatedLength).WithName(n => localizer["English"]);
-            RuleFor(m => m.DE).MaximumLength(TranslatedLength).WithName(n => localizer["German"]);
-            RuleFor(m => m.DA).MaximumLength(TranslatedLength).WithName(n => localizer["Danish"]);
-            RuleFor(m => m.NL).MaximumLength(TranslatedLength).WithName(n => localizer["Dutch"]);
-            RuleFor(m => m.NO).MaximumLength(TranslatedLength).WithName(n => localizer["Norwegian"]);
-            RuleFor(m => m.PL).MaximumLength(TranslatedLength).WithName(n => localizer["Polish"]);
-            RuleFor(m => m.SV).MaximumLength(TranslatedLength).WithName(n => localizer["Swedish"]);
+            RuleFor(m => m.EN).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["English"]);
+            RuleFor(m => m.DE).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["German"]);
+            RuleFor(m => m.DA).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["Danish"]);
+            RuleFor(m => m.NL).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["Dutch"]);
+            RuleFor(m => m.NO).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["Norwegian"]);
+            RuleFor(m => m.PL).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["Polish"]);
+            RuleFor(m => m.SV).MaximumLength(TranslatedLength).IsOrdinaryText(localizer).WithName(n => localizer["Swedish"]);
         }
     }
 }

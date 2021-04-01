@@ -1,5 +1,9 @@
 # Release Notes
 
+## Version 0.9.2
+Release date 2021-04-05
+- **Stricter validation** of text in fields where only ordinary text should be written.
+
 ## Version 0.9.1
 Release date 2021-03-31
 - **Upload** of *AutoCad* drawings of modules and PDF-documentation of modules and stations.
@@ -44,7 +48,7 @@ Release date 2021-03-21
 ## Version 0.8.4
 Release date 2021-03-20
 - **Bug fix** of issue #7 when saving new modules. Thanks to Johan Dahlgren.
-- **Buf fix** of langauge in user invitation mail. 
+- **Bug fix** of langauge in user invitation mail. 
 - **Type of Cargo** can now be managed in all supported languages.
 - **NHM-codes** levels 1 and 2 imported to classify *type of cargo*.
 

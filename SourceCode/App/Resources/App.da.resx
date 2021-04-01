@@ -732,4 +732,7 @@
   <data name="Update" xml:space="preserve">
     <value>Opdater</value>
   </data>
+  <data name="MayOnlyContainOrdinaryText" xml:space="preserve">
+    <value>Kan kun indeholde almindelig tekst</value>
+  </data>
 </root>

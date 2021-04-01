@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Runtime;
 
 namespace ModulesRegistry.Validators
 {
@@ -17,11 +16,37 @@ namespace ModulesRegistry.Validators
             {
                 if (i == 0 || (name[i - 1] == ' '))
                 {
-                    if (Char.IsLower(name[i])) return false;
+                    if (char.IsLower(name[i])) return false;
                 }
             }
             return true;
         }
+
+        public static IRuleBuilderOptions<T, string> IsOrdinaryText<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
+            builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
+        private static bool IsText(this string? text)
+        {
+            if (string.IsNullOrEmpty(text)) return true;
+            foreach (var c in text)
+            {
+                if (c.IsLatinChar()) continue;
+                if (c.IsDigit()) continue;
+                if (c.IsPermittedPunctuationOrSymbol()) continue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
+            c >= firstCodePoint && c <= lastCodePoint;
+        private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.-&#±°²³/«»£€".Contains(c);
+        private static bool IsDigit(this char c) => c >= 0x0030 && c <= 0x0039;
+        private static bool IsLatinChar(this char c) =>
+            c.IsInRange(0x0061, 0x007A) ||
+            c.IsInRange(0x0041, 0x005A) ||
+            c.IsInRange(0x00C0, 0x00D6) ||
+            c.IsInRange(0x00D8, 0X00F6) ||
+            c.IsInRange(0x00F8, 0x00FF);
 
         public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer) =>
             builder.Must(value => value.IsSelected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");

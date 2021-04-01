@@ -12,6 +12,7 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(10)
+                .IsOrdinaryText(localizer)
                 .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.ShortName)]);
 
@@ -19,6 +20,7 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
+                .IsOrdinaryText(localizer)
                 .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FullName)]);
 
@@ -26,6 +28,7 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
+                .IsOrdinaryText(localizer)
                 .NameIsCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.CityName)]);
 
