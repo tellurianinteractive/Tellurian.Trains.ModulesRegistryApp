@@ -12,5 +12,7 @@ namespace ModulesRegistry.Components
         [Parameter] public int? Width { get; set; }
         [Parameter] public bool IsDisabled { get; set; }
 
+        protected string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
     }
 }

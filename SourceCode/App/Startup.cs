@@ -72,6 +72,7 @@ namespace ModulesRegistry
             services.AddScoped<OperatingDayService>();
             services.AddScoped<PersonService>();
             services.AddScoped<PropertyService>();
+            services.AddScoped<RegionService>();
             services.AddScoped<StationService>();
             services.AddScoped<ScaleService>();
             services.AddScoped<UserService>();

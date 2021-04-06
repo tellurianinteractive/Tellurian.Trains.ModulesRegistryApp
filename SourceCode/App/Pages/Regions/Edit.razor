@@ -1,0 +1,62 @@
+﻿@page "/Regions/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "Admin")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject RegionService RegionService
+@inject CountryService CountryService
+
+<h1><span class="fa fa-shield-alt" />@Localizer.AddOrEdit("Region", Id == 0)</h1>
+
+<EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+    <Inputs>
+        <AppInputSelect Width="2" @bind-Value="Region.CountryId" Items="CountryItems" Label="Country" ShowPleaseSelect="true" />
+        <AppInputText Width="3" @bind-Value="Region.LocalName" Label="Name" TextColor="@TextColor(Region.BackColor)" BackColor="@Region.BackColor" />
+        <AppInputColor Width="2" @bind-Value="Region.BackColor" Label="BackColor" />
+        <AppInputText Width="12" @bind-Value="Region.Description" Label="Description" />
+    </Inputs>
+    <Buttons>
+
+    </Buttons>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    Region? Region;
+    IEnumerable<ListboxItem>? CountryItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Region = Id > 0 ? await RegionService.FindById(Principal, Id) : new Region { CountryId = Principal.CountryId() };
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Region is not null)
+        {
+            Region.ForeColor = TextColor(Region.BackColor);
+            var result = await RegionService.SaveAsync(Principal, Region);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+    string? TextColor(string? backColor)
+    {
+        if (string.IsNullOrWhiteSpace(backColor)) return null;
+        var r = int.Parse(backColor.Substring(1, 2),  System.Globalization.NumberStyles.HexNumber);
+        var g = int.Parse(backColor.Substring(3, 2), System.Globalization.NumberStyles.HexNumber);
+        var b = int.Parse(backColor.Substring(5, 2), System.Globalization.NumberStyles.HexNumber);
+        var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return (yiq >= 128) ? "#000000" : "#FFFFFF";
+    }
+}

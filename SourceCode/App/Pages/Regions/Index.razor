@@ -1,0 +1,52 @@
+﻿@page "/Regions/Index"
+@page "/Regions/{countryId:int}/Index"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject RegionService RegionService
+
+<h1><span class="fa fa-shield-alt" /> @Localizer["Regions"]</h1>
+@if (CountryId != 0)
+{
+    <a class="btn btn-info btn-sm" href="Regions/0/Index">@Localizer.ShowAllInAll("Regions", "Countries")</a>
+}
+
+<TableTemplate Items="Regions">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Description"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="region">
+        <td style="color: @region.ForeColor; background-color: @region.BackColor; font-weight: bold">@region.LocalName</td>
+        <td>@region.Country.EnglishName.Localized()</td>
+        <td>@region.Description</td>
+        <td>
+            @if (Principal.IsCountryAdministratorInCountry(region.CountryId))
+            {
+                <a class="btn btn-sm btn-primary" href="regions/@region.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+            }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int? CountryId { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<Region>? Regions;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Regions = await RegionService.AllAsync(Principal, CountryId);
+    }
+
+}

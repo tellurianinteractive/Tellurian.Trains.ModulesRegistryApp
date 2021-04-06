@@ -31,10 +31,7 @@
         <td>@station.IsEnd.AsYesNo()</td>
         <td>@station.IsShadow.AsYesNo()</td>
         <td>
-            @if (station.PdfInstructionId.HasValue)
-            {
-                <img src="images/pdf.png" class="icon"/>
-            }
+            <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
     </td>
     <td>
         @if (MayEdit)

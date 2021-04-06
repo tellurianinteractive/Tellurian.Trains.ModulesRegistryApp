@@ -4,7 +4,7 @@
 @inject IStringLocalizer<App> Localizer
 
 
-<div class="@BootstrapWrapperCss">
+<div class="@WidthCss">
     <br/>
     @if (IsVisible)
     {
@@ -29,6 +29,5 @@
         validationErrorMessage = null;
         return true;
     }
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
 }

@@ -4,20 +4,12 @@ using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public enum SupportedDocument
-    {
-        ModuleDwgDrawing,
-        ModulePdfDocumentation
-    }
-
     public class DocumentService
     {
         public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
@@ -31,7 +23,7 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
-        public async Task<int> SaveDocumentAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension)
+        public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension)
         {
             if (principal.IsAuthenticated())
             {
@@ -42,42 +34,42 @@ namespace ModulesRegistry.Services.Implementations
                 if (DocumentId.HasValue)
                 {
                     var existing = await dbContext.Documents.FindAsync(DocumentId);
-                    if (existing is null) return -1;
+                    if (existing is null) return principal.NothingToUpdate<Document>();
                     existing.Content = new byte[fileSize];
-                    var count = await stream.ReadAsync(existing.Content.AsMemory(0, fileSize));
+                    var bytes = await stream.ReadAsync(existing.Content.AsMemory(0, fileSize));
                     existing.LastModifiedTime = TimeProvider.Now;
-                    return await dbContext.SaveChangesAsync();
+                    var count = await dbContext.SaveChangesAsync();
+                    return count.SaveResult(existing);
                 }
                 else
                 {
                     var document = new Document
                     {
                         FileExtension = fileExtension,
-                        ContentType = ContentType(file, fileExtension),
+                        ContentType = ContentType(fileExtension),
                         Content = new byte[file.Size],
                         LastModifiedTime = TimeProvider.Now
                     };
-                    var count = await stream.ReadAsync(document.Content.AsMemory(0, fileSize));
+                    var bytes = await stream.ReadAsync(document.Content.AsMemory(0, fileSize));
                     dbContext.Documents.Add(document);
-                    var result = await dbContext.SaveChangesAsync();
-                    return await UpdateDocumentReference(dbContext, document, documentedObject);
+                    var count = await dbContext.SaveChangesAsync();
+                    count += await UpdateDocumentReference(dbContext, document, documentedObject);
+                    return count.SaveResult(document);
                 };
             }
-            return 0;
+            return principal.SaveNotAuthorised<Document>();
 
-            static string ContentType(IBrowserFile file, string? fileExtension)
-            {
-                var fileContentType = file.ContentType;
-                if (string.IsNullOrWhiteSpace(fileContentType)) return fileExtension switch
-                {
-                    "dwg" => "image/vnd.dwg",
-                    "pdf" => "application/pdf",
-                    _ => "application/octet-stream"
-                };
-                return fileContentType;
-            }
+            static string ContentType(string? fileExtension) =>
+                  fileExtension switch
+                  {
+                      "dwg" => "image/vnd.dwg",
+                      "pdf" => "application/pdf",
+                      _ => "application/octet-stream"
+                  };
         }
 
+
+        // TODO: Refactor to switch expression?
         private static async Task<int> UpdateDocumentReference(ModulesDbContext dbContext, Document document, object? documentedObject)
         {
             var (Id, _, TypeName) = DocumentedObject(documentedObject, document.FileExtension);
@@ -87,6 +79,14 @@ namespace ModulesRegistry.Services.Implementations
                 if (existing is not null)
                 {
                     existing.DwgDrawingId = document.Id;
+                }
+            }
+            else if (TypeName == "Module" && document.FileExtension == "skp")
+            {
+                var existing = await dbContext.Modules.FindAsync(Id);
+                if (existing is not null)
+                {
+                    existing.SkpDrawingId = document.Id;
                 }
             }
             else if (TypeName == "Module" && document.FileExtension == "pdf")
@@ -122,11 +122,14 @@ namespace ModulesRegistry.Services.Implementations
                 {
                     "dwg" => (module.Id, module.DwgDrawingId, nameof(Module)),
                     "pdf" => (module.Id, module.PdfDocumentationId, nameof(Module)),
+                    "skp" => (module.Id, module.SkpDrawingId, nameof(Module)),
                     _ => (0, null, string.Empty)
                 },
                 Station station => (station.Id, station.PdfInstructionId, nameof(Station)),
                 _ => (0, null, string.Empty)
             };
+
+
 
     }
 
@@ -135,6 +138,12 @@ namespace ModulesRegistry.Services.Implementations
         public static bool IsValidDocumentObject(this object? me) =>
             me is not null && DocumentService.ValidDocumentObjects.Contains(me.GetType());
 
+        public static int? Id(this object? documentedObject) => documentedObject switch
+        {
+            Module m => m.Id,
+            Station s => s.Id,
+            _ => null
+        };
 
     }
 }

@@ -64,10 +64,16 @@ else
         </Buttons>
     </EditTemplate>
 
-    <h3 style="margin-top:20px"><span class="fa fa-upload" /> @Localizer["UploadDocuments"]</h3>
-    <UploadDocument FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="250" />
-    <UploadDocument FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="250"/>
-
+    <DocumentsUpload DocumentedObject="Module">
+        <Uploads>
+            <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="250" />
+            <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="250" />
+            @if (Principal is not null && Principal.UserId() == 1)
+            {
+                <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="2000" />
+            }
+        </Uploads>
+    </DocumentsUpload>
 }
 
 @code {

@@ -9,6 +9,11 @@ namespace ModulesRegistry.Extensions
         public static string AddOrEdit(this IStringLocalizer me, string objectName, bool isAdd) =>
             (isAdd ? me["Add"].Value : me["Edit"].Value) + " " + me[objectName].ToString().ToLowerInvariant();
 
+        public static string ShowAll(this IStringLocalizer me, string objectName) =>
+            $"{me["ShowAll"]} {me[objectName].ToString().ToLowerInvariant()}";
+        public static string ShowAllInAll(this IStringLocalizer me, string objectName, string inObjectName) =>
+            $"{me["ShowAll"]} {me[objectName].ToString().ToLowerInvariant()} {me["InAll"]} {me[inObjectName].ToString().ToLowerInvariant()}";
+
         public static string HeadingAddOrEdit(this IStringLocalizer me, bool isCreate, string objectName, object? owner)
         {
             var text = new StringBuilder(100);
@@ -49,6 +54,7 @@ namespace ModulesRegistry.Extensions
         public static string NotFound<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["NotFound"].Value.ToLowerInvariant()}";
         public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
 
+        public static string Value(this IStringLocalizer me, string key) => me[key].Value;
         public static string DocumentIconHref(this int? id, string fileExtension) =>
             id.HasValue ? $"/images/{fileExtension}.png" : string.Empty;
 

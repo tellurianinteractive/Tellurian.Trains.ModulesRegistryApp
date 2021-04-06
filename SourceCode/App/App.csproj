@@ -5,7 +5,7 @@
     <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
     <AssemblyName>ModulesRegistry</AssemblyName>
     <RootNamespace>ModulesRegistry</RootNamespace>
-    <Version>0.9.2</Version>
+    <Version>0.9.3</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
@@ -19,6 +19,7 @@
     <PackageReference Include="Blazored.Toast" Version="3.1.2" />
     <PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3.3" />
+    <PackageReference Include="Blazorise.Components" Version="0.9.3.3" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3.3" />
     <PackageReference Include="Markdig" Version="0.24.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />

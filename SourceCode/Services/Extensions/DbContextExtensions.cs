@@ -18,9 +18,12 @@ namespace ModulesRegistry.Services.Extensions
 
         public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? me) => 
             (0, Strings.NotAuthorized, default);
+        public static (int Count, string Message, T? Entity) NothingToUpdate<T>(this ClaimsPrincipal? me) =>
+            (0, Strings.NotFound, default);
 
         public static (int Count, string Message) DeleteResult(this int count) => 
             (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
+
         public static (int Count, string Message) CloneResult(this int count) =>
             (count, count > 0 ? Strings.ClonedSuccessfully : Strings.CloningFailed);
 

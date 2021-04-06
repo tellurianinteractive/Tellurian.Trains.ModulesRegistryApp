@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (DocumentedObject.Id() > 0)
+{
+    <h3 style="margin-top:20px"><span class="fa fa-upload" /> @Localizer["UploadDocuments"]</h3>
+    @Uploads
+}
+
+@code {
+    [Parameter] public object? DocumentedObject { get; set; }
+    [Parameter] public RenderFragment? Uploads { get; set; }
+}

@@ -8,11 +8,14 @@
 {
     <div style="display:flex; flex-direction:row">
         <div class="col-md-3">
-            <img src="@IconImageSrc" class="icon" /><span style="font-weight: bold"> @Heading</span>
+            <img src="@IconImageSrc" class="icon" /> @Heading
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@Label').click()"><span class="fa fa-upload" /> @Localizer["SelectFile"]</button>
-            <InputFile Id="@Label" OnChange="LoadFile" accept="@Accept" hidden />
+        <div class="col-md-1">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="fa fa-upload" /> @Localizer["SelectFile"]</button>
+            <InputFile Id="@InputFileId" OnChange="LoadFile" accept="@Accept" hidden />
+        </div>
+        <div class="col-md-4">
+            @MaxSizeText
         </div>
     </div>
 }
@@ -37,8 +40,9 @@
         if (IsFileSizeWithinLimits(e.File))
         {
             var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            var result = await DocumentService.SaveDocumentAsync(principal, e.File, DocumentedObject, FileExtension);
-            ToastService.ShowSuccessOrFailure(Localizer, result, $"Upload of {e.File.Name}");
+            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension);
+            DocumentId = result.Entity?.Id;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, $"Upload of {e.File.Name}");
 
         }
         else
@@ -48,10 +52,12 @@
     }
 
     string IconImageSrc => $"/images/{FileExtension}.png";
+    string InputFileId => $"{Label}{FileExtension}";
     bool MayUpload => FileExtension.IsPermittedFileExtension() && DocumentedObject.IsValidDocumentObject();
     string Accept => $".{FileExtension}";
     string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
+    string MaxSizeText => string.Format(LanguageService.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
 
     bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb*1024;
 

@@ -1,0 +1,11 @@
+﻿@if (DocumentId.HasValue)
+{
+    <img src="@ImgSrc" class="icon" />
+}
+
+@code {
+    [Parameter] public int? DocumentId { get; set; }
+    [Parameter] public string? FileExtension { get; set; }
+
+    string ImgSrc => $"images/{FileExtension}.png";
+}

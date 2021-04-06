@@ -367,6 +367,11 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.DwgDrawingId)
                     .HasConstraintName("FK_Module_DwgDocument");
 
+                entity.HasOne(d => d.SkpDrawing)
+                    .WithMany()
+                    .HasForeignKey(d => d.SkpDrawingId)
+                    .HasConstraintName("FK_Module_SkpDocument");
+
                 entity.HasOne(d => d.PdfDocumentation)
                     .WithMany()
                     .HasForeignKey(d => d.PdfDocumentationId)

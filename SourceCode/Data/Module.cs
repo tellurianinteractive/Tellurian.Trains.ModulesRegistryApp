@@ -36,6 +36,7 @@ namespace ModulesRegistry.Data
         public int FunctionalState { get; set; }
         public int LandscapeState { get; set; }
         public int? DwgDrawingId { get; set; }
+        public int? SkpDrawingId { get; set; }
         public int? PdfDocumentationId { get; set; }
         public string Note { get; set; }
         public int? StationId { get; set; }
@@ -48,6 +49,7 @@ namespace ModulesRegistry.Data
         public short? SpeedLimit { get; set; }
 
         public virtual Document DwgDrawing { get; set; }
+        public virtual Document SkpDrawing { get; set; }
         public virtual Document PdfDocumentation { get; set; }
         public virtual Scale Scale { get; set; }
         public virtual ModuleStandard Standard { get; set; }

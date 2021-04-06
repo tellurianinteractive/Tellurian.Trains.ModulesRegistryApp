@@ -738,4 +738,25 @@
   <data name="FileExceedsMaxSizeOf" xml:space="preserve">
     <value>Filen överstiger den maximala storleken på {0} kB</value>
   </data>
+  <data name="MaxUploadFileSizeKb" xml:space="preserve">
+    <value>Största filstorlek för uppladdning är {0} kB</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>Textfärg</value>
+  </data>
+  <data name="BackColor" xml:space="preserve">
+    <value>Bakgrundsfärg</value>
+  </data>
+  <data name="InAll" xml:space="preserve">
+    <value>i alla</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Länder</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Visa alla</value>
+  </data>
+  <data name="Regions" xml:space="preserve">
+    <value>Regioner</value>
+  </data>
 </root>

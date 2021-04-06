@@ -31,14 +31,9 @@
         <td>@Owners(module.ModuleOwnerships)</td>
         <td>@((module.IsPartOfStation()).AsYesNo())</td>
         <td>
-            @if (module.PdfDocumentationId.HasValue)
-            {
-                <img src="images/pdf.png" class="icon" />
-            }
-            @if (module.DwgDrawingId.HasValue)
-            {
-                <img src="images/dwg.png" class="icon" />
-            }
+            <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
+            <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
+            <DocumentLink DocumentId="module.SkpDrawingId" FileExtension="skp" />
         </td>
         <td>
             @if (MayEdit)
