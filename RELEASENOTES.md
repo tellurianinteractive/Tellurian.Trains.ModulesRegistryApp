@@ -3,7 +3,7 @@
 ### Version 0.9.4
 Release date 2021-04-07
 - **Bug fix** of editing *stations*.
-- 
+
 ### Version 0.9.3
 - **Regions** in countries can now be defined. They are intended for cargo origins and destinations outside a *layout*. 
 - **File upload** improved user experience.
