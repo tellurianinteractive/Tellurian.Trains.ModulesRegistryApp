@@ -28,7 +28,9 @@
 </EditTemplate>
 
 <DocumentsUpload  DocumentedObject="Station?.Id">
-    <DocumentUpload FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" />
+    <Uploads>
+        <DocumentUpload FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" />
+    </Uploads>
 </DocumentsUpload>
 
 @code {
