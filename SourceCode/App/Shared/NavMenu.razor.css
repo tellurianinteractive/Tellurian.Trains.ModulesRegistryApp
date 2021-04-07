@@ -20,24 +20,24 @@
 
 .nav-item {
     font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.1rem;
 }
 
     .nav-item:first-of-type {
-        padding-top: 1rem;
+        padding-top: 0.1rem;
     }
 
     .nav-item:last-of-type {
-        padding-bottom: 1rem;
+        padding-bottom: 0.1rem;
     }
 
     .nav-item ::deep a {
         color: #d7d7d7;
         border-radius: 4px;
-        height: 3rem;
+        height: 2rem;
         display: flex;
         align-items: center;
-        line-height: 3rem;
+        line-height: 2rem;
     }
 
 .nav-item ::deep a.active {
@@ -50,7 +50,7 @@
     color: white;
 }
 
-@media (min-width: 641px) {
+@media (min-width: 1081px) {
     .navbar-toggler {
         display: none;
     }

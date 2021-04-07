@@ -2,6 +2,7 @@
 
 ### Version 0.9.4
 Release date 2021-04-07
+- **Menu** made more compact.
 - **Bug fix** of editing *stations*.
 
 ### Version 0.9.3
