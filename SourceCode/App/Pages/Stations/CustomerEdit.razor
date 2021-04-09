@@ -1,0 +1,64 @@
+﻿@page "/Stations/{StationId:int}/Customers/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject StationService StationService
+@inject StationCustomerService StationCustomerService
+
+@inject OperatingDayService OperatingDayService
+
+
+<EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+    <Inputs>
+        <AppInputText Width="4" @bind-Value="StationCustomer.CustomerName" Label="Name" />
+        <AppInputText Width="8" @bind-Value="StationCustomer.Comment" Label="Comment" />
+        <AppInputText Width="3" @bind-Value="StationCustomer.TrackOrArea" Label="Comment" BackColor="@StationCustomer.TrackOrAreaColor" TextColor="@StationCustomer.TrackOrAreaColor.TextColor()" />
+        <AppInputColor Width="3" @bind-Value="StationCustomer.TrackOrAreaColor" Label="Color" />
+        <AppInputNumber Width="2" @bind-Value="StationCustomer.OpenedYear" Label="OpenedYear" />
+        <AppInputNumber Width="2" @bind-Value="StationCustomer.ClosedYear" Label="ClosedYear" />
+    </Inputs>
+    <Buttons>
+
+    </Buttons>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Station? Station;
+    StationCustomer? StationCustomer;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StationId > 0)
+        {
+            Station = await StationService.FindByIdAsync(Principal, StationId);
+            StationCustomer = Id > 0 ? await StationCustomerService.FindByIdAsync(Principal, Id) : Default;
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (StationId > 0 && StationCustomer is not null)
+        {
+            var result = await StationCustomerService.SaveAsync(Principal, StationId, StationCustomer);
+        }
+    }
+    private StationCustomer Default => new StationCustomer
+    {
+        StationId = StationId
+    };
+}

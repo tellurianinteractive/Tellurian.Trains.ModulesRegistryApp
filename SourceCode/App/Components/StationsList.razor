@@ -10,7 +10,7 @@
     }
     else
     {
-        <div class="col-md-6" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
+        <div class="col-md-8" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
             <span class="fa fa-exclamation-circle" /> @Localizer["NOTE: Add a module first in order to then extend it by adding a station!"]
         </div>
     }
@@ -33,13 +33,13 @@
         <td>
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
     </td>
-    <td>
-        @if (MayEdit)
-        {
-            <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-        }
-        &nbsp;
-    </td>
+        <td>
+            @if (MayEdit)
+            {
+                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+            }
+            @*<a class="btn btn-sm btn-secondary" href="@CargoCustomersHref(station.Id)"><span class="fa fa-warehouse" />@Localizer["FreightCustomers"]</a>*@
+        </td>
 </RowTemplate>
 </TableTemplate>
 
@@ -54,4 +54,6 @@
     string StationEditHref(int id) => OwningGroupId > 0 ?
    $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
    $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
+
+    string CargoCustomersHref(int id) => $"/Stations/{id}/Customers";
 }

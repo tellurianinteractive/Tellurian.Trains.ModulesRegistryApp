@@ -759,4 +759,22 @@
   <data name="Regions" xml:space="preserve">
     <value>Regionen</value>
   </data>
+  <data name="FreightCustomersAt" xml:space="preserve">
+    <value>Frachtkunden bei {0}</value>
+  </data>
+  <data name="TrackOrArea" xml:space="preserve">
+    <value>Spur Nr. oder Ladefläche</value>
+  </data>
+  <data name="FreightCustomers" xml:space="preserve">
+    <value>Frachtkunden</value>
+  </data>
+  <data name="OpenedYear" xml:space="preserve">
+    <value>Eröffnungsjahr</value>
+  </data>
+  <data name="ClosedYear" xml:space="preserve">
+    <value>Geschlossenes Jahr</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
 </root>

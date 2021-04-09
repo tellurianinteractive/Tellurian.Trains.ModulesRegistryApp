@@ -19,7 +19,6 @@
     </div>
 }
 
-
 <TableTemplate Items="People" HideNoRecordsToDisplay="true">
     <TableHeader>
         <th>@Localizer["Name"]</th>
@@ -37,7 +36,7 @@
                 <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
                 <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
                 <a class="btn btn-sm btn-info" href="persons/@person.Id/stations"><span class="fa fa-school" />@Localizer["Stations"]</a>
-                @if (person.IsNeverLoggedIn())
+                @if (person.IsNeverLoggedIn() && person.HasEmail())
                 {
                     <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="fa fa-envelope" />@Localizer["Invite"]</a>
                 }

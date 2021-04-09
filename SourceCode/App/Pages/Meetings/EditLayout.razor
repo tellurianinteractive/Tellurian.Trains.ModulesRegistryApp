@@ -53,7 +53,7 @@
             {
                 ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
                 ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
-                OperatingDayItems = await OperatingDayService.BasicDaysListboxItemsAsync();
+                OperatingDayItems = await OperatingDayService.BasicDaysItemsAsync();
                 MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
                 Layout = Id > 0 ? Meeting.Layouts.SingleOrDefault(l => l.Id == Id) ?? DefaultLayout(Meeting) : DefaultLayout(Meeting);
             }

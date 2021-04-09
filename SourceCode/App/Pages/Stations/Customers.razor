@@ -1,0 +1,69 @@
+﻿@page "/Stations/{stationid:int}/Customers"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+
+@inject StationService StationService
+@inject StationCustomerService StationCustomerService
+
+<h1><span class="fa fa-warehouse" /> @Heading</h1>
+
+@if (MayEdit)
+{
+    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="fa fa-edit" />@Localizer["Add"]</a>
+}
+
+<TableTemplate Items="StationCustomers">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Comment"]</th>
+        <th>@Localizer["TrackOrArea"]</th>
+        <th>@Localizer["OpenedYear"]</th>
+        <th>@Localizer["ClosedYear"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="customer">
+        <td>@customer.CustomerName</td>
+        <td>@customer.Comment</td>
+        <td style="text-align: center; background-color: @customer.TrackOrAreaColor; color: @customer.TrackOrAreaColor.TextColor()">@customer.TrackOrArea</td>
+        <td align="center">@customer.OpenedYear</td>
+        <td align="center">@customer.ClosedYear</td>
+        <td>
+            @if (MayEdit)
+            {
+                <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(customer.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+            }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Station? Station;
+    IEnumerable<StationCustomer>? StationCustomers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StationId > 0)
+        {
+            Station = await StationService.FindByIdAsync(Principal, StationId);
+            StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
+        }
+    }
+
+    ModuleOwnershipRef OwnerRef => Principal.AsModuleOwnershipRef();
+
+    bool MayEdit => Station?.Id > 0;
+    string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomersAt"].Value, Station?.FullName);
+    string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";
+}

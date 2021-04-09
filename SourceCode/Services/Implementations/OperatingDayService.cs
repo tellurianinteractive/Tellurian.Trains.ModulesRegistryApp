@@ -19,15 +19,25 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
-        public async Task<IEnumerable<ListboxItem>> BasicDaysListboxItemsAsync()
+        public async Task<IEnumerable<ListboxItem>> BasicDaysItemsAsync()
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.OperatingDays.AsNoTracking()
                 .Where(od => od.IsBasicDay)
                 .OrderBy(od => od.Flag)
-                .Select(od => new ListboxItem(od.Id, Description(od).ToString()))
+                .Select(od => new ListboxItem(od.Id, Description(od)))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<ListboxItem>> AllDaysItemsAsync()
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.OperatingDays.AsNoTracking()
+                .OrderBy(od => od.Flag)
+                .Select(od => new ListboxItem(od.Id, Description(od)))
+                .ToListAsync();
+        }
+
 
         private static string Description(OperatingDay day)
         {

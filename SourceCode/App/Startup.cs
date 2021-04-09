@@ -61,6 +61,7 @@ namespace ModulesRegistry
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
             if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
             services.AddScoped<CargoService>();
+            services.AddScoped<StationCustomerService>();
             services.AddScoped<ContentService>();
             services.AddScoped<CountryService>();
             services.AddScoped<DocumentService>();

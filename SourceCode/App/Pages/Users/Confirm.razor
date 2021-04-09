@@ -28,6 +28,11 @@ else if (PasswordCreated)
     <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
     <p>@Localizer["YouMayNowLogin"].</p>
 }
+else if (IsLockedOut)
+{
+    <h1>@Localizer["You are locked out!"]</h1>
+    <p>@Localizer["You have tried to reset your password to many times."].</p>
+}
 else
 {
     <h1>@Localizer["CreatePassword"]</h1>
@@ -64,5 +69,6 @@ else
         User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
     }
 
-    private bool PasswordCreated => User is not null && User.PasswordResetAttempts == 0;
+    private bool PasswordCreated => User is not null && User.HashedPassword.HasValue();
+    private bool IsLockedOut => User is not null && User.PasswordResetAttempts > 3;
 }

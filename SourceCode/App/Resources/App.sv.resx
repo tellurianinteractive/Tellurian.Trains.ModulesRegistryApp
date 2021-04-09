@@ -759,4 +759,22 @@
   <data name="Regions" xml:space="preserve">
     <value>Regioner</value>
   </data>
+  <data name="FreightCustomersAt" xml:space="preserve">
+    <value>Godskunder på {0}</value>
+  </data>
+  <data name="TrackOrArea" xml:space="preserve">
+    <value>Spår nr. eller lastområde</value>
+  </data>
+  <data name="FreightCustomers" xml:space="preserve">
+    <value>Godskunder</value>
+  </data>
+  <data name="OpenedYear" xml:space="preserve">
+    <value>Öppnat år</value>
+  </data>
+  <data name="ClosedYear" xml:space="preserve">
+    <value>Stängt år</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
 </root>

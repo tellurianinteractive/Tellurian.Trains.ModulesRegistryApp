@@ -26,7 +26,7 @@ namespace ModulesRegistry.Services.Extensions
             me.Person.PrimaryEmail();
 
         public static string PrimaryEmail(this Person? me) =>
-            me is null ? string.Empty :
+            me is null || string.IsNullOrWhiteSpace(me.EmailAddresses) ? string.Empty :
             me.EmailAddresses.Items()[0];
 
         public static bool HasEmail([NotNullWhen(true)] this User? me) =>
