@@ -18,7 +18,7 @@ namespace ModulesRegistry.Data
         public string FullName { get; set; }
         public string Signature { get; set; }
         public bool IsShadow { get; set; }
-        public bool IsEnd { get; set; }
+        public bool IsTerminus { get; set; }
         public int? RegionId { get; set; }
         public int? PdfInstructionId { get; set; }
 

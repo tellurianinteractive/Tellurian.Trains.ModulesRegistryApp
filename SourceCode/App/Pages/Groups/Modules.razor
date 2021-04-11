@@ -5,7 +5,7 @@
 @inject ModuleService ModuleService
 @inject GroupService GroupService 
 
-<h1><span class="fa fa-boxes"/> @Localizer.ObjectOwner("Modules", Owner)</h1>
+<h1><span class="@FontAwesome.Module"/> @Localizer.ObjectOwner("Modules", Owner)</h1>
 <ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id"  />
 
 @code {

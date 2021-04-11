@@ -70,6 +70,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to and.
+        /// </summary>
+        internal static string And {
+            get {
+                return ResourceManager.GetString("And", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Module Registry.
         /// </summary>
         internal static string AppName {
@@ -84,6 +93,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Approved {
             get {
                 return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arrival.
+        /// </summary>
+        internal static string Arrival {
+            get {
+                return ResourceManager.GetString("Arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At night.
+        /// </summary>
+        internal static string At_night {
+            get {
+                return ResourceManager.GetString("At night", resourceCulture);
             }
         }
         
@@ -142,6 +169,42 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cubic meters.
+        /// </summary>
+        internal static string Cubicmeters {
+            get {
+                return ResourceManager.GetString("Cubicmeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daily.
+        /// </summary>
+        internal static string Daily {
+            get {
+                return ResourceManager.GetString("Daily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daily.
+        /// </summary>
+        internal static string DailyShort {
+            get {
+                return ResourceManager.GetString("DailyShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPPER.
+        /// </summary>
+        internal static string DayNameCasing {
+            get {
+                return ResourceManager.GetString("DayNameCasing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleted successfully..
         /// </summary>
         internal static string DeletedSuccessfully {
@@ -169,6 +232,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Departure.
+        /// </summary>
+        internal static string Departure {
+            get {
+                return ResourceManager.GetString("Departure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fault.
         /// </summary>
         internal static string Fault {
@@ -183,6 +264,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Fixed {
             get {
                 return ResourceManager.GetString("Fixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Friday.
+        /// </summary>
+        internal static string Friday {
+            get {
+                return ResourceManager.GetString("Friday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fr.
+        /// </summary>
+        internal static string FridayShort {
+            get {
+                return ResourceManager.GetString("FridayShort", resourceCulture);
             }
         }
         
@@ -241,6 +340,42 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the afternoon.
+        /// </summary>
+        internal static string In_the_afternoon {
+            get {
+                return ResourceManager.GetString("In the afternoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the evening.
+        /// </summary>
+        internal static string In_the_evening {
+            get {
+                return ResourceManager.GetString("In the evening", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the morning.
+        /// </summary>
+        internal static string In_the_morning {
+            get {
+                return ResourceManager.GetString("In the morning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         internal static string Info {
@@ -255,6 +390,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string MayNotBeDeleted {
             get {
                 return ResourceManager.GetString("MayNotBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monday.
+        /// </summary>
+        internal static string Monday {
+            get {
+                return ResourceManager.GetString("Monday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mo.
+        /// </summary>
+        internal static string MondayShort {
+            get {
+                return ResourceManager.GetString("MondayShort", resourceCulture);
             }
         }
         
@@ -394,6 +547,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pieces.
+        /// </summary>
+        internal static string Pieces {
+            get {
+                return ResourceManager.GetString("Pieces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planned.
         /// </summary>
         internal static string Planned {
@@ -421,11 +583,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receive.
+        /// </summary>
+        internal static string Receive {
+            get {
+                return ResourceManager.GetString("Receive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removable.
         /// </summary>
         internal static string Removable {
             get {
                 return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saturday.
+        /// </summary>
+        internal static string Saturday {
+            get {
+                return ResourceManager.GetString("Saturday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sa.
+        /// </summary>
+        internal static string SaturdayShort {
+            get {
+                return ResourceManager.GetString("SaturdayShort", resourceCulture);
             }
         }
         
@@ -448,11 +637,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        internal static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sunday.
+        /// </summary>
+        internal static string Sunday {
+            get {
+                return ResourceManager.GetString("Sunday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Su.
+        /// </summary>
+        internal static string SundayShort {
+            get {
+                return ResourceManager.GetString("SundayShort", resourceCulture);
             }
         }
         
@@ -480,6 +696,60 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Tested {
             get {
                 return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thursday.
+        /// </summary>
+        internal static string Thursday {
+            get {
+                return ResourceManager.GetString("Thursday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Th.
+        /// </summary>
+        internal static string ThursdayShort {
+            get {
+                return ResourceManager.GetString("ThursdayShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        internal static string To {
+            get {
+                return ResourceManager.GetString("To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tonnes.
+        /// </summary>
+        internal static string Tonnes {
+            get {
+                return ResourceManager.GetString("Tonnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tuesday.
+        /// </summary>
+        internal static string Tuesday {
+            get {
+                return ResourceManager.GetString("Tuesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tu.
+        /// </summary>
+        internal static string TuesdayShort {
+            get {
+                return ResourceManager.GetString("TuesdayShort", resourceCulture);
             }
         }
         
@@ -534,6 +804,33 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wagons.
+        /// </summary>
+        internal static string Wagons {
+            get {
+                return ResourceManager.GetString("Wagons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wednesday.
+        /// </summary>
+        internal static string Wednesday {
+            get {
+                return ResourceManager.GetString("Wednesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We.
+        /// </summary>
+        internal static string WednesdayShort {
+            get {
+                return ResourceManager.GetString("WednesdayShort", resourceCulture);
             }
         }
         

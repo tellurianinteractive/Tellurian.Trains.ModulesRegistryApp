@@ -6,10 +6,10 @@
 @inject IStringLocalizer<App> Localizer
 @inject RegionService RegionService
 
-<h1><span class="fa fa-shield-alt" /> @Localizer["Regions"]</h1>
+<h1><span class="@FontAwesome.Region" /> @Localizer["Regions"]</h1>
 @if (CountryId != 0)
 {
-    <a class="btn btn-info btn-sm" href="Regions/0/Index">@Localizer.ShowAllInAll("Regions", "Countries")</a>
+    <a class="btn btn-info btn-sm" href="Regions/0/Index"><span class="fa fa-globe-europe" /> @Localizer.ShowAllInAll("Regions", "Countries")</a>
 }
 
 <TableTemplate Items="Regions">
@@ -26,7 +26,7 @@
         <td>
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))
             {
-                <a class="btn btn-sm btn-primary" href="regions/@region.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-primary" href="regions/@region.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>

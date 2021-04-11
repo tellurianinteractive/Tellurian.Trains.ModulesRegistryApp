@@ -7,9 +7,8 @@
     @if (!string.IsNullOrWhiteSpace(Label))
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
-
     }
-    <input disabled="@IsDisabled" id="@Label" style="height: 38px" class="form-control @CssClass" type="color" @bind="@CurrentValue" />
+    <input disabled="@IsDisabled" id="@Label" style="height: 38px" class="form-control @CssClass"  type="color" @bind="@CurrentValue" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -19,10 +18,12 @@
 </div>
 
 @code {
+   
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        result = value ;
+        result = value.Max(7);
+        if (result is not null) result = result.ToLowerInvariant();
         validationErrorMessage = null;
         return true;
     }

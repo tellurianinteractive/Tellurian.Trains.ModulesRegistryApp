@@ -279,4 +279,103 @@
   <data name="UnderApproval" xml:space="preserve">
     <value>Under approval</value>
   </data>
+  <data name="Arrival" xml:space="preserve">
+    <value>Arrival</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Departure</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Receive" xml:space="preserve">
+    <value>Receive</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="In the evening" xml:space="preserve">
+    <value>In the evening</value>
+  </data>
+  <data name="At night" xml:space="preserve">
+    <value>At night</value>
+  </data>
+  <data name="In the afternoon" xml:space="preserve">
+    <value>In the afternoon</value>
+  </data>
+  <data name="In the morning" xml:space="preserve">
+    <value>In the morning</value>
+  </data>
+  <data name="Wagons" xml:space="preserve">
+    <value>Wagons</value>
+  </data>
+  <data name="Tonnes" xml:space="preserve">
+    <value>Tonnes</value>
+  </data>
+  <data name="Cubicmeters" xml:space="preserve">
+    <value>Cubic meters</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="And" xml:space="preserve">
+    <value>and</value>
+  </data>
+  <data name="DayNameCasing" xml:space="preserve">
+    <value>UPPER</value>
+  </data>
+  <data name="MondayShort" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>We</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="FridayShort" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="SundayShort" xml:space="preserve">
+    <value>Su</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="DailyShort" xml:space="preserve">
+    <value>Daily</value>
+  </data>
 </root>

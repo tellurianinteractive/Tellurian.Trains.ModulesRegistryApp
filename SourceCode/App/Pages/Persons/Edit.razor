@@ -12,7 +12,7 @@
 @inject CountryService CountryService
 @inject GroupService GroupService
 
-<h1><span class="fa fa-user" /> @Localizer.AddOrEdit("Person", Id == 0) </h1>
+<h1><span class="@FontAwesome.User" /> @Localizer.AddOrEdit("Person", Id == 0) </h1>
 @if (Person is null)
 {
 
@@ -31,7 +31,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 
         <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
         <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" />@Localizer["Save"]</button>
         </div>
     </EditForm>
 }

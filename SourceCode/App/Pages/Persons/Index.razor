@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+
 @page "/Persons/Index"
 @page "/Persons/Index/{countryId:int}"
 
@@ -9,13 +10,13 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
+<h1><span class="@FontAwesome.People" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
 
 @if (CountryId > 0)
 {
     <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@CountryId"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@CountryId"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
     </div>
 }
 
@@ -33,16 +34,16 @@
         <td style="white-space: nowrap !important;">
             @if (Principal.IsAuthorisedInCountry(person.CountryId))
             {
-                <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="fa fa-edit" />@Localizer["Edit"]</a>
-                <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="fa fa-boxes" />@Localizer["Modules"]</a>
-                <a class="btn btn-sm btn-info" href="persons/@person.Id/stations"><span class="fa fa-school" />@Localizer["Stations"]</a>
-                @if (person.IsNeverLoggedIn() && person.HasEmail())
+                <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+                <a class="btn btn-sm btn-info" href="persons/@person.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+                @if (person.MayBeInvited())
                 {
-                    <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="fa fa-envelope" />@Localizer["Invite"]</a>
+                    <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
                 }
                 @if (person.UserId is null)
                 {
-                    <a class="btn btn-sm btn-danger" href="persons/@person.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>
+                    <a class="btn btn-sm btn-danger" href="persons/@person.Id/delete"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</a>
                 }
             }
         </td>

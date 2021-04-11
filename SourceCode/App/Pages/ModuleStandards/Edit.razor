@@ -8,7 +8,7 @@
 @inject ScaleService ScaleService
 @inject ModuleStandardService ModuleStandardService
 
-<h1><span class="fa fa-pencil-ruler" aria-hidden="true" /> @Localizer.AddOrEdit("ModuleStandard", Id == 0) </h1>
+<h1><span class="@FontAwesome.Standard" aria-hidden="true" /> @Localizer.AddOrEdit("ModuleStandard", Id == 0) </h1>
 
 @if (ModuleStandard is null)
 {
@@ -31,7 +31,7 @@ else
         <AppInputText Width="2" Label="ElectricSystem" @bind-Value="ModuleStandard.Electricity" />
         <AppInputText Width="12" Label="AcceptedNorm" @bind-Value="ModuleStandard.AcceptedNorm" Placeholder="LinkToExternalContent" />
         <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="fa fa-save" />@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" />@Localizer["Save"]</button>
         </div>
     </EditForm>
 }

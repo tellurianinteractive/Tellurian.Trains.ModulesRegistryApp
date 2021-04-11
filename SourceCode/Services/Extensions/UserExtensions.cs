@@ -44,6 +44,9 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsInvited([NotNullWhen(true)] this Person? me) =>
             me is not null && me.User is not null && me.User.LastSignInTime is null;
 
+        public static bool MayBeInvited([NotNullWhen(true)] this Person? me) =>
+            me is not null && me.IsNeverLoggedIn() && me.HasEmail();
+
         public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? me) =>
             me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
 

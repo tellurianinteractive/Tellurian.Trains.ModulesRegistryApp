@@ -5,7 +5,7 @@
     if (AnyModules)
     {
         <div>
-            <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+            <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="@FontAwesome.Add"/> @Localizer["Add"]</a>
         </div>
     }
     else
@@ -28,7 +28,7 @@
     <RowTemplate Context="station">
         <td>@station.FullName</td>
         <td>@station.Signature</td>
-        <td>@station.IsEnd.AsYesNo()</td>
+        <td>@station.IsTerminus.AsYesNo()</td>
         <td>@station.IsShadow.AsYesNo()</td>
         <td>
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
@@ -36,9 +36,9 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
-            @*<a class="btn btn-sm btn-secondary" href="@CargoCustomersHref(station.Id)"><span class="fa fa-warehouse" />@Localizer["FreightCustomers"]</a>*@
+            <a class="btn btn-sm btn-secondary" href="@CargoCustomersHref(station.Id)"><span class="@FontAwesome.Customer" />@Localizer["FreightCustomers"]</a>
         </td>
 </RowTemplate>
 </TableTemplate>

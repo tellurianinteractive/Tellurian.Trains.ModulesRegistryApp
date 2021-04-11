@@ -5,12 +5,12 @@
 
 @inject MeetingService MeetingService
 
-<h1><span class="fa fa-calendar" aria-hidden="true" />@Localizer["Meetings"]</h1>
+<h1><span class="@FontAwesome.Meeting" aria-hidden="true" />@Localizer["Meetings"]</h1>
 
 @if (Principal.IsAnyAdministrator())
 {
     <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="Meetings/0/edit"><span class="fa fa-calendar" /> @Localizer["Add"]</a>
+        <a class="btn btn-secondary btn-sm" href="Meetings/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
     </div>
 }
 
@@ -32,7 +32,7 @@
         <td>@MeetingOrganiser(meeting)</td>
         <td>@meeting.Status.MeetingStatus()</td>
         <td>
-            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/Edit">@Localizer["Details"]</a>
+            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
         </td>
     </RowTemplate>
 </TableTemplate>

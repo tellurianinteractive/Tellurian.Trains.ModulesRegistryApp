@@ -17,7 +17,7 @@
             }
         }
     </select>
-    <button disabled="@(Id == 0)" class="btn btn-primary" @onclick="OnSelectedItem">@Localizer["Ok"]</button>
+    <button disabled="@(Id == 0)" class="btn btn-primary" @onclick="OnSelectedItem"><span class="@FontAwesome.Ok"/> @Localizer["Ok"]</button>
 </div>
 }
 

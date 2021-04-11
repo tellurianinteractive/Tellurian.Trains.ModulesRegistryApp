@@ -11,7 +11,7 @@
             <img src="@IconImageSrc" class="icon" /> @Heading
         </div>
         <div class="col-md-1">
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="fa fa-upload" /> @Localizer["SelectFile"]</button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="@FontAwesome.Upload" /> @Localizer["SelectFile"]</button>
             <InputFile Id="@InputFileId" OnChange="LoadFile" accept="@Accept" hidden />
         </div>
         <div class="col-md-4">

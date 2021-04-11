@@ -8,7 +8,7 @@
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 
-<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false) @GroupMember?.Person.Name()</h1>
+<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false) @GroupMember?.Person.Name()</h1>
 @if (GroupMember is null)
 {
 
@@ -22,7 +22,7 @@ else
         <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
         <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
         <div class="col-12">
-            <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-sm btn-primary"><span class="accordion" aria-hidden="true" />@Localizer["Save"]</button>
         </div>
     </EditForm>
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class PersonService 
+    public sealed class PersonService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public PersonService(IDbContextFactory<ModulesDbContext> factory)
@@ -105,10 +105,15 @@ namespace ModulesRegistry.Services.Implementations
                 var hasModules = dbContext.ModuleOwnerships.Any(mo => mo.PersonId == id);
                 if (isUser || hasModules) return (0, Strings.MayNotBeDeleted);
 
-                var person = await dbContext.People.FindAsync(id);
+                var person = await dbContext.People.Include(p => p.GroupMembers).SingleOrDefaultAsync( p=> p.Id == id);
+                if (person is null) return (0, Strings.NothingToDelete);
                 if (principal.IsAuthorisedInCountry(person.CountryId))
                 {
-                    if (person is null) return (0, Strings.NothingToDelete);
+                    foreach (var membership in person.GroupMembers)
+                    {
+                        dbContext.Remove(membership);
+                    }
+                    //await dbContext.SaveChangesAsync();
                     dbContext.Remove(person);
                     var count = await dbContext.SaveChangesAsync();
                     return count.DeleteResult();

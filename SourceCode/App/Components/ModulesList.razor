@@ -8,7 +8,7 @@
 @if (Modules is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-sm btn-secondary" href="@ModuleEditHref(0)"><span class="fa fa-plus-square" />@Localizer["Add"]</a>
+        <a class="btn btn-sm btn-secondary" href="@ModuleEditHref(0)"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
     </div>
 }
 
@@ -38,14 +38,15 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="@FontAwesome.Edit"/> @Localizer["Edit"]</a>
                 @if (module.StationId.HasValue)
                 {
-                    <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
+                    <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer.EditObject("Station")</a>
+                    <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer.EditObject("FreightCustomers")</a>
                 }
                 @if (module.Id > 0)
                 {
-                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="fa fa-clone" />@Localizer["Clone"]</button>
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" />@Localizer["Clone"]</button>
                 }
             }
             &nbsp;
@@ -76,9 +77,13 @@
     string ModuleEditHref(int id) => OwningGroupId > 0 ?
         $"/Modules/{id}/Edit/GroupOwned/{OwningGroupId}" :
         $"/Modules/{id}/Edit/PersonOwned/{OwningPersonId}";
-    
+
     string StationEditHref(int id) => OwningGroupId > 0 ?
         $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
         $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
+
+    string StationCustomersHref(int id) => OwningGroupId > 0 ?
+        $"/Stations/{id}/Customers" :
+        $"/Stations/{id}/Customers";
 
 }

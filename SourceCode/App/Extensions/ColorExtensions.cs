@@ -20,8 +20,7 @@ namespace ModulesRegistry.Extensions
 
         private static string HexColorRegEx => "^#([A-Fa-f0-9]{6})$";
         private static bool IsHexColor([NotNullWhen(true)] this string? maybeColor) =>
-            string.IsNullOrWhiteSpace(maybeColor) ? false :
-            Regex.IsMatch(maybeColor, HexColorRegEx);
+            !string.IsNullOrWhiteSpace(maybeColor) && Regex.IsMatch(maybeColor, HexColorRegEx);
 
        
     }

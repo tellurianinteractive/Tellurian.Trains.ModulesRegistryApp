@@ -777,4 +777,34 @@
   <data name="Comment" xml:space="preserve">
     <value>Kommentar</value>
   </data>
+  <data name="Color" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Tage</value>
+  </data>
+  <data name="OtherName" xml:space="preserve">
+    <value>Anderer Name</value>
+  </data>
+  <data name="CargoFlow" xml:space="preserve">
+    <value>Frachtfluss</value>
+  </data>
+  <data name="FreightCustomerAt" xml:space="preserve">
+    <value>Frachtkund bei {0}</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Unterlagen</value>
+  </data>
+  <data name="QuantityUnit" xml:space="preserve">
+    <value>Mengeneinheit</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Menge</value>
+  </data>
+  <data name="UnloadingReady" xml:space="preserve">
+    <value>Entladen bereit bei</value>
+  </data>
+  <data name="LoadingReady" xml:space="preserve">
+    <value>Lade bereit</value>
+  </data>
 </root>

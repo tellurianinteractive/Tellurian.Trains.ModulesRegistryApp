@@ -8,7 +8,7 @@
 
 @if (User is null)
 {
-    <h1>@Localizer["UserConfirmationFailed"]</h1>
+    <h1><span class="@FontAwesome.User"/> @Localizer["UserConfirmationFailed"]</h1>
     @if (EmailAddress is null)
     {
         <p>@Localizer["NoEmailProvided"].</p>
@@ -24,18 +24,18 @@
 }
 else if (PasswordCreated)
 {
-    <h1>@Localizer["UserConfirmed"]</h1>
+<h1><span class="@FontAwesome.User" /> @Localizer["UserConfirmed"]</h1>
     <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
     <p>@Localizer["YouMayNowLogin"].</p>
 }
 else if (IsLockedOut)
 {
-    <h1>@Localizer["You are locked out!"]</h1>
+<h1><span class="@FontAwesome.User" /> @Localizer["You are locked out!"]</h1>
     <p>@Localizer["You have tried to reset your password to many times."].</p>
 }
 else
 {
-    <h1>@Localizer["CreatePassword"]</h1>
+<h1><span class="@FontAwesome.User" /> @Localizer["CreatePassword"]</h1>
     <PasswordPolicyView />
     <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <DataAnnotationsValidator />

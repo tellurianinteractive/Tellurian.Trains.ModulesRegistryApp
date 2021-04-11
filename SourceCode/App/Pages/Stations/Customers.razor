@@ -7,11 +7,11 @@
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
 
-<h1><span class="fa fa-warehouse" /> @Heading</h1>
+<h1><span class="@FontAwesome.Customer" /> @Heading</h1>
 
 @if (MayEdit)
 {
-    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="fa fa-edit" />@Localizer["Add"]</a>
+    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
 
 <TableTemplate Items="StationCustomers">
@@ -32,7 +32,7 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(customer.Id)"><span class="fa fa-edit" />@Localizer["Edit"]</a>
+                <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(customer.Id)"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>

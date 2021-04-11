@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
-using System;
+using ModulesRegistry.Services.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -25,7 +24,7 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.OperatingDays.AsNoTracking()
                 .Where(od => od.IsBasicDay)
                 .OrderBy(od => od.Flag)
-                .Select(od => new ListboxItem(od.Id, Description(od)))
+                .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays().ShortName))
                 .ToListAsync();
         }
 
@@ -34,7 +33,7 @@ namespace ModulesRegistry.Services.Implementations
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.OperatingDays.AsNoTracking()
                 .OrderBy(od => od.Flag)
-                .Select(od => new ListboxItem(od.Id, Description(od)))
+                .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays().ShortName))
                 .ToListAsync();
         }
 

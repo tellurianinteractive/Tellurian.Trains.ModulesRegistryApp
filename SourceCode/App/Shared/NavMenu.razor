@@ -16,40 +16,40 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="Meetings/Index" >
-                <span class="fa fa-calendar" aria-hidden="true" />@Localizer["Meetings"]
+                <span class="@FontAwesome.Meeting" aria-hidden="true" />@Localizer["Meetings"]
             </NavLink>
         </li>
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Modules/Index">
-                    <span class="fa fa-boxes" aria-hidden="true" />@Localizer["Modules"]
+                    <span class="@FontAwesome.Module" aria-hidden="true" />@Localizer["Modules"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Stations/Index">
-                    <span class="fa fa-school" aria-hidden="true" />@Localizer["Stations"]
+                    <span class="@FontAwesome.Station" aria-hidden="true" />@Localizer["Stations"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Groups/Index">
-                    <span class="fa fa-users" aria-hidden="true" />@Localizer["Groups"]
+                    <span class="@FontAwesome.Group" aria-hidden="true" />@Localizer["Groups"]
                 </NavLink>
             </li>
         </AuthorizeView>
         <AuthorizeView Policy="@AppPolicyNames.Admin">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Persons/Index">
-                    <span class="fa fa-user-friends" aria-hidden="true" />@Localizer["ModuleOwners"]
+                    <span class="@FontAwesome.People" aria-hidden="true" />@Localizer["ModuleOwners"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="ModuleStandards/Index">
-                    <span class="fa fa-pencil-ruler" aria-hidden="true" />@Localizer["ModuleStandards"]
+                    <span class="@FontAwesome.Standard" aria-hidden="true" />@Localizer["ModuleStandards"]
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="ModuleStandards/Gables">
-                    <span class="fa fa-pencil-ruler" aria-hidden="true" />@Localizer["ModuleGables"]
+                    <span class="@FontAwesome.Standard" aria-hidden="true" />@Localizer["ModuleGables"]
                 </NavLink>
             </li>
         </AuthorizeView>
@@ -61,13 +61,13 @@
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Cargo/Index">
-                    <span class="fa fa-box-open" aria-hidden="true" />@Localizer["CargoTypes"]
+                    <span class="@FontAwesome.Cargo" aria-hidden="true" />@Localizer["CargoTypes"]
                 </NavLink>
             </li>
         </AuthorizeView>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="Users/Settings">
-                <span class="fa fa-user" aria-hidden="true" />@Localizer["UserSettings"]
+                <span class="@FontAwesome.User" aria-hidden="true" />@Localizer["UserSettings"]
             </NavLink>
         </li>
     </ul>

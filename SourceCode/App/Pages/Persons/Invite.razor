@@ -12,7 +12,7 @@
 @inject ContentService ContentService
 @inject CountryService CountryService
 
-<h1><span class="fa fa-user" /> @Localizer["Invite"] @Invitation?.Recipient.Person.FirstName @Invitation?.Recipient.Person.LastName</h1>
+<h1><span class="@FontAwesome.User" /> @Localizer["Invite"] @Invitation?.Recipient.Person.FirstName @Invitation?.Recipient.Person.LastName</h1>
 @if (CanSend)
 {
     <h2>@Localizer["Message"]</h2>
@@ -24,13 +24,14 @@
         <input class="form-check" type="checkbox" @bind="@IsReadOnly" />
         <label class="form-check-label">@Localizer["IsReadOnly"]</label>
     </div>
-    <button class="btn btn-primary" @onclick="Send"><span class="fa fa-envelope" />@Localizer["Send"]</button>
+    <div class="col-12">
+        <button class="btn btn-primary" @onclick="Send"><span class="@FontAwesome.Invite" />@Localizer["Send"]</button>
+    </div>
 }
 else
 {
     @Localizer["InvitedPersonHasNoEmail"];
 }
-
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -68,6 +69,7 @@ else
         if (Invitation is not null)
         {
             Invitation = Invitation with { PersonalMessage = PersonalMessage };
+            DisplayedMessage = Invitation.GetMessageHtml();
             StateHasChanged();
         }
     }

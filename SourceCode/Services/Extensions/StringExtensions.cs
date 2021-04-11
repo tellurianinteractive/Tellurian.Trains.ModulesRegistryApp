@@ -17,6 +17,9 @@ namespace ModulesRegistry.Services.Extensions
         public static bool HasNoValue([NotNullWhen(false)] this string? me) => 
             string.IsNullOrWhiteSpace(me);
 
+        public static string? Max(this string? me, int max) => 
+            me is null ? null : me.Length < max ? me : me[0..max];
+
         public static bool IsEmailAddress([NotNullWhen(true)] this string? me) => 
             me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 

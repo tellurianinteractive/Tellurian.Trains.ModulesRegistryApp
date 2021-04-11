@@ -13,7 +13,7 @@
 @inject PersonService PersonService
 @inject GroupService GroupService
 
-<h1><span class="fa fa-school" /> @Heading</h1>
+<h1><span class="@FontAwesome.Station" /> @Heading</h1>
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -21,7 +21,7 @@
         <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
         <AppInputFill Width="5" />
-        <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsEnd" />
+        <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
         <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
         <StationTracksList Station="Station" />
     </Inputs>

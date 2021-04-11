@@ -6,7 +6,7 @@
 @inject MeetingService MeetingService
 @inject GroupService GroupService
 
-<h1><span class="fa fa-calendar" aria-hidden="true" />@Heading</h1>
+<h1><span class="@FontAwesome.Meeting" aria-hidden="true" />@Heading</h1>
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -27,11 +27,11 @@
 
 @if (Meeting is not null)
 {
-    <h3 style="margin-top:12pt"><span class="fa fa-route" /> @Localizer["Layouts"]</h3>
+    <h3 style="margin-top:12pt"><span class="fa fa-project-diagram" /> @Localizer["Layouts"]</h3>
     @if (MayEdit)
     {
         <div>
-            <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/0"><span class="fa fa-route" /> @Localizer.AddOrEdit("Layout", true)</a>
+            <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/0"><span class="@FontAwesome.Add" /> @Localizer.AddOrEdit("Layout", true)</a>
 
         </div>
     }
@@ -51,11 +51,11 @@
             <td>
                 @if (MayEdit)
                     {
-                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id"><span class="fa fa-route" /> @Localizer["Edit"]</a>
+                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                     }
                 @if (Principal.IsAuthenticated())
                     {
-                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id/Modules"><span class="fa fa-boxes" /> @Localizer["SubmitModules"]</a>
+                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id/Modules"><span class="@FontAwesome.Modules" /> @Localizer["SubmitModules"]</a>
 
                     }
             </td>

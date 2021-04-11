@@ -41,6 +41,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated()) 
             {
                 entity.StationId = stationId;
+                entity.TrackOrAreaColor = entity.TrackOrAreaColor.ToLowerInvariant();
                 if (ownerRef.IsGroup)
                 {
                     using var dbContext = Factory.CreateDbContext();
@@ -88,6 +89,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 foreach (var cargo in entity.StationCustomerCargos)
                 {
+                    cargo.TrackOrAreaColor = cargo.TrackOrAreaColor?.ToLowerInvariant();
                     var current = existing.StationCustomerCargos.AsQueryable().FirstOrDefault(t => t.Id == cargo.Id);
                     if (current is null) existing.StationCustomerCargos.Add(cargo);
                     else dbContext.Entry(current).CurrentValues.SetValues(cargo);
@@ -97,7 +99,7 @@ namespace ModulesRegistry.Services.Implementations
 
             static bool IsUnchanged(ModulesDbContext dbContext, StationCustomer customer) =>
                 dbContext.Entry(customer).State == EntityState.Unchanged &&
-                customer.StationCustomerCargos.All(st => dbContext.Entry(st).State == EntityState.Unchanged);
+                customer.StationCustomerCargos.All(scc => dbContext.Entry(scc).State == EntityState.Unchanged);
         }
     }
 }

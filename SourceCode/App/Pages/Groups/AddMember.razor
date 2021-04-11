@@ -8,7 +8,7 @@
 @inject GroupService GroupService
 @inject PersonService PersonService
 
-<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Heading</h1>
+<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
 
 <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
     <FluentValidationValidator />
@@ -41,7 +41,7 @@
     <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
     <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
     <div class="col-12">
-        <button type="submit" class="btn btn-sm btn-primary"><span class="fa fa-save" aria-hidden="true" />@Localizer["Save"]</button>
+        <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
     </div>
 
 </EditForm>

@@ -8,7 +8,7 @@
 @inject CountryService CountryService
 @inject GroupCategoryService GroupCategoryService
 
-<h1><span class="fa fa-user-friends" aria-hidden="true" /> @Localizer.AddOrEdit("Group", Id == 0) </h1>
+<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Localizer.AddOrEdit("Group", Id == 0) </h1>
 @if (Group is null)
 {
 
@@ -43,7 +43,7 @@ else
         <ValidationMessage For="@(() => Group.Category)" />
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" /> @Localizer["Save"]</button>
     </div>
 </EditForm>
 }

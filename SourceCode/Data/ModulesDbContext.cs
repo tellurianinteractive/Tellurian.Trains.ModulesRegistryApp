@@ -128,13 +128,7 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<CargoRelation>(entity =>
             {
                 entity.ToTable("CargoRelation");
-
-                entity.HasOne(d => d.ConsumerStationCustomerCargo)
-                    .WithMany(p => p.CargoRelationConsumerStationCustomerCargos)
-                    .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
-
+ 
                 entity.HasOne(d => d.OperatingDay)
                     .WithMany(p => p.CargoRelations)
                     .HasForeignKey(d => d.OperatingDayId)
@@ -146,10 +140,16 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_CargoRelation_Operator");
 
                 entity.HasOne(d => d.SupplierStationCustomerCargo)
-                    .WithMany(p => p.CargoRelationSupplierStationCustomerCargos)
+                    .WithMany()
                     .HasForeignKey(d => d.SupplierStationCustomerCargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CargoRelation_CargoCustomer_Supplier");
+
+               entity.HasOne(d => d.ConsumerStationCustomerCargo)
+                    .WithMany()
+                    .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
             });
 
             modelBuilder.Entity<CargoUnit>(entity =>

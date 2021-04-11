@@ -1,8 +1,15 @@
 # Release Notes
 
+### Version 1.0.0
+Release date 2021-04-11
+
+Module and station management are now feature complete, so its time to release the first version.
+- **Freight Customers** for *stations* can now be added and maintained.
+- **Cargo Flow** for each *freight customer* can now be added and maintained.
+
 ### Version 0.9.5
 Release date 2021-04-09
-- **Bug fix** of user registration. Users may now create password again. Thanks to Seth Olofsson to report this.
+- **Bug fix** of user registration. Users may now create password again. Thanks to Seth Olofsson for reporting this.
 
 ### Version 0.9.4
 Release date 2021-04-07

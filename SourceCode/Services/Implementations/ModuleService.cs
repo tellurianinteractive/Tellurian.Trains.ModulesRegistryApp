@@ -196,20 +196,20 @@ namespace ModulesRegistry.Services.Implementations
             static async Task<(int Count, string Message, Module? Entity)> UpdateExisting(ModulesDbContext dbContext, Module entity, Module existing)
             {
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                AddOrRemoveGables(dbContext, entity, existing);
+                AddOrRemoveExits(dbContext, entity, existing);
                 if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
 
-                static void AddOrRemoveGables(ModulesDbContext dbContext, Module entity, Module existing)
+                static void AddOrRemoveExits(ModulesDbContext dbContext, Module entity, Module existing)
                 {
-                    foreach (var gable in entity.ModuleExits)
+                    foreach (var exit in entity.ModuleExits)
                     {
-                        var existingGable = existing.ModuleExits.AsQueryable().FirstOrDefault(g => g.Id == gable.Id);
-                        if (existingGable is null) existing.ModuleExits.Add(gable);
-                        else dbContext.Entry(existingGable).CurrentValues.SetValues(gable);
+                        var existingExit = existing.ModuleExits.AsQueryable().FirstOrDefault(g => g.Id == exit.Id);
+                        if (existingExit is null) existing.ModuleExits.Add(exit);
+                        else dbContext.Entry(existingExit).CurrentValues.SetValues(exit);
                     }
-                    foreach (var gable in existing.ModuleExits) if (!entity.ModuleExits.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
+                    foreach (var exit in existing.ModuleExits) if (!entity.ModuleExits.Any(mg => mg.Id == exit.Id)) dbContext.Remove(exit);
                 }
 
                 static bool IsUnchanged(ModulesDbContext dbContext, Module entity) =>

@@ -39,14 +39,19 @@ namespace ModulesRegistry.Services.Implementations
                  { Language.Danish, new CultureInfo("da") },
                  { Language.Norwegian, new CultureInfo("no") },
                  { Language.German, new CultureInfo("de") }
-                 //{ Language.Polish, new CultureInfo("pl") },
                  //{ Language.Dutch, new CultureInfo("nl") },
+                 //{ Language.Polish, new CultureInfo("pl") },
                  //{ Language.Czech, new CultureInfo("cs") },
              };
 
         public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
         public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;
 
+        /// <summary>
+        /// Uses the <paramref name="english"/> as key to find a localized text in <see cref="Strings"/> resources.
+        /// </summary>
+        /// <param name="english">The key to find a localised  </param>
+        /// <returns></returns>
         public static string Localized(this string? english)
         {
             if (english is null) return string.Empty;
@@ -54,17 +59,26 @@ namespace ModulesRegistry.Services.Implementations
             return string.IsNullOrEmpty(translated) ? english : translated;
         }
 
+        /// <summary>
+        /// Finds a translated property for an object. The object must have properties with translations for each language.
+        /// </summary>
+        /// <param name="me">An object with porperties for translated texts.</param>
+        /// <returns></returns>
+        public static LocalizedText LocalizedName(this object me) => me.LocalizedName(CurrentCulture);
+
+        /// <summary>
+        /// Finds a translated property for an object for the provided <paramref name="culture"/>. The object must have a property for that langauge.
+        /// </summary>
+        /// <param name="me"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public static LocalizedText LocalizedName(this object me, CultureInfo culture)
         {
             var language = culture.TwoLetterISOLanguageName;
             var value = language.GetPropertyValue(me);
             if (value is not null) return new LocalizedText(language, value);
             return me.LocalizedNames().FirstOrDefault() ?? LocalizedText.Empty;
-
         }
-
-        public static LocalizedText LocalizedName(this object me) => me.LocalizedName(CurrentCulture);
-
 
         private static IEnumerable<LocalizedText> LocalizedNames(this object me)
         {

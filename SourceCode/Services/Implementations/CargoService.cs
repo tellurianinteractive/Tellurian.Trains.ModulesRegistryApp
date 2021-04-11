@@ -14,6 +14,55 @@ namespace ModulesRegistry.Services.Implementations
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public CargoService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
+        public async Task<IEnumerable<ListboxItem>> GargoListboxItemsAsync(ClaimsPrincipal? principal)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.Cargos
+                    .Select(c => new ListboxItem(c.Id, c.LocalizedName().Value)).ToListAsync();
+                return items.OrderBy(l => l.Description).ToList();                  
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
+        public async Task<IEnumerable<ListboxItem>> CargoDirectionsListboxItemsAsync(ClaimsPrincipal? principal)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.CargoDirections
+                    .Select(cd => new ListboxItem(cd.Id, cd.FullName.Localized())).ToListAsync();;
+                return items
+                    .OrderBy(l => l.Description).ToList();               
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
+        public async Task<IEnumerable<ListboxItem>> CargoQualtityListboxItemsAsync(ClaimsPrincipal? principal)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.CargoUnits
+                    .Select(cu => new ListboxItem(cu.Id, cu.FullName.Localized())).ToListAsync();
+                return items.OrderBy(l => l.Description).ToList();                 
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
+        public async Task<IEnumerable<ListboxItem>> ReadyTimeListboxItemsAsync(ClaimsPrincipal? principal)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.CargoReadyTimes.Where(crt => crt.IsSpecifiedInLayoyt==true)
+                    .Select(crt => new ListboxItem(crt.Id, crt.FullName.Localized())).ToListAsync();
+                return items.OrderBy(l => l.Description).ToList();
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
         public async Task<IEnumerable<Cargo>> GetAll(ClaimsPrincipal? principal)
         {
             if (principal is not null && principal.IsAnyAdministrator())

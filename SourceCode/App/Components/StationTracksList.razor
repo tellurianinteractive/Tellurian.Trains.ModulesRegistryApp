@@ -9,7 +9,7 @@ else
 {
     <h3 class="mt-3">@Localizer["Tracks"]</h3>
     <div class="col-12">
-        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack">@AddTrackButtonText</button>
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack"><span class="@FontAwesome.Add"/> @AddTrackButtonText</button>
     </div>
     @foreach (var track in Station.StationTracks)
     {
@@ -28,9 +28,8 @@ else
             @if (track.Id > 0)
             {
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))">@Localizer["Delete"]</button>
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))"><span class="@FontAwesome.Delete" /> @Localizer["Delete"]</button>
                 </div>
-
             }
         </div>
     }

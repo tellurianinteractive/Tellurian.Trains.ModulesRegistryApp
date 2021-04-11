@@ -9,16 +9,19 @@
 @inject StationCustomerService StationCustomerService
 
 @inject OperatingDayService OperatingDayService
+@inject CargoService CargoService
 
+<h1><span class="@FontAwesome.Customer"/> @Heading</h1>
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
         <AppInputText Width="4" @bind-Value="StationCustomer.CustomerName" Label="Name" />
         <AppInputText Width="8" @bind-Value="StationCustomer.Comment" Label="Comment" />
-        <AppInputText Width="3" @bind-Value="StationCustomer.TrackOrArea" Label="Comment" BackColor="@StationCustomer.TrackOrAreaColor" TextColor="@StationCustomer.TrackOrAreaColor.TextColor()" />
+        <AppInputText Width="3" @bind-Value="StationCustomer.TrackOrArea" Label="TrackOrArea" BackColor="@StationCustomer.TrackOrAreaColor" TextColor="@StationCustomer.TrackOrAreaColor.TextColor()" />
         <AppInputColor Width="3" @bind-Value="StationCustomer.TrackOrAreaColor" Label="Color" />
         <AppInputNumber Width="2" @bind-Value="StationCustomer.OpenedYear" Label="OpenedYear" />
         <AppInputNumber Width="2" @bind-Value="StationCustomer.ClosedYear" Label="ClosedYear" />
+        <CustomerGargoList Customer="StationCustomer"  CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems"  QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
     </Inputs>
     <Buttons>
 
@@ -34,11 +37,20 @@
     Station? Station;
     StationCustomer? StationCustomer;
     IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    IEnumerable<ListboxItem>? ReadyTimeItems;
+
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CargoTypeItems = await CargoService.GargoListboxItemsAsync(Principal);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQualtityListboxItemsAsync(Principal);
+        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -55,10 +67,13 @@
         if (StationId > 0 && StationCustomer is not null)
         {
             var result = await StationCustomerService.SaveAsync(Principal, StationId, StationCustomer);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
     private StationCustomer Default => new StationCustomer
     {
         StationId = StationId
     };
+
+    string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomerAt"].Value, Station?.FullName);
 }

@@ -8,7 +8,7 @@
 
 @inject PersonService PersonService
 
-<h1><span class="fa fa-user" /> @Localizer["Delete"]?</h1>
+<h1><span class="@FontAwesome.User" /> @Localizer["Delete"]?</h1>
 @if (Person is null)
 {
 
@@ -19,8 +19,10 @@ else
         @Person.FirstName @Person.LastName, @Person.CityName
     </div>
 }
+<div class="col-12">
+    <button class="btn btn-danger" @onclick="OnDelete"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
+</div>
 
-<button class="btn btn-danger" @onclick="OnDelete"><span class="fa fa-trash" />@Localizer["Delete"]</button>
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? Id { get; set; }
