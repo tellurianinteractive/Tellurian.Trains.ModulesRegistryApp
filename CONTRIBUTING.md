@@ -11,6 +11,13 @@ As a test user you use the application and report back with:
 
 ## Translator
 If you want the application in yet another language, you can make a translation.
+
+#### Adding the new language to the app
+There are two main ways to add your translation to the app:
+- Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it.
+- Send translated files in a ZIP-file. 
+
+##### Using Git and GitHub
 You need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
 You can *check-out* the repository, add a translation and then submitting a *pull-request*.
 Below a description of what files to translate.
@@ -22,11 +29,6 @@ Markdown texts are longer texts with formatting. They are located [here](https:/
 3. Translate the texts and save. Use a Markdown editor and it is important to preserve all formatting. 
 A good start is to translate using Google and then refine the translation.
 4. Add the translated files to your local repository.
-
-#### Adding the new language to the app
-There are two main ways to add your translation to the app:
-- Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it.
-- Send translated files in a ZIP-file. 
 
 #### Resource files
 Resource files are XML-files with shorter texts or single words. They are located in three places:
