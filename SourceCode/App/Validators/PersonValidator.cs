@@ -12,30 +12,30 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FirstName)]);
 
             RuleFor(person => person.MiddleName)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.MiddleName)]);
 
             RuleFor(person => person.LastName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.LastName)]);
 
             RuleFor(person => person.CityName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.CityName)]);
 
             RuleFor(person => person.EmailAddresses)
@@ -50,7 +50,7 @@ namespace ModulesRegistry.Validators
 
             RuleFor(person => person.FremoOwnerSignature)
                 .MaximumLength(10)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.FremoOwnerSignature)]);
         }
     }

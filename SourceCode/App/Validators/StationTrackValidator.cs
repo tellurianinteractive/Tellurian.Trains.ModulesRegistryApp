@@ -15,7 +15,7 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(5)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                .WithName(n => localizer["TrackNumber"]);
             RuleFor(m => (int)m.DisplayOrder)
                 .InclusiveBetween(1, 30)
@@ -32,7 +32,7 @@ namespace ModulesRegistry.Validators
                 .WithName(n => localizer[nameof(n.SpeedLimit)]);
             RuleFor(m => m.UsageNote)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer["TrackNote"]);
         }
     }

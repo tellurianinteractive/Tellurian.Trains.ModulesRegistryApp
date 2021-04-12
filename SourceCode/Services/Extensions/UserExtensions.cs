@@ -35,11 +35,19 @@ namespace ModulesRegistry.Services.Extensions
         public static bool HasEmail([NotNullWhen(true)] this Person? me) =>
             !string.IsNullOrWhiteSpace(me.PrimaryEmail());
 
+        public static bool HasPassword([NotNullWhen(true)] this User? me) =>
+            me is not null && me.HashedPassword.HasValue();
+
         public static string Name(this Person? me) =>
             me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}":string.Empty;
 
         public static bool IsNeverLoggedIn(this Person? me) =>
             me is null || me.User is null || me.User.LastSignInTime is null;
+        public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? me) =>
+            me is null || me.LastSignInTime is null;
+
+        public static bool IsPasswordReset([NotNullWhen(true)] this User? me) =>
+            me is not null && me.PasswordResetAttempts > 0 && me.IsPasswordResetPermitted();
 
         public static bool IsInvited([NotNullWhen(true)] this Person? me) =>
             me is not null && me.User is not null && me.User.LastSignInTime is null;
@@ -49,6 +57,9 @@ namespace ModulesRegistry.Services.Extensions
 
         public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? me) =>
             me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
+
+        public static bool IsLockedOut([NotNullWhen(true)] this User? me) =>
+            me is null || me.PasswordResetAttempts > PasswordResetRequest.MaxRequests;
 
         public static string GetMessageHtml(this UserInvitation me)
         {

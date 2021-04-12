@@ -11,7 +11,7 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer["Direction"]);
             RuleFor(m => m.GablePropertyId)
                 .MustBeSelected(localizer)

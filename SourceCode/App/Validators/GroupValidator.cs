@@ -12,24 +12,24 @@ namespace ModulesRegistry.Validators
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(10)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.ShortName)]);
 
             RuleFor(group => group.FullName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FullName)]);
 
             RuleFor(group => group.CityName)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
-                .NameIsCapitalizedCorrectly(localizer)
+                .MustBeOrdinaryText(localizer)
+                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.CityName)]);
 
             RuleFor(group => group.Category)

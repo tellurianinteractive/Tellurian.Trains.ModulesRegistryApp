@@ -11,15 +11,15 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.ShortName)
                 .NotEmpty()
                 .MinimumLength(2)
-                .MaximumLength(10)
-                .IsOrdinaryText(localizer)
+                .MaximumLength(12)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.ShortName)]);
             RuleFor(m => m.ScaleId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Scale)]);
             RuleFor(m => m.TrackSystem)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.TrackSystem)]);
             RuleFor(m => m.NormalGauge)
                 .InclusiveBetween(0.0, 500.0)
@@ -31,19 +31,19 @@ namespace ModulesRegistry.Validators
                 .WithName(n => localizer[nameof(n.NarrowGauge)]);
             RuleFor(m => m.Wheelset)
                 .MaximumLength(50)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.Wheelset)]);
             RuleFor(m => m.Couplings)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.Couplings)]);
             RuleFor(m => m.Electricity)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.Electricity)]);
             RuleFor(m => m.PreferredTheme)
                 .MaximumLength(20)
-                .IsOrdinaryText(localizer)
+                .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.PreferredTheme)]);
             RuleFor(m => m.AcceptedNorm)
                 .MaximumLength(255)

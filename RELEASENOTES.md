@@ -1,6 +1,12 @@
 # Release Notes
 
-### Version 1.0.0
+### Version 1.0.1
+Release date 2021-04-12
+- **Validation** improvements of *regions*, *station customers* and *station customer cargo flow*.
+- **Bug fix** of issue #45 *The password reset link does not work*. Thanks to Alexander Ehn.
+- **Contributing** guidelines updated.
+
+## Version 1.0.0
 Release date 2021-04-11
 
 Module and station management are now feature complete, so its time to release the first version.

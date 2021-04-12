@@ -807,4 +807,7 @@
   <data name="LoadingReady" xml:space="preserve">
     <value>Lastning klar</value>
   </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Måste vara en färg</value>
+  </data>
 </root>
