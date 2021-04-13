@@ -13,8 +13,8 @@ for maintaning data about *model railway modules* with the following qualities:
 ## Status April 2021
 All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
-* Manage *groups* and *members* and member's *modules* and *stations*.
-* Administrators can manage *cargo types*, *module standards* and *module gables*.
+* Manage *groups* and *members* and member's *modules*, *stations* and *station freight customers*.
+* Administrators can manage *meetings*, *regions*, *cargo types*, *module standards* and *module gables*.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
 ## Planned work
