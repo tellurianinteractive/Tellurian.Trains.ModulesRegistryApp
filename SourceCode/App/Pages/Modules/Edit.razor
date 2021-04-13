@@ -31,9 +31,14 @@ else
             <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
             <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
 
+            <AppInputSelect Width="2" Label="Visibility" @bind-Value="Module.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
             <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
-            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
+            <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
+
+
+            <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
             <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
             <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
 
@@ -42,13 +47,15 @@ else
             <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
             <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
             <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-            <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
-            <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
+            <AppInputFill Width="4" />
 
+            <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Module.IsUnavailable" />
             <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
             <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
+            <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Module.IsDuckunder" />
             <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
             <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
+
             <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
             <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
 

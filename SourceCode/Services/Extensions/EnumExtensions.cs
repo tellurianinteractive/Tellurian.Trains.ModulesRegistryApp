@@ -29,5 +29,8 @@ namespace ModulesRegistry.Services.Extensions
             Enum.GetValues<MeetingStatus>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
         public static string MeetingStatus(this int id) => MeetingStatusListboxItems().Single(i => i.Id == id).Description;
 
+        public static IEnumerable<ListboxItem> ObjectVisibilityListboxItems() =>
+            Enum.GetValues<ObjectVisibility>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+
     }
 }

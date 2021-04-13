@@ -810,4 +810,13 @@
   <data name="MustBeAColor" xml:space="preserve">
     <value>Skal være en farve</value>
   </data>
+  <data name="IsUnavailable" xml:space="preserve">
+    <value>Er ikke tilgængelig?</value>
+  </data>
+  <data name="HasIntegratedLocoNet" xml:space="preserve">
+    <value>Har integreret LocoNet?</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Synlighed</value>
+  </data>
 </root>

@@ -384,4 +384,16 @@
   <data name="Trailers" xml:space="preserve">
     <value>Trailers</value>
   </data>
+  <data name="Private" xml:space="preserve">
+    <value>Privat</value>
+  </data>
+  <data name="GroupMembers" xml:space="preserve">
+    <value>Gruppmedlemmar</value>
+  </data>
+  <data name="DomainMembers" xml:space="preserve">
+    <value>Domänmedlemmar</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Alla användare</value>
+  </data>
 </root>

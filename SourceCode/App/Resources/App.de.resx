@@ -810,4 +810,13 @@
   <data name="MustBeAColor" xml:space="preserve">
     <value>Muss eine Farbe sein</value>
   </data>
+  <data name="IsUnavailable" xml:space="preserve">
+    <value>Ist nicht verfügbar?</value>
+  </data>
+  <data name="HasIntegratedLocoNet" xml:space="preserve">
+    <value>Hat LocoNet integriert?</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Sichtbarkeit</value>
+  </data>
 </root>

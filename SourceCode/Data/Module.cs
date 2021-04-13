@@ -33,6 +33,9 @@ namespace ModulesRegistry.Data
         public bool IsDuckunder { get; set; }
         public bool IsJunction { get; set; }
         public bool IsStation { get; set; }
+        public bool IsUnavailable { get; set; }
+        public bool HasIntegratedLocoNet { get; set; }
+        public int ObjectVisibilityId { get; set; }
         public int FunctionalState { get; set; }
         public int LandscapeState { get; set; }
         public int? DwgDrawingId { get; set; }

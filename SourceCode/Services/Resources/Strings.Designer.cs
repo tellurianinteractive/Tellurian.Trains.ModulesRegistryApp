@@ -250,6 +250,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Domain members.
+        /// </summary>
+        internal static string DomainMembers {
+            get {
+                return ResourceManager.GetString("DomainMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string Export {
@@ -336,6 +345,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Germany {
             get {
                 return ResourceManager.GetString("Germany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group members.
+        /// </summary>
+        internal static string GroupMembers {
+            get {
+                return ResourceManager.GetString("GroupMembers", resourceCulture);
             }
         }
         
@@ -583,6 +601,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Private.
+        /// </summary>
+        internal static string Private {
+            get {
+                return ResourceManager.GetString("Private", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready to test.
         /// </summary>
         internal static string ReadyToTest {
@@ -822,6 +849,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All users.
+        /// </summary>
+        internal static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
             }
         }
         
