@@ -11,7 +11,7 @@ for maintaning data about *model railway modules* with the following qualities:
 - Available as a cloud application.
 
 ## Status April 2021
-All functions for managing modulesare now inplace, including:
+All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Manage *groups* and *members* and member's *modules* and *stations*.
 * Administrators can manage *module standards* and *module gables*.
