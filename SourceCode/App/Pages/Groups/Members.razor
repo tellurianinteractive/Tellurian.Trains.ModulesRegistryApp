@@ -8,49 +8,43 @@
 @inject CountryService CountryService
 
 <h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
-@if (Group is null)
-{
 
-}
-else
+@if (IsGroupAdministrator)
 {
     <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["IsGroupAdministrator"]</th>
-                <th>@Localizer["IsDataAdministrator"]</th>
-                <th>@Localizer["IsInvited"]</th>
-                <th>@Localizer["Actions"]</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Group.GroupMembers)
-            {
-                <tr>
-                    <td>@item.Person.Name()</td>
-                    <td>@item.IsGroupAdministrator.AsYesNo()</td>
-                    <td>@item.IsDataAdministrator.AsYesNo()</td>
-                    <td>@item.Person.IsInvited().AsYes()</td>
-                    <td style="white-space: nowrap !important;">
-                        @if (IsGroupAdministrator)
-                        {
-                            <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                        }
-                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                        @if (IsGroupAdministrator && item.Person.MayBeInvited())
-                        {
-                            <a class="btn btn-sm btn-success" href="persons/@item.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
-                        }
-                        @*<a class="btn btn-sm btn-warning" href="groups/@item.GroupId/members/@item.Id/remove"><span class="fa fa-trash" />@Localizer["Remove"]</a>*@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 }
+
+<TableTemplate Items="Group?.GroupMembers">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["IsGroupAdministrator"]</th>
+        <th>@Localizer["IsDataAdministrator"]</th>
+        <th>@Localizer["IsInvited"]</th>
+        <th>@Localizer["Actions"]</th>
+
+    </TableHeader>
+    <RowTemplate Context="member">
+        <td>@member.Person.Name()</td>
+        <td>@member.IsGroupAdministrator.AsYesNo()</td>
+        <td>@member.IsDataAdministrator.AsYesNo()</td>
+        <td>@member.Person.IsInvited().AsYes()</td>
+        <td style="white-space: nowrap !important;">
+            @if (IsGroupAdministrator)
+            {
+                <a class="btn btn-sm btn-primary" href="groups/@member.GroupId/members/@member.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+            }
+            <a class="btn btn-sm btn-secondary" href="persons/@member.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+            <a class="btn btn-sm btn-secondary" href="persons/@member.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+            @if (IsGroupAdministrator && member.Person.MayBeInvited())
+            {
+                <a class="btn btn-sm btn-success" href="persons/@member.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
+            }
+            @*<a class="btn btn-sm btn-warning" href="groups/@item.GroupId/members/@item.Id/remove"><span class="fa fa-trash" />@Localizer["Remove"]</a>*@
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? GroupId { get; set; }

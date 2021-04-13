@@ -52,9 +52,13 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Groups.AsNoTracking()
+                var group = await dbContext.Groups.FindAsync(id);
+                if (group is null) return null;
+                var isCountryAdministator = principal.IsCountryAdministratorInCountry(group.CountryId);
+                var groupWithMembers = await dbContext.Groups.AsNoTracking()
                      .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
-                     .SingleOrDefaultAsync(g => g.Id == id && g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()));
+                     .SingleOrDefaultAsync(g => g.Id == id && (isCountryAdministator || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId())));
+                return groupWithMembers ?? group;
             }
             return null;
         }
