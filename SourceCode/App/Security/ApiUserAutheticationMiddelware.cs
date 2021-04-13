@@ -11,17 +11,17 @@ namespace ModulesRegistry.Security
         public ApiUserAutheticationMiddelware(RequestDelegate next) => Next = next;
         public async Task Invoke(HttpContext httpContext, UserService userService)
         {
-            if (httpContext.Request.Path.StartsWithSegments("/api") && httpContext.Request.Query.TryGetValue("apiKey", out var apiKey))
+            if (httpContext.Request.Path.StartsWithSegments("/api"))
             {
-                var user = await userService.FindByApiKeyAsync(apiKey);
-                if (user is null || !user.IsApiAccessPermitted)
+                if (httpContext.Request.Query.TryGetValue("apiKey", out var apiKey))
                 {
-                    httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    var user = await userService.FindByApiKeyAsync(apiKey);
+                    if (user is not null && user.IsApiAccessPermitted)
+                    {
+                        await Next(httpContext);
+                    }
                 }
-                else
-                {
-                    await Next(httpContext);
-                }
+                httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
             }
             else
             {
