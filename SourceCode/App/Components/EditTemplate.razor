@@ -4,7 +4,9 @@
 
 @if (Item is null)
 {
-
+    <div class="alert alert-warning">
+        <span class="fa fa-exclamation-circle" /> @Localizer["NoRecordsToDisplay"]
+    </div>
 }
 else
 {

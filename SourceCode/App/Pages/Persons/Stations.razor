@@ -1,4 +1,5 @@
 ﻿@page "/Persons/{id:int}/Stations"
+@page "/Persons/{id:int}/Stations/Group/{groupId:int}"
 
 @inject IStringLocalizer<App> Localizer
 
@@ -11,6 +12,7 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int GroupId { get; set; }
     [Parameter] public int Id { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
@@ -26,5 +28,5 @@
     private int OwningPersonId => Owner?.Id ?? 0;
     private string Heading => Localizer.ObjectOwner("Stations", Owner);
     private bool MayEdit => Principal.MaySave(OwnerRef);
-    private ModuleOwnershipRef OwnerRef => ModuleOwnershipRef.Person(OwningPersonId);
+    private ModuleOwnershipRef OwnerRef => GroupId > 0 ? ModuleOwnershipRef.PersonInGroup(OwningPersonId, GroupId) : ModuleOwnershipRef.Person(OwningPersonId);
 }

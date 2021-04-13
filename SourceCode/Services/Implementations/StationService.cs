@@ -37,7 +37,7 @@ namespace ModulesRegistry.Services.Implementations
                 ownerRef = principal.UpdateFrom(ownerRef);
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Stations.AsNoTracking()
-                     .Where(s => s.Id == id && s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
+                     .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
                      .Include(m => m.StationTracks)
                      .Include(m => m.Modules)
                      .SingleOrDefaultAsync();
@@ -53,7 +53,7 @@ namespace ModulesRegistry.Services.Implementations
                 ownerRef = principal.UpdateFrom(ownerRef);
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Stations.AsNoTracking()
-                    .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
+                    .Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
                     .Include(s => s.StationTracks)
                     .Include(m => m.Modules)
                     .ToListAsync();

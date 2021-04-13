@@ -1,4 +1,5 @@
 ﻿@page "/Persons/{id:int}/Modules"
+@page "/Persons/{id:int}/Modules/Group/{groupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -10,11 +11,12 @@
 
 <h1><span class="@FontAwesome.Modules" /> @Localizer.ObjectOwner("Modules", Owner)</h1>
 
-<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" Principal="Principal"/>
+<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" Principal="Principal" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    [Parameter] public int GroupId { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     private IEnumerable<Module>? OwnedModules;
@@ -30,5 +32,5 @@
 
     private int OwningPersonId => Owner?.Id ?? 0;
     private bool MayEdit => Principal.MaySave(OwnerRef) || IsDataAdministratorInSameGroupAsMember;
-    private ModuleOwnershipRef OwnerRef => ModuleOwnershipRef.Person(OwningPersonId);
+    private ModuleOwnershipRef OwnerRef => GroupId > 0 ? ModuleOwnershipRef.PersonInGroup(OwningPersonId, GroupId) : ModuleOwnershipRef.Person(OwningPersonId);
 }

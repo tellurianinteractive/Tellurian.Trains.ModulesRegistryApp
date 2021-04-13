@@ -38,8 +38,8 @@ else
                         {
                             <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
                         }
-                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+                        <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
                         @if (IsGroupAdministrator && item.Person.MayBeInvited())
                         {
                             <a class="btn btn-sm btn-success" href="persons/@item.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>

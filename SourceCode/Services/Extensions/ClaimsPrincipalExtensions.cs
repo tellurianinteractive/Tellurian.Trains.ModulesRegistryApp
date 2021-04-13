@@ -81,6 +81,12 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsGroupDataAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsDataAdministrator));
 
+        public static bool MaySee(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, int objectVisibility) =>
+            objectVisibility >= me.MinimumObjectVisibility(ownerRef);
+
+        public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
+            me is null ? (int)ObjectVisibility.Public : me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ?(int)ObjectVisibility.Private : ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.DomainMembers;
+
         private static string? GetString(this ClaimsPrincipal? me, string claimType, string? defaultValue = null) =>
             me is not null ? me.Claims.Claim(claimType)?.Value : defaultValue;
 

@@ -43,6 +43,9 @@ namespace ModulesRegistry.Extensions
         public static string EditObject(this IStringLocalizer me, string objectName) =>
            $"{me["Edit"]} {me[objectName].Value.ToLowerInvariant()}";
 
+        public static string EditOrViewObject(this IStringLocalizer me, string objectName, bool isEdit) =>
+             isEdit ? me.EditObject(objectName) : $"{me[objectName].Value}";
+
         private static string Name(this object? me) =>
             me switch
             {

@@ -32,7 +32,7 @@ namespace ModulesRegistry.Services.Implementations
                 else
                 {
                     modules = await dbContext.Modules.AsNoTracking()
-                         .Where(m => m.ModuleOwnerships
+                         .Where(m =>  m.ModuleOwnerships
                          .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
                          .ToListAsync();
 
@@ -77,7 +77,7 @@ namespace ModulesRegistry.Services.Implementations
                 if (isAdministrator)
                 {
                     return await dbContext.Modules.AsNoTracking()
-                        .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
+                        .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                         .Include(m => m.Scale)
                         .Include(m => m.Standard)
@@ -90,7 +90,7 @@ namespace ModulesRegistry.Services.Implementations
                 if (principal.IsAuthorisedInCountry(countryId, ownerRef.PersonId))
                 {
                     return await dbContext.Modules.AsNoTracking()
-                        .Where(m => m.ModuleOwnerships
+                        .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships
                         .Any(mo => mo.PersonId == ownerRef.PersonId))
                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                         .Include(m => m.Scale)

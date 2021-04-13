@@ -1,13 +1,13 @@
 # Release Notes
 
 ### Version 1.0.2
-Release date 2021-04-13
+Release date 2021-04-1
+- **Users** can now see more data: *groups* that you are member of and non-private *modules*, *stations* and *freight customers* in these groups.
+- **Visibility** for *modules* means that the module owner now can select if other users should see it. Thanks to Thomas Woditsch and others for this suggestion.
+>NOTE that *visibility* is currently only implemented for *private* and *group members*, and *group members* is default.
 - **Theme** free text added for *layout*.
-- **Visibility** for *modules* means that the module owner now can select if other users should see it. 
-NOTE that the effect of the visibility is not yet implemented.
-Thanks to Thomas Woditsch and others for this suggestion.
 - **Cargo units** *trailer* and *container* added. Thanks to Alexander Ehn for this suggestion.
-- **Loading/unloading** ready time can now be *not applicable**.
+- **Loading/unloading** ready time can now be set to *not applicable*.
 - **Web API** for *meetings* with *layouts* is available.
 - **API key** access to *web API*. Users that want to try it out can request a personal *api key* through the FREMO forum.
 

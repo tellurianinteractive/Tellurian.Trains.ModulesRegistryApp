@@ -56,6 +56,6 @@
            $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 
     string CargoCustomersHref(int id) => OwningGroupId > 0 ? 
-        $"/Stations/{id}/Customers/OwningGroupId/{OwningGroupId}" :
-        $"/Stations/{id}/Customers/OwningPersonId/{OwningPersonId}";
+        $"/Stations/{id}/Customers/GroupOwned/{OwningGroupId}" :
+        $"/Stations/{id}/Customers/PersonOwned/{OwningPersonId}";
 }

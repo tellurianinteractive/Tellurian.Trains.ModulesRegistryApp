@@ -19,7 +19,7 @@
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Standard"]</th>
         <th>@Localizer["Owners"]</th>
-        <th>@Localizer["IsStation"]</th>
+        <th>@Localizer["Status"]</th>
         <th>@Localizer["Documents"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
@@ -29,7 +29,7 @@
         <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
         <td>@Owners(module.ModuleOwnerships)</td>
-        <td>@((module.IsPartOfStation()).AsYesNo())</td>
+        <td><span class="@Status(module)" /></td>
         <td>
             <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
             <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
@@ -38,17 +38,18 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="@FontAwesome.Edit"/> @Localizer["Edit"]</a>
-                @if (module.StationId.HasValue)
-                {
-                    <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer.EditObject("Station")</a>
-                    <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer.EditObject("FreightCustomers")</a>
-                }
-                @if (module.Id > 0)
-                {
-                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" />@Localizer["Clone"]</button>
-                }
+                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
+            @if (module.StationId.HasValue)
+            {
+                <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer.EditOrViewObject("Station", MayEdit)</a>
+                <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer.EditOrViewObject("FreightCustomers", MayEdit)</a>
+            }
+            @if (MayEdit && module.Id > 0)
+            {
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" />@Localizer["Clone"]</button>
+            }
+
             &nbsp;
         </td>
     </RowTemplate>
@@ -72,6 +73,8 @@
         Modules = await ModuleService.GetAllAsync(Principal, ownerRef);
     }
 
+    string Status(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
+
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 
     string ModuleEditHref(int id) => OwningGroupId > 0 ?
@@ -83,7 +86,7 @@
         $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 
     string StationCustomersHref(int id) => OwningGroupId > 0 ?
-        $"/Stations/{id}/Customers" :
-        $"/Stations/{id}/Customers";
+        $"/Stations/{id}/Customers/GroupOwned/{OwningGroupId}" :
+        $"/Stations/{id}/Customers/PersonOwned/{OwningPersonId}";
 
 }
