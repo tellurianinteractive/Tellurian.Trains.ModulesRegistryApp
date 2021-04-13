@@ -10,12 +10,12 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status March 2021
-Most functions for managing modules are now inplace, including:
-* Managing your *modules* and *stations*.
+## Status April 2021
+All functions for managing modulesare now inplace, including:
+* Managing your *modules*, *stations* and *station freight customers*.
 * Manage *groups* and *members* and member's *modules* and *stations*.
 * Administrators can manage *module standards* and *module gables*.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
 ## Planned work
-You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/1). 
+You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
