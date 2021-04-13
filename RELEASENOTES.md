@@ -1,7 +1,7 @@
 # Release Notes
 
 ### Version 1.0.2
-Release date 2021-04-1
+Release date 2021-04-13
 - **Users** can now see more data: *groups* that you are member of and non-private *modules*, *stations* and *freight customers* in these groups.
 - **Visibility** for *modules* means that the module owner now can select if other users should see it. Thanks to Thomas Woditsch and others for this suggestion.
 >NOTE that *visibility* is currently only implemented for *private* and *group members*, and *group members* is default.

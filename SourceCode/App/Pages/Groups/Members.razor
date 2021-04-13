@@ -9,7 +9,7 @@
 
 <h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
 
-@if (IsGroupAdministrator)
+@if (IsGroupAdministrator && Group?.Id > 0)
 {
     <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
