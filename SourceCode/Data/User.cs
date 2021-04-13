@@ -18,6 +18,7 @@ namespace ModulesRegistry.Data
         public string AdministratorAreaOfResposibility { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsDemo { get; set; }
+        public bool IsApiAccessPermitted { get; set; }
         public string HashedPassword { get; set; }
         public int PasswordResetAttempts { get; set; }
 

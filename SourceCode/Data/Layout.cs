@@ -9,6 +9,7 @@ namespace ModulesRegistry.Data
         public int ResponsibleGroupId { get; set; }
         public int PrimaryModuleStandardId { get; set; }
         public int? StartWeekdayId { get; set; }
+        public string Theme { get; set; }
         public string Note { get; set; }
         public short? FirstYear { get; set; }
         public short? LastYear { get; set; }

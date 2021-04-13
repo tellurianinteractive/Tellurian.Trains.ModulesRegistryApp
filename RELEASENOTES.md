@@ -1,5 +1,11 @@
 # Release Notes
 
+### Version 1.0.2
+Release date 2021-04-13
+- **Theme** free text added for *layout*.
+- **Web API** for *meetings* with *layouts* is available.
+- **API key** access to *web API*. Users that want to try it out can request a personal *api key* through the FREMO forum.
+
 ### Version 1.0.1
 Release date 2021-04-12
 - **Validation** improvements of *regions*, *station customers* and *station customer cargo flow*.

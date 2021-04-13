@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using ModulesRegistry.Data;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
@@ -40,6 +41,16 @@ namespace ModulesRegistry
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
             services.AddRazorPages();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.AllowTrailingCommas = true;
+                //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" });
+            });
             services.AddServerSideBlazor();
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
@@ -80,7 +91,10 @@ namespace ModulesRegistry
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>
-                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray()));
+            {
+                options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultLanguage);
+                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -95,6 +109,9 @@ namespace ModulesRegistry
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
+
             app.UseRequestLocalization(options =>
              {
                  options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
@@ -105,14 +122,19 @@ namespace ModulesRegistry
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseApiUserAuthentication();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
     }
+
+    
+
 }

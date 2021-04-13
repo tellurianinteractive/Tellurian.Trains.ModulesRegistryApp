@@ -14,8 +14,9 @@
     <Inputs>
         <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
         <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-        <AppInputText Width="3" @bind-Value="Layout.Note" Label="Description" />
-        <AppInputFill Width="2" />
+        <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
+        <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
+        <AppInputFill Width="6" />
         <h4>@Localizer["GameSettings"]</h4>
         <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
         <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />

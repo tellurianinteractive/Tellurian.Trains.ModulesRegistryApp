@@ -378,4 +378,10 @@
   <data name="DailyShort" xml:space="preserve">
     <value>Daily</value>
   </data>
+  <data name="Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="Trailers" xml:space="preserve">
+    <value>Trailers</value>
+  </data>
 </root>

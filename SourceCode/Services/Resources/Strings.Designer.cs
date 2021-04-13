@@ -160,6 +160,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Container.
+        /// </summary>
+        internal static string Container {
+            get {
+                return ResourceManager.GetString("Container", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create password.
         /// </summary>
         internal static string CreatePassword {
@@ -732,6 +741,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Tonnes {
             get {
                 return ResourceManager.GetString("Tonnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trailers.
+        /// </summary>
+        internal static string Trailers {
+            get {
+                return ResourceManager.GetString("Trailers", resourceCulture);
             }
         }
         

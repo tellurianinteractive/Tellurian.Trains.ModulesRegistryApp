@@ -39,7 +39,7 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<ListboxItem>();
         }
 
-        public async Task<IEnumerable<ListboxItem>> CargoQualtityListboxItemsAsync(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<ListboxItem>> CargoQuantityListboxItemsAsync(ClaimsPrincipal? principal)
         {
             if (principal.IsAuthenticated())
             {
@@ -56,9 +56,9 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                var items = await dbContext.CargoReadyTimes.Where(crt => crt.IsSpecifiedInLayoyt==true)
+                var items = await dbContext.CargoReadyTimes
                     .Select(crt => new ListboxItem(crt.Id, crt.FullName.Localized())).ToListAsync();
-                return items.OrderBy(l => l.Description).ToList();
+                return items.OrderBy(l => l.Id).ToList();
             }
             return Array.Empty<ListboxItem>();
         }

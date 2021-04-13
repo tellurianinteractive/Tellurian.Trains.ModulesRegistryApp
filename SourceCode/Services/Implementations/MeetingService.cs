@@ -19,6 +19,16 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
+        public async Task<IEnumerable<Data.Api.Meeting>> Meetings(int? countryId)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Meetings.Where(m => m.EndDate > TimeProvider.Now && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
+                .Select(m => new Data.Api.Meeting(
+                    m.Id, m.Description, m.PlaceName, m.OrganiserGroup.Country.EnglishName.Localized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().Localized())
+                    { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)) })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Meeting>> GetAllAsync(int countryId)
         {
             using var dbContect = Factory.CreateDbContext();

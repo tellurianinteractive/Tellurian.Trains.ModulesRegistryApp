@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModulesRegistry.Services.Implementations;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,7 @@ namespace ModulesRegistry.Services.Extensions
             return new TextContent(string.Empty, "MD", DateTimeOffset.Now);
         }
 
-       
+        public static CultureInfo AsCultureInfo(this string? twoLetterISOLanguageName) =>
+            twoLetterISOLanguageName.SupportedOrDefaultCulture();
     }
 }

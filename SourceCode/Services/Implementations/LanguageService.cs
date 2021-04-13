@@ -1,5 +1,6 @@
 ﻿using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Resources;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -43,6 +44,9 @@ namespace ModulesRegistry.Services.Implementations
                  //{ Language.Polish, new CultureInfo("pl") },
                  //{ Language.Czech, new CultureInfo("cs") },
              };
+
+        public static CultureInfo SupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
+            SupportedCultures.SingleOrDefault(sc => sc.TwoLetterISOLanguageName.Equals(twoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase)) ?? DefaultCulture;
 
         public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
         public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;

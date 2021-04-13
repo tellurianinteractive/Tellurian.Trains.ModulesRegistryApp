@@ -681,7 +681,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_CargoCustomer_OperatingDay");
 
                 entity.HasOne(d => d.ReadyTime)
-                    .WithMany(p => p.StationCustomerCargos)
+                    .WithMany()
                     .HasForeignKey(d => d.ReadyTimeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CargoCustomer_CargoReadyTime");

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class UserService 
+    public sealed class UserService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public UserService(IDbContextFactory<ModulesDbContext> factory)
@@ -53,6 +53,14 @@ namespace ModulesRegistry.Services.Implementations
             existing.PasswordResetAttempts += 1;
             var result = await dbContext.SaveChangesAsync();
             return result == 0 ? null : existing;
+        }
+
+        public async Task<User?> FindByApiKeyAsync(string? apiKey)
+        {
+            if (string.IsNullOrWhiteSpace(apiKey)) return null;
+            using var dbContext = Factory.CreateDbContext();
+            var user = await FindByObjectIdAsync(dbContext, apiKey);
+            return user is not null && user.IsApiAccessPermitted ? user : null;
         }
 
         private static async Task<User?> FindByObjectIdAsync(ModulesDbContext dbContext, string? objectId)
