@@ -24,34 +24,38 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.Groups.AsNoTracking().Where(g => principal.IsGlobalAdministrator() || g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
         }
 
-        public async Task<IEnumerable<Group>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
+        public async Task<IEnumerable<(Group Group, bool MayEdit)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
         {
             if (principal.IsCountryAdministratorInCountry(countryId))
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Groups.AsNoTracking()
+                var items = await dbContext.Groups.AsNoTracking()
                     .Where(g => g.CountryId == countryId)
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
+                return items.Select(i => (i, true));
             }
             else
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Groups.AsNoTracking()
+                var items = await dbContext.Groups.Include(g => g.GroupMembers.Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())).AsNoTracking()
                     .Where(g => g.GroupMembers
-                    .Any(gm => (gm.IsGroupAdministrator || gm.IsDataAdministrator) && gm.PersonId == principal.PersonId()))
+                    .Any(gm => gm.PersonId == principal.PersonId()))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
+                return items.Select(i => (i, i.GroupMembers.Any()));
             }
         }
 
         public async Task<Group?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
-            using var dbContext = Factory.CreateDbContext();
-            var group = await dbContext.Groups.AsNoTracking()
-                .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
-                .SingleOrDefaultAsync(g => g.Id == id);
-            if (principal.IsCountryAdministratorInCountry(group.CountryId) || await IsGroupMemberAdministratorAsync(principal, id)) return group;
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.Groups.AsNoTracking()
+                     .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
+                     .SingleOrDefaultAsync(g => g.Id == id && g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()));
+            }
             return null;
         }
 
@@ -68,7 +72,7 @@ namespace ModulesRegistry.Services.Implementations
             return null;
         }
 
-        public async Task<bool> IsGroupDataAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
+        public async ValueTask<bool> IsGroupDataAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
         {
             if (pricipal.IsCountryAdministratorInCountry(countryId)) return true;
             else

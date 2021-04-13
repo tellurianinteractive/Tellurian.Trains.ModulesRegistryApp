@@ -34,10 +34,13 @@ else
                     <td>@item.IsDataAdministrator.AsYesNo()</td>
                     <td>@item.Person.IsInvited().AsYes()</td>
                     <td style="white-space: nowrap !important;">
-                        <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                        @if (IsGroupAdministrator)
+                        {
+                            <a class="btn btn-sm btn-primary" href="groups/@item.GroupId/members/@item.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                        }
                         <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
                         <a class="btn btn-sm btn-secondary" href="persons/@item.PersonId/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                        @if (item.Person.MayBeInvited())
+                        @if (IsGroupAdministrator && item.Person.MayBeInvited())
                         {
                             <a class="btn btn-sm btn-success" href="persons/@item.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
                         }
@@ -54,6 +57,7 @@ else
 
     private ClaimsPrincipal? Principal;
     private Group? Group;
+    private bool IsGroupAdministrator;
 
     protected async override Task OnParametersSetAsync()
     {
@@ -61,9 +65,9 @@ else
         if (GroupId.IsSet())
         {
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
+            IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value);
         }
     }
 
     private string Heading => Localizer["MembersIn"] + " " + Group?.FullName;
-
 }

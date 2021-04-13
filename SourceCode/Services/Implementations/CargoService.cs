@@ -65,7 +65,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<Cargo>> GetAll(ClaimsPrincipal? principal)
         {
-            if (principal is not null && principal.IsAnyAdministrator())
+            if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Cargos.ToListAsync();

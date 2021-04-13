@@ -66,8 +66,8 @@ namespace ModulesRegistry.Services.Extensions
         public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me is not null && !me.IsReadOnly() && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
-        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
-            me is not null && !me.IsReadOnly() && (ownerRef.IsPerson && ownerRef.PersonId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        public static bool MaySave([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool isGroupAdministrator = false) =>
+            me is not null && !me.IsReadOnly() && (isGroupAdministrator || me.IsCountryAdministratorInCountry(me.CountryId()) || me.IsGlobalAdministrator() || ownerRef.IsPerson && ownerRef.PersonId == me.PersonId() );
 
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me is not null && !me.IsReadOnly() && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());

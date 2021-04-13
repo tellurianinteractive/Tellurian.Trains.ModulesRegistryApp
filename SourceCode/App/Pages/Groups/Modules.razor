@@ -1,12 +1,14 @@
 ﻿@page "/Groups/{id:int}/Modules"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 
 @inject ModuleService ModuleService
-@inject GroupService GroupService 
+@inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Module"/> @Localizer.ObjectOwner("Modules", Owner)</h1>
-<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id"  />
+<h1><span class="@FontAwesome.Module" /> @Localizer.ObjectOwner("Modules", Owner)</h1>
+<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

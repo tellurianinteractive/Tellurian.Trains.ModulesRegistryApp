@@ -52,8 +52,10 @@
     [Parameter] public int OwningGroupId { get; set; }
 
     string StationEditHref(int id) => OwningGroupId > 0 ?
-   $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
-   $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
+           $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
+           $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 
-    string CargoCustomersHref(int id) => $"/Stations/{id}/Customers";
+    string CargoCustomersHref(int id) => OwningGroupId > 0 ? 
+        $"/Stations/{id}/Customers/OwningGroupId/{OwningGroupId}" :
+        $"/Stations/{id}/Customers/OwningPersonId/{OwningPersonId}";
 }

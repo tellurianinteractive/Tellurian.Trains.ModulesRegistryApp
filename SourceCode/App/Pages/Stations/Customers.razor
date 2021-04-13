@@ -1,9 +1,12 @@
 ﻿@page "/Stations/{stationid:int}/Customers"
+@page "/Stations/{stationid:int}/Customers/OwningPersonId/{owningPersonId:int}"
+@page "/Stations/{stationid:int}/Customers/OwningGroupId/{owningGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 
+@inject GroupService GroupService
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
 
@@ -39,13 +42,16 @@
 </TableTemplate>
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int Id { get; set; }
-    [Parameter] public int StationId { get; set; }
+        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+        [Parameter] public int Id { get; set; }
+        [Parameter] public int StationId { get; set; }
+        [Parameter] public int OwningPersonId { get; set; }
+        [Parameter] public int OwningGroupId { get; set; }
 
-    ClaimsPrincipal? Principal;
-    Station? Station;
-    IEnumerable<StationCustomer>? StationCustomers;
+        ClaimsPrincipal? Principal;
+        Station? Station;
+        IEnumerable<StationCustomer>? StationCustomers;
+        bool MayEdit;
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,14 +62,14 @@
     {
         if (StationId > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, StationId);
+            Station = await StationService.FindByIdAsync(Principal, StationId, OwnerRef);
             StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
+            MayEdit = (OwningGroupId > 0 && await GroupService.IsGroupDataAdministratorAsync(Principal, OwningGroupId)) || (OwningPersonId > 0 && await GroupService.IsDataAdministratorInSameGroupAsMember(Principal, OwningPersonId ));
         }
     }
 
-    ModuleOwnershipRef OwnerRef => Principal.AsModuleOwnershipRef();
+    ModuleOwnershipRef OwnerRef => OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) : OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) : Principal.AsModuleOwnershipRef();
 
-    bool MayEdit => Station?.Id > 0;
     string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomersAt"].Value, Station?.FullName);
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";
 }

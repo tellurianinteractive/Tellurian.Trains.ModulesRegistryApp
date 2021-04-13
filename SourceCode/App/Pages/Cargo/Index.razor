@@ -1,5 +1,4 @@
-﻿@using ModulesRegistry.Services
-@page "/Cargo/Index"
+﻿@page "/Cargo/Index"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -7,9 +6,13 @@
 @inject CargoService CargoService
 
 <h1><span class="@FontAwesome.Cargo" /> @Localizer["CargoTypes"]</h1>
-<div class="col-12">
-    <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="@FontAwesome.Add"/> @Localizer["Add"]</a>
-</div>
+
+@if (Principal.IsAnyAdministrator())
+{
+    <div class="col-12">
+        <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+    </div>
+}
 
 <TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
     <TableHeader>
@@ -17,7 +20,7 @@
         <th>@Localizer["DefaultClasses"]</th>
         <th>@Localizer["NHMCode"]</th>
         <th>@Localizer["FromYear"]</th>
-        <th>@Localizer["UpToYear"]</th>
+        <th>@Localizer["UptoYear"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="cargo">
@@ -29,7 +32,7 @@
         <td>
             @if (Principal.IsAnyAdministrator())
             {
-                <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit"/> @Localizer["Edit"]</a>
+                <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>

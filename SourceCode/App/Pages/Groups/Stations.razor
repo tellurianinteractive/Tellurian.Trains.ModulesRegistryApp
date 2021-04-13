@@ -1,5 +1,7 @@
 ﻿@page "/Groups/{id:int}/Stations"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 
 @inject StationService StationService
@@ -7,7 +9,7 @@
 @inject ModuleService ModuleService
 
 <h1><span class="@FontAwesome.Station" /> @Localizer.ObjectOwner("Stations", Owner)</h1>
-<StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" AnyModules="AnyModules"/>
+<StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" AnyModules="AnyModules" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

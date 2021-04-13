@@ -15,7 +15,10 @@
 }
 else
 {
-    <a class="btn btn-sm btn-secondary" href="groups/0/edit"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+    @if (Principal.IsCountryAdministratorInCountry(CountryId))
+    {
+        <a class="btn btn-sm btn-secondary" href="groups/0/edit"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+    }
     <table class="table table-striped table-responsive-sm">
         <thead>
             <tr>
@@ -30,15 +33,18 @@ else
             @foreach (var item in Groups)
             {
                 <tr>
-                    <td>@item.ShortName</td>
-                    <td>@item.FullName</td>
-                    <td>@item.CityName</td>
-                    <td>@Localizer[item.Category]</td>
+                    <td>@item.value.ShortName</td>
+                    <td>@item.value.FullName</td>
+                    <td>@item.value.CityName</td>
+                    <td>@Localizer[item.value.Category]</td>
                     <td style="white-space: nowrap !important;">
-                        <a class="btn btn-sm btn-primary" href="groups/@item.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                        <a class="btn btn-sm btn-secondary" href="groups/@item.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+                        @if (item.mayEdit)
+                        {
+                            <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                        }
+                        <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
+                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
                         @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
                     </td>
                 </tr>
@@ -50,20 +56,26 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     private ClaimsPrincipal? Principal;
-    private IEnumerable<Group>? Groups;
+    private IEnumerable<(Group value, bool mayEdit)>? Groups;
     private IEnumerable<ListboxItem>? Countries;
+    private int CountryId;
     private bool IsLoading;
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        if (Countries.Count() == 1) await GetGroups(Countries.First().Id);
+        if (Countries.Count() == 1)
+        {
+            CountryId = Countries.First().Id;
+            await GetGroups(CountryId);
+        }
     }
 
     private async Task OnSelectedCountry(int id)
     {
-        await GetGroups(id);
+        CountryId = id;
+        await GetGroups(CountryId);
     }
 
     private async Task GetGroups(int id)
