@@ -1,4 +1,6 @@
 ﻿@page "/Stations/Index"
+@page "/Stations/Index/GroupOwned/{owninggroupid:int}"
+@page "/Stations/Index/PersonOwned/{owningpersonid:int}"
 
 @inject IStringLocalizer<App> Localizer
 
@@ -7,10 +9,12 @@
 
 <h1><span class="@FontAwesome.Station" aria-hidden="true" /> @Localizer["Stations"] </h1>
 
-<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules"/>
+<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwningGroupId" OwningPersonId="OwningPersonId"/>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public int OwningGroupId { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Station>? Stations;
@@ -19,8 +23,9 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
-        Stations = await StationService.GetAllAsync(Principal);
-        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, Principal.AsModuleOwnershipRef());
+        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+        Stations = await StationService.GetAllAsync(Principal, ownershipRef);
+        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, ownershipRef);
     }
 
     private bool MayEdit => Principal is not null;

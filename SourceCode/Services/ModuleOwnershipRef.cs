@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using ModulesRegistry.Services.Extensions;
 
 namespace ModulesRegistry.Services
@@ -9,6 +10,9 @@ namespace ModulesRegistry.Services
         public static ModuleOwnershipRef Person(int personId) => new() { _PersonId = personId };
         public static ModuleOwnershipRef Group(int groupId) => new() { _GroupId = groupId };
         public static ModuleOwnershipRef PersonInGroup(int personId, int groupId) => new() { _PersonId = personId, _GroupId = groupId };
+        public static ModuleOwnershipRef PersonOrGroup(ClaimsPrincipal? principal, int personId, int groupId) =>
+            groupId > 0 ? Group(groupId) : personId > 0 ? Person(personId) : principal.AsModuleOwnershipRef();
+
         public static ModuleOwnershipRef None => new();
         public static ModuleOwnershipRef WithPrincipal(ModuleOwnershipRef original, ClaimsPrincipal? principal) => new() {
             _PersonId = original._PersonId, _GroupId = original._GroupId, _Principal = principal };
@@ -28,6 +32,4 @@ namespace ModulesRegistry.Services
         public bool IsNone => PersonId == 0 && GroupId == 0;
         public override string ToString() => $"Person={PersonId},Group={GroupId}";
     }
-
-
 }

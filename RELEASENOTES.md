@@ -1,5 +1,9 @@
 # Release Notes
 
+### Version 1.0.3
+Release date 2021-04-14
+- **Bug fix** of issue [#55 Cannot edit station cargo or cargo customers](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/55).
+
 ### Version 1.0.2
 Release date 2021-04-13
 - **Users** can now see more data: *groups* that you are member of and non-private *modules*, *stations* and *freight customers* in these groups.

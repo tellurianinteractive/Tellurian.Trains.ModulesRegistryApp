@@ -1,9 +1,11 @@
 ﻿using ModulesRegistry.Data;
+using ModulesRegistry.Services.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Extensions
 {
@@ -57,6 +59,21 @@ namespace ModulesRegistry.Services.Extensions
         public static ModuleOwnershipRef UpdateFrom(this ClaimsPrincipal? me, ModuleOwnershipRef original) =>
             ModuleOwnershipRef.WithPrincipal(original, me);
         public static ModuleOwnershipRef AsModuleOwnershipRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
+
+        public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownershipRef, GroupService groupService)
+        {
+            if (me is null) return false;
+            if (ownershipRef.IsPerson)
+            {
+                if (ownershipRef.PersonId == me.PersonId()) return true;
+                return await groupService.IsDataAdministratorInSameGroupAsMember(me, ownershipRef.PersonId);
+            }
+            else if (ownershipRef.IsGroup)
+            {
+                return await groupService.IsGroupDataAdministratorAsync(me, ownershipRef.GroupId);
+            }
+            return false;
+        }
 
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me.MayRead(me.PersonId());

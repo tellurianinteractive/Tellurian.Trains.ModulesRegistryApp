@@ -62,13 +62,12 @@
     {
         if (StationId > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, StationId, OwnerRef);
+            var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+            Station = await StationService.FindByIdAsync(Principal, StationId, ownershipRef);
             StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
-            MayEdit = (OwningGroupId > 0 && await GroupService.IsGroupDataAdministratorAsync(Principal, OwningGroupId)) || (OwningPersonId > 0 && await GroupService.IsDataAdministratorInSameGroupAsMember(Principal, OwningPersonId ));
+            MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
         }
     }
-
-    ModuleOwnershipRef OwnerRef => OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) : OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) : Principal.AsModuleOwnershipRef();
 
     string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomersAt"].Value, Station?.FullName);
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";

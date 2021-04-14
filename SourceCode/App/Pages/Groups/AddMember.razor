@@ -1,4 +1,5 @@
 ﻿@page "/Groups/{groupid:int}/members/add"
+
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
@@ -10,59 +11,70 @@
 
 <h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
 
-<EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
-    <FluentValidationValidator />
-    <ValidationSummary />
+@if (MayEdit)
+{
+    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
+        <FluentValidationValidator />
+        <ValidationSummary />
+        <div class="col-md-2">
+            <label class="form-control-label" for="personid">@SearchLabel</label>
+            <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
+                <SelectedTemplate Context="personId">
+                    @{
+                            var selectedPerson = SelectedPerson(personId);
+                        <text>@selectedPerson?.Description</text>
+                    }
+                </SelectedTemplate>
+                <ResultTemplate Context="person">
+                    @person.Description
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    <div>
+                        <span>
+                            @Localizer["NotFound"]
+                            <a class="btn btn-link" href="persons/0/editgroup/@GroupId">@Localizer["Add"]</a>
+                        </span>
+                    </div>
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+            <ValidationMessage For="@(() => GroupMember.Person)" />
+        </div>
+        <AppInputFill Width="10" />
+        <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
+        <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+        <div class="col-12">
+            <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
+        </div>
+    </EditForm>
 
-    <div class="col-md-2">
-        <label class="form-control-label" for="personid">@SearchLabel</label>
-        <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
-            <SelectedTemplate Context="personId">
-                @{
-                    var selectedPerson = SelectedPerson(personId);
-                    <text>@selectedPerson?.Description</text>
-                }
-            </SelectedTemplate>
-            <ResultTemplate Context="person">
-                @person.Description
-            </ResultTemplate>
-            <NotFoundTemplate>
-                <div>
-                    <span>
-                        @Localizer["NotFound"]
-                        <a class="btn btn-link" href="persons/0/editgroup/@GroupId">@Localizer["Add"]</a>
-                    </span>
-                </div>
-            </NotFoundTemplate>
-        </BlazoredTypeahead>
-        <ValidationMessage For="@(() => GroupMember.Person)" />
-    </div>
-    <AppInputFill Width="10" />
-    <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-    <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
-    </div>
-
-</EditForm>
-
+}
+else
+{
+    <ActionMessage Label="NotAuthorised" />
+}
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int? GroupId { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private Group? Group;
-    private GroupMember GroupMember = new GroupMember();
-    private IEnumerable<ListboxItem>? Persons;
+    ClaimsPrincipal? Principal;
+    Group? Group;
+    GroupMember GroupMember = new GroupMember();
+    IEnumerable<ListboxItem>? Persons;
+    bool MayEdit;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
 
     protected async override Task OnParametersSetAsync()
     {
+        MayEdit = GroupId.HasValue ? await GroupService.IsGroupDataAdministratorAsync(Principal, GroupId.Value) : false;
         await RefreshData();
     }
 
     protected async Task RefreshData()
     {
-        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (GroupId.IsSet())
         {
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
@@ -75,13 +87,13 @@
         }
     }
 
-    private async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
+    async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
     {
         return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
         Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(searchText.ToLowerInvariant())).ToList());
     }
 
-    private async Task OnValidSubmit()
+    async Task OnValidSubmit()
     {
         var result = await GroupService.AddMemberAsync(Principal, GroupMember);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
@@ -89,8 +101,8 @@
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
-    private string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
-    private string SearchLabel => Localizer.SearchObject("Person");
-    private int ConvertPerson(ListboxItem person) => person.Id;
-    private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
+    string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
+    string SearchLabel => Localizer.SearchObject("Person");
+    int ConvertPerson(ListboxItem person) => person.Id;
+    ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 }

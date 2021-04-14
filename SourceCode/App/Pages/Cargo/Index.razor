@@ -7,7 +7,7 @@
 
 <h1><span class="@FontAwesome.Cargo" /> @Localizer["CargoTypes"]</h1>
 
-@if (Principal.IsAnyAdministrator())
+@if (MayEdit)
 {
     <div class="col-12">
         <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
@@ -30,7 +30,7 @@
         <td>@cargo.FromYear</td>
         <td>@cargo.UptoYear</td>
         <td>
-            @if (Principal.IsAnyAdministrator())
+            @if (MayEdit)
             {
                 <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
@@ -41,12 +41,14 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    private ClaimsPrincipal? Principal;
-    private IEnumerable<Cargo>? Cargos;
+    ClaimsPrincipal? Principal;
+    IEnumerable<Cargo>? Cargos;
+    bool MayEdit;
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        MayEdit = Principal.IsAnyAdministrator();
         Cargos = await CargoService.GetAll(Principal);
     }
 }
