@@ -13,7 +13,7 @@
 @inject PersonService PersonService
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Station" /> @Heading</h1>
+<EditHeading ObjectName="Station" Owner="@Owner" IconClass="@FontAwesome.Station" IsAdd="@(Id == 0)" IsHelpAvailable="true" />
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -81,7 +81,7 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
-    private string Heading => Localizer.HeadingAddOrEdit(Id == 0 && OwnerId == 0, "Station", Owner);
+    private string Heading => Localizer.AddOrEdit("Station", Owner, Id == 0 && OwnerId == 0);
 
     ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
 

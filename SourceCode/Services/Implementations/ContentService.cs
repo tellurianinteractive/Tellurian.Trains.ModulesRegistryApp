@@ -29,7 +29,7 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<TextContent> GetRemoteTextContent(string href)
         {
             using var client = ClientFactory.CreateClient();
-            var markdown = await client.GetStringAsync(href);
+            string markdown = await client.GetStringAsync(href) ?? string.Empty;
             return new TextContent(markdown, "MD",  DateTimeOffset.Now );
         }
 

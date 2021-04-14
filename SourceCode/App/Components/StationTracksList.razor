@@ -3,13 +3,13 @@
 
 @if (Station is null)
 {
-
+    <ActionMessage Label="GettingContent" IconName="hourglass" />
 }
 else
 {
     <h3 class="mt-3">@Localizer["Tracks"]</h3>
     <div class="col-12">
-        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack"><span class="@FontAwesome.Add"/> @AddTrackButtonText</button>
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack"><span class="@FontAwesome.Add" /> @AddTrackButtonText</button>
     </div>
     @foreach (var track in Station.StationTracks)
     {

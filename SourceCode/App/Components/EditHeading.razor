@@ -1,0 +1,38 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject PageHistory PageHistory
+
+<div>
+    <h1>
+        <span class="@IconClass" />@Localizer.AddOrEdit(ObjectName, Owner, IsAdd)
+        <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
+        @if (IsHelpAvailable)
+        {
+            <span class="fa fa-question-circle" @onclick="ToggleHelp" />
+        }
+    </h1>
+    <ContentView ContentName="@HelpContentName" IsHidden="@HelpIsHidden" />
+    <hr />
+</div>
+
+@code {
+    [Parameter] public string? IconClass { get; set; }
+    [Parameter] public string? ObjectName { get; set; }
+    [Parameter] public object? Owner { get; set; }
+    [Parameter] public bool IsAdd { get; set; }
+    [Parameter] public bool IsHelpAvailable { get; set; }
+
+    bool HelpIsVisible;
+
+    void ToggleHelp()
+    {
+        HelpIsVisible = !HelpIsVisible;
+    }
+
+    void Back()
+    {
+        PageHistory.NavigateBack();
+    }
+
+    string? HelpContentName => string.IsNullOrWhiteSpace(ObjectName) ? null : $"{ObjectName}Help";
+    bool HelpIsHidden => !HelpIsVisible;
+}

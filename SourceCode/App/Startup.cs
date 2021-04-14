@@ -15,6 +15,7 @@ using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Shared;
 using System.Linq;
 using System.Net.Http;
 
@@ -69,6 +70,7 @@ namespace ModulesRegistry
             services.AddBlazoredToast();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
             services.AddScoped<ITimeProvider, SystemTimeProvider>();
+            services.AddScoped<PageHistory>();
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
             if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
             services.AddScoped<CargoService>();

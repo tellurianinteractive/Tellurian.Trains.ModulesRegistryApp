@@ -69,6 +69,6 @@
         //StateHasChanged();
     }
 
-    private string Heading => Localizer.HeadingAddOrEdit(Id == 0, "CargoType", null);
+    private string Heading => Localizer.AddOrEdit("CargoType", null, Id == 0);
 
 }

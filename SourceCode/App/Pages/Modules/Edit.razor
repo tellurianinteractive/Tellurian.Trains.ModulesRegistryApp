@@ -13,7 +13,7 @@
 @inject ScaleService ScaleService
 @inject ModuleStandardService ModuleStandardService
 
-<h1><span class="@FontAwesome.Module" aria-hidden="true" /> @Heading </h1>
+<EditHeading ObjectName="Module" Owner="@Owner" IconClass="@FontAwesome.Module" IsAdd="@(Id == 0)" IsHelpAvailable="true" />
 
 @if (Module is null)
 {
@@ -36,7 +36,6 @@ else
             <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
             <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
-
 
             <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
             <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
@@ -121,20 +120,20 @@ else
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
-    private string Heading => Localizer.HeadingAddOrEdit(Id == 0, "Module", OwningGroup is null ? OwningPerson : OwningGroup);
+    object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;
+    private string Heading => Localizer.AddOrEdit("Module", OwningGroup is null ? OwningPerson : OwningGroup, Id == 0);
 
     bool HasStation([NotNullWhen(true)] Module? module) => module is not null && module.StationId.HasValue;
 
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
-    private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
-    private string SelectStandardLabel => $"{Localizer["Select"]} {Localizer["ModuleStandard"].Value.ToLowerInvariant()}";
+
 
     private ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : OwnerPersonId > 0 ? ModuleOwnershipRef.Person(OwnerPersonId) : Principal.AsModuleOwnershipRef();
 
     string StationEditLink => HasStation(Module) ?
-    OwnerRef.IsPersonInGroup ?
-    $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
-    OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" :
-    $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
-    "";
+        OwnerRef.IsPersonInGroup ?
+        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
+        OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" :
+        $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
+        "";
 }

@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
+@inject PageHistory PageHistory
+
 @using System.Security.Claims
 
 <AuthorizeView>

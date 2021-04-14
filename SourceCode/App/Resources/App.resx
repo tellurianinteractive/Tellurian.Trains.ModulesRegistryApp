@@ -819,4 +819,10 @@
   <data name="Visibility" xml:space="preserve">
     <value>Visibility</value>
   </data>
+  <data name="NoInformation" xml:space="preserve">
+    <value>No information</value>
+  </data>
+  <data name="GettingContent" xml:space="preserve">
+    <value>Getting content...</value>
+  </data>
 </root>

@@ -1,23 +1,31 @@
 ﻿@inject ContentService ContentService
 @inject IStringLocalizer<App> Localizer
 
-@if (Content is null)
+@if (IsVisible)
 {
-    @Localizer["Getting content. Please wait..."]
-}
-else
-{
-    if (ShowModificationTime)
+    @if (Content is null)
     {
-        <div class="alert alert-info">@string.Format(Localizer["ThisContentWasModified"].Value, Content.LastModified)</div>
+        <ActionMessage Label="GettingContent" IconName="hourglass" />
     }
-    @((MarkupString)Content.AsHtml)
+    else if (IsEmpty)
+    {
+        <ActionMessage Label="NoInformation" />
+    }
+    else
+    {
+        if (ShowModificationTime)
+        {
+            <div class="alert alert-info"><span class="fa fa-pen-square" /> @string.Format(Localizer["ThisContentWasModified"].Value, Content.LastModified)</div>
+        }
+        @((MarkupString)Content.AsHtml)
+    }
 }
 @code {
     [Parameter] public string? ContentName { get; set; }
     [Parameter] public string? Language { get; set; } = null;
     [Parameter] public string? Href { get; set; } = null;
     [Parameter] public bool ShowModificationTime { get; set; }
+    [Parameter] public bool IsHidden { get; set; }
 
     TextContent? Content;
 
@@ -36,4 +44,7 @@ else
             Content = TextContent.Empty;
         }
     }
+
+    bool IsVisible => !IsHidden;
+    bool IsEmpty => (string.IsNullOrWhiteSpace(ContentName) && string.IsNullOrWhiteSpace(Href)) || string.IsNullOrWhiteSpace(Content?.Text);
 }

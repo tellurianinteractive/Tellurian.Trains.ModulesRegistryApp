@@ -9,7 +9,7 @@ namespace ModulesRegistry.Validators
         public StationCustomerValidator(IStringLocalizer<App> localizer)
         {
             RuleFor(m => m.CustomerName).NotEmpty().MaximumLength(50).MustBeOrdinaryText(localizer).MustBeCapitalizedCorrectly(localizer).WithName(n => localizer["Name"]);
-            RuleFor(m => m.Comment).MaximumLength(50).MustBeCapitalizedCorrectly(localizer).WithName(n => localizer[nameof(n.Comment)]);
+            RuleFor(m => m.Comment).MaximumLength(50).MustBeOrdinaryText(localizer).WithName(n => localizer[nameof(n.Comment)]);
             RuleFor(m => m.OpenedYear).MustBeValidYear(localizer).WithName(n => localizer[nameof(n.OpenedYear)]);
             RuleFor(m => m.ClosedYear).MustBeValidYear(localizer).WithName(n => localizer[nameof(n.ClosedYear)]);
             RuleFor(m => m.TrackOrArea).MustBeOrdinaryText(localizer).WithName(n => localizer[nameof(n.TrackOrArea)]);

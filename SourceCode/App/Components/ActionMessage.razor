@@ -1,9 +1,10 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
 <div class="alert alert-info mt-3">
-    <span class="@FontAwesome.Note" />@Localizer[Label]
+    <span class="fa fa-@IconName" />@Localizer[Label]
 </div>
 
 @code {
     [Parameter] public string Label { get; set; } = "ActionInProgress";
+    [Parameter] public string? IconName { get; set; } = "info-circle";
 }

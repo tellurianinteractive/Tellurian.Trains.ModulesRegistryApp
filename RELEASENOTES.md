@@ -1,5 +1,10 @@
 # Release Notes
 
+### Version 1.0.4
+Release date 2021-04-15
+- **Help texts** are now available in English for editing *modules* and *stations*. It's for evaluation by users before going further.
+- **Back button** are now available on the pages for editing *modules* and *stations*. It's for evaluation by users before going further.
+
 ### Version 1.0.3
 Release date 2021-04-14
 - **Bug fix** of issue [#55 Cannot edit station cargo or cargo customers](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/55).
