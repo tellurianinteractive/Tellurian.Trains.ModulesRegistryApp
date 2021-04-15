@@ -2,8 +2,11 @@
 
 ### Version 1.0.4
 Release date 2021-04-15
-- **Help texts** are now available in English for editing *modules* and *stations*. It's for evaluation by users before going further.
-- **Back button** are now available on the pages for editing *modules* and *stations*. It's for evaluation by users before going further.
+- **Help texts** are now available in English for editing *modules*, *stations* and *station customer*. It's for evaluation by users before going further.
+- **Back button** are now available on the pages for editing *modules*, *stations* and *station customer*. It's for evaluation by users before going further.
+- **Cargo flow** colouring is improved,  issue [#64](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/64).
+- **Variant/Box label** now is displayed in *modules* lists, issue [#61](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/61).
+- **Bug fix** of issue [#59 Cannot edit station data](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/59)
 
 ### Version 1.0.3
 Release date 2021-04-14

@@ -65,6 +65,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal.IsAuthenticated())
             {
+                ownerRef = principal.UpdateFrom(ownerRef);
                 if (ownerRef.IsGroup)
                 {
                     using var dbContext = Factory.CreateDbContext();

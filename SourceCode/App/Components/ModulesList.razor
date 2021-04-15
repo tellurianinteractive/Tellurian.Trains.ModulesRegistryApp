@@ -24,7 +24,7 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
-        <td>@module.FullName</td>
+        <td>@Name(module)</td>
         <td>@module.FremoName()</td>
         <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
@@ -73,6 +73,7 @@
         Modules = await ModuleService.GetAllAsync(Principal, ownerRef);
     }
 
+    string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName}/{module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName}@{module.PackageLabel}" : module.FullName;
     string Status(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;

@@ -825,4 +825,7 @@
   <data name="GettingContent" xml:space="preserve">
     <value>Inhalte abrufen...</value>
   </data>
+  <data name="OtherTrackOrArea" xml:space="preserve">
+    <value>Anderer Spür Nr. oder Ladefläche</value>
+  </data>
 </root>

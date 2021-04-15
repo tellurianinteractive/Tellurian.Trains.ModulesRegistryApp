@@ -5,6 +5,7 @@
 
 @inject PersonService PersonService
 @inject StationService StationService
+@inject GroupService GroupService
 
 <h1><span class="@FontAwesome.Station" /> @Heading</h1>
 
@@ -17,16 +18,17 @@
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     private IEnumerable<Station>? OwnedStations;
+    bool MayEdit;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await PersonService.FindByIdAsync(Principal, Id);
-        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, OwnerRef);
+        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, GroupId);
+        MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
+        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, ownershipRef);
     }
 
-    private int OwningPersonId => Owner?.Id ?? 0;
     private string Heading => Localizer.ObjectOwner("Stations", Owner);
-    private bool MayEdit => Principal.MaySave(OwnerRef);
-    private ModuleOwnershipRef OwnerRef => GroupId > 0 ? ModuleOwnershipRef.PersonInGroup(OwningPersonId, GroupId) : ModuleOwnershipRef.Person(OwningPersonId);
+    private int OwningPersonId => Owner?.Id ?? 0;
 }

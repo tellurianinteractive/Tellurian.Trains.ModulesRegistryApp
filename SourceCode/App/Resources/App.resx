@@ -825,4 +825,7 @@
   <data name="GettingContent" xml:space="preserve">
     <value>Getting content...</value>
   </data>
+  <data name="OtherTrackOrArea" xml:space="preserve">
+    <value>Other track no. or loading area</value>
+  </data>
 </root>

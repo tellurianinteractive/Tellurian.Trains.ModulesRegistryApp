@@ -825,4 +825,7 @@
   <data name="GettingContent" xml:space="preserve">
     <value>Henter innhold...</value>
   </data>
+  <data name="OtherTrackOrArea" xml:space="preserve">
+    <value>Annet spor nr. eller lasteområde</value>
+  </data>
 </root>
