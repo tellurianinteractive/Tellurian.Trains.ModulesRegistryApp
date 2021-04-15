@@ -17,7 +17,9 @@
         {
             <div class="alert alert-info"><span class="fa fa-pen-square" /> @string.Format(Localizer["ThisContentWasModified"].Value, Content.LastModified)</div>
         }
-        @((MarkupString)Content.AsHtml)
+        <div style="background-color: @BackgroundColor; padding: @Padding">
+            @((MarkupString)Content.AsHtml)
+        </div>
     }
 }
 @code {
@@ -26,6 +28,7 @@
     [Parameter] public string? Href { get; set; } = null;
     [Parameter] public bool ShowModificationTime { get; set; }
     [Parameter] public bool IsHidden { get; set; }
+    [Parameter] public string? BackgroundColor { get; set; }
 
     TextContent? Content;
 
@@ -45,6 +48,7 @@
         }
     }
 
+    string Padding => BackgroundColor.HasValue() ? "5pt" : "0px";
     bool IsVisible => !IsHidden;
     bool IsEmpty => (string.IsNullOrWhiteSpace(ContentName) && string.IsNullOrWhiteSpace(Href)) || string.IsNullOrWhiteSpace(Content?.Text);
 }

@@ -11,7 +11,7 @@
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
-<EditHeading ObjectName="StationCustomer" IconClass="@FontAwesome.Customer" IsAdd="@(Id == 0)" IsHelpAvailable="true" />
+<EditHeading Label="FreightCustomer"  Owner="Station" IconClass="@FontAwesome.Customer" IsAdd="@(Id == 0)" HelpContext="StationCustomer"/>
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
@@ -74,6 +74,4 @@
     {
         StationId = StationId
     };
-
-    string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomerAt"].Value, Station?.FullName);
 }

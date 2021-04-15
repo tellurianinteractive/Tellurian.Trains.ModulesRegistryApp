@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Extensions;
 using System.Text;
 
 namespace ModulesRegistry.Extensions
@@ -9,16 +10,20 @@ namespace ModulesRegistry.Extensions
         public static string AddOrEdit(this IStringLocalizer me, string? objectName, bool isAdd) =>
             $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
 
+        public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, bool isAdd) =>
+            label.HasValue() ? $"{me.AddOrEdit(isAdd)} {me.ObjectName(label, true)}" :
+            $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
+
         private static string AddOrEdit(this IStringLocalizer me, bool isAdd) =>
             isAdd ? me["Add"].Value : me["Edit"].Value;
 
         private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
             string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
 
-        public static string AddOrEdit(this IStringLocalizer me, string? objectName, object? owner, bool isAdd)
+        public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, object? owner, bool isAdd)
         {
             var text = new StringBuilder(100);
-            text.Append(me.AddOrEdit(objectName, isAdd));
+            text.Append(me.AddOrEdit(label, objectName, isAdd));
             if (owner is not null)
             {
                 text.Append(' ');
@@ -27,7 +32,13 @@ namespace ModulesRegistry.Extensions
                 text.Append(owner.Name());
             }
             return text.ToString();
+
         }
+
+        public static string AddOrEdit(this IStringLocalizer me, string? objectName, object? owner, bool isAdd) =>
+            me.AddOrEdit(null, objectName, owner, isAdd);
+       
+
         public static string ObjectOwner(this IStringLocalizer me, string objectName, object? owner) =>
             owner switch
             {
@@ -41,6 +52,7 @@ namespace ModulesRegistry.Extensions
             {
                 Person p => p.FullName(),
                 Group g => g.FullName,
+                Station s => s.FullName,
                 _ => string.Empty
             };
 

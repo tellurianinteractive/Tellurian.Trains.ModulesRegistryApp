@@ -789,8 +789,8 @@
   <data name="CargoFlow" xml:space="preserve">
     <value>Godsflöde</value>
   </data>
-  <data name="FreightCustomerAt" xml:space="preserve">
-    <value>Godskund på {0}</value>
+  <data name="FreightCustomer" xml:space="preserve">
+    <value>Godskund</value>
   </data>
   <data name="Documents" xml:space="preserve">
     <value>Dokument</value>

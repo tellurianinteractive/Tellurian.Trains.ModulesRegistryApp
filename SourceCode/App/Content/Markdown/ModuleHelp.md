@@ -1,10 +1,9 @@
 ﻿## Module Help
 Besides the more obvius fields in the form, some fields need some additional explanation:
-#### Name and FREMO no.
+- **Name** and **FREMO no.**
 You can give your module any descriptive name, it haven't to be your *FREMO owner initials*+FREMO number. 
 The given FREMO number will instead be combined with your *FREMO owner initials* stored in your personal data, ensuring that the module's FREMO-id will be correct.
-#### Variant and Box label
-These fields are mutually exclusive. 
+- **Variant** or **Box label** are mutually exclusive. 
 - **Variant** is used when a module can be assembled in in different ways 
 that requires you to enter each variant as *separate* modules with *same* name 
 but with different characteristics and drawings. You enter a different *variant* for each, for example *short* and *long* module versions.
@@ -24,5 +23,5 @@ Most modules only have two *exits*, for example line-modules, you will have one 
 When you specify exits for *station modules* you must imagine that you stand at the operation place and have the module to the north of you.
 Then *west* exits will be the ones to the *left* and the *east* exits will be the ones to the right.
 You may have several *exits* in each direction.
-These directions becomes extra important when you specify station track directions.
+These directions becomes extra important when you later specify *station track* directions.
 

@@ -13,7 +13,7 @@
 @inject PersonService PersonService
 @inject GroupService GroupService
 
-<EditHeading ObjectName="Station" Owner="@Owner" IconClass="@FontAwesome.Station" IsAdd="@(Id == 0)" IsHelpAvailable="true" />
+<EditHeading ObjectName="Station" Owner="@Owner" IconClass="@FontAwesome.Station" IsAdd="@(Id == 0)" HelpContext="Station" />
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>

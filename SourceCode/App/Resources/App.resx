@@ -789,8 +789,8 @@
   <data name="CargoFlow" xml:space="preserve">
     <value>Cargo flow</value>
   </data>
-  <data name="FreightCustomerAt" xml:space="preserve">
-    <value>Freight customer at {0}</value>
+  <data name="FreightCustomer" xml:space="preserve">
+    <value>Freight customer</value>
   </data>
   <data name="Documents" xml:space="preserve">
     <value>Documents</value>
