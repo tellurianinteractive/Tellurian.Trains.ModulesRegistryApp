@@ -4,7 +4,7 @@
     {
         public const string Add = "fa fa-plus-square";
         public const string Cargo = "fa fa-box-open";
-        public const string Clone = "fa fa-box-clone";
+        public const string Clone = "fa fa-clone";
         public const string Customer = "fa fa-industry";
         public const string Delete = "fa fa-trash-alt";
         public const string Edit = "fa fa-edit";

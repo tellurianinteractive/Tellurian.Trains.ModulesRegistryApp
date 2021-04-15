@@ -42,12 +42,12 @@
             }
             @if (module.StationId.HasValue)
             {
-                <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer.EditOrViewObject("Station", MayEdit)</a>
-                <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer.EditOrViewObject("FreightCustomers", MayEdit)</a>
+                <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer["Station"]</a>
+                <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer["FreightCustomers"]</a>
             }
             @if (MayEdit && module.Id > 0)
             {
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" />@Localizer["Clone"]</button>
+                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" /> @Localizer["Clone"]</button>
             }
 
             &nbsp;

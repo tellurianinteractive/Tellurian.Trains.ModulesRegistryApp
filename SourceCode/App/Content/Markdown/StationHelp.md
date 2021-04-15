@@ -2,7 +2,7 @@
 Besides the more obvius fields in the form, some fields need some additional explanation:
 
 - **Full name** is not necessarily the same name as the referred module.
-- **Signature** This is the short designation used internally in railway operation.
+- **Signature** is the short designation used internally in railway operation.
 The signature should fully identify a station on a layout.
 - **Is Terminus** should be checked if the tracks ends in the station. 
 - **Is Shadow Station** should be checked if the station represents the outer world for the layout. 
