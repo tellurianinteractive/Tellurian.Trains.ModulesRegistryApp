@@ -831,4 +831,10 @@
   <data name="MustBeAnyOf" xml:space="preserve">
     <value>Must be any of {0}</value>
   </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Not applicable</value>
+  </data>
+  <data name="Domain" xml:space="preserve">
+    <value>Droup domain</value>
+  </data>
 </root>

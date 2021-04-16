@@ -831,4 +831,10 @@
   <data name="MustBeAnyOf" xml:space="preserve">
     <value>Må være en av {0}</value>
   </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ikke aktuelt</value>
+  </data>
+  <data name="Domain" xml:space="preserve">
+    <value>Gruppedomene</value>
+  </data>
 </root>

@@ -2,6 +2,7 @@
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -22,6 +23,15 @@ namespace ModulesRegistry.Services.Implementations
             using var dbContext = Factory.CreateDbContext();
             var id = countryId ?? principal.CountryId();
             return await dbContext.Groups.AsNoTracking().Where(g => principal.IsGlobalAdministrator() || g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
+        }
+        public async Task<IEnumerable<ListboxItem>> GroupDomainListboxItemsAsync(ClaimsPrincipal? principal)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.GroupDomains.AsNoTracking().Select(gd => new ListboxItem(gd.Id, gd.Name)).ToListAsync();
+            }
+            return Array.Empty<ListboxItem>();
         }
 
         public async Task<IEnumerable<(Group Group, bool MayEdit)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)

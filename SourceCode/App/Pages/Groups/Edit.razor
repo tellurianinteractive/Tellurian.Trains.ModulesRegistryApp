@@ -23,6 +23,7 @@ else
     <AppInputText Width="4" Label="FullName" @bind-Value="Group.FullName" />
     <AppInputText Width="2" Label="CityName" @bind-Value="Group.CityName" />
     <AppInputSelect Width="2" Label="Country" @bind-Value="Group.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
+    <AppInputFill Width="2" />
 
     <div class="col-md-2">
         <label class="form-control-label" for="category">@SelectCategoryLabel</label>
@@ -42,6 +43,7 @@ else
         </InputSelect>
         <ValidationMessage For="@(() => Group.Category)" />
     </div>
+    <AppInputSelectNullable Width="2" Label="Domain" @bind-Value="Group.GroupDomainId" Items="DomainItems" ShowNoneOption="true" />
     <div class="col-12">
         <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" /> @Localizer["Save"]</button>
     </div>
@@ -55,6 +57,7 @@ else
     private ClaimsPrincipal? Principal;
     private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
+    private IEnumerable<ListboxItem>? DomainItems;
     private IEnumerable<(string Value, string Desciption)>? GroupCategories;
 
     protected async override Task OnParametersSetAsync()
@@ -62,6 +65,7 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         GroupCategories = await GroupCategoryService.AllAsync();
         CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+        DomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
         Group = await GetOrCreateAsync();
     }
 

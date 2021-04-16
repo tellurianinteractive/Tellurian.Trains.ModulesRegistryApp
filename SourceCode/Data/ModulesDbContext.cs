@@ -22,6 +22,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
         public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<GroupDomain> GroupDomains { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
@@ -289,8 +290,19 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Groups)
                     .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Group_Country");
+
+                entity.HasOne(d => d.GroupDomain)
+                    .WithMany()
+                    .HasForeignKey(d => d.GroupDomainId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Group_GroupDomain");
+            });
+
+            modelBuilder.Entity<GroupDomain>(entity =>
+            {
+                entity.ToTable("GroupDomain");
             });
 
             modelBuilder.Entity<GroupMember>(entity =>
@@ -305,7 +317,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.GroupMembers)
                     .HasForeignKey(d => d.PersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_GroupMember_Person");
             });
 

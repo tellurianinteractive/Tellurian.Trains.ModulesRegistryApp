@@ -41,7 +41,6 @@ namespace ModulesRegistry.Validators
             RuleFor(group => group.CountryId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer[nameof(n.Country)]);
-
         }
     }
 }
