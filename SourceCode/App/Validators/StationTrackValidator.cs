@@ -34,6 +34,9 @@ namespace ModulesRegistry.Validators
                 .MaximumLength(20)
                 .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer["TrackNote"]);
+            RuleFor(m => m.DirectionId).
+                MustBeEnumValue(localizer, typeof(StationTrackDirection)).
+                WithName(n => localizer["Direction"]);
         }
     }
 }

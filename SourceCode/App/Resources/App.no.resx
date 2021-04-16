@@ -828,4 +828,7 @@
   <data name="OtherTrackOrArea" xml:space="preserve">
     <value>Annet spor nr. eller lasteområde</value>
   </data>
+  <data name="MustBeAnyOf" xml:space="preserve">
+    <value>Må være en av {0}</value>
+  </data>
 </root>

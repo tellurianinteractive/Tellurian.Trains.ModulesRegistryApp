@@ -828,4 +828,7 @@
   <data name="OtherTrackOrArea" xml:space="preserve">
     <value>Anderer Spür Nr. oder Ladefläche</value>
   </data>
+  <data name="MustBeAnyOf" xml:space="preserve">
+    <value>Muss eine von {0} sein</value>
+  </data>
 </root>

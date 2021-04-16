@@ -53,8 +53,11 @@ namespace ModulesRegistry.Validators
 
         public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer) =>
             builder.Must(value => value.IsSelected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
-
         private static bool IsSelected(this int id) => id > 0;
+
+        public static IRuleBuilderOptions<T, int> MustBeEnumValue<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, Type enumType) =>
+            builder.Must(value => value.IsValidEnum(enumType)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAnyOf"].Value, string.Join(",", EnumExtensions.StationTrackDirections()))}");
+        private static bool IsValidEnum(this int value, Type enumType) => Enum.IsDefined(enumType, value);
 
         public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
             builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinYear, MaxYear)}");

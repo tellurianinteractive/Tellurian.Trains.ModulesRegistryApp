@@ -396,4 +396,16 @@
   <data name="Users" xml:space="preserve">
     <value>Alle brukere</value>
   </data>
+  <data name="NotScheduled" xml:space="preserve">
+    <value>Ikke planlagt</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>Øst-vest</value>
+  </data>
+  <data name="WestEast" xml:space="preserve">
+    <value>Vest-øst</value>
+  </data>
+  <data name="Bidirectional" xml:space="preserve">
+    <value>Toveis</value>
+  </data>
 </root>

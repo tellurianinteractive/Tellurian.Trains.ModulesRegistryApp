@@ -396,4 +396,16 @@
   <data name="Users" xml:space="preserve">
     <value>Alla användare</value>
   </data>
+  <data name="NotScheduled" xml:space="preserve">
+    <value>Ej tidtabellslagt</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>Öst-väst</value>
+  </data>
+  <data name="WestEast" xml:space="preserve">
+    <value>Väst-öst</value>
+  </data>
+  <data name="Bidirectional" xml:space="preserve">
+    <value>Dubbelriktat</value>
+  </data>
 </root>

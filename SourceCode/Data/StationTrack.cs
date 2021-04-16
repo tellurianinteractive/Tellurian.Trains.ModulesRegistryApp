@@ -13,6 +13,7 @@ namespace ModulesRegistry.Data
         public short DisplayOrder { get; set; }
         public bool IsSiding { get; set; }
         public bool IsScheduled { get; set; }
+        public int DirectionId { get; set; }
         public double MaxTrainLength { get; set; }
         public double? PlatformLength { get; set; }
         public short? SpeedLimit { get; set; }

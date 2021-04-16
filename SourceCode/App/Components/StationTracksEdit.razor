@@ -1,0 +1,66 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject PropertyService PropertyService
+
+@if (Station is null)
+{
+    <ActionMessage Label="GettingContent" IconName="hourglass" />
+}
+else
+{
+    <h3 class="mt-3">@Localizer["Tracks"]</h3>
+    <div class="col-12">
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddTrack"><span class="@FontAwesome.Add" /> @AddTrackButtonText</button>
+    </div>
+    @foreach (var track in Station.StationTracks)
+    {
+<div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+    <AppInputText Width="2" Label="TrackNumber" @bind-Value="track.Designation" />
+    <AppInputNumber Width="2" Label="DisplayOrder" TValue="short" @bind-Value="track.DisplayOrder" />
+    <AppInputSelect Width="2" Label="Direction" @bind-Value="track.DirectionId" Items="EnumExtensions.StationTrackDirectionListboxItems()" />
+    <AppInputNumber Width="2" Label="MaxTrainLength" TValue="double" @bind-Value="track.MaxTrainLength" Unit="m" Step="0.1" />
+    <AppInputNumber Width="2" Label="PlatformLength" TValue="double?" @bind-Value="track.PlatformLength" Unit="m" Step="0.1" />
+    <AppInputNumber Width="2" Label="SpeedLimit" TValue="short?" @bind-Value="track.SpeedLimit" Unit="km/h" Step="5" />
+
+    <AppInputText Width="4" Label="Usage" @bind-Value="track.UsageNote" />
+    <AppInputFill Width="8" />
+
+    <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="track.IsThroughTrack" />
+    <AppInputCheck Width="2" Label="IsSiding" @bind-Value="track.IsSiding" />
+    @*<AppInputCheck Width="2" Label="IsScheduled" @bind-Value="track.IsScheduled" />*@
+    <AppInputFill Width="6" />
+    @if (track.Id > 0)
+    {
+        <div class="col-md-2">
+            <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(track.Id))"><span class="@FontAwesome.Delete" /> @Localizer["Delete"]</button>
+        </div>
+    }
+</div>
+    }
+}
+
+@code {
+    [Parameter] public Station? Station { get; set; }
+
+    void AddTrack()
+    {
+        if (Station is not null)
+        {
+            Station.StationTracks.Add(DefaultStationTrack);
+            StateHasChanged();
+        }
+
+    }
+
+    void Delete(int id)
+    {
+        if (Station is not null && id > 0)
+        {
+            Station.StationTracks = Station.StationTracks.Where(st => st.Id != id).ToList();
+            StateHasChanged();
+        }
+    }
+
+    StationTrack DefaultStationTrack => new StationTrack { Designation = NextDisplayOrder.ToString(), DisplayOrder = NextDisplayOrder };
+    short NextDisplayOrder => (short)(Station is null || Station.StationTracks is null || Station.StationTracks.Count == 0 ? 1 : Station.StationTracks.Count + 1);
+    string AddTrackButtonText => $"{Localizer["Add"]} {Localizer["Track"].ToString().ToLowerInvariant()}";
+}

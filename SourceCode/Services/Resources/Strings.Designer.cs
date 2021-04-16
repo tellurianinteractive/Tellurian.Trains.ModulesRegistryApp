@@ -124,6 +124,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bidirectional.
+        /// </summary>
+        internal static string Bidirectional {
+            get {
+                return ResourceManager.GetString("Bidirectional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Canceled.
         /// </summary>
         internal static string Canceled {
@@ -255,6 +264,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string DomainMembers {
             get {
                 return ResourceManager.GetString("DomainMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to East-west.
+        /// </summary>
+        internal static string EastWest {
+            get {
+                return ResourceManager.GetString("EastWest", resourceCulture);
             }
         }
         
@@ -516,6 +534,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string NothingToDelete {
             get {
                 return ResourceManager.GetString("NothingToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not scheduled.
+        /// </summary>
+        internal static string NotScheduled {
+            get {
+                return ResourceManager.GetString("NotScheduled", resourceCulture);
             }
         }
         
@@ -885,6 +912,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string WednesdayShort {
             get {
                 return ResourceManager.GetString("WednesdayShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to West-east.
+        /// </summary>
+        internal static string WestEast {
+            get {
+                return ResourceManager.GetString("WestEast", resourceCulture);
             }
         }
         
