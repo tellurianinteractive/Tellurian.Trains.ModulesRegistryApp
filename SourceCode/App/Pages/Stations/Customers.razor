@@ -17,7 +17,7 @@
     <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
 
-<TableTemplate Items="StationCustomers">
+<TableTemplate Items="StationCustomers" GetSubItem="GetSubItem">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Comment"]</th>
@@ -42,16 +42,16 @@
 </TableTemplate>
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int Id { get; set; }
-        [Parameter] public int StationId { get; set; }
-        [Parameter] public int OwningPersonId { get; set; }
-        [Parameter] public int OwningGroupId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public int OwningGroupId { get; set; }
 
-        ClaimsPrincipal? Principal;
-        Station? Station;
-        IEnumerable<StationCustomer>? StationCustomers;
-        bool MayEdit;
+    ClaimsPrincipal? Principal;
+    Station? Station;
+    IEnumerable<StationCustomer>? StationCustomers;
+    bool MayEdit;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,6 +67,11 @@
             StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
             MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
         }
+    }
+
+    string GetSubItem(StationCustomer customer)
+    {
+        return "<td colspan=\"6\">Content</td>";
     }
 
     string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomersAt"].Value, Station?.FullName);

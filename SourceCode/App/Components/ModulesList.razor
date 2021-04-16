@@ -15,7 +15,10 @@
 <TableTemplate Items="Modules">
     <TableHeader>
         <th>@Localizer["Name"]</th>
-        <th>@Localizer["FremoName"]</th>
+        @if (AnyHasFremoName)
+        {
+            <th>@Localizer["FremoName"]</th>
+        }
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Standard"]</th>
         <th>@Localizer["Owners"]</th>
@@ -24,8 +27,11 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
-        <td>@Name(module)</td>
+        <td>@((MarkupString)Name(module))</td>
+        @if (AnyHasFremoName)
+        {
         <td>@module.FremoName()</td>
+        }
         <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
         <td>@Owners(module.ModuleOwnerships)</td>
@@ -49,8 +55,6 @@
             {
                 <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" /> @Localizer["Clone"]</button>
             }
-
-            &nbsp;
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -65,6 +69,11 @@
         string.Empty :
         string.Join(", ", owners.Select(o => o.Group is not null ? $"{o.Group.FullName}" : o.Person is not null ? $"{o.Person.FirstName} {o.Person.LastName}" : string.Empty));
 
+    protected override void OnParametersSet()
+    {
+        AnyHasFremoName = Modules is not null && Modules.Any(m => m.FremoNumber.HasValue && m.ModuleOwnerships.Any(mo => mo.Person.FremoOwnerSignature.HasValue()));
+    }
+
     async Task Clone(int id)
     {
         var ownerRef = OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) : ModuleOwnershipRef.Person(OwningPersonId);
@@ -72,8 +81,8 @@
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Modules = await ModuleService.GetAllAsync(Principal, ownerRef);
     }
-
-    string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName}/{module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName}@{module.PackageLabel}" : module.FullName;
+    bool AnyHasFremoName;
+    string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : module.FullName;
     string Status(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
