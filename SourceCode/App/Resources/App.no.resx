@@ -837,4 +837,22 @@
   <data name="Domain" xml:space="preserve">
     <value>Gruppedomene</value>
   </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Er stasjon eller en del av</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Er den eneste eieren?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Er en del av en stasjon?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Er registrert i et kommende treff?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Bekreft sletting</value>
+  </data>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Vilkår for sletting ikke oppfylt</value>
+  </data>
 </root>

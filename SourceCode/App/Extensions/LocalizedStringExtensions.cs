@@ -1,25 +1,52 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Shared;
+using System;
 using System.Text;
 
 namespace ModulesRegistry.Extensions
 {
     public static class LocalizedStringExtensions
     {
+        [Obsolete]
         public static string AddOrEdit(this IStringLocalizer me, string? objectName, bool isAdd) =>
             $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
 
+        [Obsolete]
         public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, bool isAdd) =>
             label.HasValue() ? $"{me.AddOrEdit(isAdd)} {me.ObjectName(label, true)}" :
             $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
 
+        [Obsolete]
         private static string AddOrEdit(this IStringLocalizer me, bool isAdd) =>
             isAdd ? me["Add"].Value : me["Edit"].Value;
 
-        private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
-            string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
 
+        public static string ActionText(this IStringLocalizer me, string? label, string? objectName, PageAction action) =>
+            label.HasValue() ? $"{me.ActionName(action)} {me.ObjectName(label, action != PageAction.List)}" :
+            $"{me.ActionName(action)} {me.ObjectName(objectName, action != PageAction.List)}";
+
+        private static string ActionName(this IStringLocalizer me, PageAction action) =>
+            action == PageAction.List ? string.Empty :
+            me[action.ToString()].Value;
+
+        public static string HeadingText(this IStringLocalizer me, string? label, string? objectName, object? owner, PageAction action)
+        {
+            var text = new StringBuilder(100);
+            text.Append(me.ActionText(label, objectName, action));
+            if (owner is not null)
+            {
+                text.Append(' ');
+                text.Append(me["For"].Value.ToLowerInvariant());
+                text.Append(' ');
+                text.Append(owner.Name());
+            }
+            return text.ToString();
+
+        }
+
+        [Obsolete]
         public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, object? owner, bool isAdd)
         {
             var text = new StringBuilder(100);
@@ -35,9 +62,9 @@ namespace ModulesRegistry.Extensions
 
         }
 
+        [Obsolete]
         public static string AddOrEdit(this IStringLocalizer me, string? objectName, object? owner, bool isAdd) =>
-            me.AddOrEdit(null, objectName, owner, isAdd);
-       
+            me.AddOrEdit(null, objectName, owner, isAdd);     
 
         public static string ObjectOwner(this IStringLocalizer me, string objectName, object? owner) =>
             owner switch
@@ -46,6 +73,8 @@ namespace ModulesRegistry.Extensions
                 Group => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
                 _ => me[objectName].ToString()
             };
+        private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
+            string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
 
         private static string Name(this object? me) =>
             me switch

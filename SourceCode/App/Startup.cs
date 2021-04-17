@@ -64,7 +64,7 @@ namespace ModulesRegistry
             });
             services.AddDbContextFactory<ModulesDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"));
+                options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")).EnableSensitiveDataLogging(Environment.IsDevelopment());
             });
 
             services.AddBlazoredToast();

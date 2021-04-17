@@ -3,14 +3,14 @@
 
 <div>
     <h1>
-        <span class="@IconClass" />@Localizer.AddOrEdit(Label, ObjectName, Owner, IsAdd)
+        <span class="@IconClass" />@Localizer.HeadingText(Label, ObjectName, Owner, Action)
         <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
         @if (IsHelpAvailable)
         {
             <span class="fa fa-question-circle" @onclick="ToggleHelp" />
         }
     </h1>
-    <ContentView ContentName="@HelpContentName" IsHidden="@HelpIsHidden" BackgroundColor="#ffffcc"/>
+    <ContentView ContentName="@HelpContentName" IsHidden="@HelpIsHidden" BackgroundColor="#ffffcc" />
     <hr />
 </div>
 
@@ -19,6 +19,8 @@
     [Parameter] public string? Label { get; set; }
     [Parameter] public string? ObjectName { get; set; }
     [Parameter] public object? Owner { get; set; }
+    [Parameter] public PageAction PageAction { get; set; }
+    [Obsolete]
     [Parameter] public bool IsAdd { get; set; }
     [Parameter] public string? HelpContext { get; set; }
 
@@ -37,5 +39,8 @@
     {
         PageHistory.NavigateBack();
     }
+
+    // For comatibility for a while
+    PageAction Action => PageAction == PageAction.Unknown ? IsAdd ? PageAction.Add : PageAction.Edit : PageAction;
 
 }

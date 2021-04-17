@@ -1,12 +1,23 @@
 # Release Notes
 
+### Version 1.0.5
+Release date 2021-04-17
+- **Group Domain** can now be set for groups by administrators only. Currently, the *FREMO* domain is available.
+Later, extended *data visibility* will be added for groups in the same domain.
+- **Track Direction** now replaces *Is scheduled*. It is now possible to define a track as unidirectional. Thanks to Jürgen Riedl for the idea.
+- **Modules** can now be a part of a *station*. The system ensures that there is at least one module linked. Thanks to Benny Tjäder for the idea.
+- **Delete** of a module is now possible if a number of conditions are met. They are checked on the *delete*-page.
+- **Help texts** improved and corrected.
+- **Module list** graphical improvements showing *variant* or *box label*.
+- **Api** for fecthing *cargo types* with translated names in supported langauges. You need a personal *API key* to test it.
+
 ### Version 1.0.4
 Release date 2021-04-15
 - **Help texts** are now available in English for editing *modules*, *stations* and *station customer*. It's for evaluation by users before going further.
 - **Back button** are now available on the pages for editing *modules*, *stations* and *station customer*. It's for evaluation by users before going further.
-- **Cargo flow** colouring is improved,  issue [#64](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/64).
-- **Variant/Box label** now is displayed in *modules* lists, issue [#61](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/61).
-- **Bug fix** of issue [#59 Cannot edit station data](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/59)
+- **Cargo flow** colouring is improved,  issue [#64](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/64). Thanks to Fredrik Petterson for the idea.
+- **Variant/Box label** now is displayed in *modules* lists, issue [#61](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/61). Thanks to Benny Tjäder for the idea.
+- **Bug fix** of issue [#59 Cannot edit station data](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/issues/59).
 
 ### Version 1.0.3
 Release date 2021-04-14

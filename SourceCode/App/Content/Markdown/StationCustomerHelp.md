@@ -7,16 +7,20 @@ You can override it in each *cargo flow* if a specific cargo flow is picked up o
 - **Colour** can be used if you have several customers at a station and want to improve the orientation for people shunting at your station. 
 You can assign a *colour* to each place where you have cargo exchange. 
 These colours should correspond to some orientation documentation available at the station.
+The colours for your station customers should not be confused with the colours of external destination.
 - **Opened**- and **Closed year**
 should only be fill in if it historically relevant. 
 In particular, don't fill in the *closed year* if you want your customer to stay in business *until further notice*.
+Only *freight customers* in business under any of the operating years of the *layout* will be used for *cargo matching*.
 ### Cargo flow
 Defines any cargo that is relevant that the customer supply or consume:
 - **Cargo type** may not contain the cargo that your looking for. 
 Administrators can add new cargo, so ask any of them to help you with that.
+New *cargo types* needs to be entered with translations for all supported languages.
 - **Other name** gives you an option to override the name of the *cargo type*. 
 Note that *cargo type* names are language aware, but your *other name* is not.
-- **Days** are the days when the customer ships or expects to receive the cargo. Default to daily.
+- **Days** are the days when the customer ships or expects to receive the cargo. Default to daily. 
+Other than *daily* are only relevant for meetings where trains are operated per weeday.
 - **Direction** defines if the customer supplies (*send* or *export*) or consumes (*recieve* or *import*) the cargo. 
 The *import* and *export* can be used for customers in harbors etc. 
 - **Ouantity** and **Quantity unit** is volume of cargo in each shipment. 
@@ -25,10 +29,10 @@ that forces the user to calculate how many wagons are actually needed, in repect
 - **Loading/Unloading ready** is used to control when wagons becomes ready to use 
 for another shipment or be sent empty to some other place. 
 You can select relative or absolute times, or set it as *not applicable*.
-- **Other track no. or loading area** should only be specified if it deviates from what is specified for the customer.
-You can then also then select another colour.
-- **From and Up to year**
-Only fill in years if it historically relevant. 
+- **Other track no. or loading area** should *only* be specified if it deviates from what is specified for the customer.
+You can then also then select another colour. Otherwise, leave it empty.
+- **From year** and **Up to year**
+should only filled if historically relevant. 
 In particular, don't fill in the *up to year* if you want your customer to stay in business *until further notice*.
 
 

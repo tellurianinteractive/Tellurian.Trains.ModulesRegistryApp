@@ -837,4 +837,22 @@
   <data name="Domain" xml:space="preserve">
     <value>Droup domain</value>
   </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Is station or part of</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Is the only owner?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Is referring to a station?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Is registered in an upcoming meeting?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Confirm delete</value>
+  </data>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Conditions for delete are not met</value>
+  </data>
 </root>

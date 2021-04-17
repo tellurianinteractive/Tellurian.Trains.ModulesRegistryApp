@@ -120,4 +120,19 @@
   <data name="Unknown" xml:space="preserve">
     <value>Okänd</value>
   </data>
+  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
+    <value>En station måste ha minst en modul som hänvisar till den</value>
+  </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Obehörig</value>
+  </data>
+  <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Modulen är registrerad för kommande möte</value>
+  </data>
+  <data name="NotFullOwner" xml:space="preserve">
+    <value>Inte 100% ägare</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Inget att radera</value>
+  </data>
 </root>

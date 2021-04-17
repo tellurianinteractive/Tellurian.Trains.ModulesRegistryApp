@@ -1,0 +1,73 @@
+﻿@page "/Modules/{id:int}/Delete/PersonOwned/{ownerPersonId:int}"
+@page "/Modules/{id:int}/Delete/GroupOwned/{ownerGroupId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject PageHistory PageHistory
+
+@inject ModuleService ModuleService
+
+<PageHeading ObjectName="Module" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" />
+
+<ul>
+    <li>@Localizer["IsOnlyOwner"]: @IsFullOwner.AsYesNoWithColor()</li>
+    <li>@Localizer["IsPartOfStation"]: @IsReferringStation.AsYesNoWithColor(true)</li>
+    <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesNoWithColor(true)</li>
+</ul>
+@if (Module is null)
+{
+    <ActionMessage AlertType="warning" IconName="exclamation-circle" Label="NothingToDelete" />
+}
+else if (IsFullOwner && !IsReferringStation && !IsRegisteredInUpcomingMeeting)
+{
+    <button class="btn btn-danger btn-sm" @onclick="OnDelete"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
+}
+else
+{
+    <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int OwnerPersonId { get; set; }
+    [Parameter] public int OwnerGroupId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Module? Module;
+
+    bool IsFullOwner;
+    bool IsReferringStation;
+    bool IsRegisteredInUpcomingMeeting;
+
+    override protected async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    override protected async Task OnParametersSetAsync()
+    {
+        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwnerPersonId, OwnerGroupId);
+        Module = await ModuleService.FindByIdAsync(Principal, Id, ownershipRef);
+        if (Module is not null)
+        {
+            IsReferringStation = ModuleService.IsReferringStation(Module);
+            IsFullOwner = !ModuleService.IsNotFullOwner(Module, ownershipRef);
+            IsRegisteredInUpcomingMeeting = false; // TODO: Call service when module registrations are implemented.
+        }
+    }
+
+    async Task OnDelete()
+    {
+        if (Module is not null)
+        {
+            var result = await ModuleService.DeleteAsync(Principal, Module.Id);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(3000);
+            PageHistory.NavigateBack();
+        }
+    }
+}

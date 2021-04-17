@@ -120,4 +120,19 @@
   <data name="Unknown" xml:space="preserve">
     <value>Unbekannt</value>
   </data>
+  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
+    <value>Eine Station muss mindestens ein Modul haben, das darauf verweist</value>
+  </data>
+  <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Das Modul ist für das bevorstehende Meeting registriert</value>
+  </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Nicht autorisiert</value>
+  </data>
+  <data name="NotFullOwner" xml:space="preserve">
+    <value>Nicht 100% Eigentümer</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Nichts zu löschen</value>
+  </data>
 </root>

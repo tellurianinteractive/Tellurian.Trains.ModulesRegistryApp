@@ -76,6 +76,6 @@ namespace ModulesRegistry.Validators
              builder.Must(value => value.IsHexColorOrNull()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAColor"].Value, MinHour, MaxHour)}");
 
         private static bool IsHexColorOrNull(this string? value) =>
-            value is null ? true : value.IsHexColor();
+            value is null || value.IsHexColor();
     }
 }

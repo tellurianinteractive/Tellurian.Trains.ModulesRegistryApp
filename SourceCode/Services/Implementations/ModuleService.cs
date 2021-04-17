@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Resources;
 using ModulesRegistry.Services.Extensions;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,13 @@ namespace ModulesRegistry.Services.Implementations
     public sealed class ModuleService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
+        private readonly ITimeProvider TimeProvider;
         private readonly Random Random = new();
-        public ModuleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+        public ModuleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+        {
+            Factory = factory;
+            TimeProvider = timeProvider;
+        }
 
         public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, int? stationId)
         {
@@ -32,7 +38,7 @@ namespace ModulesRegistry.Services.Implementations
                 else
                 {
                     modules = await dbContext.Modules.AsNoTracking()
-                         .Where(m =>  m.ModuleOwnerships
+                         .Where(m => m.ModuleOwnerships
                          .Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId))
                          .ToListAsync();
 
@@ -195,6 +201,7 @@ namespace ModulesRegistry.Services.Implementations
 
             static async Task<(int Count, string Message, Module? Entity)> UpdateExisting(ModulesDbContext dbContext, Module entity, Module existing)
             {
+                if (await IfStationWillHaveNoReferringModules(dbContext, entity, existing)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.SaveResult(entity);
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 AddOrRemoveExits(dbContext, entity, existing);
                 if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
@@ -217,6 +224,17 @@ namespace ModulesRegistry.Services.Implementations
                     entity.ModuleExits.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
                     entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
 
+                static async Task<bool> IfStationWillHaveNoReferringModules(ModulesDbContext dbContext, Module entity, Module existing)
+                {
+                    if (existing.StationId.HasValue)
+                    {
+                        if (entity.StationId is null || entity.StationId != existing.StationId)
+                        {
+                            return !await dbContext.Modules.AnyAsync(m => m.Id != existing.Id && m.StationId == existing.StationId);
+                        }
+                    }
+                    return false;
+                }
             }
 
             static async Task<bool> IsPrincipalGroupsDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
@@ -233,21 +251,35 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int moduleId)
         {
-            var ownerRef = principal.AsModuleOwnershipRef();
-            if (principal.MayDelete(ownerRef))
+            var ownershipRef = principal.AsModuleOwnershipRef();
+            if (principal.MayDelete(ownershipRef))
             {
-                var entity = await FindByIdAsync(principal, moduleId);
-                if (entity is not null && entity.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
+                using var dbContext = Factory.CreateDbContext();
+                var entity = await dbContext.Modules.Include(m => m.ModuleOwnerships).Include(m => m.ModuleExits).SingleOrDefaultAsync(m => m.Id == moduleId);
+                if (entity is not null)
                 {
-                    using var dbContext = Factory.CreateDbContext();
-
+                    if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
+                    if (IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
+                    if (IsSubmittedToUpcomingMeeting(dbContext, entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
+                    var documents = await dbContext.Documents.Where(d => entity.DocumentIds().Contains(d.Id)).ToListAsync();
+                    foreach (var document in documents) dbContext.Remove(document);
+                    foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);
+                    foreach (var exit in entity.ModuleExits) dbContext.ModuleExits.Remove(exit);
                     dbContext.Modules.Remove(entity);
                     var result = await dbContext.SaveChangesAsync();
                     return result.DeleteResult();
                 }
             }
-            return principal.DeleteNotAuthorized<Module>();
+            return Strings.NothingToDelete.DeleteResult();         
         }
+
+        public static bool IsReferringStation(Module? module) => module is not null && module.StationId.HasValue;
+
+        public static bool IsNotFullOwner(Module existing, ModuleOwnershipRef ownershipRef) =>
+            false == existing.ModuleOwnerships.Any(mo => mo.OwnedShare == 1 && (ownershipRef.IsPerson && mo.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId));
+        private static bool IsSubmittedToUpcomingMeeting(ModulesDbContext dbContext, Module module) => false; // TODO: Implement later when module registrations are in place.
+
+
 
         public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
         {
@@ -267,7 +299,7 @@ namespace ModulesRegistry.Services.Implementations
                 var result = await dbContext.SaveChangesAsync();
                 return result.CloneResult();
             }
-            return (0, "Not authorized.");  //TODO: Fix extension with transplations.
+            return Strings.NotAuthorised.DeleteResult();
 
             static string CloneFullName(Random random, Module module)
             {

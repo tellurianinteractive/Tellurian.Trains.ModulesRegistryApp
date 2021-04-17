@@ -22,7 +22,7 @@ namespace ModulesRegistry.Data.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ModulesRegistry.Data.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ModulesRegistry.Data.Resources.Strings", typeof(Strings).Assembly);
@@ -51,7 +51,7 @@ namespace ModulesRegistry.Data.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,54 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Module is registered for upcoming meeting.
+        /// </summary>
+        public static string ModuleIsRegisteredForUpcomingMeeting {
+            get {
+                return ResourceManager.GetString("ModuleIsRegisteredForUpcomingMeeting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unauthorised.
+        /// </summary>
+        public static string NotAuthorised {
+            get {
+                return ResourceManager.GetString("NotAuthorised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not 100% owner.
+        /// </summary>
+        public static string NotFullOwner {
+            get {
+                return ResourceManager.GetString("NotFullOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to delete.
+        /// </summary>
+        public static string NothingToDelete {
+            get {
+                return ResourceManager.GetString("NothingToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A station must have at least one module referring to it.
+        /// </summary>
+        public static string StationMustHaveAtLeastOneModuleReferringToIt {
+            get {
+                return ResourceManager.GetString("StationMustHaveAtLeastOneModuleReferringToIt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
-        internal static string Unknown {
+        public static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
             }

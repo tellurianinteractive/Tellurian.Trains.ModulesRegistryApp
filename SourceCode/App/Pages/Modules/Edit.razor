@@ -11,9 +11,10 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 @inject ScaleService ScaleService
+@inject StationService StationService
 @inject ModuleStandardService ModuleStandardService
 
-<EditHeading ObjectName="Module" Owner="@Owner" IconClass="@FontAwesome.Module" IsAdd="@(Id == 0)" HelpContext="Module" />
+<PageHeading ObjectName="Module" Owner="@Owner" IconClass="@FontAwesome.Module" PageAction="@Id.ToPageAction()" HelpContext="Module" />
 
 @if (Module is null)
 {
@@ -46,7 +47,7 @@ else
             <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
             <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
             <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-            <AppInputFill Width="4" />
+            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
 
             <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Module.IsUnavailable" />
             <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
@@ -93,6 +94,7 @@ else
     Module? Module;
     IEnumerable<ListboxItem>? ScaleItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
+    IEnumerable<ListboxItem>? StationItems;
 
     int? ScaleIdFor3R;
 
@@ -106,6 +108,7 @@ else
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
             ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
+            StationItems = await StationService.StationItemsAsync(Principal, OwnerRef);
             Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000, ObjectVisibilityId=(int)ObjectVisibility.GroupMembers };
         }
     }
@@ -121,7 +124,7 @@ else
         }
     }
     object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;
-    private string Heading => Localizer.AddOrEdit("Module", OwningGroup is null ? OwningPerson : OwningGroup, Id == 0);
+    private string Heading => Localizer.HeadingText(null, "Module", OwningGroup is null ? OwningPerson : OwningGroup, Id.ToPageAction());
 
     bool HasStation([NotNullWhen(true)] Module? module) => module is not null && module.StationId.HasValue;
 

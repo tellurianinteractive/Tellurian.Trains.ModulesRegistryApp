@@ -8,7 +8,7 @@
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Localizer.AddOrEdit("Member", false) @GroupMember?.Person.Name()</h1>
+<PageHeading ObjectName="Member" Owner="GroupMember?.Person"  IconClass="@FontAwesome.Group" PageAction="PageAction.Edit"/>
 @if (GroupMember is null)
 {
 

@@ -27,7 +27,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
-        public virtual DbSet<ModuleExit> ModuleEntries { get; set; }
+        public virtual DbSet<ModuleExit> ModuleExits { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
         public virtual DbSet<NHM> NhmCodes { get; set; }
@@ -399,7 +399,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Station)
                       .WithMany(p => p.Modules)
                       .HasForeignKey(d => d.StationId)
-                      .OnDelete(DeleteBehavior.Cascade)
+                      .OnDelete(DeleteBehavior.SetNull)
                       .HasConstraintName("FK_Module_Station");
             });
 

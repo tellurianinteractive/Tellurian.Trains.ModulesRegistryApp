@@ -10,7 +10,7 @@
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
 
-<h1><span class="@FontAwesome.Customer" /> @Heading</h1>
+<PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
 
 @if (MayEdit)
 {

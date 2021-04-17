@@ -8,6 +8,7 @@ namespace ModulesRegistry.Services
     {
         private ModuleOwnershipRef() { }
         public static ModuleOwnershipRef Person(int personId) => new() { _PersonId = personId };
+        public static ModuleOwnershipRef Person(ClaimsPrincipal? principal, int personId) => new() { _PersonId = personId > 0 ? personId : principal is not null ? principal.PersonId() : 0 };
         public static ModuleOwnershipRef Group(int groupId) => new() { _GroupId = groupId };
         public static ModuleOwnershipRef PersonInGroup(int personId, int groupId) => new() { _PersonId = personId, _GroupId = groupId };
         public static ModuleOwnershipRef PersonOrGroup(ClaimsPrincipal? principal, int personId, int groupId) =>

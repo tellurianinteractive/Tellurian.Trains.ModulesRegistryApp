@@ -9,10 +9,18 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public class CargoService 
+    public class CargoService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public CargoService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+
+        public async Task<IEnumerable<Data.Api.CargoType>> CargoTypesAsync()
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var result = await dbContext.Cargos.ToListAsync();
+            if (result is null) return Array.Empty<Data.Api.CargoType>();
+            return result.Select(c => new Data.Api.CargoType(c.Id, c.NhmCode, c.DefaultClasses) { Translations = c.LocalizedNames().Select(ln => new Data.Api.Translation(ln.Language, ln.Value)) }).ToList();
+        }
 
         public async Task<IEnumerable<ListboxItem>> GargoListboxItemsAsync(ClaimsPrincipal? principal)
         {
@@ -21,7 +29,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Cargos
                     .Select(c => new ListboxItem(c.Id, c.LocalizedName().Value)).ToListAsync();
-                return items.OrderBy(l => l.Description).ToList();                  
+                return items.OrderBy(l => l.Description).ToList();
             }
             return Array.Empty<ListboxItem>();
         }
@@ -32,9 +40,9 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.CargoDirections
-                    .Select(cd => new ListboxItem(cd.Id, cd.FullName.Localized())).ToListAsync();;
+                    .Select(cd => new ListboxItem(cd.Id, cd.FullName.Localized())).ToListAsync(); ;
                 return items
-                    .OrderBy(l => l.Description).ToList();               
+                    .OrderBy(l => l.Description).ToList();
             }
             return Array.Empty<ListboxItem>();
         }
@@ -46,7 +54,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.CargoUnits
                     .Select(cu => new ListboxItem(cu.Id, cu.FullName.Localized())).ToListAsync();
-                return items.OrderBy(l => l.Description).ToList();                 
+                return items.OrderBy(l => l.Description).ToList();
             }
             return Array.Empty<ListboxItem>();
         }
@@ -134,7 +142,7 @@ namespace ModulesRegistry.Services.Implementations
 
         }
 
-        private static ListboxItem ListboxItem(NHM nhm) => new (nhm.Id, $"{nhm.Code!.Substring(0, nhm.LevelDigits)} {nhm.LocalizedName()}");
+        private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, $"{nhm.Code!.Substring(0, nhm.LevelDigits)} {nhm.LocalizedName()}");
 
         #endregion
     }

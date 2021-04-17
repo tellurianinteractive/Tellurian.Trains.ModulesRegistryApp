@@ -6,7 +6,7 @@
 @inject IToastService ToastService
 @inject CargoService CargoService
 
-<h1><span class="@FontAwesome.Cargo" /> @Heading</h1>
+<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToPageAction()" />
 
 <EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -69,6 +69,5 @@
         //StateHasChanged();
     }
 
-    private string Heading => Localizer.AddOrEdit("CargoType", null, Id == 0);
 
 }

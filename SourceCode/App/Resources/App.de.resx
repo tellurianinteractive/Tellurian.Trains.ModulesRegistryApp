@@ -837,4 +837,22 @@
   <data name="Domain" xml:space="preserve">
     <value>Gruppendomäne</value>
   </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Ist Station oder Teil von</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Ist der einzige Besitzer?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Ist ein Teil einer Station?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Ist in einer bevorstehenden Besprechung registriert?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Löschen bestätigen</value>
+  </data>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Löschbedingungen sind nicht erfüllt</value>
+  </data>
 </root>

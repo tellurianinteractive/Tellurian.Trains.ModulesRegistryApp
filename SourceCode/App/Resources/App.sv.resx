@@ -837,4 +837,22 @@
   <data name="Domain" xml:space="preserve">
     <value>Gruppdomän</value>
   </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Är station eller en del av</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Är den enda ägaren?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Är en del av en station?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Är registrerad på ett kommande träff?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Bekräfta radering</value>
+  </data>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Villkoren för radering är inte uppfyllda</value>
+  </data>
 </root>

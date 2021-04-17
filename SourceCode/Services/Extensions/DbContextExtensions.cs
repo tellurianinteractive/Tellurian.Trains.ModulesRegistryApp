@@ -15,6 +15,8 @@ namespace ModulesRegistry.Services.Extensions
 
         public static (int Count, string Message, T? Entity) SaveResult<T>(this int count, T entity) => 
             (count, count <0 ? Strings.NoModification : count > 0 ? Strings.Saved : Strings.SaveFailed, count != 0 ? entity : default);
+        public static (int Count, string Message, T? Entity) SaveResult<T>(this string message, T entity) =>
+            (0, message, entity);
 
         public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? me) => 
             (0, Strings.NotAuthorized, default);
@@ -23,6 +25,9 @@ namespace ModulesRegistry.Services.Extensions
 
         public static (int Count, string Message) DeleteResult(this int count) => 
             (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
+
+        public static (int Count, string Message) DeleteResult(this string message) =>
+            (0, message);
 
         public static (int Count, string Message) CloneResult(this int count) =>
             (count, count > 0 ? Strings.ClonedSuccessfully : Strings.CloningFailed);

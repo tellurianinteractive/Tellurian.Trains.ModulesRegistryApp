@@ -8,7 +8,8 @@
 @inject CountryService CountryService
 @inject GroupCategoryService GroupCategoryService
 
-<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Localizer.AddOrEdit("Group", Id == 0) </h1>
+<PageHeading ObjectName="Group" IconClass="@FontAwesome.Group" PageAction="@Id.ToPageAction()" />
+
 @if (Group is null)
 {
 
@@ -52,7 +53,7 @@ else
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? Id { get; set; }
+    [Parameter] public int Id { get; set; }
 
     private ClaimsPrincipal? Principal;
     private Group? Group;
@@ -79,7 +80,7 @@ else
     }
 
     private async Task<Group> GetOrCreateAsync() =>
-    Id.IsSet() ? await GroupService.FindByIdAsync(Principal, Id.Value) ?? NewGroup : NewGroup;
+        Id > 0 ? await GroupService.FindByIdAsync(Principal, Id) ?? NewGroup : NewGroup;
     private Group NewGroup => new Group { CountryId = DefaultCountryId };
 
     private string SelectCategoryLabel => $"{Localizer["Select"]} {Localizer["Category"].Value.ToLowerInvariant()}";

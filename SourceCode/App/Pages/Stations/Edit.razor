@@ -13,11 +13,11 @@
 @inject PersonService PersonService
 @inject GroupService GroupService
 
-<EditHeading ObjectName="Station" Owner="@Owner" IconClass="@FontAwesome.Station" IsAdd="@(Id == 0)" HelpContext="Station" />
+<PageHeading ObjectName="Station" Owner="@Owner" IconClass="@FontAwesome.Station" IsAdd="@IsAdd" HelpContext="Station" />
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
-        <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" />
+        <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
         <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
         <AppInputFill Width="5" />
@@ -47,6 +47,8 @@
 
     IEnumerable<ListboxItem>? ModulesItems;
 
+    bool IsAdd => Id == 0;
+    bool IsEdit => !IsAdd;
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,7 +83,6 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
-    private string Heading => Localizer.AddOrEdit("Station", Owner, Id == 0 && OwnerId == 0);
 
     ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
 

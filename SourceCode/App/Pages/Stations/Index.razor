@@ -7,7 +7,7 @@
 @inject StationService StationService
 @inject ModuleService ModuleService
 
-<h1><span class="@FontAwesome.Station" aria-hidden="true" /> @Localizer["Stations"] </h1>
+<PageHeading ObjectName="Stations" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
 
 <StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwningGroupId" OwningPersonId="OwningPersonId"/>
 
