@@ -8,7 +8,7 @@
 @inject ModuleStandardService ModuleStandardService
 @inject OperatingDayService OperatingDayService
 
-<h1><span class="@FontAwesome.Layout" /> @Heading</h1>
+<PageHeading Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="Id.ToPageAction()" />
 
 <EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
     <Inputs>

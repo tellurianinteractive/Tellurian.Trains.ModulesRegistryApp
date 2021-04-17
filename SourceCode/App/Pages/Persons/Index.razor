@@ -10,7 +10,8 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<h1><span class="@FontAwesome.People" aria-hidden="true" /> @Localizer["ModuleOwners"]</h1>
+<PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
+
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
 
 @if (CountryId > 0)

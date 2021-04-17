@@ -5,7 +5,7 @@
 
 @inject MeetingService MeetingService
 
-<h1><span class="@FontAwesome.Meeting" aria-hidden="true" />@Localizer["Meetings"]</h1>
+<PageHeading ObjectName="Meetings" IconClass="@FontAwesome.Meeting" PageAction="PageAction.List" />
 
 @if (Principal.IsAnyAdministrator())
 {

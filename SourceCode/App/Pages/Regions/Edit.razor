@@ -8,7 +8,7 @@
 @inject RegionService RegionService
 @inject CountryService CountryService
 
-<h1><span class="@FontAwesome.Region" />@Localizer.AddOrEdit("Region", Id == 0)</h1>
+<PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToPageAction()" />
 
 <EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>

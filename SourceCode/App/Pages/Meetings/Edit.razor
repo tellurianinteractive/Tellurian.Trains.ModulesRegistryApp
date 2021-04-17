@@ -6,7 +6,7 @@
 @inject MeetingService MeetingService
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Meeting" aria-hidden="true" />@Heading</h1>
+<PageHeading  Owner="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToPageAction()" HelpContext="Meeting"/>
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -95,6 +95,5 @@
         }
     }
 
-    string Heading => Meeting is null ? Localizer["Meeting"].ToString() : $"{Localizer["Meeting"]} {Meeting.Description} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
 }

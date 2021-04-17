@@ -7,7 +7,7 @@
 @inject GroupService GroupService
 @inject CountryService CountryService
 
-<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
+<PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List"/>
 
 @if (IsGroupAdministrator && Group?.Id > 0)
 {

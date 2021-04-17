@@ -7,7 +7,8 @@
 @inject ModuleService ModuleService
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Module" /> @Localizer.ObjectOwner("Modules", Owner)</h1>
+<PageHeading ObjectName="Modules" Owner="Owner" IconClass="@FontAwesome.Module"  PageAction="PageAction.List"/>
+
 <ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id" />
 
 @code {

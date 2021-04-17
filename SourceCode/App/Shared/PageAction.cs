@@ -6,7 +6,8 @@
         List,
         Add,
         Edit,
-        Delete
+        Delete,
+        Error
     }
 
     public static class PageActionExtensions

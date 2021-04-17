@@ -12,7 +12,8 @@
 @inject ContentService ContentService
 @inject CountryService CountryService
 
-<h1><span class="@FontAwesome.User" /> @Localizer["Invite"] @Invitation?.Recipient.Person.FirstName @Invitation?.Recipient.Person.LastName</h1>
+<PageHeading Label="Invite" Owner="Invitation?.Recipient.Person" PageAction="PageAction.Unknown"/>
+
 @if (CanSend)
 {
     <h2>@Localizer["Message"]</h2>

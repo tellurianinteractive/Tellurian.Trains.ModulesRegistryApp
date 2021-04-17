@@ -1,5 +1,11 @@
 # Release Notes
 
+### Version 1.0.6
+Release date 2021-04-19
+- **Help texts** added for *person*, *group*, *cargo types* and *meeting*.
+- **Page headings** now contains a *back*-button and a *help*-button if a help text is available.
+Layout of heading is also inproved.
+
 ### Version 1.0.5
 Release date 2021-04-17
 - **Group Domain** can now be set for groups by administrators only. Currently, the *FREMO* domain is available.

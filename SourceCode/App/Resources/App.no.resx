@@ -855,4 +855,10 @@
   <data name="ConditionsForDeleteNotMet" xml:space="preserve">
     <value>Vilkår for sletting ikke oppfylt</value>
   </data>
+  <data name="YouAreLockedOut" xml:space="preserve">
+    <value>Du er utelukket!</value>
+  </data>
+  <data name="OwnedPercent" xml:space="preserve">
+    <value>Eid %</value>
+  </data>
 </root>

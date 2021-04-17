@@ -1,6 +1,7 @@
 ﻿@page "/Meetings/{meetingid:int}/Layouts/{layoutid:int}/Modules"
 
 
+<PageHeading Label="RegisterModules" Owner="Layout" IconClass="@FontAwesome.Layout" PageAction="PageAction.List"/>
 <h1><span class="@FontAwesome.Layout" /> Register Modules</h1>
 
 <div class="alert alert-warning">
@@ -11,4 +12,5 @@
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int MeetingId { get; set; }
 
+    Layout? Layout;
 }

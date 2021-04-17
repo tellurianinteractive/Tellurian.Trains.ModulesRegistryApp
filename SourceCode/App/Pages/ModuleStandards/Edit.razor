@@ -8,7 +8,7 @@
 @inject ScaleService ScaleService
 @inject ModuleStandardService ModuleStandardService
 
-<h1><span class="@FontAwesome.Standard" aria-hidden="true" /> @Localizer.AddOrEdit("ModuleStandard", Id == 0) </h1>
+<PageHeading ObjectName="ModuleStandard"  IconClass="@FontAwesome.Standard" PageAction="@Id.ToPageAction()" />
 
 @if (ModuleStandard is null)
 {

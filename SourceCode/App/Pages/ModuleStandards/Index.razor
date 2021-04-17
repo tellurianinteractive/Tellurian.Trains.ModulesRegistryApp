@@ -6,7 +6,7 @@
 
 @inject ModuleStandardService ModuleStandardService
 
-<h1><span class="@FontAwesome.Standard" aria-hidden="true" /> @Localizer["ModuleStandards"]</h1>
+<PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List"/>
 
 @if (Principal.IsAnyAdministrator() && ModuleStandards is not null)
 {

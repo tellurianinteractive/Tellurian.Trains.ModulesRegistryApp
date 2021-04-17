@@ -8,7 +8,8 @@
 
 @inject PersonService PersonService
 
-<h1><span class="@FontAwesome.User" /> @Localizer["Delete"]?</h1>
+<PageHeading ObjectName="Person" Owner="@Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" />
+
 @if (Person is null)
 {
 

@@ -2,7 +2,7 @@
 Besides the more obvius fields in the form, some fields need some additional explanation:
 - **Track no. or loading area**
 is a free text field where you can define where in the station the customers cargo will normally be picked up or delivered.
-Sometimes this is a *track numeber* and other times it is a dedicated *loading area* with its own designation.
+Sometimes this is a *track number* and other times it is a dedicated *loading area* with its own designation.
 You can override it in each *cargo flow* if a specific cargo flow is picked up or delivered at another track or loading area.
 - **Colour** can be used if you have several customers at a station and want to improve the orientation for people shunting at your station. 
 You can assign a *colour* to each place where you have cargo exchange. 
@@ -16,7 +16,7 @@ Only *freight customers* in business under any of the operating years of the *la
 Defines any cargo that is relevant that the customer supply or consume:
 - **Cargo type** may not contain the cargo that your looking for. 
 Administrators can add new cargo, so ask any of them to help you with that.
-New *cargo types* needs to be entered with translations for all supported languages.
+New *cargo types* needs to be entered with translations for all supported languages and a relevant NHM-code.
 - **Other name** gives you an option to override the name of the *cargo type*. 
 Note that *cargo type* names are language aware, but your *other name* is not.
 - **Days** are the days when the customer ships or expects to receive the cargo. Default to daily. 

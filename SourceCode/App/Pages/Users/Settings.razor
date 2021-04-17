@@ -7,7 +7,8 @@
 
 @inject UserService UserService
 
-<h1><span class="@FontAwesome.Settings" /> @Localizer["UserSettings"]</h1>
+<PageHeading Label="UserSettings" IconClass="@FontAwesome.Settings" PageAction="PageAction.List"/>
+
 <AuthorizeView Policy="User">
     <Authorized>
         <p class="alert alert-info"><span class="fa fa-info-circle"/> @Localizer["Nothing to se here yet!"]</p>

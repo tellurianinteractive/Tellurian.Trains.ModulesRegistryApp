@@ -19,9 +19,8 @@
         {
             <th>@Localizer["FremoName"]</th>
         }
-        <th>@Localizer["Scale"]</th>
         <th>@Localizer["Standard"]</th>
-        <th>@Localizer["Owners"]</th>
+        <th>@Localizer["OwnedPercent"]</th>
         <th>@Localizer["Status"]</th>
         <th>@Localizer["Documents"]</th>
         <th>@Localizer["Actions"]</th>
@@ -32,10 +31,9 @@
         {
             <td>@module.FremoName()</td>
         }
-        <td>@module.Scale.ShortName</td>
         <td>@module.Standard.ShortName</td>
-        <td>@Owners(module.ModuleOwnerships)</td>
-        <td><span class="@Status(module)" /></td>
+        <td>@OwnedPercentage(module)</td>
+        <td>@Status(module)</td>
         <td>
             <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
             <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
@@ -69,9 +67,10 @@
 
     ModuleOwnershipRef OwnershipRef => ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
 
-    private string Owners(IEnumerable<ModuleOwnership>? owners) => owners is null ?
-        string.Empty :
-        string.Join(", ", owners.Select(o => o.Group is not null ? $"{o.Group.FullName}" : o.Person is not null ? $"{o.Person.FirstName} {o.Person.LastName}" : string.Empty));
+    private string OwnedPercentage(Module module) => OwnedShare(module) == 0 ? "0%" : $"{100 / OwnedShare(module)}%";
+    private int OwnedShare(Module module) => module?.ModuleOwnerships is null ?
+        0 :
+        module.ModuleOwnerships.Where(mo => mo.GroupId == OwnershipRef.GroupId || mo.PersonId == OwnershipRef.PersonId).Select(mo => mo.OwnedShare).FirstOrDefault();
 
     protected override void OnParametersSet()
     {
@@ -86,15 +85,12 @@
     }
     bool AnyHasFremoName;
     string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : module.FullName;
-    string Status(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
+    MarkupString Status(Module module) => new( $"<span class={(module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle")}/>");
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 
     string ModuleEditHref(int id) => OwnershipRef.Href("Modules", id, "Edit");
-
     string ModuleDeleteHref(int id) => OwnershipRef.Href("Modules", id, "Delete");
-
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
-
     string StationCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
 }

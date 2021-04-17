@@ -7,7 +7,7 @@
 @inject StationService StationService
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.Station" /> @Heading</h1>
+<PageHeading ObjectName="Stations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List"/>
 
 <StationsList Stations="OwnedStations" OwningPersonId="OwningPersonId" MayEdit="MayEdit" AnyModules="true" />
 
@@ -29,6 +29,5 @@
         OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, ownershipRef);
     }
 
-    private string Heading => Localizer.ObjectOwner("Stations", Owner);
     private int OwningPersonId => Owner?.Id ?? 0;
 }

@@ -11,7 +11,7 @@
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
-<PageHeading Label="FreightCustomer"  Owner="Station" IconClass="@FontAwesome.Customer" IsAdd="@(Id == 0)" HelpContext="StationCustomer"/>
+<PageHeading Label="FreightCustomer"  Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="StationCustomer"/>
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>

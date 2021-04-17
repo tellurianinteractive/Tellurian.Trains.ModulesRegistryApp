@@ -12,7 +12,8 @@
 @inject CountryService CountryService
 @inject GroupService GroupService
 
-<h1><span class="@FontAwesome.User" /> @Localizer.AddOrEdit("Person", Id == 0) </h1>
+<PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToPageAction()" HelpContext="Person"/>
+
 @if (Person is null)
 {
 
@@ -43,7 +44,7 @@ else
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? Id { get; set; }
+    [Parameter] public int Id { get; set; }
     [Parameter] public int CountryId { get; set; }
     [Parameter] public int GroupId { get; set; }
     private Person? Person;
@@ -73,7 +74,7 @@ else
     }
 
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Principal is null || Id.IsNotSet() ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id.Value) ?? DefaultPerson;
+        Principal is null || Id== 0 ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id) ?? DefaultPerson;
 
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };

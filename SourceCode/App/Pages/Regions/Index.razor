@@ -6,7 +6,8 @@
 @inject IStringLocalizer<App> Localizer
 @inject RegionService RegionService
 
-<h1><span class="@FontAwesome.Region" /> @Localizer["Regions"]</h1>
+<PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" />
+
 @if (CountryId != 0)
 {
     <a class="btn btn-info btn-sm" href="Regions/0/Index"><span class="fa fa-globe-europe" /> @Localizer.ShowAllInAll("Regions", "Countries")</a>

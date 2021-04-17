@@ -7,8 +7,10 @@
 @inject GroupService GroupService
 @inject CountryService CountryService
 
-<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Localizer["Groups"]</h1>
+<PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List"/>
+
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />
+
 @if (Groups is null)
 {
     @if (IsLoading)@Localizer["GettingData"];

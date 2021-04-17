@@ -9,26 +9,20 @@ namespace ModulesRegistry.Extensions
 {
     public static class LocalizedStringExtensions
     {
-        [Obsolete]
         public static string AddOrEdit(this IStringLocalizer me, string? objectName, bool isAdd) =>
             $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
 
-        [Obsolete]
-        public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, bool isAdd) =>
-            label.HasValue() ? $"{me.AddOrEdit(isAdd)} {me.ObjectName(label, true)}" :
-            $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
 
-        [Obsolete]
         private static string AddOrEdit(this IStringLocalizer me, bool isAdd) =>
             isAdd ? me["Add"].Value : me["Edit"].Value;
 
 
         public static string ActionText(this IStringLocalizer me, string? label, string? objectName, PageAction action) =>
-            label.HasValue() ? $"{me.ActionName(action)} {me.ObjectName(label, action != PageAction.List)}" :
-            $"{me.ActionName(action)} {me.ObjectName(objectName, action != PageAction.List)}";
+            label.HasValue() ? $"{me.ActionName(action)} {me.ObjectName(label, !action.IsEmpty())}" :
+            $"{me.ActionName(action)} {me.ObjectName(objectName, !action.IsEmpty())}";
 
         private static string ActionName(this IStringLocalizer me, PageAction action) =>
-            action == PageAction.List ? string.Empty :
+            action.IsEmpty() ? string.Empty :
             me[action.ToString()].Value;
 
         public static string HeadingText(this IStringLocalizer me, string? label, string? objectName, object? owner, PageAction action)
@@ -38,41 +32,16 @@ namespace ModulesRegistry.Extensions
             if (owner is not null)
             {
                 text.Append(' ');
-                text.Append(me["For"].Value.ToLowerInvariant());
-                text.Append(' ');
+                //text.Append(me["For"].Value.ToLowerInvariant());
+                //text.Append(' ');
                 text.Append(owner.Name());
             }
             return text.ToString();
 
         }
 
-        [Obsolete]
-        public static string AddOrEdit(this IStringLocalizer me, string? label, string? objectName, object? owner, bool isAdd)
-        {
-            var text = new StringBuilder(100);
-            text.Append(me.AddOrEdit(label, objectName, isAdd));
-            if (owner is not null)
-            {
-                text.Append(' ');
-                text.Append(me["For"].Value.ToLowerInvariant());
-                text.Append(' ');
-                text.Append(owner.Name());
-            }
-            return text.ToString();
+        private static bool IsEmpty(this PageAction me) => me == PageAction.List || me == PageAction.Unknown || me == PageAction.Error;
 
-        }
-
-        [Obsolete]
-        public static string AddOrEdit(this IStringLocalizer me, string? objectName, object? owner, bool isAdd) =>
-            me.AddOrEdit(null, objectName, owner, isAdd);     
-
-        public static string ObjectOwner(this IStringLocalizer me, string objectName, object? owner) =>
-            owner switch
-            {
-                Person => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
-                Group => $"{me[objectName]} {me["OwnedBy"]} {owner.Name()}",
-                _ => me[objectName].ToString()
-            };
         private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
             string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
 
@@ -82,6 +51,8 @@ namespace ModulesRegistry.Extensions
                 Person p => p.FullName(),
                 Group g => g.FullName,
                 Station s => s.FullName,
+                Meeting m => $"{m.Description} {m.PlaceName} {m.StartDate:MMMM yyyy}",
+                Module mo => mo.FullName,
                 _ => string.Empty
             };
 

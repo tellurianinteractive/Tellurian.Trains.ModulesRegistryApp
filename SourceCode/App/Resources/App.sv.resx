@@ -855,4 +855,10 @@
   <data name="ConditionsForDeleteNotMet" xml:space="preserve">
     <value>Villkoren för radering är inte uppfyllda</value>
   </data>
+  <data name="YouAreLockedOut" xml:space="preserve">
+    <value>Du är utestängd!</value>
+  </data>
+  <data name="OwnedPercent" xml:space="preserve">
+    <value>Ägd %</value>
+  </data>
 </root>

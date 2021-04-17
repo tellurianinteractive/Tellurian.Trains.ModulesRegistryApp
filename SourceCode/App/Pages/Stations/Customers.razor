@@ -17,7 +17,7 @@
     <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
 
-<TableTemplate Items="StationCustomers" GetSubItem="GetSubItem">
+<TableTemplate Items="StationCustomers">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Comment"]</th>
@@ -69,11 +69,5 @@
         }
     }
 
-    string GetSubItem(StationCustomer customer)
-    {
-        return "<td colspan=\"6\">Content</td>";
-    }
-
-    string Heading => string.Format(LanguageService.CurrentCulture, Localizer["FreightCustomersAt"].Value, Station?.FullName);
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";
 }

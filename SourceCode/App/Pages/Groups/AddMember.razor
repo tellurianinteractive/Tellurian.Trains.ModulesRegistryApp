@@ -9,7 +9,7 @@
 @inject GroupService GroupService
 @inject PersonService PersonService
 
-<h1><span class="@FontAwesome.Group" aria-hidden="true" /> @Heading</h1>
+<PageHeading Label="AddMemberIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.Add"/>
 
 @if (MayEdit)
 {
@@ -46,7 +46,6 @@
             <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
         </div>
     </EditForm>
-
 }
 else
 {
@@ -101,7 +100,6 @@ else
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
-    string Heading => Localizer["AddMemberIn"] + " " + Group?.FullName;
     string SearchLabel => Localizer.SearchObject("Person");
     int ConvertPerson(ListboxItem person) => person.Id;
     ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);

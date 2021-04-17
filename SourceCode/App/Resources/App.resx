@@ -855,4 +855,10 @@
   <data name="ConditionsForDeleteNotMet" xml:space="preserve">
     <value>Conditions for delete are not met</value>
   </data>
+  <data name="YouAreLockedOut" xml:space="preserve">
+    <value>You are locked out!</value>
+  </data>
+  <data name="OwnedPercent" xml:space="preserve">
+    <value>Owned %</value>
+  </data>
 </root>

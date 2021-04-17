@@ -1,0 +1,10 @@
+﻿.flex-container {
+    display: flex;
+}
+
+    .flex-container > div {
+        margin: 0px;
+        padding: 0px;
+        font-size: 30pt;
+        font-weight: bold;
+    }

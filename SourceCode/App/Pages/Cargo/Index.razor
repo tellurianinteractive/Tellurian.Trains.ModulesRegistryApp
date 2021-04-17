@@ -5,7 +5,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject CargoService CargoService
 
-<h1><span class="@FontAwesome.Cargo" /> @Localizer["CargoTypes"]</h1>
+<PageHeading ObjectName="CargoTypes" IconClass="@FontAwesome.Cargo" PageAction="PageAction.List" HelpContext="CargoTypes" />
 
 @if (MayEdit)
 {
