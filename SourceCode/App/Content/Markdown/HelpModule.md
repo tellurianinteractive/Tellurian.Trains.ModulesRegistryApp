@@ -19,6 +19,7 @@ You can control who can view your module and station data:
 #### Exits
 Each gable of a module represents an *exit*. 
 Most modules only have two *exits*, for example line-modules, you will have one in each direction: *east* and *west*.
+When the the track ends at the module, you add only one exit.
 
 When you specify exits for *station modules* you must imagine that you stand at the operation place and have the module to the north of you.
 Then *west* exits will be the ones to the *left* and the *east* exits will be the ones to the right.
