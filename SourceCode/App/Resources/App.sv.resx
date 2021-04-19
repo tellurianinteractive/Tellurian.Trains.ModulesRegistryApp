@@ -861,4 +861,7 @@
   <data name="OwnedPercent" xml:space="preserve">
     <value>Ägd %</value>
   </data>
+  <data name="TypeMinimumCharachers" xml:space="preserve">
+    <value>Skriv minst {0} tecken</value>
+  </data>
 </root>

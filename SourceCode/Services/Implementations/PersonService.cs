@@ -18,13 +18,13 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
-        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int countryId)
+        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int countryId, int excludeGroupId = 0)
         {
             if (principal.IsAuthorisedInCountry(countryId))
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.People
-                    .Where(p => p.CountryId == countryId)
+                    .Where(p => p.CountryId == countryId && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.Id == excludeGroupId && gm.PersonId == p.Id )))
                     .ToListAsync();
                 return items
                     .Select(p => new ListboxItem(p.Id, p.FirstName + " " + p.LastName))

@@ -64,8 +64,8 @@ namespace ModulesRegistry.Extensions
         public static string ShowAllInAll(this IStringLocalizer me, string objectName, string inObjectName) =>
             $"{me["ShowAll"]} {me[objectName].ToString().ToLowerInvariant()} {me["InAll"]} {me[inObjectName].ToString().ToLowerInvariant()}";
 
-        public static string SearchObject(this IStringLocalizer me, string objectName) =>
-            $"{me["Search"]} {me[objectName].Value.ToLowerInvariant()}";
+        public static string SearchObject(this IStringLocalizer me, string objectName, int minimumTypedCharactersCount = 1) =>
+            $"{me["Search"]} {me[objectName].Value.ToLowerInvariant()}. {string.Format(me["TypeMinimumCharachers"].Value, minimumTypedCharactersCount)}.";
 
         public static string EditObject(this IStringLocalizer me, string objectName) =>
            $"{me["Edit"]} {me[objectName].Value.ToLowerInvariant()}";

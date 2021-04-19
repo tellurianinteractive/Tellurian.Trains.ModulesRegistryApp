@@ -861,4 +861,7 @@
   <data name="OwnedPercent" xml:space="preserve">
     <value>Besitz %</value>
   </data>
+  <data name="TypeMinimumCharachers" xml:space="preserve">
+    <value>Geben Sie mindestens {0} Zeichen ein</value>
+  </data>
 </root>

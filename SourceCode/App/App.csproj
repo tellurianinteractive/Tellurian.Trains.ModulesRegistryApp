@@ -42,6 +42,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Content\Markdown\HelpAddGroupMember.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HelpAddGroupMember.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HelpAddGroupMember.de.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HelpAddGroupMember.no.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\HelpAddGroupMember.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Markdown\HelpPerson.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

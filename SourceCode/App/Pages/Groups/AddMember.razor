@@ -8,17 +8,20 @@
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 @inject PersonService PersonService
+@inject CountryService CountryService
 
-<PageHeading Label="AddMemberIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.Add"/>
+<PageHeading Label="AddMemberIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.Add" HelpContext="AddGroupMember" HelpIsVisible="true"/>
 
 @if (MayEdit)
 {
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" InitialSelectedId="@CountryId" />
+
     <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <FluentValidationValidator />
         <ValidationSummary />
-        <div class="col-md-2">
+        <div class="col-md-4">
             <label class="form-control-label" for="personid">@SearchLabel</label>
-            <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="3" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
+            <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="MinimumSearchCharacters" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
                 <SelectedTemplate Context="personId">
                     @{
                             var selectedPerson = SelectedPerson(personId);
@@ -39,7 +42,7 @@
             </BlazoredTypeahead>
             <ValidationMessage For="@(() => GroupMember.Person)" />
         </div>
-        <AppInputFill Width="10" />
+        <AppInputFill Width="8" />
         <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
         <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
         <div class="col-12">
@@ -59,11 +62,16 @@ else
     Group? Group;
     GroupMember GroupMember = new GroupMember();
     IEnumerable<ListboxItem>? Persons;
+    IEnumerable<ListboxItem>? Countries;
+    int CountryId;
     bool MayEdit;
+    const int MinimumSearchCharacters = 3;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal);
+        CountryId = Principal.CountryId();
     }
 
     protected async override Task OnParametersSetAsync()
@@ -79,10 +87,9 @@ else
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
             if (Group is not null)
             {
-                Persons = await PersonService.ListboxItemsAsync(Principal, Group.CountryId);
+                Persons = await PersonService.ListboxItemsAsync(Principal, Group.CountryId, Group.Id);
                 GroupMember.GroupId = Group.Id;
             }
-            // TODO: Filter away persons that already is member in the group.
         }
     }
 
@@ -100,7 +107,13 @@ else
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
-    string SearchLabel => Localizer.SearchObject("Person");
+    async Task OnSelectedCountry(int countryId)
+    {
+        CountryId = countryId;
+        Persons = await PersonService.ListboxItemsAsync(Principal, countryId, Group?.Id ?? 0);
+    }
+
+    string SearchLabel => Localizer.SearchObject("Person", MinimumSearchCharacters);
     int ConvertPerson(ListboxItem person) => person.Id;
     ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 }
