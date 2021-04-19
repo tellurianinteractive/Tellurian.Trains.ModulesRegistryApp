@@ -9,10 +9,10 @@ Så du bör bara lägga till personer av dessa skäl.**
 
 #### Lägga till en medlem
 - Du kan välja vilket land du vill söka efter. Initialt är det gruppens land.
-För att byta län, hitta det i listan och klicka sedan på OK.
+För att byta land, välj det i listan och klicka sedan på OK.
 - För att söka efter ett namn, skriv minst tre tecken.
 Sökningen matchar någon del av personens namn.
-- Du kan också se folks namn i listrutan.
-- Jag hittar ingen person, det kan vara av två skäl:
-personen är redan medlem, eller personen finns inte i databasen.
+- Du kan också se personers namn i listrutan.
+- Hittar du  ingen person, det kan vara av två skäl:
+personen är redan medlem i gruppen, eller personen finns inte i databasen.
 - Du kan bara lägga till en person i databasen i ditt eget land.

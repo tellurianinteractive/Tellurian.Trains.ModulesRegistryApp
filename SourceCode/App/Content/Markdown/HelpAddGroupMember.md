@@ -13,6 +13,6 @@ To change county, find it in the list and then click OK.
 - To seach for a name, type at least 3 characters. 
 The search matches any part of the person's name.
 - You can also see the people's names in the drop-down list.
-- I you don't find a person , that could be of two reasons: 
+- I you don't find a person, that could be of two reasons: 
 the person is already member, or the person does not exist in the database.
 - You can add a person to the database only in your own country.

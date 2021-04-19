@@ -13,6 +13,6 @@ For at skifte amt skal du finde det på listen og derefter klikke på OK.
 - For at søge efter et navn skal du skrive mindst 3 tegn.
 Søgningen matcher enhver del af personens navn.
 - Du kan også se folks navne i rullelisten.
-- Jeg finder ikke en person, det kan være af to grunde:
+- Hvis du ikke finder en person, det kan være af to grunde:
 personen er allerede medlem, eller personen findes ikke i databasen.
 - Du kan kun tilføje en person til databasen i dit eget land.

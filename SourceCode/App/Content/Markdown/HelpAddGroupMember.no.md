@@ -13,6 +13,6 @@ For å bytte fylke, finn det i listen og klikk deretter OK.
 - For å søke etter et navn, skriv inn minst 3 tegn.
 Søket samsvarer med hvilken som helst del av personens navn.
 - Du kan også se personens navn i rullegardinlisten.
-- Jeg finner ikke en person, det kan være av to grunner:
-personen er allerede medlem, eller personen eksisterer ikke i databasen.
+- Hvis di ikke finner en person, det kan være av to grunner:
+personen er allerede medlem i gruppen, eller personen eksisterer ikke i databasen.
 - Du kan bare legge til en person i databasen i ditt eget land.
