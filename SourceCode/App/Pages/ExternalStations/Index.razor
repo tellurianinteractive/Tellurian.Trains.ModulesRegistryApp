@@ -16,6 +16,11 @@
 
 @if (RegionId > 0)
 {
+    @if (MayEdit)
+    {
+        <a class="btn btn-primary btn-sm" href="ExternalStations/0/Edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+    }
+
     <TableTemplate Items="ExternalStations">
         <TableHeader>
             <th>@Localizer["Name"]</th>
@@ -32,8 +37,11 @@
             <td>@item.OpenedYear</td>
             <td>@item.ClosedYear</td>
             <td>
-                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["Customers"]</a>
+                @if (MayEdit)
+                    {
+                    <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                    }
+                <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
             </td>
         </RowTemplate>
     </TableTemplate>
@@ -66,4 +74,6 @@
     {
         Navigator.NavigateTo($"ExternalStations/{regionId}");
     }
+
+    bool MayEdit => ExternalStations is not null;
 }

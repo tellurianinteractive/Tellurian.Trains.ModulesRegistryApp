@@ -18,6 +18,12 @@
         <AppInputNumber Width="2" @bind-Value="Station.OpenedYear" Label="OpenedYear" />
         <AppInputNumber Width="2" @bind-Value="Station.ClosedYear" Label="ClosedYear" />
     </Inputs>
+    <Buttons>
+        @if (Station?.Id > 0)
+        {
+            <a class="btn btn-secondary btn-sm" href="ExternalStations/@Station.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+        }
+    </Buttons>
 </EditTemplate>
 
 @code {

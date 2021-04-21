@@ -4,7 +4,11 @@
 
 @inject ExternalStationService ExternalStationService
 
-<PageHeading ObjectName="FreightCustomers" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
+<PageHeading ObjectName="FreightCustomers" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+@if (MayEdit)
+{
+    <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/0"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+}
 
 <TableTemplate Items="Station?.ExternalStationCustomers">
     <TableHeader>
@@ -21,9 +25,9 @@
         <td>@item.ClosedYear</td>
         <td>
             @if (MayEdit)
-                {
-                    <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/@item.Id" ><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-                }
+            {
+                <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/@item.Id"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+            }
         </td>
     </RowTemplate>
 </TableTemplate>
