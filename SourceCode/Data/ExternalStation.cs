@@ -16,10 +16,9 @@ namespace ModulesRegistry.Data
         public int RegionId { get; set; }
         public string FullName { get; set; }
         public string Signature { get; set; }
-        public string Category { get; set; }
-        public string CountyName { get; set; }
-        public string MunicipalityName { get; set; }
-
+        public string Note { get; set; }
+        public short? OpenedYear { get; set; }
+        public short? ClosedYear { get; set; }
         public virtual Region Region { get; set; }
         public virtual ICollection<ExternalStationCustomer> ExternalStationCustomers { get; set; }
     }

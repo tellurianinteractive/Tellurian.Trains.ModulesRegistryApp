@@ -131,7 +131,7 @@ namespace ModulesRegistry.Data
                 entity.ToTable("CargoRelation");
  
                 entity.HasOne(d => d.OperatingDay)
-                    .WithMany(p => p.CargoRelations)
+                    .WithMany()
                     .HasForeignKey(d => d.OperatingDayId)
                     .HasConstraintName("FK_CargoRelation_OperatingDay");
 
@@ -198,17 +198,11 @@ namespace ModulesRegistry.Data
             {
                 entity.ToTable("ExternalStation");
 
-                entity.Property(e => e.Category).HasMaxLength(20);
-
-                entity.Property(e => e.CountyName).HasMaxLength(50);
+                entity.Property(e => e.Note).HasMaxLength(20);
 
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.MunicipalityName)
-                    .HasMaxLength(10)
-                    .IsFixedLength(true);
 
                 entity.Property(e => e.Signature)
                     .IsRequired()
@@ -241,7 +235,7 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 
-                entity.HasOne<Cargo>()
+                entity.HasOne(e => e.Cargo)
                     .WithMany()
                     .HasForeignKey(d => d.CargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -260,11 +254,11 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_ExternalStationCustomerCargo_StationCustomer");
 
                 entity.HasOne(d => d.OperatingDay)
-                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .WithMany()
                     .HasForeignKey(d => d.OperatingDayId)
                     .HasConstraintName("FK_ExternalStationCustomerCargo_OperatingDay");
 
-                entity.HasOne<CargoUnit>()
+                entity.HasOne(e => e.QuantityUnit)
                     .WithMany()
                     .HasForeignKey(d => d.QuantityUnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -675,7 +669,7 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(10)
                     .IsFixedLength(true);
 
-                entity.HasOne<Cargo>()
+                entity.HasOne(e => e.Cargo)
                     .WithMany()
                     .HasForeignKey(d => d.CargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -688,7 +682,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_CargoCustomer_CargoDirection");
 
                 entity.HasOne(d => d.OperatingDay)
-                    .WithMany(p => p.StationCustomerCargos)
+                    .WithMany()
                     .HasForeignKey(d => d.OperatingDayId)
                     .HasConstraintName("FK_CargoCustomer_OperatingDay");
 

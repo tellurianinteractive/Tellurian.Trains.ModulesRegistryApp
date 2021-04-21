@@ -1,0 +1,70 @@
+﻿@page "/ExternalStations/{stationid:int}/Customers/{id:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject ExternalStationService ExternalStationService
+@inject OperatingDayService OperatingDayService
+@inject CargoService CargoService
+
+<PageHeading Label="FreightCustomer" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="ExternalStationCustomer" ShowHelpInitially="true" />
+
+<EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+    <Inputs>
+        <AppInputText Width="4" @bind-Value="StationCustomer.CustomerName" Label="Name" />
+        <AppInputNumber Width="2" @bind-Value="StationCustomer.OpenedYear" Label="OpenedYear" />
+        <AppInputNumber Width="2" @bind-Value="StationCustomer.ClosedYear" Label="ClosedYear" />
+        <ExternalCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" />
+    </Inputs>
+    <Buttons>
+
+    </Buttons>
+</EditTemplate>
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    ExternalStation? Station;
+    ExternalStationCustomer? StationCustomer;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CargoTypeItems = await CargoService.GargoListboxItemsAsync(Principal);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StationId > 0)
+        {
+            Station = await ExternalStationService.FindByIdAsync(Principal, StationId);
+            if (Station is not null)
+            {
+                StationCustomer = await ExternalStationService.FindCustomerByIdAsync(Principal, Id);
+            }
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Id > 0 && StationCustomer is not null)
+        {
+            var result = await ExternalStationService.SaveAsync(Principal, StationCustomer);
+            StationCustomer = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+}

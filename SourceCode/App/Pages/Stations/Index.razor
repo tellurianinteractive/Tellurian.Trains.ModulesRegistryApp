@@ -2,6 +2,8 @@
 @page "/Stations/Index/GroupOwned/{owninggroupid:int}"
 @page "/Stations/Index/PersonOwned/{owningpersonid:int}"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 
 @inject StationService StationService
@@ -9,7 +11,7 @@
 
 <PageHeading ObjectName="Stations" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
 
-<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwningGroupId" OwningPersonId="OwningPersonId"/>
+<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwningGroupId" OwningPersonId="OwningPersonId" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }

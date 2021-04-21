@@ -6,7 +6,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject RegionService RegionService
 
-<PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" />
+<PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" HelpContext="Regions" ShowHelpInitially="true" />
 
 @if (CountryId != 0)
 {
@@ -22,7 +22,7 @@
     </TableHeader>
     <RowTemplate Context="region">
         <td style="color: @region.ForeColor; background-color: @region.BackColor; font-weight: bold">@region.LocalName</td>
-        <td>@region.Country.EnglishName.Localized()</td>
+        <td><img src="images/flags/@(region.Country.DomainSuffix).png" /> @region.Country.EnglishName.Localized()</td>
         <td>@region.Description</td>
         <td>
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))

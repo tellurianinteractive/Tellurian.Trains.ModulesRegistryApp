@@ -1,5 +1,11 @@
 # Release Notes
 
+### Version 1.1.0
+Release date 2021-04-21
+- **External stations** to describe real world stations with *freight customers* and *cargo flow*.
+- **Component update** to latest releases.
+
+
 ### Version 1.0.6
 Release date 2021-04-19
 - **Add group member** from other country, issue #52.

@@ -51,8 +51,10 @@ namespace ModulesRegistry.Extensions
                 Person p => p.FullName(),
                 Group g => g.FullName,
                 Station s => s.FullName,
+                ExternalStation es => es.FullName,
                 Meeting m => $"{m.Description} {m.PlaceName} {m.StartDate:MMMM yyyy}",
                 Module mo => mo.FullName,
+                Region r => r.LocalName,
                 _ => string.Empty
             };
 

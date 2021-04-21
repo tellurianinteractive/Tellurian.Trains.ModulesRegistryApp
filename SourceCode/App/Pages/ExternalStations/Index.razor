@@ -1,0 +1,69 @@
+﻿@page "/ExternalStations/Index"
+@page "/ExternalStations/{regionId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+
+@inject ExternalStationService ExternalStationService
+@inject CountryService CountryService
+@inject RegionService RegionService
+
+<PageHeading ObjectName="ExternalStations" Owner="Region" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="true" />
+
+<ListboxSelector Items="RegionItems" OnSelected="OnSelectedRegion" IsVisible="true" />
+
+@if (RegionId > 0)
+{
+    <TableTemplate Items="ExternalStations">
+        <TableHeader>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Signature"]</th>
+            <th>@Localizer["Note"]</th>
+            <th>@Localizer["OpenedYear"]</th>
+            <th>@Localizer["ClosedYear"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.FullName</td>
+            <td>@item.Signature</td>
+            <td>@item.Note</td>
+            <td>@item.OpenedYear</td>
+            <td>@item.ClosedYear</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["Customers"]</a>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int RegionId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<ExternalStation>? ExternalStations;
+    IEnumerable<ListboxItem>? RegionItems;
+    Region? Region;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (RegionId > 0)
+        {
+            Region = await RegionService.FindById(Principal, RegionId);
+            ExternalStations = await ExternalStationService.GetAllInRegion(Principal, RegionId);
+        }
+    }
+
+    void OnSelectedRegion(int regionId)
+    {
+        Navigator.NavigateTo($"ExternalStations/{regionId}");
+    }
+}

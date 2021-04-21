@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ModulesRegistry.Shared
 {
@@ -8,14 +9,14 @@ namespace ModulesRegistry.Shared
     {
         private const int MaxHistorySize = 32;
         private readonly NavigationManager Navigator;
-        private readonly List<string> History;
+        private readonly List<VisitedPage> History;
 
         public PageHistory(NavigationManager navigationManager)
         {
             Navigator = navigationManager;
             History = new(MaxHistorySize)
             {
-                Navigator.Uri
+                new VisitedPage(Navigator.Uri)
             };
             Navigator.LocationChanged += OnLocationChanged;
         }
@@ -30,15 +31,21 @@ namespace ModulesRegistry.Shared
         public void NavigateBack()
         {
             if (!CanNavigateBack) return;
-            var backPageUrl = History[^2];
+            var page = History[^2];
             History.RemoveRange(History.Count - 2, 2);
-            Navigator.NavigateTo(backPageUrl);
+            Navigator.NavigateTo(page.Url);
+        }
+
+        public bool? IsShowningHelp
+        {
+            get => History.Last().ShowHelp;
+            set => History.Last().ShowHelp = value;
         }
 
         private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
         {
             EnsureSize();
-            History.Add(e.Location);
+            History.Add(new VisitedPage(e.Location));
         }
 
         private void EnsureSize()
@@ -51,5 +58,10 @@ namespace ModulesRegistry.Shared
         {
             Navigator.LocationChanged -= OnLocationChanged;
         }
+    }
+
+    public record VisitedPage(string Url)
+    {
+        public bool? ShowHelp { get; set; }
     }
 }

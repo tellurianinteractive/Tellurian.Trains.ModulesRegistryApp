@@ -12,7 +12,7 @@ namespace ModulesRegistry.Data
         public int ExternalStationCustomerId { get; set; }
         public string SpecialCargoName { get; set; }
         public int DirectionId { get; set; }
-        public int? OperatingDayId { get; set; }
+        public int OperatingDayId { get; set; }
         public int QuantityUnitId { get; set; }
         public int Quantity { get; set; }
         public short? FromYear { get; set; }

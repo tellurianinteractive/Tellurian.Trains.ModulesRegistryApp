@@ -1,0 +1,53 @@
+﻿@page "/ExternalStations/{id:int}/edit"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+ 
+@inject ExternalStationService ExternalStationService
+@inject RegionService RegionService
+
+<PageHeading ObjectName="ExternalStation" Owner="@Station?.Region" IconClass="@FontAwesome.Station" PageAction="@Id.ToPageAction()" HelpContext="ExternalStation" ShowHelpInitially="true"/>
+
+<EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
+    <Inputs>
+        <AppInputSelect Width="3" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowPleaseSelect="true" IsDisabled="false" />
+        <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
+        <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
+        <AppInputNumber Width="2" @bind-Value="Station.OpenedYear" Label="OpenedYear" />
+        <AppInputNumber Width="2" @bind-Value="Station.ClosedYear" Label="ClosedYear" />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+
+    ExternalStation? Station;
+    IEnumerable<ListboxItem>? RegionItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        RegionItems = await RegionService.ListboxItemsAsync(Principal);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Station = Id > 0 ? await ExternalStationService.FindByIdAsync(Principal, Id) : new ExternalStation { };
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (Station is not null)
+        {
+            var result = await ExternalStationService.SaveAsync(Principal, Station);
+            Station = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+}

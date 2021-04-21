@@ -1,0 +1,51 @@
+﻿@page "/ExternalStations/{id:int}/Customers"
+
+@inject IStringLocalizer<App> Localizer
+
+@inject ExternalStationService ExternalStationService
+
+<PageHeading ObjectName="FreightCustomers" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
+
+<TableTemplate Items="Station?.ExternalStationCustomers">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["HaveCargoFlow"]</th>
+        <th>@Localizer["OpenedYear"]</th>
+        <th>@Localizer["ClosedYear"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.CustomerName</td>
+        <td>@item.ExternalStationCustomerCargos.Any().AsYesNo()</td>
+        <td>@item.OpenedYear</td>
+        <td>@item.ClosedYear</td>
+        <td>
+            @if (MayEdit)
+                {
+                    <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/@item.Id" ><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+
+    ExternalStation? Station;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Station = Id > 0 ? await ExternalStationService.FindByIdAsync(Principal, Id) : null;
+    }
+
+    bool MayEdit => Station is not null && Principal.IsAuthenticated();
+
+}

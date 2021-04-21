@@ -24,16 +24,21 @@
         [Parameter] public object? Owner { get; set; }
         [Parameter] public PageAction PageAction { get; set; }
         [Parameter] public string? HelpContext { get; set; }
-        [Parameter] public bool HelpIsVisible { get; set; }
+        [Parameter] public bool ShowHelpInitially { get; set; }
 
-        bool HelpIsHidden => !HelpIsVisible;
+        //bool HelpIsVisible { get; set; }
+        bool HelpIsHidden => PageHistory.IsShowningHelp != true;
         bool IsHelpAvailable => HelpContext.HasValue();
         string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help{HelpContext}";
 
+        protected override void OnParametersSet()
+        {
+            if (PageHistory.IsShowningHelp is null) PageHistory.IsShowningHelp = ShowHelpInitially;
+        }
 
         void ToggleHelp()
         {
-            HelpIsVisible = !HelpIsVisible;
+            PageHistory.IsShowningHelp = !PageHistory.IsShowningHelp;
         }
 
         void Back()

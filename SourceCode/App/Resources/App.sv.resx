@@ -769,10 +769,10 @@
     <value>Godskunder</value>
   </data>
   <data name="OpenedYear" xml:space="preserve">
-    <value>Öppnat år</value>
+    <value>Öppnad år</value>
   </data>
   <data name="ClosedYear" xml:space="preserve">
-    <value>Stängt år</value>
+    <value>Stängd år</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Kommentar</value>
@@ -863,5 +863,14 @@
   </data>
   <data name="TypeMinimumCharachers" xml:space="preserve">
     <value>Skriv minst {0} tecken</value>
+  </data>
+  <data name="ExternalStations" xml:space="preserve">
+    <value>Externa stationer</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Anteckning</value>
+  </data>
+  <data name="ExternalStation" xml:space="preserve">
+    <value>Extern station</value>
   </data>
 </root>

@@ -78,6 +78,7 @@ namespace ModulesRegistry
             services.AddScoped<ContentService>();
             services.AddScoped<CountryService>();
             services.AddScoped<DocumentService>();
+            services.AddScoped<ExternalStationService>();
             services.AddScoped<GroupCategoryService>();
             services.AddScoped<GroupService>();
             services.AddScoped<MeetingService>();

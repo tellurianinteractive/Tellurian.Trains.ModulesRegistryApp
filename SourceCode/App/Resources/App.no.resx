@@ -864,4 +864,13 @@
   <data name="TypeMinimumCharachers" xml:space="preserve">
     <value>Skriv inn minst {0} tegn</value>
   </data>
+  <data name="ExternalStations" xml:space="preserve">
+    <value>Eksterne stasjoner</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Merknad</value>
+  </data>
+  <data name="ExternalStation" xml:space="preserve">
+    <value>Ekstern stasjon</value>
+  </data>
 </root>

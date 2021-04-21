@@ -42,7 +42,7 @@ namespace ModulesRegistry.Validators
                 .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.Electricity)]);
             RuleFor(m => m.PreferredTheme)
-                .MaximumLength(20)
+                .MaximumLength(50)
                 .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.PreferredTheme)]);
             RuleFor(m => m.AcceptedNorm)

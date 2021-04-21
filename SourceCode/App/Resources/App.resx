@@ -864,4 +864,13 @@
   <data name="TypeMinimumCharachers" xml:space="preserve">
     <value>Type minimum {0} charachers</value>
   </data>
+  <data name="ExternalStations" xml:space="preserve">
+    <value>External stations</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="ExternalStation" xml:space="preserve">
+    <value>External station</value>
+  </data>
 </root>

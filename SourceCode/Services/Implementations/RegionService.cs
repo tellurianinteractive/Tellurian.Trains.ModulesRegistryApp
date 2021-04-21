@@ -20,11 +20,11 @@ namespace ModulesRegistry.Services.Implementations
             {
                 var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.CountryId();
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Regions.AsNoTracking()
-                    .Where(r => countryId == 0 || r.CountryId == countryId)
-                    .Select(r => new ListboxItem(r.Id, r.LocalName))
+                var items = await dbContext.Regions.AsNoTracking()
+                    .Where(r => countryId == 0 || r.CountryId == countryId).Include(r => r.Country).ToListAsync();
+                return items.Select(r => new ListboxItem(r.Id, $"{r.LocalName} ({r.Country.EnglishName.Localized()})"))
                     .OrderBy(l => l.Description)
-                    .ToListAsync();
+                    .AsEnumerable();
 
             }
             return Array.Empty<ListboxItem>();

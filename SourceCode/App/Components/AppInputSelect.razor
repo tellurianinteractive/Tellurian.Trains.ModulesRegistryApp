@@ -9,26 +9,19 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-    <select disabled=@IsDisabled  class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
-        @if (ShowPleaseSelect)
+<select disabled=@IsDisabled class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+    @if (ShowPleaseSelect)
+    {
+        <option value="0">@PleaseSelectText</option>
+    }
+    @if (Items is not null)
+    {
+        foreach (var item in Items)
         {
-            <option value="0">@PleaseSelectText</option>
+            <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
         }
-        @if (Items is not null)
-        {
-            foreach (var item in Items)
-            {
-                if (item.Id == CurrentValue)
-                {
-                    <option selected value="@item.Id">@item.Description</option>
-                }
-                else
-                {
-                    <option value="@item.Id">@item.Description</option>
-                }
-            }
-        }
-    </select>
+    }
+</select>
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -62,4 +55,6 @@
             return false;
         }
     }
+
+    string? Selected(ListboxItem item) => item.Id == CurrentValue ? "selected" : null;
 }

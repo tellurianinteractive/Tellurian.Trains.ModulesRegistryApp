@@ -1,0 +1,70 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@inject OperatingDayService OperatingDayService
+@inject CargoService CargoService
+
+@if (Customer is null)
+{
+
+}
+else
+{
+    <h3 class="mt-3">@Localizer["CargoFlow"]</h3>
+    <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+        <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
+    </div>
+    @foreach (var cargo in Customer.ExternalStationCustomerCargos)
+    {
+        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+            <AppInputSelect Width="2" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
+            <AppInputNumber Width="1" @bind-Value="cargo.Quantity" Label="Quantity" />
+            <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
+            <AppInputFill Width="1" />
+
+            <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
+            <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="FromYear" />
+            <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="UptoYear" />
+
+            @if (cargo.Id > 0)
+            {
+                <div class="col-12">
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Delete(cargo.Id))"><span class="@FontAwesome.Delete" /> @Localizer["Delete"]</button>
+                </div>
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public ExternalStationCustomer? Customer { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? CargoTypeItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+
+    void AddCargoFlow()
+    {
+        if (Customer is not null)
+        {
+            Customer.ExternalStationCustomerCargos.Add(DefaultCustomerCargo);
+            StateHasChanged();
+        }
+
+    }
+
+    void Delete(int id)
+    {
+        if (Customer is not null && id > 0)
+        {
+            Customer.ExternalStationCustomerCargos = Customer.ExternalStationCustomerCargos.Where(st => st.Id != id).ToList();
+            StateHasChanged();
+        }
+    }
+
+    ExternalStationCustomerCargo DefaultCustomerCargo => new ExternalStationCustomerCargo { ExternalStationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, OperatingDayId = 8 };
+    string AddButtonText => $"{Localizer["Add"]} {Localizer["CargoFlow"].ToString().ToLowerInvariant()}";
+
+    string? ReadyTimeLabel(StationCustomerCargo cargo) => cargo is null ? null : cargo.DirectionId == 1 || cargo.DirectionId == 4 ? "UnloadingReady" : "LoadingReady";
+}
