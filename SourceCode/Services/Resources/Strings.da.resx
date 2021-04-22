@@ -408,4 +408,7 @@
   <data name="Bidirectional" xml:space="preserve">
     <value>Tovejs</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
 </root>

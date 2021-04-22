@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Projections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,21 +37,23 @@ namespace ModulesRegistry.Services.Implementations
         public Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity) =>
             SaveAsync(principal, stationId, entity, principal.AsModuleOwnershipRef());
 
-        public async Task<IEnumerable<StationCustomer>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+        public async Task<IEnumerable<FreightCustomerInfo>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
         {
             if (principal.IsAuthenticated())
             {
                 var countryId = maybeCountryId ?? principal.CountryId();
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.StationCustomers.AsNoTracking()
-                    .Where(sc => sc.Station.Region != null && (countryId == 0 || sc.Station.Region.CountryId == countryId))
+                var items = await dbContext.StationCustomers.AsNoTracking()
+                    .Where(sc => (countryId == 0 || sc.Station.Region.CountryId == countryId))
                     .OrderBy(sc => sc.Station.FullName).ThenBy(esc => esc.CustomerName)
                     .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Direction)
                     .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Cargo)
-                    .Include(esc => esc.Station).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
+                    .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.QuantityUnit)
+                    .Include(sc => sc.Station).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
                     .ToListAsync();
+                return items.Select(i => i.ToFreightCustomerInfo());
             }
-            return Array.Empty<StationCustomer>();
+            return Array.Empty<FreightCustomerInfo>();
         }
 
         public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)

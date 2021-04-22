@@ -1,14 +1,17 @@
-﻿@page "/ExternalStations/Customers"
+﻿@using ModulesRegistry.Services.Projections
+
+@page "/ExternalStations/Customers"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 
+@inject StationCustomerService StationCustomerService
 @inject ExternalStationService ExternalStationService
 
-<PageHeading  ObjectName="ExternalFreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
+<PageHeading ObjectName="FreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
-<TableTemplate Items="ExternalStationCustomers">
+<TableTemplate Items="FreightCustomers?.OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)">
     <TableHeader>
         <th>@Localizer["Station"]</th>
         <th>@Localizer["Name"]</th>
@@ -19,14 +22,21 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
-        <td><span class="fa fa-globe-europe" /> @item.ExternalStation.FullName</td>
-        <td>@item.CustomerName @Opened(item)</td>
-        <td><img src="images/flags/@(item.ExternalStation.Region.Country.DomainSuffix).png" /> @item.ExternalStation.Region.Country.EnglishName.Localized()</td>
-        <td style="color: @item.ExternalStation.Region?.ForeColor; background-color: @item.ExternalStation.Region?.BackColor">@item.ExternalStation.Region?.LocalName</td>
-        <td>@Supplies(item)</td>
-        <td>@Consumes(item)</td>
+        <td>@StationSymbol(item) @item.Station.FullName</td>
+        <td>@item.CustomerName @item.OpenPeriod</td>
+        <td>@Flag(item) @item.Country.EnglishName.Localized()</td>
+        <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
+        <td>@item.SupplyingCargo</td>
+        <td>@item.ConsumingCargo</td>
         <td>
-            <a class="btn btn-sm btn-info" href="ExternalStations/@item.ExternalStation.Id/Customers/@item.Id"><span class="fa fa-info"/> @Localizer["Show"]</a>
+            @if (item.Station.IsExternal)
+            {
+                <a class="btn btn-sm btn-info" href="ExternalStations/@item.Station.Id/Customers/@item.Id"><span class="fa fa-info" /> @Localizer["Show"]</a>
+            }
+            else
+            {
+                <a class="btn btn-sm btn-info" href="Stations/@item.Station.Id/Customers/@item.Id/Edit"><span class="fa fa-info" /> @Localizer["Show"]</a>
+            }
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -35,16 +45,18 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     ClaimsPrincipal? Principal;
-    IEnumerable<ExternalStationCustomer>? ExternalStationCustomers;
+    IEnumerable<FreightCustomerInfo>? FreightCustomers;
+    IEnumerable<FreightCustomerInfo>? ExternalFreightCustomers;
+    IEnumerable<FreightCustomerInfo>? StationFreightCustomers;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        ExternalStationCustomers = await ExternalStationService.CustomersAsync(Principal, 0);
+        ExternalFreightCustomers = await ExternalStationService.CustomersAsync(Principal, 0);
+        StationFreightCustomers = await StationCustomerService.CustomersAsync(Principal, 0);
+        FreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
     }
 
-    string Supplies(ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => escc.Direction.IsSupply).Select(escc => escc.Cargo.LocalizedName())) : Localizer["None"].Value;
-    string Consumes(ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => !escc.Direction.IsSupply).Select(escc => escc.Cargo.LocalizedName())) : Localizer["None"].Value;
-    string Opened(ExternalStationCustomer customer) => customer.OpenedYear.HasValue || customer.ClosedYear.HasValue ? $"{customer.OpenedYear}-{customer.ClosedYear}" : "";
-
+    MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
+    MarkupString Flag(FreightCustomerInfo me) => new(string.IsNullOrWhiteSpace(me.Country.DomainSuffix) ? string.Empty : $"<img src=\"images/flags/{me.Country.DomainSuffix}.png\" />");
 }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace ModulesRegistry.Data
 {
-    public partial class CargoUnit
+    public partial class QuantityUnit
     {
-        public CargoUnit()
+        public QuantityUnit()
         {
         }
 

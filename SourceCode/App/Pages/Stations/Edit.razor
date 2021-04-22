@@ -12,15 +12,17 @@
 @inject StationService StationService
 @inject PersonService PersonService
 @inject GroupService GroupService
+@inject RegionService RegionService
 
 <PageHeading ObjectName="Station" Owner="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToPageAction()" HelpContext="Station" />
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
         <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
+        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true"/>
         <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
-        <AppInputFill Width="5" />
+        <AppInputFill Width="3" />
         <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
         <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
         <StationTracksEdit Station="Station" />
@@ -46,6 +48,7 @@
     int ModuleId;
 
     IEnumerable<ListboxItem>? ModulesItems;
+    IEnumerable<ListboxItem>? RegionItems;
 
     bool IsAdd => Id == 0;
     bool IsEdit => !IsAdd;
@@ -54,6 +57,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         ModulesItems = await ModuleService.ModuleItems(Principal, OwnerRef, Id);
+        RegionItems = await RegionService.ListboxItemsAsync(Principal);
         Station = new Station();
     }
 

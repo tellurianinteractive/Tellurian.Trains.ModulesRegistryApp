@@ -1,4 +1,4 @@
-﻿#nullable enable
+﻿#nullable disable
 
 namespace ModulesRegistry.Data
 {
@@ -22,10 +22,11 @@ namespace ModulesRegistry.Data
         public short? FromYear { get; set; }
         public short? UptoYear { get; set; }
 
-        public virtual Cargo? Cargo { get; set; }
-        public virtual CargoDirection? Direction { get; set; }
-        public virtual OperatingDay? OperatingDay { get; set; }
-        public virtual CargoReadyTime? ReadyTime { get; set; }
-        public virtual StationCustomer? StationCustomer { get; set; }
+        public virtual Cargo Cargo { get; set; }
+        public virtual CargoDirection Direction { get; set; }
+        public virtual OperatingDay OperatingDay { get; set; }
+        public virtual QuantityUnit QuantityUnit { get; set; }
+        public virtual CargoReadyTime ReadyTime { get; set; }
+        public virtual StationCustomer StationCustomer { get; set; }
     }
 }

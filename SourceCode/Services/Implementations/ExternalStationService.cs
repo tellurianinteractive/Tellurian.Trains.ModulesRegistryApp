@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Projections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,21 +68,22 @@ namespace ModulesRegistry.Services.Implementations
 
         #region External station customers
 
-        public async Task<IEnumerable<ExternalStationCustomer>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+        public async  Task<IEnumerable<FreightCustomerInfo>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
         {
             if (principal.IsAuthenticated())
             {
                 var countryId = maybeCountryId ?? principal.CountryId();
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.ExternalStationCustomers.AsNoTracking()
+                var items = await dbContext.ExternalStationCustomers.AsNoTracking()
                     .Where(esc => countryId == 0 || esc.ExternalStation.Region.CountryId == countryId)
-                    .OrderBy(esc => esc.ExternalStation.FullName).ThenBy(esc => esc.CustomerName)
                     .Include(esc => esc.ExternalStationCustomerCargos).ThenInclude(escc => escc.Direction)
                     .Include(esc => esc.ExternalStationCustomerCargos).ThenInclude(escc => escc.Cargo)
+                    .Include(esc => esc.ExternalStationCustomerCargos).ThenInclude(escc => escc.QuantityUnit)
                     .Include(esc => esc.ExternalStation).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
                     .ToListAsync();
+                return items.Select(i => i.ToFreightCustomerInfo());
             }
-            return Array.Empty<ExternalStationCustomer>();
+            return Array.Empty<FreightCustomerInfo>();
         }
 
         public async Task<ExternalStationCustomer?> FindCustomerByIdAsync(ClaimsPrincipal? principal, int id)

@@ -18,7 +18,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal is not null)
             {
-                var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.CountryId();
+                var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.IsGlobalAdministrator() ? 0 : principal.CountryId();
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Regions.AsNoTracking()
                     .Where(r => countryId == 0 || r.CountryId == countryId).Include(r => r.Country).ToListAsync();
@@ -34,7 +34,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal is not null)
             {
-                var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.CountryId();
+                var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.IsGlobalAdministrator() ? 0 : principal.CountryId();
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Regions.AsNoTracking()
                     .Where(r => countryId == 0 || r.CountryId == countryId)

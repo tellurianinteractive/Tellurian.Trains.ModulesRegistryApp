@@ -15,7 +15,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<CargoDirection> CargoDirections { get; set; }
         public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
         public virtual DbSet<CargoRelation> CargoRelations { get; set; }
-        public virtual DbSet<CargoUnit> CargoUnits { get; set; }
+        public virtual DbSet<QuantityUnit> CargoUnits { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<ExternalStation> ExternalStations { get; set; }
@@ -153,7 +153,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
             });
 
-            modelBuilder.Entity<CargoUnit>(entity =>
+            modelBuilder.Entity<QuantityUnit>(entity =>
             {
                 entity.ToTable("CargoUnit");
 
@@ -262,7 +262,7 @@ namespace ModulesRegistry.Data
                     .WithMany()
                     .HasForeignKey(d => d.QuantityUnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_CargoUnit");
+                    .HasConstraintName("FK_ExternalStationCustomerCargo_QuantityUnit");
             });
 
             modelBuilder.Entity<Group>(entity =>
@@ -696,6 +696,13 @@ namespace ModulesRegistry.Data
                     .WithMany(p => p.StationCustomerCargos)
                     .HasForeignKey(d => d.StationCustomerId)
                     .HasConstraintName("FK_CargoCustomer_StationCustomer");
+
+                entity.HasOne(e => e.QuantityUnit)
+                    .WithMany()
+                    .HasForeignKey(d => d.QuantityUnitId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StationCustomerCargo_QuantityUnit");
+
             });
 
             modelBuilder.Entity<StationTrack>(entity =>

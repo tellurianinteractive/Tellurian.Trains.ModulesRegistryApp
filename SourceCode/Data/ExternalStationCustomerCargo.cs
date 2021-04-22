@@ -22,6 +22,6 @@ namespace ModulesRegistry.Data
         public virtual CargoDirection Direction { get; set; }
         public virtual ExternalStationCustomer ExternalStationCustomer { get; set; }
         public virtual OperatingDay OperatingDay { get; set; }
-        public virtual CargoUnit QuantityUnit { get; set; }
+        public virtual QuantityUnit QuantityUnit { get; set; }
     }
 }
