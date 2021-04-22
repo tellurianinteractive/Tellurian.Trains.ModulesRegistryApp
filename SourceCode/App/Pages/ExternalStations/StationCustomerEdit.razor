@@ -25,17 +25,17 @@
 
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int Id { get; set; }
-        [Parameter] public int StationId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
 
-        ClaimsPrincipal? Principal;
-        ExternalStation? Station;
-        ExternalStationCustomer? StationCustomer;
-        IEnumerable<ListboxItem>? OperatingDayItems;
-        IEnumerable<ListboxItem>? CargoTypeItems;
-        IEnumerable<ListboxItem>? DirectionItems;
-        IEnumerable<ListboxItem>? QuantityUnitItems;
+    ClaimsPrincipal? Principal;
+    ExternalStation? Station;
+    ExternalStationCustomer? StationCustomer;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,6 +62,7 @@
     {
         if (StationCustomer is not null)
         {
+            StationCustomer.ExternalStationCustomerCargos = StationCustomer.ExternalStationCustomerCargos.Where(escc => escc.CargoId > 0).ToList(); // Removes invalid items.
             var result = await ExternalStationService.SaveAsync(Principal, StationCustomer);
             StationCustomer = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);

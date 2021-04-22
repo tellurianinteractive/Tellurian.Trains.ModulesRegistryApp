@@ -1,10 +1,14 @@
 # Release Notes
 
+### Version 1.1.1
+Release date 2021-04-22
+- **External Freight Customers** overview including supplied and consumed cargo types.
+- **Bug fixes** in external *freight customers*
+-
 ### Version 1.1.0
 Release date 2021-04-21
 - **External stations** to describe real world stations with *freight customers* and *cargo flow*.
 - **Component update** to latest releases.
-
 
 ### Version 1.0.6
 Release date 2021-04-19

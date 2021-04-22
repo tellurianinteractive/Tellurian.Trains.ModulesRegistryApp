@@ -873,4 +873,16 @@
   <data name="ExternalStation" xml:space="preserve">
     <value>Externe Station</value>
   </data>
+  <data name="Supplying" xml:space="preserve">
+    <value>Lieferung</value>
+  </data>
+  <data name="Consuming" xml:space="preserve">
+    <value>Verbraucht</value>
+  </data>
+  <data name="ExternalFreightCustomers" xml:space="preserve">
+    <value>Externe Frachtkunden</value>
+  </data>
+  <data name="HaveFreightFlow" xml:space="preserve">
+    <value>Hat Frachtfluss?</value>
+  </data>
 </root>

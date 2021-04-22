@@ -36,6 +36,23 @@ namespace ModulesRegistry.Services.Implementations
         public Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity) =>
             SaveAsync(principal, stationId, entity, principal.AsModuleOwnershipRef());
 
+        public async Task<IEnumerable<StationCustomer>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                var countryId = maybeCountryId ?? principal.CountryId();
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.StationCustomers.AsNoTracking()
+                    .Where(sc => sc.Station.Region != null && (countryId == 0 || sc.Station.Region.CountryId == countryId))
+                    .OrderBy(sc => sc.Station.FullName).ThenBy(esc => esc.CustomerName)
+                    .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Direction)
+                    .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Cargo)
+                    .Include(esc => esc.Station).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
+                    .ToListAsync();
+            }
+            return Array.Empty<StationCustomer>();
+        }
+
         public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)
         {
             if (principal.IsAuthenticated()) 

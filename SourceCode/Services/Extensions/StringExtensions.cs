@@ -1,4 +1,5 @@
 ﻿using Markdig;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ModulesRegistry.Services.Implementations;
 using System;
@@ -24,7 +25,6 @@ namespace ModulesRegistry.Services.Extensions
        public static string[] Items(this string? value, char separator = ';') =>
             string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
             value.Trim().Split(separator);
-
 
         public static string HtmlFromMarkdown(this string? markdown)
         {

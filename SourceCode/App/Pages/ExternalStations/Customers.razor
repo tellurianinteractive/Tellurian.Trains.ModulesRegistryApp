@@ -1,6 +1,50 @@
 ﻿@page "/ExternalStations/Customers"
-<h3>Customers</h3>
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+
+@inject ExternalStationService ExternalStationService
+
+<PageHeading  ObjectName="ExternalFreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
+
+<TableTemplate Items="ExternalStationCustomers">
+    <TableHeader>
+        <th>@Localizer["Station"]</th>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Region"]</th>
+        <th>@Localizer["Supplying"]</th>
+        <th>@Localizer["Consuming"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td><span class="fa fa-globe-europe" /> @item.ExternalStation.FullName</td>
+        <td>@item.CustomerName @Opened(item)</td>
+        <td><img src="images/flags/@(item.ExternalStation.Region.Country.DomainSuffix).png" /> @item.ExternalStation.Region.Country.EnglishName.Localized()</td>
+        <td style="color: @item.ExternalStation.Region?.ForeColor; background-color: @item.ExternalStation.Region?.BackColor">@item.ExternalStation.Region?.LocalName</td>
+        <td>@Supplies(item)</td>
+        <td>@Consumes(item)</td>
+        <td>
+            <a class="btn btn-sm btn-info" href="ExternalStations/@item.ExternalStation.Id/Customers/@item.Id"><span class="fa fa-info"/> @Localizer["Show"]</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<ExternalStationCustomer>? ExternalStationCustomers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        ExternalStationCustomers = await ExternalStationService.CustomersAsync(Principal, 0);
+    }
+
+    string Supplies(ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => escc.Direction.IsSupply).Select(escc => escc.Cargo.LocalizedName())) : Localizer["None"].Value;
+    string Consumes(ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => !escc.Direction.IsSupply).Select(escc => escc.Cargo.LocalizedName())) : Localizer["None"].Value;
+    string Opened(ExternalStationCustomer customer) => customer.OpenedYear.HasValue || customer.ClosedYear.HasValue ? $"{customer.OpenedYear}-{customer.ClosedYear}" : "";
 
 }

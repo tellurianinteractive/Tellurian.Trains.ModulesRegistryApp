@@ -34,7 +34,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.ExternalStations.AsNoTracking()
-                    .Include(es => es.ExternalStationCustomers)
+                    .Include(es => es.ExternalStationCustomers).ThenInclude(esc => esc.ExternalStationCustomerCargos)
                     .SingleOrDefaultAsync(es => es.Id == id);
             }
             return null;
@@ -66,6 +66,23 @@ namespace ModulesRegistry.Services.Implementations
         }
 
         #region External station customers
+
+        public async Task<IEnumerable<ExternalStationCustomer>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                var countryId = maybeCountryId ?? principal.CountryId();
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.ExternalStationCustomers.AsNoTracking()
+                    .Where(esc => countryId == 0 || esc.ExternalStation.Region.CountryId == countryId)
+                    .OrderBy(esc => esc.ExternalStation.FullName).ThenBy(esc => esc.CustomerName)
+                    .Include(esc => esc.ExternalStationCustomerCargos).ThenInclude(escc => escc.Direction)
+                    .Include(esc => esc.ExternalStationCustomerCargos).ThenInclude(escc => escc.Cargo)
+                    .Include(esc => esc.ExternalStation).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
+                    .ToListAsync();
+            }
+            return Array.Empty<ExternalStationCustomer>();
+        }
 
         public async Task<ExternalStationCustomer?> FindCustomerByIdAsync(ClaimsPrincipal? principal, int id)
         {
