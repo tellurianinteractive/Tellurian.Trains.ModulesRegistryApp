@@ -27,9 +27,9 @@ namespace ModulesRegistry.Services.Projections
       
         
 
-        public static string CargoName(this ExternalStationCustomerCargo it) => it.Cargo.NhmCode == 0 ? it.QuantityUnit.FullName.Localized() : it.Cargo.LocalizedName().Value;
         public static string SupplyingCargo(this ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
         public static string ConsumingCargo(this ExternalStationCustomer customer) => customer.ExternalStationCustomerCargos.Any() ? string.Join(", ", customer.ExternalStationCustomerCargos.Where(escc => !escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
+        public static string CargoName(this ExternalStationCustomerCargo it) => it is null ? string.Empty : it.Cargo.NhmCode == 0 ? $"{it.Cargo.LocalizedName().Value} ({it.QuantityUnit.FullName.Localized().ToLowerInvariant()})" : it.Cargo.LocalizedName().Value;
         public static string OpenPeriod(this ExternalStationCustomer customer) => customer.OpenedYear.HasValue || customer.ClosedYear.HasValue ? $"{customer.OpenedYear}-{customer.ClosedYear}" : "";
     }
 
@@ -50,7 +50,7 @@ namespace ModulesRegistry.Services.Projections
         static string SupplyingCargo(this StationCustomer customer) => customer.StationCustomerCargos.Any() ? string.Join(", ", customer.StationCustomerCargos.Where(escc => escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
         static string ConsumingCargo(this StationCustomer customer) => customer.StationCustomerCargos.Any() ? string.Join(", ", customer.StationCustomerCargos.Where(escc => !escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
 
-        static string CargoName(this StationCustomerCargo? it) => it is null ? string.Empty : it.Cargo.NhmCode == 0 ? it.QuantityUnit.FullName.Localized() : it.Cargo.LocalizedName().Value;
+        static string CargoName(this StationCustomerCargo? it) => it is null ? string.Empty : it.Cargo.NhmCode == 0 ? $"{it.Cargo.LocalizedName().Value} ({it.QuantityUnit.FullName.Localized().ToLowerInvariant()})" : it.Cargo.LocalizedName().Value;
         static string OpenPeriod(this StationCustomer? it) => it is null ? string.Empty : it.OpenedYear.HasValue || it.ClosedYear.HasValue ? $"{it.OpenedYear}-{it.ClosedYear}" : string.Empty;
     }
 }

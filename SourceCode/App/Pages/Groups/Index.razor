@@ -27,6 +27,7 @@ else
                 <th>@Localizer["ShortName"]</th>
                 <th>@Localizer["FullName"]</th>
                 <th>@Localizer["CityName"]</th>
+                <th>@Localizer["Domain"]</th>
                 <th>@Localizer["Category"]</th>
                 <th>@Localizer["Actions"]</th>
             </tr>
@@ -34,22 +35,23 @@ else
         <tbody>
             @foreach (var item in Groups)
             {
-                <tr>
-                    <td>@item.value.ShortName</td>
-                    <td>@item.value.FullName</td>
-                    <td>@item.value.CityName</td>
-                    <td>@Localizer[item.value.Category]</td>
-                    <td style="white-space: nowrap !important;">
-                        @if (item.mayEdit)
-                        {
-                            <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                        }
-                        <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                        @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
-                    </td>
-                </tr>
+            <tr>
+                <td>@item.value.ShortName</td>
+                <td>@item.value.FullName</td>
+                <td>@item.value.CityName</td>
+                <td>@item.value.GroupDomain?.Name</td>
+                <td>@Localizer[item.value.Category]</td>
+                <td style="white-space: nowrap !important;">
+                    @if (item.mayEdit)
+                    {
+                        <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                    }
+                    <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
+                    <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+                    <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+                    @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
+                </td>
+            </tr>
             }
         </tbody>
     </table>

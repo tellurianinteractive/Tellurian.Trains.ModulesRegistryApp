@@ -73,35 +73,38 @@ namespace ModulesRegistry.Services.Implementations
 
         public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
 
-        public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+        public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
         {
-            ownerRef = principal.UpdateFrom(ownerRef);
-            using var dbContext = Factory.CreateDbContext();
-            if (ownerRef.IsGroup)
+            if (principal.IsAuthenticated())
             {
-                bool isAdministrator = await IsGroupOrDataAdministrator(dbContext, principal, ownerRef);
-                if (isAdministrator)
+                ownershipRef = principal.UpdateFrom(ownershipRef);
+
+                using var dbContext = Factory.CreateDbContext();
+                var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
+
+                var modules = await dbContext.Modules.AsNoTracking()
+                    .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId))
+                    .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                    .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+                    .Include(m => m.Scale)
+                    .Include(m => m.Standard)
+                    .ToListAsync();
+
+
+                if (ownershipRef.IsGroup)
                 {
-                    return await dbContext.Modules.AsNoTracking()
-                        .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
-                        .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                        .Include(m => m.Scale)
-                        .Include(m => m.Standard)
-                        .ToListAsync();
+                    return modules
+                         .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && m.ModuleOwnerships.Any(mo => principal.IsMemberOfGroupSpecificGroupDomainOrNone(mo.Group.GroupDomainId)));
                 }
-            }
-            else
-            {
-                var countryId = dbContext.People.Find(ownerRef.PersonId)?.CountryId;
-                if (principal.IsAuthorisedInCountry(countryId, ownerRef.PersonId))
+                else if (ownershipRef.IsPersonInGroup)
                 {
-                    return await dbContext.Modules.AsNoTracking()
-                        .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships
-                        .Any(mo => mo.PersonId == ownerRef.PersonId))
-                        .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                        .Include(m => m.Scale)
-                        .Include(m => m.Standard)
-                        .ToListAsync();
+                    return modules
+                        .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain));
+                }
+                else if (ownershipRef.IsPerson)
+                {
+                    return modules
+                         .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain));
                 }
             }
             return Array.Empty<Module>();
@@ -270,7 +273,7 @@ namespace ModulesRegistry.Services.Implementations
                     return result.DeleteResult();
                 }
             }
-            return Strings.NothingToDelete.DeleteResult();         
+            return Strings.NothingToDelete.DeleteResult();
         }
 
         public static bool IsReferringStation(Module? module) => module is not null && module.StationId.HasValue;

@@ -8,6 +8,9 @@ namespace ModulesRegistry.Validators
     {
         public ExternalStationValidator(IStringLocalizer<App> localizer)
         {
+            RuleFor(m => m.RegionId)
+                .MustBeSelected(localizer)
+                .WithName(n => localizer[nameof(n.Region)]);
             RuleFor(m => m.FullName)
                 .NotEmpty()
                 .MinimumLength(1)

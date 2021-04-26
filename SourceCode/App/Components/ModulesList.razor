@@ -85,7 +85,7 @@
     }
     bool AnyHasFremoName;
     string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : module.FullName;
-    MarkupString Status(Module module) => new( $"<span class={(module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle")}/>");
+    MarkupString Status(Module module) => new( $"<span class=\"{(module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle")}\"/>");
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 

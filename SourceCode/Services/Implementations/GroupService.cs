@@ -40,7 +40,8 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
-                    .Where(g => g.CountryId == countryId)
+                    .Include(g => g.GroupDomain)
+                    .Where(g => (g.GroupDomainId == null && g.CountryId == countryId) || ( g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, true));
@@ -48,12 +49,12 @@ namespace ModulesRegistry.Services.Implementations
             else
             {
                 using var dbContext = Factory.CreateDbContext();
-                var items = await dbContext.Groups.Include(g => g.GroupMembers.Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())).AsNoTracking()
-                    .Where(g => g.GroupMembers
-                    .Any(gm => gm.PersonId == principal.PersonId()))
+                var items = await dbContext.Groups.AsNoTracking()
+                    .Include(g => g.GroupDomain)
+                    .Where(g => (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)) || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
-                return items.Select(i => (i, i.GroupMembers.Any()));
+                return items.Select(i => (i, i.GroupMembers.Any(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())));
             }
         }
 
@@ -62,13 +63,11 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                var group = await dbContext.Groups.FindAsync(id);
-                if (group is null) return null;
-                var isCountryAdministator = principal.IsCountryAdministratorInCountry(group.CountryId);
-                var groupWithMembers = await dbContext.Groups.AsNoTracking()
+                var group = await dbContext.Groups.AsNoTracking()
                      .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
-                     .SingleOrDefaultAsync(g => g.Id == id && (isCountryAdministator || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId())));
-                return groupWithMembers ?? group;
+                     .Where(g => g.Id == id)
+                     .ToListAsync(); 
+                return group.SingleOrDefault(g => principal.IsCountryAdministratorInCountry(g.CountryId) || principal.IsMemberOfGroupSpecificGroupDomainOrNone(g.GroupDomainId) || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()));
             }
             return null;
         }
@@ -117,6 +116,28 @@ namespace ModulesRegistry.Services.Implementations
                 .ToListAsync();
             if (adminGroups is null || adminGroups.Count == 0) return false;
             return adminGroups.Any(ag => ag.GroupMembers.Any(gm => gm.PersonId == memberPersonId));
+        }
+
+        public bool IsMemberInGroupsInSameDomain(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
+        }
+
+        internal static bool IsMemberInGroupsInSameDomain(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
+        {
+            if (principal.IsAuthenticated() && ownershipRef.IsPerson)
+            {
+                if (principal.PersonId() == ownershipRef.PersonId) return false;
+
+                var memberships = dbContext.GroupMembers.AsNoTracking().Include(gm => gm.Group)
+                    .Where(gm => gm.Group.GroupDomainId > 0 && (gm.PersonId == ownershipRef.PersonId || gm.PersonId == principal.PersonId()))
+                    .AsEnumerable()
+                    .GroupBy(gm => gm.Group.GroupDomainId)
+                    .ToList();
+                return memberships.Any(m => m.Count(gm => gm.PersonId == ownershipRef.PersonId || gm.PersonId == principal.PersonId()) > 1);
+            }
+            return false;
         }
 
         public async Task<(int Count, string Message, Group? Entity)> SaveAsync(ClaimsPrincipal? principal, Group group)

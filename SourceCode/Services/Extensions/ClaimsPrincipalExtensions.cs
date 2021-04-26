@@ -26,6 +26,7 @@ namespace ModulesRegistry.Services.Extensions
         public const string LastTermsOfUseAcceptTime = nameof(LastTermsOfUseAcceptTime);
         public const string ReadOnly = nameof(ReadOnly);
         public const string Demo = nameof(Demo);
+        public const string DomainId = nameof(DomainId);
 
     }
 
@@ -77,6 +78,7 @@ namespace ModulesRegistry.Services.Extensions
 
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me.MayRead(me.PersonId());
+
         public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? me, int entityOwnerId) =>
              me is not null && (entityOwnerId == me.PersonId() || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
 
@@ -88,9 +90,12 @@ namespace ModulesRegistry.Services.Extensions
 
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me) =>
             me is not null && !me.IsReadOnly() && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+
         public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
              me is not null && !me.IsReadOnly() && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == me.PersonId()) || me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator());
+        
         public static ModuleOwnershipRef OwnerRef(this ClaimsPrincipal? me) => me is null ? ModuleOwnershipRef.None : ModuleOwnershipRef.Person(me.PersonId());
+        
         public static int PersonOwnerId(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) => me is null ? 0 :ownerRef.IsPerson ? ownerRef.PersonId : me.PersonId();
         public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsGroupAdministrator));
@@ -98,11 +103,25 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsGroupDataAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, IEnumerable<GroupMember> members) =>
             me is not null && (me.IsAuthorisedInCountry(me.CountryId()) || me.IsGlobalAdministrator() || members.Any(m => m.PersonId == me.PersonId() && m.IsDataAdministrator));
 
+        public static IList<int> GroupDomainIds(this ClaimsPrincipal? me) =>
+            me is null  ? Array.Empty<int>() :
+            me.Claims.Where(c => c.Type == AppClaimTypes.DomainId).Select(c => me.GetInt32(AppClaimTypes.DomainId)).ToList();
+
+        public static bool IsMemberOfGroupSpecificGroupDomainOrNone([NotNullWhen(true)] this ClaimsPrincipal? me, int? groupDomainId) =>
+            groupDomainId is null || me.None(AppClaimTypes.DomainId) ? true : me.GroupDomainIds().Contains(groupDomainId.Value);
+
         public static bool MaySee(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, int objectVisibility) =>
             objectVisibility >= me.MinimumObjectVisibility(ownerRef);
 
+        [Obsolete]
         public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
             me is null ? (int)ObjectVisibility.Public : me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ?(int)ObjectVisibility.Private : ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.DomainMembers;
+ 
+        public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool isMemberInGroupsInSameDomain) =>
+            me is null ? (int)ObjectVisibility.Public : 
+            me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ? (int)ObjectVisibility.Private : 
+            ownerRef.IsPerson && isMemberInGroupsInSameDomain ? (int)ObjectVisibility.DomainMembers :
+            ownerRef.GroupId > 0 ?  (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.Private;
 
         private static string? GetString(this ClaimsPrincipal? me, string claimType, string? defaultValue = null) =>
             me is not null ? me.Claims.Claim(claimType)?.Value : defaultValue;
@@ -117,5 +136,6 @@ namespace ModulesRegistry.Services.Extensions
             us.SingleOrDefault(c => c is not null && c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase));
 
         private static bool Any(this ClaimsPrincipal? me, string claimType) => me is not null && me.Claims.Any(c => c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase));
+        private static bool None(this ClaimsPrincipal? me, string claimType) => ! me.Any(claimType);
     }
 }

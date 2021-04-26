@@ -49,7 +49,12 @@ namespace ModulesRegistry.Validators
             c.IsInRange(0x0041, 0x005A) ||
             c.IsInRange(0x00C0, 0x00D6) ||
             c.IsInRange(0x00D8, 0X00F6) ||
-            c.IsInRange(0x00F8, 0x00FF);
+            c.IsInRange(0x00F8, 0x00FF) ||
+            c.IsInRange(0x0104, 0x0107) ||
+            c.IsInRange(0x0118, 0x0119) ||
+            c.IsInRange(0x0141, 0x0144) ||
+            c.IsInRange(0x015A, 0x015B) ||
+            c.IsInRange(0x0179, 0x017C);
 
         public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer) =>
             builder.Must(value => value.IsSelected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");

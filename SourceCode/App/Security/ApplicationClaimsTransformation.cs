@@ -64,10 +64,15 @@ namespace ModulesRegistry.Security
                     result.Add(Claim(AppClaimTypes.LastTermsOfUseAcceptTime, true));
                 }
             }
-            var person = await db.People.SingleOrDefaultAsync(p => p.UserId == user.Id);
+            var person = await db.People.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user.Id);
             if (person is not null)
             {
                 AddPersonalClaims(person, result);
+                var groupDomainIds = db.GroupDomains.Where(gd => gd.Groups.Any(g => g.GroupMembers.Any(gm => gm.PersonId == person.Id))).Select(g => g.Id).Distinct();
+                if (groupDomainIds is not null)
+                {
+                    foreach (var domainId in groupDomainIds) result.Add(Claim(AppClaimTypes.DomainId, domainId));
+                }
             }
             return result;
 

@@ -288,7 +288,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_Group_Country");
 
                 entity.HasOne(d => d.GroupDomain)
-                    .WithMany()
+                    .WithMany(p => p.Groups)
                     .HasForeignKey(d => d.GroupDomainId)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Group_GroupDomain");
