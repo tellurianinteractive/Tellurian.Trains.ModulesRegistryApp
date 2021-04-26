@@ -41,7 +41,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
                     .Include(g => g.GroupDomain)
-                    .Where(g => (g.GroupDomainId == null && g.CountryId == countryId) || ( g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
+                    .Where(g => (g.GroupDomainId == null && g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, true));
@@ -66,7 +66,7 @@ namespace ModulesRegistry.Services.Implementations
                 var group = await dbContext.Groups.AsNoTracking()
                      .Include(g => g.GroupMembers).ThenInclude(gm => gm.Person).ThenInclude(p => p.User)
                      .Where(g => g.Id == id)
-                     .ToListAsync(); 
+                     .ToListAsync();
                 return group.SingleOrDefault(g => principal.IsCountryAdministratorInCountry(g.CountryId) || principal.IsMemberOfGroupSpecificGroupDomainOrNone(g.GroupDomainId) || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()));
             }
             return null;
@@ -196,14 +196,13 @@ namespace ModulesRegistry.Services.Implementations
             return principal.SaveNotAuthorised<GroupMember>();
         }
 
-        public async Task<(int Count, string Message)> RemoveMemberAsync(ClaimsPrincipal? principal, int groupId, int personId)
+        public async Task<(int Count, string Message)> RemoveMemberAsync(ClaimsPrincipal? principal, int membershipId)
         {
             using var dbContext = Factory.CreateDbContext();
-            var countryId = (await dbContext.Groups.AsNoTracking().SingleOrDefaultAsync(g => g.Id == groupId))?.CountryId;
-            if (countryId.HasValue && await IsGroupDataAdministratorAsync(principal, groupId, countryId.Value))
+            var existing = await dbContext.GroupMembers.Include(gm => gm.Group).SingleOrDefaultAsync(gm => gm.Id == membershipId);
+            if (existing is null) return existing.NotFound();
+            if (await IsGroupDataAdministratorAsync(principal, existing.GroupId, existing.Group.CountryId))
             {
-                var existing = await dbContext.GroupMembers.SingleOrDefaultAsync(gm => gm.PersonId == personId && gm.GroupId == groupId);
-                if (existing is null) return existing.NotFound();
                 dbContext.GroupMembers.Remove(existing);
                 var result = await dbContext.SaveChangesAsync();
                 return result.DeleteResult();

@@ -1,5 +1,13 @@
 # Release Notes
 
+### Version 1.1.2
+Release date 2021-04-26
+- **Better data visibility** which means that FREMO members will see all groups, group members and modules within the FREMO domain, regardless of country.
+- **Delete station customer** is now possible. 
+- **Delete group member** is now possible.
+- **Bug fix** of issue #77 *Checkboxes linked together*. Thanks to Dag-Cato Skårvik for reporting this.
+- **Bug fix** of issue #78 *Remove cargo flow*. Thanks to Benny Tjäder for reporting this,
+
 ### Version 1.1.1
 Release date 2021-04-22
 - **Freight Customers** overview including supplied and consumed cargo types.

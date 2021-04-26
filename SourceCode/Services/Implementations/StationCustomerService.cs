@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Resources;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Projections;
 using System;
@@ -61,7 +62,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated()) 
             {
                 entity.StationId = stationId;
-                entity.TrackOrAreaColor = entity.TrackOrAreaColor.ToLowerInvariant();
+                entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
                 if (ownerRef.IsGroup)
                 {
                     using var dbContext = Factory.CreateDbContext();
@@ -83,7 +84,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 var station = await dbContext.Stations.FindAsync(entity.StationId);
                 if (station is null) return principal.SaveNotAuthorised<StationCustomer>();
-                var existing = station.StationCustomers.SingleOrDefault(sc => sc.Id == entity.Id);
+                var existing = dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).SingleOrDefault(sc => sc.Id == entity.Id);
                 return existing is null ? 
                     await AddNew(dbContext, principal, station, entity) : 
                     await UpdateExisting(dbContext, principal, station, entity, existing);
@@ -120,6 +121,25 @@ namespace ModulesRegistry.Services.Implementations
             static bool IsUnchanged(ModulesDbContext dbContext, StationCustomer customer) =>
                 dbContext.Entry(customer).State == EntityState.Unchanged &&
                 customer.StationCustomerCargos.All(scc => dbContext.Entry(scc).State == EntityState.Unchanged);
+        }
+
+        public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int customerId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).SingleOrDefaultAsync(sc => sc.Id == customerId);
+                if (existing is not null)
+                {
+                    foreach (var cargoflow in existing.StationCustomerCargos) dbContext.StationCustomerCargos.Remove(cargoflow);
+                    dbContext.StationCustomers.Remove(existing);
+                    var result = await dbContext.SaveChangesAsync();
+                    return result.DeleteResult();
+                }
+                return Strings.NothingToDelete.DeleteResult();
+            }
+            return Strings.NotAuthorised.DeleteResult();
+
         }
     }
 }

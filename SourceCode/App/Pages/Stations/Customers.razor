@@ -5,6 +5,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService 
 
 @inject GroupService GroupService
 @inject StationService StationService
@@ -36,6 +37,7 @@
             @if (MayEdit)
             {
                 <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(customer.Id)"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                <button class="btn btn-sm btn-danger" @onclick="(async () => await OnDeleteStationCustomer(customer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
             }
         </td>
     </RowTemplate>
@@ -67,6 +69,14 @@
             StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
             MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
         }
+    }
+
+    async Task OnDeleteStationCustomer(int customerId)
+    {
+
+        var result = await StationCustomerService.DeleteAsync(Principal, customerId);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
     }
 
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";

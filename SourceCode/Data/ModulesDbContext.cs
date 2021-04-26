@@ -695,7 +695,8 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.StationCustomer)
                     .WithMany(p => p.StationCustomerCargos)
                     .HasForeignKey(d => d.StationCustomerId)
-                    .HasConstraintName("FK_CargoCustomer_StationCustomer");
+                    .HasConstraintName("FK_CargoCustomer_StationCustomer")
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(e => e.QuantityUnit)
                     .WithMany()

@@ -4,6 +4,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
+@inject PageHistory PageHistory
 
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
@@ -11,7 +12,7 @@
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
-<PageHeading Label="FreightCustomer"  Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="StationCustomer"/>
+<PageHeading Label="FreightCustomer" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="StationCustomer" />
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
@@ -24,7 +25,10 @@
         <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
     </Inputs>
     <Buttons>
-
+        @if (StationCustomer.Id > 0)
+        {
+            <button class="btn btn-sm btn-danger" @onclick="(async () => await OnDeleteStationCustomer(StationCustomer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
+        }
     </Buttons>
 </EditTemplate>
 
@@ -70,6 +74,20 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    async Task OnDeleteStationCustomer(int? customerId)
+    {
+        if (customerId > 0)
+        {
+            Station = null;
+            StationCustomer = null;
+            var result = await StationCustomerService.DeleteAsync(Principal, customerId.Value);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(3000);
+            PageHistory.NavigateBack();
+        }
+    }
+
     private StationCustomer Default => new StationCustomer
     {
         StationId = StationId

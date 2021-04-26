@@ -3,11 +3,12 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 
 @inject GroupService GroupService
 @inject CountryService CountryService
 
-<PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List"/>
+<PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
 @if (IsGroupAdministrator && Group?.Id > 0)
 {
@@ -35,11 +36,14 @@
             }
             <a class="btn btn-sm btn-secondary" href="persons/@member.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
             <a class="btn btn-sm btn-secondary" href="persons/@member.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-            @if (IsGroupAdministrator && member.Person.MayBeInvited())
+            @if (IsGroupAdministrator)
             {
-                <a class="btn btn-sm btn-success" href="persons/@member.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
+                <button class="btn btn-sm btn-danger" @onclick="(async () => await RemoveMember(member.Id))"><span class="fa fa-trash" />@Localizer["Remove"]</button>
+                @if (member.Person.MayBeInvited())
+                {
+                    <a class="btn btn-sm btn-success" href="persons/@member.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
+                }
             }
-            @*<a class="btn btn-sm btn-warning" href="groups/@item.GroupId/members/@item.Id/remove"><span class="fa fa-trash" />@Localizer["Remove"]</a>*@
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -60,6 +64,16 @@
         {
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
             IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value);
+        }
+    }
+
+    async Task RemoveMember(int membershipId)
+    {
+        if (membershipId > 0)
+        {
+            var result = await GroupService.RemoveMemberAsync(Principal, membershipId);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
         }
     }
 

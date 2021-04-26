@@ -294,7 +294,9 @@ namespace ModulesRegistry.Services.Implementations
                 clone.FullName = CloneFullName(Random, clone);
                 clone.Id = 0;
                 clone.Station = null;
-                clone.StationId = null;
+                clone.DwgDrawing = null;
+                clone.PdfDocumentation = null;
+                clone.SkpDrawing = null;
                 foreach (var gable in clone.ModuleExits) gable.Id = 0;
                 foreach (var ownership in clone.ModuleOwnerships) ownership.Id = 0;
                 using var dbContext = Factory.CreateDbContext();
