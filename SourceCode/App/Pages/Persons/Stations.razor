@@ -24,7 +24,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Owner = await PersonService.FindByIdAsync(Principal, Id);
-        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, GroupId);
+        var ownershipRef = ModuleOwnershipRef.PersonInGroup( OwningPersonId, GroupId);
         MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
         OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, ownershipRef);
     }

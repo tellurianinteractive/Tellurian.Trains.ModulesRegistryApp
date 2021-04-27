@@ -46,17 +46,31 @@ namespace ModulesRegistry.Services.Implementations
         }
         public Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
 
-        public async Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+        public async Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
         {
             if (principal.IsAuthenticated())
             {
-                ownerRef = principal.UpdateFrom(ownerRef);
+                ownershipRef = principal.UpdateFrom(ownershipRef);
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Stations.AsNoTracking()
-                    .Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
+                var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
+                var stations = await dbContext.Stations.AsNoTracking()
+                    .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId)))
+                    .Include(s => s.Modules).ThenInclude(m => m.ModuleOwnerships)
                     .Include(s => s.StationTracks)
                     .Include(m => m.Modules)
                     .ToListAsync();
+                if (ownershipRef.IsPersonInGroup)
+                {
+                    var group = await dbContext.Groups.FindAsync(ownershipRef.GroupId);
+                    if (group is not null) 
+                    {
+                       return stations.Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && principal.IsMemberOfGroupSpecificGroupDomainOrNone(group.GroupDomainId)));
+                    }
+                }
+                else
+                {
+                    return stations.Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain)));
+                }
             }
             return Array.Empty<Station>();
         }

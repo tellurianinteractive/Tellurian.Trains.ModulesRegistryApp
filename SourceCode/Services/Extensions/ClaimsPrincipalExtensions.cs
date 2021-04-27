@@ -108,7 +108,7 @@ namespace ModulesRegistry.Services.Extensions
             me.Claims.Where(c => c.Type == AppClaimTypes.DomainId).Select(c => me.GetInt32(AppClaimTypes.DomainId)).ToList();
 
         public static bool IsMemberOfGroupSpecificGroupDomainOrNone([NotNullWhen(true)] this ClaimsPrincipal? me, int? groupDomainId) =>
-            groupDomainId is null || me.None(AppClaimTypes.DomainId) ? true : me.GroupDomainIds().Contains(groupDomainId.Value);
+            groupDomainId is null || me.None(AppClaimTypes.DomainId) || me.IsGlobalAdministrator() ? true : me.GroupDomainIds().Contains(groupDomainId.Value);
 
         public static bool MaySee(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, int objectVisibility) =>
             objectVisibility >= me.MinimumObjectVisibility(ownerRef);

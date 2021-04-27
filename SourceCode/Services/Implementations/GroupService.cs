@@ -41,7 +41,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
                     .Include(g => g.GroupDomain)
-                    .Where(g => (g.GroupDomainId == null && g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
+                    .Where(g =>  (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, true));
