@@ -888,4 +888,19 @@
   <data name="MakeStation" xml:space="preserve">
     <value>Make station</value>
   </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="MyModules" xml:space="preserve">
+    <value>My modules</value>
+  </data>
+  <data name="MyStations" xml:space="preserve">
+    <value>My stations</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="OperationTheme" xml:space="preserve">
+    <value>Operation theme</value>
+  </data>
 </root>

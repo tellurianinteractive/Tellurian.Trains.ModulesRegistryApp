@@ -64,3 +64,15 @@ a, .btn-link {
     height: 32px;
     margin-right: 6px;
 }
+h1 {
+    font-size: 24pt;
+    font-weight: bold;
+}
+h2 {
+    font-size: 18pt;
+    font-weight: bold;
+}
+h3 {
+    font-size: 14pt;
+    font-weight: bold;
+}

@@ -24,5 +24,6 @@
         public const string Standard = "fa fa-pencil-ruler";
         public const string Upload = "fa fa-file-upload";
         public const string User = "fa fa-user";
+        public const string View = "fa fa-eye";
     }
 }

@@ -4,10 +4,11 @@
 @inject IStringLocalizer<App> Localizer
 
 @inject MeetingService MeetingService
+@inject GroupService GroupService
 
 <PageHeading ObjectName="Meetings" IconClass="@FontAwesome.Meeting" PageAction="PageAction.List" />
 
-@if (Principal.IsAnyAdministrator())
+@if (Principal.IsAuthenticated())
 {
     <div class="col-12">
         <a class="btn btn-secondary btn-sm" href="Meetings/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
@@ -16,23 +17,27 @@
 
 <TableTemplate Items="Meetings">
     <TableHeader>
+        <th>@Localizer["Meeting"]</th>
         <th>@Localizer["Country"]</th>
         <th>@Localizer["Venue"]</th>
         <th>@Localizer["StartDate"]</th>
         <th>@Localizer["EndDate"]</th>
-        <th>@Localizer["Organiser"]</th>
         <th>@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="meeting">
+        <td>@meeting.Description</td>
         <td>@meeting.OrganiserGroup.Country.EnglishName.Localized()</td>
         <td>@meeting.PlaceName</td>
         <td>@meeting.StartDate.ToString("d")</td>
         <td>@meeting.EndDate.ToString("d")</td>
-        <td>@MeetingOrganiser(meeting)</td>
         <td>@meeting.Status.MeetingStatus()</td>
         <td>
-            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
+            @if ( Principal.IsAuthenticated())
+            {
+                <a class="btn btn-primary btn-sm" href="Meetings/@meeting.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+            }
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -50,5 +55,4 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Meetings = await MeetingService.GetAllAsync(CountryId);
     }
-
 }

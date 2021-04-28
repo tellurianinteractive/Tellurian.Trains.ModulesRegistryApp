@@ -1,10 +1,12 @@
 ﻿@page "/Meetings/{meetingid:int}/Layouts/{id:int}"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 
 @inject MeetingService MeetingService
-@inject GroupService GroupService 
+@inject GroupService GroupService
 @inject ModuleStandardService ModuleStandardService
 @inject OperatingDayService OperatingDayService
 
@@ -21,8 +23,8 @@
         <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
         <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
         @*<AppInputSelect Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" />
-        <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
-        <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
+            <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
+            <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
     </Inputs>
     <Buttons>
 

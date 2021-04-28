@@ -883,9 +883,24 @@
     <value>Eksterne fraktkunder</value>
   </data>
   <data name="HaveFreightFlow" xml:space="preserve">
-    <value>Har godstrøm</value>
+    <value>Har godstrøm?</value>
   </data>
   <data name="MakeStation" xml:space="preserve">
     <value>Gjør til stasjon</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Datoer</value>
+  </data>
+  <data name="MyModules" xml:space="preserve">
+    <value>Mine moduler</value>
+  </data>
+  <data name="MyStations" xml:space="preserve">
+    <value>Mine stasjoner</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Vis</value>
+  </data>
+  <data name="OperationTheme" xml:space="preserve">
+    <value>Trafikk tema</value>
   </data>
 </root>

@@ -1,11 +1,13 @@
 ﻿@page "/Meetings/{meetingid:int}/Layouts/{layoutid:int}/Modules"
 
+@attribute [Authorize(Policy = "User")]
 
-<PageHeading Label="RegisterModules" Owner="Layout" IconClass="@FontAwesome.Layout" PageAction="PageAction.List"/>
+
+<PageHeading Label="RegisterModules" Owner="Layout" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" />
 <h1><span class="@FontAwesome.Layout" /> Register Modules</h1>
 
 <div class="alert alert-warning">
-    <span class="fa fa-warning"/> This page is not ready yet!
+    <span class="fa fa-warning" /> This page is not ready yet!
 </div>
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
