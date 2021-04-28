@@ -23,11 +23,16 @@
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
+    protected override void OnInitialized()
+    {
+        CurrentValue = CurrentValue.Date;
+    }
+
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTime result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         if (DateTime.TryParse(value, LanguageService.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeDate))
         {
-            result = maybeDate;
+            result = maybeDate.Date;
             validationErrorMessage = "";
             return true;
         }

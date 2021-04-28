@@ -1,9 +1,7 @@
-﻿> **OBS! Nettstedet er under utvikling. Foreløpig er det bare spesielt inviterte testere som kan få lov til å bruke nettstedet.**
-
-
-**Modulregistret** er et nettsted for å opprettholde data om
+﻿**Modulregistret** er et nettsted for å opprettholde data om
 modell jernbanemoduler i hvilken som helst skala.
 Dette er et nettsted bare for inviterte brukere.
+Se *Kontakt*-siden for å bli invitert.
 
 #### Eksisterende bruker?
 Hvis du allerede har en konto, vennligst logg inn.
@@ -15,6 +13,6 @@ Etter at du har fått en invitasjon, kan du registrere deg og logge på.
 #### Glemt passordet?
 Klikk på *Brukerinnstillinger* for å tilbakestille det.
 
-#### Bruker du iPhone eller iPad?
-Det virker vanskelig å logge på med iOS-enheter.
-Det spiller ingen rolle hvilken nettleser du bruker, alle er basert på Safari.
+#### Fungerer best på en stor skjerm
+Modulregisteret er ikke designet for å fungere bra på små telefonskjermbilder.
+Bruk en datamaskin eller et nettbrett.

@@ -16,15 +16,17 @@
     <Inputs>
         <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
         <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-        <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
+        <AppInputDate Width="3" @bind-Value="Layout.LastRegistrationDate" Label="LastRegistrationDate" />
+        <AppInputFill Width="2" />
+        <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
         <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
-        <AppInputFill Width="6" />
+        <AppInputFill Width="1" />
         <h4>@Localizer["GameSettings"]</h4>
         <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
         <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
-        @*<AppInputSelect Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" />
-            <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
-            <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
+        @*<AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true"/>
+        <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
+        <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
     </Inputs>
     <Buttons>
 

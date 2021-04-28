@@ -25,7 +25,7 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.Meetings.Where(m => m.EndDate > TimeProvider.Now && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
                 .Select(m => new Data.Api.Meeting(
                     m.Id, m.Description, m.PlaceName, m.OrganiserGroup.Country.EnglishName.Localized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().Localized())
-                    { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)) })
+                { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)) })
                 .ToListAsync();
         }
 
@@ -40,7 +40,7 @@ namespace ModulesRegistry.Services.Implementations
                 .ToListAsync();
         }
 
-        public async Task<Meeting?> FindByIdAsync( int id)
+        public async Task<Meeting?> FindByIdAsync(int id)
         {
             using var dbContect = Factory.CreateDbContext();
             return await dbContect.Meetings.AsNoTracking()
@@ -56,7 +56,10 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var isMeetingOrganizer = await IsMeetingOrganiser(dbContext, principal, entity);
-                if (isMeetingOrganizer) return await AddOrUpdate(dbContext, entity);
+                if (isMeetingOrganizer)
+                {
+                    return await AddOrUpdate(dbContext, entity);
+                }
             }
             return principal.SaveNotAuthorised<Meeting>();
 
@@ -92,6 +95,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 foreach (var layout in entity.Layouts)
                 {
+                    layout.LastRegistrationDate = layout.LastRegistrationDate.Date.AddMinutes(1439);
                     var existingGable = existing.Layouts.AsQueryable().FirstOrDefault(g => g.Id == layout.Id);
                     if (existingGable is null) existing.Layouts.Add(layout);
                     else dbContext.Entry(existingGable).CurrentValues.SetValues(layout);

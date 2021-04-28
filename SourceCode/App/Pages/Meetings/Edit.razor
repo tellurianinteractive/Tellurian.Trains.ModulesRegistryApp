@@ -39,18 +39,14 @@
     }
     <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">
         <TableHeader>
-            <th>@Localizer["ResponsibleGroup"]</th>
             <th>@Localizer["PrimaryModuleStandard"]</th>
-            <th>@Localizer["Note"]</th>
-            <th>@Localizer["Theme"]</th>
+            <th>@Localizer["ResponsibleGroup"]</th>
             <th>@Localizer["OperatingPeriod"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="meetinglayout">
-            <td>@meetinglayout.ResponsibleGroup.FullName</td>
             <td>@meetinglayout.PrimaryModuleStandard.ShortName</td>
-            <td>@meetinglayout.Note</td>
-            <td>@meetinglayout.Theme</td>
+            <td>@meetinglayout.ResponsibleGroup.FullName</td>
             <td>@OperatingPeriod(meetinglayout)</td>
             <td>
                 @if (MayEdit)

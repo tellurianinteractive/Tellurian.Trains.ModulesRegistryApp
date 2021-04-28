@@ -903,4 +903,7 @@
   <data name="OperationTheme" xml:space="preserve">
     <value>Trafik tema</value>
   </data>
+  <data name="LastRegistrationDate" xml:space="preserve">
+    <value>Sidste registreringsdato</value>
+  </data>
 </root>
