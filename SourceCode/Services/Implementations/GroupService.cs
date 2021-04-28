@@ -41,7 +41,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
                     .Include(g => g.GroupDomain)
-                    .Where(g =>  (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
+                    .Where(g => (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, true));
@@ -108,14 +108,26 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<bool> IsDataAdministratorInSameGroupAsMember(ClaimsPrincipal? pricipal, int memberPersonId)
         {
-            using var dbContext = Factory.CreateDbContext();
-            var adminGroups = await dbContext.Groups.AsNoTracking()
-                .Include(g => g.GroupMembers)
-                .Where(g => g.GroupMembers
-                .Any(gm => gm.IsDataAdministrator && gm.PersonId == pricipal.PersonId()))
-                .ToListAsync();
-            if (adminGroups is null || adminGroups.Count == 0) return false;
-            return adminGroups.Any(ag => ag.GroupMembers.Any(gm => gm.PersonId == memberPersonId));
+            if (pricipal.IsGlobalAdministrator()) return true;
+            else if (pricipal.IsCountryAdministrator())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var countryIds = await dbContext.Groups.AsNoTracking()
+                    .Where(g => g.GroupMembers.Any(gm => gm.PersonId == memberPersonId))
+                    .Select(g => g.CountryId )
+                    .ToListAsync();
+                return countryIds.Any(c => c == pricipal.CountryId());
+            }
+            else
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var adminGroups = await dbContext.Groups.AsNoTracking()
+                    .Include(g => g.GroupMembers)
+                    .Where(g => g.GroupMembers.Any(gm => gm.IsDataAdministrator && gm.PersonId == pricipal.PersonId()))
+                    .ToListAsync();
+                if (adminGroups is null || adminGroups.Count == 0) return false;
+                return adminGroups.Any(ag => pricipal.IsCountryAdministratorInCountry(ag.CountryId) || ag.GroupMembers.Any(gm => gm.PersonId == memberPersonId));
+            }
         }
 
         public bool IsMemberInGroupsInSameDomain(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
