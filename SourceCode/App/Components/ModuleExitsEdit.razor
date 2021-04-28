@@ -8,7 +8,7 @@
 else
 {
     <h3 class="mt-3">@Localizer["Exits"]</h3>
-    <div class="col-12">
+    <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
         <button type="button" class="btn btn-sm btn-secondary" @onclick="Add"><span class="@FontAwesome.Add" /> @Localizer["Add"]</button>
     </div>
     @foreach (var exit in Module.ModuleExits)
