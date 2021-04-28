@@ -91,11 +91,12 @@
         }
     }
 
-    void SetDefaultStationName()
+    async Task SetDefaultStationName()
     {
         if (Station is not null && ModuleId > 0 && string.IsNullOrWhiteSpace(Station.FullName))
         {
-            Station.FullName = ModulesItems is null ? string.Empty: ModulesItems.SingleOrDefault(mi => mi.Id == ModuleId)?.Description;
+            var module = await ModuleService.FindByIdAsync(Principal, ModuleId);
+            Station.FullName = module is null ? string.Empty: module.FullName;
         }
     }
 
