@@ -2,7 +2,11 @@
 
 ### Version 1.1.3
 Release date 2021-04-28
+- **Make station** button added on the *module* edit form to make it more obvious that it has to be a station to add *tracks* and *freight customers*. 
+Thanks to Seth Olofsson for notifying about this problem.
+- **Freight customer** documentation corrected. Thanks to Fredrik Petterson to notifying this.
 - **Bug fix** issue #81 viewing stations from group list. Thanks to Benny Tjäder for reporting this.
+- **Bug fix** of visibility of data for administrators regarding *modules*, *stations* and *freight customers*.
 
 ### Version 1.1.2
 Release date 2021-04-26
