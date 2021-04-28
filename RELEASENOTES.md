@@ -1,5 +1,12 @@
 # Release Notes
 
+### Version 1.1.4
+Release date 2021-04-29
+- **Meeting** summary information view added. Also publicly available. The *meeting* edit view now only available for authorized users. 
+- **Latest registration date** for modules added for layouts. Each layout in a meeting can have different dates.
+- **Make station** now gets a default name of associated module, but you can change it.
+- **Module standards** page now made public.
+
 ### Version 1.1.3
 Release date 2021-04-28
 - **Make station** button added on the *module* edit form to make it more obvious that it has to be a station to add *tracks* and *freight customers*. 
