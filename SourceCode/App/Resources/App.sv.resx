@@ -885,4 +885,7 @@
   <data name="HaveFreightFlow" xml:space="preserve">
     <value>Har godsflöde?</value>
   </data>
+  <data name="MakeStation" xml:space="preserve">
+    <value>Gör till station</value>
+  </data>
 </root>

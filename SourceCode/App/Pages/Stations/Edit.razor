@@ -2,6 +2,8 @@
 @page "/Stations/{id:int}/Edit/{ownerid:int}"
 @page "/Stations/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
 @page "/Stations/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
+@page "/Stations/Create/{moduleId:int}/PersonOwned/{ownerPersonId:int}"
+@page "/Stations/Create/{moduleId:int}/GroupOwned/{ownerGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -19,7 +21,7 @@
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
         <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
-        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true"/>
+        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true" />
         <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
         <AppInputFill Width="3" />
@@ -41,11 +43,11 @@
     [Parameter] public int OwnerId { get; set; }
     [Parameter] public int OwnerGroupId { get; set; }
     [Parameter] public int OwnerPersonId { get; set; }
+    [Parameter] public int ModuleId { get; set; }
 
     ClaimsPrincipal? Principal;
     object? Owner;
     Station? Station;
-    int ModuleId;
 
     IEnumerable<ListboxItem>? ModulesItems;
     IEnumerable<ListboxItem>? RegionItems;
@@ -72,6 +74,7 @@
             Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef);
             if (Station is not null) ModuleId = Station.Modules.First().Id;
         }
+        SetDefaultStationName();
     }
 
     private async Task GetOwner() =>
@@ -85,6 +88,14 @@
             Station = result.Entity;
             if (Station is not null) ModuleId = Station.Modules.First().Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+    void SetDefaultStationName()
+    {
+        if (Station is not null && ModuleId > 0 && string.IsNullOrWhiteSpace(Station.FullName))
+        {
+            Station.FullName = ModulesItems is null ? string.Empty: ModulesItems.SingleOrDefault(mi => mi.Id == ModuleId)?.Description;
         }
     }
 

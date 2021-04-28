@@ -1,4 +1,7 @@
 ﻿## Module Help
+> NOTE: A *module* is not automatically a *station*. In order to add *station tracks*, and *freight customers* you need to make it a *station*.
+> That *station* will be linked to your module.
+
 Besides the more obvius fields in the form, some fields need some additional explanation:
 - **Name** and **FREMO no.**
 You can give your module any descriptive name, it haven't to be your *FREMO owner initials*+FREMO number. 

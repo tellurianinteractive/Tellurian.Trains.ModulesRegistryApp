@@ -68,6 +68,10 @@ else
                 {
                 <a class="btn btn-secondary btn-sm" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
                 }
+                else if (Module.Id > 0)
+                {
+                <a class="btn btn-secondary btn-sm" href="@StationMakeLink"><span class="fa fa-school" />@Localizer["MakeStation"]</a>
+                }
         </Buttons>
     </EditTemplate>
 
@@ -109,7 +113,7 @@ else
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
             ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
             StationItems = await StationService.StationItemsAsync(Principal, OwnerRef);
-            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000, ObjectVisibilityId=(int)ObjectVisibility.GroupMembers };
+            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnerRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers };
         }
     }
 
@@ -139,4 +143,9 @@ else
         OwnerRef.IsGroup ? $"Stations/{Module.StationId}/Edit/GroupOwned/{OwnerRef.GroupId}" :
         $"Stations/{Module.StationId}/Edit/PersonOwned/{OwnerRef.PersonId}" :
         "";
+
+    string StationMakeLink =>
+        Module is null ? string.Empty :
+        OwnerRef.IsGroup ? $"Stations/Create/{Module.Id}/GroupOwned/{OwnerRef.GroupId}" :
+        $"Stations/Create/{Module.Id}/PersonOwned/{OwnerRef.PersonId}";
 }
