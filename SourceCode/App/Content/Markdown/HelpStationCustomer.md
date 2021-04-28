@@ -8,8 +8,7 @@ You can override it in each *cargo flow* if a specific cargo flow is picked up o
 You can assign a *colour* to each place where you have cargo exchange. 
 These colours should correspond to some orientation documentation available at the station.
 The colours for your station customers should not be confused with the colours of external destination.
-- **Opened**- and **Closed year**
-should only be fill in if it historically relevant. 
+- **Opened**- and **Closed year** controls under which operating period the customer is relevant.
 In particular, don't fill in the *closed year* if you want your customer to stay in business *until further notice*.
 Only *freight customers* in business under any of the operating years of the *layout* will be used for *cargo matching*.
 ### Cargo flow
@@ -20,7 +19,8 @@ New *cargo types* needs to be entered with translations for all supported langua
 - **Other name** gives you an option to override the name of the *cargo type*. 
 Note that *cargo type* names are language aware, but your *other name* is not.
 - **Days** are the days when the customer ships or expects to receive the cargo. Default to daily. 
-Other than *daily* are only relevant for meetings where trains are operated per weeday.
+Other than *daily* are only relevant for meetings where trains are operated per weeday and 
+where *cargo matching* is used.
 - **Direction** defines if the customer supplies (*send* or *export*) or consumes (*recieve* or *import*) the cargo. 
 The *import* and *export* can be used for customers in harbors etc. 
 - **Ouantity** and **Quantity unit** is volume of cargo in each shipment. 
@@ -32,8 +32,8 @@ You can select relative or absolute times, or set it as *not applicable*.
 - **Other track no. or loading area** should *only* be specified if it deviates from what is specified for the customer.
 You can then also then select another colour. Otherwise, leave it empty.
 - **From year** and **Up to year**
-should only filled if historically relevant. 
-In particular, don't fill in the *up to year* if you want your customer to stay in business *until further notice*.
+should only filled if it deviates from the customer's *opened year*- and/or *closed year*. 
+In particular, don't fill in the *up to year* if you want the cargo flow to be in effect *until further notice*.
 
 
 
