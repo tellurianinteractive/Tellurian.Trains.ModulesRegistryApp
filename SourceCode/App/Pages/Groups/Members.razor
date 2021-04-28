@@ -63,7 +63,7 @@
         if (GroupId.IsSet())
         {
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
-            IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value);
+            IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value, Group?.CountryId);
         }
     }
 
