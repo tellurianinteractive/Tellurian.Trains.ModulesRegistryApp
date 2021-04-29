@@ -1,8 +1,6 @@
 ﻿@page "/Regions/Index"
 @page "/Regions/{countryId:int}/Index"
 
-@attribute [Authorize(Policy = "User")]
-
 @inject IStringLocalizer<App> Localizer
 @inject RegionService RegionService
 
