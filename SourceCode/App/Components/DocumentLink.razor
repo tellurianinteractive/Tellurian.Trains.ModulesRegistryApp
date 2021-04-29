@@ -1,6 +1,6 @@
 ﻿@if (DocumentId.HasValue)
 {
-    <img src="@ImgSrc" class="icon" />
+    <a href="documents/@DocumentId.Value"><img src="@ImgSrc" class="icon" /></a>
 }
 
 @code {

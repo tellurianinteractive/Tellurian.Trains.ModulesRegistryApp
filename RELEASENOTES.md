@@ -9,6 +9,7 @@ Release date 2021-04-29
 - **Module gable types** page now made public and with improved add/edit for administrators.
 - **Cargo types** page now made public.
 - **Regions** page now made public.
+- **Document download** now working. You can download all documentation file types.
 
 ### Version 1.1.3
 Release date 2021-04-28

@@ -23,6 +23,40 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
+        public async Task<Document?> FindByIdAsync(int id)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Documents.FindAsync(id);
+        }
+
+        /// <summary>
+        /// Seaches al objects that can refer to a document to find a suitable name.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<string> GetDocumentName(int id)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            string? name;
+            name = await dbContext.Modules.AsNoTracking()
+                .Where(m => m.PdfDocumentationId == id || m.DwgDrawingId == id || m.SkpDrawingId == id)
+                .Select(m => m.FullName)
+                .SingleOrDefaultAsync();
+            if (name is not null) return name;
+            name = await dbContext.Stations.AsNoTracking()
+                .Where(s => s.PdfInstructionId == id)
+                .Select(s => s.FullName)
+                .SingleOrDefaultAsync();
+            if (name is not null) return name;
+            name = await dbContext.ModuleGableTypes.AsNoTracking()
+                .Where(mgt => mgt.PdfDocumentId == id)
+                .Select(mgt => mgt.Designation)
+                .SingleOrDefaultAsync();
+            if (name is not null) return name;
+            return id.ToString();
+        }
+
+
         public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension)
         {
             if (principal.IsAuthenticated())
