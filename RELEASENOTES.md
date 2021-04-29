@@ -7,6 +7,8 @@ Release date 2021-04-29
 - **Make station** now gets a default name of associated module, but you can change it.
 - **Module standards** page now made public.
 - **Module gable types** page now made public and with improved add/edit for administrators.
+- **Cargo types** page now made public.
+- **Regions** page now made public.
 
 ### Version 1.1.3
 Release date 2021-04-28
