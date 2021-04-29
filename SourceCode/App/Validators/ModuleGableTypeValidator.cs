@@ -3,19 +3,19 @@ using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 namespace ModulesRegistry.Validators
 {
-    public class ModuleExitValidator : AbstractValidator<ModuleExit>
+    public class ModuleGableTypeValidator : AbstractValidator<ModuleGableType>
     {
-        public ModuleExitValidator(IStringLocalizer<App> localizer)
+        public ModuleGableTypeValidator(IStringLocalizer<App> localizer)
         {
-            RuleFor(m => m.Label)
+            RuleFor(m => m.Designation)
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(20)
                 .MustBeOrdinaryText(localizer)
-                .WithName(n => localizer["Direction"]);
-            RuleFor(m => m.GableTypeId)
+                .WithName(n => localizer[nameof(n.Designation)]);
+            RuleFor(m => m.ScaleId)
                 .MustBeSelected(localizer)
-                .WithName(n => localizer["GableType"]);
+                .WithName(n => localizer[nameof(n.Scale)]);
         }
     }
 }

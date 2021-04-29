@@ -74,7 +74,7 @@
             Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef);
             if (Station is not null) ModuleId = Station.Modules.First().Id;
         }
-        SetDefaultStationName();
+        await SetDefaultStationName();
     }
 
     private async Task GetOwner() =>

@@ -75,9 +75,9 @@ namespace ModulesRegistry.Imports.Tests
                 Length = row.AsDouble(8)!.Value
             };
             var gable1Id = EndPlateId(row.AsString(9));
-            if (gable1Id.HasValue) module.ModuleExits.Add(new Data.ModuleExit { GablePropertyId = gable1Id.Value, Label = "Sida 1" });
+            if (gable1Id.HasValue) module.ModuleExits.Add(new Data.ModuleExit { GableTypeId = gable1Id.Value, Label = "Sida 1" });
             var gable2Id = EndPlateId(row.AsString(10));
-            if (gable2Id.HasValue) module.ModuleExits.Add(new Data.ModuleExit { GablePropertyId = gable2Id.Value, Label = "Sida 2" });
+            if (gable2Id.HasValue) module.ModuleExits.Add(new Data.ModuleExit { GableTypeId = gable2Id.Value, Label = "Sida 2" });
 
             return module;
         }

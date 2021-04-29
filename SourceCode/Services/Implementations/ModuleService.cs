@@ -138,7 +138,7 @@ namespace ModulesRegistry.Services.Implementations
                         return await dbContext.Modules.AsNoTracking()
                          .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
                          .Include(m => m.ModuleOwnerships)
-                         .Include(m => m.ModuleExits)
+                         .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
                          .SingleOrDefaultAsync();
                     }
                 }
@@ -147,7 +147,7 @@ namespace ModulesRegistry.Services.Implementations
                     return await dbContext.Modules.AsNoTracking()
                         .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
                         .Include(m => m.ModuleOwnerships)
-                        .Include(m => m.ModuleExits)
+                        .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
                         .SingleOrDefaultAsync();
                 }
             }

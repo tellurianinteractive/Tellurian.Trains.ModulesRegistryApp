@@ -1,5 +1,4 @@
-﻿**Modulregistret** er et nettsted for å opprettholde data om
-modell jernbanemoduler i hvilken som helst skala.
+﻿# **Modulregistret** er et nettsted for å opprettholde data om modell jernbanemoduler i hvilken som helst skala.
 Dette er et nettsted bare for inviterte brukere.
 Se *Kontakt*-siden for å bli invitert.
 

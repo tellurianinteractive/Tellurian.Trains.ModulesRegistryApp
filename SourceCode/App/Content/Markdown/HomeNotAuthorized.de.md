@@ -1,5 +1,4 @@
-﻿Die **Modulregistrierung** ist eine Site zum Verwalten von Daten über
-Modelleisenbahnmodule in jedem Maßstab.
+﻿# Die **Modulregistrierung** ist eine Site zum Verwalten von Daten über Modelleisenbahnmodule in jedem Maßstab.
 Dies ist eine Seite nur für eingeladene Benutzer.
 Auf der Seite *Kontakt* erfahren Sie, wie Sie eingeladen werden.
 

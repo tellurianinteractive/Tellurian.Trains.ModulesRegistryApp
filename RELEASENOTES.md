@@ -6,6 +6,7 @@ Release date 2021-04-29
 - **Latest registration date** for modules added for layouts. Each layout in a meeting can have different dates.
 - **Make station** now gets a default name of associated module, but you can change it.
 - **Module standards** page now made public.
+- **Module gable types** page now made public and with improved add/edit for administrators.
 
 ### Version 1.1.3
 Release date 2021-04-28

@@ -83,6 +83,7 @@ namespace ModulesRegistry
             services.AddScoped<GroupService>();
             services.AddScoped<MeetingService>();
             services.AddScoped<ModuleService>();
+            services.AddScoped<ModuleGableTypeService>();
             services.AddScoped<ModuleStandardService>();
             services.AddScoped<OperatingDayService>();
             services.AddScoped<PersonService>();

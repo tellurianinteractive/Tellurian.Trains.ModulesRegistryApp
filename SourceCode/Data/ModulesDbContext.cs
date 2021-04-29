@@ -28,6 +28,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleExit> ModuleExits { get; set; }
+        public virtual DbSet<ModuleGableType> ModuleGableTypes { get; set; }
         public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
         public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
         public virtual DbSet<NHM> NhmCodes { get; set; }
@@ -129,7 +130,7 @@ namespace ModulesRegistry.Data
             modelBuilder.Entity<CargoRelation>(entity =>
             {
                 entity.ToTable("CargoRelation");
- 
+
                 entity.HasOne(d => d.OperatingDay)
                     .WithMany()
                     .HasForeignKey(d => d.OperatingDayId)
@@ -146,11 +147,11 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CargoRelation_CargoCustomer_Supplier");
 
-               entity.HasOne(d => d.ConsumerStationCustomerCargo)
-                    .WithMany()
-                    .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
+                entity.HasOne(d => d.ConsumerStationCustomerCargo)
+                     .WithMany()
+                     .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
             });
 
             modelBuilder.Entity<QuantityUnit>(entity =>
@@ -411,11 +412,32 @@ namespace ModulesRegistry.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ModuleExit_Module");
 
-                entity.HasOne(d => d.GableProperty)
-                    .WithMany(p => p.ModuleGables)
-                    .HasForeignKey(d => d.GablePropertyId)
+                entity.HasOne(d => d.GableType)
+                    .WithMany()
+                    .HasForeignKey(d => d.GableTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ModuleExit_Property");
+                    .HasConstraintName("FK_ModuleExit_ModuleGableType");
+
+            });
+
+            modelBuilder.Entity<ModuleGableType>(entity =>
+            {
+                entity.ToTable("ModuleGableType");
+
+                entity.Property(e => e.Designation)
+                    .IsRequired();
+
+                entity.HasOne(d => d.Scale)
+                    .WithMany()
+                    .HasForeignKey(d => d.ScaleId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_ModuleGableType_Scale");
+
+                entity.HasOne(d => d.PdfDocument)
+                    .WithMany()
+                    .HasForeignKey(d => d.PdfDocumentId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_ModuleGableType_Document");
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>
