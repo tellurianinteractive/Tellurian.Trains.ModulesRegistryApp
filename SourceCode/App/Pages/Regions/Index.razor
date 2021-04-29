@@ -33,7 +33,7 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? CountryId { get; set; }
+    [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<Region>? Regions;
 

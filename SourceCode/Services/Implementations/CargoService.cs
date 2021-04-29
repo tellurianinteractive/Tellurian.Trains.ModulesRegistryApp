@@ -71,14 +71,10 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<ListboxItem>();
         }
 
-        public async Task<IEnumerable<Cargo>> GetAll(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<Cargo>> GetAll()
         {
-            if (principal.IsAuthenticated())
-            {
-                using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Cargos.ToListAsync();
-            }
-            return Array.Empty<Cargo>();
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Cargos.ToListAsync();
         }
 
         public async Task<Cargo?> FindByIdAsync(ClaimsPrincipal? principal, int id)

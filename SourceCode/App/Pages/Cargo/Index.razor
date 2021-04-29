@@ -47,6 +47,6 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         MayEdit = Principal.IsAnyAdministrator();
-        Cargos = await CargoService.GetAll(Principal);
+        Cargos = await CargoService.GetAll();
     }
 }

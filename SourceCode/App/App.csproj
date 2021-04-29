@@ -90,6 +90,18 @@
     <None Update="Content\Markdown\HelpModule.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Markdown\PasswordReset.no.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\PasswordReset.de.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\PasswordReset.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\PasswordReset.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Markdown\PasswordResetMail.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
