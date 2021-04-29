@@ -906,4 +906,7 @@
   <data name="LastRegistrationDate" xml:space="preserve">
     <value>Last registration date</value>
   </data>
+  <data name="Discussions" xml:space="preserve">
+    <value>Discussions</value>
+  </data>
 </root>
