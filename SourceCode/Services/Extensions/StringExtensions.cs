@@ -1,6 +1,6 @@
 ﻿using Markdig;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -12,12 +12,6 @@ namespace ModulesRegistry.Services.Extensions
 {
     public static class StringExtensions
     {
-        public static bool HasValue([NotNullWhen(true)] this string? me) => 
-            !string.IsNullOrWhiteSpace(me);
-
-        public static bool HasNoValue([NotNullWhen(false)] this string? me) => 
-            string.IsNullOrWhiteSpace(me);
-
         public static string? Max(this string? me, int max) => 
             me is null ? null : me.Length < max ? me : me[0..max];
 

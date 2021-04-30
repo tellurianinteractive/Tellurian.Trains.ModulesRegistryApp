@@ -1,4 +1,5 @@
 ﻿using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Resources;
 using System;
 using System.Collections.Generic;

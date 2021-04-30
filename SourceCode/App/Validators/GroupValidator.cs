@@ -21,7 +21,6 @@ namespace ModulesRegistry.Validators
                 .MinimumLength(1)
                 .MaximumLength(50)
                 .MustBeOrdinaryText(localizer)
-                .MustBeCapitalizedCorrectly(localizer)
                 .WithName(n => localizer[nameof(n.FullName)]);
 
             RuleFor(group => group.CityName)

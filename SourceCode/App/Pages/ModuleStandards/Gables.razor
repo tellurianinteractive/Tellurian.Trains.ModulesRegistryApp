@@ -3,6 +3,8 @@
 @inject IStringLocalizer<App> Localizer
 @inject ModuleGableTypeService ModuleGableTypeService
 
+<PageHeading Label="ModuleGables" IconClass="@FontAwesome.Standard" PageAction="PageAction.List"  />
+
 @if (Principal.IsAnyAdministrator())
 {
     <a class="btn btn-sm btn-primary" href="ModuleStandards/Gables/0/Edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>

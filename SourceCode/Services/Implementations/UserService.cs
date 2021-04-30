@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -20,7 +20,7 @@
         <th>@Localizer["Name"]</th>
         <th>@Localizer["IsGroupAdministrator"]</th>
         <th>@Localizer["IsDataAdministrator"]</th>
-        <th>@Localizer["IsInvited"]</th>
+        <th>@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
 
     </TableHeader>
@@ -28,7 +28,7 @@
         <td>@member.Person.Name()</td>
         <td>@member.IsGroupAdministrator.AsYesNo()</td>
         <td>@member.IsDataAdministrator.AsYesNo()</td>
-        <td>@member.Person.IsInvited().AsYes()</td>
+        <td>@UserStatus(member)</td>
         <td style="white-space: nowrap !important;">
             @if (IsGroupAdministrator)
             {
@@ -50,8 +50,8 @@
 
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? GroupId { get; set; }
+        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+        [Parameter] public int? GroupId { get; set; }
 
     private ClaimsPrincipal? Principal;
     private Group? Group;
@@ -78,4 +78,6 @@
     }
 
     private string Heading => Localizer["MembersIn"] + " " + Group?.FullName;
+    MarkupString UserStatus(GroupMember? member) => new( $"<span class=\"fa fa-{StatusSymbol(member) }\" />" );
+    string StatusSymbol(GroupMember? member) => member is null ? string.Empty : member.Person.IsInvited() && member.Person.IsNeverLoggedIn() ? "envelope" : member.Person.UserId.HasValue ? "user-check" : "user-slash";
 }

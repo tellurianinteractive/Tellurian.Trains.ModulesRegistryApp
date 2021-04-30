@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
-using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Shared;
-using System;
 using System.Text;
 
 namespace ModulesRegistry.Extensions

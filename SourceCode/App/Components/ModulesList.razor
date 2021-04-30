@@ -26,7 +26,7 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
-        <td>@((MarkupString)Name(module))</td>
+        <td>@Name(module)</td>
         @if (AnyHasFremoName)
         {
             <td>@module.FremoName()</td>
@@ -74,7 +74,7 @@
 
     protected override void OnParametersSet()
     {
-        AnyHasFremoName = Modules is not null && Modules.Any(m => m.FremoNumber.HasValue && m.ModuleOwnerships.Any(mo => mo.Person.FremoOwnerSignature.HasValue()));
+        AnyHasFremoName = Modules.HasAnyFremoName();
     }
 
     async Task Clone(int id)
@@ -84,7 +84,11 @@
         Modules = await ModuleService.GetAllAsync(Principal, OwnershipRef);
     }
     bool AnyHasFremoName;
-    string Name(Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : module.FullName;
+    MarkupString Name(Module module) => new(
+        module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : 
+        module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : 
+        module.FullName);
+
     MarkupString Status(Module module) => new( $"<span class=\"{(module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle")}\"/>");
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;

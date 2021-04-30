@@ -1,5 +1,9 @@
 # Release Notes
 
+### Version 1.1.5
+Release date 2021-04-30
+- **Bug fix** of issue #83 *error when viewing group modules*. This fix also made FREMO-name of group modules display correctly.
+
 ### Version 1.1.4
 Release date 2021-04-29
 - **Meeting** summary information view added. Also publicly available. The *meeting* edit view now only available for authorized users. 
