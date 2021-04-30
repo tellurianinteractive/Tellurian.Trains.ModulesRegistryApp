@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Security
 {
-    internal sealed class ApiUserAutheticationMiddelware
+    internal sealed class ApiUserAuthenticationMiddelware
     {
         private readonly RequestDelegate Next;
-        public ApiUserAutheticationMiddelware(RequestDelegate next) => Next = next;
+        public ApiUserAuthenticationMiddelware(RequestDelegate next) => Next = next;
         public async Task Invoke(HttpContext httpContext, UserService userService)
         {
             if (httpContext.Request.Path.StartsWithSegments("/api"))
@@ -33,7 +33,7 @@ namespace ModulesRegistry.Security
     internal static class ApiUserAutheticationMiddelwareExtension
     {
         public static IApplicationBuilder UseApiUserAuthentication(this IApplicationBuilder builder) =>
-            builder.UseMiddleware<ApiUserAutheticationMiddelware>();
+            builder.UseMiddleware<ApiUserAuthenticationMiddelware>();
 
     }
 }

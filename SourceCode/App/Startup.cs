@@ -57,11 +57,7 @@ namespace ModulesRegistry
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(AppPolicyNames.Admin, policy => policy.RequireClaim(AppClaimTypes.CountryAdministrator, "True").RequireClaim(AppClaimTypes.LastTermsOfUseAcceptTime));
-                options.AddPolicy(AppPolicyNames.User, policy => policy.RequireClaim(AppClaimTypes.UserId).RequireClaim(AppClaimTypes.LastTermsOfUseAcceptTime));
-            });
+            services.AddAuthorizationPolicies();
             services.AddDbContextFactory<ModulesDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")).EnableSensitiveDataLogging(Environment.IsDevelopment());
