@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" InitialSelectedId="CountryId" />
 
 @if (Groups is null)
 {
@@ -40,7 +40,7 @@ else
                 <tr>
                     <td>@item.value.ShortName</td>
                     <td>@item.value.FullName</td>
-                    <td>@item.value.CityName</td>
+                    <td>@CityName(item.value)</td>
                     <td>@item.value.GroupDomain?.Name</td>
                     <td>@Localizer[item.value.Category]</td>
                     <td style="white-space: nowrap !important;">
@@ -62,10 +62,10 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private IEnumerable<(Group value, bool mayEdit)>? Groups;
-    private IEnumerable<ListboxItem>? Countries;
-    private bool IsLoading;
+    ClaimsPrincipal? Principal;
+    IEnumerable<(Group value, bool mayEdit)>? Groups;
+    IEnumerable<ListboxItem>? Countries;
+    bool IsLoading;
 
     protected async override Task OnParametersSetAsync()
     {
@@ -90,7 +90,7 @@ else
         }
     }
 
-    private async Task GetGroups(int id)
+    async Task GetGroups(int id)
     {
         if (id > 0)
         {
@@ -101,6 +101,8 @@ else
         }
     }
 
-    private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+    bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+
+    string CityName(Group? group) => group is null ? string.Empty : group.CountryId == CountryId ? group.CityName : $"{group.CityName} ({group.Country.DomainSuffix.ToUpperInvariant()})";
 
 }
