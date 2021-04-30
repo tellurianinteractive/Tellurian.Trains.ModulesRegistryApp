@@ -28,9 +28,9 @@
     <RowTemplate Context="station">
         <td>@station.FullName</td>
         <td>@station.Signature</td>
-        <td>@station.IsTerminus.AsYesNo()</td>
-        <td>@station.IsShadow.AsYesNo()</td>
-        <td>
+        <td align="center">@station.IsTerminus.AsYesNo()</td>
+        <td align="center">@station.IsShadow.AsYesNo()</td>
+        <td align="center">
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
     </td>
         <td>

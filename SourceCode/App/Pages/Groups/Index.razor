@@ -1,13 +1,15 @@
 ﻿@page "/Groups/Index"
+@page "/Groups/Index/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
 
 @inject GroupService GroupService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List"/>
+<PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" />
 
@@ -35,37 +37,37 @@ else
         <tbody>
             @foreach (var item in Groups)
             {
-            <tr>
-                <td>@item.value.ShortName</td>
-                <td>@item.value.FullName</td>
-                <td>@item.value.CityName</td>
-                <td>@item.value.GroupDomain?.Name</td>
-                <td>@Localizer[item.value.Category]</td>
-                <td style="white-space: nowrap !important;">
-                    @if (item.mayEdit)
-                    {
-                        <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                    }
-                    <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
-                    <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                    <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                    @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.value.ShortName</td>
+                    <td>@item.value.FullName</td>
+                    <td>@item.value.CityName</td>
+                    <td>@item.value.GroupDomain?.Name</td>
+                    <td>@Localizer[item.value.Category]</td>
+                    <td style="white-space: nowrap !important;">
+                        @if (item.mayEdit)
+                        {
+                            <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                        }
+                        <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
+                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
+                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+                        @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<(Group value, bool mayEdit)>? Groups;
     private IEnumerable<ListboxItem>? Countries;
-    private int CountryId;
     private bool IsLoading;
 
-    protected async override Task OnInitializedAsync()
+    protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
@@ -74,12 +76,18 @@ else
             CountryId = Countries.First().Id;
             await GetGroups(CountryId);
         }
+        else if (CountryId > 0)
+        {
+            await GetGroups(CountryId);
+        }
     }
 
-    private async Task OnSelectedCountry(int id)
+    void OnSelectedCountry(int id)
     {
-        CountryId = id;
-        await GetGroups(CountryId);
+        if (id > 0)
+        {
+            Navigator.NavigateTo($"/Groups/Index/{id}");
+        }
     }
 
     private async Task GetGroups(int id)

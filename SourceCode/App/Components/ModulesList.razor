@@ -32,8 +32,8 @@
             <td>@module.FremoName()</td>
         }
         <td>@module.Standard.ShortName</td>
-        <td>@OwnedPercentage(module)</td>
-        <td>@Status(module)</td>
+        <td align="center">@OwnedPercentage(module)</td>
+        <td align="center">@Status(module)</td>
         <td>
             <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
             <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
@@ -44,15 +44,15 @@
             {
                 <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                 <a class="btn btn-sm btn-danger" href="@ModuleDeleteHref(module.Id)"><span class="@FontAwesome.Delete" /> @Localizer["Delete"]</a>
+                @if ( module.Id > 0)
+                {
+                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" /> @Localizer["Clone"]</button>
+                }
             }
             @if (module.StationId.HasValue)
             {
-                <a class="btn btn-sm btn-secondary" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer["Station"]</a>
-                <a class="btn btn-sm btn-secondary" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer["FreightCustomers"]</a>
-            }
-            @if (MayEdit && module.Id > 0)
-            {
-                <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" /> @Localizer["Clone"]</button>
+                <a class="btn btn-sm btn-info" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer["Station"]</a>
+                <a class="btn btn-sm btn-info" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer["FreightCustomers"]</a>
             }
         </td>
     </RowTemplate>

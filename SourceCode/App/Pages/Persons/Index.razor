@@ -25,13 +25,13 @@
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["City"]</th>
-        <th style="text-align: center">@Localizer["IsUser"]</th>
+        <th align="center">@Localizer["IsUser"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="person">
         <td>@Name(person)</td>
         <td>@person.CityName</td>
-        <td style="text-align: center">@UserStatus(person)</td>
+        <td align="center">@UserStatus(person)</td>
         <td style="white-space: nowrap !important;">
             @if (Principal.IsAuthorisedInCountry(person.CountryId))
             {

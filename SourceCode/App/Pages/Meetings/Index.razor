@@ -29,9 +29,9 @@
         <td>@meeting.Description</td>
         <td>@meeting.OrganiserGroup.Country.EnglishName.Localized()</td>
         <td>@meeting.PlaceName</td>
-        <td>@meeting.StartDate.ToString("d")</td>
-        <td>@meeting.EndDate.ToString("d")</td>
-        <td>@meeting.Status.MeetingStatus()</td>
+        <td align="center">@meeting.StartDate.ToString("d")</td>
+        <td align="center">@meeting.EndDate.ToString("d")</td>
+        <td align="center">@meeting.Status.MeetingStatus()</td>
         <td>
             <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
             @if ( Principal.IsAuthenticated())

@@ -23,10 +23,10 @@
     </TableHeader>
     <RowTemplate Context="cargo">
         <td>@cargo.LocalizedName()</td>
-        <td>@cargo.DefaultClasses</td>
-        <td>@cargo.NhmCode.ToString("0000 0000")</td>
-        <td>@cargo.FromYear</td>
-        <td>@cargo.UptoYear</td>
+        <td align="center">@cargo.DefaultClasses</td>
+        <td align="center">@cargo.NhmCode.ToString("0000 0000")</td>
+        <td align="center">@cargo.FromYear</td>
+        <td align="center">@cargo.UptoYear</td>
         <td>
             @if (MayEdit)
             {

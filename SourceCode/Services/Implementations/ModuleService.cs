@@ -83,7 +83,7 @@ namespace ModulesRegistry.Services.Implementations
                 var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
 
                 var modules = await dbContext.Modules.AsNoTracking()
-                    .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId))
+                    .Where(m => m.ModuleOwnerships.Any(mo => ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId))
                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                     .Include(m => m.Scale)
