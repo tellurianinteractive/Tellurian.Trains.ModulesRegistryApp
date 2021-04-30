@@ -16,8 +16,9 @@
     <Inputs>
         <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
         <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-        <AppInputDate Width="3" @bind-Value="Layout.LastRegistrationDate" Label="LastRegistrationDate" />
-        <AppInputFill Width="2" />
+        <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
+        <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
+        <AppInputFill Width="1" />
         <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
         <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
         <AppInputFill Width="1" />
@@ -53,7 +54,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdAsync(MeetingId);
+            Meeting = await MeetingService.FindByIdAsync(Principal, MeetingId);
             if (Meeting is not null)
             {
                 ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);

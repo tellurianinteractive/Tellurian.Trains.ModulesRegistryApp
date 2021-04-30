@@ -18,7 +18,7 @@
 </div>
 
 @code {
-   
+#nullable enable
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage)
     {

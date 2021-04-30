@@ -10,7 +10,8 @@ namespace ModulesRegistry.Data
         public int MeetingId { get; set; }
         public int ResponsibleGroupId { get; set; }
         public int PrimaryModuleStandardId { get; set; }
-        public DateTime LastRegistrationDate { get; set; }
+        public DateTime RegistrationOpeningDate { get; set; }
+        public DateTime RegistrationClosingDate { get; set; }
         public int? StartWeekdayId { get; set; }
         public string Theme { get; set; }
         public string Note { get; set; }

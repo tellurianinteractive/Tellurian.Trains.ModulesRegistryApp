@@ -126,6 +126,7 @@ namespace ModulesRegistry
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
+            var isClosed = Configuration.GetValue("Status:Closed", false);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

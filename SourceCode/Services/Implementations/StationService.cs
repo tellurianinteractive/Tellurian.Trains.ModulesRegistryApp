@@ -34,10 +34,12 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal.IsAuthenticated())
             {
+                
                 ownerRef = principal.UpdateFrom(ownerRef);
                 using var dbContext = Factory.CreateDbContext();
+                var isMemberInGroupsInSameDomain =  GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownerRef);
                 return await dbContext.Stations.AsNoTracking()
-                     .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
+                     .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef, isMemberInGroupsInSameDomain) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
                      .Include(m => m.StationTracks)
                      .Include(m => m.Modules)
                      .SingleOrDefaultAsync();

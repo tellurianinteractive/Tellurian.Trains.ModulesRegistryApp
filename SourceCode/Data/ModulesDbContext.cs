@@ -26,6 +26,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<ModuleExit> ModuleExits { get; set; }
         public virtual DbSet<ModuleGableType> ModuleGableTypes { get; set; }
@@ -349,6 +350,21 @@ namespace ModulesRegistry.Data
                     .WithMany()
                     .HasForeignKey(d => d.OrganiserGroupId)
                     .HasConstraintName("FK_Meeting_Group");
+           });
+
+            modelBuilder.Entity<MeetingParticipant>(entity =>
+            {
+                entity.ToTable("MeetingParticipant");
+
+                entity.HasOne(d => d.Meeting)
+                    .WithMany(d => d.Participants)
+                    .HasForeignKey(d => d.MeetingId)
+                    .HasConstraintName("FK_MeetingParticipant_Meeting");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany()
+                    .HasForeignKey(d => d.PersonId)
+                    .HasConstraintName("FK_MeetingParticipant_Person");
             });
 
             modelBuilder.Entity<Module>(entity =>

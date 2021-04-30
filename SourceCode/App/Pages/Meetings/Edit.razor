@@ -53,12 +53,7 @@
                     {
                     <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                     }
-                @if (meetinglayout.Id > 0 && Principal.IsAuthenticated())
-                    {
-                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id/Modules"><span class="@FontAwesome.Modules" /> @Localizer["SubmitModules"]</a>
-
-                    }
-            </td>
+             </td>
         </RowTemplate>
     </TableTemplate>
 
@@ -76,7 +71,7 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) : new Meeting();
+        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Principal, Id) : new Meeting();
         if (Meeting is not null)
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);

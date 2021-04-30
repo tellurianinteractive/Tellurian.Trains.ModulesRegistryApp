@@ -10,6 +10,7 @@ namespace ModulesRegistry.Data
         public Meeting()
         {
             Layouts = new HashSet<Layout>();
+            Participants = new HashSet<MeetingParticipant>();
         }
 
         public int Id { get; set; }
@@ -22,6 +23,7 @@ namespace ModulesRegistry.Data
         public bool IsFremo { get; set; }
         public virtual Group OrganiserGroup { get; set; }
         public virtual ICollection<Layout> Layouts { get; set; }
+        public virtual ICollection<MeetingParticipant> Participants { get; set; }
 
     }
 }

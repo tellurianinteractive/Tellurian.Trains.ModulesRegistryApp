@@ -1,20 +1,2 @@
 ﻿@typeparam TValue
 @inherits InputBase<TValue>
-@*@inject IStringLocalizer<App> Localizer
-
-    <div class="@WidthCss">
-        @if (IsVisible)
-        {
-            @if (!string.IsNullOrWhiteSpace(Label))
-            {
-                <label class="form-control-label" for="@Label">@Localizer[Label]</label>
-            }
-
-            @if (ValidationFor is not null)
-            {
-                <div class="form-control-validation">
-                    <ValidationMessage For="@ValidationFor" />
-                </div>
-            }
-        }
-    </div>*@

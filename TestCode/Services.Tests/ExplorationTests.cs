@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using System.Linq;
 
+#pragma warning disable IDE0051 // Remove unused private members
+
 namespace ModulesRegistry.Services.Tests
 {
     [TestClass]
@@ -22,28 +24,6 @@ namespace ModulesRegistry.Services.Tests
         {
 
         }
-
-        [TestMethod]
-        public async Task MyTestMethod()
-        {
-            var services = CreateServiceProvider();
-            var factory = CreateDbContextFactory(services);
-            var ownershipRef = ModuleOwnershipRef.PersonInGroup(104, 11);
-            var principalPersonId = 14;
-            using var dbContext = factory.CreateDbContext();
-            var memberships = dbContext.GroupMembers.AsNoTracking().Include(gm => gm.Group)
-                .Where(gm => gm.Group.GroupDomainId > 0 && (gm.PersonId == ownershipRef.PersonId || gm.PersonId == principalPersonId))
-                .AsEnumerable()
-            //var x = memberships
-                .GroupBy(gm => gm.Group.GroupDomainId)
-                .ToList();
-
-           var isMemberInSameDomain = memberships.Any(m => m.Count(gm => (gm.PersonId == ownershipRef.PersonId || gm.PersonId == principalPersonId))>1);
-
-            Assert.IsTrue(isMemberInSameDomain);
-        }
-
-
 
         private static ServiceProvider CreateServiceProvider()
         {

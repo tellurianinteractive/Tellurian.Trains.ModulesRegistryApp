@@ -23,12 +23,12 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.Countries.FindAsync(id);
         }
 
-        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, bool isAdministrator = false)
         {
             if (principal is null) return Array.Empty<ListboxItem>();
             using var dbContext = Factory.CreateDbContext();
             var countries = await dbContext.Countries.ToListAsync();
-            return countries.AsEnumerable().Where(c => principal.IsAuthorisedInCountry(c.Id)).Select(c => new ListboxItem(c.Id, c.EnglishName.Localized())).ToList();
+            return countries.AsEnumerable().Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id)).Select(c => new ListboxItem(c.Id, c.EnglishName.Localized())).ToList();
         }
     }
 }

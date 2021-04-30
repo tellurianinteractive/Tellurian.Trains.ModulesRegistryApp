@@ -903,10 +903,25 @@
   <data name="OperationTheme" xml:space="preserve">
     <value>Operation theme</value>
   </data>
-  <data name="LastRegistrationDate" xml:space="preserve">
-    <value>Last registration date</value>
+  <data name="RegistrationOpens" xml:space="preserve">
+    <value>Registration opens</value>
   </data>
   <data name="Discussions" xml:space="preserve">
     <value>Discussions</value>
+  </data>
+  <data name="RegistrationCloses" xml:space="preserve">
+    <value>Registration closes</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="SelectPersonToRegister" xml:space="preserve">
+    <value>Select person to register</value>
+  </data>
+  <data name="RegistrationTime" xml:space="preserve">
+    <value>Signed up</value>
+  </data>
+  <data name="Registered" xml:space="preserve">
+    <value>Registered</value>
   </data>
 </root>

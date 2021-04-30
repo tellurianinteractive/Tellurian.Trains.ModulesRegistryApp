@@ -712,7 +712,7 @@
     <value>Modulstandard</value>
   </data>
   <data name="RegisterModules" xml:space="preserve">
-    <value>Module registrieren</value>
+    <value>Module angemelden</value>
   </data>
   <data name="UploadDocuments" xml:space="preserve">
     <value>Dokumente hochladen</value>
@@ -903,10 +903,25 @@
   <data name="OperationTheme" xml:space="preserve">
     <value>Verkehrsthema</value>
   </data>
-  <data name="LastRegistrationDate" xml:space="preserve">
-    <value>Letztes Registrierungsdatum</value>
+  <data name="RegistrationOpens" xml:space="preserve">
+    <value>Anmeldung öffnet</value>
   </data>
   <data name="Discussions" xml:space="preserve">
     <value>Diskussionen</value>
+  </data>
+  <data name="RegistrationCloses" xml:space="preserve">
+    <value>Anmeldung schließt</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registriren</value>
+  </data>
+  <data name="SelectPersonToRegister" xml:space="preserve">
+    <value>Wählen Sie die Person aus, die Sie registrieren möchten</value>
+  </data>
+  <data name="RegistrationTime" xml:space="preserve">
+    <value>Angemeldet</value>
+  </data>
+  <data name="Registered" xml:space="preserve">
+    <value>Registriert</value>
   </data>
 </root>

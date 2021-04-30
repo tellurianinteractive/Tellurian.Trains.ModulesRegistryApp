@@ -11,7 +11,8 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.MeetingId).MustBeSelected(localizer).WithName(n => localizer["Meeting"]);
             RuleFor(m => m.ResponsibleGroupId).MustBeSelected(localizer).WithName(n => localizer[nameof(n.ResponsibleGroup)]);
             RuleFor(m => m.PrimaryModuleStandardId).MustBeSelected(localizer).WithName(n => localizer[nameof(n.PrimaryModuleStandard)]);
-            RuleFor(m => m.LastRegistrationDate).NotEmpty().WithName(n => localizer[nameof(n.LastRegistrationDate)]);
+            RuleFor(m => m.RegistrationOpeningDate).NotEmpty().WithName(n => localizer["RegistrationOpens"]);
+            RuleFor(m => m.RegistrationClosingDate).NotEmpty().WithName(n => localizer["RegistrationCloses"]);
             RuleFor(m => m.Theme).MaximumLength(100).MustBeOrdinaryText(localizer).WithName(n => localizer[nameof(n.Theme)]);
             RuleFor(m => m.Note).MaximumLength(100).MustBeOrdinaryText(localizer).WithName(n => localizer[nameof(n.Note)]);
             RuleFor(m => m.FirstYear).MustBeValidYear(localizer).WithName(n => localizer[nameof(n.FirstYear)]);

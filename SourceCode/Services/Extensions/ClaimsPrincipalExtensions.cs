@@ -108,15 +108,8 @@ namespace ModulesRegistry.Services.Extensions
             me.Claims.Where(c => c.Type == AppClaimTypes.DomainId).Select(c => me.GetInt32(AppClaimTypes.DomainId)).ToList();
 
         public static bool IsMemberOfGroupSpecificGroupDomainOrNone([NotNullWhen(true)] this ClaimsPrincipal? me, int? groupDomainId) =>
-            groupDomainId is null || me.None(AppClaimTypes.DomainId) || me.IsGlobalAdministrator() ? true : me.GroupDomainIds().Contains(groupDomainId.Value);
+            groupDomainId is null || me.None(AppClaimTypes.DomainId) || me.IsGlobalAdministrator() || me.GroupDomainIds().Contains(groupDomainId.Value);
 
-        public static bool MaySee(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, int objectVisibility) =>
-            objectVisibility >= me.MinimumObjectVisibility(ownerRef);
-
-        [Obsolete]
-        public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef) =>
-            me is null ? (int)ObjectVisibility.Public : me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ?(int)ObjectVisibility.Private : ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.DomainMembers;
- 
         public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool isMemberInGroupsInSameDomain) =>
             me is null ? (int)ObjectVisibility.Public : 
             me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ? (int)ObjectVisibility.Private : 

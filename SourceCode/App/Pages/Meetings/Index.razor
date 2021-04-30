@@ -2,6 +2,7 @@
 @page "/Meetings/{countryid:int}/Index"
 
 @inject IStringLocalizer<App> Localizer
+@inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
 @inject GroupService GroupService
@@ -25,18 +26,22 @@
         <th>@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
-    <RowTemplate Context="meeting">
-        <td>@meeting.Description</td>
-        <td>@meeting.OrganiserGroup.Country.EnglishName.Localized()</td>
-        <td>@meeting.PlaceName</td>
-        <td align="center">@meeting.StartDate.ToString("d")</td>
-        <td align="center">@meeting.EndDate.ToString("d")</td>
-        <td align="center">@meeting.Status.MeetingStatus()</td>
+    <RowTemplate Context="item">
+        <td>@item.meeting.Description</td>
+        <td>@item.meeting.OrganiserGroup.Country.EnglishName.Localized()</td>
+        <td>@item.meeting.PlaceName</td>
+        <td align="center">@item.meeting.StartDate.ToString("d")</td>
+        <td align="center">@item.meeting.EndDate.ToString("d")</td>
+        <td align="center">@item.meeting.Status.MeetingStatus()</td>
         <td>
-            <a class="btn btn-info btn-sm" href="Meetings/@meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
-            @if ( Principal.IsAuthenticated())
+            <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
+            @if (Principal.IsAuthenticated() && MeetingRegistrationIsOpen(item.meeting))
             {
-                <a class="btn btn-primary btn-sm" href="Meetings/@meeting.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                <a class="btn btn-secondary btn-sm" href="Meetings/@item.meeting.Id/Register"><span class="@FontAwesome.Register" /> @Localizer["Register"]</a>
+            }
+            @if (item.MayEdit)
+            {
+                <a class="btn btn-primary btn-sm" href="Meetings/@item.meeting.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>
@@ -47,12 +52,16 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
-    IEnumerable<Meeting>? Meetings;
+    IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
+
     string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meetings = await MeetingService.GetAllAsync(CountryId);
+        Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
     }
+
+    bool MeetingRegistrationIsOpen(Meeting? meeting) => meeting is null || meeting.Layouts.Count ==0 ? false : meeting.Layouts.Min(l => l.RegistrationOpeningDate) <= TimeProvider.Now && meeting.Layouts.Max(l => l.RegistrationClosingDate) >= TimeProvider.Now;
+
 }

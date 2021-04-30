@@ -19,12 +19,14 @@ else
     @Item("Status", Meeting.Status.MeetingStatus())
     @if (Meeting.Layouts.Any())
     {
-        <h2>@Localizer["Layouts"]</h2>
+        <hr />
+        <h2><span class="@FontAwesome.Layout" />@Localizer["Layouts"]</h2>
         @foreach (var item in Meeting.Layouts)
         {
-            <div style="border-top: 1px solid black; min-height: 40pt">
+            <div style="padding-top: 10pt; border-top: 1px solid black; min-height: 40pt">
                 @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
-                @Item("LastRegistrationDate", item.LastRegistrationDate.ToString("ddd d MMM yyyy"))
+                @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
+                @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
                 @Item("Note", item.Note)
                 @Item("OperationTheme", item.Theme)
                 @Item("Period", OperatingPeriod(item))
@@ -42,7 +44,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = await MeetingService.FindByIdAsync(Id);
+        Meeting = await MeetingService.FindByIdAsync(Principal, Id);
     }
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;

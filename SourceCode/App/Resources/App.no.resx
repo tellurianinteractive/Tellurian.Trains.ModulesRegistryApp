@@ -903,10 +903,25 @@
   <data name="OperationTheme" xml:space="preserve">
     <value>Trafikk tema</value>
   </data>
-  <data name="LastRegistrationDate" xml:space="preserve">
-    <value>Siste registreringsdato</value>
+  <data name="RegistrationOpens" xml:space="preserve">
+    <value>Påmeldingen åpnes</value>
   </data>
   <data name="Discussions" xml:space="preserve">
     <value>Diskusjoner</value>
+  </data>
+  <data name="RegistrationCloses" xml:space="preserve">
+    <value>Påmeldingen stenger</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrer</value>
+  </data>
+  <data name="SelectPersonToRegister" xml:space="preserve">
+    <value>Velg person du vil registrere</value>
+  </data>
+  <data name="RegistrationTime" xml:space="preserve">
+    <value>Meldt seg</value>
+  </data>
+  <data name="Registered" xml:space="preserve">
+    <value>Registrert</value>
   </data>
 </root>

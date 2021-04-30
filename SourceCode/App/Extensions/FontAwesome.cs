@@ -3,6 +3,7 @@
     public static class FontAwesome
     {
         public const string Add = "fa fa-plus-square";
+        public const string Cancel = "fa fa-user-slash";
         public const string Cargo = "fa fa-box-open";
         public const string Clone = "fa fa-clone";
         public const string Customer = "fa fa-industry";
@@ -18,6 +19,7 @@
         public const string Ok = "fa fa-check-circle";
         public const string People = "fa fa-user-friends";
         public const string Region = "fa fa-shield-alt";
+        public const string Register = "fa fa-user-plus";
         public const string Save = "fa fa-save";
         public const string Settings = "fa fa-user-cog";
         public const string Station = "fa fa-school";

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ModulesRegistry.Services.Extensions;
+using System;
 
 namespace ModulesRegistry.Services.Implementations
 {
@@ -19,6 +20,18 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
+
+        public async Task<IEnumerable<ListboxItem>> PeopleListboxItemsAsync(ClaimsPrincipal? principal, int meetingId, int countryId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var items = await dbContext.People.AsNoTracking().Where(p => p.CountryId == countryId).Select(p => new ListboxItem(p.Id, $"{p.Name()}, {p.CityName}")).ToListAsync();
+                return items.OrderBy(i => i.Description);
+            }
+            return Array.Empty<ListboxItem>();
+        }
+
         public async Task<IEnumerable<Data.Api.Meeting>> Meetings(int? countryId)
         {
             using var dbContext = Factory.CreateDbContext();
@@ -29,18 +42,20 @@ namespace ModulesRegistry.Services.Implementations
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Meeting>> GetAllAsync(int countryId)
+        public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
         {
             using var dbContect = Factory.CreateDbContext();
-            return await dbContect.Meetings.AsNoTracking()
+            var meetings = await dbContect.Meetings.AsNoTracking()
                 .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
                 .OrderBy(m => m.StartDate)
                 .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
+                .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
                 .Include(m => m.Layouts)
                 .ToListAsync();
+            return meetings.Select(m => (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()), m));
         }
 
-        public async Task<Meeting?> FindByIdAsync(int id)
+        public async Task<Meeting?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
             using var dbContect = Factory.CreateDbContext();
             return await dbContect.Meetings.AsNoTracking()
@@ -49,6 +64,15 @@ namespace ModulesRegistry.Services.Implementations
                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
                 .SingleOrDefaultAsync(m => m.Id == id);
         }
+
+        public async Task<Meeting?> FindByIdWithParticipantsAsync(ClaimsPrincipal? principal, int id)
+        {
+            using var dbContect = Factory.CreateDbContext();
+            return await dbContect.Meetings.AsNoTracking()
+                .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
+                .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
 
         public async Task<(int Count, string Message, Meeting? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting entity)
         {
@@ -95,7 +119,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 foreach (var layout in entity.Layouts)
                 {
-                    layout.LastRegistrationDate = layout.LastRegistrationDate.Date.AddMinutes(1439);
+                    layout.RegistrationClosingDate = layout.RegistrationClosingDate.Date.AddMinutes(1439);
                     var existingGable = existing.Layouts.AsQueryable().FirstOrDefault(g => g.Id == layout.Id);
                     if (existingGable is null) existing.Layouts.Add(layout);
                     else dbContext.Entry(existingGable).CurrentValues.SetValues(layout);
@@ -123,5 +147,48 @@ namespace ModulesRegistry.Services.Implementations
             return await dbContext.GroupMembers.AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator);
 
         }
+
+        #region Meeting Participant
+
+        public async Task<MeetingParticipant?> FindParticipantAsync(ClaimsPrincipal? principal, int meetingId, int personId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.MeetingParticipants.Include(mp => mp.Person).SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId);
+            }
+            return null;
+        }
+
+        public async Task<(int Count, string Message, MeetingParticipant? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting meeting, MeetingParticipant entity)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var isSelf = entity.PersonId == principal.PersonId();
+                var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting);
+                if (isOrganiser || isSelf)
+                {
+                    var existing = await dbContext.MeetingParticipants.SingleOrDefaultAsync(mp => mp.Id == entity.Id);
+                    if (existing is null)
+                    {
+                        entity.RegistrationTime = TimeProvider.Now;
+                        dbContext.MeetingParticipants.Add(entity);
+                    }
+                    else
+                    {
+                        dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+                    }
+                    var result = await dbContext.SaveChangesAsync();
+                    var id = existing?.Id ?? entity?.Id;
+                    return result.SaveResult(await dbContext.MeetingParticipants.Include(mp => mp.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(mp => mp.Id == id));
+                }
+            }
+            return principal.SaveNotAuthorised<MeetingParticipant>();
+
+
+        }
+        #endregion
     }
 }
