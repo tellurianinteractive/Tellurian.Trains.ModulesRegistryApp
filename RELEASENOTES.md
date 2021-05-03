@@ -3,6 +3,7 @@
 #### Release 1.2.0
 - **Registration of persons** to module meetings. The *meeting organiser* can register any person from any country, and a normal *user* can register themselves.
 - **Registration of modules** for a *layout* is in **preview**. It does not yet save registered modules.
+- **Browning groups** is improved for users that can see groups in different countries.
 
 #### Version 1.1.5
 Release date 2021-04-30
