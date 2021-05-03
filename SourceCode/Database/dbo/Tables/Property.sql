@@ -6,7 +6,8 @@
 );
 
 
+
+
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Property_Unique]
-    ON [dbo].[Property]([Name] ASC, [Value] ASC);
+
 

@@ -7,8 +7,8 @@
     [SpecialCargoName]  NVARCHAR (20) NULL,
     [DirectionId]       INT           NOT NULL,
     [OperatingDayId]    INT           CONSTRAINT [DF_StationCustomerCargo_OperatingDayId] DEFAULT ((0)) NOT NULL,
-    [QuantityUnitId]    INT           CONSTRAINT [DF_StationCustomerCargo_QuantityUnitId] DEFAULT ((4)) NOT NULL,
-    [Quantity]          INT           CONSTRAINT [DF_StationCustomerCargo_Ouantity] DEFAULT ((0)) NOT NULL,
+    [QuantityUnitId]    INT           NOT NULL,
+    [Quantity]          INT           CONSTRAINT [DF_StationCustomerCargo_Quantity] DEFAULT ((0)) NOT NULL,
     [ReadyTimeId]       INT           NOT NULL,
     [FromYear]          SMALLINT      NULL,
     [UptoYear]          SMALLINT      NULL,
@@ -17,6 +17,8 @@
     CONSTRAINT [FK_CargoCustomer_CargoDirection] FOREIGN KEY ([DirectionId]) REFERENCES [dbo].[CargoDirection] ([Id]),
     CONSTRAINT [FK_CargoCustomer_CargoReadyTime] FOREIGN KEY ([ReadyTimeId]) REFERENCES [dbo].[CargoReadyTime] ([Id]),
     CONSTRAINT [FK_CargoCustomer_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
-    CONSTRAINT [FK_CargoCustomer_StationCustomer] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id])
+    CONSTRAINT [FK_CargoCustomer_StationCustomer] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id]) ON DELETE CASCADE
 );
+
+
 

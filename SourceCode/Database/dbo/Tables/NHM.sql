@@ -12,7 +12,8 @@
 );
 
 
+
+
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_NHM_Code]
-    ON [dbo].[NHM]([Code] ASC);
+
 

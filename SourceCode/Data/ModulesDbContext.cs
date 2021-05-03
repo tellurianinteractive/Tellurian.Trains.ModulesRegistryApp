@@ -6,8 +6,8 @@ namespace ModulesRegistry.Data
 {
     public partial class ModulesDbContext : DbContext
     {
-        public ModulesDbContext(DbContextOptions<ModulesDbContext> options)
-     : base(options)
+        public ModulesDbContext() { }
+        public ModulesDbContext(DbContextOptions<ModulesDbContext> options) : base(options)
         {
         }
 
@@ -350,7 +350,7 @@ namespace ModulesRegistry.Data
                     .WithMany()
                     .HasForeignKey(d => d.OrganiserGroupId)
                     .HasConstraintName("FK_Meeting_Group");
-           });
+            });
 
             modelBuilder.Entity<MeetingParticipant>(entity =>
             {

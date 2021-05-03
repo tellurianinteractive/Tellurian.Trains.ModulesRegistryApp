@@ -10,6 +10,18 @@
     [FremoOwnerSignature] NVARCHAR (10) NULL,
     CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Person_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id]),
-    CONSTRAINT [FK_Person_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_Person_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id]) ON DELETE SET NULL
 );
+
+
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Person_UserId]
+    ON [dbo].[Person]([UserId] ASC) WHERE ([UserId] IS NOT NULL);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Person_CountryId]
+    ON [dbo].[Person]([CountryId] ASC);
 

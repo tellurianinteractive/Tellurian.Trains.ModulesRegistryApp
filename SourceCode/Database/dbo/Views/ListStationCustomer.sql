@@ -1,10 +1,12 @@
 ﻿CREATE VIEW dbo.ListStationCustomer
 AS
-SELECT TOP (100) PERCENT dbo.StationCustomer.Id, dbo.Station.FullName + ' ' + dbo.StationCustomer.CustomerName AS Display, dbo.Person.CountryId
+SELECT DISTINCT TOP (100) PERCENT dbo.StationCustomer.Id, dbo.Station.FullName + ' ' + dbo.StationCustomer.CustomerName AS Display, dbo.Person.CountryId
 FROM     dbo.Station INNER JOIN
                   dbo.StationCustomer ON dbo.StationCustomer.StationId = dbo.Station.Id INNER JOIN
-                  dbo.Person ON dbo.Station.OwnerPersonId = dbo.Person.Id
-ORDER BY dbo.Station.FullName, dbo.StationCustomer.CustomerName
+                  dbo.Module ON dbo.Module.StationId = dbo.Station.Id INNER JOIN
+                  dbo.ModuleOwnership ON dbo.ModuleOwnership.ModuleId = dbo.Module.Id INNER JOIN
+                  dbo.Person ON dbo.ModuleOwnership.PersonId = dbo.Person.Id
+ORDER BY dbo.Station.FullName + ' ' + dbo.StationCustomer.CustomerName, dbo.Person.CountryId, dbo.StationCustomer.Id
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]

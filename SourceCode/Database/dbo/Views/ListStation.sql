@@ -1,8 +1,9 @@
 ﻿CREATE VIEW dbo.ListStation
 AS
-SELECT TOP (100) PERCENT dbo.Station.Id, dbo.Station.FullName, dbo.Person.CountryId
-FROM     dbo.Station INNER JOIN
-                  dbo.Person ON dbo.Station.OwnerPersonId = dbo.Person.Id
+SELECT DISTINCT TOP (100) PERCENT dbo.Station.Id, dbo.Station.FullName, dbo.Person.CountryId
+FROM     dbo.Station INNER JOIN dbo.Module ON dbo.Module.StationId = dbo.Station.Id
+        INNER JOIN dbo.ModuleOwnership ON dbo.ModuleOwnership.ModuleId = dbo.Module.Id
+        INNER JOIN dbo.Person ON dbo.ModuleOwnership.PersonId = dbo.Person.Id
 ORDER BY dbo.Station.FullName
 
 GO

@@ -24,7 +24,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween(1, 1000)
                 .WithName(n => localizer[nameof(n.Quantity)]);
             RuleFor(m => m.SpecialCargoName)
-                .MaximumLength(50)
+                .MaximumLength(20)
                 .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer[nameof(n.SpecialCargoName)]);
             RuleFor(m => m.FromYear)

@@ -2,7 +2,7 @@
 AS
 SELECT TOP (100) PERCENT Id, ShortName
 FROM     dbo.CargoReadyTime
-WHERE  (IsSpecifiedInLayoyt = 1)
+WHERE  (IsSpecifiedInLayout = 1)
 ORDER BY ShortName
 
 GO

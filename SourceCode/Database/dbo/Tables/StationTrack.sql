@@ -3,7 +3,7 @@
     [StationId]      INT           NOT NULL,
     [Designation]    NVARCHAR (5)  NOT NULL,
     [DisplayOrder]   SMALLINT      NOT NULL,
-    [IsSiding]       BIT           CONSTRAINT [DF_StationTrack_IsSiding] DEFAULT ((0)) NOT NULL,
+    [IsSiding]       BIT           NOT NULL,
     [IsScheduled]    BIT           NOT NULL,
     [MaxTrainLength] FLOAT (53)    NOT NULL,
     [PlatformLength] FLOAT (53)    NULL,
@@ -14,4 +14,11 @@
     CONSTRAINT [PK_StationTrack] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_StationTrack_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]) ON DELETE CASCADE
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StationTrack_StationId]
+    ON [dbo].[StationTrack]([StationId] ASC);
 

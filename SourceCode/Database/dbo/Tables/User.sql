@@ -18,7 +18,8 @@
 );
 
 
+
+
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_User_EmailAddress]
-    ON [dbo].[User]([EmailAddress] ASC);
+
 

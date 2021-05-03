@@ -11,3 +11,10 @@
     CONSTRAINT [FK_Group_GroupDomain] FOREIGN KEY ([GroupDomainId]) REFERENCES [dbo].[GroupDomain] ([Id])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Group_CountryId]
+    ON [dbo].[Group]([CountryId] ASC);
+

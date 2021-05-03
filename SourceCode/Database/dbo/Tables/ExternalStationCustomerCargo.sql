@@ -14,6 +14,6 @@
     CONSTRAINT [FK_ExternalStationCustomerCargo_CargoDirection] FOREIGN KEY ([DirectionId]) REFERENCES [dbo].[CargoDirection] ([Id]),
     CONSTRAINT [FK_ExternalStationCustomerCargo_CargoUnit] FOREIGN KEY ([QuantityUnitId]) REFERENCES [dbo].[CargoUnit] ([Id]),
     CONSTRAINT [FK_ExternalStationCustomerCargo_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
-    CONSTRAINT [FK_ExternalStationCustomerCargo_StationCustomer] FOREIGN KEY ([ExternalStationCustomerId]) REFERENCES [dbo].[ExternalStationCustomer] ([Id])
+    CONSTRAINT [FK_ExternalStationCustomerCargo_StationCustomer] FOREIGN KEY ([ExternalStationCustomerId]) REFERENCES [dbo].[ExternalStationCustomer] ([Id]) ON DELETE CASCADE
 );
 

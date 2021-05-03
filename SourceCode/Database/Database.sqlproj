@@ -16,7 +16,7 @@
     <ModelCollation>1035,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -24,6 +24,7 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DefaultCollation>Finnish_Swedish_CI_AS</DefaultCollation>
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -103,14 +104,13 @@
     <Build Include="dbo\Views\ListStationCustomer.sql" />
     <Build Include="dbo\Views\ListExternalStationCustomer.sql" />
     <Build Include="dbo\Views\ListCargoDirection.sql" />
-    <Build Include="dbo\Views\ReportStationCustomer.sql" />
     <Build Include="dbo\Views\ListCountry.sql" />
     <Build Include="dbo\Views\ListRegion.sql" />
     <Build Include="dbo\Views\ListExternalStation.sql" />
     <Build Include="dbo\Views\ListCargoUnit.sql" />
-    <Build Include="dbo\Views\ListCargo.sql" />
     <Build Include="dbo\Views\ListStation.sql" />
     <Build Include="dbo\Views\ListBasicDay.sql" />
     <Build Include="dbo\Views\ListOperatingDay.sql" />
+    <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
   </ItemGroup>
 </Project>

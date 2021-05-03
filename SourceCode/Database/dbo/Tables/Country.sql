@@ -8,6 +8,8 @@
 );
 
 
+
+
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'A semicolon separated list of two-letter language codes.', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Country', @level2type = N'COLUMN', @level2name = N'Languages';
+
 

@@ -12,7 +12,8 @@
 );
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_Meeting]
-    ON [dbo].[Meeting]([Id] ASC);
+
 

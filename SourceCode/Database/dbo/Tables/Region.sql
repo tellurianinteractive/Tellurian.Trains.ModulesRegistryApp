@@ -11,3 +11,10 @@
     CONSTRAINT [FK_Region_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Region_CountryId]
+    ON [dbo].[Region]([CountryId] ASC);
+

@@ -3,7 +3,7 @@
     [DefaultClasses] NVARCHAR (10) NULL,
     [FromYear]       SMALLINT      NULL,
     [UptoYear]       SMALLINT      NULL,
-    [NHMCode]        INT           NOT NULL,
+    [NHMCode]        INT           NULL,
     [DA]             NVARCHAR (50) NULL,
     [DE]             NVARCHAR (50) NULL,
     [EN]             NVARCHAR (50) NULL,
@@ -13,4 +13,6 @@
     [SV]             NVARCHAR (50) NULL,
     CONSTRAINT [PK_Cargo] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

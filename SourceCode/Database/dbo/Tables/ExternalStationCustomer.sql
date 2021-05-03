@@ -8,3 +8,10 @@
     CONSTRAINT [FK_ExternalStationCustomer_ExternalStation] FOREIGN KEY ([ExternalStationId]) REFERENCES [dbo].[ExternalStation] ([Id]) ON DELETE CASCADE
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ExternalStationCustomer_ExternalStationId]
+    ON [dbo].[ExternalStationCustomer]([ExternalStationId] ASC);
+
