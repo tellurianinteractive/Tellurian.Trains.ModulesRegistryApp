@@ -22,9 +22,12 @@
     [Parameter] public int InitialSelectedId { get; set; }
     int Id { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        Id = InitialSelectedId;
+        if (Id == 0)
+        {
+            Id = InitialSelectedId;
+        }
     }
 
     private async Task OnSelectedItem()
@@ -34,6 +37,6 @@
 
     private string Label => $"{Localizer["Select"]} {LocalizedItemType.ToLowerInvariant()}";
     private string LocalizedItemType => ItemType is null ? string.Empty : Localizer[ItemType].Value;
-    string? Selected(ListboxItem item) => Items is not null && (item.Id == Id || Items.Count() == 1) ? "selected" : null;
+    string? Selected(ListboxItem item) => Items is not null && (item.Id == Id) ? "selected" : null;
 
 }

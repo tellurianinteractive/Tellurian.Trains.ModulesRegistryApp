@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Api", "Data.Api\Data.Api.csproj", "{6397D024-FED8-4979-B4C7-B5676D5200BF}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "SourceCode\Database\Database.sqlproj", "{4A4992F4-A2FE-42AC-A2A8-8218900C5966}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,13 +90,25 @@ Global
 		{6397D024-FED8-4979-B4C7-B5676D5200BF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6397D024-FED8-4979-B4C7-B5676D5200BF}.Release|x64.ActiveCfg = Release|Any CPU
 		{6397D024-FED8-4979-B4C7-B5676D5200BF}.Release|x64.Build.0 = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|x64.Build.0 = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.ActiveCfg = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.Build.0 = Release|Any CPU
+		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
-		RESX_NeutralResourcesLanguage = en-GB
 		RESX_ExcelExportMode = SingleSheet
+		RESX_NeutralResourcesLanguage = en-GB
+		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
 	EndGlobalSection
 EndGlobal

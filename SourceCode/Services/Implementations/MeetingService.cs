@@ -149,6 +149,15 @@ namespace ModulesRegistry.Services.Implementations
         }
 
         #region Meeting Participant
+        public async Task<MeetingParticipant?> FindParticipantAsync(ClaimsPrincipal? principal, int participantId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.MeetingParticipants.Include(mp => mp.Person).SingleOrDefaultAsync(mp => mp.Id == participantId);
+            }
+            return null;
+        }
 
         public async Task<MeetingParticipant?> FindParticipantAsync(ClaimsPrincipal? principal, int meetingId, int personId)
         {

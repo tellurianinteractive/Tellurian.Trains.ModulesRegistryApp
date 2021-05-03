@@ -1,7 +1,8 @@
 # Release Notes
 
 #### Release 1.2.0
-- **Registration of persons** to module meetings. The meeting organiser can register any person, and a normal user can register themselves.
+- **Registration of persons** to module meetings. The *meeting organiser* can register any person from any country, and a normal *user* can register themselves.
+- **Registration of modules** for a *layout* is in **preview**. It does not yet save registered modules.
 
 #### Version 1.1.5
 Release date 2021-04-30

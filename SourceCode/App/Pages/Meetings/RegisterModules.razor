@@ -2,16 +2,109 @@
 
 @attribute [Authorize(Policy = "User")]
 
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject ITimeProvider TimeProvider
 
-<PageHeading Label="RegisterModules" Owner="Layout" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" />
+@inject MeetingService MeetingService
+@inject CountryService CountryService
+@inject GroupService GroupService
+@inject ModuleService ModuleService
 
-<div class="alert alert-warning">
-    <span class="fa fa-warning" /> This page is not ready yet!
-</div>
+<ActionMessage  AlertType="warning" Label="This page is not ready for production, it does not save registered modules."/>
+
+<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" />
+
+<ListboxSelector ItemType="Layout" Items="LayoutItems" IsVisible="true" OnSelected="OnSelectedLayout" />
+
+<h3>Avaliable modules</h3>
+
+<TableTemplate Items="Packages" Key="Key">
+    <TableHeader>
+        <th>@Localizer["Package"]</th>
+        <th>@Localizer["Modules"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.Name</td>
+        <td>@item.ContaningModules()</td>
+        <td>
+            <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+<h3>Registered modules</h3>
+
+<TableTemplate Items="RegisteredModules">
+    <TableHeader>
+        <th>@Localizer["Package"]</th>
+        <th>@Localizer["Module"]</th>
+        <th>@Localizer["RegistrationTime"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@(item.PackageLabel ?? item.FullName)</td>
+        <td>@item.FullName</td>
+        <td></td>
+        <td></td>
+    </RowTemplate>
+</TableTemplate>
 @code {
+
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int ParticipantId { get; set; }
     [Parameter] public int MeetingId { get; set; }
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+    MeetingParticipant? Participant;
+    IEnumerable<Module>? Modules;
+    IEnumerable<Module>? AvailableModules;
+    List<Module> RegisteredModules = new List<Module>();
+    IEnumerable<ModulePackage>? Packages;
 
-    Layout? Layout;
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (MeetingId > 0 && ParticipantId > 0)
+        {
+            Meeting = await MeetingService.FindByIdAsync(Principal, MeetingId);
+            if (Meeting is not null)
+            {
+                Participant = await MeetingService.FindParticipantAsync(Principal, ParticipantId);
+                if (Participant is not null)
+                {
+                    Modules = await ModuleService.GetAllAsync(Principal, ModuleOwnershipRef.Person(Participant.PersonId));
+                }
+            }
+        }
+    }
+
+    void OnSelectedLayout(int layoutId)
+    {
+        var layout = Meeting?.Layouts.SingleOrDefault(l => l.Id == layoutId);
+        if (layout is not null && Participant is not null)
+        {
+            var scaleId = layout.PrimaryModuleStandard.ScaleId;
+            AvailableModules = Available(Modules, scaleId);
+            Packages = AvailableModules.AsPackages();
+        }
+    }
+
+    void OnRegister(int packageId)
+    {
+        var package = Packages?.SingleOrDefault(p => p.Id == packageId);
+        if (package is not null)
+        {
+            RegisteredModules.AddRange(package.Modules);
+            AvailableModules = Available(Modules, package.ScaleId);
+            Packages = AvailableModules.AsPackages();
+        }
+    }
+
+    IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !RegisteredModuleIds.Contains(m.Id));
+    IEnumerable<int> RegisteredModuleIds => RegisteredModules.Select(m => m.Id);
+
+    string Key(ModulePackage package) => package.Name;
+    IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.PrimaryModuleStandard.ShortName)).ToList();
 }

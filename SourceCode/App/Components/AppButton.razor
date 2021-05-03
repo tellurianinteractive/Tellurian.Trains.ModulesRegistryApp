@@ -1,0 +1,32 @@
+﻿@inject IStringLocalizer<App> Localizer
+@if (Href.HasValue())
+{
+    <a  class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /> @Localizer[Label]</a>
+}
+else 
+{
+    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" /> @Localizer[Label]</button>
+}
+@code {
+    [Parameter] public string Label { get; set; } = "Button";
+    [Parameter] public string? Href { get; set; }
+    [Parameter] public EventCallback<int> OnClickCallback { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+
+
+    string ButtonType => Label?.ToLowerInvariant() switch
+    {
+        "add" => "primary",
+        "edit" => "primary",
+        "ok" => "primary",
+        "register" => "primary",
+        "upload" => "primary",
+        "delete" => "danger",
+        _ => "info"
+    };
+
+    string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
+    string? Disabled => IsDisabled ? "disabled" : null;
+    string ButtonClass => $"btn btn-sm btn-{ButtonType}";
+    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : string.Empty;
+}

@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Extensions
+﻿using System.Collections.Generic;
+
+namespace ModulesRegistry.Extensions
 {
     public static class FontAwesome
     {
@@ -27,5 +29,36 @@
         public const string Upload = "fa fa-file-upload";
         public const string User = "fa fa-user";
         public const string View = "fa fa-eye";
+
+        public static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
+        {
+            {nameof(Add), Add },
+            {nameof(Cancel), Cancel },
+            {nameof(Cargo), Cargo },
+            {nameof(Clone), Clone },
+            {nameof(Customer), Customer },
+            {nameof(Delete), Delete },
+            {nameof(Edit), Edit },
+            {nameof(Group), Group },
+            {nameof(Invite), Invite },
+            {nameof(Layout), Layout },
+            {nameof(Meeting), Meeting },
+            {nameof(Module), Module },
+            {nameof(Modules), Modules },
+            {nameof(Note), Note },
+            {nameof(Ok), Ok },
+            {nameof(People), People },
+            {nameof(Region), Region },
+            {nameof(Register), Register },
+            {nameof(Save), Save },
+            {nameof(Settings), Settings },
+            {nameof(Station), Station },
+            {nameof(Standard), Standard },
+            {nameof(Upload), Upload },
+            {nameof(User), User },
+            {nameof(View), View },
+       };
+
+
     }
 }
