@@ -922,6 +922,9 @@
     <value>Tilmeldt</value>
   </data>
   <data name="Registered" xml:space="preserve">
-    <value>Registreret</value>
+    <value>Tilmeldt</value>
+  </data>
+  <data name="Withdrawn" xml:space="preserve">
+    <value>Withdrawn</value>
   </data>
 </root>

@@ -924,4 +924,7 @@
   <data name="Registered" xml:space="preserve">
     <value>Registriert</value>
   </data>
+  <data name="Withdrawn" xml:space="preserve">
+    <value>Zurückgezogen</value>
+  </data>
 </root>

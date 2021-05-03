@@ -47,8 +47,8 @@ else if (IsMeetingOrganizer) // Can submit any persons modules
                 <th>@Localizer["Name"]</th>
                 <th>@Localizer["CityName"]</th>
                 <th>@Localizer["Country"]</th>
-                <th>@Localizer["RegistrationDate"]</th>
-                <th>@Localizer["CancellationDate"]</th>
+                <th>@Localizer["Registered"]</th>
+                <th>@Localizer["Withdrawn"]</th>
                 <th>@Localizer["Actions"]</th>
             </TableHeader>
             <RowTemplate Context="item">
@@ -60,8 +60,8 @@ else if (IsMeetingOrganizer) // Can submit any persons modules
                 <td>
                     @if (!item.CancellationTime.HasValue)
                             {
-                        <a class="btn btn-sm btn-primary" href="Meeting/@item.MeetingId/Register/@item.PersonId/Modules" disabled><span class="@FontAwesome.Module" /> @Localizer["RegisterModules"]</a>
-                        <button class="btn btn-sm btn-danger" disabled><span class="@FontAwesome.Cancel" /> @Localizer["Cancel"]</button>
+                        <AppButton Label="RegisterModules" Href="@RegistrtationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
+                        <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
                             }
                 </td>
             </RowTemplate>
@@ -151,4 +151,11 @@ else // Its an ordinary user that only can submit owned modules.
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    async Task OnCancel(int particpantId)
+    {
+
+    }
+
+    string RegistrtationHref(int meetingId, int participantId) => $"Meeting/{meetingId}/Register/{participantId}/Modules";
 }

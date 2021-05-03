@@ -12,9 +12,11 @@ else
     [Parameter] public string? Href { get; set; }
     [Parameter] public EventCallback<int> OnClickCallback { get; set; }
     [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public string? Type { get; set; }
+    [Parameter] public string IconName { get; set; }
 
 
-    string ButtonType => Label?.ToLowerInvariant() switch
+    string ButtonType => Type.HasValue() ? Type : Label?.ToLowerInvariant() switch
     {
         "add" => "primary",
         "edit" => "primary",
@@ -28,5 +30,5 @@ else
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonType}";
-    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : string.Empty;
+    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : IconName.HasValue() ? $"fa fa-{IconName}" : string.Empty;
 }

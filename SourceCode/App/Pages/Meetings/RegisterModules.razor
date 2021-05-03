@@ -11,57 +11,62 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<ActionMessage  AlertType="warning" Label="This page is not ready for production, it does not save registered modules."/>
+<ActionMessage AlertType="warning" Label="This page is not ready for production, it does not save registered modules." />
 
 <PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" />
 
 <ListboxSelector ItemType="Layout" Items="LayoutItems" IsVisible="true" OnSelected="OnSelectedLayout" />
 
-<h3>Avaliable modules</h3>
+@if (LayoutId > 0)
+{
+    <h3>Avaliable modules</h3>
 
-<TableTemplate Items="Packages" Key="Key">
-    <TableHeader>
-        <th>@Localizer["Package"]</th>
-        <th>@Localizer["Modules"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="item">
-        <td>@item.Name</td>
-        <td>@item.ContaningModules()</td>
-        <td>
-            <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
-        </td>
-    </RowTemplate>
-</TableTemplate>
+    <TableTemplate Items="Packages" Key="Key">
+        <TableHeader>
+            <th>@Localizer["Package"]</th>
+            <th>@Localizer["Modules"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.Name</td>
+            <td>@item.ContaningModules()</td>
+            <td>
+                <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
 
-<h3>Registered modules</h3>
+    <h3>Registered modules</h3>
 
-<TableTemplate Items="RegisteredModules">
-    <TableHeader>
-        <th>@Localizer["Package"]</th>
-        <th>@Localizer["Module"]</th>
-        <th>@Localizer["RegistrationTime"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="item">
-        <td>@(item.PackageLabel ?? item.FullName)</td>
-        <td>@item.FullName</td>
-        <td></td>
-        <td></td>
-    </RowTemplate>
-</TableTemplate>
+    <TableTemplate Items="RegisteredModules">
+        <TableHeader>
+            <th>@Localizer["Package"]</th>
+            <th>@Localizer["Module"]</th>
+            <th>@Localizer["RegistrationTime"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@(item.PackageLabel ?? item.FullName)</td>
+            <td>@item.FullName</td>
+            <td></td>
+            <td></td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
 @code {
 
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int ParticipantId { get; set; }
     [Parameter] public int MeetingId { get; set; }
+    int LayoutId;
     ClaimsPrincipal? Principal;
     Meeting? Meeting;
     MeetingParticipant? Participant;
-    IEnumerable<Module>? Modules;
+    IEnumerable<Module>? Modules = Array.Empty<Module>();
     IEnumerable<Module>? AvailableModules;
     List<Module> RegisteredModules = new List<Module>();
-    IEnumerable<ModulePackage>? Packages;
+    IEnumerable<ModulePackage>? Packages = Array.Empty<ModulePackage>();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -85,6 +90,7 @@
         var layout = Meeting?.Layouts.SingleOrDefault(l => l.Id == layoutId);
         if (layout is not null && Participant is not null)
         {
+            LayoutId = layoutId;
             var scaleId = layout.PrimaryModuleStandard.ScaleId;
             AvailableModules = Available(Modules, scaleId);
             Packages = AvailableModules.AsPackages();
