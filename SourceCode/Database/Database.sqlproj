@@ -13,7 +13,7 @@
     </RootPath>
     <RootNamespace>Database</RootNamespace>
     <AssemblyName>Database</AssemblyName>
-    <ModelCollation>1033, CI</ModelCollation>
+    <ModelCollation>1035,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -22,6 +22,8 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Finnish_Swedish_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -56,5 +58,59 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\MeetingParticipant.sql" />
+    <Build Include="dbo\Tables\CargoRelation.sql" />
+    <Build Include="dbo\Tables\CargoRelationWagon.sql" />
+    <Build Include="dbo\Tables\OperatingDay.sql" />
+    <Build Include="dbo\Tables\StationCustomerCargo.sql" />
+    <Build Include="dbo\Tables\Property.sql" />
+    <Build Include="dbo\Tables\Operator.sql" />
+    <Build Include="dbo\Tables\OperatingBasicDay.sql" />
+    <Build Include="dbo\Tables\StationTrack.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\Meeting.sql" />
+    <Build Include="dbo\Tables\CargoUnit.sql" />
+    <Build Include="dbo\Tables\CargoReadyTime.sql" />
+    <Build Include="dbo\Tables\Person.sql" />
+    <Build Include="dbo\Tables\Country.sql" />
+    <Build Include="dbo\Tables\Station.sql" />
+    <Build Include="dbo\Tables\GroupDomain.sql" />
+    <Build Include="dbo\Tables\Region.sql" />
+    <Build Include="dbo\Tables\ExternalStationCustomerCargo.sql" />
+    <Build Include="dbo\Tables\ExternalStation.sql" />
+    <Build Include="dbo\Tables\Document.sql" />
+    <Build Include="dbo\Tables\ExternalStationCustomer.sql" />
+    <Build Include="dbo\Tables\ModuleStandard.sql" />
+    <Build Include="dbo\Tables\Module.sql" />
+    <Build Include="dbo\Tables\Group.sql" />
+    <Build Include="dbo\Tables\GroupMember.sql" />
+    <Build Include="dbo\Tables\StationCustomer.sql" />
+    <Build Include="dbo\Tables\ModuleOwnership.sql" />
+    <Build Include="dbo\Tables\ModuleExit.sql" />
+    <Build Include="dbo\Tables\NHM.sql" />
+    <Build Include="dbo\Tables\ModuleGableType.sql" />
+    <Build Include="dbo\Tables\CargoDirection.sql" />
+    <Build Include="dbo\Tables\Layout.sql" />
+    <Build Include="dbo\Tables\Cargo.sql" />
+    <Build Include="dbo\Tables\Scale.sql" />
+    <Build Include="dbo\Views\ListCargoReadyTime.sql" />
+    <Build Include="dbo\Views\ListUntimedCargoReadyTime.sql" />
+    <Build Include="dbo\Views\ListStationCustomer.sql" />
+    <Build Include="dbo\Views\ListExternalStationCustomer.sql" />
+    <Build Include="dbo\Views\ListCargoDirection.sql" />
+    <Build Include="dbo\Views\ReportStationCustomer.sql" />
+    <Build Include="dbo\Views\ListCountry.sql" />
+    <Build Include="dbo\Views\ListRegion.sql" />
+    <Build Include="dbo\Views\ListExternalStation.sql" />
+    <Build Include="dbo\Views\ListCargoUnit.sql" />
+    <Build Include="dbo\Views\ListCargo.sql" />
+    <Build Include="dbo\Views\ListStation.sql" />
+    <Build Include="dbo\Views\ListBasicDay.sql" />
+    <Build Include="dbo\Views\ListOperatingDay.sql" />
   </ItemGroup>
 </Project>

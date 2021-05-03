@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Api", "Data.Api\Data.Api.csproj", "{6397D024-FED8-4979-B4C7-B5676D5200BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Api", "SourceCode\Data.Api\Data.Api.csproj", "{6397D024-FED8-4979-B4C7-B5676D5200BF}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "SourceCode\Database\Database.sqlproj", "{4A4992F4-A2FE-42AC-A2A8-8218900C5966}"
 EndProject
