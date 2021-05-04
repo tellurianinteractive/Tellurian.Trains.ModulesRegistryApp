@@ -6,7 +6,7 @@ namespace ModulesRegistry.Data
 {
     public partial class ModulesDbContext : DbContext
     {
-        public ModulesDbContext() { }
+        //public ModulesDbContext() { }
         public ModulesDbContext(DbContextOptions<ModulesDbContext> options) : base(options)
         {
         }
@@ -25,6 +25,9 @@ namespace ModulesRegistry.Data
         public virtual DbSet<GroupDomain> GroupDomains { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
+        public virtual DbSet<LayoutLine> LayoutLines { get; set; }
+        public virtual DbSet<LayoutModule> LayoutModules { get; set; }
+        public virtual DbSet<LayoutStation> LayoutStations { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
@@ -340,6 +343,90 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.PrimaryModuleStandardId)
                     .HasConstraintName("FK_Layout_ModuleStandard");
 
+            });
+
+            modelBuilder.Entity<LayoutLine>(entity =>
+            {
+                entity.ToTable("LayoutLine");
+
+                entity.HasOne(e => e.Layout)
+                    .WithMany(e => e.LayoutLines)
+                    .HasForeignKey(e => e.LayoutId);
+
+                entity.HasOne(e => e.FromLayoutStation)
+                    .WithMany(e => e.StartingLines)
+                    .HasForeignKey(e => e.FromLayoutStationId)
+                    .HasConstraintName("FK_LayoutLine_FromLayoutStation");
+
+                entity.HasOne(e => e.FromStationExit)
+                    .WithMany()
+                    .HasForeignKey(e => e.FromStationExitId)
+                    .HasConstraintName("FK_LayoutLine_FromStationExit");
+
+                entity.HasOne(e => e.ToLayoutStation)
+                   .WithMany(e => e.EndingLines)
+                   .HasForeignKey(e => e.ToLayoutStationId)
+                   .HasConstraintName("FK_LayoutLine_ToLayoutStation");
+
+                entity.HasOne(e => e.ToStationExit)
+                   .WithMany()
+                   .HasForeignKey(e => e.ToStationExitId)
+                   .HasConstraintName("FK_LayoutLine_ToStationExit");
+            });
+
+            modelBuilder.Entity<LayoutModule>(entity =>
+            {
+                entity.Property(e => e.Note)
+                     .HasMaxLength(50);
+
+                entity.ToTable("LayoutModule");
+
+                entity.HasOne(e => e.Layout)
+                     .WithMany(e => e.LayoutModules)
+                     .HasForeignKey(e => e.LayoutId)
+                     .HasConstraintName("FK_LayoutModule_Layout");
+
+                entity.HasOne(e => e.Module)
+                      .WithMany()
+                      .HasForeignKey(e => e.ModuleId)
+                      .HasConstraintName("FK_LayoutModule_Module");
+
+                entity.HasOne(e => e.Participant)
+                   .WithMany(e => e.LayoutModules)
+                   .HasForeignKey(e => e.ParticipantId)
+                   .HasConstraintName("FK_LayoutModule_Participant");
+
+                entity.HasOne(e => e.Line)
+                   .WithMany(e => e.Lines)
+                   .HasForeignKey(e => e.LayoutLineId)
+                   .HasConstraintName("FK_LayoutModule_LayoutLine");
+
+            });
+
+            modelBuilder.Entity<LayoutStation>(entity =>
+            {
+                entity.Property(e => e.OtherName)
+                     .HasMaxLength(50);
+
+                entity.Property(e => e.OtherSignature)
+                      .HasMaxLength(5);
+
+                entity.ToTable("LayoutStation");
+
+                entity.HasOne(e => e.Layout)
+                     .WithMany(e => e.LayoutStations)
+                     .HasForeignKey(e => e.LayoutId)
+                     .HasConstraintName("FK_LayoutStation_Layout");
+
+                entity.HasOne(e => e.Station)
+                     .WithOne()
+                     .HasForeignKey<LayoutStation>(e => e.StationId)
+                     .HasConstraintName("FK_LayoutStation_Station");
+
+                entity.HasOne(e => e.OtherCountry)
+                    .WithOne()
+                    .HasForeignKey<LayoutStation>(e => e.OtherCountryId)
+                    .HasConstraintName("FK_LayoutStation_OtherCountry");
             });
 
             modelBuilder.Entity<Meeting>(entity =>

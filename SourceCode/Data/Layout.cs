@@ -1,11 +1,18 @@
 ﻿#nullable disable
 
 using System;
+using System.Collections.Generic;
 
 namespace ModulesRegistry.Data
 {
     public class Layout
     {
+        public Layout()
+        {
+            LayoutLines = new HashSet<LayoutLine>();
+            LayoutModules = new HashSet<LayoutModule>();
+            LayoutStations = new HashSet<LayoutStation>();
+        }
         public int Id { get; set; }
         public int MeetingId { get; set; }
         public int ResponsibleGroupId { get; set; }
@@ -24,5 +31,9 @@ namespace ModulesRegistry.Data
         public virtual Group ResponsibleGroup { get; set; }
         public virtual ModuleStandard PrimaryModuleStandard { get; set; }
         public virtual OperatingDay StartWeekday { get; set; }
+        public virtual ICollection<LayoutLine> LayoutLines { get; set; }
+        public virtual ICollection<LayoutModule> LayoutModules { get; set; }
+        public virtual ICollection<LayoutStation> LayoutStations { get; set; }
+
     }
 }

@@ -62,6 +62,9 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Data" />
+    <Folder Include="dbo\Scripts" />
+    <Folder Include="dbo\Scripts\Initial data" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\MeetingParticipant.sql" />
@@ -112,5 +115,19 @@
     <Build Include="dbo\Views\ListBasicDay.sql" />
     <Build Include="dbo\Views\ListOperatingDay.sql" />
     <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
+    <None Include="dbo\Data\Init.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.CargoUnit.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.Country.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.GroupDomain.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.NHM.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.OperatingDay.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.Scale.Table.sql" />
+    <Build Include="dbo\Tables\LayoutModule.sql" />
+    <Build Include="dbo\Tables\LayoutStation.sql" />
+    <Build Include="dbo\Tables\LayoutStationRegion.sql" />
+    <Build Include="dbo\Tables\LayoutLine.sql" />
   </ItemGroup>
 </Project>
