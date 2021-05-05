@@ -1,8 +1,11 @@
 # Contributing Guidelines
 
-This page describes the ways you can contribute to the development of the **Module Registry** web application. 
-All contribution requires you to have a [GitHub account](https://github.com/).
-For all contributions, exept for *test user*, you need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
+**Welcome to contribute to the development and documentation of the **Module Registry** web application.**
+
+This page describes the ways you can contribute. 
+In general, contribution requires you to have a [GitHub account](https://github.com/).
+However, translations can be also submitted through e-mail.
+For most contributions, you need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
 
 ## As Test User
 As a test user you use the application and report back with:
@@ -57,12 +60,14 @@ Create a pull-request and push it to the remote repository.
 Otherwise; send an email with the translated files.
 
 ## As Developer
-> Full development with deployment and testing against a database must be made with Visual Studio on a Windows machine.
-> Changing source code can be made in any text editing tool on any platform, and the application can be build using the *dotnet* Command Line Interface.
-
 If you want to contribute to the development of the application, there are two major paths:
 - As an **app developer**; developing user interface and services to handle data.
 - As a **database administrator**; analyse an optimize performance, suggest improvements of how queries are made using *Entity Framework*.
+
+> NOTE: Full development with deployment and testing against a database must be made with Visual Studio on a Windows machine.
+> Changing source code can be made in any text editing tool on any platform, and the application can be build using the *dotnet* Command Line Interface,
+> which comes with the .NET SDK installation for your platform.
+
 
 #### Skills
 To contribute, you need some experience in the following fields:
