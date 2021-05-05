@@ -20,18 +20,6 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
-
-        public async Task<IEnumerable<ListboxItem>> PeopleListboxItemsAsync(ClaimsPrincipal? principal, int meetingId, int countryId)
-        {
-            if (principal.IsAuthenticated())
-            {
-                using var dbContext = Factory.CreateDbContext();
-                var items = await dbContext.People.AsNoTracking().Where(p => p.CountryId == countryId).Select(p => new ListboxItem(p.Id, $"{p.Name()}, {p.CityName}")).ToListAsync();
-                return items.OrderBy(i => i.Description);
-            }
-            return Array.Empty<ListboxItem>();
-        }
-
         public async Task<IEnumerable<Data.Api.Meeting>> Meetings(int? countryId)
         {
             using var dbContext = Factory.CreateDbContext();
@@ -44,8 +32,8 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
         {
-            using var dbContect = Factory.CreateDbContext();
-            var meetings = await dbContect.Meetings.AsNoTracking()
+            using var dbContext = Factory.CreateDbContext();
+            var meetings = await dbContext.Meetings.AsNoTracking()
                 .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
                 .OrderBy(m => m.StartDate)
                 .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
@@ -57,20 +45,28 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<Meeting?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
-            using var dbContect = Factory.CreateDbContext();
-            return await dbContect.Meetings.AsNoTracking()
-                .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
-                .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
-                .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.Meetings.AsNoTracking()
+                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
+                     .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
+                     .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
+                     .SingleOrDefaultAsync(m => m.Id == id);
+            }
+            return null;
         }
 
         public async Task<Meeting?> FindByIdWithParticipantsAsync(ClaimsPrincipal? principal, int id)
         {
-            using var dbContect = Factory.CreateDbContext();
-            return await dbContect.Meetings.AsNoTracking()
-                .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.Meetings.AsNoTracking()
+                    .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
+                    .SingleOrDefaultAsync(m => m.Id == id);
+            }
+            return null;
         }
 
 
@@ -149,6 +145,7 @@ namespace ModulesRegistry.Services.Implementations
         }
 
         #region Meeting Participant
+
         public async Task<MeetingParticipant?> FindParticipantAsync(ClaimsPrincipal? principal, int participantId)
         {
             if (principal.IsAuthenticated())

@@ -9,6 +9,7 @@
 @inject MeetingService MeetingService
 @inject CountryService CountryService
 @inject GroupService GroupService
+@inject PersonService PersonService 
 
 <PageHeading Label="Register" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" />
 
@@ -128,7 +129,7 @@ else // Its an ordinary user that only can submit owned modules.
         {
             CountryId = countryId;
             PersonId = 0;
-            PeopleItems = await MeetingService.PeopleListboxItemsAsync(Principal, Id, countryId);
+            PeopleItems = await PersonService.ListboxItemsAsync(Principal, countryId);
         }
     }
 

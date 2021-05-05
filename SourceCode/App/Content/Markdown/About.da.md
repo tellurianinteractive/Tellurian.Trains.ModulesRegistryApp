@@ -10,6 +10,9 @@ og mødeplanlægning med tilmeldning af moduler.
 Enhver, der er interesseret i at vedligeholde strukturerede data om *modeljernbane moduler*
 og alle, der arrangerer *modultræf*.
 
+#### Gratis
+Webapplikationen er ikke-kommerciel og gratis at bruge af enhver modulbanehobbyist inden for EU, Schweiz og Norge.
+
 #### Teknisk oversigt
 Applikationen er udviklet som *open source* og er sponsoreret af det svenske firma *Tellurian Interactive AB*.
 Koden er skrevet i C #, HTML, CSS og SQL. Det kører i Microsoft Azure.

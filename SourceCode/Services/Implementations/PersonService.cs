@@ -23,11 +23,11 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthorisedInCountry(countryId))
             {
                 using var dbContext = Factory.CreateDbContext();
-                var items = await dbContext.People
-                    .Where(p => p.CountryId == countryId && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.Id == excludeGroupId && gm.PersonId == p.Id )))
+                var items = await dbContext.People.Include(p => p.Country)
+                    .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.Id == excludeGroupId && gm.PersonId == p.Id )))
                     .ToListAsync();
                 return items
-                    .Select(p => new ListboxItem(p.Id, p.FirstName + " " + p.LastName))
+                    .Select(p => new ListboxItem(p.Id, countryId == 0 ? $"{p.Name()} {p.CityName}, {p.Country.EnglishName.Localized()}" : $"{p.Name()} {p.CityName}"))
                     .OrderBy(li => li.Description)
                     .ToList();
             }

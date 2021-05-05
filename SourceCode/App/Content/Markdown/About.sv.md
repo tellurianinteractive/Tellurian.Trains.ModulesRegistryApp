@@ -10,6 +10,9 @@ samt mötesplanering med anmälan av moduler.
 Alla som är intresserade av att underhålla strukturerad data om *modelljärnvägsmoduler*
 och alla som arrangerar modulräffar.
 
+#### Kostnadsfritt
+Webbapplikationen är icke-kommersiell och gratis att använda av alla moduljärnvägshobbyister inom Europeiska unionen, Schweiz och Norge.
+
 #### Teknisk översikt
 Applikationen är utvecklad som *öppen källkod* och sponsras av *Tellurian Interactive AB*.
 Koden är skriven i C #, HTML, CSS och SQL. Den körs i Microsoft Azure.

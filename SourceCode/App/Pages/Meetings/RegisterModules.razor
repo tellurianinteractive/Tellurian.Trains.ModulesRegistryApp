@@ -7,6 +7,7 @@
 @inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
+@inject LayoutService LayoutService
 @inject CountryService CountryService
 @inject GroupService GroupService
 @inject ModuleService ModuleService
@@ -65,7 +66,7 @@
     MeetingParticipant? Participant;
     IEnumerable<Module>? Modules = Array.Empty<Module>();
     IEnumerable<Module>? AvailableModules;
-    List<Module> RegisteredModules = new List<Module>();
+    Ienumerable<LayoutModule> RegisteredModules = new List<LayoutModule>();
     IEnumerable<ModulePackage>? Packages = Array.Empty<ModulePackage>();
 
     protected override async Task OnParametersSetAsync()
@@ -97,20 +98,24 @@
         }
     }
 
-    void OnRegister(int packageId)
+    async Task OnRegister(int packageId)
     {
         var package = Packages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null)
         {
-            RegisteredModules.AddRange(package.Modules);
-            AvailableModules = Available(Modules, package.ScaleId);
-            Packages = AvailableModules.AsPackages();
+            var result = await LayoutService.AddPackageModulesAsync(Principal, ParticipantId, LayoutId, package);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            if (result.Count > 0)
+            {
+                RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, ParticipantId, LayoutId);
+                AvailableModules = Available(Modules, package.ScaleId);
+                Packages = AvailableModules.AsPackages();
+            }
         }
     }
 
+    string Key(ModulePackage package) => package.Name;
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !RegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> RegisteredModuleIds => RegisteredModules.Select(m => m.Id);
-
-    string Key(ModulePackage package) => package.Name;
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.PrimaryModuleStandard.ShortName)).ToList();
 }

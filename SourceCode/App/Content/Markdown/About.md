@@ -10,6 +10,9 @@ and meeting planning with submission of modules.
 Anyone that are interested in maintaining structured data about *model railway modules*
 and anyone that arranges *module meetings*.
 
+#### Free of Charge
+The web application is non-commercial and free to use by any module railway hobbyist within the European Union, Switzerland and Norway.
+
 #### Technical Overview
 The application is developed as *open source* and is sponsored by the Swedish company *Tellurian Interactive AB*.
 Code is written in C#, HTML, CSS and SQL. It runs in Microsoft Azure.
