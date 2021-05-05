@@ -135,4 +135,7 @@
   <data name="NothingToDelete" xml:space="preserve">
     <value>Nichts zu löschen</value>
   </data>
+  <data name="NotPlacedInLayout" xml:space="preserve">
+    <value>Nicht im Gleisplan enthalten</value>
+  </data>
 </root>

@@ -97,6 +97,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not located in track plan.
+        /// </summary>
+        public static string NotPlacedInLayout {
+            get {
+                return ResourceManager.GetString("NotPlacedInLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A station must have at least one module referring to it.
         /// </summary>
         public static string StationMustHaveAtLeastOneModuleReferringToIt {

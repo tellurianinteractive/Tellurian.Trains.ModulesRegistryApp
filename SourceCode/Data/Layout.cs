@@ -34,6 +34,5 @@ namespace ModulesRegistry.Data
         public virtual ICollection<LayoutLine> LayoutLines { get; set; }
         public virtual ICollection<LayoutModule> LayoutModules { get; set; }
         public virtual ICollection<LayoutStation> LayoutStations { get; set; }
-
     }
 }

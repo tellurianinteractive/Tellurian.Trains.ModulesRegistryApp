@@ -927,4 +927,19 @@
   <data name="Withdrawn" xml:space="preserve">
     <value>Zurückgezogen</value>
   </data>
+  <data name="AvailableModules" xml:space="preserve">
+    <value>Verfügbare Module</value>
+  </data>
+  <data name="RegisteredModules" xml:space="preserve">
+    <value>Angemeldete Module</value>
+  </data>
+  <data name="Participant" xml:space="preserve">
+    <value>Teilnehmer</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Anmeldung</value>
+  </data>
+  <data name="NoModulesRegistered" xml:space="preserve">
+    <value>Keine Module registriert</value>
+  </data>
 </root>

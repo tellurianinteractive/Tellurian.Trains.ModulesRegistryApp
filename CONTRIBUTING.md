@@ -61,8 +61,9 @@ Otherwise; send an email with the translated files.
 
 ## As Developer
 If you want to contribute to the development of the application, there are two major paths:
-- As an **app developer**; developing user interface and services to handle data.
-- As a **database administrator**; analyse an optimize performance, suggest improvements of how queries are made using *Entity Framework*.
+- As an **App developer**; developing user interface and services to handle data.
+- As a **Database administrator**; analyse an optimize performance, suggest improvements of how queries are made using *Entity Framework*.
+- As a **DevOps specialist**; setting up an maintaining DevOps for application and database.
 
 > NOTE: Full development with deployment and testing against a database must be made with Visual Studio on a Windows machine.
 > Changing source code can be made in any text editing tool on any platform, and the application can be build using the *dotnet* Command Line Interface,
@@ -78,6 +79,7 @@ To contribute, you need some experience in the following fields:
 * Using [**Sql Server**](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for local development and tests, and [**Azure SQL Database**](https://azure.microsoft.com/en-us/products/azure-sql/database/) as production database.
 * Using [**Visual Studio**](https://visualstudio.microsoft.com/) as development environment.
 Visual Studio has excellent support for coding and publishing apps written in C#, HTML/CSS, and built in database design- and deployment tools. 
+* Setting up DevOps using GitHub actions and Azure DevOps deployment slots. This is not in place, and help is needed.
 
 If you have experiences from writing web applications using HTML/CSS and JAVA, 
 you will propably get up to speed with *Blazor* and C# in relative short term.

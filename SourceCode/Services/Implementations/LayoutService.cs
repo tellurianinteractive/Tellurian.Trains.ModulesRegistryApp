@@ -13,7 +13,12 @@ namespace ModulesRegistry.Services.Implementations
     public class LayoutService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
-        public LayoutService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+        private readonly ITimeProvider TimeProvider;
+        public LayoutService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+        {
+            Factory = factory;
+            TimeProvider = timeProvider;
+        }
 
         /// <summary>
         /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>
@@ -36,7 +41,7 @@ namespace ModulesRegistry.Services.Implementations
                     var existing = await dbContext.LayoutModules.SingleOrDefaultAsync(lm => lm.ModuleId == module.Id);
                     if (existing is null)
                     {
-                        var addedModule = new LayoutModule { LayoutId = layoutId, ModuleId = module.Id, ParticipantId = participant.Id };
+                        var addedModule = new LayoutModule { LayoutId = layoutId, ModuleId = module.Id, ParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
                         dbContext.LayoutModules.Add(addedModule);
                         await AddLayoutStationAsync(dbContext, participantId, layoutId, module);
                         await dbContext.SaveChangesAsync();
@@ -70,9 +75,23 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.LayoutModules.Where(lm => lm.ParticipantId == participantId && lm.LayoutId == layoutId).ToListAsync();
+                return await dbContext.LayoutModules.Include(lm => lm.Module).Where(lm => lm.ParticipantId == participantId && lm.LayoutId == layoutId).ToListAsync();
             }
             return Array.Empty<LayoutModule>();
+        }
+
+        public async Task<(int Count, string Message)> RemoveModuleAsync(ClaimsPrincipal? principal, int layoutModuleId )
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.LayoutModules.FindAsync(layoutModuleId);
+                if (existing is null) return (-1, Resources.Strings.NoModification);
+                dbContext.LayoutModules.Remove(existing);
+                var result = await dbContext.SaveChangesAsync();
+                return result.DeleteResult();
+            }
+            return principal.DeleteNotAuthorized<LayoutModule>();
         }
 
     }

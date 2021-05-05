@@ -22,7 +22,7 @@
     [Parameter] public int InitialSelectedId { get; set; }
     int Id { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         if (Id == 0)
         {

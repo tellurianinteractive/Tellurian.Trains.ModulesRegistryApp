@@ -77,6 +77,7 @@ namespace ModulesRegistry
             services.AddScoped<ExternalStationService>();
             services.AddScoped<GroupCategoryService>();
             services.AddScoped<GroupService>();
+            services.AddScoped<LayoutService>();
             services.AddScoped<MeetingService>();
             services.AddScoped<ModuleService>();
             services.AddScoped<ModuleGableTypeService>();

@@ -927,4 +927,19 @@
   <data name="Withdrawn" xml:space="preserve">
     <value>Återkallad</value>
   </data>
+  <data name="AvailableModules" xml:space="preserve">
+    <value>Tillgängliga moduler</value>
+  </data>
+  <data name="RegisteredModules" xml:space="preserve">
+    <value>Anmälda moduler</value>
+  </data>
+  <data name="Participant" xml:space="preserve">
+    <value>Deltagare</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Anmälan</value>
+  </data>
+  <data name="NoModulesRegistered" xml:space="preserve">
+    <value>Inga moduler anmälda</value>
+  </data>
 </root>

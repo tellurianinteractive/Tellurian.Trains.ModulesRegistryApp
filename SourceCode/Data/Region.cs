@@ -11,6 +11,7 @@ namespace ModulesRegistry.Data
         {
             ExternalStations = new HashSet<ExternalStation>();
             Stations = new HashSet<Station>();
+            LayoutStations = new HashSet<LayoutStation>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace ModulesRegistry.Data
         public virtual Country Country { get; set; }
         public virtual ICollection<ExternalStation> ExternalStations { get; set; }
         public virtual ICollection<Station> Stations { get; set; }
+        public virtual ICollection<LayoutStation> LayoutStations { get; set; }
     }
 }

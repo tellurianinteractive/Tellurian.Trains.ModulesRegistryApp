@@ -1,6 +1,12 @@
-# Release Notes
+## Release Notes
+
+#### Release 1.2.1
+Release date 2021-05-05
+- **Registration of modules** for a *layout* is ready to use. 
+The *meeting organiser* can register any person's modules, and a normal *user* can register their own modules.
 
 #### Release 1.2.0
+Release date 2021-05-03
 - **Registration of persons** to module meetings. The *meeting organiser* can register any person from any country, and a normal *user* can register themselves.
 - **Registration of modules** for a *layout* is in **preview**. It does not yet save registered modules.
 - **Browning groups** is improved for users that can see groups in different countries.

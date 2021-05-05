@@ -135,4 +135,7 @@
   <data name="NothingToDelete" xml:space="preserve">
     <value>Nothing to delete</value>
   </data>
+  <data name="NotPlacedInLayout" xml:space="preserve">
+    <value>Not located in track plan</value>
+  </data>
 </root>

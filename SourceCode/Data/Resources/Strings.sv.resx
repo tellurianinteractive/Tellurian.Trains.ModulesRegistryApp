@@ -135,4 +135,7 @@
   <data name="NothingToDelete" xml:space="preserve">
     <value>Inget att radera</value>
   </data>
+  <data name="NotPlacedInLayout" xml:space="preserve">
+    <value>Ej placerad i banplanen</value>
+  </data>
 </root>

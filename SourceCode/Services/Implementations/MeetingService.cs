@@ -64,6 +64,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Meetings.AsNoTracking()
                     .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
+                    .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.Layout).ThenInclude(l => l.PrimaryModuleStandard)
                     .SingleOrDefaultAsync(m => m.Id == id);
             }
             return null;

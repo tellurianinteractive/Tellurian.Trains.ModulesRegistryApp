@@ -135,4 +135,7 @@
   <data name="NothingToDelete" xml:space="preserve">
     <value>Intet at slette</value>
   </data>
+  <data name="NotPlacedInLayout" xml:space="preserve">
+    <value>Ikke placeret i sporplan</value>
+  </data>
 </root>

@@ -9,86 +9,70 @@
 @inject MeetingService MeetingService
 @inject CountryService CountryService
 @inject GroupService GroupService
-@inject PersonService PersonService 
+@inject PersonService PersonService
 
-<PageHeading Label="Register" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" />
+<PageHeading Label="Registration" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
 
 @if (Meeting is null)
 {
 }
-else if (IsMeetingOrganizer) // Can submit any persons modules
+else
 {
-    <h3>@Localizer["SelectPersonToRegister"]</h3>
-    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
-    <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" InitialSelectedId="PersonId" />
+    @if (IsMeetingOrganizer)
+    {
+        <h3>@Localizer["SelectPersonToRegister"]</h3>
+        <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
+        <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" InitialSelectedId="PersonId" />
+    }
+
     @if (Participant?.Id > 0)
     {
         <h4>@Localizer["Registered"]</h4>
         <ul>
-            <li>@Participant.Person.Name()</li>
-            <li>@Meeting?.Description</li>
-            <li>@Participant.RegistrationTime.ToString("d")</li>
+            <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
+            <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
         </ul>
     }
-    else if (Meeting?.Id > 0 && PersonId > 0)
+    else if (Meeting.Id > 0 && PersonId > 0)
     {
         <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
     }
     <hr />
 
-    @if (Meeting is null || Meeting.Participants.Count == 0)
-    {
-
-    }
-    else
-    {
-        <h3>@Localizer["Participants"]</h3>
-        <TableTemplate Items="Meeting.Participants">
-            <TableHeader>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["CityName"]</th>
-                <th>@Localizer["Country"]</th>
-                <th>@Localizer["Registered"]</th>
+    <h3>@Localizer["Participants"]</h3>
+    <TableTemplate Items="Meeting.Participants">
+        <TableHeader>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["CityName"]</th>
+            <th>@Localizer["Country"]</th>
+            <th>@Localizer["Registered"]</th>
+            <th>@Localizer["Layouts"]</th>
+            @if (IsMeetingOrganizer)
+            {
                 <th>@Localizer["Withdrawn"]</th>
-                <th>@Localizer["Actions"]</th>
-            </TableHeader>
-            <RowTemplate Context="item">
-                <td>@item.Person.Name()</td>
-                <td>@item.Person.CityName</td>
-                <td>@item.Person.Country.EnglishName.Localized()</td>
-                <td>@item.RegistrationTime.ToString("d")</td>
-                <td>@item.CancellationTime?.ToString("d")</td>
-                <td>
-                    @if (!item.CancellationTime.HasValue)
-                            {
-                        <AppButton Label="RegisterModules" Href="@RegistrtationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
-                        <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
-                            }
-                </td>
-            </RowTemplate>
-        </TableTemplate>
-
-    }
+            }
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.Person.Name()</td>
+            <td>@item.Person.CityName</td>
+            <td>@item.Person.Country.EnglishName.Localized()</td>
+            <td>@item.RegistrationTime.ToString("g")</td>
+            <td>@ParticipantLayouts(item)</td>
+            @if (IsMeetingOrganizer)
+            {
+                <td>@item.CancellationTime?.ToString("g")</td>
+            }
+            <td>
+                @if (MayEdit(item))
+                    {
+                    <AppButton Label="RegisterModules" Href="@RegistrationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
+                    <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
+                    }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
 }
-else // Its an ordinary user that only can submit owned modules.
-{
-    @if (Participant?.Id > 0)
-    {
-        <h4>@Localizer["Registered"]</h4>
-        <ul>
-            <li>@Participant.Person.Name()</li>
-            <li>@Meeting?.Description</li>
-            <li>@Participant.RegistrationTime.ToString("d")</li>
-        </ul>
-        <hr />
-        <a class="btn btn-sm btn-primary" href="Meeting/@Participant.MeetingId/Register/@Participant.Id/Modules" disabled><span class="@FontAwesome.Module" /> @Localizer["RegisterModules"]</a>
-    }
-    else
-    {
-        <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
-    }
-}
-
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -153,10 +137,14 @@ else // Its an ordinary user that only can submit owned modules.
         }
     }
 
-    async Task OnCancel(int particpantId)
+    void OnCancel(int particpantId)
     {
 
     }
 
-    string RegistrtationHref(int meetingId, int participantId) => $"Meeting/{meetingId}/Register/{participantId}/Modules";
+    bool MayEdit(MeetingParticipant mp) => !mp.CancellationTime.HasValue && (IsMeetingOrganizer || mp.PersonId == Principal.PersonId());
+
+    string RegistrationHref(int meetingId, int participantId) => $"Meeting/{meetingId}/Register/{participantId}/Modules";
+
+    string ParticipantLayouts(MeetingParticipant mp) => mp.LayoutModules.Any() ? string.Join(',', mp.LayoutModules.Select(lm => lm.Layout.Name()).Distinct()) : Localizer["NoModulesRegistered"].ToString();
 }

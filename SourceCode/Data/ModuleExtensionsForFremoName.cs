@@ -1,23 +1,11 @@
 ﻿using ModulesRegistry.Data.Extensions;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ModulesRegistry.Data
 {
-    public static class ModuleExtensions
-    {
-        public static bool IsPartOfStation([NotNullWhen(true)] this Module me) => me.StationId.HasValue;
 
-        public static IEnumerable<int> DocumentIds(this Module me)
-        {
-            if (me.PdfDocumentationId.HasValue) yield return me.PdfDocumentationId.Value;
-            if (me.DwgDrawingId.HasValue) yield return me.DwgDrawingId.Value;
-            if (me.SkpDrawingId.HasValue) yield return me.SkpDrawingId.Value;
-        }
-    }
-
-    public static class FremoNameRulesExtension
+    public static class ModuleExtensionsForFremoName
     {
         public static string? FremoName(this Module me)
         {

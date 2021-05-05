@@ -396,7 +396,7 @@ namespace ModulesRegistry.Data
                    .HasForeignKey(e => e.ParticipantId)
                    .HasConstraintName("FK_LayoutModule_Participant");
 
-                entity.HasOne(e => e.Line)
+                entity.HasOne(e => e.LayoutLine)
                    .WithMany(e => e.Lines)
                    .HasForeignKey(e => e.LayoutLineId)
                    .HasConstraintName("FK_LayoutModule_LayoutLine");
@@ -417,6 +417,9 @@ namespace ModulesRegistry.Data
                      .WithMany(e => e.LayoutStations)
                      .HasForeignKey(e => e.LayoutId)
                      .HasConstraintName("FK_LayoutStation_Layout");
+
+                entity.HasMany(e => e.Regions)
+                    .WithMany(e => e.LayoutStations);
 
                 entity.HasOne(e => e.Station)
                      .WithOne()

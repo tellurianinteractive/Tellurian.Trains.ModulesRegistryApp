@@ -41,11 +41,11 @@ else
                         <tr @key="@Key(item)">
                             @RowTemplate(item)
                             @if (RowEditTemplate is not null)
-                            {
-                                <td>
-                                    <button class="btn btn-sm btn-primary"><span class="@FontAwesome.Edit" /> @Localizer["Ediit"]</button>
-                                </td>
-                            }
+                                {
+                                    <td>
+                                        <button class="btn btn-sm btn-primary"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</button>
+                                    </td>
+                                }
                         </tr>
                     }
                 }
@@ -60,9 +60,13 @@ else
     [Parameter] public RenderFragment<TItem>? RowEditTemplate { get; set; }
     [Parameter] public IEnumerable<TItem>? Items { get; set; }
     [Parameter] public bool HideNoRecordsToDisplay { get; set; }
-    [Parameter] public Func<TItem, string> Key { get; set; } = (item) => item.GetHashCode().ToString();
+    [Parameter] public Func<TItem, string> Key { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Key is null) Key = (item) => item.GetHashCode().ToString();
+    }
 
     string? EditedKey = null;
-
     bool IsEditItem(TItem item) => EditedKey is not null && Key(item) == EditedKey;
 }
