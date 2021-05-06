@@ -24,6 +24,7 @@
     {
         result = value.Max(7);
         if (result is not null) result = result.ToLowerInvariant();
+        else result = "#000000";
         validationErrorMessage = null;
         return true;
     }

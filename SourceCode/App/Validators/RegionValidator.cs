@@ -9,8 +9,8 @@ namespace ModulesRegistry.Validators
         public RegionValidator(IStringLocalizer<App> localizer)
         {
             RuleFor(m => m.CountryId).MustBeSelected(localizer).WithName(n => localizer[nameof(n.Country)]);
-            RuleFor(m => m.Description).MustBeCapitalizedCorrectly(localizer).WithName(n => localizer[nameof(n.Description)]);
-            RuleFor(m => m.ForeColor).MustBeColor(localizer).WithName(n => localizer["TextColor"]);
+            RuleFor(m => m.Description).MustBeOrdinaryTextOrNull(localizer).WithName(n => localizer[nameof(n.Description)]);
+            RuleFor(m => m.LocalName).NotEmpty().MustBeCapitalizedCorrectly(localizer).WithName(n => localizer["Name"]);
             RuleFor(m => m.BackColor).MustBeColor(localizer).WithName(n => localizer[nameof(n.BackColor)]);
        }
     }

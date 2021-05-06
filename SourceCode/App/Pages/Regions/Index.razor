@@ -11,6 +11,11 @@
     <a class="btn btn-info btn-sm" href="Regions/0/Index"><span class="fa fa-globe-europe" /> @Localizer.ShowAllInAll("Regions", "Countries")</a>
 }
 
+@if (Principal.IsAnyAdministrator())
+{
+    <AppButton Label="Add" Href="@EditHref(0)" />
+}
+
 <TableTemplate Items="Regions">
     <TableHeader>
         <th>@Localizer["Name"]</th>
@@ -25,7 +30,8 @@
         <td>
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))
             {
-                <a class="btn btn-sm btn-primary" href="regions/@region.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                <AppButton Label="Edit" Href="@EditHref(region.Id)" />
+                <a class="btn btn-sm btn-primary" href=""><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>
@@ -47,5 +53,7 @@
     {
         Regions = await RegionService.AllAsync(Principal, CountryId);
     }
+
+    string EditHref(int id) => $"regions/{id}/edit";
 
 }

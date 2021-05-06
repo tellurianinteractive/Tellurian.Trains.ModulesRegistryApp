@@ -715,11 +715,9 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(10);
 
                 entity.Property(e => e.ColourName)
-                    .IsRequired()
                     .HasMaxLength(10);
 
                 entity.Property(e => e.EnglishName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.ForeColor)

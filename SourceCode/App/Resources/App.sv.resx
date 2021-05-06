@@ -948,4 +948,7 @@
   <data name="Place" xml:space="preserve">
     <value>Plats</value>
   </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>Engelskt namn</value>
+  </data>
 </root>
