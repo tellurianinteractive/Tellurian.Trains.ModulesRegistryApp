@@ -942,4 +942,10 @@
   <data name="NoModulesRegistered" xml:space="preserve">
     <value>Keine Module registriert</value>
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Fertig</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Platz</value>
+  </data>
 </root>

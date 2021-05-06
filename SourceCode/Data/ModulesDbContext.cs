@@ -401,6 +401,11 @@ namespace ModulesRegistry.Data
                    .HasForeignKey(e => e.LayoutLineId)
                    .HasConstraintName("FK_LayoutModule_LayoutLine");
 
+                entity.HasOne(e => e.LayoutStation)
+                    .WithMany(e => e.LayoutModules)
+                    .HasForeignKey(e => e.LayoutStationId)
+                    .HasConstraintName("FK_LayoutModule_LayoutStation");
+
             });
 
             modelBuilder.Entity<LayoutStation>(entity =>
@@ -430,7 +435,8 @@ namespace ModulesRegistry.Data
                     .WithOne()
                     .HasForeignKey<LayoutStation>(e => e.OtherCountryId)
                     .HasConstraintName("FK_LayoutStation_OtherCountry");
-            });
+
+           });
 
             modelBuilder.Entity<Meeting>(entity =>
             {

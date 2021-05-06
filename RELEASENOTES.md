@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Release 1.2.2
+Release date 2021-05-05
+- **Station freight customers** overview now improved so you have everything on one page, issue #86. Thanks to Fredrik Pettersson for insist on this.
+
 #### Release 1.2.1
 Release date 2021-05-05
 - **Registration of modules** for a *layout* is ready to use. 
