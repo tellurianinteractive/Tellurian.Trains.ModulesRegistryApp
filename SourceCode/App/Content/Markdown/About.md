@@ -1,5 +1,5 @@
 ﻿#### Purpose
-This applocation is intended to improve planning of *module meetings*, 
+This application is intended to improve planning of *module meetings*, 
 also with participants from several European countries.
 
 The main features are keeping a registry of all *model railway modules*, 
@@ -7,8 +7,8 @@ inclucing all details necessary for planning layouts and schedules,
 and meeting planning with submission of modules.
 
 #### Intended Users
-Anyone that are interested in maintaining structured data about *model railway modules*
-and anyone that arranges *module meetings*.
+Anyone who is interested in maintaining structured data about *model railway modules*
+and anyone who arranges *module meetings*.
 
 #### Free of Charge
 The web application is non-commercial and free to use by any module railway hobbyist within the European Union, Switzerland and Norway.
