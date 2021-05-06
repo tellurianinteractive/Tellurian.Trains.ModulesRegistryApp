@@ -49,7 +49,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Meetings.AsNoTracking()
-                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
+                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
                      .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
                      .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
                      .SingleOrDefaultAsync(m => m.Id == id);

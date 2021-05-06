@@ -12,7 +12,7 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules"/>
+<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
 
 <div>
     <h2>@Localizer["Participant"]: @Participant?.Person.Name()</h2>
@@ -57,9 +57,9 @@
                 <td>@item.LayoutPosition()</td>
                 <td>
                     @if (MayCancel(item))
-                    {
+                        {
                         <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
-                    }
+                        }
                 </td>
             </RowTemplate>
         </TableTemplate>
@@ -80,7 +80,7 @@
     IEnumerable<LayoutModule> RegisteredModules = new List<LayoutModule>();
     IEnumerable<ModulePackage>? Packages = Array.Empty<ModulePackage>();
 
-    bool MayCancel(LayoutModule lm) => Principal.IsAnyAdministrator() || (lm.LayoutLine is null && Layout is not null && Layout.RegistrationClosingDate <= TimeProvider.Now);
+    bool MayCancel(LayoutModule lm) => Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
 
     protected override async Task OnParametersSetAsync()
     {

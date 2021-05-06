@@ -38,12 +38,16 @@ namespace ModulesRegistry.Services.Implementations
                 if (participant is null) return (-1, Resources.Strings.NotFound);
                 foreach (var module in package.Modules)
                 {
-                    var existing = await dbContext.LayoutModules.SingleOrDefaultAsync(lm => lm.ModuleId == module.Id);
+                    var existing = await dbContext.LayoutModules.SingleOrDefaultAsync(lm => lm.ModuleId == module.Id && lm.LayoutId == layoutId);
                     if (existing is null)
                     {
                         var layoutModule = new LayoutModule { LayoutId = layoutId, ModuleId = module.Id, ParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
+                        if (module.StationId.HasValue)
+                        {
+                            var layoutStation = new LayoutStation { LayoutId = layoutId, StationId = module.StationId.Value };
+                            layoutModule.LayoutStation = layoutStation;
+                        }
                         dbContext.LayoutModules.Add(layoutModule);
-                        await AddLayoutStationAsync(dbContext, participantId, layoutId, module, layoutModule);
                         await dbContext.SaveChangesAsync();
                     }
                     else
@@ -52,21 +56,6 @@ namespace ModulesRegistry.Services.Implementations
                     }
                 }
                 return result == 0 ? (-1, Resources.Strings.NoModification) : (1, Resources.Strings.Saved);
-
-                static async Task AddLayoutStationAsync(ModulesDbContext dbContext, int participantId, int layoutId, Module module, LayoutModule layoutModule)
-                {
-                    if (module.StationId.HasValue)
-                    {
-                        var existing = await dbContext.LayoutStations.SingleOrDefaultAsync(ls => ls.LayoutId == layoutId && ls.StationId == module.StationId);
-                        if (existing is null)
-                        {
-                            var addedStation = new LayoutStation { LayoutId = layoutId, StationId = module.StationId.Value };
-                            dbContext.LayoutStations.Add(addedStation);
-                            layoutModule.LayoutStationId = addedStation.Id;
-                        }
-                    }
-                }
-
             }
             return (0, Resources.Strings.NotAuthorized);
         }
@@ -87,8 +76,8 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var existing = await dbContext.LayoutModules
-                    .Include(lm => lm.LayoutStation).ThenInclude(ls=> ls.LayoutModules)
-                    .SingleOrDefaultAsync( lm => lm.Id == layoutModuleId);
+                    .Include(lm => lm.LayoutStation).ThenInclude(ls => ls.LayoutModules)
+                    .SingleOrDefaultAsync(lm => lm.Id == layoutModuleId);
 
                 if (existing is null) return (-1, Resources.Strings.NoModification);
 
@@ -96,7 +85,7 @@ namespace ModulesRegistry.Services.Implementations
                 var layoutStationIsNotUsedInLayout = await dbContext.LayoutStations.Where(ls => ls.Id == existing.LayoutStationId).AnyAsync(ls => !ls.StartingLines.Any() && !ls.EndingLines.Any());
                 if (layoutStationIsNotUsedInLayout)
                 {
-                    if (! stationIsReferredFromOtherLayoutModule)
+                    if (!stationIsReferredFromOtherLayoutModule)
                     {
                         dbContext.LayoutStations.Remove(existing.LayoutStation);
                     }
