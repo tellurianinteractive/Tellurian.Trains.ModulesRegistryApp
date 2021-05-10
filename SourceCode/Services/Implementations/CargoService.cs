@@ -28,8 +28,8 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Cargos
-                    .Select(c => new ListboxItem(c.Id, c.LocalizedName().Value)).ToListAsync();
-                return items.OrderBy(l => l.Description).ToList();
+                    .ToListAsync();
+                return items.Select(c => new ListboxItem(c.Id, c.LocalizedName().Value)).OrderBy(l => l.Description).ToList();
             }
             return Array.Empty<ListboxItem>();
         }

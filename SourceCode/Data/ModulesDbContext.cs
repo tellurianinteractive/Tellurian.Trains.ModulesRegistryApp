@@ -93,7 +93,6 @@ namespace ModulesRegistry.Data
                      .HasColumnName("PL");
 
                 entity.Property(e => e.SV)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("SV");
 
