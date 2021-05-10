@@ -31,7 +31,9 @@ namespace ModulesRegistry.Data
         public bool IsSignal { get; set; }
         public bool IsTurntable { get; set; }
         public bool IsDuckunder { get; set; }
+        [Obsolete("Not in use")]
         public bool IsJunction { get; set; }
+        [Obsolete("Not in use")]
         public bool IsStation { get; set; }
         public bool IsUnavailable { get; set; }
         public bool HasIntegratedLocoNet { get; set; }

@@ -4,7 +4,7 @@
 Release date 2021-05-10
 - **Module names** must now be unique for each owner. Either *name* or *name* and *variant* must be unique for each owner. 
 A *name* without a *variant* is unique, so you can't have the same *name* with *variant*. All modules with same *name* must all have a *variant*.
-This also fix the ereror of registering some modules to a meeting's layout.
+This also fix the error of registering some modules to a meeting's layout.
 Thanks to Fredrik Petterson for testing and reporting this.
 - **Bug fix** of issue #91 where cloning a module failed.
 - **Bug fix** of issue #90 error when displaying groups. Thanks to Benny Tjäder for reporting this.
