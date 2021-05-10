@@ -10,6 +10,7 @@ Thanks to Fredrik Petterson for testing and reporting this.
 - **Bug fix** of issue #90 error when displaying groups. Thanks to Benny Tjäder for reporting this.
 - **Bug fix** of issie #89 when removing module from meeting layout. Thanks to Benny Tjäder for reporting this.
 - **Bug fix** of listing *cargo* due to missing translations. It is now required to translate caro names into all supported languages.
+Thanks to Jens Ehlers for reportning this.
 
 #### Release 1.2.2
 Release date 2021-05-05
