@@ -81,11 +81,11 @@ namespace ModulesRegistry.Services.Implementations
 
                 if (existing is null) return (-1, Resources.Strings.NoModification);
 
-                var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && !existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
-                var layoutStationIsNotUsedInLayout = await dbContext.LayoutStations.Where(ls => ls.Id == existing.LayoutStationId).AnyAsync(ls => !ls.StartingLines.Any() && !ls.EndingLines.Any());
+                var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
+                var layoutStationIsNotUsedInLayout = existing.LayoutStation is null || await dbContext.LayoutStations.Where(ls => ls.Id == existing.LayoutStationId).AnyAsync(ls => !ls.StartingLines.Any() && !ls.EndingLines.Any());
                 if (layoutStationIsNotUsedInLayout)
                 {
-                    if (!stationIsReferredFromOtherLayoutModule)
+                    if (!stationIsReferredFromOtherLayoutModule && existing.LayoutStation is not null)
                     {
                         dbContext.LayoutStations.Remove(existing.LayoutStation);
                     }
@@ -93,7 +93,7 @@ namespace ModulesRegistry.Services.Implementations
                     var result = await dbContext.SaveChangesAsync();
                     return result.DeleteResult();
                 }
-                Data.Resources.Strings.NotAuthorised.DeleteResult();
+                 Data.Resources.Strings.NotAuthorised.DeleteResult();
             }
             return principal.DeleteNotAuthorized<LayoutModule>();
         }

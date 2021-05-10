@@ -40,9 +40,9 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
+                    .Where(g => (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .Include(g => g.GroupDomain)
                     .Include(g => g.Country)
-                    .Where(g => (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, true));
@@ -51,8 +51,9 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Groups.AsNoTracking()
-                    .Include(g => g.GroupDomain)
                     .Where(g => (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)) || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
+                    .Include(g => g.GroupDomain)
+                    .Include(g => g.Country)
                     .OrderBy(g => g.FullName)
                     .ToListAsync();
                 return items.Select(i => (i, i.GroupMembers.Any(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())));
@@ -115,7 +116,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var countryIds = await dbContext.Groups.AsNoTracking()
                     .Where(g => g.GroupMembers.Any(gm => gm.PersonId == memberPersonId))
-                    .Select(g => g.CountryId )
+                    .Select(g => g.CountryId)
                     .ToListAsync();
                 return countryIds.Any(c => c == pricipal.CountryId());
             }

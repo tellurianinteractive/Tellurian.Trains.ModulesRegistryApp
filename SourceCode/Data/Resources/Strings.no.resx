@@ -138,4 +138,7 @@
   <data name="NotPlacedInLayout" xml:space="preserve">
     <value>Ikke plassert i sporplanen</value>
   </data>
+  <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
+    <value>Modulnavn/variant er allerede tatt</value>
+  </data>
 </root>

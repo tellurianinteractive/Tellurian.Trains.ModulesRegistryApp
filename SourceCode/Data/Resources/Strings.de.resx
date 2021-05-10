@@ -138,4 +138,7 @@
   <data name="NotPlacedInLayout" xml:space="preserve">
     <value>Nicht im Gleisplan enthalten</value>
   </data>
+  <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
+    <value>Modulname/Variante ist bereits vergeben</value>
+  </data>
 </root>

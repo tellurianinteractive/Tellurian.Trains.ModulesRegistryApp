@@ -160,6 +160,10 @@ namespace ModulesRegistry.Services.Implementations
         {
             ownerRef = principal.UpdateFrom(ownerRef);
             using var dbContext = Factory.CreateDbContext();
+            if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef))
+            {
+                return Strings.ModuleNameIsAlreadyTaken.SaveResult(entity);
+            }
             if (principal.MaySave(ownerRef))
             {
                 return await AddOrUpdate(dbContext, entity, ownerRef);
@@ -176,6 +180,17 @@ namespace ModulesRegistry.Services.Implementations
                 return isAdministrator && isMember ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
             }
             return principal.SaveNotAuthorised<Module>();
+
+            static async Task<bool> IsSameNameAlreadyExisting(ModulesDbContext dbContext, Module module, ModuleOwnershipRef ownerRef)
+            {
+                var existing = await dbContext.Modules.Where(m =>
+                    m.Id != module.Id &&
+                    m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)).ToListAsync();
+                if (existing is null) return false;
+                return existing.Any(m =>
+                    m.FullName.Equals(module.FullName, StringComparison.OrdinalIgnoreCase) &&
+                    (m.ConfigurationLabel is null || m.ConfigurationLabel.Equals(module.ConfigurationLabel, StringComparison.OrdinalIgnoreCase)));
+            }
 
             static async Task<(int Count, string Message, Module? Entity)> AddOrUpdate(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
             {
@@ -226,6 +241,7 @@ namespace ModulesRegistry.Services.Implementations
                     dbContext.Entry(entity).State == EntityState.Unchanged &&
                     entity.ModuleExits.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
                     entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
+
 
                 static async Task<bool> IfStationWillHaveNoReferringModules(ModulesDbContext dbContext, Module entity, Module existing)
                 {
@@ -282,37 +298,20 @@ namespace ModulesRegistry.Services.Implementations
             false == existing.ModuleOwnerships.Any(mo => mo.OwnedShare == 1 && (ownershipRef.IsPerson && mo.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId));
         private static bool IsSubmittedToUpcomingMeeting(ModulesDbContext dbContext, Module module) => false; // TODO: Implement later when module registrations are in place.
 
-
-
         public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
         {
             ownerRef = principal.UpdateFrom(ownerRef);
             if (principal.MaySave(ownerRef))
             {
-                var clone = await FindByIdAsync(principal, id, ownerRef);
-                if (clone is null) return principal.NotFound();
-                clone.FullName = CloneFullName(Random, clone);
-                clone.Id = 0;
-                clone.Station = null;
-                clone.DwgDrawing = null;
-                clone.PdfDocumentation = null;
-                clone.SkpDrawing = null;
-                foreach (var gable in clone.ModuleExits) gable.Id = 0;
-                foreach (var ownership in clone.ModuleOwnerships) ownership.Id = 0;
+                var existing = await FindByIdAsync(principal, id, ownerRef);
+                if (existing is null) return principal.NotFound();
+                var clone = existing.Clone();
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.Modules.Add(clone);
                 var result = await dbContext.SaveChangesAsync();
                 return result.CloneResult();
             }
             return Strings.NotAuthorised.DeleteResult();
-
-            static string CloneFullName(Random random, Module module)
-            {
-                var appended = $"-{random.Next(1, 1000)}";
-                var totalLength = module.FullName.Length + appended.Length;
-                if (totalLength <= 50) return $"{module.FullName}{appended}";
-                return $"{module.FullName.Substring(0, 50 - appended.Length)}{appended}";
-            }
         }
     }
 }

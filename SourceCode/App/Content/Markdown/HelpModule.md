@@ -10,7 +10,9 @@ The given FREMO number will instead be combined with your *FREMO owner initials*
 - **Variant** is used when a module can be assembled in in different ways 
 that requires you to enter each variant as *separate* modules with *same* name 
 but with different characteristics and drawings. You enter a different *variant* for each, for example *short* and *long* module versions.
-- **Box label** is used in any other case, and should be the identity of the box where the module is stored. If several modules are in the same box, they should have the same *box label*. 
+> **IMPORTANT: The combination of *name* and *variant* must be unique for all your modules.**
+> There may be only one module *name* without *variant*, or all modules with same *name* must have a *variant*. 
+- **Box label** is used in any other case, and should be the identity of the box where the module is stored. If several modules are in the same box, they should have the same *box label*.
 #### Visibility
 You can control who can view your module and station data:
 - **Private** means that only you and any *data administrator* in groups that you are member of will be able to see your module/station.

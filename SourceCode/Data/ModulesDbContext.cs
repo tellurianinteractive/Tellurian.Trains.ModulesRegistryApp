@@ -521,15 +521,14 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Module)
                     .WithMany(p => p.ModuleExits)
                     .HasForeignKey(d => d.ModuleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ModuleExit_Module");
 
                 entity.HasOne(d => d.GableType)
                     .WithMany()
                     .HasForeignKey(d => d.GableTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_ModuleExit_ModuleGableType");
-
             });
 
             modelBuilder.Entity<ModuleGableType>(entity =>

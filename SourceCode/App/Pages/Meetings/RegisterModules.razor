@@ -33,7 +33,7 @@
             </TableHeader>
             <RowTemplate Context="item">
                 <td>@item.Name</td>
-                <td>@item.ContaningModules()</td>
+                <td>@item.ToString()</td>
                 <td>
                     <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
                 </td>
