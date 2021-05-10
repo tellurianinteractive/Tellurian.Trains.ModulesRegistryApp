@@ -8,7 +8,8 @@ This also fix the error of registering some modules to a meeting's layout.
 Thanks to Fredrik Petterson for testing and reporting this.
 - **Bug fix** of issue #91 where cloning a module failed.
 - **Bug fix** of issue #90 error when displaying groups. Thanks to Benny Tjäder for reporting this.
-- **Bug fix** if issie #89 when removing module from meeting layout. Thanks to Benny Tjäder for reporting this.
+- **Bug fix** of issie #89 when removing module from meeting layout. Thanks to Benny Tjäder for reporting this.
+- **Bug fix** of listing *cargo* due to missing translations. It is now required to translate caro names into all supported languages.
 
 #### Release 1.2.2
 Release date 2021-05-05
