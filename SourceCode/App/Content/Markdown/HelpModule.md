@@ -1,4 +1,8 @@
 ﻿## Module Help
+What is a module? If you have sections that must be assembled toghether, enter it as *one* module with a number of sections.
+Typically this will be the case for a station module, but also other fixed combinations of sections should be considered as *one* module.
+Only when a module section can be combined with arbitrary other modules, it should be entered as a separate module.
+ 
 > NOTE: A *module* is not automatically a *station*. In order to add *station tracks*, and *freight customers* you need to make it a *station*.
 > That *station* will be linked to your module.
 
