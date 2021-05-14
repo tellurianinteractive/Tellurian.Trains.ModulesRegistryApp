@@ -75,6 +75,7 @@
     Meeting? Meeting;
     Layout? Layout;
     MeetingParticipant? Participant;
+    ModuleOwnershipRef? OwnershipRef;
     IEnumerable<Module>? Modules = Array.Empty<Module>();
     IEnumerable<Module>? AvailableModules;
     IEnumerable<LayoutModule> RegisteredModules = new List<LayoutModule>();
@@ -94,12 +95,19 @@
                 Participant = await MeetingService.FindParticipantAsync(Principal, ParticipantId);
                 if (Participant is not null)
                 {
-                    Modules = await ModuleService.GetAllAsync(Principal, ModuleOwnershipRef.Person(Participant.PersonId));
+                    OwnershipRef = ModuleOwnershipRef.Person(Participant.PersonId);
+                    Modules = await AllModules(OwnershipRef);
                     await Update();
                 }
             }
         }
     }
+
+    async Task<IEnumerable<Module>> AllModules(ModuleOwnershipRef ownershipRef)
+    {
+        return  (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
+    }
+
 
     async Task OnSelectedLayout(int layoutId)
     {

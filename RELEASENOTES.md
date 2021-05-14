@@ -1,6 +1,10 @@
 ## Release Notes
+#### Version 1.2.4
+Release date 2021-05-14
+- **Register group owned modules** to a meeting layout can now be made by any persion that is a data administrator of the group.
+This fixes issue #93. Thanks to Fredrik Petterson for noticing this.
 
-#### Release 1.2.3
+#### Version 1.2.3
 Release date 2021-05-10
 - **Module names** must now be unique for each owner. Either *name* or *name* and *variant* must be unique for each owner. 
 A *name* without a *variant* is unique, so you can't have the same *name* with *variant*. All modules with same *name* must all have a *variant*.
@@ -12,16 +16,16 @@ Thanks to Fredrik Petterson for testing and reporting this.
 - **Bug fix** of listing *cargo* due to missing translations. It is now required to translate caro names into all supported languages.
 Thanks to Jens Ehlers for reportning this.
 
-#### Release 1.2.2
+#### Version 1.2.2
 Release date 2021-05-05
 - **Station freight customers** overview now improved so you have everything on one page, issue #86. Thanks to Fredrik Pettersson for insist on this.
 
-#### Release 1.2.1
+#### Version 1.2.1
 Release date 2021-05-05
 - **Registration of modules** for a *layout* is ready to use. 
 The *meeting organiser* can register any person's modules, and a normal *user* can register their own modules.
 
-#### Release 1.2.0
+#### Version 1.2.0
 Release date 2021-05-03
 - **Registration of persons** to module meetings. The *meeting organiser* can register any person from any country, and a normal *user* can register themselves.
 - **Registration of modules** for a *layout* is in **preview**. It does not yet save registered modules.

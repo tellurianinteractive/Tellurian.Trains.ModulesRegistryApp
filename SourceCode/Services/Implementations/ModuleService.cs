@@ -77,6 +77,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal.IsAuthenticated())
             {
+
                 ownershipRef = principal.UpdateFrom(ownershipRef);
 
                 using var dbContext = Factory.CreateDbContext();
@@ -105,6 +106,29 @@ namespace ModulesRegistry.Services.Implementations
                 {
                     return modules
                          .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain));
+                }
+            }
+            return Array.Empty<Module>();
+        }
+
+        public async Task<IEnumerable<Module>> GetAllGroupOwnedForDataAdministrator(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
+        {
+            if (principal.IsAuthenticated())
+            {
+                ownershipRef = principal.UpdateFrom(ownershipRef);
+                using var dbContext = Factory.CreateDbContext();
+                var administeredGroupsIds = await dbContext.Groups.AsNoTracking()
+                    .Where(g => g.GroupMembers.Any(gm => gm.PersonId == ownershipRef.PersonId && gm.IsDataAdministrator))
+                    .Select(g => g.Id).ToListAsync();
+                if (administeredGroupsIds.Any())
+                {
+                return await dbContext.Modules.AsNoTracking()
+                     .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId.HasValue &&  administeredGroupsIds.Contains( mo.GroupId.Value)))
+                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+                     .Include(m => m.Scale)
+                     .Include(m => m.Standard)
+                     .ToListAsync();
                 }
             }
             return Array.Empty<Module>();
