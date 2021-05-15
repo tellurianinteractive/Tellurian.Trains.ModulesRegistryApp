@@ -951,4 +951,7 @@
   <data name="EnglishName" xml:space="preserve">
     <value>Engelsk navn</value>
   </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Er frittstående?</value>
+  </data>
 </root>

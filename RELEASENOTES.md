@@ -1,4 +1,11 @@
 ## Release Notes
+
+#### Version 1.2.5
+Release date 2021-05-15
+- **Is Stand-Alone** added for modules. 
+This shold be checked for modules that have legs enough to stand for themselves.
+The default is that modules is stand-alone.
+
 #### Version 1.2.4
 Release date 2021-05-14
 - **Register group owned modules** to a meeting layout can now be made by any persion that is a data administrator of the group.
