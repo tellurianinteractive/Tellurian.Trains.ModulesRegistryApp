@@ -954,4 +954,10 @@
   <data name="IsStandAlone" xml:space="preserve">
     <value>Er frittstående?</value>
   </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klikk OK for å slette</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
 </root>

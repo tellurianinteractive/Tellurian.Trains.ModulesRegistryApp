@@ -954,4 +954,10 @@
   <data name="IsStandAlone" xml:space="preserve">
     <value>Ist eigenständig?</value>
   </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klicken Sie zum Löschen auf OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
 </root>

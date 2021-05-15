@@ -5,6 +5,7 @@ Release date 2021-05-15
 - **Is Stand-Alone** added for modules. 
 This shold be checked for modules that have legs enough to stand for themselves.
 The default is that modules is stand-alone.
+- **Delete** of cargo customer now asks to confirm delete or cancel the action.
 
 #### Version 1.2.4
 Release date 2021-05-14
