@@ -1,4 +1,7 @@
 ## Release Notes
+#### Version 1.2.6
+Release date 2021-05-17
+- **Bug fix** of viewing meeting details.
 
 #### Version 1.2.5
 Release date 2021-05-15
