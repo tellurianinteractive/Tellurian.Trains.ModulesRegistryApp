@@ -469,7 +469,7 @@
     <value>Bitte lesen und akzeptieren.</value>
   </data>
   <data name="Gables" xml:space="preserve">
-    <value>Giebel</value>
+    <value>Endprofilen</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Richtung</value>
@@ -574,7 +574,7 @@
     <value>Ich habe gelesen und verstanden</value>
   </data>
   <data name="Gable" xml:space="preserve">
-    <value>Giebel</value>
+    <value>Endprofil</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Gleis</value>
@@ -898,7 +898,7 @@
     <value>Meine Stationen</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Anziegen</value>
+    <value>Anzeigen</value>
   </data>
   <data name="OperationTheme" xml:space="preserve">
     <value>Verkehrsthema</value>

@@ -1,9 +1,8 @@
-﻿Wenn Sie Ihr Passwort vergessen haben, können Sie es hier zurücksetzen.
-Geben Sie Ihre E-Mail-Adresse ein und klicken Sie auf *Senden*.
-Wir senden Ihnen eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.
-* Geben Sie die **gleiche E-Mail-Adresse** ein, mit der Sie sich anmelden.
-* **Aus Sicherheitsgründen** bestätigen wir nicht, dass Ihre E-Mail-Adresse gefunden wurde oder nicht.
-Stellen Sie daher sicher, dass Sie Ihre E-Mail-Adresse korrekt eingeben.
-* Sie haben nur eine **begrenzte Anzahl von Versuchen**, Ihr Passwort zurückzusetzen.
-dann wirst du blockiert.
-* **Suchen Sie in Ihrem Spam-Ordner**, wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten.
+﻿Hvis du har glemt din adgangskode, kan du nulstille den her.
+Indtast din e-mail-adresse, og klik på *Send*.
+Vi sender dig en e-mail med et link for at nulstille din adgangskode.
+* Indtast den **samme e-mail-adresse**, som du bruger til at logge ind.
+* **Af sikkerhedsmæssige årsager** bekræfter vi ikke, at din e-mail-adresse er fundet eller ej,
+så sørg for at indtaste din e-mail korrekt.
+* Du har kun et **begrænset antal forsøg** på at nulstille din adgangskode,
+så bliver du blokeret.

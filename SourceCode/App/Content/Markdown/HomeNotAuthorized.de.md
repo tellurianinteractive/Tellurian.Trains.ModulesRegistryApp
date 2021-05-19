@@ -7,7 +7,7 @@ Sie finden sie auf der Seite [**Kontakt**](/Contact).
 Nachdem Sie eine Einladung erhalten haben, können Sie sich registrieren und anmelden.
 
 #### Passwort vergessen?
-Klicken Sie auf [**Instellungen**](/Users/Settings), um es zurückzusetzen.
+Klicken Sie auf [**Einstellungen**](/Users/Settings), um es zurückzusetzen.
 
 #### Funktioniert am besten auf einem großen Bildschirm
 Die Modulregistrierung funktioniert nicht gut auf kleinen Telefonbildschirmen.

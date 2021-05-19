@@ -1,9 +1,19 @@
-﻿If you have forgot your password, you can reset it here.
-Enter your email address and click *Send*.
-We will send you an email with a link to reset your password.
-* Enter the **same email address** that you use to login.
-* **For security reasons** we do not confirm that your email address is found or not,
-so be sure that you enter your email correct.
-* You have only a **limited number of attempts** to reset your password, 
-then you will be blocked.
-* **Look in your spam folder** if you don't receive the mail within a few minutes.
+﻿Wenn Sie Ihr Passwort vergessen haben, können Sie es hier zurücksetzen.
+Geben Sie Ihre E-Mail-Adresse ein und klicken Sie auf *Senden*.
+Wir senden Ihnen eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.
+* Geben Sie die **gleiche E-Mail-Adresse** ein, mit der Sie sich anmelden.
+* **Aus Sicherheitsgründen** bestätigen wir nicht, dass Ihre E-Mail-Adresse gefunden wurde oder nicht.
+Stellen Sie daher sicher, dass Sie Ihre E-Mail-Adresse korrekt eingeben.
+* Sie haben nur eine **begrenzte Anzahl von Versuchen**, Ihr Passwort zurückzusetzen.
+dann wirst du blockiert.
+* **Suchen Sie in Ihrem Spam-Ordner**, wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten.
+Wenn Sie Ihr Passwort vergessen haben, können Sie es hier zurücksetzen.
+Geben Sie Ihre E-Mail-Adresse ein und klicken Sie auf *Senden*.
+Wir senden Ihnen eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.
+* Geben Sie die **gleiche E-Mail-Adresse** ein, mit der Sie sich anmelden.
+* **Aus Sicherheitsgründen** bestätigen wir nicht, dass Ihre E-Mail-Adresse gefunden wurde oder nicht.
+Stellen Sie daher sicher, dass Sie Ihre E-Mail-Adresse korrekt eingeben.
+* Sie haben nur eine **begrenzte Anzahl von Versuchen**, Ihr Passwort zurückzusetzen.
+dann wirst du blockiert.
+* **Suchen Sie in Ihrem Spam-Ordner**, wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten.
+* **Se i din spam-mappe**, hvis du ikke modtager e-mailen inden for få minutter.

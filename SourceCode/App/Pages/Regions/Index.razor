@@ -31,7 +31,6 @@
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))
             {
                 <AppButton Label="Edit" Href="@EditHref(region.Id)" />
-                <a class="btn btn-sm btn-primary" href=""><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
             }
         </td>
     </RowTemplate>
