@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 #nullable disable
 
@@ -11,6 +10,7 @@ namespace ModulesRegistry.Data
         {
             ModuleExits = new HashSet<ModuleExit>();
             ModuleOwnerships = new HashSet<ModuleOwnership>();
+            IsStandAlone = true;
         }
 
         public int Id { get; set; }
@@ -28,11 +28,9 @@ namespace ModulesRegistry.Data
         public bool HasNarrowGauge { get; set; }
         public bool Is2R { get; set; }
         public bool Is3R { get; set; }
-        public bool IsSignal { get; set; }
         public bool IsTurntable { get; set; }
         public bool IsDuckunder { get; set; }
-        public bool IsJunction { get; set; }
-        public bool IsStation { get; set; }
+        public bool IsStandAlone { get; set; }
         public bool IsUnavailable { get; set; }
         public bool HasIntegratedLocoNet { get; set; }
         public int ObjectVisibilityId { get; set; }

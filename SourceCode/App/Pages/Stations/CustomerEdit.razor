@@ -14,6 +14,14 @@
 
 <PageHeading Label="FreightCustomer" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="StationCustomer" />
 
+@if (DeleteDialogOpen)
+{
+    <AppModalDialog Title="@DeleteTitle"
+                 Text="@Localizer["ClickOKToDelete"]"
+                 OnClose="@OnDeleteDialogClose">
+    </AppModalDialog>
+}
+
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
         <AppInputText Width="4" @bind-Value="StationCustomer.CustomerName" Label="Name" />
@@ -27,7 +35,7 @@
     <Buttons>
         @if (StationCustomer.Id > 0)
         {
-            <button class="btn btn-sm btn-danger" @onclick="(async () => await OnDeleteStationCustomer(StationCustomer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
+            <button class="btn btn-sm btn-danger" @onclick="( () => OpenDeleteDialog(StationCustomer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
         }
     </Buttons>
 </EditTemplate>
@@ -46,6 +54,9 @@
     IEnumerable<ListboxItem>? QuantityUnitItems;
     IEnumerable<ListboxItem>? ReadyTimeItems;
 
+    bool DeleteDialogOpen { get; set; }
+    int DeletedId;
+    string DeleteTitle => $"{Localizer["Delete"]} {StationCustomer?.CustomerName}?";
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,17 +86,26 @@
         }
     }
 
-    async Task OnDeleteStationCustomer(int? customerId)
+    private void OpenDeleteDialog(int id)
     {
-        if (customerId > 0)
+        DeletedId = id;
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private async Task OnDeleteDialogClose(bool accepted)
+    {
+        if (accepted && DeletedId > 0)
         {
             Station = null;
             StationCustomer = null;
-            var result = await StationCustomerService.DeleteAsync(Principal, customerId.Value);
+            var result = await StationCustomerService.DeleteAsync(Principal, DeletedId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);
             PageHistory.NavigateBack();
         }
+        DeleteDialogOpen = false;
+        StateHasChanged();
     }
 
     private StationCustomer Default => new StationCustomer

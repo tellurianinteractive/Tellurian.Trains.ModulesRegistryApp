@@ -4,6 +4,7 @@
 	[LayoutId]           INT NOT NULL,
     [ModuleId]           INT NOT NULL,
 	[ParticipantId]      INT NOT NULL,
+	[LayoutStationId]	 INT NULL,
 	[RegisteredTime]     DATETIMEOFFSET(7) CONSTRAINT [DF_LayoutModule_RegisteredTime] DEFAULT ((SYSDATETIMEOFFSET())) NOT NULL,
 	[RegistrationStatus] INT NOT NULL,
 	[LayoutLineId]       INT NULL,
@@ -13,5 +14,5 @@
 	CONSTRAINT [FK_LayoutModule_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_LayoutModule_Module] FOREIGN KEY ([ModuleId]) REFERENCES [dbo].[Module] ([Id]) ,
     CONSTRAINT [FK_LayoutModule_MeetingParticipant] FOREIGN KEY ([ParticipantId]) REFERENCES [dbo].[MeetingParticipant] ([Id]) ON DELETE NO ACTION ,
-    CONSTRAINT [FK_LayoutModule_LayoutLine] FOREIGN KEY ([LayoutLineId]) REFERENCES [dbo].[LayoutLine] ([Id]) ,
+    CONSTRAINT [FK_LayoutModule_LayoutStation] FOREIGN KEY ([LayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id]) ,
 )

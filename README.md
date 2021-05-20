@@ -10,11 +10,15 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status April 2021
+## Status May 2021
 All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Manage *groups* and *members* and member's *modules*, *stations* and *station freight customers*.
 * Administrators can manage *meetings*, *regions*, *cargo types*, *module standards* and *module gables*.
+* Meeting organisers can now add persons as *participants* and add their modules to a *layout*
+* Users can now add themselves as *meeting particpant* and and their modules to a layout.
+* Domains now change group visibiliy for groups within same domain. FREMO is a domain.
+* More information is now publicly visible.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
 ## Planned work

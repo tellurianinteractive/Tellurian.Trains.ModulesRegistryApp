@@ -942,4 +942,22 @@
   <data name="NoModulesRegistered" xml:space="preserve">
     <value>Keine Module registriert</value>
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Fertig</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Platz</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>Englisch Name</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Ist eigenständig?</value>
+  </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klicken Sie zum Löschen auf OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
 </root>

@@ -138,4 +138,7 @@
   <data name="NotPlacedInLayout" xml:space="preserve">
     <value>Ej placerad i banplanen</value>
   </data>
+  <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
+    <value>Modulnamn/variant är upptaget</value>
+  </data>
 </root>

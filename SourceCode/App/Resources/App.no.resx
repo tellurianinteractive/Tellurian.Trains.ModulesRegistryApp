@@ -942,4 +942,22 @@
   <data name="NoModulesRegistered" xml:space="preserve">
     <value>Ingen moduler registrert</value>
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Ferdig</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Plass</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>Engelsk navn</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Er frittstående?</value>
+  </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klikk OK for å slette</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
 </root>

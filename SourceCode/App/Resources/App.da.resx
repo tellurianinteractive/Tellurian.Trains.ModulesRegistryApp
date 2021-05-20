@@ -637,7 +637,7 @@
     <value>Medlem</value>
   </data>
   <data name="Exits" xml:space="preserve">
-    <value>Udfarter</value>
+    <value>Udkørsler</value>
   </data>
   <data name="Venue" xml:space="preserve">
     <value>Sted</value>
@@ -941,5 +941,23 @@
   </data>
   <data name="NoModulesRegistered" xml:space="preserve">
     <value>Ingen moduler registreret</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Færdig</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Plads</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>Engelsk navn</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Er enkeltstående?</value>
+  </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klik på OK for at slette</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuller</value>
   </data>
 </root>

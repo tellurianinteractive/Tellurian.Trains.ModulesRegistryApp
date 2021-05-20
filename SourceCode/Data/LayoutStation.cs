@@ -22,6 +22,7 @@ namespace ModulesRegistry.Data
         public virtual Layout Layout { get; set; }
         public virtual Station Station { get; set; }
         public virtual Country OtherCountry { get; set; }
+        public virtual ICollection<LayoutModule> LayoutModules { get; set; }
         public virtual ICollection<Region> Regions { get; set; }
         public virtual ICollection<LayoutLine> StartingLines { get; set; }
         public virtual ICollection<LayoutLine> EndingLines { get; set; }

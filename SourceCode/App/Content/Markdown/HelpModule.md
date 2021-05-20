@@ -1,4 +1,8 @@
 ﻿## Module Help
+What is a module? If you have sections that must be assembled toghether, enter it as *one* module with a number of sections.
+Typically this will be the case for a station module, but also other fixed combinations of sections should be considered as *one* module.
+Only when a module section can be combined with arbitrary other modules, it should be entered as a separate module.
+ 
 > NOTE: A *module* is not automatically a *station*. In order to add *station tracks* and *freight customers* you need to make it a *station*.
 > That *station* will be linked to your module.
 
@@ -6,11 +10,21 @@ Besides the more obvius fields in the form, some fields need some additional exp
 - **Name** and **FREMO no.**
 You can give your module any descriptive name, it does not have to be your *FREMO owner initials*+FREMO number.
 The given FREMO number will instead be combined with your *FREMO owner initials* stored in your personal data, ensuring that the module's FREMO-id will be correct.
-- **Variant** or **Box label** are mutually exclusive.
-- **Variant** is used when a module can be assembled in different ways,
-which requires you to enter each variant as *separate* modules with the *same* name
+#### Variant or Box Label
+**Variant** or **Box label** are mutually exclusive. 
+> **IMPORTANT: The combination of *name* and *variant* must be unique for all your modules.**
+> There may be only one module *name* without *variant*, or all modules with same *name* must have a *variant*. 
+- **Variant** is used when a module can be assembled in in different ways 
+that requires you to enter each variant as *separate* modules with *same* name 
 but with different characteristics and drawings. You enter a different *variant* for each, for example *short* and *long* module versions.
 - **Box label** is used in any other case, and should be the identity of the box where the module is stored. If several modules are in the same box, they should have the same *box label*.
+#### Checkboxes
+- **Is Unavailable** means that the module cannot be registered for a meeting.
+- **Is Stand-Alone** means that the module can stand freely on its legs. 
+- **Is Signal** means that the module is a separate signal module that can be placed with other modules 
+between the signal and the station or line it protects.
+- **Is Turntable** means the module has or is a turntable.
+- **Is Duckunder** means that the modules is suitable to use as a passway under the tracks. 
 #### Visibility
 You can control who can view your module and station data:
 - **Private** means that only you and any *data administrator* in groups that you are a member of will be able to see your module/station.

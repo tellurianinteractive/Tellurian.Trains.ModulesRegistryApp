@@ -53,6 +53,12 @@ namespace ModulesRegistry.Services.Extensions
         public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me) => 
             me is not null && (me.IsGlobalAdministrator() || me.IsCountryAdministrator());
 
+        public static bool IsAnyGroupAdministrator([NotNullWhen(true)] this ClaimsPrincipal? me, Group? group) =>
+            me is not null && group is not null && 
+            (   me.IsCountryAdministratorInCountry(group.CountryId) ||
+                group.GroupMembers is not null && group.GroupMembers.Any(gm => gm.PersonId == me.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator))
+            );
+
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId) =>
             me is not null  && (me.IsGlobalAdministrator() || (countryId.HasValue && countryId.Value == me.CountryId()));
         public static bool IsAuthorisedInCountry([NotNullWhen(true)] this ClaimsPrincipal? me, int? countryId, int personId) =>
