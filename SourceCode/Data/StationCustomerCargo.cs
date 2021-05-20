@@ -29,4 +29,10 @@ namespace ModulesRegistry.Data
         public virtual CargoReadyTime ReadyTime { get; set; }
         public virtual StationCustomer StationCustomer { get; set; }
     }
+
+    public static class StationCustomerCargoExtensions
+    {
+        public static bool IsUnloading(this StationCustomerCargo me) => me.DirectionId == 1 || me.DirectionId == 4;
+        public static bool IsLoading(this StationCustomerCargo me) => !me.IsUnloading();
+    }
 }

@@ -45,16 +45,12 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<Meeting?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
-            if (principal.IsAuthenticated())
-            {
-                using var dbContext = Factory.CreateDbContext();
-                return await dbContext.Meetings.AsNoTracking()
-                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
-                     .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
-                     .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                     .SingleOrDefaultAsync(m => m.Id == id);
-            }
-            return null;
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Meetings.AsNoTracking()
+                 .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
+                 .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
+                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
+                 .SingleOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<Meeting?> FindByIdWithParticipantsAsync(ClaimsPrincipal? principal, int id)

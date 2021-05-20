@@ -50,12 +50,13 @@ else
             <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
 
             <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Module.IsUnavailable" />
+            <AppInputCheck Width="2" Label="IsStandAlone" @bind-Value="Module.IsStandAlone" />
             <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
             <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
-            <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Module.HasIntegratedLocoNet" />
             <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
             <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
 
+            <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Module.HasIntegratedLocoNet" />
             <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
             <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
 

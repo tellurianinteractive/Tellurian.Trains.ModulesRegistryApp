@@ -1,0 +1,28 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+<div class="@WidthCss">
+    @if (ShowLabel)
+    {
+        <label class="form-control-label" for="@Label">@Localizer[Label]: </label>
+    }
+    @if (Value.HasValue())
+    {
+        <span style="font-weight:bold; color: @TextColor; background-color: @BackColor"> @Value</span>
+
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public string TextColor { get; set; } = "black";
+    [Parameter] public string? BackColor { get; set; }
+    [Parameter] public bool HideLabelIfValueIsEmpty { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+    bool ShowLabel => Label.HasValue() && (HideLabelIfValueIsEmpty && Value.HasValue());
+}

@@ -4,6 +4,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
+@inject PageHistory PageHistory
 
 @inject RegionService RegionService
 @inject CountryService CountryService
@@ -45,8 +46,11 @@
         if (Region is not null)
         {
             Region.ForeColor = Region.BackColor.TextColor();
+            Region.ColourName = Region.ColourName?.ToUpperInvariant();
             var result = await RegionService.SaveAsync(Principal, Region);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(3000);
+            PageHistory.NavigateBack();
         }
     }
 }

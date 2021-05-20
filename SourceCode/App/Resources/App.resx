@@ -942,4 +942,22 @@
   <data name="NoModulesRegistered" xml:space="preserve">
     <value>No modules registered</value>
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>English name</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Is stand-alone?</value>
+  </data>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Click OK to delete</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

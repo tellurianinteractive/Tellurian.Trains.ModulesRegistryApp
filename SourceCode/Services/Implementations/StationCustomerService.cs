@@ -21,7 +21,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.StationCustomers.AsNoTracking().Where(sc => sc.StationId == stationId).ToListAsync();
+                return await dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).AsNoTracking().Where(sc => sc.StationId == stationId).ToListAsync();
             }
             return Array.Empty<StationCustomer>();
         }

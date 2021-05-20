@@ -28,16 +28,13 @@
         <td>@member.Person.Name()</td>
         <td align="center">@member.IsGroupAdministrator.AsYesNo()</td>
         <td align="center">@member.IsDataAdministrator.AsYesNo()</td>
-        <td align="center">@UserStatus(member)</td>
+        <td align="center">@member.Person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
-            @if (IsGroupAdministrator)
-            {
-                <a class="btn btn-sm btn-primary" href="groups/@member.GroupId/members/@member.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-            }
             <a class="btn btn-sm btn-info" href="persons/@member.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
             <a class="btn btn-sm btn-info" href="persons/@member.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
             @if (IsGroupAdministrator)
             {
+                <a class="btn btn-sm btn-primary" href="groups/@member.GroupId/members/@member.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
                 <button class="btn btn-sm btn-danger" @onclick="(async () => await RemoveMember(member.Id))"><span class="fa fa-trash" />@Localizer["Remove"]</button>
                 @if (member.Person.MayBeInvited())
                 {
@@ -76,8 +73,4 @@
             if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
         }
     }
-
-    private string Heading => Localizer["MembersIn"] + " " + Group?.FullName;
-    MarkupString UserStatus(GroupMember? member) => new( $"<span class=\"fa fa-{StatusSymbol(member) }\" />" );
-    string StatusSymbol(GroupMember? member) => member is null ? string.Empty : member.Person.IsInvited() && member.Person.IsNeverLoggedIn() ? "envelope" : member.Person.UserId.HasValue ? "user-check" : "user-slash";
 }

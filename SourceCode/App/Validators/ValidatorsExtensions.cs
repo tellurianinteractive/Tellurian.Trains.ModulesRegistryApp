@@ -42,7 +42,7 @@ namespace ModulesRegistry.Validators
 
         private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
             c >= firstCodePoint && c <= lastCodePoint;
-        private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.-+*!?%&§#±°²³/«»£€´".Contains(c);
+        private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´".Contains(c);
         private static bool IsDigit(this char c) => c >= 0x0030 && c <= 0x0039;
         private static bool IsLatinChar(this char c) =>
             c.IsInRange(0x0061, 0x007A) ||
@@ -56,9 +56,9 @@ namespace ModulesRegistry.Validators
             c.IsInRange(0x015A, 0x015B) ||
             c.IsInRange(0x0179, 0x017C);
 
-        public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer) =>
-            builder.Must(value => value.IsSelected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
-        private static bool IsSelected(this int id) => id > 0;
+        public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, bool orZero = false) =>
+            builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
+        private static bool IsSelected(this int id, bool zero) => id > 0 || zero;
 
         public static IRuleBuilderOptions<T, int> MustBeEnumValue<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, Type enumType) =>
             builder.Must(value => value.IsValidEnum(enumType)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAnyOf"].Value, string.Join(",", EnumExtensions.StationTrackDirections()))}");

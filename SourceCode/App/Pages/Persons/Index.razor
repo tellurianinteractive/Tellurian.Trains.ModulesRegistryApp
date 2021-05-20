@@ -25,13 +25,13 @@
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["City"]</th>
-        <th align="center">@Localizer["IsUser"]</th>
+        <th align="center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="person">
-        <td>@Name(person)</td>
+        <td>@person.Name()</td>
         <td>@person.CityName</td>
-        <td align="center">@UserStatus(person)</td>
+        <td align="center"><span ></span>@person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
             @if (Principal.IsAuthorisedInCountry(person.CountryId))
             {
@@ -90,5 +90,4 @@
         person.User.LastSignInTime.HasValue ? string.Format(LanguageService.CurrentCulture, "{0:g}", person.User.LastSignInTime) :
         Localizer["Yes"];
 
-    private string Name(Person person) => person.MiddleName.HasNoValue() ? $"{person.FirstName} {person.LastName}" : $"{person.FirstName} {person.MiddleName} {person.LastName}";
 }

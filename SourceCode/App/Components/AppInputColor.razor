@@ -20,10 +20,19 @@
 @code {
 #nullable enable
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (CurrentValue is null || CurrentValue.Length < 7) CurrentValue = "#FFFFFF";
+        }
+    }
+
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         result = value.Max(7);
         if (result is not null) result = result.ToLowerInvariant();
+        else result = "#FFFFFF";
         validationErrorMessage = null;
         return true;
     }

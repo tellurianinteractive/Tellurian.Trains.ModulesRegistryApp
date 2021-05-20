@@ -12,7 +12,7 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules"/>
+<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
 
 <div>
     <h2>@Localizer["Participant"]: @Participant?.Person.Name()</h2>
@@ -33,7 +33,7 @@
             </TableHeader>
             <RowTemplate Context="item">
                 <td>@item.Name</td>
-                <td>@item.ContaningModules()</td>
+                <td>@item.ToString()</td>
                 <td>
                     <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
                 </td>
@@ -57,9 +57,9 @@
                 <td>@item.LayoutPosition()</td>
                 <td>
                     @if (MayCancel(item))
-                    {
+                        {
                         <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
-                    }
+                        }
                 </td>
             </RowTemplate>
         </TableTemplate>
@@ -75,12 +75,13 @@
     Meeting? Meeting;
     Layout? Layout;
     MeetingParticipant? Participant;
+    ModuleOwnershipRef? OwnershipRef;
     IEnumerable<Module>? Modules = Array.Empty<Module>();
     IEnumerable<Module>? AvailableModules;
     IEnumerable<LayoutModule> RegisteredModules = new List<LayoutModule>();
     IEnumerable<ModulePackage>? Packages = Array.Empty<ModulePackage>();
 
-    bool MayCancel(LayoutModule lm) => Principal.IsAnyAdministrator() || (lm.LayoutLine is null && Layout is not null && Layout.RegistrationClosingDate <= TimeProvider.Now);
+    bool MayCancel(LayoutModule lm) => Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
 
     protected override async Task OnParametersSetAsync()
     {
@@ -94,12 +95,19 @@
                 Participant = await MeetingService.FindParticipantAsync(Principal, ParticipantId);
                 if (Participant is not null)
                 {
-                    Modules = await ModuleService.GetAllAsync(Principal, ModuleOwnershipRef.Person(Participant.PersonId));
+                    OwnershipRef = ModuleOwnershipRef.Person(Participant.PersonId);
+                    Modules = await AllModules(OwnershipRef);
                     await Update();
                 }
             }
         }
     }
+
+    async Task<IEnumerable<Module>> AllModules(ModuleOwnershipRef ownershipRef)
+    {
+        return  (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
+    }
+
 
     async Task OnSelectedLayout(int layoutId)
     {

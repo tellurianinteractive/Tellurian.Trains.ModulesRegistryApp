@@ -5,43 +5,28 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService 
+@inject IToastService ToastService
 
 @inject GroupService GroupService
+@inject CargoService CargoService
+@inject OperatingDayService OperatingDayService
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
 
-<PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List"/>
+<PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
 @if (MayEdit)
 {
     <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
-
-<TableTemplate Items="StationCustomers">
-    <TableHeader>
-        <th>@Localizer["Name"]</th>
-        <th>@Localizer["Comment"]</th>
-        <th>@Localizer["TrackOrArea"]</th>
-        <th>@Localizer["OpenedYear"]</th>
-        <th>@Localizer["ClosedYear"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="customer">
-        <td>@customer.CustomerName</td>
-        <td>@customer.Comment</td>
-        <td style="text-align: center; background-color: @customer.TrackOrAreaColor; color: @customer.TrackOrAreaColor.TextColor()">@customer.TrackOrArea</td>
-        <td align="center">@customer.OpenedYear</td>
-        <td align="center">@customer.ClosedYear</td>
-        <td>
-            @if (MayEdit)
-            {
-                <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(customer.Id)"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                <button class="btn btn-sm btn-danger" @onclick="(async () => await OnDeleteStationCustomer(customer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
-            }
-        </td>
-    </RowTemplate>
-</TableTemplate>
+<hr/>
+@if (StationCustomers is not null)
+{
+    @foreach (var customer in StationCustomers.OrderBy(sc => sc.CustomerName))
+    {
+        <StationCustomerItemView Customer="customer" MayEdit="MayEdit" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
+    }
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -49,6 +34,13 @@
     [Parameter] public int StationId { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
+
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    IEnumerable<ListboxItem>? ReadyTimeItems;
+
 
     ClaimsPrincipal? Principal;
     Station? Station;
@@ -58,6 +50,12 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CargoTypeItems = await CargoService.GargoListboxItemsAsync(Principal);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+
     }
 
     protected override async Task OnParametersSetAsync()

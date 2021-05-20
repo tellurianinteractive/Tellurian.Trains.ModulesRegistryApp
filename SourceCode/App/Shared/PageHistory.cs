@@ -38,7 +38,7 @@ namespace ModulesRegistry.Shared
 
         public bool? IsShowningHelp
         {
-            get => History.Last().ShowHelp;
+            get => History.Last()?.ShowHelp ?? false;
             set => History.Last().ShowHelp = value;
         }
 

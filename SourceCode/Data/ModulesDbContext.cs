@@ -93,7 +93,6 @@ namespace ModulesRegistry.Data
                      .HasColumnName("PL");
 
                 entity.Property(e => e.SV)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("SV");
 
@@ -401,6 +400,11 @@ namespace ModulesRegistry.Data
                    .HasForeignKey(e => e.LayoutLineId)
                    .HasConstraintName("FK_LayoutModule_LayoutLine");
 
+                entity.HasOne(e => e.LayoutStation)
+                    .WithMany(e => e.LayoutModules)
+                    .HasForeignKey(e => e.LayoutStationId)
+                    .HasConstraintName("FK_LayoutModule_LayoutStation");
+
             });
 
             modelBuilder.Entity<LayoutStation>(entity =>
@@ -430,7 +434,8 @@ namespace ModulesRegistry.Data
                     .WithOne()
                     .HasForeignKey<LayoutStation>(e => e.OtherCountryId)
                     .HasConstraintName("FK_LayoutStation_OtherCountry");
-            });
+
+           });
 
             modelBuilder.Entity<Meeting>(entity =>
             {
@@ -515,15 +520,14 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Module)
                     .WithMany(p => p.ModuleExits)
                     .HasForeignKey(d => d.ModuleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ModuleExit_Module");
 
                 entity.HasOne(d => d.GableType)
                     .WithMany()
                     .HasForeignKey(d => d.GableTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .HasConstraintName("FK_ModuleExit_ModuleGableType");
-
             });
 
             modelBuilder.Entity<ModuleGableType>(entity =>
@@ -709,11 +713,9 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(10);
 
                 entity.Property(e => e.ColourName)
-                    .IsRequired()
                     .HasMaxLength(10);
 
                 entity.Property(e => e.EnglishName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.ForeColor)

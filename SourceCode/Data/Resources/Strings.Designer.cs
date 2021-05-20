@@ -70,6 +70,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Module name/variant is already taken.
+        /// </summary>
+        public static string ModuleNameIsAlreadyTaken {
+            get {
+                return ResourceManager.GetString("ModuleNameIsAlreadyTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unauthorised.
         /// </summary>
         public static string NotAuthorised {

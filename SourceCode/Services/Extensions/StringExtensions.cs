@@ -62,6 +62,8 @@ namespace ModulesRegistry.Services.Extensions
         public  static bool IsHexColor([NotNullWhen(true)] this string? maybeColor) =>
             !string.IsNullOrWhiteSpace(maybeColor) && Regex.IsMatch(maybeColor, HexColorRegEx);
 
+        public static bool IsWhiteColor([NotNullWhen(true)] this string? maybeColor) => string.IsNullOrWhiteSpace(maybeColor) || maybeColor.ToUpperInvariant() == "#FFFFFF";
+
         #endregion
 
         #region GUID string
