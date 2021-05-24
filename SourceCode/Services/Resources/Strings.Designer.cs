@@ -583,6 +583,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Participant has registered modules.
+        /// </summary>
+        internal static string ParticipantHasRegisteredModules {
+            get {
+                return ResourceManager.GetString("ParticipantHasRegisteredModules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password does not meet policy requirements..
         /// </summary>
         internal static string PasswordInvalid {

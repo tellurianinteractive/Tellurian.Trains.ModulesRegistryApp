@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #nullable disable
 
@@ -25,5 +26,11 @@ namespace ModulesRegistry.Data
         public virtual ICollection<Layout> Layouts { get; set; }
         public virtual ICollection<MeetingParticipant> Participants { get; set; }
 
+    }
+
+    public static class MeetingExtensions
+    {
+        public static bool IsOpenForRegistration(this Meeting? it, DateTime at) =>
+            it is not null && it.Layouts.Any() && it.Layouts.Min(l => l.RegistrationOpeningDate) <= at && it.Layouts.Max(l => l.RegistrationClosingDate) > at;
     }
 }

@@ -189,8 +189,21 @@ namespace ModulesRegistry.Services.Implementations
                 }
             }
             return principal.SaveNotAuthorised<MeetingParticipant>();
+        }
 
-
+        public async Task<(int Count, string Message)> CancelParticipaction(ClaimsPrincipal? principal, int paricipantId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.MeetingParticipants.Include(mp => mp.LayoutModules).SingleOrDefaultAsync(mp => mp.Id == paricipantId);
+                if (existing is null) return Resources.Strings.NotFound.DeleteResult();
+                if (existing.LayoutModules.Any()) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
+                dbContext.MeetingParticipants.Remove(existing);
+                var result = await dbContext.SaveChangesAsync();
+                return result.DeleteResult();
+            }
+            return principal.DeleteNotAuthorized<MeetingParticipant>();
         }
         #endregion
     }

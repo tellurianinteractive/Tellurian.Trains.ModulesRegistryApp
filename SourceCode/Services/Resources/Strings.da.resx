@@ -414,4 +414,7 @@
   <data name="with" xml:space="preserve">
     <value>med</value>
   </data>
+  <data name="ParticipantHasRegisteredModules" xml:space="preserve">
+    <value>Deltager har moduler registreret</value>
+  </data>
 </root>

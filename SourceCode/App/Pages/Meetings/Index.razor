@@ -35,7 +35,7 @@
         <td align="center">@item.meeting.Status.MeetingStatus()</td>
         <td>
             <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
-            @if (Principal.IsAuthenticated() && MeetingRegistrationIsOpen(item.meeting))
+            @if (MayRegister(item.meeting))
             {
                 <a class="btn btn-secondary btn-sm" href="Meetings/@item.meeting.Id/Register"><span class="@FontAwesome.Register" /> @Localizer["Register"]</a>
             }
@@ -53,6 +53,7 @@
     [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
+    bool MayRegister(Meeting meeting) => Principal.IsAnyAdministrator() || (Principal.IsAuthenticated() && MeetingRegistrationIsOpen(meeting));
 
     string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
 
