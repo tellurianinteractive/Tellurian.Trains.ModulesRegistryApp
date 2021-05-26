@@ -56,8 +56,8 @@ else
     string TrackOrArea(StationCustomerCargo? it) => it is not null ? it.TrackOrArea.HasValue() ? it.TrackOrArea : it.StationCustomer.TrackOrArea : string.Empty;
     string TrackOrAreaColour(StationCustomerCargo? it) => it is not null ? it.TrackOrAreaColor.IsWhiteColor() ? it.StationCustomer.TrackOrAreaColor : it.TrackOrAreaColor : string.Empty;
 
-    string CargoTypeName(StationCustomerCargo? it) => it is not null ? it.SpecialCargoName ?? CargoType(it) : string.Empty;
-    string CargoType(StationCustomerCargo? it) => it is not null && CargoTypeItems is not null ? CargoTypeItems.SingleOrDefault(i => i.Id == it.CargoId)?.Description ?? string.Empty : string.Empty;
+    string CargoTypeName(StationCustomerCargo? it) => it is null ? string.Empty : string.IsNullOrWhiteSpace(it.SpecialCargoName) ? CargoType(it) : it.SpecialCargoName;
+    string CargoType(StationCustomerCargo? it) => it is null ? string.Empty : CargoTypeItems is not null ? CargoTypeItems.SingleOrDefault(i => i.Id == it.CargoId)?.Description ?? string.Empty : string.Empty;
     string Direction(StationCustomerCargo? it) => it is not null && DirectionItems is not null ? DirectionItems.SingleOrDefault(i => i.Id == it.DirectionId)?.Description ?? string.Empty : string.Empty;
     string QuantityUnit(StationCustomerCargo? it) => it is not null && QuantityUnitItems is not null ? QuantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
     string OperatingDay(StationCustomerCargo? it) => it is not null && OperatingDayItems is not null ? OperatingDayItems.SingleOrDefault(i => i.Id == it.OperatingDayId)?.Description ?? string.Empty : string.Empty;
