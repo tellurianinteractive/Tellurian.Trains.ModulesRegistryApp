@@ -1,4 +1,10 @@
 ## Release Notes
+#### Version 1.2.7
+Release date 2021-05-26
+- **Bug fix** of displaying cargo names for station customers.
+- **Improved** meeting participant registration and cancellation.
+- **Correction** of some German translations. Thanks to Stefan Kloppenburg.
+
 #### Version 1.2.6
 Release date 2021-05-17
 - **Bug fix** of viewing meeting details.
