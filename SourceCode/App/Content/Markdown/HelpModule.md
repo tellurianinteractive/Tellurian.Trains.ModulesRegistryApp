@@ -3,12 +3,12 @@ What is a module? If you have sections that must be assembled toghether, enter i
 Typically this will be the case for a station module, but also other fixed combinations of sections should be considered as *one* module.
 Only when a module section can be combined with arbitrary other modules, it should be entered as a separate module.
  
-> NOTE: A *module* is not automatically a *station*. In order to add *station tracks*, and *freight customers* you need to make it a *station*.
+> NOTE: A *module* is not automatically a *station*. In order to add *station tracks* and *freight customers* you need to make it a *station*.
 > That *station* will be linked to your module.
 
 Besides the more obvius fields in the form, some fields need some additional explanation:
 - **Name** and **FREMO no.**
-You can give your module any descriptive name, it haven't to be your *FREMO owner initials*+FREMO number. 
+You can give your module any descriptive name, it does not have to be your *FREMO owner initials*+FREMO number.
 The given FREMO number will instead be combined with your *FREMO owner initials* stored in your personal data, ensuring that the module's FREMO-id will be correct.
 #### Variant or Box Label
 **Variant** or **Box label** are mutually exclusive. 
@@ -27,18 +27,18 @@ between the signal and the station or line it protects.
 - **Is Duckunder** means that the modules is suitable to use as a passway under the tracks. 
 #### Visibility
 You can control who can view your module and station data:
-- **Private** means that only you and any *data administrator* in groups that you are member of will be able to see your module/station.
-- **Group members** means that *all members* of all groups where you are member will be able to see your module/station.
-- **Domain members** means that *all members* of all groups belonging to the same *domain* as groups you are member of, will be able to see your module/station.
-- **All users** means that all logged in users will be able to see your module/station.
->In all cases, only you and and any *data administrator* in groups that you are member can modify data for your module/station. 
+- **Private** means that only you and any *data administrator* in groups that you are a member of will be able to see your module/station.
+- **Group members** means that *all members* of all groups that you are a member of will be able to see your module/station.
+- **Domain members** means that *all members* of all groups you are a member of belonging to the same *domain* will be able to see your module/station.
+- **All users** means that all logged-in users will be able to see your module/station.
+>In all cases, only you and any *data administrator* in groups that you are a member of can modify data for your module/station. 
 >When you submit a module to a meeting, the organising group's *data aministrator* can also modify data for your module/station. 
 #### Exits
-Each gable of a module represents an *exit*. 
-Most modules only have two *exits*, for example line-modules, you will have one in each direction: *east* and *west*.
-When the the track ends at the module, you add only one exit.
+Each gable of a module represents an *exit*.
+Most modules only have two *exits*, for example line-modules; you will have one in each direction: *east* and *west*.
+When the track ends on the module, you add only one exit.
 
-When you specify exits for *station modules* you must imagine that you stand at the operation place and have the module to the north of you.
+When specifying exits for *station modules* you must imagine that you stand at the operation place and have the module to the north of you.
 Then *west* exits will be the ones to the *left* and the *east* exits will be the ones to the right.
 You may have several *exits* in each direction.
 These directions becomes extra important when you later specify *station track* directions.

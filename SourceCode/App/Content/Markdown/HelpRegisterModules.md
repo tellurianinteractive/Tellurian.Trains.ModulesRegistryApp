@@ -6,6 +6,6 @@ The list is populated with *module packages* that have the same *scale* as the l
 A *module package* contains modules with same *box label* or all *variants* of a module, so it can contain more than one module.
 
 **Registered modules** are the modules you have registered for the *layout*.
-You can witdraw modules up to the registration closes, as long as they are not assigned a *position* in the layout.
+You can withdraw modules until the registration closes, as long as they are not assigned to a *position* in the layout.
 
 
