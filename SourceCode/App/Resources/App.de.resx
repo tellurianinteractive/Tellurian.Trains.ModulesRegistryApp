@@ -960,4 +960,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="OtherWagonClass" xml:space="preserve">
+    <value>Andere Wagenklasse</value>
+  </data>
 </root>

@@ -13,6 +13,7 @@ namespace ModulesRegistry.Data
         public int StationCustomerId { get; set; }
         public string TrackOrArea { get; set; }
         public string TrackOrAreaColor { get; set; }
+        public string SpecificWagonClass { get; set; }
         public string SpecialCargoName { get; set; }
         public int DirectionId { get; set; }
         public int OperatingDayId { get; set; }

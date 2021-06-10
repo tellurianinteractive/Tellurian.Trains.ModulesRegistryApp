@@ -1,11 +1,11 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @if (Href.HasValue())
 {
-    <a  class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /> @Localizer[Label]</a>
+    <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[Label]</a>
 }
-else 
+else
 {
-    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" /> @Localizer[Label] @ObjectNameLocalized</button>
+    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" />&nbsp;@Localizer[Label]&nbsp;@ObjectNameLocalized</button>
 }
 @code {
     [Parameter] public string Label { get; set; } = "Button";
@@ -31,6 +31,6 @@ else
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonType}";
-    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : IconName.HasValue() ? $"fa fa-{IconName}" : string.Empty;
+    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string? ObjectNameLocalized => string.IsNullOrWhiteSpace(ObjectName) ? null : Localizer[ObjectName].ToString();
 }

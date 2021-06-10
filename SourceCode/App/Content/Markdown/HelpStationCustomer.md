@@ -13,11 +13,14 @@ In particular, don't fill in the *closed year* if you want your customer to stay
 Only *freight customers* in business under any of the operating years of the *layout* will be used for *cargo matching*.
 ### Cargo flow
 Defines any cargo that is relevant that the customer supply or consume:
-- **Cargo type** may not contain the cargo that your looking for. 
-Administrators can add new cargo, so ask any of them to help you with that.
-New *cargo types* needs to be entered with translations for all supported languages and a relevant NHM-code.
+- **Cargo type** must be selected. Try to select a correct gargo type, or a similar one.
+If the list does ontain the cargo that your looking for,
+administrators can add new cargo, so ask any of them to help you with that.
+- **Wagon Class** gives you an option to specify a specific wagon class 
+that overrides the default wagon classes for the *cargo type*.
 - **Other name** gives you an option to override the name of the *cargo type*. 
-Note that *cargo type* names are language aware, but your *other name* is not.
+DO NOT use this instead of selecting a proper carco type.
+ALSO NOTE that selected *cargo type* names are language aware, but your name in this field is not.
 - **Days** are the days when the customer ships or expects to receive the cargo. Default to daily. 
 Other than *daily* are only relevant for meetings where trains are operated per weeday and 
 where *cargo matching* is used.

@@ -31,11 +31,11 @@
         <td>
             @if (item.Station.IsExternal)
             {
-                <a class="btn btn-sm btn-info" href="ExternalStations/@item.Station.Id/Customers/@item.Id"><span class="fa fa-info" /> @Localizer["Show"]</a>
+                <AppButton Label="Show" Href="@ExternalHref(item.Station.Id, item.Id)" />
             }
             else
             {
-                <a class="btn btn-sm btn-info" href="Stations/@item.Station.Id/Customers"><span class="fa fa-info" /> @Localizer["Show"]</a>
+                <AppButton Label="Show" Href="@InternalHref(item.Station.Id)" />
             }
         </td>
     </RowTemplate>
@@ -57,6 +57,8 @@
         FreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
     }
 
+    string InternalHref(int stationId) => $"Stations/{stationId}/Customers";
+    string ExternalHref(int stationId, int customerId) => $"ExternalStations/{stationId}/Customers/{customerId}";
     MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
     MarkupString Flag(FreightCustomerInfo me) => new(string.IsNullOrWhiteSpace(me.Country.DomainSuffix) ? string.Empty : $"<img src=\"images/flags/{me.Country.DomainSuffix}.png\" />");
 }

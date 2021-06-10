@@ -2,6 +2,7 @@
     [Id]                        INT           IDENTITY (1, 1) NOT NULL,
     [CargoId]                   INT           NOT NULL,
     [ExternalStationCustomerId] INT           NOT NULL,
+    [SpecificWagonClass]        NVARCHAR (10) NULL,
     [SpecialCargoName]          NVARCHAR (20) NULL,
     [DirectionId]               INT           NOT NULL,
     [OperatingDayId]            INT           CONSTRAINT [DF_ExternalStationCustomerCargo_OperatingDayId] DEFAULT ((0)) NOT NULL,

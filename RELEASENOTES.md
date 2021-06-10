@@ -1,4 +1,8 @@
 ## Release Notes
+
+#### Version 1.2.8
+Release date 2021-06-10
+- **Other Wagon Class** can now be specified for each station customer's *cargo flow* if you want to override the default classes for the *cargo type*.
 #### Version 1.2.7
 Release date 2021-05-26
 - **Bug fix** of displaying cargo names for station customers.

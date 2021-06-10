@@ -29,7 +29,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Cargos
                     .ToListAsync();
-                return items.Select(c => new ListboxItem(c.Id, c.LocalizedName().Value)).OrderBy(l => l.Description).ToList();
+                return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
             }
             return Array.Empty<ListboxItem>();
         }

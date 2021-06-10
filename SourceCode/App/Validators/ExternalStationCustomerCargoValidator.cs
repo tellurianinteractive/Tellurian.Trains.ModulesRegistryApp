@@ -23,6 +23,10 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.Quantity)
                 .InclusiveBetween(1, 1000)
                 .WithName(n => localizer[nameof(n.Quantity)]);
+            RuleFor(m => m.SpecificWagonClass)
+                .MaximumLength(10)
+                .MustBeOrdinaryTextOrNull(localizer)
+                .WithName(n => localizer["OtherWagonClass"]);
             RuleFor(m => m.SpecialCargoName)
                 .MaximumLength(20)
                 .MustBeOrdinaryText(localizer)

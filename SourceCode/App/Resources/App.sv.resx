@@ -586,7 +586,7 @@
     <value>Spårnummer</value>
   </data>
   <data name="DefaultClasses" xml:space="preserve">
-    <value>Vagnklasser</value>
+    <value>Vagnslittera</value>
   </data>
   <data name="NHMCode" xml:space="preserve">
     <value>NHM-kod</value>
@@ -959,5 +959,8 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Avbryt</value>
+  </data>
+  <data name="OtherWagonClass" xml:space="preserve">
+    <value>Annat vagnslittera</value>
   </data>
 </root>

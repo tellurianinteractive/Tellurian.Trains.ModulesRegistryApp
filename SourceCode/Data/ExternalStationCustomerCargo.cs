@@ -10,6 +10,7 @@ namespace ModulesRegistry.Data
         public int Id { get; set; }
         public int CargoId { get; set; }
         public int ExternalStationCustomerId { get; set; }
+        public string SpecificWagonClass { get; set; }
         public string SpecialCargoName { get; set; }
         public int DirectionId { get; set; }
         public int OperatingDayId { get; set; }

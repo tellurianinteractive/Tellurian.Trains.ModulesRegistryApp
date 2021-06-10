@@ -239,6 +239,8 @@ namespace ModulesRegistry.Data
 
                 entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 
+                entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
+
                 entity.HasOne(e => e.Cargo)
                     .WithMany()
                     .HasForeignKey(d => d.CargoId)
@@ -785,56 +787,58 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_StationCustomer_Station");
             });
 
-            modelBuilder.Entity<StationCustomerCargo>(entity =>
-            {
-                entity.ToTable("StationCustomerCargo");
+            _ = modelBuilder.Entity<StationCustomerCargo>(entity =>
+              {
+                  entity.ToTable("StationCustomerCargo");
 
-                entity.Property(e => e.QuantityUnitId).HasDefaultValueSql("((4))");
+                  entity.Property(e => e.QuantityUnitId).HasDefaultValueSql("((4))");
 
-                entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
+                  entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 
-                entity.Property(e => e.TrackOrArea).HasMaxLength(10);
+                  entity.Property(e => e.TrackOrArea).HasMaxLength(10);
 
-                entity.Property(e => e.TrackOrAreaColor)
-                    .HasMaxLength(10)
-                    .IsFixedLength(true);
+                  entity.Property(e => e.TrackOrAreaColor)
+                      .HasMaxLength(10)
+                      .IsFixedLength(true);
 
-                entity.HasOne(e => e.Cargo)
-                    .WithMany()
-                    .HasForeignKey(d => d.CargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoCustomer_Cargo");
+                  entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
 
-                entity.HasOne(d => d.Direction)
-                    .WithMany(p => p.StationCustomerCargos)
-                    .HasForeignKey(d => d.DirectionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoCustomer_CargoDirection");
+                  entity.HasOne(e => e.Cargo)
+                      .WithMany()
+                      .HasForeignKey(d => d.CargoId)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK_CargoCustomer_Cargo");
 
-                entity.HasOne(d => d.OperatingDay)
-                    .WithMany()
-                    .HasForeignKey(d => d.OperatingDayId)
-                    .HasConstraintName("FK_CargoCustomer_OperatingDay");
+                  entity.HasOne(d => d.Direction)
+                      .WithMany(p => p.StationCustomerCargos)
+                      .HasForeignKey(d => d.DirectionId)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK_CargoCustomer_CargoDirection");
 
-                entity.HasOne(d => d.ReadyTime)
-                    .WithMany()
-                    .HasForeignKey(d => d.ReadyTimeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoCustomer_CargoReadyTime");
+                  entity.HasOne(d => d.OperatingDay)
+                      .WithMany()
+                      .HasForeignKey(d => d.OperatingDayId)
+                      .HasConstraintName("FK_CargoCustomer_OperatingDay");
 
-                entity.HasOne(d => d.StationCustomer)
-                    .WithMany(p => p.StationCustomerCargos)
-                    .HasForeignKey(d => d.StationCustomerId)
-                    .HasConstraintName("FK_CargoCustomer_StationCustomer")
-                    .OnDelete(DeleteBehavior.Cascade);
+                  entity.HasOne(d => d.ReadyTime)
+                      .WithMany()
+                      .HasForeignKey(d => d.ReadyTimeId)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK_CargoCustomer_CargoReadyTime");
 
-                entity.HasOne(e => e.QuantityUnit)
-                    .WithMany()
-                    .HasForeignKey(d => d.QuantityUnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StationCustomerCargo_QuantityUnit");
+                  entity.HasOne(d => d.StationCustomer)
+                      .WithMany(p => p.StationCustomerCargos)
+                      .HasForeignKey(d => d.StationCustomerId)
+                      .HasConstraintName("FK_CargoCustomer_StationCustomer")
+                      .OnDelete(DeleteBehavior.Cascade);
 
-            });
+                  entity.HasOne(e => e.QuantityUnit)
+                      .WithMany()
+                      .HasForeignKey(d => d.QuantityUnitId)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK_StationCustomerCargo_QuantityUnit");
+
+              });
 
             modelBuilder.Entity<StationTrack>(entity =>
             {
