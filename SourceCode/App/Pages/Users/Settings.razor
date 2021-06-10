@@ -2,6 +2,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IMailSender MailSender
+@inject IToastService ToastService
 @inject NavigationManager Navigator
 @inject ContentService ContentService
 
@@ -61,7 +62,8 @@
                 var message = PasswordResetRequest.AsMailMessage();
                 if (message is not null)
                 {
-                    _ = await MailSender.SendMailMessageAsync(message);
+                    var result = await MailSender.SendMailMessageAsync(message);
+                    ToastService.ShowSuccessOrFailure(Localizer, result, "PasswordResetMail");
                 }
             }
         }

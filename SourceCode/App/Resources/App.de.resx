@@ -963,4 +963,7 @@
   <data name="OtherWagonClass" xml:space="preserve">
     <value>Andere Wagenklasse</value>
   </data>
+  <data name="PasswordResetFailed" xml:space="preserve">
+    <value>Passwort zurücksetzen fehlgeschlagen</value>
+  </data>
 </root>

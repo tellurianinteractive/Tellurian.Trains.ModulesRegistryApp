@@ -14,13 +14,9 @@
     {
         <p>@Localizer["NoEmailProvided"].</p>
     }
-    @if (ObjectId is null)
+    else 
     {
-        <p>@Localizer["NoRegistrationIdIsProvided"].</p>
-    }
-    @if (EmailAddress.HasValue() && ObjectId.HasValue())
-    {
-        <p>@string.Format(Localizer["NoUserFoundWithEmailAndRegistrationId"].Value, EmailAddress, ObjectId).</p>
+        <p>@Localizer["PasswordResetFailed"].</p>
     }
 }
 else if (User.IsPasswordReset() || User.IsNeverLoggedIn())

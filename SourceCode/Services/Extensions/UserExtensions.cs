@@ -23,7 +23,7 @@ namespace ModulesRegistry.Services.Extensions
 
         public static string PrimaryEmail(this User? me) =>
             me is null ? string.Empty :
-            me.Person is null ? me.EmailAddress :
+            me.EmailAddress.HasValue() ? me.EmailAddress :
             me.Person.PrimaryEmail();
 
         public static string PrimaryEmail(this Person? me) =>
