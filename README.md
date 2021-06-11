@@ -10,9 +10,10 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status May 2021
+## Status June 2021
 All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
+* Transfer of module *ownership* - part or whole - to other person or group.
 * Manage *groups* and *members* and member's *modules*, *stations* and *station freight customers*.
 * Administrators can manage *meetings*, *regions*, *cargo types*, *module standards* and *module gables*.
 * Meeting organisers can now add persons as *participants* and add their modules to a *layout*
