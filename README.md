@@ -21,6 +21,7 @@ All functions for managing modules are now inplace, including:
 * Users can now add themselves as *meeting particpant* and and their modules to a layout.
 * Domains now change group visibiliy for groups within same domain. FREMO is a domain.
 * More information is now publicly visible.
+* Help texts for most forms with recommendation how to enter data.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
 ## Planned work
