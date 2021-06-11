@@ -1,0 +1,79 @@
+﻿
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+
+@inject PersonService PersonService
+@inject CountryService CountryService
+
+
+<div class="col-md-4">
+    <label class="form-control-label" for="personid">@SearchLabel</label>
+    <BlazoredTypeahead @oninput="OnSelectedInternal" SearchMethod="SearchPersons" @bind-Value="SelectedPersonId" ConvertMethod="ConvertPerson" MinimumLength="MinimumSearchCharacters" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
+        <SelectedTemplate Context="personId">
+            @{
+                var selectedPerson = SelectedPerson(personId);
+                <text>@selectedPerson?.Description</text>
+            }
+        </SelectedTemplate>
+        <ResultTemplate Context="person">
+            @person.Description
+        </ResultTemplate>
+        <NotFoundTemplate>
+            <div>
+                <span>
+                    @Localizer["NotFound"]
+                    @if (AddPersonHref is not null)
+                    {
+                        <AppButton Label="Add" Href="AddPersonHref"/>
+                    }
+                </span>
+            </div>
+        </NotFoundTemplate>
+    </BlazoredTypeahead>
+</div>
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public string? SearchLabel { get; set; }
+    [Parameter] public int MinimumSearchCharacters { get; set; } = 3;
+    [Parameter] public int CountryId { get; set; }
+    [Parameter] public int? ExcludeGroupId { get; set; }
+    [Parameter] public string? AddPersonHref { get; set; }
+    [Parameter] public Action<int>? OnSelected { get; set; }
+
+
+    ClaimsPrincipal? Principal;
+
+
+    IEnumerable<ListboxItem>? Persons;
+
+    int SelectedPersonId;
+
+    void OnSelectedInternal()
+    {
+        if (SelectedPersonId > 0 && OnSelected is not null)
+        {
+            OnSelected(SelectedPersonId);
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (CountryId == 0) CountryId = Principal.CountryId();
+        Persons = await PersonService.ListboxItemsAsync(Principal, CountryId, ExcludeGroupId ?? 0);
+    }
+
+
+    async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
+    {
+        return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
+        Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(searchText.ToLowerInvariant())).ToList());
+    }
+
+    ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
+    int ConvertPerson(ListboxItem person) => person.Id;
+
+}

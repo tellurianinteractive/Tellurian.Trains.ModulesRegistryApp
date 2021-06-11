@@ -10,12 +10,12 @@
 
 <PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
-@if (IsGroupAdministrator && Group?.Id > 0)
+@if (IsGroupAdministrator && Group.Id > 0)
 {
     <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
 
-<TableTemplate Items="Group?.GroupMembers">
+<TableTemplate Items="Group.GroupMembers">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["IsGroupAdministrator"]</th>
@@ -47,11 +47,11 @@
 
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int? GroupId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int? GroupId { get; set; }
 
     private ClaimsPrincipal? Principal;
-    private Group? Group;
+    private Group Group = new Group();
     private bool IsGroupAdministrator;
 
     protected async override Task OnParametersSetAsync()
@@ -59,7 +59,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (GroupId.IsSet())
         {
-            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
+            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
             IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value, Group?.CountryId);
         }
     }
@@ -70,7 +70,7 @@
         {
             var result = await GroupService.RemoveMemberAsync(Principal, membershipId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
+            if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
         }
     }
 }

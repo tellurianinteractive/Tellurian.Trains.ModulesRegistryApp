@@ -35,7 +35,7 @@
 
     private ClaimsPrincipal? Principal;
 
-    Cargo? Cargo;
+    Cargo Cargo = new Cargo();
     IEnumerable<ListboxItem>? TopLevelNhmCodeItems;
     IEnumerable<ListboxItem>? NextLevelNhmCodeItems;
     int LastTopLevelId;
@@ -56,7 +56,7 @@
     {
         if (Cargo is null) return;
         var result = await CargoService.SaveAsync(Principal, Cargo);
-        Cargo = result.Entity;
+        if (result.Entity is not null)  Cargo = result.Entity;
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 

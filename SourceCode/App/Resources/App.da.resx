@@ -966,4 +966,19 @@
   <data name="PasswordResetFailed" xml:space="preserve">
     <value>Nulstilling af adgangskode mislykkedes</value>
   </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Overfør</value>
+  </data>
+  <data name="TransferOwnership" xml:space="preserve">
+    <value>Overfør ejerskab</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Ejer</value>
+  </data>
+  <data name="NewOwner" xml:space="preserve">
+    <value>Ny ejer</value>
+  </data>
+  <data name="TransferredShare" xml:space="preserve">
+    <value>Overført andel</value>
+  </data>
 </root>

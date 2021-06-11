@@ -966,4 +966,19 @@
   <data name="PasswordResetFailed" xml:space="preserve">
     <value>Password reset failed</value>
   </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="TransferOwnership" xml:space="preserve">
+    <value>Transfer ownership</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="NewOwner" xml:space="preserve">
+    <value>New owner</value>
+  </data>
+  <data name="TransferredShare" xml:space="preserve">
+    <value>Transferred share</value>
+  </data>
 </root>

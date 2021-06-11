@@ -28,6 +28,8 @@ namespace ModulesRegistry.Data
 
     }
 
+#nullable enable
+
     public static class MeetingExtensions
     {
         public static bool IsOpenForRegistration(this Meeting? it, DateTime at) =>

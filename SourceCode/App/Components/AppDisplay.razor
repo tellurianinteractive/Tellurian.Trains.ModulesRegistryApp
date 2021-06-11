@@ -14,7 +14,7 @@
 </div>
 
 @code {
-    [Parameter] public string? Label { get; set; }
+    [Parameter] public string Label { get; set; } = string.Empty;
     [Parameter] public string? Value { get; set; }
     [Parameter] public int? Width { get; set; }
     [Parameter] public string TextColor { get; set; } = "black";

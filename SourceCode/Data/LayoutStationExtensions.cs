@@ -1,5 +1,4 @@
-﻿#nullable disable
-
+﻿
 namespace ModulesRegistry.Data
 {
     public static class LayoutStationExtensions

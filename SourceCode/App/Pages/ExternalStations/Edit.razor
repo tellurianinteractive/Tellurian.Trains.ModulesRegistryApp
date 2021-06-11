@@ -8,7 +8,7 @@
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStation" Owner="@Station?.Region" IconClass="@FontAwesome.Station" PageAction="@Id.ToPageAction()" HelpContext="ExternalStation" ShowHelpInitially="true"/>
+<PageHeading ObjectName="ExternalStation" Owner="@Station.Region" IconClass="@FontAwesome.Station" PageAction="@Id.ToPageAction()" HelpContext="ExternalStation" ShowHelpInitially="true"/>
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -32,7 +32,7 @@
 
     ClaimsPrincipal? Principal;
 
-    ExternalStation? Station;
+    ExternalStation Station = new ExternalStation();
     IEnumerable<ListboxItem>? RegionItems;
 
     protected override async Task OnInitializedAsync()
@@ -43,7 +43,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Station = Id > 0 ? await ExternalStationService.FindByIdAsync(Principal, Id) : new ExternalStation { };
+        Station = Id > 0 ? await ExternalStationService.FindByIdAsync(Principal, Id) ?? new ExternalStation () : new ExternalStation();
     }
 
     async Task OnValidSubmit()
@@ -51,7 +51,7 @@
         if (Station is not null)
         {
             var result = await ExternalStationService.SaveAsync(Principal, Station);
-            Station = result.Entity;
+            if (result.Entity is not null) Station = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }

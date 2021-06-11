@@ -27,7 +27,7 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
-    Region? Region;
+    Region Region = new Region();
     IEnumerable<ListboxItem>? CountryItems;
 
     protected override async Task OnInitializedAsync()
@@ -38,8 +38,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Region = Id > 0 ? await RegionService.FindById(Principal, Id) : new Region { CountryId = Principal.CountryId() };
+        Region = Id > 0 ? await RegionService.FindById(Principal, Id) ?? Default : Default;
     }
+
+    Region Default => new Region { CountryId = Principal.CountryId() };
 
     async Task OnValidSubmit()
     {

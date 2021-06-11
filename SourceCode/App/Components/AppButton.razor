@@ -1,11 +1,15 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @if (Href.HasValue())
 {
-    <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[Label]</a>
+    <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]</a>
+}
+else if (IsSubmit)
+{
+    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
 }
 else
 {
-    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" />&nbsp;@Localizer[Label]&nbsp;@ObjectNameLocalized</button>
+    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
 }
 @code {
     [Parameter] public string Label { get; set; } = "Button";
@@ -15,9 +19,10 @@ else
     [Parameter] public bool IsDisabled { get; set; }
     [Parameter] public string? Type { get; set; }
     [Parameter] public string IconName { get; set; } = string.Empty;
+    [Parameter] public bool IsSubmit { get; set; }
 
 
-    string ButtonType => Type.HasValue() ? Type : Label?.ToLowerInvariant() switch
+    string ButtonClassType => Type.HasValue() ? Type.ToLowerInvariant() : Label?.ToLowerInvariant() switch
     {
         "add" => "primary",
         "edit" => "primary",
@@ -25,12 +30,14 @@ else
         "register" => "primary",
         "upload" => "primary",
         "delete" => "danger",
+        "save" => "primary",
         _ => "info"
     };
 
+    string LabelOrType => Label ?? Type ?? "Button";
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
-    string ButtonClass => $"btn btn-sm btn-{ButtonType}";
-    string IconClass => FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
+    string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
+    string IconClass => FontAwesome.ButtonIcons.ContainsKey(LabelOrType) ? FontAwesome.ButtonIcons[LabelOrType] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string? ObjectNameLocalized => string.IsNullOrWhiteSpace(ObjectName) ? null : Localizer[ObjectName].ToString();
 }

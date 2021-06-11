@@ -19,7 +19,7 @@ namespace ModulesRegistry.Data
         public byte LayoutLinePosition { get; set; }
         public int? LayoutStationId { get; set; }
         public bool BringAnyway { get; set; }
-        public string? Note { get; set; }
+        public string Note { get; set; }
         public virtual Layout Layout { get; set; }
         public virtual Module Module { get; set; }
         public virtual MeetingParticipant Participant { get; set; }

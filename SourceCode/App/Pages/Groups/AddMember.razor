@@ -93,6 +93,11 @@ else
         }
     }
 
+    void OnSelectedPerson(int id)
+    {
+        if (GroupMember is not null) GroupMember.PersonId = id;
+    }
+
     async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
     {
         return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
@@ -112,6 +117,8 @@ else
         CountryId = countryId;
         Persons = await PersonService.ListboxItemsAsync(Principal, countryId, Group?.Id ?? 0);
     }
+
+    string AddPersonHref(int? groupId) => $"persons/0/editgroup/{groupId}";
 
     string SearchLabel => Localizer.SearchObject("Person", MinimumSearchCharacters);
     int ConvertPerson(ListboxItem person) => person.Id;

@@ -1,8 +1,13 @@
 ## Release Notes
 
 #### Version 1.2.8
-Release date 2021-06-10
-- **Other Wagon Class** can now be specified for each station customer's *cargo flow* if you want to override the default classes for the *cargo type*.
+Release date 2021-06-11
+- **Other Wagon Class** can now be specified for each station customer's *cargo flow* 
+if you want to override the default classes for the *cargo type*.
+- **Transfer Module Ownership** makes it possibible to transfer part or whole ownership of a module
+to another person. You can only transfer your own ownership and it cannot be undone.
+- **Bug fix** of resetting password for persons with more than one email address.
+
 #### Version 1.2.7
 Release date 2021-05-26
 - **Bug fix** of displaying cargo names for station customers.

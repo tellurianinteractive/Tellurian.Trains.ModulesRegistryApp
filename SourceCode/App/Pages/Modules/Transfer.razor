@@ -1,0 +1,102 @@
+﻿@page "/Modules/{id:int}/Transfer/PersonOwned/{owningPersonId:int}"
+@page "/Modules/{id:int}/Transfer/GroupOwned/{owningGroupId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject ModuleService ModuleService
+@inject PersonService PersonService
+
+@if (Module is null)
+{
+    <PageHeading Label="TransferOwnership" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+    <ActionMessage Label="ModuleNotFound" AlertType="´Warning" />
+}
+else
+{
+    <PageHeading Label="TransferOwnership" ObjectName="@Module.FullName" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+
+    <h2>@Module.FullName</h2>
+
+    <TableTemplate Items="Module.ModuleOwnerships">
+        <TableHeader>
+            <th>@Localizer["Owner"]</th>
+            <th>@Localizer["OwnedPercent"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.OwnerName()</td>
+            <td>@item.OwnedShareAndPercentage()</td>
+            <td>
+                @if (OwnershipRef?.IsOwner(item) == true)
+                    {
+                    <AppButton Label="Transfer" OnClickCallback="(() => TransferOwnership(item))" />
+                    }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
+    @if (NewOwnership is not null)
+    {
+        <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
+            <Inputs>
+                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons"  @bind-Value="NewOwnership.PersonId"  />
+                <AppInputSelect Width="2" Label="TransferredShare" Items="TransferSharesItems(OwnershipToTransfer)" @bind-Value="SelectedTransferShare" />
+            </Inputs>
+        </EditTemplate>
+    }
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int OwningPersonId { get; set; }
+    [Parameter] public int OwningGroupId { get; set; }
+
+
+    ClaimsPrincipal? Principal;
+    ModuleOwnershipRef? OwnershipRef;
+    Module? Module;
+    ModuleOwnership? OwnershipToTransfer;
+    ModuleOwnership? NewOwnership;
+    IEnumerable<ListboxItem> Persons = Array.Empty<ListboxItem>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        OwnershipRef = GetOwnershipRef;
+        Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef);
+        Persons = await PersonService.ListboxItemsAsync(Principal, Principal.CountryId());
+    }
+
+    ModuleOwnershipRef GetOwnershipRef =>
+        OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
+        OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) :
+        Principal.OwnerRef();
+
+    void TransferOwnership(ModuleOwnership ownership)
+    {
+        OwnershipToTransfer = ownership;
+        NewOwnership = new ModuleOwnership { ModuleId = ownership.ModuleId};
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (OwnershipToTransfer is not null && NewOwnership is not null && OwnershipRef is not null && SelectedTransferShare > 0)
+        {
+            NewOwnership.OwnedShare = TransferShares.Single(ts => ts.Index == SelectedTransferShare).Percentage;
+            var result = await ModuleService.TransferOwnershipAsync(Principal, OwnershipToTransfer, NewOwnership, OwnershipRef);
+            if (result.Entity is not null) Module = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+    IEnumerable<ListboxItem> TransferSharesItems(ModuleOwnership? ownership) =>
+        ownership is null ? Array.Empty<ListboxItem>() :
+        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, $"1/{ts.Index} ({ts.Percentage*100:F0}%)"));
+
+    int SelectedTransferShare;
+    static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0/3.0), (4, 0.25), (5, 0.20) };
+}

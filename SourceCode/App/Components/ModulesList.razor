@@ -32,7 +32,7 @@
             <td>@module.FremoName()</td>
         }
         <td>@module.Standard.ShortName</td>
-        <td align="center">@OwnedPercentage(module)</td>
+        <td align="center">@ModuleOwnership(module).OwnedShareAndPercentage()</td>
         <td align="center">@Status(module)</td>
         <td>
             <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
@@ -42,17 +42,18 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-primary" href="@ModuleEditHref(module.Id)"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-                <a class="btn btn-sm btn-danger" href="@ModuleDeleteHref(module.Id)"><span class="@FontAwesome.Delete" /> @Localizer["Delete"]</a>
-                @if ( module.Id > 0)
+                <AppButton Label="Edit" Href="@ModuleEditHref(module.Id)" />
+                <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)" />
+                <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
+                @if (module.Id > 0)
                 {
-                    <button type="button" class="btn btn-sm btn-secondary" @onclick="(() => Clone(module.Id))"><span class="@FontAwesome.Clone" /> @Localizer["Clone"]</button>
+                    <AppButton Label="Clone" OnClickCallback="(() => Clone(module.Id))" />
                 }
             }
             @if (module.StationId.HasValue)
             {
-                <a class="btn btn-sm btn-info" href="@StationEditHref(module.StationId.Value)"><span class="@FontAwesome.Station" /> @Localizer["Station"]</a>
-                <a class="btn btn-sm btn-info" href="@StationCustomersHref(module.StationId.Value)"><span class="@FontAwesome.Cargo" /> @Localizer["FreightCustomers"]</a>
+                <AppButton Label="Station" Href="@StationEditHref(module.StationId.Value)" />
+                <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" />
             }
         </td>
     </RowTemplate>
@@ -67,10 +68,7 @@
 
     ModuleOwnershipRef OwnershipRef => ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
 
-    private string OwnedPercentage(Module module) => OwnedShare(module) == 0 ? "0%" : $"{100 / OwnedShare(module)}%";
-    private int OwnedShare(Module module) => module?.ModuleOwnerships is null ?
-        0 :
-        module.ModuleOwnerships.Where(mo => mo.GroupId == OwnershipRef.GroupId || mo.PersonId == OwnershipRef.PersonId).Select(mo => mo.OwnedShare).FirstOrDefault();
+    ModuleOwnership? ModuleOwnership(Module module) => module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == OwnershipRef.GroupId || mo.PersonId == OwnershipRef.PersonId);
 
     protected override void OnParametersSet()
     {
@@ -97,4 +95,5 @@
     string ModuleDeleteHref(int id) => OwnershipRef.Href("Modules", id, "Delete");
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string StationCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
+    string TransferOwnershipHref(int id) => OwnershipRef.Href("Modules", id, "Transfer");
 }

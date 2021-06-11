@@ -47,7 +47,7 @@
 
     ClaimsPrincipal? Principal;
     Station? Station;
-    StationCustomer? StationCustomer;
+    StationCustomer StationCustomer = new StationCustomer();
     IEnumerable<ListboxItem>? OperatingDayItems;
     IEnumerable<ListboxItem>? CargoTypeItems;
     IEnumerable<ListboxItem>? DirectionItems;
@@ -73,7 +73,7 @@
         if (StationId > 0)
         {
             Station = await StationService.FindByIdAsync(Principal, StationId);
-            StationCustomer = Id > 0 ? await StationCustomerService.FindByIdAsync(Principal, Id) : Default;
+            StationCustomer = Id > 0 ? await StationCustomerService.FindByIdAsync(Principal, Id) ?? Default : Default;
         }
     }
 
@@ -98,7 +98,7 @@
         if (accepted && DeletedId > 0)
         {
             Station = null;
-            StationCustomer = null;
+            StationCustomer = Default;
             var result = await StationCustomerService.DeleteAsync(Principal, DeletedId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);

@@ -9,26 +9,26 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-<select disabled=@IsDisabled class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
-    @if (ShowNoneOption)
-    {
-        <option value="">@NoneOption</option>
-    }
-   @if (Items is not null)
-    {
-        foreach (var item in Items)
+    <select disabled=@IsDisabled class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+        @if (ShowNoneOption)
         {
-            if (item.Id == CurrentValue)
+            <option value="">@NoneOption</option>
+        }
+        @if (Items is not null)
+        {
+            foreach (var item in Items)
             {
-                <option selected value="@item.Id">@item.Description</option>
-            }
-            else
-            {
-                <option value="@item.Id">@item.Description</option>
+                if (item.Id == CurrentValue)
+                {
+                    <option selected value="@item.Id">@item.Description</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Description</option>
+                }
             }
         }
-    }
-</select>
+    </select>
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">

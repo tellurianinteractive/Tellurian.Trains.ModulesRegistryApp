@@ -8,7 +8,7 @@
 @inject ModuleGableTypeService ModuleGableTypeService
 @inject ScaleService ScaleService
 
-<EditTemplate Item="GableType" OnValidSubmit="OnValidSubmit" ShowSaveButton="true" >
+<EditTemplate Item="GableType" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
         <AppInputSelect Width="2" Label="Scale" @bind-Value="GableType.ScaleId" Items="ScaleItems" />
         <AppInputText Width="8" Label="Designation" @bind-Value="GableType.Designation" />
@@ -16,11 +16,11 @@
 </EditTemplate>
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int Id { get; set; }
-        ClaimsPrincipal? Principal;
-        ModuleGableType? GableType;
-        IEnumerable<ListboxItem>? ScaleItems;
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    ModuleGableType GableType = Default;
+    IEnumerable<ListboxItem>? ScaleItems;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -28,16 +28,18 @@
         if (Principal is not null)
         {
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
-            GableType = Id > 0 ? await ModuleGableTypeService.FindByIdAsync(Principal, Id) : new ModuleGableType { ScaleId = 3 };
+            GableType = Id > 0 ? await ModuleGableTypeService.FindByIdAsync(Principal, Id) ?? Default: Default;
         }
     }
+
+    static ModuleGableType Default => new ModuleGableType { ScaleId = 3 };
 
     async Task OnValidSubmit()
     {
         if (GableType is not null)
         {
             var result = await ModuleGableTypeService.SaveAsync(Principal, GableType);
-            GableType = result.Entity;
+            if (result.Entity is not null) GableType = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }

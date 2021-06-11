@@ -3,8 +3,6 @@ using ModulesRegistry.Services.Resources;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
 namespace ModulesRegistry.Services.Extensions
 {
     static public class DbContextExtensions
@@ -17,10 +15,12 @@ namespace ModulesRegistry.Services.Extensions
             (count, count <0 ? Strings.NoModification : count > 0 ? Strings.Saved : Strings.SaveFailed, count != 0 ? entity : default);
         public static (int Count, string Message, T? Entity) SaveResult<T>(this string message, T entity) =>
             (0, message, entity);
+        public static (int Count, string Message, T? Entity) SaveResult<T>(this string message) =>
+            (0, message, default);
 
-        public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? me) => 
+        public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? _) => 
             (0, Strings.NotAuthorized, default);
-        public static (int Count, string Message, T? Entity) NothingToUpdate<T>(this ClaimsPrincipal? me) =>
+        public static (int Count, string Message, T? Entity) NothingToUpdate<T>(this ClaimsPrincipal? _) =>
             (0, Strings.NotFound, default);
 
         public static (int Count, string Message) DeleteResult(this int count) => 
@@ -32,13 +32,13 @@ namespace ModulesRegistry.Services.Extensions
         public static (int Count, string Message) CloneResult(this int count) =>
             (count, count > 0 ? Strings.ClonedSuccessfully : Strings.CloningFailed);
 
-        public static (int Count, string Message) DeleteNotAuthorized<T>(this ClaimsPrincipal? me) => 
+        public static (int Count, string Message) DeleteNotAuthorized<T>(this ClaimsPrincipal? _) => 
             (0, Strings.NotAuthorized);
 
-        public static (int Count, string Message, T? Entity) AlreadyExists<T>(this T? me) =>
+        public static (int Count, string Message, T? Entity) AlreadyExists<T>(this T? _) =>
             (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.AlreadyExists.ToLowerInvariant()}", default);
 
-        public static (int Count, string Message) NotFound<T>(this T? me) =>
+        public static (int Count, string Message) NotFound<T>(this T? _) =>
             (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.NotFound.ToLowerInvariant()}");
 
     }

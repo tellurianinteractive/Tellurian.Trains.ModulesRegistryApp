@@ -2,6 +2,7 @@
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Resources;
 using ModulesRegistry.Services.Extensions;
+using Rationals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,9 @@ namespace ModulesRegistry.Services.Implementations
     public sealed class ModuleService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
-        private readonly ITimeProvider TimeProvider;
-        private readonly Random Random = new();
-        public ModuleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+        public ModuleService(IDbContextFactory<ModulesDbContext> factory)
         {
             Factory = factory;
-            TimeProvider = timeProvider;
         }
 
         public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, int? stationId)
@@ -122,13 +120,13 @@ namespace ModulesRegistry.Services.Implementations
                     .Select(g => g.Id).ToListAsync();
                 if (administeredGroupsIds.Any())
                 {
-                return await dbContext.Modules.AsNoTracking()
-                     .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId.HasValue &&  administeredGroupsIds.Contains( mo.GroupId.Value)))
-                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
-                     .Include(m => m.Scale)
-                     .Include(m => m.Standard)
-                     .ToListAsync();
+                    return await dbContext.Modules.AsNoTracking()
+                         .Where(m => m.ModuleOwnerships.Any(mo => mo.GroupId.HasValue && administeredGroupsIds.Contains(mo.GroupId.Value)))
+                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+                         .Include(m => m.Scale)
+                         .Include(m => m.Standard)
+                         .ToListAsync();
                 }
             }
             return Array.Empty<Module>();
@@ -161,7 +159,7 @@ namespace ModulesRegistry.Services.Implementations
                     {
                         return await dbContext.Modules.AsNoTracking()
                          .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
-                         .Include(m => m.ModuleOwnerships)
+                         .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                          .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
                          .SingleOrDefaultAsync();
                     }
@@ -170,7 +168,7 @@ namespace ModulesRegistry.Services.Implementations
                 {
                     return await dbContext.Modules.AsNoTracking()
                         .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
-                        .Include(m => m.ModuleOwnerships)
+                        .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                         .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
                         .SingleOrDefaultAsync();
                 }
@@ -320,6 +318,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public static bool IsNotFullOwner(Module existing, ModuleOwnershipRef ownershipRef) =>
             false == existing.ModuleOwnerships.Any(mo => mo.OwnedShare == 1 && (ownershipRef.IsPerson && mo.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId));
+
         private static bool IsSubmittedToUpcomingMeeting(ModulesDbContext dbContext, Module module) => false; // TODO: Implement later when module registrations are in place.
 
         public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
@@ -337,5 +336,71 @@ namespace ModulesRegistry.Services.Implementations
             }
             return Strings.NotAuthorised.DeleteResult();
         }
+
+#pragma warning disable IDE0042 // Deconstruct variable declaration
+        public async Task<(int Count, string Message, Module? Entity)> TransferOwnershipAsync(ClaimsPrincipal? principal, ModuleOwnership origin, ModuleOwnership destination, ModuleOwnershipRef ownerRef)
+        {
+            ownerRef = principal.UpdateFrom(ownerRef);
+            if (principal.MaySave(ownerRef))
+            {
+                using var dbContext = Factory.CreateDbContext();
+                using var transaction = dbContext.Database.BeginTransaction();
+
+                var existingOrigin = dbContext.ModuleOwnerships.SingleOrDefault(mo =>
+                    mo.ModuleId == origin.ModuleId &&
+                    (origin.PersonId.HasValue && mo.PersonId == origin.PersonId || origin.GroupId.HasValue && mo.GroupId == origin.GroupId));
+
+                if (existingOrigin is null) return Strings.NotAuthorised.SaveResult<Module>();
+
+                var existingDestination = dbContext.ModuleOwnerships.SingleOrDefault(mo =>
+                    mo.ModuleId == destination.ModuleId &&
+                    (destination.PersonId.HasValue && mo.PersonId == destination.PersonId || destination.GroupId.HasValue && mo.GroupId == destination.GroupId));
+
+
+                var transferredShare = Rational.Approximate(destination.OwnedShare, 0.001);
+                var originShare = existingOrigin.SubtractShare(transferredShare);
+
+                if (originShare.Ok)
+                {
+                    if (originShare.Percentage < 0.01)
+                    {
+                        dbContext.ModuleOwnerships.Remove(existingOrigin);
+                    }
+                    else
+                    {
+                        existingOrigin.OwnedShare = originShare.Percentage;
+                    }
+                }
+                else
+                {
+                    transaction.Rollback();
+                    return Strings.NotAuthorised.SaveResult<Module>(); // Wrong owner share
+                }
+
+                if (existingDestination is null)
+                {
+                    dbContext.ModuleOwnerships.Add(destination);
+                }
+                else
+                {
+                    var destinationShare = existingDestination.AddShare(transferredShare);
+                    if (destinationShare.Ok)
+                    {
+                        existingDestination.OwnedShare = destinationShare.Percentage;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return Strings.NotAuthorised.SaveResult<Module>(); // Wrong owner share
+                    }
+                }
+                var result = await dbContext.SaveChangesAsync();
+                transaction.Commit();
+                var module = await FindByIdAsync(principal, origin.ModuleId);
+                return result.SaveResult(module);
+            }
+            return principal.SaveNotAuthorised<Module>();
+        }
+#pragma warning restore IDE0042 // Deconstruct variable declaration
     }
 }

@@ -47,7 +47,7 @@
 
     ClaimsPrincipal? Principal;
     object? Owner;
-    Station? Station;
+    Station Station = new Station();
 
     IEnumerable<ListboxItem>? ModulesItems;
     IEnumerable<ListboxItem>? RegionItems;
@@ -71,7 +71,7 @@
         }
         if (Id > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef);
+            Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef) ?? new Station();
             if (Station is not null) ModuleId = Station.Modules.First().Id;
         }
         await SetDefaultStationName();
@@ -85,7 +85,7 @@
         if (Station is not null)
         {
             var result = await StationService.SaveAsync(Principal, Station, OwnerRef, ModuleId);
-            Station = result.Entity;
+            if (result.Entity is not null) Station = result.Entity;
             if (Station is not null) ModuleId = Station.Modules.First().Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }

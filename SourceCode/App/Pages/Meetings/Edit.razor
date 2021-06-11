@@ -64,14 +64,14 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
-    Meeting? Meeting;
+    Meeting Meeting = new Meeting();
     IEnumerable<ListboxItem>? OrganiserItems;
     bool MayEdit;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Principal, Id) : new Meeting();
+        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Principal, Id) ?? new Meeting() : new Meeting();
         if (Meeting is not null)
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
@@ -84,7 +84,7 @@
         if (Meeting is not null)
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting);
-            Meeting = result.Entity;
+            if (result.Entity is not null)  Meeting = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
 
         }

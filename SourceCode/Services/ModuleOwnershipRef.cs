@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
 
 namespace ModulesRegistry.Services
@@ -24,6 +25,11 @@ namespace ModulesRegistry.Services
         private ClaimsPrincipal? _Principal;
         private int _PersonId;
         private int _GroupId;
+
+
+        public bool IsOwner(ModuleOwnership ownership) =>
+            IsGroup ? ownership.GroupId == GroupId :
+            IsPerson && ownership.PersonId == PersonId;
 
         public bool IsOwner(int id) => (PersonId > 0 && id == PersonId) || (GroupId > 0 && id == GroupId);
         public bool IsGroup => GroupId > 0 &&  PersonId == 0;
