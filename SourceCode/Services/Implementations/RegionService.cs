@@ -22,12 +22,16 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Regions.AsNoTracking()
                     .Where(r => countryId == 0 || r.CountryId == countryId).Include(r => r.Country).ToListAsync();
-                return items.Select(r => new ListboxItem(r.Id, $"{r.LocalName} ({r.Country.EnglishName.Localized()})"))
+                return items.Select(r => new ListboxItem(r.Id, Description(r, maybeCountryId > 0)))
                     .OrderBy(l => l.Description)
                     .AsEnumerable();
 
             }
             return Array.Empty<ListboxItem>();
+
+            static string Description(Region region, bool singleCountry) =>
+                singleCountry ? region.LocalName :
+                $"{region.Country.EnglishName.Localized()}: {region.LocalName}";
         }
 
         public async Task<IEnumerable<Region>> AllAsync(ClaimsPrincipal? principal, int? maybeCountryId = null)
