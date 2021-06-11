@@ -5,8 +5,9 @@ Welcome to the *open source* project for creating a registry for *model railway 
 The project's man goal is to create an application 
 for maintaning data about *model railway modules* with the following qualities:
 - Handle all important aspects of module data to enable to plan meetings.
+- Support for managing modules in any scale in any standard.
 - Available to any user within the module railwayers community.
-- Selective user authorisation for flexible data management.
+- Different levens of user access for flexible data management.
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
