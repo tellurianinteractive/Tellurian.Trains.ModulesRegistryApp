@@ -8,6 +8,7 @@
     [RepresentsUptoYear]    SMALLINT       NULL,
     [Radius]                FLOAT (53)     NULL,
     [Angle]                 FLOAT (53)     NULL,
+    [Straight]              FLOAT (53)     NULL,
     [Length]                FLOAT (53)     NOT NULL,
     [Width]                 FLOAT (53)     NULL,
     [NumberOfThroughTracks] SMALLINT       CONSTRAINT [DF_Module_ThrougTracksCount] DEFAULT ((1)) NOT NULL,

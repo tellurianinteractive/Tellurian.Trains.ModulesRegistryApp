@@ -43,7 +43,7 @@
             @if (MayEdit)
             {
                 <AppButton Label="Edit" Href="@ModuleEditHref(module.Id)" />
-                <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)" />
+                <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)"/>
                 <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
                 @if (module.Id > 0)
                 {
@@ -53,7 +53,7 @@
             @if (module.StationId.HasValue)
             {
                 <AppButton Label="Station" Href="@StationEditHref(module.StationId.Value)" />
-                <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" />
+                <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
             }
         </td>
     </RowTemplate>

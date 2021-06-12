@@ -214,7 +214,7 @@
     <value>Land</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Är grupp admin</value>
+    <value>Är gruppadmin?</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
     <value>Är data admin?</value>
@@ -980,5 +980,11 @@
   </data>
   <data name="TransferredShare" xml:space="preserve">
     <value>Överförd andel</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Bredd</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Rakt</value>
   </data>
 </root>

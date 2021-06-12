@@ -214,7 +214,7 @@
     <value>City</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Is group admin</value>
+    <value>Is group admin?</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
     <value>Is data admin?</value>
@@ -980,5 +980,11 @@
   </data>
   <data name="TransferredShare" xml:space="preserve">
     <value>Transferred share</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Straight</value>
   </data>
 </root>

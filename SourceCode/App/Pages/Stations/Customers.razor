@@ -62,7 +62,7 @@
     {
         if (StationId > 0)
         {
-            var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+            var ownershipRef = ModuleOwnershipRef.PersonOrGroup(OwningPersonId, OwningGroupId);
             Station = await StationService.FindByIdAsync(Principal, StationId, ownershipRef);
             StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
             MayEdit = await Principal.MayEdit(ownershipRef, GroupService);

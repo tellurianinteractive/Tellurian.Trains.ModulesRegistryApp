@@ -7,7 +7,7 @@
 <PageHeading ObjectName="FreightCustomers" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 @if (MayEdit)
 {
-    <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/0"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+    <AppButton Label="Add" Href="@CustomerAddHref(Station)" />
 }
 
 <TableTemplate Items="Station?.ExternalStationCustomers">
@@ -26,7 +26,7 @@
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-primary" href="ExternalStations/@Station?.Id/Customers/@item.Id"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                <AppButton Label="Edit" Href="@CustomerEditHref(item)" />
             }
         </td>
     </RowTemplate>
@@ -51,5 +51,7 @@
     }
 
     bool MayEdit => Station is not null && Principal.IsAuthenticated();
+    string CustomerEditHref(ExternalStationCustomer customer) => $"externalstations/{customer.ExternalStation.Id}/Customers/{customer.Id}";
+    string CustomerAddHref(ExternalStation? station) => station is null ? string.Empty : $"externalstations/{station.Id}/Customers/0";
 
 }

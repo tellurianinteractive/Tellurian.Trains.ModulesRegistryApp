@@ -19,6 +19,7 @@ namespace ModulesRegistry.Data
         public int OperatingDayId { get; set; }
         public int QuantityUnitId { get; set; }
         public int Quantity { get; set; }
+        public int? MaxTrainsetLength { get; set; }
         public int ReadyTimeId { get; set; }
         public short? FromYear { get; set; }
         public short? UptoYear { get; set; }

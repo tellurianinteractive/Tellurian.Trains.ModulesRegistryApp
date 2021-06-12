@@ -826,6 +826,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trainset.
+        /// </summary>
+        internal static string Trainset {
+            get {
+                return ResourceManager.GetString("Trainset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuesday.
         /// </summary>
         internal static string Tuesday {

@@ -166,7 +166,7 @@
     <value>Ideell forening</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Er gruppeadministrator</value>
+    <value>Er gruppeadmin?</value>
   </data>
   <data name="MembersIn" xml:space="preserve">
     <value>Mitglieder in</value>
@@ -980,5 +980,11 @@
   </data>
   <data name="TransferredShare" xml:space="preserve">
     <value>Overført andel</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Bredde</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Rett</value>
   </data>
 </root>

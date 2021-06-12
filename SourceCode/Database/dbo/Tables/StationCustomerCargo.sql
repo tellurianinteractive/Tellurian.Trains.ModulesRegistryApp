@@ -10,6 +10,7 @@
     [OperatingDayId]     INT           CONSTRAINT [DF_StationCustomerCargo_OperatingDayId] DEFAULT ((0)) NOT NULL,
     [QuantityUnitId]     INT           NOT NULL,
     [Quantity]           INT           CONSTRAINT [DF_StationCustomerCargo_Quantity] DEFAULT ((0)) NOT NULL,
+    [MaxTrainsetLength]  INT           NULL,
     [ReadyTimeId]        INT           NOT NULL,
     [FromYear]           SMALLINT      NULL,
     [UptoYear]           SMALLINT      NULL,

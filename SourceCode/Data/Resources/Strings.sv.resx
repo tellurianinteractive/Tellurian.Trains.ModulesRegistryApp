@@ -141,4 +141,13 @@
   <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
     <value>Modulnamn/variant är upptaget</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Inbjuden</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
 </root>

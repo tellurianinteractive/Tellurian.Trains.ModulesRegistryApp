@@ -417,4 +417,7 @@
   <data name="ParticipantHasRegisteredModules" xml:space="preserve">
     <value>Participant has registered modules</value>
   </data>
+  <data name="Trainset" xml:space="preserve">
+    <value>Trainset</value>
+  </data>
 </root>

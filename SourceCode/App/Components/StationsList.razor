@@ -5,7 +5,7 @@
     if (AnyModules)
     {
         <div>
-            <a class="btn btn-sm btn-secondary" href="@StationEditHref(0)"><span class="@FontAwesome.Add"/> @Localizer["Add"]</a>
+            <AppButton Label="Add" Href="@StationEditHref(0)" />
         </div>
     }
     else
@@ -15,7 +15,7 @@
         </div>
     }
 }
-<TableTemplate Items="Stations" >
+<TableTemplate Items="Stations">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Signature"]</th>
@@ -32,15 +32,15 @@
         <td align="center">@station.IsShadow.AsYesNo()</td>
         <td align="center">
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
-    </td>
+        </td>
         <td>
             @if (MayEdit)
             {
-                <a class="btn btn-sm btn-secondary" href="@StationEditHref(station.Id)"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                <AppButton Label="Edit" Href="@StationEditHref(station.Id)" />
             }
-            <a class="btn btn-sm btn-secondary" href="@CargoCustomersHref(station.Id)"><span class="@FontAwesome.Customer" />@Localizer["FreightCustomers"]</a>
+            <AppButton Label="FreightCustomers" Href="@CargoCustomersHref(station.Id)" IconName="Customer" />
         </td>
-</RowTemplate>
+    </RowTemplate>
 </TableTemplate>
 
 
@@ -55,7 +55,8 @@
            $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
            $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
 
-    string CargoCustomersHref(int id) => OwningGroupId > 0 ? 
+    string CargoCustomersHref(int id) => OwningGroupId > 0 ?
         $"/Stations/{id}/Customers/GroupOwned/{OwningGroupId}" :
         $"/Stations/{id}/Customers/PersonOwned/{OwningPersonId}";
+
 }

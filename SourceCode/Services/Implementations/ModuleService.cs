@@ -181,6 +181,7 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
         {
             ownerRef = principal.UpdateFrom(ownerRef);
+            entity.Length = entity.CalculateLength();
             using var dbContext = Factory.CreateDbContext();
             if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef))
             {

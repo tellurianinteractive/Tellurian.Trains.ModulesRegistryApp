@@ -163,7 +163,7 @@
     <value>Gemeinnütziger Verein</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Ist Gruppenadministrator</value>
+    <value>Ist Gruppenadmin?</value>
   </data>
   <data name="MembersIn" xml:space="preserve">
     <value>Mitglieder in</value>
@@ -980,5 +980,11 @@
   </data>
   <data name="TransferredShare" xml:space="preserve">
     <value>Übertragener Anteil</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Breite</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Gerade</value>
   </data>
 </root>

@@ -38,16 +38,19 @@ else
             <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
 
-            <AppInputText Width="8" Label="ThemeNote" @bind-Value="Module.Theme" />
+            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
+            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
             <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
             <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
 
-            <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" />
-            <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" />
-            <AppInputNumber Width="2" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" />
+            <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" OnChangedValue="UpdateLength" />
+            <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°"  OnChangedValue="UpdateLength" />
+            <AppInputNumber Width="1" Label="Straight" @bind-Value="Module.Straight" Unit="mm" Step="1"  OnChangedValue="UpdateLength" />
+            <AppInputNumber Width="1" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" IsDisabled="true"  />
+            <AppInputNumber Width="1" Label="Width" @bind-Value="Module.Width" Unit="mm" Step="1" />
             <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
             <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
+            <AppInputFill Width="3" />
 
             <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Module.IsUnavailable" />
             <AppInputCheck Width="2" Label="IsStandAlone" @bind-Value="Module.IsStandAlone" />
@@ -122,12 +125,19 @@ else
     {
         if (Module is not null)
         {
+            Module.Length = Module.CalculateLength();
             Module.ModuleExits = Module.ModuleExits.Where(mg => mg.GableTypeId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnerRef);
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    void UpdateLength()
+    {
+        if (Module is not null) Module.Length = Module.CalculateLength();
+    }
+
     object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;
     private string Heading => Localizer.HeadingText(null, "Module", OwningGroup is null ? OwningPerson : OwningGroup, Id.ToPageAction());
 

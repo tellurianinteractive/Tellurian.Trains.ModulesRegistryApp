@@ -24,13 +24,15 @@ namespace ModulesRegistry.Extensions
         public const string Register = "fa fa-user-plus";
         public const string Save = "fa fa-save";
         public const string Settings = "fa fa-user-cog";
+        public const string Show = "fa fa-info";
         public const string Station = "fa fa-school";
         public const string Standard = "fa fa-pencil-ruler";
+        public const string Transfer = "fa fa-people-carry";
         public const string Upload = "fa fa-file-upload";
         public const string User = "fa fa-user";
         public const string View = "fa fa-eye";
 
-        public static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
+        public readonly static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
         {
             {nameof(Add), Add },
             {nameof(Cancel), Cancel },
@@ -52,8 +54,10 @@ namespace ModulesRegistry.Extensions
             {nameof(Register), Register },
             {nameof(Save), Save },
             {nameof(Settings), Settings },
+            {nameof(Show), Show },
             {nameof(Station), Station },
             {nameof(Standard), Standard },
+            {nameof(Transfer), Transfer },
             {nameof(Upload), Upload },
             {nameof(User), User },
             {nameof(View), View },

@@ -1,5 +1,13 @@
 ## Release Notes
 
+#### Version 1.2.9
+Release date 2021-06-12
+- **Width** can now be specified for modules.
+- **Length** of modules is now calculated as the sum of *straight* and *curved* lengths.
+There is a new optional *straight* length field. The *length* field is now read-only.
+- **Trainset** added as a *quantity unit*, and it is also possible to specify *max length* of the trainset.
+- **Improvements** of some user interface functionality.
+
 #### Version 1.2.8
 Release date 2021-06-11
 - **Other Wagon Class** can now be specified for each station customer's *cargo flow* 

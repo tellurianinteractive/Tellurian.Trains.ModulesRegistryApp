@@ -14,13 +14,13 @@ namespace ModulesRegistry.Services.Implementations
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public StationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-        public async Task<IEnumerable<ListboxItem>> StationItemsAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+        public async Task<IEnumerable<ListboxItem>> StationItemsAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
         {
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
                 return await dbContext.Stations.AsNoTracking()
-                    .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId || mo.PersonId == ownerRef.PersonId)))
+                    .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId)))
                     .Select(s => new ListboxItem(s.Id, s.FullName))
                     .ToListAsync();
             }
@@ -30,16 +30,15 @@ namespace ModulesRegistry.Services.Implementations
         public Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id) =>
             FindByIdAsync(principal, id, ModuleOwnershipRef.None);
 
-        public async Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
+        public async Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownershipRef)
         {
             if (principal.IsAuthenticated())
-            {
-                
-                ownerRef = principal.UpdateFrom(ownerRef);
+            {               
+                if (!ownershipRef.IsNone) ownershipRef = principal.UpdateFrom(ownershipRef);
                 using var dbContext = Factory.CreateDbContext();
-                var isMemberInGroupsInSameDomain =  GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownerRef);
+                var isMemberInGroupsInSameDomain =  GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
                 return await dbContext.Stations.AsNoTracking()
-                     .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownerRef, isMemberInGroupsInSameDomain) && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)))
+                     .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && (ownershipRef.IsNone || m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
                      .Include(m => m.StationTracks)
                      .Include(m => m.Modules)
                      .SingleOrDefaultAsync();
@@ -77,21 +76,21 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<Station>();
         }
 
-        public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownerRef, int moduleId)
+        public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownershipRef, int moduleId)
         {
             if (principal.IsAuthenticated())
             {
-                ownerRef = principal.UpdateFrom(ownerRef);
-                if (ownerRef.IsGroup)
+                ownershipRef = principal.UpdateFrom(ownershipRef);
+                if (ownershipRef.IsGroup)
                 {
                     using var dbContext = Factory.CreateDbContext();
-                    var isDataAdministrator = await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId());
+                    var isDataAdministrator = await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownershipRef.GroupId && gm.PersonId == principal.PersonId());
                     if (isDataAdministrator)
                     {
                         return await AddOrUpdate(dbContext, principal, entity, moduleId);
                     }
                 }
-                else if (principal.MaySave(ownerRef))
+                else if (principal.MaySave(ownershipRef))
                 {
                     using var dbContext = Factory.CreateDbContext();
                     return await AddOrUpdate(dbContext, principal, entity, moduleId);

@@ -61,6 +61,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invited.
+        /// </summary>
+        public static string Invited {
+            get {
+                return ResourceManager.GetString("Invited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Module is registered for upcoming meeting.
         /// </summary>
         public static string ModuleIsRegisteredForUpcomingMeeting {
@@ -75,6 +84,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string ModuleNameIsAlreadyTaken {
             get {
                 return ResourceManager.GetString("ModuleNameIsAlreadyTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
@@ -129,6 +147,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

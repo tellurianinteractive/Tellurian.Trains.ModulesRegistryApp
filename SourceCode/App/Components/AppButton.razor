@@ -21,6 +21,14 @@ else
     [Parameter] public string IconName { get; set; } = string.Empty;
     [Parameter] public bool IsSubmit { get; set; }
 
+    protected override void OnParametersSet()
+    {
+        if (string.IsNullOrWhiteSpace(IconName))
+        {
+            IconName = Label ?? "info";
+        }
+    }
+
 
     string ButtonClassType => Type.HasValue() ? Type.ToLowerInvariant() : Label?.ToLowerInvariant() switch
     {
@@ -38,6 +46,6 @@ else
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
-    string IconClass => FontAwesome.ButtonIcons.ContainsKey(LabelOrType) ? FontAwesome.ButtonIcons[LabelOrType] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
+    string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string? ObjectNameLocalized => string.IsNullOrWhiteSpace(ObjectName) ? null : Localizer[ObjectName].ToString();
 }

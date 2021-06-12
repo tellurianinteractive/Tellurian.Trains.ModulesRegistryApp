@@ -43,13 +43,16 @@ namespace ModulesRegistry.Validators
                .MustBeValidYear(localizer)
                .WithName(n => localizer["UptoYear"]);
             RuleFor(m => m.Radius)
-                .InclusiveBetween(500.0, 10000.0).When(m => m.Radius is not null)
+                .InclusiveBetween(300.0, 10000.0).When(m => m.Radius is not null)
                 .WithName(n => localizer[nameof(n.Radius)]);
             RuleFor(m => m.Angle)
                 .InclusiveBetween(1, 360).When(m => m.Angle is not null)
                 .WithName(n => localizer[nameof(n.Angle)]);
+            RuleFor(m => m.Straight)
+                .InclusiveBetween(0, 50000).When(m => m.Straight is not null)
+                .WithName(n => localizer[nameof(n.Straight)]);
             RuleFor(m => m.Length)
-                .InclusiveBetween(5, 50000)
+                .InclusiveBetween(0, 50000)
                 .WithName(n => localizer[nameof(n.Length)]);
             RuleFor(m => (int)m.NumberOfThroughTracks)
                 .InclusiveBetween(1, 4)

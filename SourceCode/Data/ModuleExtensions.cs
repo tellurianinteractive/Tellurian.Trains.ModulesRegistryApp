@@ -69,5 +69,15 @@ namespace ModulesRegistry.Data
             if (me.DwgDrawingId.HasValue) yield return me.DwgDrawingId.Value;
             if (me.SkpDrawingId.HasValue) yield return me.SkpDrawingId.Value;
         }
+
+        public static double CalculateLength(this Module me)
+        {
+            double? curveLength = me.Angle.HasValue && me.Radius.HasValue ? Math.Round(Math.PI * me.Angle.Value * me.Radius.Value / 180.0, 0) : null;
+            if (curveLength.HasValue && me.Straight.HasValue) return curveLength.Value + me.Straight.Value;
+            if (curveLength.HasValue) return curveLength.Value;
+            if (me.Straight.HasValue) return me.Straight.Value;
+            return 0.0;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -22,7 +23,9 @@ namespace ModulesRegistry.Data
         public short? RepresentsUptoYear { get; set; }
         public double? Radius { get; set; }
         public double? Angle { get; set; }
+        public double? Straight { get; set; }
         public double Length { get; set; }
+        public double? Width { get; set; }
         public short NumberOfThroughTracks { get; set; }
         public bool HasNormalGauge { get; set; }
         public bool HasNarrowGauge { get; set; }
@@ -58,4 +61,5 @@ namespace ModulesRegistry.Data
         public virtual ICollection<ModuleExit> ModuleExits { get; set; }
         public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     }
+   
 }

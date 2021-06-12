@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Stations" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
 
-<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwningGroupId" OwningPersonId="OwningPersonId" />
+<StationsList Stations="Stations" MayEdit="MayEdit" AnyModules="AnyModules" OwningGroupId="OwnershipRef.GroupId" OwningPersonId="OwnershipRef.PersonId" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
@@ -20,14 +20,15 @@
 
     ClaimsPrincipal? Principal;
     IEnumerable<Station>? Stations;
+    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
     bool AnyModules;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
-        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
-        Stations = await StationService.GetAllAsync(Principal, ownershipRef);
-        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, ownershipRef);
+        OwnershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+        Stations = await StationService.GetAllAsync(Principal, OwnershipRef);
+        AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, OwnershipRef);
     }
 
     private bool MayEdit => Principal is not null;

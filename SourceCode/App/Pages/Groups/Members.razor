@@ -18,9 +18,9 @@
 <TableTemplate Items="Group.GroupMembers">
     <TableHeader>
         <th>@Localizer["Name"]</th>
-        <th>@Localizer["IsGroupAdministrator"]</th>
-        <th>@Localizer["IsDataAdministrator"]</th>
-        <th>@Localizer["Status"]</th>
+        <th align="center">@Localizer["IsGroupAdministrator"]</th>
+        <th align="center">@Localizer["IsDataAdministrator"]</th>
+        <th align="center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
 
     </TableHeader>
@@ -30,15 +30,15 @@
         <td align="center">@member.IsDataAdministrator.AsYesNo()</td>
         <td align="center">@member.Person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
-            <a class="btn btn-sm btn-info" href="persons/@member.PersonId/modules/group/@Group.Id"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-            <a class="btn btn-sm btn-info" href="persons/@member.PersonId/stations/group/@Group.Id"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
+            <AppButton Label="Modules" Href="@ModulesHref(member)" IconName="Modules" />
+            <AppButton Label="Stations" Href="@StationsHref(member)" IconName="Station" />
             @if (IsGroupAdministrator)
             {
-                <a class="btn btn-sm btn-primary" href="groups/@member.GroupId/members/@member.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                <button class="btn btn-sm btn-danger" @onclick="(async () => await RemoveMember(member.Id))"><span class="fa fa-trash" />@Localizer["Remove"]</button>
+                <AppButton Label="Edit" Href="@MemberEditHref(member)" />
+                <AppButton Label="Remove" OnClickCallback="(async () => await RemoveMember(member.Id))" IconName="Delete"/>
                 @if (member.Person.MayBeInvited())
                 {
-                    <a class="btn btn-sm btn-success" href="persons/@member.Person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
+                    <AppButton Label="Invite" Href="InviteHref(member)" IconName="Invite" />
                 }
             }
         </td>
@@ -73,4 +73,9 @@
             if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
         }
     }
+
+    string ModulesHref(GroupMember member) => $"persons/{member.PersonId}/modules/{member.GroupId}";
+    string StationsHref(GroupMember member) => $"persons/{member.PersonId}/stations/{member.GroupId}";
+    string MemberEditHref(GroupMember member) => $"groups/{member.GroupId}/members/{member.Id}/edit";
+    string InviteHref(GroupMember member) => $"persons/{member.PersonId}/invite";
 }

@@ -214,7 +214,7 @@
     <value>Kategori</value>
   </data>
   <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Er gruppe admin</value>
+    <value>Er gruppe admin?</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
     <value>Er data admin?</value>
@@ -980,5 +980,11 @@
   </data>
   <data name="TransferredShare" xml:space="preserve">
     <value>Overført andel</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Bredde</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Lige</value>
   </data>
 </root>
