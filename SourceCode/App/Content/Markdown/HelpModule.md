@@ -18,6 +18,11 @@ The given FREMO number will instead be combined with your *FREMO owner initials*
 that requires you to enter each variant as *separate* modules with *same* name 
 but with different characteristics and drawings. You enter a different *variant* for each, for example *short* and *long* module versions.
 - **Box label** is used in any other case, and should be the identity of the box where the module is stored. If several modules are in the same box, they should have the same *box label*.
+#### Measures
+A module can be a curve, a straigh or a combination of both. The length of a module is defined by:
+- A **radius** and **angle** of curve part of module plus **straight** length part.
+- The total **length** of the module is calculated by the application.
+- You can also specfy a module **width** that should be the widest part of the module.
 #### Checkboxes
 - **Is Unavailable** means that the module cannot be registered for a meeting.
 - **Is Stand-Alone** means that the module can stand freely on its legs. 
@@ -33,7 +38,6 @@ You can control who can view your module and station data:
 - **All users** means that all logged-in users will be able to see your module/station.
 >In all cases, only you and any *data administrator* in groups that you are a member of can modify data for your module/station. 
 >When you submit a module to a meeting, the organising group's *data aministrator* can also modify data for your module/station. 
-#### Measures
 
 #### Exits
 Each gable of a module represents an *exit*.

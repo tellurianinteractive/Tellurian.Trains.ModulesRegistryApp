@@ -27,8 +27,9 @@ where *cargo matching* is used.
 - **Direction** defines if the customer supplies (*send* or *export*) or consumes (*recieve* or *import*) the cargo. 
 The *import* and *export* can be used for customers in harbors etc. 
 - **Ouantity** and **Quantity unit** is volume of cargo in each shipment. 
-The simplest way is to use *wagons*, but other more advanced cargo volumes can be used,
+The simplest way is to use *wagons* or *transet*, but other more advanced cargo volumes can be used,
 that forces the user to calculate how many wagons are actually needed, in repect to each wagon type's capacity.
+- **Max trainset length** is the maximum number of wagons that can be recieved in one trainset.
 - **Loading/Unloading ready** is used to control when wagons becomes ready to use 
 for another shipment or be sent empty to some other place. 
 You can select relative or absolute times, or set it as *not applicable*.
