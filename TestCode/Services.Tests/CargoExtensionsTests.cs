@@ -21,7 +21,7 @@ namespace ModulesRegistry.Services.Tests
         [TestMethod]
         public void ReturnsSpecificLanguage()
         {
-            var target = new Cargo { DA="Dansk tekst."};
+            var target = new Cargo { DA = "Dansk tekst." };
             var culture = new CultureInfo("da");
             var actual = target.LocalizedName(culture);
             Assert.IsNotNull(actual);

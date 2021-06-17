@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ModuleStandardService 
+    public sealed class ModuleStandardService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
         public ModuleStandardService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
@@ -21,7 +21,8 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.ModuleStandards
                     .Include(ms => ms.Scale)
-                    .ToListAsync();
+                    .ToListAsync()
+                    .ConfigureAwait(false);
                 return items
                     .Select(ms => new ListboxItem(ms.Id, $"{ms.ShortName} (1:{ms.Scale.Denominator})"))
                     .OrderBy(l => l.Description);
@@ -34,7 +35,11 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.MayRead())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.ModuleStandards.Include(ms => ms.Scale).OrderBy(ms => ms.ShortName).ToListAsync();
+                return await dbContext.ModuleStandards
+                    .Include(ms => ms.Scale)
+                    .OrderBy(ms => ms.ShortName)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
             }
             return Array.Empty<ModuleStandard>();
         }
@@ -44,7 +49,11 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.MayRead())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.ModuleStandards.Where(ms => ms.Id == id).Include(ms => ms.Scale).SingleOrDefaultAsync();
+                return await dbContext.ModuleStandards
+                    .Where(ms => ms.Id == id)
+                    .Include(ms => ms.Scale)
+                    .SingleOrDefaultAsync()
+                    .ConfigureAwait(false);
             }
             return null;
         }
@@ -57,7 +66,7 @@ namespace ModulesRegistry.Services.Implementations
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.ModuleStandards.Attach(entity);
                 dbContext.Entry(entity).State = entity.Id.GetState();
-                var count = await dbContext.SaveChangesAsync();
+                var count = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return count.SaveResult(entity);
             }
             return principal.SaveNotAuthorised<ModuleStandard>();
@@ -71,7 +80,7 @@ namespace ModulesRegistry.Services.Implementations
                 var existing = dbContext.ModuleStandards.Find(id);
                 if (existing is null) return existing.NotFound();
                 dbContext.ModuleStandards.Remove(existing);
-                var count = await dbContext.SaveChangesAsync();
+                var count = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return count.DeleteResult();
             }
             return principal.DeleteNotAuthorized<ModuleStandard>();

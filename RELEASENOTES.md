@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.2.10
+Release date 2021-06-17
+- **Service release** with latest .NET security patches and code cleanup.
+
 #### Version 1.2.9
 Release date 2021-06-12
 - **Width** can now be specified for modules.

@@ -1,16 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Office.Interop.Excel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using System.Globalization;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Imports.Tests
 {
     [TestClass]
+    [Ignore("This effort is regarded as dropped.")]
     public class FremoImport
     {
         [TestMethod]
@@ -22,25 +19,21 @@ namespace ModulesRegistry.Imports.Tests
             Workbook workbook = workbooks.Open(@"C:\Users\Stefan\Documents\FREMO Import data\H0-RE Schweden.xlsx");
             Worksheet worksheet = workbook.Worksheets[1];
 
-            var colA = "X";
+            const string colA = "X";
             var row = 0;
             while (!string.IsNullOrWhiteSpace(colA))
             {
                 row++;
                 var rowValues = (Array)(worksheet.get_Range(Cell("A", row), Cell("R", row)).Cells.Value);
-
-
             }
-           
-            
         }
 
-        private static string Cell(string col, int row)=> col + row.ToString(CultureInfo.InvariantCulture);
+        private static string Cell(string col, int row) => col + row.ToString(CultureInfo.InvariantCulture);
     }
 
     public static class UsefulExtensions
     {
-       public static string AsString(this Array? row, int col)
+        public static string AsString(this Array? row, int col)
         {
             if (row == null) throw new ArgumentNullException(nameof(row));
             return row.GetValue(1, col)?.ToString() ?? string.Empty;
@@ -50,21 +43,19 @@ namespace ModulesRegistry.Imports.Tests
         {
             if (row == null) throw new ArgumentNullException(nameof(row));
             return (int?)(row.GetValue(1, col));
-
         }
         public static short? AsShort(this Array? row, int col)
         {
             if (row == null) throw new ArgumentNullException(nameof(row));
             return (short?)(row.GetValue(1, col));
-
         }
         public static double? AsDouble(this Array? row, int col)
         {
             if (row == null) throw new ArgumentNullException(nameof(row));
             return (double?)(row.GetValue(1, col));
-
         }
-        public static Data.Module AsModule(this Array? row) {
+        public static Data.Module AsModule(this Array? row)
+        {
             var module = new Data.Module
             {
                 FremoNumber = row.AsInt(2),

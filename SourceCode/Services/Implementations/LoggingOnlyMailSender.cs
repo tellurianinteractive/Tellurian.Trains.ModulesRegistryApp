@@ -20,7 +20,7 @@ namespace ModulesRegistry.Services.Implementations
             return Task.FromResult(1);
 
             static string MessageSummary(MailMessage message) =>
-                $"{message.Subject} to {string.Join(';',message.To.AsEnumerable().Select(m => m.Address))}\n{message.Body}";
+                $"{message.Subject} to {string.Join(';', message.To.AsEnumerable().Select(m => m.Address))}\n{message.Body}";
         }
 
     }

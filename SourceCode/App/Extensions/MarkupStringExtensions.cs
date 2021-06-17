@@ -2,10 +2,6 @@
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Extensions
 {
@@ -15,7 +11,7 @@ namespace ModulesRegistry.Extensions
     public static class MarkupStringExtensions
     {
         private static MarkupString AsMarkup(this string? markupText) =>
-            string.IsNullOrWhiteSpace(markupText) ? new() : new (markupText);
+            string.IsNullOrWhiteSpace(markupText) ? new() : new(markupText);
 
         public static MarkupString StatusIcon(this Person? me) =>
             me.PersonStatusIcons().AsMarkup();
@@ -29,6 +25,5 @@ namespace ModulesRegistry.Extensions
             me.IsInvited() && me.IsNeverLoggedIn() ? "envelope" :
             me.UserId.HasValue ? "user-check" :
             "user-slash";
-
     }
 }

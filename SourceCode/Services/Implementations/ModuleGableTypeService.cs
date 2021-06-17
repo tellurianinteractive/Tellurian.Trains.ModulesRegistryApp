@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -21,13 +19,20 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int? scaleId)
         {
             var dbContext = Factory.CreateDbContext();
-            return await dbContext.ModuleGableTypes.AsNoTracking().Where(mgt => !scaleId.HasValue || mgt.ScaleId == scaleId).Select(mgt => new ListboxItem(mgt.Id, mgt.Designation)).ToListAsync();
+            return await dbContext.ModuleGableTypes.AsNoTracking()
+                .Where(mgt => !scaleId.HasValue || mgt.ScaleId == scaleId)
+                .Select(mgt => new ListboxItem(mgt.Id, mgt.Designation))
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<ModuleGableType>> GetAllAsync()
         {
             var dbContext = Factory.CreateDbContext();
-            return await dbContext.ModuleGableTypes.AsNoTracking().Include(mgt => mgt.Scale).ToListAsync();
+            return await dbContext.ModuleGableTypes.AsNoTracking()
+                .Include(mgt => mgt.Scale)
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task<ModuleGableType?> FindByIdAsync(ClaimsPrincipal? principal, int id)
@@ -35,7 +40,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAnyAdministrator())
             {
                 var dbContext = Factory.CreateDbContext();
-                return await dbContext.ModuleGableTypes.FindAsync(id);
+                return await dbContext.ModuleGableTypes.FindAsync(id).ConfigureAwait(false);
             }
             return null;
         }
@@ -45,7 +50,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAnyAdministrator())
             {
                 var dbContext = Factory.CreateDbContext();
-                var existing = await dbContext.ModuleGableTypes.FindAsync(entity.Id);
+                var existing = await dbContext.ModuleGableTypes.FindAsync(entity.Id).ConfigureAwait(false);
                 if (existing is null)
                 {
                     dbContext.ModuleGableTypes.Add(entity);
@@ -55,7 +60,7 @@ namespace ModulesRegistry.Services.Implementations
                     dbContext.Entry(existing).CurrentValues.SetValues(entity);
                     if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
                 }
-                var result = await dbContext.SaveChangesAsync();
+                var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return result.SaveResult(existing ?? entity);
             }
             return principal.SaveNotAuthorised<ModuleGableType>();

@@ -1,14 +1,13 @@
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ModulesRegistry.Services;
+using ModulesRegistry.Services.Implementations;
 using System;
 using System.Resources;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using ModulesRegistry.Services.Implementations;
 
 [assembly: NeutralResourcesLanguage(LanguageService.DefaultLanguage)]
 namespace ModulesRegistry
@@ -32,7 +31,7 @@ namespace ModulesRegistry
                         var secretClient = new SecretClient(new Uri("https://telluriantrains.vault.azure.net/"), new DefaultAzureCredential());
                         config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                     }
-                    if (context.HostingEnvironment.IsDevelopment())
+                    else if (context.HostingEnvironment.IsDevelopment())
                     {
                         config.AddUserSecrets<Program>();
                     }

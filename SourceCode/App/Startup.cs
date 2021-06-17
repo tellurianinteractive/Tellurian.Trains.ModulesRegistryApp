@@ -13,7 +13,6 @@ using Microsoft.OpenApi.Models;
 using ModulesRegistry.Data;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
-using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
 using System.Linq;
@@ -34,10 +33,7 @@ namespace ModulesRegistry
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
-            });
+            services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
             services.Configure<CloudMailSenderSettings>(Configuration.GetSection("SendGrid"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
@@ -48,20 +44,14 @@ namespace ModulesRegistry
                 //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" });
-            });
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" }));
             services.AddServerSideBlazor();
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
             services.AddAuthorizationPolicies();
-            services.AddDbContextFactory<ModulesDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")).EnableSensitiveDataLogging(Environment.IsDevelopment());
-            });
+            services.AddDbContextFactory<ModulesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")).EnableSensitiveDataLogging(Environment.IsDevelopment()));
 
             services.AddBlazoredToast();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
@@ -136,7 +126,4 @@ namespace ModulesRegistry
             });
         }
     }
-
-    
-
 }

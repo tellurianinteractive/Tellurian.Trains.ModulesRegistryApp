@@ -12,13 +12,13 @@ namespace ModulesRegistry.Services.Extensions
 {
     public static class StringExtensions
     {
-        public static string? Max(this string? me, int max) => 
+        public static string? Max(this string? me, int max) =>
             me is null ? null : me.Length < max ? me : me[0..max];
 
 
-       public static string[] Items(this string? value, char separator = ';') =>
-            string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
-            value.Trim().Split(separator);
+        public static string[] Items(this string? value, char separator = ';') =>
+             string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
+             value.Trim().Split(separator);
 
         public static string HtmlFromMarkdown(this string? markdown)
         {
@@ -33,12 +33,12 @@ namespace ModulesRegistry.Services.Extensions
             }
         }
 
-        public static string Href(this ModuleOwnershipRef ownershipRef , string objectName, int objectId,  string ActionName ) =>
+        public static string Href(this ModuleOwnershipRef ownershipRef, string objectName, int objectId, string ActionName) =>
             ownershipRef.IsGroup ?
             $"/{objectName}/{objectId}/{ActionName}/GroupOwned/{ownershipRef.GroupId}" :
             $"/{objectName}/{objectId}/{ActionName}/PersonOwned/{ownershipRef.PersonId}";
 
-        public static bool IsEmailAddress([NotNullWhen(true)] this string? me) => 
+        public static bool IsEmailAddress([NotNullWhen(true)] this string? me) =>
             me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
         public static bool IsPermittedFileExtension(this string? it) =>
@@ -59,7 +59,7 @@ namespace ModulesRegistry.Services.Extensions
         }
 
         private static string HexColorRegEx => "^#([A-Fa-f0-9]{6})$";
-        public  static bool IsHexColor([NotNullWhen(true)] this string? maybeColor) =>
+        public static bool IsHexColor([NotNullWhen(true)] this string? maybeColor) =>
             !string.IsNullOrWhiteSpace(maybeColor) && Regex.IsMatch(maybeColor, HexColorRegEx);
 
         public static bool IsWhiteColor([NotNullWhen(true)] this string? maybeColor) => string.IsNullOrWhiteSpace(maybeColor) || maybeColor.ToUpperInvariant() == "#FFFFFF";
@@ -117,6 +117,6 @@ namespace ModulesRegistry.Services.Extensions
         }
 
         #endregion
-        
+
     }
 }

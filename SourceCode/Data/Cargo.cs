@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace ModulesRegistry.Data
 {
@@ -23,6 +20,5 @@ namespace ModulesRegistry.Data
         public string NO { get; set; }
         public string PL { get; set; }
         public string SV { get; set; }
-
     }
 }

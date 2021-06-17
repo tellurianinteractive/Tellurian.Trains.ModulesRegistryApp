@@ -3,6 +3,6 @@
     public record LocalizedText(string Language, string Value)
     {
         public override string ToString() => Value;
-        public static LocalizedText Empty => new ("", "");
+        public static LocalizedText Empty => new("", "");
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ModulesRegistry.Services.Resources;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using ModulesRegistry.Services.Resources;
 
 namespace ModulesRegistry.Services.Extensions
 {

@@ -68,7 +68,7 @@ namespace ModulesRegistry.Services.Implementations
 
         #region External station customers
 
-        public async  Task<IEnumerable<FreightCustomerInfo>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+        public async Task<IEnumerable<FreightCustomerInfo>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
         {
             if (principal.IsAuthenticated())
             {

@@ -1,8 +1,8 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Security;
+using ModulesRegistry.Services.Implementations;
+using System.Threading.Tasks;
 
 namespace ModulesRegistry.Pages
 {
@@ -12,7 +12,7 @@ namespace ModulesRegistry.Pages
         private readonly UserService UserService;
         public string? ReturnUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string? username, string? password) => 
+        public async Task<IActionResult> OnGetAsync(string? username, string? password) =>
             await this.LoginAsync(UserService, username, password);
     }
 }

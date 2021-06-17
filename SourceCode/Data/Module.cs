@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 #nullable disable
 
@@ -61,5 +60,5 @@ namespace ModulesRegistry.Data
         public virtual ICollection<ModuleExit> ModuleExits { get; set; }
         public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     }
-   
+
 }

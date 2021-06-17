@@ -39,5 +39,5 @@ namespace ModulesRegistry.Data.Integration.Tests
         }
     }
 
-    
+
 }

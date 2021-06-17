@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System;
 using ModulesRegistry.Services.Extensions;
+using System;
 
 namespace ModulesRegistry.Validators
 {

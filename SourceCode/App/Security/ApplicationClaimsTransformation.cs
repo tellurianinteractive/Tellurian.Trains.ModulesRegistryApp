@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using ModulesRegistry.Services.Extensions;
+using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ModulesRegistry.Services;
-using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Security
 {
@@ -33,10 +32,10 @@ namespace ModulesRegistry.Security
             var objectId = principal.ObjectId();
             if (objectId is null) return principal;
             var objectGuid = Guid.Parse(objectId);
-            var user = await db.Users.Where(u => u.ObjectId == objectGuid).SingleOrDefaultAsync();
+            var user = await db.Users.Where(u => u.ObjectId == objectGuid).SingleOrDefaultAsync().ConfigureAwait(false);
             if (user is null) return principal;
 
-            foreach (var claim in await GetUserClaimsAsync(user))
+            foreach (var claim in await GetUserClaimsAsync(user).ConfigureAwait(false))
             {
                 newIdentity.AddClaim(claim);
             }
@@ -58,13 +57,13 @@ namespace ModulesRegistry.Security
             AddAdministratorClaims(user, result);
             if (user.LastTermsOfUseAcceptTime is not null)
             {
-                var lastTermsOfUseChanged = await ContentService.GetLastModifiedTimeOfTextContent("TermsOfUse");
+                var lastTermsOfUseChanged = await ContentService.GetLastModifiedTimeOfTextContent("TermsOfUse").ConfigureAwait(false);
                 if (lastTermsOfUseChanged < user.LastTermsOfUseAcceptTime)
                 {
                     result.Add(Claim(AppClaimTypes.LastTermsOfUseAcceptTime, true));
                 }
             }
-            var person = await db.People.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user.Id);
+            var person = await db.People.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user.Id).ConfigureAwait(false);
             if (person is not null)
             {
                 AddPersonalClaims(person, result);
@@ -75,7 +74,6 @@ namespace ModulesRegistry.Security
                 }
             }
             return result;
-
 
             static void AddAdministratorClaims(User user, List<Claim> result)
             {
@@ -96,12 +94,10 @@ namespace ModulesRegistry.Security
                     result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
                 }
             }
-
         }
         private static Claim Claim(string type, object value) =>
             new(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
         private static Claim Claim(string type, string value) =>
             new(type, value, null, nameof(ModulesRegistry));
-
     }
 }

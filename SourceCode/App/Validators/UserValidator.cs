@@ -3,7 +3,7 @@ using ModulesRegistry.Data;
 
 namespace ModulesRegistry.Validators
 {
-    public class UserValidator : AbstractValidator<User> 
+    public class UserValidator : AbstractValidator<User>
     {
         public UserValidator()
         {

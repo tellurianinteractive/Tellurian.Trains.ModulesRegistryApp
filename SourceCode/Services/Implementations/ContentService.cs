@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class ContentService 
+    public sealed class ContentService
     {
         private readonly string MarkdownPath = "content/markdown";
         private readonly IHttpClientFactory ClientFactory;
@@ -22,15 +22,15 @@ namespace ModulesRegistry.Services.Implementations
         public async Task<TextContent> GetTextContent(string content, string? language)
         {
             if (string.IsNullOrWhiteSpace(language))
-                return await GetTextContent(content);
-                return await language.GetMarkdownAsync(MarkdownPath, content); // To bypass unsupported Cultures in Azure.
+                return await GetTextContent(content).ConfigureAwait(false);
+            return await language.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false); // To bypass unsupported Cultures in Azure.
         }
 
         public async Task<TextContent> GetRemoteTextContent(string href)
         {
             using var client = ClientFactory.CreateClient();
-            string markdown = await client.GetStringAsync(href) ?? string.Empty;
-            return new TextContent(markdown, "MD",  DateTimeOffset.Now );
+            string markdown = await client.GetStringAsync(href).ConfigureAwait(false) ?? string.Empty;
+            return new TextContent(markdown, "MD", DateTimeOffset.Now);
         }
 
         public Task<DateTimeOffset> GetLastModifiedTimeOfTextContent(string content)

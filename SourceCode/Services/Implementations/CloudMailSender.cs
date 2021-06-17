@@ -23,7 +23,7 @@ namespace ModulesRegistry.Services.Implementations
             using var client = Client;
             try
             {
-                await client.SendMailAsync(message);
+                await client.SendMailAsync(message).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -33,13 +33,13 @@ namespace ModulesRegistry.Services.Implementations
         }
 
         private MailAddress Sender =>
-            new (Settings.SenderMailAddress, Resources.Strings.AppName);
+            new(Settings.SenderMailAddress, Resources.Strings.AppName);
 
         private SmtpClient Client =>
-            new ("smtp.sendgrid.net", 587) { Credentials = NetworkCredential };
+            new("smtp.sendgrid.net", 587) { Credentials = NetworkCredential };
 
         private NetworkCredential NetworkCredential =>
-            new ("apikey", Settings.ApiKey);
+            new("apikey", Settings.ApiKey);
     }
 
     public class CloudMailSenderSettings

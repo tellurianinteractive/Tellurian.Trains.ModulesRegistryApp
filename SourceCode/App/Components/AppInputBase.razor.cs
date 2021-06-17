@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ModulesRegistry.Components
 {
-    public abstract partial class AppInputBase<TValue> 
+    public abstract partial class AppInputBase<TValue>
     {
 
         [Parameter] public string? Label { get; set; }

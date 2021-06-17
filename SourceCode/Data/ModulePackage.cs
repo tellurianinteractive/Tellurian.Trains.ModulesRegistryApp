@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Data
 {
@@ -67,18 +65,19 @@ namespace ModulesRegistry.Data
                     }
                 }
             }
-            return packages.Select((p, i) => new ModulePackage(i, PackageType(p.Value),  PackageName(p.Value), p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
+            return packages.Select((p, i) => new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
 
             static ModulePackageType PackageType(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) => items.First().Type;
             static string PackageName(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
-               PackageType(items) switch { 
+               PackageType(items) switch
+               {
                    ModulePackageType.Package => items.First().Module.PackageLabel,
                    _ => items.First().Module.FullName
                };
 
 
 
-        }            
+        }
         public static string ModuleNames(this ModulePackage it) =>
                   it.PackageType switch
                   {

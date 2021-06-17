@@ -4,12 +4,12 @@ namespace ModulesRegistry.Services
 {
     public class Password
     {
-        [PasswordPolicy( ErrorMessageResourceName = "PasswordInvalid", ErrorMessageResourceType = typeof(Resources.Strings))]
+        [PasswordPolicy(ErrorMessageResourceName = "PasswordInvalid", ErrorMessageResourceType = typeof(Resources.Strings))]
         public string? Value { get; set; }
         [PasswordPolicy(ErrorMessageResourceName = "PasswordInvalid", ErrorMessageResourceType = typeof(Resources.Strings))]
         public string? ConfirmValue { get; set; }
 
-        public bool IsConfirmed => Value is not null && Value.Equals(ConfirmValue, System.StringComparison.Ordinal);
+        public bool IsConfirmed => Value?.Equals(ConfirmValue, System.StringComparison.Ordinal) == true;
     }
 
     public class PasswordPolicy : ValidationAttribute
@@ -32,9 +32,9 @@ namespace ModulesRegistry.Services
                 var count = 0;
                 foreach (var c in text)
                 {
-                    if (Letters.Characters.Contains(c)) { count++; letters++; };
-                    if (Digits.Characters.Contains(c)) { count++; digits++; };
-                    if (Special.Characters.Contains(c)) { count++; special++;  };
+                    if (Letters.Characters.Contains(c)) { count++; letters++; }
+                    if (Digits.Characters.Contains(c)) { count++; digits++; }
+                    if (Special.Characters.Contains(c)) { count++; special++; }
                 }
                 return text.Length == count && letters >= Letters.Minimum && digits >= Digits.Minimum && special >= Special.Minimum;
             }
@@ -46,7 +46,5 @@ namespace ModulesRegistry.Services
                 Letters.Minimum, Letters.Characters,
                 Digits.Minimum, Digits.Characters,
                 Special.Minimum, Special.Characters);
-
-
     }
 }

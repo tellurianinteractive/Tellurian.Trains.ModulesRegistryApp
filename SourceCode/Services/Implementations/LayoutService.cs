@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Implementations
@@ -93,7 +92,7 @@ namespace ModulesRegistry.Services.Implementations
                     var result = await dbContext.SaveChangesAsync();
                     return result.DeleteResult();
                 }
-                 Data.Resources.Strings.NotAuthorised.DeleteResult();
+                Data.Resources.Strings.NotAuthorised.DeleteResult();
             }
             return principal.DeleteNotAuthorized<LayoutModule>();
         }

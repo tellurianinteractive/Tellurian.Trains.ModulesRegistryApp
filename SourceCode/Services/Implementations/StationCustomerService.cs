@@ -59,7 +59,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)
         {
-            if (principal.IsAuthenticated()) 
+            if (principal.IsAuthenticated())
             {
                 entity.StationId = stationId;
                 entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
@@ -85,19 +85,19 @@ namespace ModulesRegistry.Services.Implementations
                 var station = await dbContext.Stations.FindAsync(entity.StationId);
                 if (station is null) return principal.SaveNotAuthorised<StationCustomer>();
                 var existing = dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).SingleOrDefault(sc => sc.Id == entity.Id);
-                return existing is null ? 
-                    await AddNew(dbContext, principal, station, entity) : 
+                return existing is null ?
+                    await AddNew(dbContext, principal, station, entity) :
                     await UpdateExisting(dbContext, principal, station, entity, existing);
             }
 
-            static async Task<(int Count, string Message, StationCustomer? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station station,  StationCustomer entity)
+            static async Task<(int Count, string Message, StationCustomer? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station station, StationCustomer entity)
             {
                 station.StationCustomers.Add(entity);
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(entity);
             }
 
-            static async Task<(int Count, string Message, StationCustomer? Entity)> UpdateExisting(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station station,  StationCustomer entity, StationCustomer existing)
+            static async Task<(int Count, string Message, StationCustomer? Entity)> UpdateExisting(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station station, StationCustomer entity, StationCustomer existing)
             {
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 AddOrRemoveCustomerCargos(dbContext, entity, existing);

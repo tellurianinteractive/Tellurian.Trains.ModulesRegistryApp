@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
+using ModulesRegistry.Services.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ModulesRegistry.Services.Extensions;
-using System;
 
 namespace ModulesRegistry.Services.Implementations
 {
@@ -27,7 +26,8 @@ namespace ModulesRegistry.Services.Implementations
                 .Select(m => new Data.Api.Meeting(
                     m.Id, m.Description, m.PlaceName, m.OrganiserGroup.Country.EnglishName.Localized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().Localized())
                 { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)) })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
@@ -39,18 +39,24 @@ namespace ModulesRegistry.Services.Implementations
                 .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
                 .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
                 .Include(m => m.Layouts)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
             return meetings.Select(m => (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()), m));
         }
 
         public async Task<Meeting?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {
+            if (principal.IsAuthenticated())
+            {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Meetings.AsNoTracking()
                  .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
                  .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
                  .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                 .SingleOrDefaultAsync(m => m.Id == id);
+                 .SingleOrDefaultAsync(m => m.Id == id)
+                 .ConfigureAwait(false);
+            }
+            return null;
         }
 
         public async Task<Meeting?> FindByIdWithParticipantsAsync(ClaimsPrincipal? principal, int id)
@@ -61,21 +67,21 @@ namespace ModulesRegistry.Services.Implementations
                 return await dbContext.Meetings.AsNoTracking()
                     .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
                     .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.Layout).ThenInclude(l => l.PrimaryModuleStandard)
-                    .SingleOrDefaultAsync(m => m.Id == id);
+                    .SingleOrDefaultAsync(m => m.Id == id)
+                    .ConfigureAwait(false);
             }
             return null;
         }
-
 
         public async Task<(int Count, string Message, Meeting? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting entity)
         {
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
-                var isMeetingOrganizer = await IsMeetingOrganiser(dbContext, principal, entity);
+                var isMeetingOrganizer = await IsMeetingOrganiser(dbContext, principal, entity).ConfigureAwait(false);
                 if (isMeetingOrganizer)
                 {
-                    return await AddOrUpdate(dbContext, entity);
+                    return await AddOrUpdate(dbContext, entity).ConfigureAwait(false);
                 }
             }
             return principal.SaveNotAuthorised<Meeting>();
@@ -86,17 +92,18 @@ namespace ModulesRegistry.Services.Implementations
                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
                     .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
                     .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                    .SingleOrDefaultAsync(m => m.Id == entity.Id);
+                    .SingleOrDefaultAsync(m => m.Id == entity.Id)
+                    .ConfigureAwait(false);
 
                 return (existing is null) ?
-                    await AddNew(dbContext, entity) :
-                    await UpdateExisting(dbContext, entity, existing);
+                    await  AddNew(dbContext, entity).ConfigureAwait(false) :
+                    await UpdateExisting(dbContext, entity, existing).ConfigureAwait(false);
             }
 
             static async Task<(int Count, string Message, Meeting? Entity)> AddNew(ModulesDbContext dbContext, Meeting entity)
             {
                 dbContext.Add(entity);
-                var result = await dbContext.SaveChangesAsync();
+                var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return result.SaveResult(entity);
             }
             static async Task<(int Count, string Message, Meeting? Entity)> UpdateExisting(ModulesDbContext dbContext, Meeting entity, Meeting existing)
@@ -104,7 +111,7 @@ namespace ModulesRegistry.Services.Implementations
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 AddOrRemoveLayouts(dbContext, entity, existing);
                 if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
-                var result = await dbContext.SaveChangesAsync();
+                var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return result.SaveResult(existing);
             }
 
@@ -130,15 +137,17 @@ namespace ModulesRegistry.Services.Implementations
             var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
             if (principal.IsCountryAdministratorInCountry(countryId)) return true;
             using var dbContext = Factory.CreateDbContext();
-            return await IsMeetingOrganiser(dbContext, principal, entity);
+            return await IsMeetingOrganiser(dbContext, principal, entity)
+                .ConfigureAwait(false);
         }
 
         private static async Task<bool> IsMeetingOrganiser(ModulesDbContext dbContext, ClaimsPrincipal? principal, Meeting entity)
         {
             var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
             if (principal.IsCountryAdministratorInCountry(countryId)) return true;
-            return await dbContext.GroupMembers.AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator);
-
+            return await dbContext.GroupMembers
+                .AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator)
+                .ConfigureAwait(false);
         }
 
         #region Meeting Participant
@@ -148,7 +157,10 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.MeetingParticipants.Include(mp => mp.Person).SingleOrDefaultAsync(mp => mp.Id == participantId);
+                return await dbContext.MeetingParticipants
+                    .Include(mp => mp.Person)
+                    .SingleOrDefaultAsync(mp => mp.Id == participantId)
+                    .ConfigureAwait(false);
             }
             return null;
         }
@@ -158,7 +170,10 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.MeetingParticipants.Include(mp => mp.Person).SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId);
+                return await dbContext.MeetingParticipants
+                    .Include(mp => mp.Person)
+                    .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
+                    .ConfigureAwait(false);
             }
             return null;
         }
@@ -169,10 +184,10 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var isSelf = entity.PersonId == principal.PersonId();
-                var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting);
+                var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting).ConfigureAwait(false);
                 if (isOrganiser || isSelf)
                 {
-                    var existing = await dbContext.MeetingParticipants.SingleOrDefaultAsync(mp => mp.Id == entity.Id);
+                    var existing = await dbContext.MeetingParticipants.SingleOrDefaultAsync(mp => mp.Id == entity.Id).ConfigureAwait(false);
                     if (existing is null)
                     {
                         entity.RegistrationTime = TimeProvider.Now;
@@ -183,9 +198,12 @@ namespace ModulesRegistry.Services.Implementations
                         dbContext.Entry(existing).CurrentValues.SetValues(entity);
                         if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
                     }
-                    var result = await dbContext.SaveChangesAsync();
+                    var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                     var id = existing?.Id ?? entity?.Id;
-                    return result.SaveResult(await dbContext.MeetingParticipants.Include(mp => mp.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(mp => mp.Id == id));
+                    return result.SaveResult(await dbContext.MeetingParticipants
+                        .Include(mp => mp.Person).ThenInclude(p => p.Country)
+                        .SingleOrDefaultAsync(mp => mp.Id == id)
+                        .ConfigureAwait(false));
                 }
             }
             return principal.SaveNotAuthorised<MeetingParticipant>();
@@ -196,11 +214,14 @@ namespace ModulesRegistry.Services.Implementations
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                var existing = await dbContext.MeetingParticipants.Include(mp => mp.LayoutModules).SingleOrDefaultAsync(mp => mp.Id == paricipantId);
+                var existing = await dbContext.MeetingParticipants
+                    .Include(mp => mp.LayoutModules)
+                    .SingleOrDefaultAsync(mp => mp.Id == paricipantId)
+                    .ConfigureAwait(false);
                 if (existing is null) return Resources.Strings.NotFound.DeleteResult();
-                if (existing.LayoutModules.Any()) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
+                if (existing.LayoutModules.Count > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
                 dbContext.MeetingParticipants.Remove(existing);
-                var result = await dbContext.SaveChangesAsync();
+                var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return result.DeleteResult();
             }
             return principal.DeleteNotAuthorized<MeetingParticipant>();

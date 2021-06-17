@@ -40,7 +40,7 @@ namespace ModulesRegistry.Services.Extensions
             me is not null && me.HashedPassword.HasValue();
 
         public static string Name(this Person? me) =>
-            me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}":string.Empty;
+            me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}" : string.Empty;
 
         public static bool IsNeverLoggedIn(this Person? me) =>
             me is null || me.User is null || me.User.LastSignInTime is null;
@@ -124,7 +124,7 @@ namespace ModulesRegistry.Services.Extensions
         public string? PersonalMessage { get; init; }
         public bool HasPersonalMessage => !string.IsNullOrWhiteSpace(PersonalMessage);
         public override string MessageHtml => this.GetMessageHtml();
-        
+
     }
 
     public record PasswordResetRequest(User Recipient, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)

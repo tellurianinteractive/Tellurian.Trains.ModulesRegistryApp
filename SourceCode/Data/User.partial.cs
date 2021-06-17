@@ -6,6 +6,4 @@ namespace ModulesRegistry.Data
     {
         public virtual Person Person { get; set; }
     }
-
-    
 }

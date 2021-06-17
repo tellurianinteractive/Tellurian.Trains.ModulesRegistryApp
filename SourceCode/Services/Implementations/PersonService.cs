@@ -24,7 +24,7 @@ namespace ModulesRegistry.Services.Implementations
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.People.Include(p => p.Country)
-                    .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.Id == excludeGroupId && gm.PersonId == p.Id )))
+                    .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.Id == excludeGroupId && gm.PersonId == p.Id)))
                     .ToListAsync();
                 return items
                     .Select(p => new ListboxItem(p.Id, countryId == 0 ? $"{p.Name()} {p.CityName}, {p.Country.EnglishName.Localized()}" : $"{p.Name()} {p.CityName}"))
@@ -105,7 +105,7 @@ namespace ModulesRegistry.Services.Implementations
                 var hasModules = dbContext.ModuleOwnerships.Any(mo => mo.PersonId == id);
                 if (isUser || hasModules) return (0, Strings.MayNotBeDeleted);
 
-                var person = await dbContext.People.Include(p => p.GroupMembers).SingleOrDefaultAsync( p=> p.Id == id);
+                var person = await dbContext.People.Include(p => p.GroupMembers).SingleOrDefaultAsync(p => p.Id == id);
                 if (person is null) return (0, Strings.NothingToDelete);
                 if (principal.IsAuthorisedInCountry(person.CountryId))
                 {

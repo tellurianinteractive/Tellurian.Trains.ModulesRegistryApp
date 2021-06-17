@@ -4,14 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>ModulesRegistry.Services</AssemblyName>
     <RootNamespace>ModulesRegistry.Services</RootNamespace>
-    <Version>1.2.9</Version>
+    <Version>1.2.10</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.24.0" />
+    <PackageReference Include="Markdig" Version="0.25.0" />
   </ItemGroup>
 
   <ItemGroup>

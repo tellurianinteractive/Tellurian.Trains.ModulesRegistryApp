@@ -12,6 +12,6 @@
 
     public static class PageActionExtensions
     {
-        public static PageAction ToPageAction(this int id) =>  id == 0 ? PageAction.Add : PageAction.Edit;
+        public static PageAction ToPageAction(this int id) => id == 0 ? PageAction.Add : PageAction.Edit;
     }
 }

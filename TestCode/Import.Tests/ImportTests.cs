@@ -1,12 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data.Odbc;
-using System.Data;
-using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.Data;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data;
+using System.Data.Odbc;
+using System.Globalization;
+
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable RCS1163 // Unused parameter.
+#pragma warning disable RCS1164 // Unused type parameter.
 
 namespace ModulesRegistry.Data.Integration
 {
@@ -47,12 +50,10 @@ namespace ModulesRegistry.Data.Integration
             //}
         }
 
-
-
         internal static OdbcConnection CreateModuleConnection() =>
             CreateSourceConnection(@"C:\Users\Stefan\OneDrive\Modelljärnväg\Träffar\2020\2020-05 Gävle\Banplanering\Anmälda moduler.accdb");
         internal static OdbcConnection CreatePlanningConnection() =>
-            CreateSourceConnection( @"C:\Users\Stefan\OneDrive\Modelljärnväg\Träffar\2020\2020-10 Värnamo\Trafikplanering\Timetable.accdb");
+            CreateSourceConnection(@"C:\Users\Stefan\OneDrive\Modelljärnväg\Träffar\2020\2020-10 Värnamo\Trafikplanering\Timetable.accdb");
 
         internal static OdbcConnection CreateSourceConnection(string databaseFileName)
         {
@@ -61,10 +62,8 @@ namespace ModulesRegistry.Data.Integration
             return new OdbcConnection(connectionString);
         }
 
-
-
         internal static SqlConnection LocalDestination() =>
-            new ("Server=localhost;Database=TimetablePlanning;Trusted_Connection=True;");
+            new("Server=localhost;Database=TimetablePlanning;Trusted_Connection=True;");
 
         internal static IMapper CreateMapper<T>()
         {

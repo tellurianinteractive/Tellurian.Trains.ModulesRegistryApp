@@ -53,7 +53,7 @@ namespace ModulesRegistry.Services.Implementations
         public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;
 
         public static MarkupString AsYesNoWithColor(this bool me, bool invert = false) => new($"<span style=\"color: {me.YesNoColor(invert)};\">{me.AsYesNo()}</span>");
-        private static string YesNoColor(this bool me, bool invert = false) => invert ? me ? "red" : "green" : me ? "green": "red";
+        private static string YesNoColor(this bool me, bool invert = false) => invert ? me ? "red" : "green" : me ? "green" : "red";
 
         /// <summary>
         /// Uses the <paramref name="english"/> as key to find a localized text in <see cref="Strings"/> resources.

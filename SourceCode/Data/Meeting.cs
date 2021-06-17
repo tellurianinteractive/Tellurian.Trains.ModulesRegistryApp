@@ -19,7 +19,7 @@ namespace ModulesRegistry.Data
         public string PlaceName { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Today.AddYears(1);
-        public DateTime EndDate { get; set; } =  DateTime.Today.AddYears(1).AddDays(4);
+        public DateTime EndDate { get; set; } = DateTime.Today.AddYears(1).AddDays(4);
         public int Status { get; set; }
         public bool IsFremo { get; set; }
         public virtual Group OrganiserGroup { get; set; }

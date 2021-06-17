@@ -99,7 +99,6 @@ namespace ModulesRegistry.Data
                 entity.HasOne<NHM>()
                     .WithMany()
                     .HasForeignKey(e => e.NhmCode);
-
             });
 
             modelBuilder.Entity<CargoDirection>(entity =>
@@ -300,10 +299,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_Group_GroupDomain");
             });
 
-            modelBuilder.Entity<GroupDomain>(entity =>
-            {
-                entity.ToTable("GroupDomain");
-            });
+            modelBuilder.Entity<GroupDomain>(entity => entity.ToTable("GroupDomain"));
 
             modelBuilder.Entity<GroupMember>(entity =>
             {
@@ -326,7 +322,6 @@ namespace ModulesRegistry.Data
                 entity.Property(e => e.Note)
                     .HasMaxLength(50);
 
-
                 entity.ToTable("Layout");
 
                 entity.HasOne(d => d.Meeting)
@@ -343,7 +338,6 @@ namespace ModulesRegistry.Data
                     .WithMany()
                     .HasForeignKey(d => d.PrimaryModuleStandardId)
                     .HasConstraintName("FK_Layout_ModuleStandard");
-
             });
 
             modelBuilder.Entity<LayoutLine>(entity =>
@@ -406,7 +400,6 @@ namespace ModulesRegistry.Data
                     .WithMany(e => e.LayoutModules)
                     .HasForeignKey(e => e.LayoutStationId)
                     .HasConstraintName("FK_LayoutModule_LayoutStation");
-
             });
 
             modelBuilder.Entity<LayoutStation>(entity =>
@@ -436,8 +429,7 @@ namespace ModulesRegistry.Data
                     .WithOne()
                     .HasForeignKey<LayoutStation>(e => e.OtherCountryId)
                     .HasConstraintName("FK_LayoutStation_OtherCountry");
-
-           });
+            });
 
             modelBuilder.Entity<Meeting>(entity =>
             {
@@ -605,10 +597,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_ModuleStandard_Scale");
             });
 
-            modelBuilder.Entity<NHM>(entity =>
-            {
-                entity.ToTable("NHM");
-            });
+            modelBuilder.Entity<NHM>(entity => entity.ToTable("NHM"));
 
             modelBuilder.Entity<OperatingBasicDay>(entity =>
             {
@@ -837,7 +826,6 @@ namespace ModulesRegistry.Data
                       .HasForeignKey(d => d.QuantityUnitId)
                       .OnDelete(DeleteBehavior.ClientSetNull)
                       .HasConstraintName("FK_StationCustomerCargo_QuantityUnit");
-
               });
 
             modelBuilder.Entity<StationTrack>(entity =>

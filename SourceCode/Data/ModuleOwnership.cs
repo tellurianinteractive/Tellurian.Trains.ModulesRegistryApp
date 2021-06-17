@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Rationals;
+﻿using Rationals;
 
 #nullable disable
 
@@ -33,7 +31,7 @@ namespace ModulesRegistry.Data
 
         public static string OwnedShareAndPercentage(this ModuleOwnership? me) =>
             me is null ? string.Empty :
-            $"{me.OwnedShare()} ({me.OwnedPercent()*100:F1}%)";
+            $"{me.OwnedShare()} ({me.OwnedPercent() * 100:F1}%)";
 
         public static double OwnedPercent(this ModuleOwnership? me) =>
             me is null || me.OwnedShare == 0 ? 0.0 :
