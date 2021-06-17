@@ -96,6 +96,9 @@
     <None Update="Content\Markdown\HelpModule.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Markdown\HomeUser.no.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Markdown\PasswordReset.no.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

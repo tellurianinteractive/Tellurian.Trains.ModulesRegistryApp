@@ -5,23 +5,18 @@
 
 @using System.Security.Claims
 
+
+<h1>@Localizer["Welcome"]</h1>
+<img style="width: 100%; padding-bottom:10px" src="images/Image1.jpg" />
+
 <AuthorizeView>
     <Authorized>
-        <h1>@Localizer["Welcome"]</h1>
-        <img style="width: 100%; padding-bottom:10px" src="images/Image1.jpg" />
         <ContentView ContentName="HomeUser"></ContentView>
-        <div>
-            <span class="fa fa-external-link" />
-            <a target="_blank" href="https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/RELEASENOTES.md">Release notes</a>
-        </div>
     </Authorized>
     <Authorizing>
-        <h1>@Localizer["Welcome"]</h1>
         @Localizer["AuthenticationInProgress"]
     </Authorizing>
     <NotAuthorized>
-        <h1>@Localizer["Welcome"]</h1>
-        <img style="width: 100%; padding-bottom:10px" src="images/Image1.jpg" />
         @if (Principal?.Identity?.IsAuthenticated == true)
         {
             <ContentView ContentName="HomeNoUser"></ContentView>
@@ -31,12 +26,12 @@
             <ContentView ContentName="HomeNotAuthorized"></ContentView>
         }
         <hr />
-        <div>
-            <span class="fa fa-external-link" />
-            <a target="_blank" href="https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/RELEASENOTES.md">Release notes</a>
-        </div>
     </NotAuthorized>
 </AuthorizeView>
+<div>
+    <span class="fa fa-external-link" />
+    <a target="_blank" href="https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/RELEASENOTES.md">Release notes</a>
+</div>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
