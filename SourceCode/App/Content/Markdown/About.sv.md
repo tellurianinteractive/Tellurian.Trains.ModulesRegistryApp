@@ -13,7 +13,16 @@ och alla som arrangerar modulräffar.
 #### Kostnadsfritt
 Webbapplikationen är icke-kommersiell och gratis att använda av alla moduljärnvägshobbyister inom Europeiska unionen, Schweiz och Norge.
 
+#### Bidra
+Applikationen är utvecklad som *öppen källkod*.
+Du kan bidra till att förbättra *Modulregistret* på flera sätt:
+- Ge feedback och föreslå förbättringar eller nya funktioner.
+- Förbättra befintliga översättningar eller lägg till nya.
+- Som utvecklare.
+- Som sponsor. För närvarande sponsras appen av det svenska företaget *Tellurian Interactive AB*.
+Du hittar detaljerade riktlinjer för bidrag i länkarna nedan.
+
 #### Teknisk översikt
-Applikationen är utvecklad som *öppen källkod* och sponsras av *Tellurian Interactive AB*.
-Koden är skriven i C #, HTML, CSS och SQL. Den körs i Microsoft Azure.
+Koden är skriven i C #, HTML, CSS och SQL.
+Den körs i Microsoft Azure.
 Data lagras på servrar inom Europeiska unionen.

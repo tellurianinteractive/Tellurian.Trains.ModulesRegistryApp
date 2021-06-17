@@ -13,7 +13,16 @@ und jeder, der *Modultreffen* organisiert.
 #### Kostenlos
 Die Webanwendung ist nicht kommerziell und kann von jedem Modulbahn-Hobbyisten in der Europäischen Union, der Schweiz und Norwegen kostenlos verwendet werden.
 
+#### Beitragen
+Die Anwendung wird als *Open Source* entwickelt.
+Sie können auf verschiedene Weise zur Verbesserung der *Module Registry* beitragen:
+- Geben Sie Feedback und schlagen Sie Verbesserungen oder neue Funktionen vor.
+- Verbessern Sie vorhandene Übersetzungen oder fügen Sie neue hinzu.
+- Als ein Entwickler.
+- Als Sponsor. Derzeit wird die App von der schwedischen Firma *Tellurian Interactive AB* gesponsert.
+Detaillierte Beitragsrichtlinien finden Sie in den folgenden Links.
+
 #### Technische Übersicht
-Die Anwendung wurde als *Open Source* entwickelt und wird von der schwedischen Firma *Tellurian Interactive AB* gesponsert.
-Code ist in C #, HTML, CSS und SQL geschrieben. Es wird in Microsoft Azure ausgeführt.
+Code ist in C#, HTML, CSS und SQL geschrieben.
+Es läuft in Microsoft Azure.
 Die Daten werden auf Servern innerhalb der Europäischen Union gespeichert.

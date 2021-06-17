@@ -13,7 +13,16 @@ og alle som arrangerer *modultreff*.
 #### Gratis
 Nettapplikasjonen er ikke-kommersiell og gratis å bruke av alle modulbanehobbyister i EU, Sveits og Norge.
 
+#### Bidra
+Applikasjonen er utviklet som *åpen kildekode*.
+Du kan bidra til å forbedre *Modulregisteret* på flere måter:
+- Gi tilbakemelding og foreslå forbedringer eller nye funksjoner.
+- Forbedre eksisterende oversettelser eller legg til nye.
+- Som utvikler.
+- Som sponsor. For tiden er appen sponset av det svenske selskapet *Tellurian Interactive AB*.
+Du finner detaljerte retningslinjer for bidrag i lenkene nedenfor.
+
 #### Teknisk oversikt
-Applikasjonen er utviklet som *åpen kildekode* og er sponset av det svenske selskapet *Tellurian Interactive AB*.
-Koden er skrevet i C #, HTML, CSS og SQL. Den kjører i Microsoft Azure.
+Koden er skrevet i C #, HTML, CSS og SQL.
+Den kjører i Microsoft Azure.
 Data lagres på servere innen EU.
