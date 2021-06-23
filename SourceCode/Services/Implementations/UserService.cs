@@ -39,9 +39,10 @@ namespace ModulesRegistry.Services.Implementations
             if (user is null) return null;
             user.HashedPassword = password.AsHashedPassword();
             user.LastEmailConfirmationTime = DateTimeOffset.Now;
+            user.ObjectId = Guid.NewGuid(); // Prevents using old password reset mails and also changes user's API-key.
             user.PasswordResetAttempts = 0;
             await dbContext.SaveChangesAsync();
-            return await FindByObjectIdAsync(dbContext, objectId);
+            return await FindByObjectIdAsync(dbContext, user.ObjectId.ToString().ToUpperInvariant());
         }
 
         public async Task<User?> ResetPasswordAsync(string? emailAddress)
@@ -51,6 +52,7 @@ namespace ModulesRegistry.Services.Implementations
             var existing = await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(u => u.EmailAddress == emailAddress);
             if (existing is null) return null;
             if (existing.PasswordResetAttempts > PasswordResetRequest.MaxRequests) return existing;
+            existing.EmailAddress = existing.Person.PrimaryEmail();
             existing.PasswordResetAttempts += 1;
             var result = await dbContext.SaveChangesAsync();
             return result == 0 ? null : existing;
