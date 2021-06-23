@@ -4,6 +4,7 @@
 Release date 2021-06.23
 - **User's API-key** now change after confirmed password reset.
 - **User's login email** now changes after changing person's password.
+- **Start page content** for logged in user is changed. Release notes are now accessible via a link.
 
 #### Version 1.2.10
 Release date 2021-06-17
