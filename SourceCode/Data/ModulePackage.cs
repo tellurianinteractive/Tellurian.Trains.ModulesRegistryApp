@@ -15,6 +15,7 @@ namespace ModulesRegistry.Data
             Id = id;
             Name = name;
             Modules = modules;
+            PackageType = type;
         }
         public int Id { get; }
         public string Name { get; }

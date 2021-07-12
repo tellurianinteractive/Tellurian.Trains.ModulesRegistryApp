@@ -23,7 +23,7 @@ namespace ModulesRegistry.Services.Extensions
            Enum.GetValues<SignalFeature>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
         public static IEnumerable<ListboxItem> StationEntryDirectionsListboxItems() =>
-            Enum.GetValues<ModuleEntryDirection>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+            Enum.GetValues<ModuleExitDirection>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
         public static IEnumerable<ListboxItem> MeetingStatusListboxItems() =>
             Enum.GetValues<MeetingStatus>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
