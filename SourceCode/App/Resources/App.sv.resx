@@ -990,4 +990,7 @@
   <data name="MaxTrainsetLength" xml:space="preserve">
     <value>Max tågsättslängd</value>
   </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Deltagare</value>
+  </data>
 </root>

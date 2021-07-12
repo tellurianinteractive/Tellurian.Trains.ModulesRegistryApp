@@ -57,13 +57,14 @@ namespace ModulesRegistry.Services.Implementations
         }
 
 
-        public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension)
+        public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, int maxFileSizeKb)
         {
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                using var stream = file.OpenReadStream();
                 var fileSize = (int)file.Size;
+
+                using var stream = file.OpenReadStream(maxFileSizeKb*1024);
                 var (Id, DocumentId, TypeName) = DocumentedObject(documentedObject, fileExtension);
                 if (DocumentId.HasValue)
                 {

@@ -1,7 +1,12 @@
 ## Release Notes
-
+#### Version 1.2.12
+Release date 2021-07-12
+- **Administrators** can now add modules to a meeting also after registration end date.
+- **Bug fix** of file upload of larger files than 512 kB.
+- **Translation fixes** of missing or added translations.
+ 
 #### Version 1.2.11
-Release date 2021-06.23
+Release date 2021-06-23
 - **User's API-key** now change after confirmed password reset.
 - **User's login email** now changes after changing person's password.
 - **Start page content** for logged in user is changed. Release notes are now accessible via a link.

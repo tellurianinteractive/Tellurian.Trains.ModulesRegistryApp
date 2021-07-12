@@ -990,4 +990,7 @@
   <data name="MaxTrainsetLength" xml:space="preserve">
     <value>Maks togsett længde</value>
   </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Deltagere</value>
+  </data>
 </root>

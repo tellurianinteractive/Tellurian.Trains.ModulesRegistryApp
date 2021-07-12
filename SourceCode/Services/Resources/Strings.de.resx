@@ -267,11 +267,11 @@
   <data name="Undefined" xml:space="preserve">
     <value>Nicht definiert</value>
   </data>
-  <data name="FromEast" xml:space="preserve">
-    <value>Von Osten</value>
+  <data name="Eastwards" xml:space="preserve">
+    <value>Ostwärts</value>
   </data>
-  <data name="FromWest" xml:space="preserve">
-    <value>Von Westen</value>
+  <data name="Westwards" xml:space="preserve">
+    <value>Westwärts</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Absagen</value>
@@ -419,5 +419,11 @@
   </data>
   <data name="Trainset" xml:space="preserve">
     <value>Zugset</value>
+  </data>
+  <data name="Northwards" xml:space="preserve">
+    <value>Nordwärts</value>
+  </data>
+  <data name="Southwards" xml:space="preserve">
+    <value>Südwärts</value>
   </data>
 </root>

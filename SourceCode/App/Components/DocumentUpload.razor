@@ -39,7 +39,7 @@
         if (IsFileSizeWithinLimits(e.File))
         {
             var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension);
+            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSizeKb ?? 512);
             DocumentId = result.Entity?.Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, $"Upload of {e.File.Name}");
 
@@ -58,6 +58,6 @@
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
     string MaxSizeText => string.Format(LanguageService.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
 
-    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb*1024;
+    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb * 1024;
 
 }

@@ -33,7 +33,7 @@ else
             <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
         </ul>
     }
-    else if (Meeting.Id > 0 && PersonId > 0 && Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+    else if (Meeting.Id > 0 && PersonId > 0 && (Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date)))
     {
         <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
     }
@@ -127,7 +127,7 @@ else
         if (Id > 0 && personId > 0)
         {
             PersonId = personId;
-            Participant = await MeetingService.FindParticipantAsync(Principal, Id, personId) ?? new MeetingParticipant { PersonId = personId, MeetingId = Id };
+            Participant = await MeetingService.FindParticipantAsync(Principal, Id, personId) ?? new MeetingParticipant { PersonId = personId, MeetingId = Id, RegistrationTime = TimeProvider.Now };
         }
     }
 

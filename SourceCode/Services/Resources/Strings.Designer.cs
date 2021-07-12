@@ -268,6 +268,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Eastwards.
+        /// </summary>
+        internal static string Eastwards {
+            get {
+                return ResourceManager.GetString("Eastwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to East-west.
         /// </summary>
         internal static string EastWest {
@@ -318,24 +327,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string FridayShort {
             get {
                 return ResourceManager.GetString("FridayShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to From east.
-        /// </summary>
-        internal static string FromEast {
-            get {
-                return ResourceManager.GetString("FromEast", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to From west.
-        /// </summary>
-        internal static string FromWest {
-            get {
-                return ResourceManager.GetString("FromWest", resourceCulture);
             }
         }
         
@@ -498,6 +489,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string NonProfitAssociation {
             get {
                 return ResourceManager.GetString("NonProfitAssociation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Northwards.
+        /// </summary>
+        internal static string Northwards {
+            get {
+                return ResourceManager.GetString("Northwards", resourceCulture);
             }
         }
         
@@ -727,6 +727,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Southwards.
+        /// </summary>
+        internal static string Southwards {
+            get {
+                return ResourceManager.GetString("Southwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Success {
@@ -948,6 +957,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string WestEast {
             get {
                 return ResourceManager.GetString("WestEast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Westwards.
+        /// </summary>
+        internal static string Westwards {
+            get {
+                return ResourceManager.GetString("Westwards", resourceCulture);
             }
         }
         

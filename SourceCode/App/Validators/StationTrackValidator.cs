@@ -31,7 +31,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween(5, 200)
                 .WithName(n => localizer[nameof(n.SpeedLimit)]);
             RuleFor(m => m.UsageNote)
-                .MaximumLength(20)
+                .MaximumLength(50)
                 .MustBeOrdinaryText(localizer)
                 .WithName(n => localizer["TrackNote"]);
             RuleFor(m => m.DirectionId).

@@ -8,7 +8,7 @@
     [MaxTrainLength] FLOAT (53)    NOT NULL,
     [PlatformLength] FLOAT (53)    NULL,
     [SpeedLimit]     SMALLINT      NULL,
-    [UsageNote]      NVARCHAR (20) NULL,
+    [UsageNote]      NVARCHAR (50) NULL,
     [IsThroughTrack] BIT           CONSTRAINT [DF_StationTrack_IsThroughTrack] DEFAULT ((0)) NOT NULL,
     [DirectionId]    INT           CONSTRAINT [DF_StationTrack_DirectionId] DEFAULT ((10)) NOT NULL,
     CONSTRAINT [PK_StationTrack] PRIMARY KEY CLUSTERED ([Id] ASC),

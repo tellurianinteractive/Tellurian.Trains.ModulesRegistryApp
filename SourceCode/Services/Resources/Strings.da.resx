@@ -267,11 +267,11 @@
   <data name="Undefined" xml:space="preserve">
     <value>Udefineret</value>
   </data>
-  <data name="FromEast" xml:space="preserve">
-    <value>Fra øst</value>
+  <data name="Eastwards" xml:space="preserve">
+    <value>Østpå</value>
   </data>
-  <data name="FromWest" xml:space="preserve">
-    <value>Fra vest</value>
+  <data name="Westwards" xml:space="preserve">
+    <value>Vestpå</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Aflyst</value>
@@ -419,5 +419,11 @@
   </data>
   <data name="Trainset" xml:space="preserve">
     <value>Togsæt</value>
+  </data>
+  <data name="Northwards" xml:space="preserve">
+    <value>Nordpå</value>
+  </data>
+  <data name="Southwards" xml:space="preserve">
+    <value>Sydpå</value>
   </data>
 </root>
