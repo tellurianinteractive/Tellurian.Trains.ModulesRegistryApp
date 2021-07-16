@@ -7,3 +7,6 @@ You are invited to become a user.
 To finalize the registration of your user account, you can click on the create password link in this message.
 It will take you to a page where you create your password. 
 Then you are ready to go.
+
+#### NOTE
+The Module Registry is not designed for small screens. You need a computer or a larger tablet screen.

@@ -7,3 +7,6 @@ Du er inviteret til at blive bruger.
 For at afslutte registreringen af din brugerkonto kan du klikke på linket Opret adgangskode i denne meddelelse.
 Det fører dig til en side, hvor du opretter din adgangskode.
 Så er du klar til at bruge siden.
+
+#### BEMÆRK
+Modulregistret er ikke designet til små skærme. Du har brug for en computer eller en større tabletskærm.

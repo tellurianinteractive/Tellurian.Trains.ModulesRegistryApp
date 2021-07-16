@@ -7,3 +7,6 @@ Du är inbjuden att bli användare.
 För att slutföra registreringen av ditt användarkonto kan du klicka på skapa lösenord i detta meddelande.
 Det tar dig till en sida där du skapar ditt lösenord.
 Efter det är du redo att köra igång.
+
+#### NOTERA
+Modulregistret är inte utformat för små skärmar. Du behöver en dator eller en större surfplatta.
