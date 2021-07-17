@@ -1,4 +1,10 @@
 ## Release Notes
+
+#### Version 1.2.13
+Release date 2021-07-17
+- **Available modules** for a meeting layout now displays all modules in each package.
+- **Intivation mail** now clarifies that the app is not suitable for small screens.
+
 #### Version 1.2.12
 Release date 2021-07-12
 - **Administrators** can now add modules to a meeting also after registration end date.

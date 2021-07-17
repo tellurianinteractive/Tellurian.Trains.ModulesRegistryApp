@@ -83,7 +83,7 @@ namespace ModulesRegistry.Data
                   it.PackageType switch
                   {
                       ModulePackageType.Variants => string.Join(", ", it.Modules.Select(i => i.ConfigurationLabel)),
-                      _ => it.Modules.First().FullName
+                      _ => string.Join(", ", it.Modules.Select(m => m.FullName))
                   };
 
     }
