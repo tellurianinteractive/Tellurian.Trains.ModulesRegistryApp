@@ -24,7 +24,7 @@ namespace ModulesRegistry.Validators
                 }
                 else if ((n[i - 1] == ' '))
                 {
-                    var rest = n.Slice(i);
+                    var rest = n[i..];
                     if (IsAnyLowerCaseWord(rest)) continue;
                     if (char.IsLower(n[i])) return false;
                 }

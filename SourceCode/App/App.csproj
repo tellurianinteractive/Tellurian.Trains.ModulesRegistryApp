@@ -5,7 +5,7 @@
     <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
     <AssemblyName>ModulesRegistry</AssemblyName>
     <RootNamespace>ModulesRegistry</RootNamespace>
-    <Version>1.2.13</Version>
+    <Version>1.2.14</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
@@ -18,20 +18,20 @@
     <PackageReference Include="Blazored.FluentValidation" Version="2.0.1" />
     <PackageReference Include="Blazored.Toast" Version="3.1.2" />
     <PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
-    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.3.10" />
-    <PackageReference Include="Blazorise.Components" Version="0.9.3.10" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3.10" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.Components" Version="0.9.4.1" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.4.1" />
     <PackageReference Include="Markdig" Version="0.25.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.7" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.9.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.8" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.9.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.7" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.14.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.8" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.15.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
 

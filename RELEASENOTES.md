@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.2.14
+Release date 2021-07-27
+- **Improved validation** of names, where some words now are considered valid with lower case initial letter.
+- **Service release** with latest .NET security patches and bug fixes.
+
 #### Version 1.2.13
 Release date 2021-07-17
 - **Available modules** for a meeting layout now displays all modules in each package.
