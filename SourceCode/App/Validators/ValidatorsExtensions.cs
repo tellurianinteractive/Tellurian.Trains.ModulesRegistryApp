@@ -10,18 +10,41 @@ namespace ModulesRegistry.Validators
         public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
             builder.Must(value => value.IsNameCapitalizedCorrectly()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}");
 
+
         private static bool IsNameCapitalizedCorrectly(this string? name)
         {
             if (name is null || name.Length < 1) return true;
-            for (var i = 0; i < name.Length; i++)
+            var n = name.AsSpan();
+            for (var i = 0; i < n.Length; i++)
             {
-                if (i == 0 || (name[i - 1] == ' '))
+                if (i == 0)
                 {
-                    if (char.IsLower(name[i])) return false;
+                    if (char.IsLower(n[i]))
+                        return false;
+                }
+                else if ((n[i - 1] == ' '))
+                {
+                    var rest = n.Slice(i);
+                    if (IsAnyLowerCaseWord(rest)) continue;
+                    if (char.IsLower(n[i])) return false;
                 }
             }
             return true;
         }
+
+        private static bool IsAnyLowerCaseWord(ReadOnlySpan<char> word)
+        {
+            foreach (var w in LowerCaseWords)
+            {
+                if (w.Length > word.Length) continue;
+                if (MemoryExtensions.StartsWith(word, w, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        private static string[] LowerCaseWords => new[] { "af", "am", "an", "auf", "och", "von" };
+
+
         public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
            builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
 
