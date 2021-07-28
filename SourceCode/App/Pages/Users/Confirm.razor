@@ -1,6 +1,7 @@
 ﻿@page "/Users/Confirm/"
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject NavigationManager Navigator
 
 @inject UserService UserService
@@ -9,12 +10,11 @@
 @if (User is null)
 {
     <PageHeading Label="UserConfirmationFailed" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
-    <h1><span class="" /> @Localizer["UserConfirmationFailed"]</h1>
     @if (EmailAddress is null)
     {
         <p>@Localizer["NoEmailProvided"].</p>
     }
-    else 
+    else
     {
         <p>@Localizer["PasswordResetFailed"].</p>
     }
@@ -64,7 +64,14 @@ else
 
     private async Task OnValidSubmit()
     {
-        User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
+        if (Password.IsConfirmed)
+        {
+            User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
+        }
+        else
+        {
+            ToastService.ShowError(Localizer["PasswordConfirmationDoesNotMatch"], Localizer["Error"]);
+        }
     }
 
 

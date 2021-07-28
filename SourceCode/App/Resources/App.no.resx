@@ -993,4 +993,10 @@
   <data name="Participants" xml:space="preserve">
     <value>Deltagere</value>
   </data>
+  <data name="PasswordConfirmationDoesNotMatch" xml:space="preserve">
+    <value>Passordbekreftelse samsvarer ikke</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Feil</value>
+  </data>
 </root>
