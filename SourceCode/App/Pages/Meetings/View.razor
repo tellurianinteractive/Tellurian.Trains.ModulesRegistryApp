@@ -26,7 +26,9 @@ else
             <div style="padding-top: 10pt; border-top: 1px solid black; min-height: 40pt">
                 @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
                 @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
+                @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
                 @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
+                @Item("Organiser", item.ResponsibleGroup.FullName)
                 @Item("Note", item.Note)
                 @Item("OperationTheme", item.Theme)
                 @Item("Period", OperatingPeriod(item))
@@ -35,7 +37,8 @@ else
     }
 }
 
-@code {
+@code
+{
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;

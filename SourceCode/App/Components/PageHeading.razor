@@ -7,11 +7,11 @@
             <span class="@IconClass" /> @Localizer.HeadingText(Label, ObjectName, Owner, PageAction)
         </div>
         <div style="flex-grow: 1; text-align:right">
-            <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
             @if (IsHelpAvailable)
             {
                 <span class="fa fa-question-circle" @onclick="ToggleHelp" />
             }
+            <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
         </div>
     </div>
     @if (HelpContentName.HasValue())

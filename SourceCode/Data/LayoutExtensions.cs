@@ -11,5 +11,8 @@ namespace ModulesRegistry.Data
 
         public static bool RegistrationIsOpen([NotNullWhen(true)] this Layout? me, DateTimeOffset atTime) =>
             me is not null && atTime >= me.RegistrationOpeningDate && atTime < me.RegistrationClosingDate.AddDays(1);
+
+        public static DateTime ModuleRegistrationClosingDate(this Layout layout) => layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate;
+
     }
 }

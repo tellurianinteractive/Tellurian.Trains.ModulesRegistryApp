@@ -999,4 +999,7 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="ModuleRegistrationCloses" xml:space="preserve">
+    <value>Module registrations closes</value>
+  </data>
 </root>

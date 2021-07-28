@@ -16,8 +16,10 @@
     <Inputs>
         <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
         <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
+        <AppInputFill Width="5" />
         <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
         <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
+        <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
         <AppInputFill Width="1" />
         <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
         <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
@@ -86,7 +88,15 @@
         }
     }
 
-    Layout DefaultLayout(Meeting meeting) => new Layout { MeetingId = MeetingId, ResponsibleGroupId = meeting.OrganiserGroupId };
+    Layout DefaultLayout(Meeting meeting) => new Layout { 
+        MeetingId = MeetingId, 
+        ResponsibleGroupId = meeting.OrganiserGroupId, 
+        RegistrationOpeningDate = DefaultRegistrationOpeningDate, 
+        RegistrationClosingDate = DefaultRegistrationClosingDate
+    };
     string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Description} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
+
+    DateTime DefaultRegistrationOpeningDate => Meeting?.StartDate.AddMonths(-6) ?? DateTime.Today;
+    DateTime DefaultRegistrationClosingDate => Meeting?.StartDate.AddMonths(-2) ?? DateTime.Today.AddMonths(2);
 
 }

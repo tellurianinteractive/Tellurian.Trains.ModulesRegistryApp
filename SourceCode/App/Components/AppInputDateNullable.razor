@@ -1,0 +1,46 @@
+﻿@using System.Diagnostics.CodeAnalysis;
+@using System.Globalization;
+
+@inherits AppInputBase<DateTime?>
+@inject IStringLocalizer<App> Localizer
+
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label text-end" for="@Label">@Localizer[Label]</label>
+    }
+    <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" />
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+</div>
+
+@code {
+    public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+    protected override void OnInitialized()
+    {
+        CurrentValue = CurrentValue?.Date;
+    }
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTime? result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        if (DateTime.TryParse(value, LanguageService.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeDate))
+        {
+            result = maybeDate.Date;
+            validationErrorMessage = "";
+            return true;
+        }
+        else
+        {
+            result = default;
+            validationErrorMessage = "";
+            return true;
+        }
+    }
+}
