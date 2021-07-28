@@ -1002,4 +1002,7 @@
   <data name="ModuleRegistrationCloses" xml:space="preserve">
     <value>Modulregistreringer stenger</value>
   </data>
+  <data name="PackagingUnit" xml:space="preserve">
+    <value>Emballasjeenhet</value>
+  </data>
 </root>

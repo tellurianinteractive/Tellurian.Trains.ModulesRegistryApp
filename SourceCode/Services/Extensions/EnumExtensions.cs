@@ -36,5 +36,7 @@ namespace ModulesRegistry.Services.Extensions
         public static IEnumerable<string> StationTrackDirections() =>
             Enum.GetValues<StationTrackDirection>().Select(value => ResourceManager.GetString(value.ToString()) ?? value.ToString());
 
+        public static IEnumerable<ListboxItem> CargoPackageUnitListboxItems() =>
+            Enum.GetValues<CargoPackagingUnit>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
     }
 }

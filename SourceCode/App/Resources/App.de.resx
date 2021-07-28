@@ -1002,4 +1002,7 @@
   <data name="ModuleRegistrationCloses" xml:space="preserve">
     <value>Anmeldeschluss für Module</value>
   </data>
+  <data name="PackagingUnit" xml:space="preserve">
+    <value>Packungseinheit</value>
+  </data>
 </root>

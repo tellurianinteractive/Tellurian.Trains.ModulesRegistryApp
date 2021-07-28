@@ -9,8 +9,9 @@ namespace ModulesRegistry.Data
         }
 
         public int Id { get; set; }
-        public int CargoId { get; set; }
         public int StationCustomerId { get; set; }
+        public int CargoId { get; set; }
+        public int PackageUnitId { get; set; }
         public string TrackOrArea { get; set; }
         public string TrackOrAreaColor { get; set; }
         public string SpecificWagonClass { get; set; }

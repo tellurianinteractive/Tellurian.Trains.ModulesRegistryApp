@@ -17,10 +17,14 @@ else
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
+            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="EnumExtensions.CargoPackageUnitListboxItems()" />
+            <AppInputFill Width="6" />
+
             <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
             <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
-            <AppInputNumber Width="1" @bind-Value="cargo.Quantity" Label="Quantity" />
+            <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
             <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
+            <AppInputFill Width="4" />
 
             <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
             <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />

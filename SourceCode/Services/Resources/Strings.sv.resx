@@ -426,4 +426,43 @@
   <data name="Southwards" xml:space="preserve">
     <value>Söderut</value>
   </data>
+  <data name="Boxes" xml:space="preserve">
+    <value>Lådor</value>
+  </data>
+  <data name="Barrels" xml:space="preserve">
+    <value>Fat</value>
+  </data>
+  <data name="Bales" xml:space="preserve">
+    <value>Balar</value>
+  </data>
+  <data name="Sacks" xml:space="preserve">
+    <value>Säckar</value>
+  </data>
+  <data name="Pallets" xml:space="preserve">
+    <value>Pallar</value>
+  </data>
+  <data name="Bottles" xml:space="preserve">
+    <value>Flaskor</value>
+  </data>
+  <data name="CargoRacks" xml:space="preserve">
+    <value>Lasrhållare</value>
+  </data>
+  <data name="LiquidContainer" xml:space="preserve">
+    <value>Vätskebehållare</value>
+  </data>
+  <data name="DryContainer10" xml:space="preserve">
+    <value>10' Torrcontainer</value>
+  </data>
+  <data name="DryContainer20" xml:space="preserve">
+    <value>20' Torrcontainer</value>
+  </data>
+  <data name="DryContainer40" xml:space="preserve">
+    <value>40' Torrcontainer</value>
+  </data>
+  <data name="ReeferContainer20" xml:space="preserve">
+    <value>20' Kylcontainer</value>
+  </data>
+  <data name="ReeferContainer40" xml:space="preserve">
+    <value>40' Kylcontainer</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[StationCustomerCargo] (
     [Id]                 INT           IDENTITY (1, 1) NOT NULL,
     [CargoId]            INT           NOT NULL,
+    [PackageUnitId]      INT           CONSTRAINT [DF_StationCustomerCargo_PackageUnitId] DEFAULT((0)) NOT NULL,
     [StationCustomerId]  INT           NOT NULL,
     [TrackOrArea]        NVARCHAR (10) NULL,
     [TrackOrAreaColor]   NCHAR (7)     NULL,

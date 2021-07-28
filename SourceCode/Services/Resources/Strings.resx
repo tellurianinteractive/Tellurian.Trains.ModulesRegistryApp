@@ -426,4 +426,64 @@
   <data name="Southwards" xml:space="preserve">
     <value>Southwards</value>
   </data>
+  <data name="Boxes" xml:space="preserve">
+    <value>Boxes</value>
+  </data>
+  <data name="Barrels" xml:space="preserve">
+    <value>Barrels</value>
+  </data>
+  <data name="Bales" xml:space="preserve">
+    <value>Bales</value>
+  </data>
+  <data name="Sacks" xml:space="preserve">
+    <value>Sacks</value>
+  </data>
+  <data name="Pallets" xml:space="preserve">
+    <value>Pallets</value>
+  </data>
+  <data name="Bottles" xml:space="preserve">
+    <value>Bottles</value>
+  </data>
+  <data name="CargoRacks" xml:space="preserve">
+    <value>Cargo racks</value>
+  </data>
+  <data name="LiquidContainer" xml:space="preserve">
+    <value>Liquid container</value>
+  </data>
+  <data name="DryContainer10" xml:space="preserve">
+    <value>10' Dry container</value>
+  </data>
+  <data name="DryContainer20" xml:space="preserve">
+    <value>20' Dry container</value>
+  </data>
+  <data name="DryContainer40" xml:space="preserve">
+    <value>40' Dry contrainer</value>
+  </data>
+  <data name="ReeferContainer20" xml:space="preserve">
+    <value>20' Reefer container</value>
+  </data>
+  <data name="ReeferContainer40" xml:space="preserve">
+    <value>40' Reefer container</value>
+  </data>
+  <data name="FlatRackContainer20" xml:space="preserve">
+    <value>20' Flat rack container</value>
+  </data>
+  <data name="FlatRackContainer40" xml:space="preserve">
+    <value>40' Flat rack container</value>
+  </data>
+  <data name="OpenTopContainer20" xml:space="preserve">
+    <value>20' Open top container</value>
+  </data>
+  <data name="OpenTopContainer40" xml:space="preserve">
+    <value>40' Open top container</value>
+  </data>
+  <data name="HighCubeContainer20" xml:space="preserve">
+    <value>20' High cube container</value>
+  </data>
+  <data name="HighCubeContainer40" xml:space="preserve">
+    <value>40' High cube container</value>
+  </data>
+  <data name="HighCubeReeferContainer40" xml:space="preserve">
+    <value>40' High cube reefer container</value>
+  </data>
 </root>

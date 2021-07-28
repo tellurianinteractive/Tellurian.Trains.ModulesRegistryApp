@@ -115,6 +115,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bales.
+        /// </summary>
+        internal static string Bales {
+            get {
+                return ResourceManager.GetString("Bales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Barrels.
+        /// </summary>
+        internal static string Barrels {
+            get {
+                return ResourceManager.GetString("Barrels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Best regards.
         /// </summary>
         internal static string BestRegards {
@@ -133,11 +151,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bottles.
+        /// </summary>
+        internal static string Bottles {
+            get {
+                return ResourceManager.GetString("Bottles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boxes.
+        /// </summary>
+        internal static string Boxes {
+            get {
+                return ResourceManager.GetString("Boxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Canceled.
         /// </summary>
         internal static string Canceled {
             get {
                 return ResourceManager.GetString("Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cargo racks.
+        /// </summary>
+        internal static string CargoRacks {
+            get {
+                return ResourceManager.GetString("CargoRacks", resourceCulture);
             }
         }
         
@@ -268,6 +313,33 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 10&apos; Dry container.
+        /// </summary>
+        internal static string DryContainer10 {
+            get {
+                return ResourceManager.GetString("DryContainer10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 20&apos; Dry container.
+        /// </summary>
+        internal static string DryContainer20 {
+            get {
+                return ResourceManager.GetString("DryContainer20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; Dry contrainer.
+        /// </summary>
+        internal static string DryContainer40 {
+            get {
+                return ResourceManager.GetString("DryContainer40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eastwards.
         /// </summary>
         internal static string Eastwards {
@@ -309,6 +381,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Fixed {
             get {
                 return ResourceManager.GetString("Fixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 20&apos; Flat rack container.
+        /// </summary>
+        internal static string FlatRackContainer20 {
+            get {
+                return ResourceManager.GetString("FlatRackContainer20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; Flat rack container.
+        /// </summary>
+        internal static string FlatRackContainer40 {
+            get {
+                return ResourceManager.GetString("FlatRackContainer40", resourceCulture);
             }
         }
         
@@ -376,6 +466,33 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 20&apos; High cube container.
+        /// </summary>
+        internal static string HighCubeContainer20 {
+            get {
+                return ResourceManager.GetString("HighCubeContainer20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; High cube container.
+        /// </summary>
+        internal static string HighCubeContainer40 {
+            get {
+                return ResourceManager.GetString("HighCubeContainer40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; High cube reefer container.
+        /// </summary>
+        internal static string HighCubeReeferContainer40 {
+            get {
+                return ResourceManager.GetString("HighCubeReeferContainer40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import.
         /// </summary>
         internal static string Import {
@@ -417,6 +534,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Info {
             get {
                 return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Liquid container.
+        /// </summary>
+        internal static string LiquidContainer {
+            get {
+                return ResourceManager.GetString("LiquidContainer", resourceCulture);
             }
         }
         
@@ -565,11 +691,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 20&apos; Open top container.
+        /// </summary>
+        internal static string OpenTopContainer20 {
+            get {
+                return ResourceManager.GetString("OpenTopContainer20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; Open top container.
+        /// </summary>
+        internal static string OpenTopContainer40 {
+            get {
+                return ResourceManager.GetString("OpenTopContainer40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optional.
         /// </summary>
         internal static string Optional {
             get {
                 return ResourceManager.GetString("Optional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pallets.
+        /// </summary>
+        internal static string Pallets {
+            get {
+                return ResourceManager.GetString("Pallets", resourceCulture);
             }
         }
         
@@ -673,11 +826,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 20&apos; Reefer container.
+        /// </summary>
+        internal static string ReeferContainer20 {
+            get {
+                return ResourceManager.GetString("ReeferContainer20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 40&apos; Reefer container.
+        /// </summary>
+        internal static string ReeferContainer40 {
+            get {
+                return ResourceManager.GetString("ReeferContainer40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removable.
         /// </summary>
         internal static string Removable {
             get {
                 return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sacks.
+        /// </summary>
+        internal static string Sacks {
+            get {
+                return ResourceManager.GetString("Sacks", resourceCulture);
             }
         }
         

@@ -5,8 +5,9 @@ namespace ModulesRegistry.Data
     public partial class ExternalStationCustomerCargo
     {
         public int Id { get; set; }
-        public int CargoId { get; set; }
         public int ExternalStationCustomerId { get; set; }
+        public int CargoId { get; set; }
+        public int PackageUnitId { get; set; }
         public string SpecificWagonClass { get; set; }
         public string SpecialCargoName { get; set; }
         public int DirectionId { get; set; }

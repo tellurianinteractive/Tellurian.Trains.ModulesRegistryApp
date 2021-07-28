@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.2.15
+Release date 2021-07-28
+- **Packaging unit** can now be specified for a freight customer's cargo flow.
+- 
 #### Version 1.2.14
 Release date 2021-07-27
 - **Improved validation** of names, where some words now are considered valid with lower case initial letter.
