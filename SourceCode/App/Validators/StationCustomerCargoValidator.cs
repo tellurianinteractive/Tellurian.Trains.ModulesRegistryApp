@@ -16,7 +16,7 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.Quantity).InclusiveBetween(1, 1000).WithName(localizer["Quantity"]);
             RuleFor(m => m.SpecificWagonClass).MaximumLength(10).MustBeOrdinaryTextOrNull(localizer).WithName(localizer["OtherWagonClass"]);
             RuleFor(m => m.SpecialCargoName).MaximumLength(20).MustBeOrdinaryTextOrNull(localizer).WithName(localizer["SpecialName"]);
-            RuleFor(m => m.ReadyTimeId).MustBeSelected(localizer).WithName(n => localizer[ReadyTimeLabel(n)]);
+            RuleFor(m => m.ReadyTimeId).MustBeSelected(localizer, orZero: true).WithName(n => localizer[ReadyTimeLabel(n)]);
             RuleFor(m => m.FromYear).MustBeValidYear(localizer).WithName(n => localizer[nameof(n.FromYear)]);
             RuleFor(m => m.UptoYear).MustBeValidYear(localizer).WithName(n => localizer[nameof(n.UptoYear)]);
             RuleFor(m => m.TrackOrArea).MaximumLength(10).MustBeOrdinaryTextOrNull(localizer).WithName(n => localizer[nameof(n.TrackOrArea)]);

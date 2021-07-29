@@ -22,14 +22,22 @@ namespace ModulesRegistry.Services.Implementations
             return result.Select(c => new Data.Api.CargoType(c.Id, c.NhmCode, c.DefaultClasses) { Translations = c.LocalizedNames().Select(ln => new Data.Api.Translation(ln.Language, ln.Value)) }).ToList();
         }
 
-        public async Task<IEnumerable<ListboxItem>> GargoListboxItemsAsync(ClaimsPrincipal? principal)
+        public async Task<IEnumerable<ListboxItem>> CargoListboxItemsAsync(ClaimsPrincipal? principal, bool includeDefaultClasses = true)
         {
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
                 var items = await dbContext.Cargos
                     .ToListAsync();
-                return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
+                if (includeDefaultClasses)
+                {
+                    return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
+                }
+                else
+                {
+                    return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value}")).OrderBy(l => l.Description).ToList();
+
+                }
             }
             return Array.Empty<ListboxItem>();
         }

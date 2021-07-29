@@ -61,7 +61,7 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CargoTypeItems = await CargoService.GargoListboxItemsAsync(Principal);
+        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
         DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
         QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);

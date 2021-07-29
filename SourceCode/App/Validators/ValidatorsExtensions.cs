@@ -42,7 +42,7 @@ namespace ModulesRegistry.Validators
             return false;
         }
 
-        private static string[] LowerCaseWords => new[] { "af", "am", "an", "auf", "och", "von" };
+        private static string[] LowerCaseWords => new[] { "af", "am", "an", "auf", "och", "und", "von" };
 
 
         public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>

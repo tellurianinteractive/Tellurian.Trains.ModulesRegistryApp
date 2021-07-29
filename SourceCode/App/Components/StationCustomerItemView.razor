@@ -24,6 +24,7 @@ else
     <TableTemplate Items="Customer.StationCustomerCargos.OrderBy(scc => scc.DirectionId)">
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
+            <th>@Localizer["PackagingUnit"]</th>
             <th align="center">@Localizer["Place"]</th>
             <th align="center">@Localizer["Days"]</th>
             <th align="center">@Localizer["Direction"]</th>
@@ -32,13 +33,14 @@ else
             <th>@Localizer["OperatingPeriod"]</th>
         </TableHeader>
         <RowTemplate Context="item">
-            <td width="20%">@CargoTypeName(item)</td>
-            <td width="8%" align="center" style="color: @TrackOrAreaColour(item).TextColor(); background-color: @TrackOrAreaColour(item)">@TrackOrArea(item)</td>
+            <td width="15%">@CargoTypeName(item)</td>
+            <td width="10%">@PackagingUnit(item)</td>
+            <td width="6%" align="center" style="color: @TrackOrAreaColour(item).TextColor(); background-color: @TrackOrAreaColour(item)">@TrackOrArea(item)</td>
             <td width="6%" align="center">@OperatingDay(item)</td>
             <td width="6%" align="center">@Direction(item)</td>
             <td width="12%">@item.Quantity @QuantityUnit(item)</td>
             <td width="20%">@ReadyLoadingOrUnloading(item)</td>
-            <td>@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
+            <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
         </RowTemplate>
     </TableTemplate>
 
@@ -47,6 +49,7 @@ else
 @code {
     [Parameter] public StationCustomer? Customer { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? CargoTypeItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? PackagingUnits { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
@@ -58,13 +61,15 @@ else
 
     string CargoTypeName(StationCustomerCargo? it) => it is null ? string.Empty : string.IsNullOrWhiteSpace(it.SpecialCargoName) ? CargoType(it) : it.SpecialCargoName;
     string CargoType(StationCustomerCargo? it) => it is null ? string.Empty : CargoTypeItems is not null ? CargoTypeItems.SingleOrDefault(i => i.Id == it.CargoId)?.Description ?? string.Empty : string.Empty;
+    string PackagingUnit(StationCustomerCargo it) => it is null || PackagingUnits is null ? string.Empty : PackagingUnits.SingleOrDefault(i => i.Id == it.PackageUnitId)?.Description ?? string.Empty;
     string Direction(StationCustomerCargo? it) => it is not null && DirectionItems is not null ? DirectionItems.SingleOrDefault(i => i.Id == it.DirectionId)?.Description ?? string.Empty : string.Empty;
     string QuantityUnit(StationCustomerCargo? it) => it is not null && QuantityUnitItems is not null ? QuantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
     string OperatingDay(StationCustomerCargo? it) => it is not null && OperatingDayItems is not null ? OperatingDayItems.SingleOrDefault(i => i.Id == it.OperatingDayId)?.Description ?? string.Empty : string.Empty;
     string ReadyTime(StationCustomerCargo? it) => it is not null && ReadyTimeItems is not null ? ReadyTimeItems.SingleOrDefault(i => i.Id == it.ReadyTimeId)?.Description ?? string.Empty : string.Empty;
-    string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is not null ?
+    string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is  null ?
+        string.Empty :
         it.IsLoading() ? $"{Localizer["LoadingReady"]} {ReadyTime(it).ToLowerInvariant()}" :
-        $"{Localizer["UnloadingReady"]} {ReadyTime(it).ToLowerInvariant()}" :
+        it.IsUnloading() ? $"{Localizer["UnloadingReady"]} {ReadyTime(it).ToLowerInvariant()}" :
         string.Empty;
     string FreightCustomerHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Edit";
 
