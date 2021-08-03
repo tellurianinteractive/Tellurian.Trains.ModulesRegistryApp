@@ -1,7 +1,13 @@
 ## Release Notes
 
+#### Version 1.2.17
+Release date 2021-08-03
+- **Mumber of trough track** for *modules* can now be zero (thanks to Jonas Hjelm).
+- **Max track speed** is raised to 350 km/h (thanks to Jonas Hjelm, a TGV enthustiast).
+- **Oherhead wire** feature can now be set to *planned* (thanks to Jonas Hjelm).
+
 #### Version 1.2.16
-Release sate 2021-07-29
+Release date 2021-07-29
 - **Edit Station Customer** is improved and corrected.
 
 #### Version 1.2.15

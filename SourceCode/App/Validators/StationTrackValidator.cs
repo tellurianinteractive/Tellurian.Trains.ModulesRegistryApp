@@ -28,7 +28,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween(0.2, 10.0)
                 .WithName(n => localizer[nameof(n.PlatformLength)]);
             RuleFor(m => (int?)m.SpeedLimit)
-                .InclusiveBetween(5, 200)
+                .InclusiveBetween(5, 350)
                 .WithName(n => localizer[nameof(n.SpeedLimit)]);
             RuleFor(m => m.UsageNote)
                 .MaximumLength(50)

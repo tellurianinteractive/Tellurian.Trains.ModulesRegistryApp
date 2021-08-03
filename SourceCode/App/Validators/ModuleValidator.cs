@@ -55,7 +55,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween(0, 50000)
                 .WithName(n => localizer[nameof(n.Length)]);
             RuleFor(m => (int)m.NumberOfThroughTracks)
-                .InclusiveBetween(1, 4)
+                .InclusiveBetween(0, 4)
                 .WithName(n => localizer[nameof(n.NumberOfThroughTracks)]);
             RuleFor(m => (int?)m.SpeedLimit)
                .InclusiveBetween(10, 200).When(m => m.SpeedLimit.HasValue)
