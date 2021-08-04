@@ -58,7 +58,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween(0, 4)
                 .WithName(n => localizer[nameof(n.NumberOfThroughTracks)]);
             RuleFor(m => (int?)m.SpeedLimit)
-               .InclusiveBetween(10, 200).When(m => m.SpeedLimit.HasValue)
+               .InclusiveBetween(10, 350).When(m => m.SpeedLimit.HasValue)
                .WithName(n => localizer[nameof(n.SpeedLimit)]);
             RuleFor(m => m.FunctionalState)
                 .InclusiveBetween((int)ModuleFunctionalState.Unknown, (int)ModuleFunctionalState.Approved)
@@ -67,7 +67,7 @@ namespace ModulesRegistry.Validators
                 .InclusiveBetween((int)ModuleLandscapeState.Unknown, (int)ModuleLandscapeState.FullyAppliedDetailed)
                 .WithName(n => localizer[nameof(n.LandscapeState)]);
             RuleFor(m => m.OverheadLineFeature)
-               .InclusiveBetween((int)OverheadLineFeature.No, (int)OverheadLineFeature.OnlyPosts)
+               .InclusiveBetween((int)OverheadLineFeature.No, (int)OverheadLineFeature.Planned)
                .WithName(n => localizer[nameof(n.OverheadLineFeature)]);
             RuleFor(m => m.SignalFeature)
               .InclusiveBetween((int)SignalFeature.No, (int)SignalFeature.Fixed)
