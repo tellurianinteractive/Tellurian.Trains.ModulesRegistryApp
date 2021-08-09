@@ -50,12 +50,13 @@
             <td>@OperatingPeriod(meetinglayout)</td>
             <td>
                 @if (MayEdit)
-                    {
-                    <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/@meetinglayout.Id"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-                    }
-             </td>
-        </RowTemplate>
-    </TableTemplate>
+                {
+                    <AppButton Label="Edit" Href=LayoutHref(meetingLayout.Id) />
+                    <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetinglayout.Id)) />
+                }
+        </td>
+    </RowTemplate>
+</TableTemplate>
 
 }
 
@@ -84,11 +85,21 @@
         if (Meeting is not null)
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting);
-            if (result.Entity is not null)  Meeting = result.Entity;
+            if (result.Entity is not null) Meeting = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
 
+    async Task DeleteLayout(int layoutId)
+    {
+        if (Meeting is not null)
+        {
+            var result = await MeetingService.DeleteLayoutAsync(Principal, Meeting.Id, layoutId);
+            if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Principal, Id);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
+    string LayoutHref(int id) => Meeting is null ? null : $"Meetings/{Meeting.Id}/Layouts/{id}";
 }

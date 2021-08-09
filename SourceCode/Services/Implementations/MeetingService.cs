@@ -48,13 +48,13 @@ namespace ModulesRegistry.Services.Implementations
         {
             if (principal.IsAuthenticated())
             {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings.AsNoTracking()
-                 .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
-                 .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
-                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                 .SingleOrDefaultAsync(m => m.Id == id)
-                 .ConfigureAwait(false);
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.Meetings.AsNoTracking()
+                     .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
+                     .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
+                     .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
+                     .SingleOrDefaultAsync(m => m.Id == id)
+                     .ConfigureAwait(false);
             }
             return null;
         }
@@ -96,7 +96,7 @@ namespace ModulesRegistry.Services.Implementations
                     .ConfigureAwait(false);
 
                 return (existing is null) ?
-                    await  AddNew(dbContext, entity).ConfigureAwait(false) :
+                    await AddNew(dbContext, entity).ConfigureAwait(false) :
                     await UpdateExisting(dbContext, entity, existing).ConfigureAwait(false);
             }
 
@@ -130,6 +130,20 @@ namespace ModulesRegistry.Services.Implementations
             static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>
                     dbContext.Entry(entity).State == EntityState.Unchanged &&
                     entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged);
+        }
+
+        public async Task<(int Count, string? Message)> DeleteLayoutAsync(ClaimsPrincipal? principal, int meetingId, int layoutId)
+        {
+            if (principal is not null)
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.Layouts.Include(l => l.LayoutModules).Where(l => l.Id==layoutId && l.MeetingId == meetingId).SingleOrDefaultAsync();
+                if (existing is null) return (-1).DeleteResult();
+                dbContext.Layouts.Remove(existing);
+                var result = await dbContext.SaveChangesAsync();
+                return result.DeleteResult();
+            }
+            return principal.DeleteNotAuthorized<Layout>();
         }
 
         public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting entity)

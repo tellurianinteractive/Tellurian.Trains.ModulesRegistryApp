@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.2.18
+Release date 2021-08-09
+- **Delete layout from meeting**, issue #105, is now added. Thanks to Fredde Pettersson for reporting this.
+- **Password reset** show failed when actually successful. Thanks to Stefan Kloppenburg for reporting this.
+
+
 #### Version 1.2.17
 Release date 2021-08-03
 - **Mumber of trough track** for *modules* can now be zero (thanks to Jonas Hjelm).

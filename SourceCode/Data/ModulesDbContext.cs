@@ -327,6 +327,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Meeting)
                     .WithMany(p => p.Layouts)
                     .HasForeignKey(d => d.MeetingId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Layout_Meeting");
 
                 entity.HasOne(d => d.ResponsibleGroup)
@@ -346,6 +347,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(e => e.Layout)
                     .WithMany(e => e.LayoutLines)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasForeignKey(e => e.LayoutId);
 
                 entity.HasOne(e => e.FromLayoutStation)
@@ -379,6 +381,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(e => e.Layout)
                      .WithMany(e => e.LayoutModules)
                      .HasForeignKey(e => e.LayoutId)
+                     .OnDelete(DeleteBehavior.Cascade)
                      .HasConstraintName("FK_LayoutModule_Layout");
 
                 entity.HasOne(e => e.Module)
@@ -415,6 +418,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(e => e.Layout)
                      .WithMany(e => e.LayoutStations)
                      .HasForeignKey(e => e.LayoutId)
+                     .OnDelete(DeleteBehavior.Cascade)
                      .HasConstraintName("FK_LayoutStation_Layout");
 
                 entity.HasMany(e => e.Regions)
