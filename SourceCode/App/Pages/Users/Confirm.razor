@@ -3,9 +3,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject NavigationManager Navigator
-
 @inject UserService UserService
-
 
 @if (User is null)
 {
@@ -18,6 +16,12 @@
     {
         <p>@Localizer["PasswordResetFailed"].</p>
     }
+}
+else if (IsPasswordAssigned)
+{
+    <PageHeading Label="UserConfirmed" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
+    <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
+    <p>@Localizer["YouMayNowLogin"].</p>
 }
 else if (User.IsPasswordReset() || User.IsNeverLoggedIn())
 {
@@ -37,12 +41,6 @@ else if (User.IsLockedOut())
     <PageHeading Label="YouAreLockedOut" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
     <p>@Localizer["You have tried to reset your password to many times."].</p>
 }
-else
-{
-    <PageHeading Label="UserConfirmed" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
-    <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
-    <p>@Localizer["YouMayNowLogin"].</p>
-}
 
 @code {
     private string? ObjectId;
@@ -50,10 +48,12 @@ else
     private User? User;
     private Password Password = new Password();
     private Services.PasswordPolicy Policy = new PasswordPolicy();
+    private bool IsPasswordAssigned;
 
 
     protected override async Task OnInitializedAsync()
     {
+        IsPasswordAssigned = false;
         var hasObjectId = Navigator.TryGetQueryStringValue<string?>("objectid", out ObjectId);
         var hasEmail = Navigator.TryGetQueryStringValue<string?>("email", out EmailAddress);
         if (hasEmail && hasObjectId)
@@ -67,6 +67,7 @@ else
         if (Password.IsConfirmed)
         {
             User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
+            IsPasswordAssigned = User is not null;
         }
         else
         {
