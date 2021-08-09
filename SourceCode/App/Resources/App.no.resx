@@ -1005,4 +1005,10 @@
   <data name="PackagingUnit" xml:space="preserve">
     <value>Emballasjeenhet</value>
   </data>
+  <data name="PasswordResetMailSent" xml:space="preserve">
+    <value>E -post for tilbakestilling av passord sendt</value>
+  </data>
+  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
+    <value>Tilbakestilling av passord er forespurt</value>
+  </data>
 </root>

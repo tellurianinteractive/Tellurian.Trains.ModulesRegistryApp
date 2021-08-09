@@ -4,7 +4,8 @@
 Release date 2021-08-09
 - **Delete layout from meeting**, issue #105, is now added. Thanks to Fredde Pettersson for reporting this.
 - **Password reset** show failed when actually successful. Thanks to Stefan Kloppenburg for reporting this.
-
+- **Improved group list** now directly loads groups for user's country.
+- **Bug fix** of #106 broken invite-link for group members.
 
 #### Version 1.2.17
 Release date 2021-08-03

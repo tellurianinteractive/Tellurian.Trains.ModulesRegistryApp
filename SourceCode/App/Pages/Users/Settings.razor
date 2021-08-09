@@ -56,14 +56,14 @@
         if (requestor.IsPasswordResetPermitted())
         {
             var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
-            PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["ResetPasswordHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
+            PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["PasswordResetHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
             if (PasswordResetRequest.IsValid)
             {
                 var message = PasswordResetRequest.AsMailMessage();
                 if (message is not null)
                 {
                     var result = await MailSender.SendMailMessageAsync(message);
-                    ToastService.ShowSuccessOrFailure(Localizer, result, "PasswordResetMail");
+                    ToastService.ShowSuccessOrFailure(Localizer, result, "PasswordResetMailSent");
                 }
             }
         }

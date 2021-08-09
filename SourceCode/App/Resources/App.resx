@@ -1005,4 +1005,10 @@
   <data name="PackagingUnit" xml:space="preserve">
     <value>Packaging unit</value>
   </data>
+  <data name="PasswordResetMailSent" xml:space="preserve">
+    <value>Password reset mail sent</value>
+  </data>
+  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
+    <value>Password reset has been requested</value>
+  </data>
 </root>

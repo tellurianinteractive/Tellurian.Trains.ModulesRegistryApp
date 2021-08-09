@@ -38,7 +38,7 @@
                 <AppButton Label="Remove" OnClickCallback="(async () => await RemoveMember(member.Id))" IconName="Delete"/>
                 @if (member.Person.MayBeInvited())
                 {
-                    <AppButton Label="Invite" Href="InviteHref(member)" IconName="Invite" />
+                    <AppButton Label="Invite" Href="@InviteHref(member)" IconName="Invite" />
                 }
             }
         </td>

@@ -71,12 +71,12 @@ else
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        if (Countries.Count() == 1)
+        if (CountryId == 0)
         {
-            CountryId = Countries.First().Id;
-            await GetGroups(CountryId);
+            CountryId = Principal.CountryId();
+            OnSelectedCountry(CountryId);
         }
-        else if (CountryId > 0)
+        else
         {
             await GetGroups(CountryId);
         }
