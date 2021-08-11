@@ -4,7 +4,7 @@
 
 @if (Item is null)
 {
-    <ActionMessage Label="NoRecordsToDisplay" IconName="exclamation-circle"  AlertType="warning"/>
+    <ActionMessage Label="NoRecordsToDisplay" IconName="exclamation-circle" AlertType="warning" />
 }
 else
 {
@@ -12,13 +12,14 @@ else
         <FluentValidationValidator />
         <ValidationSummary />
         @Inputs
-    <div class="col-12">
-        @if (ShowSaveButton)
-        {
-           <AppButton Label="Save" IsSubmit="true" />
-        }
-        @Buttons
-    </div>
+        <div class="col-12">
+            @if (ShowSaveButton)
+            {
+                <AppButton Label="Save" IsSubmit="true" />
+            }
+            @Buttons
+        </div>
+        @SubInputs
     </EditForm>
 }
 
@@ -26,6 +27,7 @@ else
     [Parameter] public TItem? Item { get; set; }
     [Parameter] public RenderFragment? Inputs { get; set; }
     [Parameter] public RenderFragment? Buttons { get; set; }
+    [Parameter] public RenderFragment? SubInputs { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
     [Parameter] public bool ShowSaveButton { get; set; } = true;
 }

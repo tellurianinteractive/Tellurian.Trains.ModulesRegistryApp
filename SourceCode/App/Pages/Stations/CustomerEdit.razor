@@ -30,7 +30,6 @@
         <AppInputColor Width="3" @bind-Value="StationCustomer.TrackOrAreaColor" Label="Color" />
         <AppInputNumber Width="2" @bind-Value="StationCustomer.OpenedYear" Label="OpenedYear" />
         <AppInputNumber Width="2" @bind-Value="StationCustomer.ClosedYear" Label="ClosedYear" />
-        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
     </Inputs>
     <Buttons>
         @if (StationCustomer.Id > 0)
@@ -38,6 +37,9 @@
             <button class="btn btn-sm btn-danger" @onclick="( () => OpenDeleteDialog(StationCustomer.Id))"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
         }
     </Buttons>
+    <SubInputs>
+        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
+    </SubInputs>
 </EditTemplate>
 
 @code {

@@ -3,6 +3,7 @@
 #### Version 1.2.19
 Release date 2021-08-11
 - **Bug fix** of access to listing group members modules and stations. Thanks to Stefan Kloppenburg for reporting this.
+- **Improved editing of cargo flow** by moving buttons up and adding new cargoflow at the top. Thanks to Stefan Kloppenburg for suggesting this.
 
 #### Version 1.2.18
 Release date 2021-08-09

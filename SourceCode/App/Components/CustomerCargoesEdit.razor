@@ -15,32 +15,33 @@ else
     </div>
     @foreach (var cargo in Customer.StationCustomerCargos)
     {
-<div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-    <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
-    <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="EnumExtensions.CargoPackageUnitListboxItems()" />
-    <AppInputFill Width="6" />
+        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+            <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
+            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="EnumExtensions.CargoPackageUnitListboxItems()" />
+            <AppInputFill Width="6" />
 
-    <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
-    <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
-    <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
-    <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
-    <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
-    <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@ReadyTimeLabel(cargo)" ShowPleaseSelect="true" Items="ReadyTimeItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
+            <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
+            <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
+            <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
+            <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@ReadyTimeLabel(cargo)" ShowPleaseSelect="true" Items="ReadyTimeItems" />
 
-    <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
-    <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
-    <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@BackColor(cargo)" TextColor="@BackColor(cargo).TextColor()" />
-    <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="Color" />
-    <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="FromYear" />
-    <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="UptoYear" />
+            <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
+            <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
+            <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@BackColor(cargo)" TextColor="@BackColor(cargo).TextColor()" />
+            <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="Color" />
+            <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="FromYear" />
+            <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="UptoYear" />
 
-    @if (cargo.Id > 0)
-    {
-        <div class="col-12">
-            <AppButton Label="Delete" OnClickCallback="(() => Delete(cargo.Id))" />
+            @if (cargo.Id > 0)
+            {
+                <div class="col-12">
+                    <AppButton Label="Clone" OnClickCallback="(() => Clone(cargo.Id))" />
+                    <AppButton Label="Delete" OnClickCallback="(() => Delete(cargo.Id))" />
+                </div>
+            }
         </div>
-    }
-</div>
     }
 }
 
@@ -56,8 +57,21 @@ else
     {
         if (Customer is not null)
         {
-            Customer.StationCustomerCargos.Add(DefaultCustomerCargo);
+            Customer.StationCustomerCargos = (new[] { DefaultCustomerCargo }.Concat(Customer.StationCustomerCargos)).ToArray();
             StateHasChanged();
+        }
+    }
+
+    void Clone(int id)
+    {
+        if (Customer is not null && id > 0)
+        {
+            var existing = Customer.StationCustomerCargos.SingleOrDefault(scc => scc.Id == id);
+            if (existing is not null)
+            {
+                var cloned = existing.Clone();
+                Customer.StationCustomerCargos = (new[] { cloned }.Concat(Customer.StationCustomerCargos)).ToArray();
+            }
         }
     }
 
