@@ -74,8 +74,8 @@
         }
     }
 
-    string ModulesHref(GroupMember member) => $"persons/{member.PersonId}/modules/{member.GroupId}";
-    string StationsHref(GroupMember member) => $"persons/{member.PersonId}/stations/{member.GroupId}";
+    string ModulesHref(GroupMember member) => $"persons/{member.PersonId}/modules/group/{member.GroupId}";
+    string StationsHref(GroupMember member) => $"persons/{member.PersonId}/stations/group/{member.GroupId}";
     string MemberEditHref(GroupMember member) => $"groups/{member.GroupId}/members/{member.Id}/edit";
     string InviteHref(GroupMember member) => $"persons/{member.PersonId}/invite";
 }

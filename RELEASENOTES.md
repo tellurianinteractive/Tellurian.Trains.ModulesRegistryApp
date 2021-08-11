@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.2.19
+Release date 2021-08-11
+- **Bug fix** of access to listing group members modules and stations. Thanks to Stefan Kloppenburg for reporting this.
+
 #### Version 1.2.18
 Release date 2021-08-09
 - **Delete layout from meeting**, issue #105, is now added. Thanks to Fredde Pettersson for reporting this.
