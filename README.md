@@ -1,7 +1,5 @@
 # Module Registry App
-Welcome to the *open source* project for creating a registry for *model railway modules*.
-
-You find more to read in the [WIKI](/wiki).
+Welcome to the *open source* project for creating a registry for *model railway modules*. You find more to read in the [WIKI](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki).
 
 ## Goal
 The project's man goal is to create an application 
