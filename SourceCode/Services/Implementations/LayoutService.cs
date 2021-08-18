@@ -27,7 +27,7 @@ namespace ModulesRegistry.Services.Implementations
         /// <param name="layoutId"></param>
         /// <param name="package"></param>
         /// <returns></returns>
-        public async Task<(int Count, string Message)> AddPackageModulesAsync(ClaimsPrincipal? principal, int participantId, int layoutId, ModulePackage package)
+        public async Task<(int Count, string Message)> AddPackageModulesAsync(ClaimsPrincipal? principal, int layoutId, int participantId, ModulePackage package)
         {
             if (principal.IsAuthenticated())
             {
@@ -59,12 +59,17 @@ namespace ModulesRegistry.Services.Implementations
             return (0, Resources.Strings.NotAuthorized);
         }
 
-        public async Task<IEnumerable<LayoutModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int participantId, int layoutId)
+        public async Task<IEnumerable<LayoutModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutId, int participantId = 0)
         {
             if (principal.IsAuthenticated())
             {
                 using var dbContext = Factory.CreateDbContext();
-                return await dbContext.LayoutModules.Include(lm => lm.LayoutStation).Include(lm => lm.Module).Where(lm => lm.ParticipantId == participantId && lm.LayoutId == layoutId).ToListAsync();
+                return await dbContext.LayoutModules
+                    .Include(lm => lm.LayoutStation)
+                    .Include(lm => lm.Module)
+                    .Include(lm => lm.Participant).ThenInclude(p => p.Person)
+                    .Where(lm => (participantId == 0 || lm.ParticipantId == participantId) && lm.LayoutId == layoutId)
+                    .ToListAsync();
             }
             return Array.Empty<LayoutModule>();
         }

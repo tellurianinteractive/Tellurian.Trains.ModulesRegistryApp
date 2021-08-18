@@ -1,0 +1,62 @@
+﻿@page "/layouts/{id:int}/modules"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+
+@inject MeetingService MeetingService
+@inject LayoutService LayoutService
+
+<PageHeading Label="Modules" ObjectName="Layout" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+@if (MeetingParticipants is null)
+{
+
+}
+else if (IsParticipant /*|| Principal.IsAnyAdministrator()*/)
+{
+    @foreach (var participant in MeetingParticipants.OrderBy(mp => mp.Person.FullName()))
+    {
+        <h3>@participant.Person.FullName(), @participant.Person.CityName</h3>
+        @if (participant.LayoutModules.Count > 0)
+        {
+            <TableTemplate Items="@participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
+                <TableHeader>
+                    <th>@Localizer["Module"]</th>
+                    <th width="120px">@Localizer["RegistrationTime"]</th>
+                    <th width="60px" align="center">@Localizer["IsStation"]</th>
+                </TableHeader>
+                <RowTemplate Context="item">
+                    <td>@item.Module.FullName</td>
+                    <td width="120px">@item.RegisteredTime.ToString("d")</td>
+                    <td width="60px" align="center">@item.Module.IsPartOfStation().AsYesNo()</td>
+                </RowTemplate>
+            </TableTemplate>
+        }
+        else
+        {
+            <p>@Localizer["NoModulesRegistered"]</p>
+        }
+    }
+}
+else
+{
+    <ActionMessage Label="NotAuthorized" AlertType="warning" />
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<MeetingParticipant>? MeetingParticipants;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        MeetingParticipants = await MeetingService.MeetingParticipantsAsync(Principal, Id);
+    }
+
+
+    bool IsParticipant => Principal is not null && MeetingParticipants is not null && MeetingParticipants.Any(mp => mp.PersonId == Principal.PersonId());
+}

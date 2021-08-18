@@ -14,6 +14,7 @@
     [IsApiAccessPermitted]             BIT                CONSTRAINT [DF_User_IsApiAccessPermitted] DEFAULT ((0)) NOT NULL,
     [AdministratorAreaOfResposibility] NVARCHAR (50)      NULL,
     [PasswordResetAttempts]            INT                CONSTRAINT [DF_User_PasswordResetAttempts] DEFAULT ((0)) NOT NULL,
+    [MayUploadSkpDrawing]              BIT                CONSTRAINT [DF_User_MayUploadSkpDrawing] DEFAULT ((0)) NOT NULL, 
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

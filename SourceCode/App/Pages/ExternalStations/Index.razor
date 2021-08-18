@@ -1,5 +1,7 @@
 ﻿@page "/ExternalStations/Index"
 @page "/ExternalStations/{regionId:int}"
+@page "/ExternalStations/Region/{regionId:int}"
+@page "/ExternalStations/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -10,11 +12,11 @@
 @inject CountryService CountryService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStations" Owner="Region" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="true" />
+<PageHeading ObjectName="ExternalStations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="true" />
 
-<ListboxSelector Items="RegionItems" OnSelected="OnSelectedRegion" IsVisible="true" />
+<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" />
 
-@if (RegionId > 0)
+@if (HasData)
 {
     @if (MayEdit)
     {
@@ -38,30 +40,55 @@
             <td>@item.ClosedYear</td>
             <td>
                 @if (MayEdit)
-                    {
-                    <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-                    }
-                <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
-            </td>
-        </RowTemplate>
-    </TableTemplate>
+                {
+                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                }
+            <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int RegionId { get; set; }
+    [Parameter] public int CountryId { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<ExternalStation>? ExternalStations;
+    IEnumerable<ListboxItem>? CountryItems;
     IEnumerable<ListboxItem>? RegionItems;
+    Country? Country;
     Region? Region;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
         RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
+        if (CountryItems.Count() == 1) OnSelectedCountry(CountryItems.First().Id);
     }
 
     protected override async Task OnParametersSetAsync()
+    {
+        await GetCountryStations();
+        await GetRegionStations();
+    }
+
+    async Task GetCountryStations()
+    {
+        if (CountryId > 0)
+        {
+            Country = await CountryService.FindById(CountryId);
+            ExternalStations = await ExternalStationService.GetAllInCountry(Principal, CountryId);
+        }
+    }
+
+    void OnSelectedCountry(int countryId)
+    {
+        Navigator.NavigateTo($"ExternalStations/Country/{countryId}");
+    }
+
+    async Task GetRegionStations()
     {
         if (RegionId > 0)
         {
@@ -72,8 +99,13 @@
 
     void OnSelectedRegion(int regionId)
     {
-        Navigator.NavigateTo($"ExternalStations/{regionId}");
+        Navigator.NavigateTo($"ExternalStations/Region{regionId}");
     }
 
+    object? Owner => Country is not null ? Country : Region;
+
     bool MayEdit => ExternalStations is not null;
+
+    bool HasData => ExternalStations is not null && ExternalStations.Count() > 0;
+    bool CanSelectCountry => CountryItems is not null && CountryItems.Count() > 1;
 }

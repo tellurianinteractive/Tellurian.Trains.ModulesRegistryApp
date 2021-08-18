@@ -81,6 +81,7 @@ namespace ModulesRegistry.Security
                 if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, true));
                 if (user.IsReadOnly) result.Add(Claim(AppClaimTypes.ReadOnly, true));
                 if (user.IsDemo) result.Add(Claim(AppClaimTypes.Demo, true));
+                if (user.MayUploadSkpDrawing) result.Add(Claim(AppClaimTypes.MayUploadSkpDrawing, true));
             }
 
             static void AddPersonalClaims(Person? person, List<Claim> result)

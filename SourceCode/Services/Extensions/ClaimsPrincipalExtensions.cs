@@ -27,6 +27,7 @@ namespace ModulesRegistry.Services.Extensions
         public const string ReadOnly = nameof(ReadOnly);
         public const string Demo = nameof(Demo);
         public const string DomainId = nameof(DomainId);
+        public const string MayUploadSkpDrawing = nameof(MayUploadSkpDrawing);
     }
 
     public static class ClaimsPrincipalExtensions
@@ -40,6 +41,7 @@ namespace ModulesRegistry.Services.Extensions
         public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.CountryId);
         public static bool IsDemo(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.Demo);
         public static bool IsReadOnly(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.ReadOnly);
+        public static bool MayUploadSkpDrawing(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.MayUploadSkpDrawing);
 
         public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
         public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? me) => me.Any(AppClaimTypes.ObjectId);

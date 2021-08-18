@@ -1011,4 +1011,10 @@
   <data name="PasswordResetHasBeenRequested" xml:space="preserve">
     <value>Återställning av lösenord har begärts</value>
   </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Obehörig</value>
+  </data>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>alla ord måste börja med stor bokstav</value>
+  </data>
 </root>

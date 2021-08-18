@@ -13,7 +13,7 @@ namespace ModulesRegistry.Validators
                 .MinimumLength(3)
                 .MaximumLength(50)
                 .MustBeOrdinaryText(localizer)
-                .MustBeCapitalizedCorrectly(localizer)
+                .MustBeCapitalizedCorrectly(localizer, false)
                 .WithName(n => localizer[nameof(n.FullName)]);
             RuleFor(m => m.Signature)
                 .NotEmpty()

@@ -7,29 +7,41 @@ namespace ModulesRegistry.Validators
 {
     public static class ValidatorsExtensions
     {
-        public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-            builder.Must(value => value.IsNameCapitalizedCorrectly()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}");
+        public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, bool allWordsWithInitialCapitals = true) =>
+            builder.Must(value => value.IsNameCapitalizedCorrectly(allWordsWithInitialCapitals)).WithMessage(Message(localizer, allWordsWithInitialCapitals));
+
+        private static string Message(IStringLocalizer localizer, bool allWordsWithInitialCapitals) =>
+            allWordsWithInitialCapitals ?
+            $"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}" :
+            $"\"{{PropertyName}}\" {localizer["AllWordsMustBeginWithCapitalLetter"]}";
 
 
-        private static bool IsNameCapitalizedCorrectly(this string? name)
+        private static bool IsNameCapitalizedCorrectly(this string? name, bool allWordsWithInitialCapitals)
         {
             if (name is null || name.Length < 1) return true;
             var n = name.AsSpan();
-            for (var i = 0; i < n.Length; i++)
+            if (allWordsWithInitialCapitals)
             {
-                if (i == 0)
+                for (var i = 0; i < n.Length; i++)
                 {
-                    if (char.IsLower(n[i]))
-                        return false;
+                    if (i == 0)
+                    {
+                        if (char.IsLower(n[i]))
+                            return false;
+                    }
+                    else if ((n[i - 1] == ' '))
+                    {
+                        var rest = n[i..];
+                        if (IsAnyLowerCaseWord(rest)) continue;
+                        if (char.IsLower(n[i])) return false;
+                    }
                 }
-                else if ((n[i - 1] == ' '))
-                {
-                    var rest = n[i..];
-                    if (IsAnyLowerCaseWord(rest)) continue;
-                    if (char.IsLower(n[i])) return false;
-                }
+                return true;
             }
-            return true;
+            else
+            {
+                return !char.IsLower(n[0]);
+            }
         }
 
         private static bool IsAnyLowerCaseWord(ReadOnlySpan<char> word)
@@ -42,7 +54,7 @@ namespace ModulesRegistry.Validators
             return false;
         }
 
-        private static string[] LowerCaseWords => new[] { "af", "am", "an", "auf", "och", "und", "von" };
+        private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "von" };
 
 
         public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>

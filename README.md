@@ -1,5 +1,7 @@
 # Module Registry App
 Welcome to the *open source* project for creating a registry for *model railway modules*.
+You find the application [here](https://moduleregistry.azurewebsites.net/).
+You need an intitation to create an account and log in.
 
 ## Goal
 The project's man goal is to create an application 
@@ -11,7 +13,7 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status June 2021
+## Status August 2021
 All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Transfer of module *ownership* - part or whole - to other person or group.

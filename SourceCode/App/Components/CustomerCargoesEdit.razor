@@ -13,7 +13,7 @@ else
     <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
         <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
     </div>
-    @foreach (var cargo in Customer.StationCustomerCargos)
+    @foreach (var cargo in Customer.StationCustomerCargos.OrderBy(scc => scc.Id))
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
@@ -53,12 +53,18 @@ else
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? ReadyTimeItems { get; set; }
 
+    List<StationCustomerCargo> StationCustomerCargoes = new List<StationCustomerCargo>();
+
+    protected override void OnParametersSet()
+    {
+        StationCustomerCargoes.AddRange( Customer!.StationCustomerCargos);
+    }
+
     void AddCargoFlow()
     {
         if (Customer is not null)
         {
-            Customer.StationCustomerCargos = (new[] { DefaultCustomerCargo }.Concat(Customer.StationCustomerCargos)).ToArray();
-            StateHasChanged();
+            Customer.StationCustomerCargos.Add(DefaultCustomerCargo);
         }
     }
 
@@ -70,7 +76,7 @@ else
             if (existing is not null)
             {
                 var cloned = existing.Clone();
-                Customer.StationCustomerCargos = (new[] { cloned }.Concat(Customer.StationCustomerCargos)).ToArray();
+                Customer.StationCustomerCargos.Add(cloned);
             }
         }
     }
@@ -79,12 +85,13 @@ else
     {
         if (Customer is not null && id > 0)
         {
-            Customer.StationCustomerCargos = Customer.StationCustomerCargos.Where(st => st.Id != id).ToList();
-            StateHasChanged();
+            var item = Customer.StationCustomerCargos.SingleOrDefault(scc => scc.Id == id);
+            if (item is not null) Customer.StationCustomerCargos.Remove(item);
         }
     }
 
-    StationCustomerCargo DefaultCustomerCargo => new StationCustomerCargo { StationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8 };
+    StationCustomerCargo DefaultCustomerCargo => new StationCustomerCargo { StationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8, TrackOrAreaColor="#FFFFFF" };
+
     string AddButtonText => $"{Localizer["Add"]} {Localizer["CargoFlow"].ToString().ToLowerInvariant()}";
 
     string? BackColor(StationCustomerCargo cargo) =>

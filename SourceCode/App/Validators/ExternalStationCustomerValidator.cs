@@ -13,7 +13,7 @@ namespace ModulesRegistry.Validators
                 .MinimumLength(1)
                 .MaximumLength(50)
                 .MustBeOrdinaryText(localizer)
-                .MustBeCapitalizedCorrectly(localizer)
+                .MustBeCapitalizedCorrectly(localizer, false)
                 .WithName(n => localizer["Name"]);
             RuleFor(m => m.OpenedYear)
                 .MustBeValidYear(localizer)

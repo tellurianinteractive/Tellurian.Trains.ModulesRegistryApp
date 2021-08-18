@@ -20,5 +20,5 @@
 	[ShuntingInstructions]		NVARCHAR(2000) NULL,
 	CONSTRAINT [FK_LayoutStation_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_LayoutStation_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]),
-	CONSTRAINT [FK_LayoutStation_Country] FOREIGN KEY ([OtherCountryId]) REFERENCES [dbo].[Country] ([Id]),
+	CONSTRAINT [FK_LayoutStation_Country] FOREIGN KEY ([OtherCountryId]) REFERENCES [dbo].[Country] ([Id])
 )

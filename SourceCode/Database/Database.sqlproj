@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{4a4992f4-a2fe-42ac-a2a8-8218900c5966}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -64,6 +64,8 @@
     <Folder Include="dbo\Views\" />
     <Folder Include="dbo\Scripts" />
     <Folder Include="dbo\Scripts\Initial data" />
+    <Folder Include="dbo\Listboxes" />
+    <Folder Include="dbo\Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\MeetingParticipant.sql" />
@@ -101,18 +103,6 @@
     <Build Include="dbo\Tables\Layout.sql" />
     <Build Include="dbo\Tables\Cargo.sql" />
     <Build Include="dbo\Tables\Scale.sql" />
-    <Build Include="dbo\Views\ListCargoReadyTime.sql" />
-    <Build Include="dbo\Views\ListUntimedCargoReadyTime.sql" />
-    <Build Include="dbo\Views\ListStationCustomer.sql" />
-    <Build Include="dbo\Views\ListExternalStationCustomer.sql" />
-    <Build Include="dbo\Views\ListCargoDirection.sql" />
-    <Build Include="dbo\Views\ListCountry.sql" />
-    <Build Include="dbo\Views\ListRegion.sql" />
-    <Build Include="dbo\Views\ListExternalStation.sql" />
-    <Build Include="dbo\Views\ListCargoUnit.sql" />
-    <Build Include="dbo\Views\ListStation.sql" />
-    <Build Include="dbo\Views\ListBasicDay.sql" />
-    <Build Include="dbo\Views\ListOperatingDay.sql" />
     <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
@@ -126,6 +116,21 @@
     <Build Include="dbo\Tables\LayoutStation.sql" />
     <Build Include="dbo\Tables\LayoutStationRegion.sql" />
     <Build Include="dbo\Tables\LayoutLine.sql" />
+    <Build Include="dbo\Views\CustomerCargo.sql" />
+    <Build Include="dbo\Views\Waybills.sql" />
+    <Build Include="dbo\Listboxes\ListBasicDay.sql" />
+    <Build Include="dbo\Listboxes\ListCargoDirection.sql" />
+    <Build Include="dbo\Listboxes\ListCargoReadyTime.sql" />
+    <Build Include="dbo\Listboxes\ListCargoUnit.sql" />
+    <Build Include="dbo\Listboxes\ListCountry.sql" />
+    <Build Include="dbo\Listboxes\ListExternalStation.sql" />
+    <Build Include="dbo\Listboxes\ListExternalStationCustomer.sql" />
+    <Build Include="dbo\Listboxes\ListOperatingDay.sql" />
+    <Build Include="dbo\Listboxes\ListRegion.sql" />
+    <Build Include="dbo\Listboxes\ListStation.sql" />
+    <Build Include="dbo\Listboxes\ListStationCustomer.sql" />
+    <Build Include="dbo\Listboxes\ListUntimedCargoReadyTime.sql" />
+    <Build Include="dbo\Procedures\GetWaybills.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -111,7 +111,7 @@ namespace ModulesRegistry.Services.Implementations
                 foreach (var cargo in entity.StationCustomerCargos)
                 {
                     cargo.TrackOrAreaColor = cargo.TrackOrAreaColor?.ToLowerInvariant();
-                    var current = existing.StationCustomerCargos.AsQueryable().FirstOrDefault(t => t.Id == cargo.Id);
+                    var current = existing.StationCustomerCargos.AsQueryable().FirstOrDefault(scc => scc.Id == cargo.Id);
                     if (current is null) existing.StationCustomerCargos.Add(cargo);
                     else dbContext.Entry(current).CurrentValues.SetValues(cargo);
                 }

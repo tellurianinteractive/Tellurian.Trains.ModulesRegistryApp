@@ -1,9 +1,18 @@
 ## Release Notes
 
+#### Version 1.3
+Release date 2021-08-18
+- **List of modules** registered for a meeting layout can now be seen by any meeting participant.
+- **External stations and freight customers** can be added by any user in their country of residence.
+- **Improved name validation** of persons, modules etc.
+- **SketchUp drawings** can be uploaded by selected users.
+- **Bug fix** of adding cargo flow to station customer.
+- **Service release** with latest .NET security patches and bug fixes.
+
 #### Version 1.2.19
 Release date 2021-08-11
 - **Bug fix** of access to listing group members modules and stations. Thanks to Stefan Kloppenburg for reporting this.
-- **Improved editing of cargo flow** by moving buttons up and adding new cargoflow at the top. Thanks to Stefan Kloppenburg for suggesting this.
+- **Improved editing of cargo flow** by moving buttons up and adding new cargoflow at the top, and option to clone existing flow. Thanks to Stefan Kloppenburg for suggesting this.
 
 #### Version 1.2.18
 Release date 2021-08-09

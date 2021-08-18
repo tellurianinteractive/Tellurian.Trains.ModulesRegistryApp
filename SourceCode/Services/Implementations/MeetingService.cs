@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -73,6 +74,22 @@ namespace ModulesRegistry.Services.Implementations
             return null;
         }
 
+        public async Task<IEnumerable<MeetingParticipant>> MeetingParticipantsAsync(ClaimsPrincipal? principal, int layoutId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var meetingId = await dbContext.Layouts.Where(l => l.Id == layoutId).Select(l => l.MeetingId).SingleOrDefaultAsync();
+                return await dbContext.MeetingParticipants.AsNoTracking()
+                    .Include(mp => mp.Person).ThenInclude(p => p.Country)
+                    .Include(p => p.LayoutModules).ThenInclude(lm => lm.Module)
+                    .Where(m => m.MeetingId == meetingId && (m.LayoutModules.Count == 0 || m.LayoutModules.Any(lm => lm.LayoutId == layoutId)))
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+            }
+            return Array.Empty<MeetingParticipant>();
+        }
+
         public async Task<(int Count, string Message, Meeting? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting entity)
         {
             if (principal is not null)
@@ -137,7 +154,7 @@ namespace ModulesRegistry.Services.Implementations
             if (principal is not null)
             {
                 using var dbContext = Factory.CreateDbContext();
-                var existing = await dbContext.Layouts.Include(l => l.LayoutModules).Where(l => l.Id==layoutId && l.MeetingId == meetingId).SingleOrDefaultAsync();
+                var existing = await dbContext.Layouts.Include(l => l.LayoutModules).Where(l => l.Id == layoutId && l.MeetingId == meetingId).SingleOrDefaultAsync();
                 if (existing is null) return (-1).DeleteResult();
                 dbContext.Layouts.Remove(existing);
                 var result = await dbContext.SaveChangesAsync();

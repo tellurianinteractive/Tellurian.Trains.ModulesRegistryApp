@@ -1011,4 +1011,10 @@
   <data name="PasswordResetHasBeenRequested" xml:space="preserve">
     <value>Tilbakestilling av passord er forespurt</value>
   </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Uautorisert</value>
+  </data>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>alle ord må begynne med stor bokstav</value>
+  </data>
 </root>

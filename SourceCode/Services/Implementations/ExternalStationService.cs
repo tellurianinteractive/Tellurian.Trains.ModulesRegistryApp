@@ -28,6 +28,20 @@ namespace ModulesRegistry.Services.Implementations
             }
             return Array.Empty<ExternalStation>();
         }
+        public async Task<IEnumerable<ExternalStation>> GetAllInCountry(ClaimsPrincipal? principal, int countryId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.ExternalStations.AsNoTracking()
+                    .Where(es => es.Region.CountryId == countryId)
+                    .Include(es => es.ExternalStationCustomers)
+                    .OrderBy(es => es.FullName)
+                    .ToListAsync();
+            }
+            return Array.Empty<ExternalStation>();
+        }
+
 
         public async Task<ExternalStation?> FindByIdAsync(ClaimsPrincipal? principal, int id)
         {

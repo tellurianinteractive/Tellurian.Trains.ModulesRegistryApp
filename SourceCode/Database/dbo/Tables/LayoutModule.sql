@@ -13,6 +13,6 @@
 	[Note]               NVARCHAR(50) NULL,
 	CONSTRAINT [FK_LayoutModule_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_LayoutModule_Module] FOREIGN KEY ([ModuleId]) REFERENCES [dbo].[Module] ([Id]) ,
-    CONSTRAINT [FK_LayoutModule_MeetingParticipant] FOREIGN KEY ([ParticipantId]) REFERENCES [dbo].[MeetingParticipant] ([Id]) ON DELETE NO ACTION ,
-    CONSTRAINT [FK_LayoutModule_LayoutStation] FOREIGN KEY ([LayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id]) ,
+    CONSTRAINT [FK_LayoutModule_MeetingParticipant] FOREIGN KEY ([ParticipantId]) REFERENCES [dbo].[MeetingParticipant] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_LayoutModule_LayoutStation] FOREIGN KEY ([LayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id])
 )

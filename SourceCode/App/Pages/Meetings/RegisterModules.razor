@@ -124,7 +124,7 @@
         var package = Packages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null && Layout is not null)
         {
-            var result = await LayoutService.AddPackageModulesAsync(Principal, ParticipantId, Layout.Id, package);
+            var result = await LayoutService.AddPackageModulesAsync(Principal, Layout.Id, ParticipantId, package);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
@@ -145,7 +145,7 @@
     {
         if (Layout is not null && Participant is not null)
         {
-            RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, Participant.Id, Layout.Id);
+            RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, Layout.Id, Participant.Id);
             AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
             Packages = AvailableModules.AsPackages();
         }
