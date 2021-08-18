@@ -2,6 +2,7 @@
 Welcome to the *open source* project for creating a registry for *model railway modules*.
 You find the application [here](https://moduleregistry.azurewebsites.net/).
 You need an intitation to create an account and log in.
+Welcome to the *open source* project for creating a registry for *model railway modules*. You find more to read in the [WIKI](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki).
 
 ## Goal
 The project's man goal is to create an application 
