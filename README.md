@@ -1,6 +1,8 @@
 # Module Registry App
 Welcome to the *open source* project for creating a registry for *model railway modules*.
 
+You find more to read in the [WIKI](/wiki).
+
 ## Goal
 The project's man goal is to create an application 
 for maintaning data about *model railway modules* with the following qualities:
