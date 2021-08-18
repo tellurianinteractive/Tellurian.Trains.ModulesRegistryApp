@@ -109,8 +109,8 @@ In order to run the application locally, you also need to install *SQL Server*.
 2. Build the *Database* project in the solution, and the publish it. 
 3. In the *Publish dialog* you select your local server and giv the database a name of your choice.
 4. The database is created and the schema is published to the database.
-5. You need to fill some tables with data. In the folder *dbo/Scripts/Initial data* are SQL-scrips per table that you need to run. 
-You can open a file, connect to your database, and execute the SQL-script.
+5. You need to fill some tables with data. In the folder *dbo/Scripts/Initial data* are SQL-scrips per table that you need to run. You can open a file, connect to your database, and execute these SQL-script.
+6. You can also request a fresh copy of the production database using the *sqlpackage.exe* utiity program and then import this to your local database.
 
 After the database is created and filled with initial data, you need to configure the application to connect to it.
 1. Store the database connection string in your local [app secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets) using the key *ConnectionStrings:TimetablePlanningDatabase*.
