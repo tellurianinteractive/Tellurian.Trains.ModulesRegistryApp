@@ -1,8 +1,11 @@
 # Module Registry App
 Welcome to the *open source* project for creating a registry for *model railway modules*.
+
 You find the application [here](https://moduleregistry.azurewebsites.net/).
 You need an invitation to create an account and log in. Contact your [country administrator](https://moduleregistry.azurewebsites.net/contacts). 
-Road more in the [WIKI](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki).
+
+Read more in the [WIKI](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/wiki) and
+follow the [discussions](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/discussions) about new features and other related things.
 
 ## Goal
 The project's man goal is to create an application 
