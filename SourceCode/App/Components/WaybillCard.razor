@@ -1,0 +1,101 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Item != null && Item.Origin is not null && Item.Destination is not null)
+{
+    <Pocket>
+        <div class="waybill">
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="box" style="color: @Item.Destination.ForeColor; background-color: @Item.Destination.BackColor">
+                            <div class="waybill label">@DestinationLabel(Item, "Destination")</div>
+                            <div class="waybill name">
+                                @if (Item.Destination.Language != Item.Origin.Language)
+                                {
+                                    <span><img src="@Item.FlagSrc()" /></span>
+                                }
+                                <span>@Item.Destination.StationName</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="waybill destination">
+                            <div class="waybill label">@DestinationLabel(Item, "Consignee")</div>
+                            <div class="waybill item">@Item.Destination.Name</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="waybill destination">
+                            <div class="waybill label">@DestinationLabel(Item, "Cargo")</div>
+                            <div class="waybill item">@Item.Destination.CargoName</div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="3" class="waybill destination">
+                            <div class="waybill label">@DestinationLabel(Item, "Instructions")</div>
+                            <div class="waybill instruction">@Item.Destination.Instruction</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3" style="border: 2px solid gray; color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
+                            <div class="waybill label">@OriginLabel(Item, "Origin")</div>
+                            <div class="waybill name">@Item.Origin.StationName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="waybill label">@OriginLabel(Item, "Shipper")</div>
+                            <div class="waybill shipper">@Item.Origin.Name</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="waybill label">@OriginLabel(Item, "Carrier")</div>
+                            <div class="waybill item">@Item.OperatorName</div>
+                        </td>
+                        <td>
+                            <div class="waybill label">@OriginLabel(Item, "Class")</div>
+                            <div class="waybill item">@Item.WagonClass</div>
+                        </td>
+                        <td>
+                            <div class="waybill label">@OriginLabel(Item, "Epoch")</div>
+                            <div class="waybill item">@Item.Epoch</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="waybill label">@OriginLabel(Item, "Instructions")</div>
+                            <div class="waybill instruction">@Item.Origin.Instruction</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </Pocket>
+}
+
+@code {
+    [Parameter] public Waybill? Item { get; set; }
+    [Parameter] public IEnumerable<LanguageLabels>? LanguageLabels { get; set; }
+
+    string OriginLabel(Waybill item, string resourceKey, string? englishText = null) =>
+        Label(item.Origin?.Language, resourceKey, englishText);
+
+    string DestinationLabel(Waybill item, string resourceKey, string? englishText = null) =>
+        Label(item.Destination?.Language, resourceKey, englishText);
+
+    string Label(string? langaugeCode, string resourceKey, string? englishText)
+    {
+        if (englishText is null) englishText = resourceKey;
+        var localText = Localizer[resourceKey].Value;
+        if (LanguageLabels != null && langaugeCode != null)
+        {
+            localText = LanguageLabels.GetLabelText(langaugeCode, resourceKey);
+            if (string.IsNullOrWhiteSpace(localText)) englishText = Localizer[resourceKey];
+        }
+        if (englishText == localText || string.IsNullOrWhiteSpace(localText)) return englishText!;
+        return $"{englishText}/{localText}";
+    }
+}

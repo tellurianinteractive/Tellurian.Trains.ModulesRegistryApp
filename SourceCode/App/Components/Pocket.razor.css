@@ -1,0 +1,17 @@
+﻿.pocket {
+    font-weight: 500;
+    font-size: 11pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+    .pocket.frame {
+        width: 52mm;
+        height: 92mm;
+        padding: 0pt;
+        margin: 0pt;
+        border-color: gainsboro;
+        border-width: 1px;
+        border-style: solid;
+        padding: 2pt;
+        display: inline-block;
+    }

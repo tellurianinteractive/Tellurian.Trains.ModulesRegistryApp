@@ -26,5 +26,13 @@ namespace ModulesRegistry.Data
         public virtual ICollection<ExternalStation> ExternalStations { get; set; }
         public virtual ICollection<Station> Stations { get; set; }
         public virtual ICollection<LayoutStation> LayoutStations { get; set; }
+
+        public static Region OriginDefault => new() { ForeColor = DefaultOriginForeColor, BackColor = DefaultOriginBackColor };
+        public static Region DestinationDefault => new() { ForeColor = DefaultDestinationForeColor, BackColor = DefaultDestinationBackColor };
+
+        public const string DefaultOriginForeColor = "#000000";
+        public const string DefaultOriginBackColor = "#FFFFFF";
+        public const string DefaultDestinationForeColor = "#000000";
+        public const string DefaultDestinationBackColor = "#FFFFE0";
     }
 }

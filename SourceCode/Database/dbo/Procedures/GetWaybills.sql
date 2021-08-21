@@ -1,6 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[GetWaybills]
-	@LayoutId int,
-	@MatchShadowYard bit = 0
+	@LayoutId INT,
+	@StationId INT = NULL,
+	@MatchShadowYard BIT = 0,
+	@Sending BIT = 1,
+	@Receiving BIT = 1
 AS
 SELECT
 	CCS.LayoutId,
@@ -45,7 +48,8 @@ WHERE
 	(CCS.IsSupply <> 0 AND CCC.IsSupply = 0) AND
 	((CCS.IsInternational <> 0 AND CCC.IsInternational <> 0) OR (CCS.CountryId = CCC.CountryId)) AND
 	((CCS.Id = 0 AND CCC.Id <> 0 AND CCC.IsInternal <>0) OR (CCC.Id = 0 AND CCS.Id <> 0 AND CCS.IsInternal <> 0) OR (CCS.Id <> 0 AND CCC.Id <> 0)) AND
-	(CCS.StationId <> CCC.StationId) AND
+	(CCS.StationId <> CCC.StationId) AND 
+	((@Sending <> 0 OR CCC.StationId = @StationId) OR (@Receiving <> 0 OR CCS.StationId=@StationId)) AND
 	(CCS.QuantityUnitId = CCC.QuantityUnitId) AND
 	(CCS.FromYear IS NULL OR CCS.FromYear <= 2014) AND (CCS.UptoYear IS NULL OR CCS.UptoYear >= 2021) AND
 	(CCC.FromYear IS NULL OR CCC.FromYear <= 2014) AND (CCC.UptoYear IS NULL OR CCC.UptoYear >= 2021) AND

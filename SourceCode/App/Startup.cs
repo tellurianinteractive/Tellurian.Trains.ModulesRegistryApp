@@ -55,6 +55,7 @@ namespace ModulesRegistry
 
             services.AddBlazoredToast();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
+            services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<ITimeProvider, SystemTimeProvider>();
             services.AddScoped<PageHistory>();
             if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
@@ -83,8 +84,8 @@ namespace ModulesRegistry
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>
             {
-                options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultLanguage);
-                options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
+                options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
             });
         }
 
@@ -105,9 +106,9 @@ namespace ModulesRegistry
 
             app.UseRequestLocalization(options =>
              {
-                 options.AddSupportedCultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
-                 options.AddSupportedUICultures(LanguageService.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
-                 options.DefaultRequestCulture = new RequestCulture(LanguageService.DefaultCulture);
+                 options.AddSupportedCultures(LanguageUtility.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                 options.AddSupportedUICultures(LanguageUtility.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                 options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultCulture);
                  options.FallBackToParentCultures = true;
              });
             app.UseHttpsRedirection();

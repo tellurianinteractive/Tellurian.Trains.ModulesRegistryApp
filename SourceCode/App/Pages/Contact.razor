@@ -10,7 +10,7 @@
 else
 {
     <ContentView ContentName="Contact" />
-    <TableTemplate Items="ContactPersons.OrderBy(cp => LanguageService.GetString(cp.Person.Country.EnglishName, null))" HideNoRecordsToDisplay="true">
+    <TableTemplate Items="ContactPersons.OrderBy(cp => LanguageUtility.GetString(cp.Person.Country.EnglishName, null))" HideNoRecordsToDisplay="true">
         <TableHeader>
             <th>@Localizer["Country"]</th>
             <th>@Localizer["Name"]</th>
@@ -19,7 +19,7 @@ else
             <th>@Localizer["AdministersGroups"]</th>
         </TableHeader>
         <RowTemplate Context="contact">
-            <th>@LanguageService.GetString(contact.Person.Country.EnglishName, null)</th>
+            <th>@LanguageUtility.GetString(contact.Person.Country.EnglishName, null)</th>
             <th>@contact.Person.FullName()</th>
             <td>@contact.IsGlobalAdministrator.AsYesNo()</td>
             <td>@contact.AdministratorAreaOfResposibility</td>

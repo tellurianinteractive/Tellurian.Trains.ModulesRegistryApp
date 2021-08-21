@@ -19,7 +19,7 @@ namespace ModulesRegistry.Services.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -178,11 +178,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cargo.
+        /// </summary>
+        internal static string Cargo {
+            get {
+                return ResourceManager.GetString("Cargo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cargo racks.
         /// </summary>
         internal static string CargoRacks {
             get {
                 return ResourceManager.GetString("CargoRacks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carrier.
+        /// </summary>
+        internal static string Carrier {
+            get {
+                return ResourceManager.GetString("Carrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        internal static string Class {
+            get {
+                return ResourceManager.GetString("Class", resourceCulture);
             }
         }
         
@@ -210,6 +237,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Community {
             get {
                 return ResourceManager.GetString("Community", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consignee.
+        /// </summary>
+        internal static string Consignee {
+            get {
+                return ResourceManager.GetString("Consignee", resourceCulture);
             }
         }
         
@@ -304,6 +340,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Destination.
+        /// </summary>
+        internal static string Destination {
+            get {
+                return ResourceManager.GetString("Destination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Domain members.
         /// </summary>
         internal static string DomainMembers {
@@ -354,6 +399,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string EastWest {
             get {
                 return ResourceManager.GetString("EastWest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty.
+        /// </summary>
+        internal static string Empty {
+            get {
+                return ResourceManager.GetString("Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epoch.
+        /// </summary>
+        internal static string Epoch {
+            get {
+                return ResourceManager.GetString("Epoch", resourceCulture);
             }
         }
         
@@ -538,6 +601,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instructions.
+        /// </summary>
+        internal static string Instructions {
+            get {
+                return ResourceManager.GetString("Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Liquid container.
         /// </summary>
         internal static string LiquidContainer {
@@ -714,6 +786,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Optional {
             get {
                 return ResourceManager.GetString("Optional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Origin.
+        /// </summary>
+        internal static string Origin {
+            get {
+                return ResourceManager.GetString("Origin", resourceCulture);
             }
         }
         
@@ -903,6 +984,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Send {
             get {
                 return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipper.
+        /// </summary>
+        internal static string Shipper {
+            get {
+                return ResourceManager.GetString("Shipper", resourceCulture);
             }
         }
         

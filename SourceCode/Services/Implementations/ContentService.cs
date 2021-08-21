@@ -17,7 +17,7 @@ namespace ModulesRegistry.Services.Implementations
             MarkdownPath = markdownPath ?? MarkdownPath;
         }
         public async Task<TextContent> GetTextContent(string content) =>
-            await LanguageService.CurrentCulture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
+            await LanguageUtility.CurrentCulture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
 
         public async Task<TextContent> GetTextContent(string content, string? language)
         {

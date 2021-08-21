@@ -19,7 +19,7 @@ namespace ModulesRegistry.Services.Extensions
 
         public static string ConfirmationLinkTag(this User? me, string baseUri) =>
             me is null ? string.Empty :
-            $"<p><a href=\"{me.ConfirmationLink(baseUri)}\">{LanguageService.GetString("CreatePassword", me.PreferredLanguage())}</a></p>";
+            $"<p><a href=\"{me.ConfirmationLink(baseUri)}\">{LanguageUtility.GetString("CreatePassword", me.PreferredLanguage())}</a></p>";
 
         public static string PrimaryEmail(this User? me) =>
             me is null ? string.Empty :
@@ -71,7 +71,7 @@ namespace ModulesRegistry.Services.Extensions
             if (me.HasPersonalMessage) text.Append($"<p>{me.PersonalMessage}</p>");
             text.AppendLine(me.Message.AsHtml);
             text.AppendLine(me.Recipient.ConfirmationLinkTag(me.BaseUri));
-            text.Append($"<p>{LanguageService.GetString("BestRegards", preferredLanguage)}</p>");
+            text.Append($"<p>{LanguageUtility.GetString("BestRegards", preferredLanguage)}</p>");
             text.Append($"<p>{me.Inviter.FirstName} {me.Inviter.LastName}</p>");
             return text.ToString();
         }
@@ -97,15 +97,15 @@ namespace ModulesRegistry.Services.Extensions
             text.AppendHelloPhrase(me);
             text.AppendLine(me.Message.AsHtml);
             text.AppendLine(me.Recipient.ConfirmationLinkTag(me.BaseUri));
-            text.Append($"<p>{LanguageService.GetString("BestRegards", preferredLanguage)}</p>");
-            text.Append($"<p>{LanguageService.GetString("AppName", preferredLanguage)}</p>");
+            text.Append($"<p>{LanguageUtility.GetString("BestRegards", preferredLanguage)}</p>");
+            text.Append($"<p>{LanguageUtility.GetString("AppName", preferredLanguage)}</p>");
             return text.ToString();
         }
 
         private static void AppendHelloPhrase(this StringBuilder me, UserMessage message)
         {
             me.Append("<h1>");
-            me.Append(LanguageService.GetString("Hello", message.Recipient.PreferredLanguage()));
+            me.Append(LanguageUtility.GetString("Hello", message.Recipient.PreferredLanguage()));
             me.Append(' ');
             me.Append(message.Recipient.Person.FirstName);
             me.AppendLine("</h1>");

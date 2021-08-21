@@ -9,7 +9,7 @@ using ModulesRegistry.Services.Implementations;
 using System;
 using System.Resources;
 
-[assembly: NeutralResourcesLanguage(LanguageService.DefaultLanguage)]
+[assembly: NeutralResourcesLanguage(LanguageUtility.DefaultLanguage)]
 namespace ModulesRegistry
 {
     public class Program

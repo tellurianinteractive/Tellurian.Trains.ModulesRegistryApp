@@ -1,4 +1,6 @@
-﻿CREATE TABLE [dbo].[CargoRelation] (
+﻿-- Not implemented. Waybills are created from a view.
+
+CREATE TABLE [dbo].[CargoRelation] (
     [Id]                             INT IDENTITY (1, 1) NOT NULL,
     [SupplierStationCustomerCargoId] INT NOT NULL,
     [ConsumerStationCustomerCargoId] INT NOT NULL,

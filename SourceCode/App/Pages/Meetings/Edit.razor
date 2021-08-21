@@ -95,11 +95,11 @@
         if (Meeting is not null)
         {
             var result = await MeetingService.DeleteLayoutAsync(Principal, Meeting.Id, layoutId);
-            if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Principal, Id);
+            if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Principal, Id) ?? new Meeting();
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
-    string LayoutHref(int id) => Meeting is null ? null : $"Meetings/{Meeting.Id}/Layouts/{id}";
+    string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
 }

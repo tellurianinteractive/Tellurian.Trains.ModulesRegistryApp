@@ -6,8 +6,9 @@ namespace ModulesRegistry.Extensions
     public static class ToastServiceExtensions
     {
 
-        public static void ShowSuccessOrFailure(this IToastService me, IStringLocalizer localizer, int count, string message)
+        public static void ShowSuccessOrFailure(this IToastService me, IStringLocalizer localizer, int count, string? message)
         {
+            if (string.IsNullOrWhiteSpace(message)) message = string.Empty;
             if (count > 0)
                 me.ShowSuccess(localizer[message], localizer["Success"].ToString());
             else if (count < 0)

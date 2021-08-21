@@ -445,7 +445,7 @@
     <value>Flaskor</value>
   </data>
   <data name="CargoRacks" xml:space="preserve">
-    <value>Lasrhållare</value>
+    <value>Lasthållare</value>
   </data>
   <data name="LiquidContainer" xml:space="preserve">
     <value>Vätskebehållare</value>
@@ -464,5 +464,35 @@
   </data>
   <data name="ReeferContainer40" xml:space="preserve">
     <value>40' Kylcontainer</value>
+  </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Speditör</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Littra</value>
+  </data>
+  <data name="Consignee" xml:space="preserve">
+    <value>Mottagare</value>
+  </data>
+  <data name="Destination" xml:space="preserve">
+    <value>Destination</value>
+  </data>
+  <data name="Epoch" xml:space="preserve">
+    <value>Epok</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Tom</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instruktioner</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>Avsändningsstation</value>
+  </data>
+  <data name="Shipper" xml:space="preserve">
+    <value>Avsändare</value>
   </data>
 </root>

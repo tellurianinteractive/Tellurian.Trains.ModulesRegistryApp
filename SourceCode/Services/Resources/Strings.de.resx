@@ -465,4 +465,34 @@
   <data name="ReeferContainer40" xml:space="preserve">
     <value>40' Kühlcontainer</value>
   </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Fracht</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Spediteur</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Klasse</value>
+  </data>
+  <data name="Consignee" xml:space="preserve">
+    <value>Empfänger</value>
+  </data>
+  <data name="Destination" xml:space="preserve">
+    <value>Ziel</value>
+  </data>
+  <data name="Epoch" xml:space="preserve">
+    <value>Epoch</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Leer</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Anweisungen</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>Versandstation</value>
+  </data>
+  <data name="Shipper" xml:space="preserve">
+    <value>Absender</value>
+  </data>
 </root>

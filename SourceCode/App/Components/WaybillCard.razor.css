@@ -1,0 +1,50 @@
+﻿.waybill {
+    line-height: 14pt;
+    font-weight: 600;
+}
+
+    .label {
+        font-size: 7pt;
+    }
+
+    .destination {
+        background-color: lightyellow;
+    }
+
+    .box {
+        height: 12mm;
+        border: 2px solid red;
+    }
+
+    .name {
+        font-weight: bold;
+        font-size: 14pt;
+        line-height: 18pt;
+        width: 48mm;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .shipper {
+        font-weight: bold;
+        font-size: 12pt;
+        width: 48mm;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .flag {
+        vertical-align: text-bottom;
+    }
+
+    .item {
+        font-weight: bold;
+        font-size: 12pt;
+    }
+
+    .instruction {
+        font-weight: normal;
+        font-size: 11pt;
+    }

@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.25.0" />
+    <PackageReference Include="StoredProcedureEFCore" Version="1.0.5" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

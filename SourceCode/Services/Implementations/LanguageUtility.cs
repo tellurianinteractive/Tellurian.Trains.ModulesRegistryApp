@@ -9,7 +9,7 @@ using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations
 {
-    public static class LanguageService
+    public static class LanguageUtility
     {
         public const string DefaultLanguage = "en";
         public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -34,6 +34,7 @@ namespace ModulesRegistry.Services.Implementations
             return result is null ? resourceName : result;
         }
         public static IList<CultureInfo> SupportedCultures => LanguageCultureMap.Values.ToArray();
+        public static string[] SupportedLanguages => SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
         private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
              new Dictionary<Language, CultureInfo>() {
                  { Language.English, new CultureInfo("en") },

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "SourceCode\App\App.csproj", "{BA2CA2BE-3016-43F0-AC64-2C19C69F389A}"
 EndProject
@@ -107,8 +107,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = SingleSheet
-		RESX_NeutralResourcesLanguage = en-GB
 		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
+		RESX_NeutralResourcesLanguage = en-GB
+		RESX_ExcelExportMode = SingleSheet
 	EndGlobalSection
 EndGlobal

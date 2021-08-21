@@ -138,12 +138,7 @@ namespace ModulesRegistry.Data
                     .HasForeignKey(d => d.OperatingDayId)
                     .HasConstraintName("FK_CargoRelation_OperatingDay");
 
-                entity.HasOne(d => d.Operator)
-                    .WithMany(p => p.CargoRelations)
-                    .HasForeignKey(d => d.OperatorId)
-                    .HasConstraintName("FK_CargoRelation_Operator");
-
-                entity.HasOne(d => d.SupplierStationCustomerCargo)
+                 entity.HasOne(d => d.SupplierStationCustomerCargo)
                     .WithMany()
                     .HasForeignKey(d => d.SupplierStationCustomerCargoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)

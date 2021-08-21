@@ -46,7 +46,7 @@
         }
         else
         {
-            ToastService.ShowWarning(string.Format(LanguageService.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSizeKb));
+            ToastService.ShowWarning(string.Format(LanguageUtility.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSizeKb));
         }
     }
 
@@ -56,7 +56,7 @@
     string Accept => $".{FileExtension}";
     string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
-    string MaxSizeText => string.Format(LanguageService.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
+    string MaxSizeText => string.Format(LanguageUtility.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
 
     bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb * 1024;
 

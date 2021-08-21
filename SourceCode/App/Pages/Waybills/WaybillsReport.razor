@@ -1,0 +1,37 @@
+﻿@page "/reports/waybills/layout/{layoutId:int}"
+@layout PrintLayout
+@inject IStringLocalizer<App> Localizer
+@inject ILanguageService LanguageService
+@inject WaybillService WaybillService
+
+@if (Items is null || LanguageLabels is null)
+{
+    <div class="print creatingreport">@Localizer["CreatingReport"]</div>
+}
+else
+{
+    @foreach (var itemsPerPage in Items.ItemsPerPage(10))
+    {
+        <div class="pagebreak">
+            @foreach (var item in itemsPerPage)
+            {
+                <WaybillCard Item="@item" LanguageLabels="@LanguageLabels"></WaybillCard>
+            }
+        </div>
+    }
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int LayoutId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<Waybill>? Items { get; set; }
+    IEnumerable<LanguageLabels>? LanguageLabels { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        LanguageLabels = LanguageService.GetWaybillLabes();
+        Items = WaybillService.GetWaybills(Principal, LayoutId );
+    }
+}
