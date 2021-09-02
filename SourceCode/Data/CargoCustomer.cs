@@ -12,6 +12,7 @@
         public string CargoName { get; set; } = string.Empty;
         public string SpecialCargoName { get; set; } = string.Empty;
         public string QuantityUnitName { get; set; } = string.Empty;
+        public string PackageUnitName { get; set; } = string.Empty;
         public byte OperationDaysFlags { get; set; }
 
         //public static CargoCustomer Origin(string name, string stationName, string instruction = "-") =>

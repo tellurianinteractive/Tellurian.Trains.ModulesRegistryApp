@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.4.0
+Release date 2021-09-03
+- **Waybill print** for specific meeting layout.
+- **Waybill print** for specific station in meeting layout.
+
 #### Version 1.3.1
 Release date 2021-09-02
 - **Bug fix** of issue #109 access to editing meeting layouts. Thanks to Fredde Pettersson for reporting this.
@@ -27,9 +32,9 @@ Release date 2021-08-09
 
 #### Version 1.2.17
 Release date 2021-08-03
-- **Mumber of trough track** for *modules* can now be zero (thanks to Jonas Hjelm).
+- **Number of trough track** for *modules* can now be zero (thanks to Jonas Hjelm).
 - **Max track speed** is raised to 350 km/h (thanks to Jonas Hjelm, a TGV enthustiast).
-- **Oherhead wire** feature can now be set to *planned* (thanks to Jonas Hjelm).
+- **Overhead wire** feature can now be set to *planned* (thanks to Jonas Hjelm).
 
 #### Version 1.2.16
 Release date 2021-07-29

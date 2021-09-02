@@ -516,4 +516,10 @@
   <data name="Shipper" xml:space="preserve">
     <value>Shipper</value>
   </data>
+  <data name="Wagon" xml:space="preserve">
+    <value>Wagon</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>in</value>
+  </data>
 </root>

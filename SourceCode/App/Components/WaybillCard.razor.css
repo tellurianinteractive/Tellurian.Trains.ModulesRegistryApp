@@ -1,50 +1,61 @@
 ﻿.waybill {
-    line-height: 14pt;
+    line-height: 12pt;
     font-weight: 600;
 }
 
-    .label {
-        font-size: 7pt;
-    }
+.label {
+    font-size: 7pt;
+    max-height: 9pt;
+    line-height: 9pt;
+    vertical-align: top;
+}
 
-    .destination {
-        background-color: lightyellow;
-    }
+.destination {
+    background-color: lightyellow;
+}
 
-    .box {
-        height: 12mm;
-        border: 2px solid red;
-    }
+.box {
+    height: 12mm;
+    border: 2px solid red;
+    padding: 1px;
+}
 
-    .name {
-        font-weight: bold;
-        font-size: 14pt;
-        line-height: 18pt;
-        width: 48mm;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.name {
+    font-weight: bold;
+    line-height: 15pt;
+    width: 48mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .shipper {
-        font-weight: bold;
-        font-size: 12pt;
-        width: 48mm;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.shipper {
+    font-weight: bold;
+    font-size: 11pt;
+    width: 48mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .flag {
-        vertical-align: text-bottom;
-    }
+.flag {
+    vertical-align: text-bottom;
+    padding-right: 5px;
+}
 
-    .item {
-        font-weight: bold;
-        font-size: 12pt;
-    }
+.item {
+    font-weight: bold;
+    font-size: 11pt;
+    min-height: 13pt;
+    max-width: 48mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .instruction {
-        font-weight: normal;
-        font-size: 11pt;
-    }
+.instruction {
+    font-weight: normal;
+    font-size: 9pt;
+    line-height: 11pt;
+    min-height: 11pt;
+}

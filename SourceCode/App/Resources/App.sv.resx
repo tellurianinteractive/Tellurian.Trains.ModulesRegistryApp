@@ -1017,4 +1017,7 @@
   <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
     <value>alla ord måste börja med stor bokstav</value>
   </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>Fraktsedlar</value>
+  </data>
 </root>

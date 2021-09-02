@@ -565,6 +565,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to in.
+        /// </summary>
+        internal static string In {
+            get {
+                return ResourceManager.GetString("In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In the afternoon.
         /// </summary>
         internal static string In_the_afternoon {
@@ -1191,6 +1200,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Users {
             get {
                 return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wagon.
+        /// </summary>
+        internal static string Wagon {
+            get {
+                return ResourceManager.GetString("Wagon", resourceCulture);
             }
         }
         

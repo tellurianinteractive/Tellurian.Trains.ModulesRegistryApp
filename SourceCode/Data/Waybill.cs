@@ -24,13 +24,19 @@ namespace ModulesRegistry.Data
             "Destination",
             "Empty",
             "Epoch",
+            "In",
             "Instructions",
             "Origin",
             "Shipper",
         };
 
-        public static string FlagSrc(this Waybill me) =>
-           me.Destination is null ? string.Empty :
-           $"images/flags/{me.Destination.Language}.png";
+        public static string FlagOriginSrc(this Waybill me) =>
+           me.Origin is null ? string.Empty :
+           $"images/flags/{me.Origin.DomainSuffix}.png";
+        public static string FlagDestinationSrc(this Waybill me) =>
+            me.Destination is null ? string.Empty :
+            $"images/flags/{me.Destination.DomainSuffix}.png";
+
+        public static bool IsCrossBorder(this Waybill me) => me.Origin?.DomainSuffix != me.Destination?.DomainSuffix;
     }
 }

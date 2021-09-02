@@ -19,6 +19,18 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
+        public async Task<IEnumerable<LayoutStation>> GetStationsAsync(ClaimsPrincipal? principal, int layoutId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.LayoutStations.AsNoTracking()
+                    .Where(ls => ls.LayoutId == layoutId)
+                    .ToListAsync();
+            }
+            return Array.Empty<LayoutStation>();
+        }
+
         /// <summary>
         /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>
         /// </summary>

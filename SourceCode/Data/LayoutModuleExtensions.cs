@@ -14,5 +14,8 @@ namespace ModulesRegistry.Data
 
         public static bool IsNotInUse([NotNullWhen(true)] this LayoutModule? me) =>
             me is not null && !me.IsInUse();
+
+        public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStationId.HasValue;
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿@using System.Web;
 @using System.Security.Claims;
 @inject IStringLocalizer<App> Localizer
+@inject DefaultUserService DefaultUserService
+
 <AuthorizeView>
     <Authorized>
         <b>@UserLoginStatus(context.User)</b>
@@ -21,6 +23,12 @@
 @code {
     string? Username { get; set; }
     string? Password { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Username = DefaultUserService.Username;
+        Password = DefaultUserService.Password;
+    }
 
     private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
 

@@ -37,6 +37,18 @@ namespace ModulesRegistry
             services.Configure<CloudMailSenderSettings>(Configuration.GetSection("SendGrid"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+            if (Environment.IsDevelopment())
+            {
+                var s = new DefaultUserService { 
+                    Username = Configuration.GetValue<string>("Username"),
+                    Password = Configuration.GetValue<string>("Password")
+                };
+                services.AddSingleton(s);
+            }
+            else
+            {
+                services.AddSingleton(new DefaultUserService());
+            }
             services.AddRazorPages();
             services.AddControllers().AddJsonOptions(options =>
             {
@@ -80,6 +92,7 @@ namespace ModulesRegistry
             services.AddScoped<StationService>();
             services.AddScoped<ScaleService>();
             services.AddScoped<UserService>();
+            services.AddScoped<WaybillService>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>

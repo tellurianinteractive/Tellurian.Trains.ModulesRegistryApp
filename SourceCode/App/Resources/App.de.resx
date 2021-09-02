@@ -1017,4 +1017,7 @@
   <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
     <value>alle Wörter müssen mit einem Großbuchstaben beginnen</value>
   </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>Frachtbriefe</value>
+  </data>
 </root>

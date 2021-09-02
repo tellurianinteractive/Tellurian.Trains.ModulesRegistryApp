@@ -52,6 +52,8 @@
                 @if (MayEdit)
                 {
                 <AppButton Label="Edit" Href="@LayoutHref(meetingLayout.Id)" />
+                <AppButton Label="Modules" Href="@LayoutModulesHref(meetingLayout.Id)" />
+                <AppButton Label="Waybills" Href="@WaybillsHref(meetingLayout.Id)" />
                 <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
                 }
         </td>
@@ -101,4 +103,6 @@
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
     string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
+    string LayoutModulesHref(int id) => $"layouts/{id}/modules";
+    string WaybillsHref(int id) => $"reports/waybills/layout/{id}";
 }

@@ -495,4 +495,10 @@
   <data name="Shipper" xml:space="preserve">
     <value>Afsender</value>
   </data>
+  <data name="Wagon" xml:space="preserve">
+    <value>Vogn</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>i</value>
+  </data>
 </root>

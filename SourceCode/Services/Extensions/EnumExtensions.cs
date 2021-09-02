@@ -38,5 +38,9 @@ namespace ModulesRegistry.Services.Extensions
 
         public static IEnumerable<ListboxItem> CargoPackageUnitListboxItems() =>
             Enum.GetValues<CargoPackagingUnit>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+
+        public static IEnumerable<ListboxItem> CargoPackageUnitListboxItems(string language) =>
+            Enum.GetValues<CargoPackagingUnit>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString(), language.AsCultureInfo()) ?? value.ToString()));
+
     }
 }

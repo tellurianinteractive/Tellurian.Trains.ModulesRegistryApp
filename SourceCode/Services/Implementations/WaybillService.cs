@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
-using StoredProcedureEFCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Globalization;
+using System.Linq;
 using System.Resources;
 using System.Security.Claims;
 
@@ -21,35 +21,49 @@ namespace ModulesRegistry.Services.Implementations
             Factory = factory;
         }
 
-        public IEnumerable<Waybill>? GetWaybills(ClaimsPrincipal? principal, int layoutId, bool matchShadowYards = false, bool sending = true, bool receiving = true)
+        public IEnumerable<Waybill>? GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false, bool sending = true, bool receiving = true)
         {
-            IEnumerable<Waybill>? waybills = null;
+            List<Waybill>? waybills = new List<Waybill>(200);
             if (principal.IsAuthenticated())
             {
                 var dbContext = Factory.CreateDbContext();
-                dbContext.LoadStoredProc("dbo.GetWaybills")
-                    .AddParam("LayoutId", layoutId)
-                    .AddParam("MatchShadowYards", matchShadowYards)
-                    .AddParam("Sending", sending)
-                    .AddParam("Receiving", receiving)
-                    .Exec(r => waybills = MapWaybills(r));
+                using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+                if (connection is not null)
+                {
+                    var command = new SqlCommand("GetWaybills", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    command.Parameters.AddWithValue("@LayoutId", layoutId);
+                    if (stationId.HasValue) command.Parameters.AddWithValue("@StationId", stationId);
+                    command.Parameters.AddWithValue("@MatchShadowYard", matchShadowYards);
+                    try
+                    {
+                        connection.Open();
+                        var reader = command.ExecuteReader();
+                        var resourceManager = new ResourceManager(typeof(Resources.Strings));
+                        while (reader.Read())
+                        {
+                            waybills.Add(MapWaybill(reader, resourceManager));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return null;
+                    }
+
+                }
             }
             return waybills;
-        }
-
-        private static  IEnumerable<Waybill> MapWaybills(DbDataReader reader)
-        {
-            var resourceManager = new ResourceManager(typeof(Resources.Strings));
-            while (reader.Read())
-            {
-                yield return MapWaybill(reader, resourceManager);
-            }
         }
 
         private static Waybill MapWaybill(IDataRecord record, ResourceManager resourceManager)
         {
             string originLanguage = record.GetString("OriginLanguages", "EN").FirstItem("EN");
             string destinationLanguage = record.GetString("DestinationLanguages", "EN").FirstItem("EN");
+            var originPackageUnits = EnumExtensions.CargoPackageUnitListboxItems(originLanguage);
+            var destinationPackageUnits = EnumExtensions.CargoPackageUnitListboxItems(destinationLanguage);
             var wagonClass = record.GetString("DefaultClasses");
             var specialWagonClass = record.GetString("SpecificWagonClass");
             return new()
@@ -63,7 +77,8 @@ namespace ModulesRegistry.Services.Implementations
                     ForeColor = record.GetString("OriginForeColor"),
                     BackColor = record.GetString("OriginBackColor"),
                     CargoName = record.GetString(originLanguage),
-                    QuantityUnitName = record.GetStringResource("QuanityUnitResourceName", resourceManager, originLanguage)
+                    PackageUnitName = PackageUnitName(originPackageUnits, record.GetInt("OriginPackageUnitId")),
+                    QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, originLanguage)
                 },
                 Destination = new CargoCustomer
                 {
@@ -74,13 +89,18 @@ namespace ModulesRegistry.Services.Implementations
                     ForeColor = record.GetString("DestinationForeColor"),
                     BackColor = record.GetString("DestinationBackColor"),
                     CargoName = record.GetString(destinationLanguage),
-                    QuantityUnitName = record.GetStringResource("QuanityUnitResourceName", resourceManager, destinationLanguage)
+                    PackageUnitName = PackageUnitName(destinationPackageUnits, record.GetInt("DestinationPackageUnitId")),
+                    QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, destinationLanguage)
                 },
                 Quantity = record.GetInt("Quantity"),
                 OperatorName = string.Empty, // To be supported
                 WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass
             };
         }
+
+        static string PackageUnitName(IEnumerable<ListboxItem>? items, int id) =>
+            items is null || id == 0 ? string.Empty :
+            items.SingleOrDefault(i => i.Id == id)?.Description ?? string.Empty;
     }
 
     public static class IDataRecordExtensions
@@ -93,17 +113,17 @@ namespace ModulesRegistry.Services.Implementations
             return (string.IsNullOrWhiteSpace(s)) ? defaultValue : s;
         }
 
-        public static string GetStringResource(this IDataRecord me, string columnName, ResourceManager resourceManager, string defaultValue = "")
-        {
-            var resourceKey = me.GetString(columnName, defaultValue);
-            if (resourceKey.HasValue())
-            {
-                var resourceValue = resourceManager.GetString(resourceKey, CultureInfo.CurrentCulture);
-                if (resourceValue.HasValue()) return resourceValue;
-                return resourceKey;
-            }
-            return defaultValue;
-        }
+        //public static string GetStringResource(this IDataRecord me, string columnName, ResourceManager resourceManager, string defaultValue = "")
+        //{
+        //    var resourceKey = me.GetString(columnName, defaultValue);
+        //    if (resourceKey.HasValue())
+        //    {
+        //        var resourceValue = resourceManager.GetString(resourceKey, CultureInfo.CurrentCulture);
+        //        if (resourceValue.HasValue()) return resourceValue;
+        //        return resourceKey;
+        //    }
+        //    return defaultValue;
+        //}
         public static string GetStringResourceForLanguage(this IDataRecord me, string columnName, ResourceManager resourceManager, string language, string defaultValue = "")
         {
             var resourceKey = me.GetString(columnName, defaultValue);

@@ -9,10 +9,10 @@
                     <tr>
                         <td colspan="3" class="box" style="color: @Item.Destination.ForeColor; background-color: @Item.Destination.BackColor">
                             <div class="waybill label">@DestinationLabel(Item, "Destination")</div>
-                            <div class="waybill name">
-                                @if (Item.Destination.Language != Item.Origin.Language)
+                            <div class="waybill name" style="font-size: @TextSize(Item.Destination.StationName, Item.IsCrossBorder())pt">
+                                @if (Item.IsCrossBorder())
                                 {
-                                    <span><img src="@Item.FlagSrc()" /></span>
+                                    <span class="flag"><img src="@Item.FlagDestinationSrc()" /></span>
                                 }
                                 <span>@Item.Destination.StationName</span>
                             </div>
@@ -27,7 +27,13 @@
                     <tr>
                         <td colspan="3" class="waybill destination">
                             <div class="waybill label">@DestinationLabel(Item, "Cargo")</div>
-                            <div class="waybill item">@Item.Destination.CargoName</div>
+                            <div class="waybill item">@CargoName(Item.Destination)</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="waybill destination">
+                            <div class="waybill label">@DestinationLabel(Item, "Unit")</div>
+                            <div class="waybill item">1 @Item.Destination.QuantityUnitName</div>
                         </td>
                     </tr>
                     <tr>
@@ -41,7 +47,13 @@
                     <tr>
                         <td colspan="3" style="border: 2px solid gray; color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
                             <div class="waybill label">@OriginLabel(Item, "Origin")</div>
-                            <div class="waybill name">@Item.Origin.StationName</div>
+                            <div class="waybill name" style="font-size: @TextSize(Item.Origin.StationName, Item.IsCrossBorder())pt">
+                                @if (Item.IsCrossBorder())
+                                {
+                                    <span class="flag"><img src="@Item.FlagOriginSrc()" /></span>
+                                }
+                                <span>@Item.Origin.StationName</span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -50,6 +62,15 @@
                             <div class="waybill shipper">@Item.Origin.Name</div>
                         </td>
                     </tr>
+                    @if (Item.IsCrossBorder())
+                    {
+                        <tr>
+                            <td colspan="3" class="waybill">
+                                <div class="waybill label">@OriginLabel(Item, "Cargo")</div>
+                                <div class="waybill item">@CargoName(Item.Origin)</div>
+                            </td>
+                        </tr>
+                    }
                     <tr>
                         <td>
                             <div class="waybill label">@OriginLabel(Item, "Carrier")</div>
@@ -58,10 +79,6 @@
                         <td>
                             <div class="waybill label">@OriginLabel(Item, "Class")</div>
                             <div class="waybill item">@Item.WagonClass</div>
-                        </td>
-                        <td>
-                            <div class="waybill label">@OriginLabel(Item, "Epoch")</div>
-                            <div class="waybill item">@Item.Epoch</div>
                         </td>
                     </tr>
                     <tr>
@@ -98,4 +115,16 @@
         if (englishText == localText || string.IsNullOrWhiteSpace(localText)) return englishText!;
         return $"{englishText}/{localText}";
     }
+
+    string CargoName(CargoCustomer? me) =>
+        me is null ? string.Empty :
+        me.PackageUnitName.HasValue() ? $"{me.CargoName} {In(me)} {me.PackageUnitName.ToLowerInvariant()}" :
+        me.CargoName;
+
+    string In(CargoCustomer me) => LanguageLabels.GetLabelText(me.Language, "In");
+
+    int TextSize(string? text, bool hasFlag) =>
+        string.IsNullOrWhiteSpace(text) ? 14 :
+        hasFlag && text.Length < 14 ? 14 :
+        text.Length < 18 ? 14 : 12;
 }

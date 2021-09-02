@@ -1,4 +1,5 @@
 ﻿@page "/reports/waybills/layout/{layoutId:int}"
+@page "/reports/waybills/layout/{layoutId:int}/station/{layoutStationId:int}"
 @layout PrintLayout
 @inject IStringLocalizer<App> Localizer
 @inject ILanguageService LanguageService
@@ -6,7 +7,11 @@
 
 @if (Items is null || LanguageLabels is null)
 {
-    <div class="print creatingreport">@Localizer["CreatingReport"]</div>
+    <ActionMessage Label="CreatingReport"/>
+}
+else if (Items.Count() == 0)
+{
+    <ActionMessage Label="NoWaybills"/>
 }
 else
 {
@@ -23,6 +28,7 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int LayoutId { get; set; }
+    [Parameter] public int? LayoutStationId { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Waybill>? Items { get; set; }
@@ -32,6 +38,6 @@ else
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         LanguageLabels = LanguageService.GetWaybillLabes();
-        Items = WaybillService.GetWaybills(Principal, LayoutId );
+        Items = WaybillService.GetWaybills(Principal, LayoutId, LayoutStationId,  true );
     }
 }

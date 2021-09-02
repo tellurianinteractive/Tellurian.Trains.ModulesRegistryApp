@@ -30,6 +30,8 @@ namespace ModulesRegistry.Extensions
         public const string Transfer = "fa fa-people-carry";
         public const string Upload = "fa fa-file-upload";
         public const string User = "fa fa-user";
+        public const string Waybill = "fa fa-file-invoice";
+        public const string Waybills = "fa fa-file-invoice";
         public const string View = "fa fa-eye";
 
         public readonly static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
@@ -60,6 +62,8 @@ namespace ModulesRegistry.Extensions
             {nameof(Transfer), Transfer },
             {nameof(Upload), Upload },
             {nameof(User), User },
+            {nameof(Waybill), Waybill },
+            {nameof(Waybills), Waybills },
             {nameof(View), View },
        };
 

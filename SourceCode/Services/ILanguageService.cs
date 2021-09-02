@@ -51,7 +51,7 @@ namespace ModulesRegistry.Services
         }
 
         public static string GetLabelText(this LanguageLabels me, string resourceKey) =>
-            me.Labels.Single(l => l.ResourceKey == resourceKey).Text;
+            me.Labels.SingleOrDefault(l => l.ResourceKey == resourceKey)?.Text ?? resourceKey;
 
         public static string GetLabelText(this IEnumerable<LanguageLabels> me, string languageCode, string resourceKey) =>
             me.Single(l => l.LanguageCode == languageCode).GetLabelText(resourceKey);

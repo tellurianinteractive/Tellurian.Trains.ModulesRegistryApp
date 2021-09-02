@@ -68,6 +68,7 @@ namespace ModulesRegistry.Services.Implementations
                 return await dbContext.Meetings.AsNoTracking()
                     .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
                     .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.Layout).ThenInclude(l => l.PrimaryModuleStandard)
+                    .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.LayoutStation)
                     .SingleOrDefaultAsync(m => m.Id == id)
                     .ConfigureAwait(false);
             }
