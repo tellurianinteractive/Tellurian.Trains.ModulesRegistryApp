@@ -7,12 +7,12 @@
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
 
-<PageHeading Label="Modules" ObjectName="Layout" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading Label="RegisteredModules" ObjectName="Layout" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 @if (MeetingParticipants is null)
 {
 
 }
-else if (IsParticipant /*|| Principal.IsAnyAdministrator()*/)
+else if (IsParticipant || Principal.IsAnyAdministrator())
 {
     @foreach (var participant in MeetingParticipants.OrderBy(mp => mp.Person.FullName()))
     {
@@ -40,7 +40,7 @@ else if (IsParticipant /*|| Principal.IsAnyAdministrator()*/)
 }
 else
 {
-    <ActionMessage Label="NotAuthorized" AlertType="warning" />
+    <ActionMessage Label="NotAuthorised" AlertType="warning" />
 }
 
 

@@ -1,6 +1,10 @@
 ## Release Notes
 
-#### Version 1.3
+#### Version 1.3.1
+Release date 2021-09-02
+- **Bug fix** of issue #109 access to editing meeting layouts. Thanks to Fredde Pettersson for reporting this.
+
+#### Version 1.3.0
 Release date 2021-08-18
 - **List of modules** registered for a meeting layout can now be seen by any meeting participant.
 - **External stations and freight customers** can be added by any user in their country of residence.
