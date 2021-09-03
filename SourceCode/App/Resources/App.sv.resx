@@ -1020,4 +1020,16 @@
   <data name="Waybills" xml:space="preserve">
     <value>Fraktsedlar</value>
   </data>
+  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
+    <value>Träffdatum kan inte ändras</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

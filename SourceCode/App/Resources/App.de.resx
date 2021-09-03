@@ -1020,4 +1020,16 @@
   <data name="Waybills" xml:space="preserve">
     <value>Frachtbriefe</value>
   </data>
+  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
+    <value>Treffentermine können nicht geändert werden</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

@@ -81,3 +81,16 @@ h4 {
     font-weight: bold;
 }
 
+.meeting {
+
+}
+.meeting.open {
+    color: green;
+}
+.meeting.closed {
+    color: black;
+}
+.meeting.cancelled {
+    color: red;
+}
+

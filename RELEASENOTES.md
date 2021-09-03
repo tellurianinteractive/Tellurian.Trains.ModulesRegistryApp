@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.4.2
+Release date 2021-09-05
+- **Meeting status** is colourised.
+- **Meeting dates** cannot be changed more that 7 days, to permit minor date changes, but prevent reusing an old meeting as a new meeting.
+
 #### Version 1.4.1
 Release date 2021-09-03
 - **Waybill improvements** where *days*, *loading and unloading instructions* has been added, and the visual appearence is better.

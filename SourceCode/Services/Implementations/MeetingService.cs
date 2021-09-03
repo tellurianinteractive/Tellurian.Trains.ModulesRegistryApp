@@ -126,6 +126,7 @@ namespace ModulesRegistry.Services.Implementations
             }
             static async Task<(int Count, string Message, Meeting? Entity)> UpdateExisting(ModulesDbContext dbContext, Meeting entity, Meeting existing)
             {
+                if (IsMovedTooFarInTime(existing, entity)) return (0, "MeetingDatesCannotBeChanged", entity);
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 AddOrRemoveLayouts(dbContext, entity, existing);
                 if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
@@ -148,6 +149,9 @@ namespace ModulesRegistry.Services.Implementations
             static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>
                     dbContext.Entry(entity).State == EntityState.Unchanged &&
                     entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged);
+
+            static bool IsMovedTooFarInTime(Meeting existing, Meeting entity) =>
+                Math.Abs((existing.StartDate - entity.StartDate).TotalDays) > 7 || Math.Abs((existing.EndDate - entity.EndDate).TotalDays) > 7;
         }
 
         public async Task<(int Count, string? Message)> DeleteLayoutAsync(ClaimsPrincipal? principal, int meetingId, int layoutId)
