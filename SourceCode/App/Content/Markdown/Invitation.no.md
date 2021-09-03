@@ -1,6 +1,6 @@
-﻿#### Du er invitert til modulregistret
+﻿#### Du er invitert til Modulregistret
 
-Modules Registry er en webbapplikasjon for å opprettholde data om modelljernbanemoduler.
+Modulregistreter en webbapplikasjon for å opprettholde data om modelljernbanemoduler.
 Du kan vedlikeholde dine egne moduler og hjelpe andre ved å vedlikeholde moduler for medlemmer i samme gruppe som deg.
 
 Du blir invitert til å bli bruker.
