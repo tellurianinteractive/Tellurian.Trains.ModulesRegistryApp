@@ -1,38 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>ModulesRegistry.Services</AssemblyName>
-    <RootNamespace>ModulesRegistry.Services</RootNamespace>
-    <Version>1.3.1</Version>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<AssemblyName>ModulesRegistry.Services</AssemblyName>
+		<RootNamespace>ModulesRegistry.Services</RootNamespace>
+		<Version>1.4.0</Version>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.25.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0-preview1.21237.2" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Markdig" Version="0.25.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0-preview1.21237.2" />
+		<PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Data.Api\Data.Api.csproj" />
-    <ProjectReference Include="..\Data\Data.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Data.Api\Data.Api.csproj" />
+		<ProjectReference Include="..\Data\Data.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Resources\Strings.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Strings.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\Strings.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Strings.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	
 </Project>

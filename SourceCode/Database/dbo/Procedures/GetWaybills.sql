@@ -50,6 +50,7 @@ WHERE
 	((CCS.IsInternational <> 0 AND CCC.IsInternational <> 0) OR (CCS.CountryId = CCC.CountryId)) AND
 	((CCS.Id = 0 AND CCC.Id <> 0 AND CCC.IsInternal <>0) OR (CCC.Id = 0 AND CCS.Id <> 0 AND CCS.IsInternal <> 0) OR (CCS.Id <> 0 AND CCC.Id <> 0)) AND
 	(CCS.StationId <> CCC.StationId) AND 
+	(@StationId IS NULL OR @StationId = CCS.StationId OR @StationId = CCC.StationId) AND
 	((@Sending <> 0 OR CCC.StationId = @StationId) OR (@Receiving <> 0 OR CCS.StationId=@StationId)) AND
 	(CCS.QuantityUnitId = CCC.QuantityUnitId) AND
 	(CCS.FromYear IS NULL OR CCS.FromYear <= 2014) AND (CCS.UptoYear IS NULL OR CCS.UptoYear >= 2021) AND
