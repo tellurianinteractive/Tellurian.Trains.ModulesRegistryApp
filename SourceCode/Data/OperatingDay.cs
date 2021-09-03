@@ -8,11 +8,8 @@ namespace ModulesRegistry.Data
     {
         public OperatingDay()
         {
-            //CargoRelations = new HashSet<CargoRelation>();
-            //ExternalStationCustomerCargos = new HashSet<ExternalStationCustomerCargo>();
             OperatingBasicDayBasicDays = new HashSet<OperatingBasicDay>();
             OperatingBasicDayOperatingDays = new HashSet<OperatingBasicDay>();
-            //StationCustomerCargos = new HashSet<StationCustomerCargo>();
         }
 
         public int Id { get; set; }
@@ -28,10 +25,7 @@ namespace ModulesRegistry.Data
         public bool IsSaturday { get; set; }
         public bool IsSunday { get; set; }
 
-        //public virtual ICollection<CargoRelation> CargoRelations { get; set; }
-        //public virtual ICollection<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
         public virtual ICollection<OperatingBasicDay> OperatingBasicDayBasicDays { get; set; }
         public virtual ICollection<OperatingBasicDay> OperatingBasicDayOperatingDays { get; set; }
-        //public virtual ICollection<StationCustomerCargo> StationCustomerCargos { get; set; }
     }
 }

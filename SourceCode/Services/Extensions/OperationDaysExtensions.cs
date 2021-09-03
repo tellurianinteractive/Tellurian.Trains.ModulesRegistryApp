@@ -51,8 +51,8 @@ namespace ModulesRegistry.Services.Extensions
             var and = Strings.ResourceManager.GetString("And", culture) ?? "and";
             if (days.Length == 1)
             {
-                fullName.Append(days[0].FullNameLocal(culture));
-                shortName.Append(days[0].ShortNameLocal(culture));
+                fullName.Append(days[0].FullName(culture));
+                shortName.Append(days[0].ShortName(culture));
             }
             else
             {
@@ -60,23 +60,23 @@ namespace ModulesRegistry.Services.Extensions
                 var lastDayNumber = days.Last().Number;
                 if (days.IsConsectutive())
                 {
-                    Append(days[0], fullName, shortName);
+                    Append(days[0], fullName, shortName, culture);
                     Append(to, "-", fullName, shortName);
-                    Append(days.Last(), fullName, shortName, true);
+                    Append(days[^1], fullName, shortName, culture, true);
                 }
                 else if (flags == 0x5F)
                 {
-                    Append(Days[1], fullName, shortName);
+                    Append(Days[1], fullName, shortName, culture);
                     Append(to, "-", fullName, shortName);
-                    Append(Days[5], fullName, shortName, true);
+                    Append(Days[5], fullName, shortName, culture, true);
                     Append(and, ",", fullName, shortName);
-                    Append(Days[7], fullName, shortName, true);
+                    Append(Days[7], fullName, shortName, culture, true);
                 }
                 else if (flags == 0x4F)
                 {
-                    Append(Days[7], fullName, shortName);
+                    Append(Days[7], fullName, shortName, culture);
                     Append(to, "-", fullName, shortName);
-                    Append(Days[4], fullName, shortName, true);
+                    Append(Days[4], fullName, shortName, culture, true);
                 }
                 else
                 {
@@ -90,7 +90,7 @@ namespace ModulesRegistry.Services.Extensions
                         {
                             Append(",", ",", fullName, shortName);
                         }
-                        Append(day, fullName, shortName, day.Number > days[0].Number);
+                        Append(day, fullName, shortName, culture, day.Number > days[0].Number);
                         dayNumber = day.Number;
                     }
                 }
@@ -103,10 +103,11 @@ namespace ModulesRegistry.Services.Extensions
             };
         }
 
-        private static void Append(Day day, StringBuilder fullNames, StringBuilder shortNames, bool toLower = false)
+        private static void Append(Day day, StringBuilder fullNames, StringBuilder shortNames, CultureInfo culture, bool toLower = false)
         {
-            _ = fullNames.Append(toLower && Strings.DayNameCasing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? day.FullName.ToLowerInvariant() : day.FullName);
-            shortNames.Append(day.ShortName);
+
+            fullNames.Append(toLower && Strings.DayNameCasing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? day.FullName(culture).ToLowerInvariant() : day.FullName(culture));
+            shortNames.Append(day.ShortName(culture));
         }
         public static void Append(this string fullText, string shortText, StringBuilder fullNames, StringBuilder shortNames)
         {
@@ -130,16 +131,14 @@ namespace ModulesRegistry.Services.Extensions
         public byte Number { get; }
         private string FullNameResourceKey { get; }
         private string ShortNameResourceKey { get; }
-        public string FullName => Strings.ResourceManager.GetString(FullNameResourceKey, CultureInfo.CurrentCulture) ?? FullNameResourceKey;
-        public string ShortName => Strings.ResourceManager.GetString(ShortNameResourceKey, CultureInfo.CurrentCulture) ?? ShortNameResourceKey;
-        public string ShortNameLocal(CultureInfo culture)
+        public string ShortName(CultureInfo culture)
         {
             var resourceManager = Strings.ResourceManager;
             if (resourceManager == null) return string.Empty;
             return resourceManager.GetString(ShortNameResourceKey, culture) ?? string.Empty;
         }
 
-        public string FullNameLocal(CultureInfo culture)
+        public string FullName(CultureInfo culture)
         {
             var resourceManager = Strings.ResourceManager;
             if (resourceManager == null) return string.Empty;

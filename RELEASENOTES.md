@@ -1,9 +1,11 @@
 ## Release Notes
 
 #### Version 1.4.2
-Release date 2021-09-05
+Release date 2021-09-03
 - **Meeting status** is colourised.
 - **Meeting dates** cannot be changed more that 7 days, to permit minor date changes, but prevent reusing an old meeting as a new meeting.
+- **Waybill sending days** now displayed in language of origin station.
+- **Service release** with latest .NET security patches and bug fixes.
 
 #### Version 1.4.1
 Release date 2021-09-03
@@ -74,7 +76,7 @@ Release date 2021-07-12
 #### Version 1.2.11
 Release date 2021-06-23
 - **User's API-key** now change after confirmed password reset.
-- **User's login email** now changes after changing person's password.
+- **User's login email** now synched after changing person's email.
 - **Start page content** for logged in user is changed. Release notes are now accessible via a link.
 
 #### Version 1.2.10
