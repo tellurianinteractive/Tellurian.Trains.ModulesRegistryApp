@@ -63,5 +63,10 @@ WHERE
 	(CCC.FromYear IS NULL OR CCC.FromYear <= 2014) AND (CCC.UptoYear IS NULL OR CCC.UptoYear >= 2021) AND
 	((CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId) OR (CCS.LayoutId= @LayoutId AND CCC.LayoutId = -1) OR (CCC.LayoutId = @LayoutId AND CCS.LayoutId = -1)) AND
 	((@MatchShadowYard <> 0) OR (CCS.IsShadowYard = 0 AND CCC.IsShadowYard = 0))
+ORDER BY
+	CCC.StationName, 
+	CCC.CustomerName,
+	CCS.StationName,
+	CCS.CustomerName
 
 RETURN 0

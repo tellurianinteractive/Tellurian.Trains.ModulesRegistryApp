@@ -147,6 +147,6 @@
 
     int TextSize(string? text, bool hasFlag) =>
         string.IsNullOrWhiteSpace(text) ? 14 :
-        hasFlag && text.Length < 14 ? 14 :
-        text.Length < 18 ? 14 : 12;
+        hasFlag && text.Length < 12 ? 14 :
+        text.Length < 15 ? 14 : 12;
 }
