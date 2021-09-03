@@ -7,7 +7,7 @@
             <table width="100%">
                 <tbody>
                     <tr>
-                        <td colspan="3" class="box" style="color: @Item.Destination.ForeColor; background-color: @Item.Destination.BackColor">
+                        <td colspan="3" class="box destination" style="color: @Item.Destination.ForeColor; background-color: @Item.Destination.BackColor">
                             <div class="waybill label">@DestinationLabel(Item, "Destination")</div>
                             <div class="waybill name" style="font-size: @TextSize(Item.Destination.StationName, Item.IsCrossBorder())pt">
                                 @if (Item.IsCrossBorder())
@@ -32,20 +32,20 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="waybill destination">
-                            <div class="waybill label">@DestinationLabel(Item, "Unit")</div>
-                            <div class="waybill item">1 @Item.Destination.QuantityUnitName</div>
+                            <div class="waybill label">@DestinationLabel(Item, "CargoUnit", "Cargo unit")</div>
+                            <div class="waybill item">@Item.Destination.QuantityUnitName</div>
                         </td>
                     </tr>
                     <tr>
 
                         <td colspan="3" class="waybill destination">
                             <div class="waybill label">@DestinationLabel(Item, "Instructions")</div>
-                            <div class="waybill instruction">@Item.Destination.Instruction</div>
+                            <div class="waybill instruction">@DestinationInstruction(Item)</div>
                         </td>
                     </tr>
 
                     <tr>
-                        <td colspan="3" style="border: 2px solid gray; color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
+                        <td colspan="3" class="box origin" style="color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
                             <div class="waybill label">@OriginLabel(Item, "Origin")</div>
                             <div class="waybill name" style="font-size: @TextSize(Item.Origin.StationName, Item.IsCrossBorder())pt">
                                 @if (Item.IsCrossBorder())
@@ -62,7 +62,7 @@
                             <div class="waybill shipper">@Item.Origin.Name</div>
                         </td>
                     </tr>
-                    @if (Item.IsCrossBorder())
+                    @if (Item.IsCrossBorder() && CargoName(Item.Origin) != CargoName(Item.Destination))
                     {
                         <tr>
                             <td colspan="3" class="waybill">
@@ -77,6 +77,11 @@
                             <div class="waybill item">@Item.OperatorName</div>
                         </td>
                         <td>
+                            <div class="waybill label">@OriginLabel(Item, "Days")</div>
+                            <div class="waybill item">@Item.Origin.OperationDaysFlags.OperationDays(Item.Origin.Language.AsCultureInfo()).ShortName</div>
+
+                        </td>
+                        <td>
                             <div class="waybill label">@OriginLabel(Item, "Class")</div>
                             <div class="waybill item">@Item.WagonClass</div>
                         </td>
@@ -84,7 +89,7 @@
                     <tr>
                         <td colspan="3">
                             <div class="waybill label">@OriginLabel(Item, "Instructions")</div>
-                            <div class="waybill instruction">@Item.Origin.Instruction</div>
+                            <div class="waybill instruction">@OriginInstruction(Item)</div>
                         </td>
                     </tr>
                 </tbody>
@@ -109,19 +114,36 @@
         var localText = Localizer[resourceKey].Value;
         if (LanguageLabels != null && langaugeCode != null)
         {
-            localText = LanguageLabels.GetLabelText(langaugeCode, resourceKey);
+            localText = LanguageLabels.GetLabelText(resourceKey, langaugeCode);
             if (string.IsNullOrWhiteSpace(localText)) englishText = Localizer[resourceKey];
         }
         if (englishText == localText || string.IsNullOrWhiteSpace(localText)) return englishText!;
         return $"{englishText}/{localText}";
     }
 
+    string DestinationInstruction(Waybill waybill) => UnloadingReady(waybill.Destination);
+    string OriginInstruction(Waybill waybill) => LoadingReady(waybill.Origin);
+
     string CargoName(CargoCustomer? me) =>
         me is null ? string.Empty :
         me.PackageUnitName.HasValue() ? $"{me.CargoName} {In(me)} {me.PackageUnitName.ToLowerInvariant()}" :
         me.CargoName;
 
-    string In(CargoCustomer me) => LanguageLabels.GetLabelText(me.Language, "In");
+    string In(CargoCustomer me) => GetLabelText("In", me.Language);
+
+    string LoadingReady(CargoCustomer? me) => 
+        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ? "-" :
+        $"{GetLabelText("LoadingReadyTime", me.Language)} {ReadyTime(me)}";
+
+    string UnloadingReady(CargoCustomer? me) => 
+        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ? "-" :
+        $"{GetLabelText("UnloadingReadyTime", me.Language)} {ReadyTime(me)}";
+
+    string ReadyTime(CargoCustomer me) => (me.ReadyTimeIsSpecifiedInLayout ? GetLabelText(me.ReadyTime, me.Language) : me.ReadyTime).ToLowerInvariant();
+
+    string GetLabelText(string resourceKey, string language) =>
+        LanguageLabels is null ? string.Empty : LanguageLabels.GetLabelText(resourceKey, language);
+
 
     int TextSize(string? text, bool hasFlag) =>
         string.IsNullOrWhiteSpace(text) ? 14 :

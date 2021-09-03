@@ -49,12 +49,10 @@ namespace ModulesRegistry.Services
                 Labels = resourceKeys.Select(k => new LanguageLabel { ResourceKey = k, Text = resourceManager.GetString(k, culture) ?? k }).ToArray()
             };
         }
-
-        public static string GetLabelText(this LanguageLabels me, string resourceKey) =>
-            me.Labels.SingleOrDefault(l => l.ResourceKey == resourceKey)?.Text ?? resourceKey;
-
-        public static string GetLabelText(this IEnumerable<LanguageLabels> me, string languageCode, string resourceKey) =>
+        public static string GetLabelText(this IEnumerable<LanguageLabels> me, string resourceKey, string languageCode) =>
             me.Single(l => l.LanguageCode == languageCode).GetLabelText(resourceKey);
-    }
 
+        private static string GetLabelText(this LanguageLabels me, string resourceKey) =>
+            me.Labels.SingleOrDefault(l => l.ResourceKey == resourceKey)?.Text ?? resourceKey;
+    }
 }

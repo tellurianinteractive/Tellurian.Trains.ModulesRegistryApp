@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.4.1
+Release date 2021-09-03
+- **Waybill improvements** where *days*, *loading and unloading instructions* has been added, and the visual appearence is better.
+
 #### Version 1.4.0
 Release date 2021-09-03
 - **Waybill print** for specific meeting layout.

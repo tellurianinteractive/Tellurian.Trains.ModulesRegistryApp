@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 
 namespace ModulesRegistry.Services.Extensions
@@ -39,16 +40,19 @@ namespace ModulesRegistry.Services.Extensions
 
         public static byte And(this byte flags, byte and) => (byte)(flags & and);
 
-        public static OperationDays OperationDays(this byte flags)
+        public static OperationDays OperationDays(this byte flags, CultureInfo? culture = null)
         {
+            if (culture is null) culture = CultureInfo.CurrentCulture;
             var days = GetDays(flags);
             var isDaily = flags == 0x7F;
             var fullName = new StringBuilder(20);
             var shortName = new StringBuilder(10);
+            var to = Strings.ResourceManager.GetString("In", culture) ?? "to";
+            var and = Strings.ResourceManager.GetString("And", culture) ?? "and";
             if (days.Length == 1)
             {
-                fullName.Append(days[0].FullName);
-                shortName.Append(days[0].ShortName);
+                fullName.Append(days[0].FullNameLocal(culture));
+                shortName.Append(days[0].ShortNameLocal(culture));
             }
             else
             {
@@ -57,21 +61,21 @@ namespace ModulesRegistry.Services.Extensions
                 if (days.IsConsectutive())
                 {
                     Append(days[0], fullName, shortName);
-                    Append(Strings.To, "-", fullName, shortName);
+                    Append(to, "-", fullName, shortName);
                     Append(days.Last(), fullName, shortName, true);
                 }
                 else if (flags == 0x5F)
                 {
                     Append(Days[1], fullName, shortName);
-                    Append(Strings.To, "-", fullName, shortName);
+                    Append(to, "-", fullName, shortName);
                     Append(Days[5], fullName, shortName, true);
-                    Append(Strings.And, ",", fullName, shortName);
+                    Append(and, ",", fullName, shortName);
                     Append(Days[7], fullName, shortName, true);
                 }
                 else if (flags == 0x4F)
                 {
                     Append(Days[7], fullName, shortName);
-                    Append(Strings.To, "-", fullName, shortName);
+                    Append(to, "-", fullName, shortName);
                     Append(Days[4], fullName, shortName, true);
                 }
                 else
@@ -80,7 +84,7 @@ namespace ModulesRegistry.Services.Extensions
                     {
                         if (day.Number == lastDayNumber)
                         {
-                            Append(Strings.And, ",", fullName, shortName);
+                            Append(and, ",", fullName, shortName);
                         }
                         else if (dayNumber > 0)
                         {
@@ -128,6 +132,20 @@ namespace ModulesRegistry.Services.Extensions
         private string ShortNameResourceKey { get; }
         public string FullName => Strings.ResourceManager.GetString(FullNameResourceKey, CultureInfo.CurrentCulture) ?? FullNameResourceKey;
         public string ShortName => Strings.ResourceManager.GetString(ShortNameResourceKey, CultureInfo.CurrentCulture) ?? ShortNameResourceKey;
+        public string ShortNameLocal(CultureInfo culture)
+        {
+            var resourceManager = Strings.ResourceManager;
+            if (resourceManager == null) return string.Empty;
+            return resourceManager.GetString(ShortNameResourceKey, culture) ?? string.Empty;
+        }
+
+        public string FullNameLocal(CultureInfo culture)
+        {
+            var resourceManager = Strings.ResourceManager;
+            if (resourceManager == null) return string.Empty;
+            return resourceManager.GetString(FullNameResourceKey, culture) ?? string.Empty;
+        }
+
     }
 
     internal static class DayExtensions

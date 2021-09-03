@@ -69,6 +69,6 @@ else
     bool IsParticipant => Principal is not null && MeetingParticipants is not null && MeetingParticipants.Any(mp => mp.PersonId == Principal.PersonId());
 
     string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
-    LayoutStation? LayoutStation(int? id) => id is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
+    LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 
 }

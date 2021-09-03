@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ModulesRegistry.Data
 {
@@ -17,17 +16,26 @@ namespace ModulesRegistry.Data
     {
         public static IEnumerable<string> LabelResourceKeys => new[]
         {
+            "Afternoon",
             "Cargo",
+            "CargoUnit",
             "Carrier",
             "Class",
             "Consignee",
+            "Days",
             "Destination",
             "Empty",
             "Epoch",
+            "Evening",
             "In",
             "Instructions",
+            "LoadingReadyTime",
+            "Morning",
+            "Night",
+            "Noon",
             "Origin",
             "Shipper",
+            "UnloadingReadyTime"
         };
 
         public static string FlagOriginSrc(this Waybill me) =>

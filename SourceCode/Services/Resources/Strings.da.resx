@@ -501,4 +501,31 @@
   <data name="In" xml:space="preserve">
     <value>i</value>
   </data>
+  <data name="CargoUnit" xml:space="preserve">
+    <value>Lastenhed</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dage</value>
+  </data>
+  <data name="LoadingReadyTime" xml:space="preserve">
+    <value>Lastning klar</value>
+  </data>
+  <data name="UnloadingReadyTime" xml:space="preserve">
+    <value>Aflæsning klar</value>
+  </data>
+  <data name="Afternoon" xml:space="preserve">
+    <value>Eftermiddag</value>
+  </data>
+  <data name="Evening" xml:space="preserve">
+    <value>Aften</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Nat</value>
+  </data>
+  <data name="Morning" xml:space="preserve">
+    <value>Morgen</value>
+  </data>
+  <data name="Noon" xml:space="preserve">
+    <value>Middag</value>
+  </data>
 </root>

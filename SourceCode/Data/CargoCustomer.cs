@@ -6,7 +6,6 @@
         public string StationName { get; set; } = string.Empty;
         public string ForeColor { get; set; } = Region.DefaultOriginForeColor;
         public string BackColor { get; set; } = Region.DefaultOriginBackColor;
-        public string Instruction { get; set; } = string.Empty;
         public string Language { get; set; } = string.Empty;
         public string DomainSuffix { get; set; } = string.Empty;
         public string CargoName { get; set; } = string.Empty;
@@ -14,6 +13,10 @@
         public string QuantityUnitName { get; set; } = string.Empty;
         public string PackageUnitName { get; set; } = string.Empty;
         public byte OperationDaysFlags { get; set; }
+        public bool IsInternal { get; set; }
+        public string ReadyTime { get; set; } = string.Empty;
+        public bool ReadyTimeIsSpecifiedInLayout { get; set; }
+
 
         //public static CargoCustomer Origin(string name, string stationName, string instruction = "-") =>
         //    new() { Name = name, StationName = stationName, Instruction = instruction, Region = Region.OriginDefault };

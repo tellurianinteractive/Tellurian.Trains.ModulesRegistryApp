@@ -61,6 +61,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Afternoon.
+        /// </summary>
+        internal static string Afternoon {
+            get {
+                return ResourceManager.GetString("Afternoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Already exists.
         /// </summary>
         internal static string AlreadyExists {
@@ -196,6 +205,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cargo unit.
+        /// </summary>
+        internal static string CargoUnit {
+            get {
+                return ResourceManager.GetString("CargoUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Carrier.
         /// </summary>
         internal static string Carrier {
@@ -300,6 +318,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string DayNameCasing {
             get {
                 return ResourceManager.GetString("DayNameCasing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Days.
+        /// </summary>
+        internal static string Days {
+            get {
+                return ResourceManager.GetString("Days", resourceCulture);
             }
         }
         
@@ -417,6 +444,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Epoch {
             get {
                 return ResourceManager.GetString("Epoch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Evening.
+        /// </summary>
+        internal static string Evening {
+            get {
+                return ResourceManager.GetString("Evening", resourceCulture);
             }
         }
         
@@ -628,6 +664,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading finished.
+        /// </summary>
+        internal static string LoadingReadyTime {
+            get {
+                return ResourceManager.GetString("LoadingReadyTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May not be deleted..
         /// </summary>
         internal static string MayNotBeDeleted {
@@ -655,11 +700,29 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Morning.
+        /// </summary>
+        internal static string Morning {
+            get {
+                return ResourceManager.GetString("Morning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Netherlands.
         /// </summary>
         internal static string Netherlands {
             get {
                 return ResourceManager.GetString("Netherlands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Night.
+        /// </summary>
+        internal static string Night {
+            get {
+                return ResourceManager.GetString("Night", resourceCulture);
             }
         }
         
@@ -696,6 +759,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string NonProfitAssociation {
             get {
                 return ResourceManager.GetString("NonProfitAssociation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Noon.
+        /// </summary>
+        internal static string Noon {
+            get {
+                return ResourceManager.GetString("Noon", resourceCulture);
             }
         }
         
@@ -1191,6 +1263,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unloading finished.
+        /// </summary>
+        internal static string UnloadingReadyTime {
+            get {
+                return ResourceManager.GetString("UnloadingReadyTime", resourceCulture);
             }
         }
         

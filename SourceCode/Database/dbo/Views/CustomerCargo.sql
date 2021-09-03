@@ -23,13 +23,16 @@ SELECT -- Internal station customer cargo
 	SCC.QuantityUnitId,
 	SCC.PackageUnitId,
 	SCC.SpecificWagonClass,
-	SCC.SpecialCargoName
+	SCC.SpecialCargoName,
+	CRT.ShortName AS ReadyTime,
+	CRT.IsSpecifiedInLayout AS ReadyTimeIsSpecifiedInLayout
 FROM [Station] AS S 
 	INNER JOIN [Region] AS R ON S.RegionId = R.Id 
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
 	INNER JOIN [StationCustomerCargo] AS SCC ON SCC.StationCustomerId = SC.Id
 	INNER JOIN [Cargo] AS C ON SCC.CargoId = C.Id
 	INNER JOIN [CargoDirection] AS CD ON SCC.DirectionId = CD.Id
+	INNER JOIN [CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId
 	LEFT JOIN [LayoutStation] AS LS ON LS.StationId = S.Id
 UNION
 SELECT -- External station customer cargo
@@ -55,7 +58,9 @@ SELECT -- External station customer cargo
 	ESCC.QuantityUnitId,
 	ESCC.PackageUnitId,
 	ESCC.SpecificWagonClass,
-	ESCC.SpecialCargoName
+	ESCC.SpecialCargoName,
+	NULL AS ReadyTime,
+	0 AS ReadyTimeIsSpecifiedInLayout
 FROM [ExternalStation] AS ES 
 	INNER JOIN [Region] AS R ON ES.RegionId = R.Id 
 	INNER JOIN [ExternalStationCustomer] AS ESC ON ESC.ExternalStationId = ES.Id
@@ -87,7 +92,9 @@ SELECT -- Shadow yard suppliers
 	4 AS QuantityUnitId,
 	0 AS PackageUnitId,
 	NULL AS SpecificWagonClass,
-	NULL AS SpecialCargoName
+	NULL AS SpecialCargoName,
+	NULL AS ReadyTime,
+	0 AS ReadyTimeIsSpecifiedInLayout
 FROM 
 	LayoutStation LS
 	INNER JOIN Station S ON S.Id = LS.StationId
@@ -119,7 +126,9 @@ SELECT -- Shadow yard consumers
 	4 AS QuantityUnitId,
 	0 AS PackageUnitId,
 	NULL AS SpecificWagonClass,
-	NULL AS SpecialCargoName
+	NULL AS SpecialCargoName,
+	NULL AS ReadyTime,
+	0 AS ReadyTimeIsSpecifiedInLayout
 FROM 
 	LayoutStation LS
 	INNER JOIN Station S ON S.Id = LS.StationId
