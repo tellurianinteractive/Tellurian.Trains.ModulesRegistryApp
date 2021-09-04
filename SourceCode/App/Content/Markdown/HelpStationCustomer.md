@@ -25,21 +25,23 @@ ALSO NOTE that selected *cargo type* names are language aware, but your name in 
 Other than *daily* are only relevant for meetings where trains are operated per weeday and 
 where *cargo matching* is used.
 - **Direction** defines if the customer supplies (*send* or *export*) or consumes (*recieve* or *import*) the cargo. 
-The *import* and *export* can be used for customers in harbors etc. 
+*Import* and *export* will make waybill matching cross border, *send* and *receice* 
+will obly match waybills with customers in the same country. 
 - **Ouantity** and **Quantity unit** is volume of cargo in each shipment. 
 The simplest way is to use *wagons* or *transet*, but other more advanced cargo volumes can be used,
 that forces the user to calculate how many wagons are actually needed, in repect to each wagon type's capacity.
-- **Max trainset length** is the maximum number of wagons that can be recieved in one trainset.
+- **Max trainset length** is the maximum number of *wagons* that can be recieved in one trainset.
 - **Loading/Unloading ready** is used to control when wagons becomes ready to use 
 for another shipment or be sent empty to some other place. 
 You can select relative or absolute times, or set it as *not applicable*.
-- **Other track no. or loading area** should *only* be specified if it deviates from what is specified for the customer.
-You can then also then select another colour. Otherwise, leave it empty.
-- **From year** and **Up to year**
-should only filled if it deviates from the customer's *opened year*- and/or *closed year*. 
-In particular, don't fill in the *up to year* if you want the cargo flow to be in effect *until further notice*.
-
-
-
+#### Other...-fields
+You should only enter these fields to override what is specified for the *customer* and the selected *cargo type*:
+- **Other wagon class** overrides the default wagon class(es) for the selected *cargo type*-
+- **Other name** gives you an option to override the name of the *cargo type*. 
+Note that *cargo type* names are language aware, but your *other name* is not.
+- **Other track or area** lets you override the *track or area* specified for the customer.
+- **Other colour** lets you override the *colour* you specified for the customer-
+- **Other from year** and **Other to year** should only filled if historically relevant and different from *opening* and *closing* dates of the sustomer.
+In particular, don't fill in the *up to year* if you want the cargo flow to exists *until further notice*.
 
 

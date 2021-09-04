@@ -988,7 +988,7 @@
     <value>Rakt</value>
   </data>
   <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Max tågsättslängd</value>
+    <value>Max tågsättslängd  (vagnar)</value>
   </data>
   <data name="Participants" xml:space="preserve">
     <value>Deltagare</value>
@@ -1031,5 +1031,14 @@
   </data>
   <data name="Success" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Annan färg</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Annat från-år</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Annat till-år</value>
   </data>
 </root>

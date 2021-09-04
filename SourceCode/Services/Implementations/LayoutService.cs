@@ -19,6 +19,18 @@ namespace ModulesRegistry.Services.Implementations
             TimeProvider = timeProvider;
         }
 
+        public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                return await dbContext.LayoutModules.AsNoTracking()
+                    .Where(ls => ls.Layout.MeetingId == meetingId)
+                    .CountAsync();
+            }
+            return -1;
+        }
+
         public async Task<IEnumerable<LayoutStation>> GetStationsAsync(ClaimsPrincipal? principal, int layoutId)
         {
             if (principal.IsAuthenticated())

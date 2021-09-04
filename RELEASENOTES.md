@@ -1,5 +1,12 @@
 ## Release Notes
 
+#### Version 1.4.4
+Release date 2021-09-05
+- **Gables list** are now sorted by scale and gable name.
+- **Cargo flow** help text and field labels updated to better describe meaning of fields.
+- **Meeting dates** cannot be changed if any modules are registered or after seven days before first day of meeting. 
+Only *country administrators* will then be able to change dates.
+
 #### Version 1.4.3
 Release date 2021-09-04
 - **Updated help** for modules.

@@ -4,8 +4,10 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
+@inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
+@inject LayoutService LayoutService
 @inject GroupService GroupService
 
 <PageHeading Owner="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToPageAction()" HelpContext="Meeting" />
@@ -16,8 +18,8 @@
         <AppInputText Width="3" @bind-Value="Meeting.PlaceName" Label="Venue" />
         <AppInputText Width="5" @bind-Value="Meeting.Description" Label="Description" />
 
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" />
-        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" />
+        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
         <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
     </Inputs>
@@ -69,6 +71,7 @@
     Meeting Meeting = new Meeting();
     IEnumerable<ListboxItem>? OrganiserItems;
     bool MayEdit;
+    int RegisteredModulesCount;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -78,6 +81,7 @@
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
             MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+            RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
         }
     }
 
@@ -105,4 +109,8 @@
     string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
     string LayoutModulesHref(int id) => $"layouts/{id}/modules";
     string WaybillsHref(int id) => $"reports/waybills/layout/{id}";
+    bool DatesIsLocked(Meeting meeting) =>
+        !Principal.IsCountryAdministrator() &&
+        ( meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
+          RegisteredModulesCount > 0);
 }

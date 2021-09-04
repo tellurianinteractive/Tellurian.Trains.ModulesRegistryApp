@@ -30,9 +30,9 @@ else
             <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
             <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
             <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@BackColor(cargo)" TextColor="@BackColor(cargo).TextColor()" />
-            <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="Color" />
-            <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="FromYear" />
-            <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="UptoYear" />
+            <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="OtherColor" />
+            <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="OtherFromYear" />
+            <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="OtherUptoYear" />
 
             @if (cargo.Id > 0)
             {

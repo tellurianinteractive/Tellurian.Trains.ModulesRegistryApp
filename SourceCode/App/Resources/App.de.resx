@@ -988,7 +988,7 @@
     <value>Gerade</value>
   </data>
   <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Max. Zugset länge</value>
+    <value>Max. Zugset  (Wagen)</value>
   </data>
   <data name="Participants" xml:space="preserve">
     <value>Teilnehmer</value>
@@ -1031,5 +1031,14 @@
   </data>
   <data name="Success" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Andere Farbe</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Sonst. ab Jahr</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Sonst. zum Jahr</value>
   </data>
 </root>

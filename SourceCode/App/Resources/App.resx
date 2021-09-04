@@ -988,7 +988,7 @@
     <value>Straight</value>
   </data>
   <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Max trainset length</value>
+    <value>Max trainset length (wagons)</value>
   </data>
   <data name="Participants" xml:space="preserve">
     <value>Participants</value>
@@ -1031,5 +1031,14 @@
   </data>
   <data name="Success" xml:space="preserve">
     <value>Success</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Other colour</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Other from year</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Other to-year</value>
   </data>
 </root>

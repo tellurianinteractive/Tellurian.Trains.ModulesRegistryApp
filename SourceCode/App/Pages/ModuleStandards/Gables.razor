@@ -10,7 +10,9 @@
     <a class="btn btn-sm btn-primary" href="ModuleStandards/Gables/0/Edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
 }
 
-<TableTemplate Items="GableTypes">
+
+
+<TableTemplate Items="GableTypes?.OrderBy(gt => gt.Scale.Denominator).ThenBy(gt => gt.Designation)">
     <TableHeader>
         <th>@Localizer["Designation"]</th>
         <th>@Localizer["Scale"]</th>

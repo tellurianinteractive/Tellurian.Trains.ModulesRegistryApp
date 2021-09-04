@@ -988,7 +988,7 @@
     <value>Rett</value>
   </data>
   <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Maks togsett længde</value>
+    <value>Maks togsett længde (vogner)</value>
   </data>
   <data name="Participants" xml:space="preserve">
     <value>Deltagere</value>
@@ -1031,5 +1031,14 @@
   </data>
   <data name="Success" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Annen farge</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Annet fra-år</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Annet til-år</value>
   </data>
 </root>
