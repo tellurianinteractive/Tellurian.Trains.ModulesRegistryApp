@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.4.3
+Release date 2021-09-04
+- **Updated help** for modules.
+- **Bug fix** of adding group members.
+
 #### Version 1.4.2
 Release date 2021-09-03
 - **Meeting status** is colourised.

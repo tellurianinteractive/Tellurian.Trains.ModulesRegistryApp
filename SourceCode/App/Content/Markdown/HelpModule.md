@@ -18,11 +18,20 @@ The given FREMO number will instead be combined with your *FREMO owner initials*
 that requires you to enter each variant as *separate* modules with *same* name 
 but with different characteristics and drawings. You enter a different *variant* for each, for example *short* and *long* module versions.
 - **Box label** is used in any other case, and should be the identity of the box where the module is stored. If several modules are in the same box, they should have the same *box label*.
+#### Years of representation
+Neither **Represents from year** and **Represents to year** is mandatory.
+- If you leave **Represents from year** empty, it means before 1900.
+- If you leave **Represents to year** empty, it means *until further notice*.
 #### Measures
 A module can be a curve, a straigh or a combination of both. The length of a module is defined by:
 - A **radius** and **angle** of curve part of module plus **straight** length part.
 - The total **length** of the module is calculated by the application.
 - You can also specfy a module **width** that should be the widest part of the module.
+#### Number of through tracks
+- One through track means a single track module.
+- Two through tracks means a double track module.
+
+Modules with more that two through tracks may exist, but rather seldom and for special layouts.
 #### Checkboxes
 - **Is Unavailable** means that the module cannot be registered for a meeting.
 - **Is Stand-Alone** means that the module can stand freely on its legs. 
