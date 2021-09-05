@@ -8,7 +8,7 @@ Release date 2021-09-05
 Read more about [NHM-codes](https://uic.org/freight/freight-IT/article/nhm).
 - **Meeting dates** cannot be changed if any modules are registered or after seven days before first day of meeting. Help text is updated with this restriction.
 Only *country administrators* will then be able to change dates.
-- **Italy* added as country but no language support.
+- **Italy** added as country but no language support.
 - **Bug fix** of group member administrator creating new persons in other countries to add to group.
 - **Bug fix** of issue #122 creating new persons to add to a group. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
 - **Bug fix** of issue #123 creating new meeting. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
