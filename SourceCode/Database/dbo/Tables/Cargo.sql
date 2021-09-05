@@ -7,6 +7,8 @@
     [DA]             NVARCHAR (50) NULL,
     [DE]             NVARCHAR (50) NULL,
     [EN]             NVARCHAR (50) NULL,
+    [FR]             NVARCHAR (50) NULL,
+    [IT]             NVARCHAR (50) NULL,
     [NL]             NVARCHAR (50) NULL,
     [NO]             NVARCHAR (50) NULL,
     [PL]             NVARCHAR (50) NULL,

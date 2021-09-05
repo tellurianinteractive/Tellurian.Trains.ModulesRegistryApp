@@ -33,8 +33,15 @@ namespace ModulesRegistry.Services.Implementations
             var result = Strings.ResourceManager.GetString(resourceName, culture);
             return result is null ? resourceName : result;
         }
-        public static IList<CultureInfo> SupportedCultures => LanguageCultureMap.Values.ToArray();
+        /// <summary>
+        /// Returns the languages that are fully supported in user interface.
+        /// </summary>
+        public static IList<CultureInfo> SupportedCultures => LanguageCultureMap.Values.Take(5).ToArray();
         public static string[] SupportedLanguages => SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
+        
+        /// <summary>
+        /// This list contains all languages that are fully or partia
+        /// </summary>
         private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
              new Dictionary<Language, CultureInfo>() {
                  { Language.English, new CultureInfo("en") },
