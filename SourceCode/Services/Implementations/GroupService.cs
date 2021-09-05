@@ -83,7 +83,7 @@ namespace ModulesRegistry.Services.Implementations
                 .Include(gm => gm.Person)
                 .SingleOrDefaultAsync();
             if (groupMember is null) return null;
-            if (await IsGroupDataAdministratorAsync(principal, groupMember.GroupId, groupMember.Group.CountryId)) return groupMember;
+            if (await IsGroupMemberAdministratorAsync(principal, groupMember.GroupId, groupMember.Group.CountryId)) return groupMember;
             return null;
         }
 
@@ -156,7 +156,7 @@ namespace ModulesRegistry.Services.Implementations
 
         public async Task<(int Count, string Message, Group? Entity)> SaveAsync(ClaimsPrincipal? principal, Group group)
         {
-            if (principal.MaySave())
+            if (principal.MaySave() || await IsGroupMemberAdministratorAsync(principal, group.Id))
             {
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.Groups.Attach(group);
@@ -171,7 +171,7 @@ namespace ModulesRegistry.Services.Implementations
         {
             using var dbContext = Factory.CreateDbContext();
             var countryId = (await dbContext.Groups.AsNoTracking().SingleOrDefaultAsync(g => g.Id == entity.GroupId))?.CountryId;
-            if (await IsGroupDataAdministratorAsync(principal, entity.GroupId, countryId))
+            if (await IsGroupMemberAdministratorAsync(principal, entity.GroupId, countryId))
             {
                 dbContext.GroupMembers.Attach(entity);
                 dbContext.Entry(entity).State = entity.Id.GetState();

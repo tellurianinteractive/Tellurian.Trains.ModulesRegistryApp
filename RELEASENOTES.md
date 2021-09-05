@@ -13,6 +13,7 @@ Only *country administrators* will then be able to change dates.
 - **Bug fix** of issue #122 creating new persons to add to a group. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
 - **Bug fix** of issue #123 creating new meeting. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
 - **Bug fix** of available modules for registration in meeting layout. Previously not all available modules was shown due to module visibility restrictions.
+- **Bug fix** of user rights to modify group member.
 
 #### Version 1.4.3
 Release date 2021-09-04
