@@ -70,13 +70,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Countries = await CountryService.ListboxItemsAsync(Principal);
         CountryId = Principal.CountryId();
     }
 
     protected async override Task OnParametersSetAsync()
     {
-        MayEdit = GroupId.HasValue ? await GroupService.IsGroupDataAdministratorAsync(Principal, GroupId.Value) : false;
+        MayEdit = GroupId.HasValue ? await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value) : false;
+        Countries = await CountryService.ListboxItemsAsync(Principal, MayEdit);
         await RefreshData();
     }
 
