@@ -97,8 +97,9 @@ namespace ModulesRegistry
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>
             {
-                options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
-                options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
+                //options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
+                //options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
+                //options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
             });
         }
 
@@ -116,11 +117,11 @@ namespace ModulesRegistry
             }
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
-
+            var supportedCultures = LanguageUtility.SupportedLanguages;
             app.UseRequestLocalization(options =>
              {
-                 options.AddSupportedCultures(LanguageUtility.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
-                 options.AddSupportedUICultures(LanguageUtility.SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray());
+                 options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
+                 options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
                  options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultCulture);
                  options.FallBackToParentCultures = true;
              });

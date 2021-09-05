@@ -655,6 +655,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Italy.
+        /// </summary>
+        internal static string Italy {
+            get {
+                return ResourceManager.GetString("Italy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Liquid container.
         /// </summary>
         internal static string LiquidContainer {

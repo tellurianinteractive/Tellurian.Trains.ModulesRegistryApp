@@ -528,4 +528,7 @@
   <data name="Noon" xml:space="preserve">
     <value>Mittag</value>
   </data>
+  <data name="Italy" xml:space="preserve">
+    <value>Italien</value>
+  </data>
 </root>
