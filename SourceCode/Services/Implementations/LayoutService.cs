@@ -43,6 +43,63 @@ namespace ModulesRegistry.Services.Implementations
             return Array.Empty<LayoutStation>();
         }
 
+        public async Task<(int Count, string Message, Layout? Entity)> SaveAsync(ClaimsPrincipal? principal, Layout entity)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.Layouts.SingleOrDefaultAsync(l => l.Id == entity.Id);
+                if (existing is null)
+                {
+                    dbContext.Layouts.Add(entity);
+                    var result = await dbContext.SaveChangesAsync();
+                    return result.SaveResult(entity);
+                }
+                else
+                {
+                    dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                    if (dbContext.Entry(entity).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                    var result = await dbContext.SaveChangesAsync();
+                    return result.SaveResult(entity);
+                }
+
+            }
+            return (0, Resources.Strings.NotAuthorized, entity);
+        }
+
+        public async Task<IEnumerable<Module>> GetAvailableModules(ClaimsPrincipal? principal, MeetingParticipant participant, Layout layout)
+        {
+            if (principal.IsAuthenticated())
+            {
+                using var dbContext = Factory.CreateDbContext();
+                //var registeredModulesId = await dbContext.LayoutModules.AsNoTracking()
+                //    .Where(lm => lm.LayoutId == layout.Id && lm.ParticipantId == participant.Id)
+                //    .Select(lm => lm.ModuleId)
+                //    .ToListAsync()
+                //    .ConfigureAwait(false);
+
+                var groupsId = await dbContext.GroupMembers.AsNoTracking()
+                    .Where(gm => gm.IsGroupAdministrator && gm.PersonId == participant.PersonId)
+                    .Select(gm => gm.GroupId)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
+                var modules = await dbContext.Modules.AsNoTracking()
+                    .Include(m => m.ModuleOwnerships)
+                    .Include(m => m.Standard)
+                    .Where(m => m.ScaleId == layout.PrimaryModuleStandard.ScaleId)
+                    .ToListAsync();
+                if (modules is not null)
+                {
+                    return modules
+                       .Where(m => m.ModuleOwnerships.Any(
+                            mo => mo.PersonId == participant.PersonId || groupsId.Any(id => id == mo.GroupId)));
+                }
+            }
+            return Array.Empty<Module>();
+
+        }
+
         /// <summary>
         /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>
         /// </summary>

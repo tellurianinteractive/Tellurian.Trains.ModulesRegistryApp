@@ -18,7 +18,7 @@
 }
 else
 {
-    @if (IsMeetingOrganizer)
+    @if (IsMeetingOrganiser)
     {
         <h3>@Localizer["SelectPersonToRegister"]</h3>
         <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
@@ -33,10 +33,15 @@ else
             <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
         </ul>
     }
-    else if (Meeting.Id > 0 && PersonId > 0 && (Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date)))
+    else if (Meeting.Id > 0 && PersonId > 0)
     {
-        <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
+        if (IsMeetingOrganiser || Principal.IsAnyAdministrator()|| Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+        {
+            <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
+        }
+
     }
+
     <hr />
 
     <h3>@Localizer["Participants"]</h3>
@@ -47,31 +52,31 @@ else
             <th>@Localizer["Country"]</th>
             <th>@Localizer["Registered"]</th>
             <th>@Localizer["Layouts"]</th>
-            @if (IsMeetingOrganizer)
+            @if (IsMeetingOrganiser)
+        {
+            <th>@Localizer["Withdrawn"]</th>
+        }
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.Person.Name()</td>
+        <td>@item.Person.CityName</td>
+        <td>@item.Person.Country.EnglishName.Localized()</td>
+        <td>@item.RegistrationTime.ToString("g")</td>
+        <td>@ParticipantLayouts(item)</td>
+        @if (IsMeetingOrganiser)
             {
-                <th>@Localizer["Withdrawn"]</th>
+            <td>@item.CancellationTime?.ToString("g")</td>
             }
-            <th>@Localizer["Actions"]</th>
-        </TableHeader>
-        <RowTemplate Context="item">
-            <td>@item.Person.Name()</td>
-            <td>@item.Person.CityName</td>
-            <td>@item.Person.Country.EnglishName.Localized()</td>
-            <td>@item.RegistrationTime.ToString("g")</td>
-            <td>@ParticipantLayouts(item)</td>
-            @if (IsMeetingOrganizer)
-            {
-                <td>@item.CancellationTime?.ToString("g")</td>
-            }
-            <td>
-                @if (MayEdit(item))
-                    {
-                    <AppButton Label="RegisterModules" Href="@RegistrationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
-                    <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
-                    }
-            </td>
-        </RowTemplate>
-    </TableTemplate>
+        <td>
+            @if (MayEdit(item))
+                {
+                <AppButton Label="RegisterModules" Href="@RegistrationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
+                <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
+                }
+        </td>
+    </RowTemplate>
+</TableTemplate>
 }
 
 @code {
@@ -86,8 +91,8 @@ else
     IEnumerable<ListboxItem>? CountryItems;
     IEnumerable<ListboxItem>? PeopleItems;
 
-    bool IsMeetingOrganizer;
-    bool MayEdit(MeetingParticipant mp) => !mp.CancellationTime.HasValue && (IsMeetingOrganizer || mp.PersonId == Principal.PersonId());
+    bool IsMeetingOrganiser;
+    bool MayEdit(MeetingParticipant mp) => !mp.CancellationTime.HasValue && (IsMeetingOrganiser || mp.PersonId == Principal.PersonId());
     string RegistrationHref(int meetingId, int participantId) => $"Meeting/{meetingId}/Register/{participantId}/Modules";
     string ParticipantLayouts(MeetingParticipant mp) => mp.LayoutModules.Any() ? string.Join(',', mp.LayoutModules.Select(lm => lm.Layout.Name()).Distinct()) : Localizer["NoModulesRegistered"].ToString();
 
@@ -99,10 +104,10 @@ else
             Meeting = await MeetingService.FindByIdWithParticipantsAsync(Principal, Id);
             if (Meeting is not null)
             {
-                IsMeetingOrganizer = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
-                if (IsMeetingOrganizer)
+                IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+                if (IsMeetingOrganiser)
                 {
-                    CountryItems = await CountryService.ListboxItemsAsync(Principal, IsMeetingOrganizer);
+                    CountryItems = await CountryService.ListboxItemsAsync(Principal, IsMeetingOrganiser);
                 }
                 else
                 {

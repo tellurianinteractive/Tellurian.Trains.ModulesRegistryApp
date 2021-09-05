@@ -139,9 +139,9 @@ namespace ModulesRegistry.Services.Implementations
                 foreach (var layout in entity.Layouts)
                 {
                     layout.RegistrationClosingDate = layout.RegistrationClosingDate.Date.AddMinutes(1439);
-                    var existingGable = existing.Layouts.AsQueryable().FirstOrDefault(g => g.Id == layout.Id);
-                    if (existingGable is null) existing.Layouts.Add(layout);
-                    else dbContext.Entry(existingGable).CurrentValues.SetValues(layout);
+                    var existingLayout = existing.Layouts.AsQueryable().FirstOrDefault(g => g.Id == layout.Id);
+                    if (existingLayout is null) existing.Layouts.Add(layout);
+                    else dbContext.Entry(existingLayout).CurrentValues.SetValues(layout);
                 }
                 foreach (var gable in existing.Layouts) if (!entity.Layouts.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
             }

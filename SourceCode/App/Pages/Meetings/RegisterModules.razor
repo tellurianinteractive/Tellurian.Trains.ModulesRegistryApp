@@ -57,12 +57,12 @@
                 <td>@item.LayoutPosition()</td>
                 <td>
                     @if (MayCancel(item))
-                        {
-                        <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
-                        }
-                </td>
-            </RowTemplate>
-        </TableTemplate>
+                    {
+                    <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
+                    }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
     }
 </div>
 @code {
@@ -96,7 +96,6 @@
                 if (Participant is not null)
                 {
                     OwnershipRef = ModuleOwnershipRef.Person(Participant.PersonId);
-                    Modules = await AllModules(OwnershipRef);
                     await Update();
                 }
             }
@@ -105,7 +104,12 @@
 
     async Task<IEnumerable<Module>> AllModules(ModuleOwnershipRef ownershipRef)
     {
-        return  (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
+        if (Participant is not null && Layout is not null)
+        {
+            return await LayoutService.GetAvailableModules(Principal, Participant, Layout);
+        }
+        return Array.Empty<Module>();
+        //return  (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
     }
 
 
@@ -145,6 +149,7 @@
     {
         if (Layout is not null && Participant is not null)
         {
+            Modules = await LayoutService.GetAvailableModules(Principal, Participant, Layout);
             RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, Layout.Id, Participant.Id);
             AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
             Packages = AvailableModules.AsPackages();
