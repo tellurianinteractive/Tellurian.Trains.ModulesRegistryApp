@@ -4,8 +4,12 @@
 Release date 2021-09-05
 - **Gables list** are now sorted by scale and gable name.
 - **Cargo flow** help text and field labels updated to better describe meaning of fields.
-- **Meeting dates** cannot be changed if any modules are registered or after seven days before first day of meeting. 
+- **Cargo lists** now shows NMH-code and is sorted in NHM-code order. 
+Read more about [NHM-codes](https://uic.org/freight/freight-IT/article/nhm).
+- **Meeting dates** cannot be changed if any modules are registered or after seven days before first day of meeting. Help text is updated with this restriction.
 Only *country administrators* will then be able to change dates.
+- **Bug fix** of issue #122 creating new persons to add to a group. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
+- **Bug fix** of issue #123 creating new meeting. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
 
 #### Version 1.4.3
 Release date 2021-09-04

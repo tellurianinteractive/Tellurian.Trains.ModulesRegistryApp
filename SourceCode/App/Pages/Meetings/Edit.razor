@@ -80,7 +80,7 @@
         if (Meeting is not null)
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
-            MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+            MayEdit = (Id == 0 && Principal.IsAuthenticated()) ||  (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
         }
     }

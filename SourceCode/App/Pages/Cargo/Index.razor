@@ -14,19 +14,19 @@
 
 <TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
     <TableHeader>
+        <th>@Localizer["NHMCode"]</th>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["DefaultClasses"]</th>
-        <th>@Localizer["NHMCode"]</th>
         <th>@Localizer["FromYear"]</th>
         <th>@Localizer["UptoYear"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="cargo">
+        <td>@cargo.NhmCodeOrEmpty()</td>
         <td>@cargo.LocalizedName()</td>
-        <td align="center">@cargo.DefaultClasses</td>
-        <td align="center">@cargo.NhmCode.ToString("0000 0000")</td>
-        <td align="center">@cargo.FromYear</td>
-        <td align="center">@cargo.UptoYear</td>
+        <td>@cargo.DefaultClasses</td>
+        <td>@cargo.FromYear</td>
+        <td>@cargo.UptoYear</td>
         <td>
             @if (MayEdit)
             {

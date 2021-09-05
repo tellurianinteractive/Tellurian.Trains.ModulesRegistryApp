@@ -31,11 +31,11 @@ namespace ModulesRegistry.Services.Implementations
                     .ToListAsync();
                 if (includeDefaultClasses)
                 {
-                    return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
+                    return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
                 }
                 else
                 {
-                    return items.Select(c => new ListboxItem(c.Id, $"{c.LocalizedName().Value}")).OrderBy(l => l.Description).ToList();
+                    return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value}")).OrderBy(l => l.Description).ToList();
 
                 }
             }

@@ -12,7 +12,7 @@
 @inject CountryService CountryService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToPageAction()" HelpContext="Person"/>
+<PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToPageAction()" HelpContext="Person" />
 
 @if (Person is null)
 {
@@ -47,34 +47,47 @@ else
     [Parameter] public int Id { get; set; }
     [Parameter] public int CountryId { get; set; }
     [Parameter] public int GroupId { get; set; }
+
     private Person? Person;
+    private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
     private ClaimsPrincipal? Principal;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+        CountriesItems = await CountryService.ListboxItemsAsync(Principal, IsGroupAdministrator);
         Person = await GetOrCreatePersonAsync();
+        if (GroupId > 0) Group = await GroupService.FindByIdAsync(Principal, GroupId);
     }
 
     private async Task OnValidSumbit()
     {
         if (Principal is null || Person is null) return;
-        var result = await PersonService.SaveAsync(Principal, Person);
-        Person = result.Entity;
-        if (IsNotGroupMember)
+        var result = await PersonService.SaveAsync(Principal, Person, IsGroupAdministrator);
+        if (result.Count< 1)
         {
-            var addresult = await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = Person!.Id });
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
-        Navigator.NavigateTo(AfterSaveHref);
+        else
+        {
+            Person = result.Entity;
+            if (IsNotGroupMember)
+            {
+                var addresult = await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = Person!.Id });
+            }
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(3000);
+            Navigator.NavigateTo(AfterSaveHref);
+             
+        }
 
     }
 
+    private bool IsGroupAdministrator => Group is not null && Group.GroupMembers.Any(gm => gm.PersonId == Principal.PersonId() && gm.IsGroupAdministrator);
+
     private async Task<Person> GetOrCreatePersonAsync() =>
-        Principal is null || Id== 0 ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id) ?? DefaultPerson;
+        Principal is null || Id == 0 ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id) ?? DefaultPerson;
 
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
     private Person DefaultPerson => new Person { CountryId = DefaultCountryId };

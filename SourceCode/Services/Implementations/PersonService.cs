@@ -83,10 +83,10 @@ namespace ModulesRegistry.Services.Implementations
             return null;
         }
 
-        public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity)
+        public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity, bool isGroupAdministrator = false)
         {
             var ownerRef = ModuleOwnershipRef.Person(entity.Id);
-            if (principal.MaySave(ownerRef))
+            if (principal.MaySave(ownerRef, isGroupAdministrator))
             {
                 using var dbContext = Factory.CreateDbContext();
                 dbContext.People.Attach(entity);
