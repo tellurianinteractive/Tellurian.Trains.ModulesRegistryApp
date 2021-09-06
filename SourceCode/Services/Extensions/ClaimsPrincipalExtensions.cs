@@ -1,11 +1,5 @@
-﻿using ModulesRegistry.Data;
-using ModulesRegistry.Services.Implementations;
-using System;
-using System.Collections.Generic;
+﻿using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Extensions;
 

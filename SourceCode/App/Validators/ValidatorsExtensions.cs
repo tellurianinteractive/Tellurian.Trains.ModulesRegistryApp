@@ -77,19 +77,14 @@ namespace ModulesRegistry.Validators
 
         private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
             c >= firstCodePoint && c <= lastCodePoint;
-        private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´".Contains(c);
+        private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'".Contains(c);
         private static bool IsDigit(this char c) => c >= 0x0030 && c <= 0x0039;
         private static bool IsLatinChar(this char c) =>
             c.IsInRange(0x0061, 0x007A) ||
             c.IsInRange(0x0041, 0x005A) ||
-            c.IsInRange(0x00C0, 0x00D6) ||
-            c.IsInRange(0x00D8, 0X00F6) ||
-            c.IsInRange(0x00F8, 0x00FF) ||
-            c.IsInRange(0x0104, 0x0107) ||
-            c.IsInRange(0x0118, 0x0119) ||
-            c.IsInRange(0x0141, 0x0144) ||
-            c.IsInRange(0x015A, 0x015B) ||
-            c.IsInRange(0x0179, 0x017C);
+            c.IsInRange(0x00C0, 0x00FF) ||
+            c.IsInRange(0x0100, 0x0148) ||
+            c.IsInRange(0x014A, 0x017F) ;
 
         public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, bool orZero = false) =>
             builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");

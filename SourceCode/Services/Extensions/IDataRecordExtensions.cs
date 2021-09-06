@@ -1,6 +1,4 @@
-﻿using ModulesRegistry.Data.Extensions;
-using System;
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using System.Resources;
 

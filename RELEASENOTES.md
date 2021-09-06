@@ -2,6 +2,8 @@
 
 #### Version 1.4.5
 Release date 2021-09-06
+- **Cargo names** now also supported for Italian and French.
+- **Waybills** now contain trafo or area for load and unload if this nis specified for the cargo customer or cargo flow.
 - **Bug fix** of issue #125 can't edit other member modules, even as group data administrator. Tanks Lars Ljungberg for reporting this.
 
 #### Version 1.4.4

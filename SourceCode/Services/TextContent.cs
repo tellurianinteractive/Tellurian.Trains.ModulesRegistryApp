@@ -1,7 +1,4 @@
-﻿using ModulesRegistry.Services.Extensions;
-using System;
-
-namespace ModulesRegistry.Services
+﻿namespace ModulesRegistry.Services
 {
     public record TextContent(string? Text, string Type, DateTimeOffset LastModified)
     {

@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Services.Resources;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 
 namespace ModulesRegistry.Services.Extensions;
 

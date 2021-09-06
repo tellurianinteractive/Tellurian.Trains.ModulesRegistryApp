@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace ModulesRegistry.Services.Extensions;
+﻿namespace ModulesRegistry.Services.Extensions;
 
 public static class PaginationExtensions
 {

@@ -16,6 +16,8 @@ namespace ModulesRegistry.Data
         public string DA { get; set; }
         public string DE { get; set; }
         public string EN { get; set; }
+        public string FR { get; set; }
+        public string IT { get; set; }
         public string NL { get; set; }
         public string NO { get; set; }
         public string PL { get; set; }

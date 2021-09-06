@@ -1,8 +1,4 @@
-﻿using ModulesRegistry.Data;
-using ModulesRegistry.Services.Extensions;
-using System.Security.Claims;
-
-namespace ModulesRegistry.Services
+﻿namespace ModulesRegistry.Services
 {
     public class ModuleOwnershipRef
     {

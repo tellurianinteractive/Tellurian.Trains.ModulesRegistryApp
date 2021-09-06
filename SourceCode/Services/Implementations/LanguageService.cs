@@ -1,7 +1,4 @@
-﻿using ModulesRegistry.Data;
-using System.Linq;
-
-namespace ModulesRegistry.Services.Implementations;
+﻿namespace ModulesRegistry.Services.Implementations;
 
 public class LanguageService : ILanguageService
 {

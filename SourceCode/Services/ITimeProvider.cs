@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ModulesRegistry.Services
+﻿namespace ModulesRegistry.Services
 {
     public interface ITimeProvider
     {

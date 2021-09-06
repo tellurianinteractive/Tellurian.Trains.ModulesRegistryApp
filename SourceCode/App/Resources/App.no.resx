@@ -1041,4 +1041,10 @@
   <data name="OtherUptoYear" xml:space="preserve">
     <value>Annet til-år</value>
   </data>
+  <data name="Italian" xml:space="preserve">
+    <value>Italiensk</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>Fransk</value>
+  </data>
 </root>

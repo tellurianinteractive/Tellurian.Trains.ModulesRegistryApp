@@ -1,10 +1,7 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 

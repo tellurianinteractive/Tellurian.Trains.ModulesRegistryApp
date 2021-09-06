@@ -1,8 +1,5 @@
-﻿using ModulesRegistry.Data;
-using ModulesRegistry.Services.Implementations;
+﻿using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Services.Resources;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ModulesRegistry.Services.Projections
 {

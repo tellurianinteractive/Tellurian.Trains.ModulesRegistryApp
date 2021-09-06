@@ -16,15 +16,7 @@
         public bool IsInternal { get; set; }
         public string ReadyTime { get; set; } = string.Empty;
         public bool ReadyTimeIsSpecifiedInLayout { get; set; }
-
-
-        //public static CargoCustomer Origin(string name, string stationName, string instruction = "-") =>
-        //    new() { Name = name, StationName = stationName, Instruction = instruction, Region = Region.OriginDefault };
-        //public static CargoCustomer Origin(string name, string stationName, Region region, string instruction = "-") =>
-        //    new() { Name = name, StationName = stationName, Instruction = instruction, Region = region };
-        //public static CargoCustomer Destination(string name, string stationName, string instruction = "-") =>
-        //   new() { Name = name, StationName = stationName, Instruction = instruction, Region = Region.DestinationDefault };
-        //public static CargoCustomer Destination(string name, string stationName, Region region, string instruction = "-") =>
-        //   new() { Name = name, StationName = stationName, Instruction = instruction, Region = region };
+        public string TrackOrArea { get; set; } = string.Empty;
+        public string TrackOrAreaColor { get; set; } = string.Empty;
     }
 }

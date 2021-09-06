@@ -25,7 +25,12 @@ SELECT -- Internal station customer cargo
 	SCC.SpecificWagonClass,
 	SCC.SpecialCargoName,
 	CRT.ShortName AS ReadyTime,
-	CRT.IsSpecifiedInLayout AS ReadyTimeIsSpecifiedInLayout
+	CRT.IsSpecifiedInLayout AS ReadyTimeIsSpecifiedInLayout,
+	COALESCE(SCC.TrackOrArea, SC.TrackOrArea) AS TrackOrArea,
+	CASE
+		WHEN SCC.TrackOrAreaColor IS NOT NULL AND SCC.TrackOrAreaColor <> '#ffffff' THEN SCC.TrackOrAreaColor
+		ELSE SC.TrackOrAreaColor
+	END AS TrackOrAreaColor
 FROM [Station] AS S 
 	INNER JOIN [Region] AS R ON S.RegionId = R.Id 
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
@@ -60,7 +65,9 @@ SELECT -- External station customer cargo
 	ESCC.SpecificWagonClass,
 	ESCC.SpecialCargoName,
 	NULL AS ReadyTime,
-	0 AS ReadyTimeIsSpecifiedInLayout
+	0 AS ReadyTimeIsSpecifiedInLayout,
+	NULL AS TrackOrArea,
+	'#ffffff' AS TrackOrAreaColor
 FROM [ExternalStation] AS ES 
 	INNER JOIN [Region] AS R ON ES.RegionId = R.Id 
 	INNER JOIN [ExternalStationCustomer] AS ESC ON ESC.ExternalStationId = ES.Id
@@ -94,7 +101,9 @@ SELECT -- Shadow yard suppliers
 	NULL AS SpecificWagonClass,
 	NULL AS SpecialCargoName,
 	NULL AS ReadyTime,
-	0 AS ReadyTimeIsSpecifiedInLayout
+	0 AS ReadyTimeIsSpecifiedInLayout,
+	NULL AS TrackOrArea,
+	'#ffffff' AS TrackOrAreaColor
 FROM 
 	LayoutStation LS
 	INNER JOIN Station S ON S.Id = LS.StationId
@@ -128,7 +137,9 @@ SELECT -- Shadow yard consumers
 	NULL AS SpecificWagonClass,
 	NULL AS SpecialCargoName,
 	NULL AS ReadyTime,
-	0 AS ReadyTimeIsSpecifiedInLayout
+	0 AS ReadyTimeIsSpecifiedInLayout,
+	NULL AS TrackOrArea,
+	'#ffffff' AS TrackOrAreaColor
 FROM 
 	LayoutStation LS
 	INNER JOIN Station S ON S.Id = LS.StationId

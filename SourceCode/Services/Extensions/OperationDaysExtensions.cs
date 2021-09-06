@@ -1,11 +1,8 @@
 ﻿using ModulesRegistry.Services.Resources;
-using System;
 using System.Globalization;
-using System.Linq;
-using System.Resources;
 using System.Text;
 
-namespace ModulesRegistry.Services.Extensions;
+namespace ModulesRegistry.Services.Extensions; 
 
 public class OperationDays
 {

@@ -1,8 +1,4 @@
-﻿using ModulesRegistry.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Resources;
+﻿using System.Resources;
 
 namespace ModulesRegistry.Services.Extensions;
 

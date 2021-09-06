@@ -40,7 +40,14 @@
 
                         <td colspan="3" class="waybill destination">
                             <div class="waybill label">@DestinationLabel(Item, "Instructions")</div>
-                            <div class="waybill instruction">@DestinationInstruction(Item)</div>
+                            <div class="waybill instruction">
+                                <span>@DestinationInstruction(Item)</span>
+                                @if (Item.Destination.TrackOrArea.HasValue())
+                                {
+                                    <span>&commat;</span>
+                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @DestinationTrackOrAreaColor(Item); color: @DestinationTrackOrAreaColor(Item).TextColor()"> @Item.Destination.TrackOrArea </span>
+                                }
+                            </div>
                         </td>
                     </tr>
 
@@ -89,7 +96,14 @@
                     <tr>
                         <td colspan="3">
                             <div class="waybill label">@OriginLabel(Item, "Instructions")</div>
-                            <div class="waybill instruction">@OriginInstruction(Item)</div>
+                            <div class="waybill instruction">
+                                <span>@OriginInstruction(Item)</span>
+                                @if (Item.Origin.TrackOrArea.HasValue())
+                                {
+                                   <span>&commat;</span>
+                                   <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaColor; color: @Item.Origin.TrackOrAreaColor.TextColor()">@Item.Origin.TrackOrArea </span>
+                                }
+                           </div>
                         </td>
                     </tr>
                 </tbody>
@@ -107,6 +121,9 @@
 
     string DestinationLabel(Waybill item, string resourceKey, string? englishText = null) =>
         Label(item.Destination?.Language, resourceKey, englishText);
+
+    string DestinationTrackOrAreaColor(Waybill item) =>
+        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" : item.Destination.TrackOrAreaColor;
 
     string Label(string? langaugeCode, string resourceKey, string? englishText)
     {
@@ -131,13 +148,16 @@
 
     string In(CargoCustomer me) => GetLabelText("In", me.Language);
 
-    string LoadingReady(CargoCustomer? me) => 
-        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ? "-" :
-        $"{GetLabelText("LoadingReadyTime", me.Language)} {ReadyTime(me)}";
+    string LoadingReady(CargoCustomer? me) =>
+        me is null ? string.Empty :
+        string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ?
+            me.TrackOrArea.HasNoValue() ? string.Empty : $"{GetLabelText("Load", me.Language)} " :
+            $"{GetLabelText("LoadingReadyTime", me.Language)} {ReadyTime(me)} ";
 
-    string UnloadingReady(CargoCustomer? me) => 
-        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ? "-" :
-        $"{GetLabelText("UnloadingReadyTime", me.Language)} {ReadyTime(me)}";
+    string UnloadingReady(CargoCustomer? me) =>
+        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ?
+        me.TrackOrArea.HasNoValue() ? string.Empty : $"{GetLabelText("Unload", me.Language)} " :
+        $"{GetLabelText("UnloadingReadyTime", me.Language)} {ReadyTime(me)} ";
 
     string ReadyTime(CargoCustomer me) => (me.ReadyTimeIsSpecifiedInLayout ? GetLabelText(me.ReadyTime, me.Language) : me.ReadyTime).ToLowerInvariant();
 

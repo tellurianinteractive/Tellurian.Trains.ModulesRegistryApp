@@ -1,8 +1,6 @@
 ﻿using ModulesRegistry.Services.Implementations;
-using System;
 using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Extensions;
 

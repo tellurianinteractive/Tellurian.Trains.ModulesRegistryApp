@@ -531,4 +531,10 @@
   <data name="Italy" xml:space="preserve">
     <value>Italien</value>
   </data>
+  <data name="Unload" xml:space="preserve">
+    <value>Lasta av</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Lasta</value>
+  </data>
 </root>

@@ -673,6 +673,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load.
+        /// </summary>
+        internal static string Load {
+            get {
+                return ResourceManager.GetString("Load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading finished.
         /// </summary>
         internal static string LoadingReadyTime {
@@ -1272,6 +1281,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unload.
+        /// </summary>
+        internal static string Unload {
+            get {
+                return ResourceManager.GetString("Unload", resourceCulture);
             }
         }
         

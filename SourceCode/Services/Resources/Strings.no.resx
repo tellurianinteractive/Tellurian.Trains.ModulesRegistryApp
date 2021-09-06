@@ -511,7 +511,7 @@
     <value>Lasting er klar</value>
   </data>
   <data name="UnloadingReadyTime" xml:space="preserve">
-    <value>Lossing klar</value>
+    <value>Utlasting klar</value>
   </data>
   <data name="Afternoon" xml:space="preserve">
     <value>Ettermiddag</value>
@@ -530,5 +530,11 @@
   </data>
   <data name="Italy" xml:space="preserve">
     <value>Italia</value>
+  </data>
+  <data name="Unload" xml:space="preserve">
+    <value>Last ut</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Last</value>
   </data>
 </root>

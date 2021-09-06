@@ -29,12 +29,14 @@ namespace ModulesRegistry.Data
             "Evening",
             "In",
             "Instructions",
+            "Load",
             "LoadingReadyTime",
             "Morning",
             "Night",
             "Noon",
             "Origin",
             "Shipper",
+            "Unload",
             "UnloadingReadyTime"
         };
 
