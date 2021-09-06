@@ -103,7 +103,6 @@
     <Build Include="dbo\Tables\Layout.sql" />
     <Build Include="dbo\Tables\Cargo.sql" />
     <Build Include="dbo\Tables\Scale.sql" />
-    <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoUnit.Table.sql" />
