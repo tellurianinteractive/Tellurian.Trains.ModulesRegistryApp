@@ -1,9 +1,10 @@
 ﻿@page "/Stations/{id:int}/Edit"
 @page "/Stations/{id:int}/Edit/{ownerid:int}"
-@page "/Stations/{id:int}/Edit/PersonOwned/{ownerPersonId:int}"
-@page "/Stations/{id:int}/Edit/GroupOwned/{ownerGroupId:int}"
-@page "/Stations/Create/{moduleId:int}/PersonOwned/{ownerPersonId:int}"
-@page "/Stations/Create/{moduleId:int}/GroupOwned/{ownerGroupId:int}"
+@page "/Stations/{id:int}/Edit/PersonOwned/{PersonId:int}"
+@page "/Stations/{id:int}/Edit/PersonOwned/{PersonId:int}/InGroup/{GroupId:int}"
+@page "/Stations/{id:int}/Edit/GroupOwned/{GroupId:int}"
+@page "/Stations/Create/{moduleId:int}/PersonOwned/{PersonId:int}"
+@page "/Stations/Create/{moduleId:int}/GroupOwned/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -41,13 +42,14 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerId { get; set; }
-    [Parameter] public int OwnerGroupId { get; set; }
-    [Parameter] public int OwnerPersonId { get; set; }
+    [Parameter] public int GroupId { get; set; }
+    [Parameter] public int PersonId { get; set; }
     [Parameter] public int ModuleId { get; set; }
 
     ClaimsPrincipal? Principal;
     object? Owner;
     Station Station = new Station();
+    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
 
     IEnumerable<ListboxItem>? ModulesItems;
     IEnumerable<ListboxItem>? RegionItems;
@@ -58,33 +60,34 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        ModulesItems = await ModuleService.ModuleItems(Principal, OwnerRef, Id);
+        OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
+        ModulesItems = await ModuleService.ModuleItems(Principal, OwnershipRef, Id);
         RegionItems = await RegionService.ListboxItemsAsync(Principal);
         Station = new Station();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (OwnerRef.IsAny)
+        if (OwnershipRef.IsAny)
         {
             await GetOwner();
         }
         if (Id > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, Id, OwnerRef) ?? new Station();
+            Station = await StationService.FindByIdAsync(Principal, Id, OwnershipRef) ?? new Station();
             if (Station is not null) ModuleId = Station.Modules.First().Id;
         }
         await SetDefaultStationName();
     }
 
     private async Task GetOwner() =>
-        Owner = OwnerRef.IsGroup ? await GroupService.FindByIdAsync(Principal, OwnerRef.GroupId) : await PersonService.FindByIdAsync(Principal, OwnerRef.PersonId);
+        Owner = OwnershipRef.IsGroup ? await GroupService.FindByIdAsync(Principal, OwnershipRef.GroupId) : await PersonService.FindByIdAsync(Principal, OwnershipRef.PersonId);
 
     async Task OnValidSubmit()
     {
         if (Station is not null)
         {
-            var result = await StationService.SaveAsync(Principal, Station, OwnerRef, ModuleId);
+            var result = await StationService.SaveAsync(Principal, Station, OwnershipRef, ModuleId);
             if (result.Entity is not null) Station = result.Entity;
             if (Station is not null) ModuleId = Station.Modules.First().Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
@@ -99,7 +102,4 @@
             Station.FullName = module is null ? string.Empty: module.FullName;
         }
     }
-
-    ModuleOwnershipRef OwnerRef => OwnerGroupId > 0 ? ModuleOwnershipRef.Group(OwnerGroupId) : ModuleOwnershipRef.Person(OwnerPersonId > 0 ? OwnerPersonId : OwnerId);
-
 }

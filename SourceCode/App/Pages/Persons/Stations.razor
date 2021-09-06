@@ -1,5 +1,5 @@
-﻿@page "/Persons/{id:int}/Stations"
-@page "/Persons/{id:int}/Stations/Group/{groupId:int}"
+﻿@page "/Persons/{OwnerId:int}/Stations"
+@page "/Persons/{OwnerId:int}/Stations/InGroup/{GroupId:int}"
 
 @inject IStringLocalizer<App> Localizer
 
@@ -7,14 +7,14 @@
 @inject StationService StationService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Stations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List"/>
+<PageHeading ObjectName="Stations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
 
-<StationsList Stations="OwnedStations" OwningPersonId="OwningPersonId" MayEdit="MayEdit" AnyModules="true" />
+<StationsList Stations="OwnedStations" OwningPersonId="OwnerId" OwningGroupId=GroupId MayEdit="MayEdit" AnyModules="true" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int GroupId { get; set; }
-    [Parameter] public int Id { get; set; }
+    [Parameter] public int OwnerId { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     private IEnumerable<Station>? OwnedStations;
@@ -23,11 +23,18 @@
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Owner = await PersonService.FindByIdAsync(Principal, Id);
-        var ownershipRef = ModuleOwnershipRef.PersonInGroup( OwningPersonId, GroupId);
-        MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
-        OwnedStations = Owner is null ? Array.Empty<Station>() : await StationService.GetAllAsync(Principal, ownershipRef);
+        Owner = await PersonService.FindByIdAsync(Principal, OwnerId);
+        if (Owner is null)
+        {
+            OwnerId = 0;
+            GroupId = 0;
+            OwnedStations = Array.Empty<Station>();
+        }
+        else
+        {
+            var ownershipRef = ModuleOwnershipRef.PersonInGroup(Owner.Id, GroupId);
+            MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
+            OwnedStations = await StationService.GetAllAsync(Principal, ownershipRef);
+        }
     }
-
-    private int OwningPersonId => Owner?.Id ?? 0;
 }

@@ -33,10 +33,6 @@ public static class StringExtensions
         }
     }
 
-    public static string Href(this ModuleOwnershipRef ownershipRef, string objectName, int objectId, string ActionName) =>
-        ownershipRef.IsGroup ?
-        $"/{objectName}/{objectId}/{ActionName}/GroupOwned/{ownershipRef.GroupId}" :
-        $"/{objectName}/{objectId}/{ActionName}/PersonOwned/{ownershipRef.PersonId}";
 
     public static bool IsEmailAddress([NotNullWhen(true)] this string? me) =>
         me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");

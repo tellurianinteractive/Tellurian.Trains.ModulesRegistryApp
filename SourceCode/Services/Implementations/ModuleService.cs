@@ -183,11 +183,12 @@ namespace ModulesRegistry.Services.Implementations
             ownerRef = principal.UpdateFrom(ownerRef);
             entity.Length = entity.CalculateLength();
             using var dbContext = Factory.CreateDbContext();
+            var isGroupAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
             if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef))
             {
                 return Strings.ModuleNameIsAlreadyTaken.SaveResult(entity);
             }
-            if (principal.MaySave(ownerRef))
+            if (principal.MaySave(ownerRef, isGroupAdministrator))
             {
                 return await AddOrUpdate(dbContext, entity, ownerRef);
             }
@@ -198,9 +199,8 @@ namespace ModulesRegistry.Services.Implementations
             }
             else if (ownerRef.IsPersonInGroup)
             {
-                var isAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
                 var isMember = await IsOwnerMemberOfGroup(ownerRef, dbContext);
-                return isAdministrator && isMember ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
+                return isGroupAdministrator && isMember ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
             }
             return principal.SaveNotAuthorised<Module>();
 

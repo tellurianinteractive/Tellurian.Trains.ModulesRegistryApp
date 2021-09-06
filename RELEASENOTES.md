@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.4.5
+Release date 2021-09-06
+- **Bug fix** of issue #125 can't edit other member modules, even as group data administrator. Tanks Lars Ljungberg for reporting this.
+
 #### Version 1.4.4
 Release date 2021-09-05
 - **Gables list** are now sorted by scale and gable name.

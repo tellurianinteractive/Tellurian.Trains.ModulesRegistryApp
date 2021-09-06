@@ -1,6 +1,7 @@
 ﻿@page "/Stations/Index"
-@page "/Stations/Index/GroupOwned/{owninggroupid:int}"
-@page "/Stations/Index/PersonOwned/{owningpersonid:int}"
+@page "/Stations/Index/GroupOwned/{Groupid:int}"
+@page "/Stations/Index/PersonOwned/{Personid:int}"
+@page "/Stations/Index/PersonOwned/{Personid:int}/InGroup/{Groupid:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -15,22 +16,23 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    [Parameter] public int OwningPersonId { get; set; }
-    [Parameter] public int OwningGroupId { get; set; }
+    [Parameter] public int PersonId { get; set; }
+    [Parameter] public int GroupId { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Station>? Stations;
     ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
     bool AnyModules;
+    bool MayEdit;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
-        OwnershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+        MayEdit = Principal.IsAuthenticated();
+        OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
         Stations = await StationService.GetAllAsync(Principal, OwnershipRef);
         AnyModules = await ModuleService.HasAnyNonStationAsync(Principal, OwnershipRef);
     }
 
-    private bool MayEdit => Principal is not null;
 }
 

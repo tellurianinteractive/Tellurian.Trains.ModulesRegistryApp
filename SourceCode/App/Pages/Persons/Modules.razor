@@ -1,5 +1,5 @@
-﻿@page "/Persons/{id:int}/Modules"
-@page "/Persons/{id:int}/Modules/Group/{groupId:int}"
+﻿@page "/Persons/{Id:int}/Modules"
+@page "/Persons/{Id:int}/Modules/InGroup/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Modules" Owner="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 
-<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" Principal="Principal" />
+<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

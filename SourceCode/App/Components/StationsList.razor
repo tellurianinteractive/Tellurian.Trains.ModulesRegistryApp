@@ -51,12 +51,13 @@
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
 
-    string StationEditHref(int id) => OwningGroupId > 0 ?
-           $"/Stations/{id}/Edit/GroupOwned/{OwningGroupId}" :
-           $"/Stations/{id}/Edit/PersonOwned/{OwningPersonId}";
+    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
 
-    string CargoCustomersHref(int id) => OwningGroupId > 0 ?
-        $"/Stations/{id}/Customers/GroupOwned/{OwningGroupId}" :
-        $"/Stations/{id}/Customers/PersonOwned/{OwningPersonId}";
+    protected override void OnParametersSet()
+    {
+        OwnershipRef = ModuleOwnershipRef.Any(null, OwningPersonId, OwningGroupId);
+    }
 
+    string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
+    string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
 }

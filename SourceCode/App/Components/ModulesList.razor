@@ -66,7 +66,7 @@
     [Parameter] public int OwningGroupId { get; set; }
     [Parameter] public ClaimsPrincipal? Principal { get; set; }
 
-    ModuleOwnershipRef OwnershipRef => ModuleOwnershipRef.PersonOrGroup(Principal, OwningPersonId, OwningGroupId);
+    ModuleOwnershipRef OwnershipRef => ModuleOwnershipRef.PersonAndOrGroup(Principal, OwningPersonId, OwningGroupId);
 
     ModuleOwnership? ModuleOwnership(Module module) => module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == OwnershipRef.GroupId || mo.PersonId == OwnershipRef.PersonId);
 

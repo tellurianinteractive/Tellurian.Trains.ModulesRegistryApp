@@ -50,7 +50,7 @@ else
 
     override protected async Task OnParametersSetAsync()
     {
-        var ownershipRef = ModuleOwnershipRef.PersonOrGroup(Principal, OwnerPersonId, OwnerGroupId);
+        var ownershipRef = ModuleOwnershipRef.PersonAndOrGroup(Principal, OwnerPersonId, OwnerGroupId);
         Module = await ModuleService.FindByIdAsync(Principal, Id, ownershipRef);
         if (Module is not null)
         {

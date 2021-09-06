@@ -70,7 +70,7 @@ public static class ClaimsPrincipalExtensions
     public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? me, ModuleOwnershipRef ownershipRef, GroupService groupService)
     {
         if (me is null) return false;
-        if (ownershipRef.IsPerson)
+        if (ownershipRef.IsPerson || ownershipRef.IsPersonInGroup)
         {
             if (ownershipRef.PersonId == me.PersonId()) return true;
             return await groupService.IsDataAdministratorInSameGroupAsMember(me, ownershipRef.PersonId).ConfigureAwait(false);
@@ -119,6 +119,7 @@ public static class ClaimsPrincipalExtensions
     public static int MinimumObjectVisibility(this ClaimsPrincipal? me, ModuleOwnershipRef ownerRef, bool isMemberInGroupsInSameDomain) =>
         me is null ? (int)ObjectVisibility.Public :
         me.IsAnyAdministrator() || ownerRef.PersonId == me.PersonId() ? (int)ObjectVisibility.Private :
+        ownerRef.IsPersonInGroup ? (int)ObjectVisibility.GroupMembers :
         ownerRef.IsPerson && isMemberInGroupsInSameDomain ? (int)ObjectVisibility.DomainMembers :
         ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.Private;
 

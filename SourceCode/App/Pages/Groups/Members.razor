@@ -53,6 +53,8 @@
     private ClaimsPrincipal? Principal;
     private Group Group = new Group();
     private bool IsGroupAdministrator;
+    private ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
+
 
     protected async override Task OnParametersSetAsync()
     {
@@ -74,8 +76,8 @@
         }
     }
 
-    string ModulesHref(GroupMember member) => $"persons/{member.PersonId}/modules/group/{member.GroupId}";
-    string StationsHref(GroupMember member) => $"persons/{member.PersonId}/stations/group/{member.GroupId}";
+    string ModulesHref(GroupMember member) => $"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}";
+    string StationsHref(GroupMember member) => $"Persons/{member.PersonId}/Stations/InGroup/{member.GroupId}";
     string MemberEditHref(GroupMember member) => $"groups/{member.GroupId}/members/{member.Id}/edit";
     string InviteHref(GroupMember member) => $"persons/{member.PersonId}/invite";
 }
