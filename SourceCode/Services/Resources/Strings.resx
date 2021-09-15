@@ -558,4 +558,10 @@
   <data name="Load" xml:space="preserve">
     <value>Load</value>
   </data>
+  <data name="ImportAgent" xml:space="preserve">
+    <value>Import agent</value>
+  </data>
+  <data name="ExportAgent" xml:space="preserve">
+    <value>Export agent</value>
+  </data>
 </root>

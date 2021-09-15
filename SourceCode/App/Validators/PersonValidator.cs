@@ -39,9 +39,8 @@ namespace ModulesRegistry.Validators
                 .WithName(n => localizer[nameof(n.CityName)]);
 
             RuleFor(person => person.EmailAddresses)
-                .MinimumLength(5)
                 .MaximumLength(50)
-                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
+                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).When(n => n.EmailAddresses.Length > 0)
                 .WithName(n => localizer[nameof(n.EmailAddresses)]);
 
             RuleFor(person => person.CountryId)

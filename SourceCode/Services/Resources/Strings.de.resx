@@ -537,4 +537,10 @@
   <data name="Load" xml:space="preserve">
     <value>Laden</value>
   </data>
+  <data name="ImportAgent" xml:space="preserve">
+    <value>Importagent</value>
+  </data>
+  <data name="ExportAgent" xml:space="preserve">
+    <value>Exportagent</value>
+  </data>
 </root>

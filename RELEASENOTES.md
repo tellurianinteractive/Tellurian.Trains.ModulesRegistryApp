@@ -1,5 +1,12 @@
 ## Release Notes
 
+#### Version 1.4.6
+Release date 2021-09-15
+- **H0-US gables** added.
+- **Group owned modules** can now be submitted to meetings by *group administrators* or group member that *may borrow the group's modules*. The latter is a new checkbox for group members.
+- **Waybill typography** improved and *import agent* and *export agent* are now translated to origin and destination languages.
+- **Bug fix** of making group-owned module to a station.
+
 #### Version 1.4.5
 Release date 2021-09-06
 - **Cargo names** now also supported for Italian and French.

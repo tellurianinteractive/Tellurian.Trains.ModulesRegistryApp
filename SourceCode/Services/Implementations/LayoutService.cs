@@ -70,7 +70,7 @@ public class LayoutService
             //    .ConfigureAwait(false);
 
             var groupsId = await dbContext.GroupMembers.AsNoTracking()
-                .Where(gm => gm.IsGroupAdministrator && gm.PersonId == participant.PersonId)
+                .Where(gm => (gm.MayBorrowModules()) &&  gm.PersonId == participant.PersonId)
                 .Select(gm => gm.GroupId)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -79,7 +79,9 @@ public class LayoutService
                 .Include(m => m.ModuleOwnerships)
                 .Include(m => m.Standard)
                 .Where(m => m.ScaleId == layout.PrimaryModuleStandard.ScaleId)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
+            ;
             if (modules is not null)
             {
                 return modules

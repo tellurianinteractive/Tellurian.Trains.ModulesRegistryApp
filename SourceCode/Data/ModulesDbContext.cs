@@ -53,7 +53,8 @@ namespace ModulesRegistry.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=ConnectionStrings:TimetablePlanningDatabase");
+                optionsBuilder.UseSqlServer("Name=ConnectionStrings:TimetablePlanningDatabase",
+                    options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             }
         }
 

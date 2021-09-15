@@ -21,7 +21,7 @@
                     <tr>
                         <td colspan="3" class="waybill destination">
                             <div class="waybill label">@DestinationLabel(Item, "Consignee")</div>
-                            <div class="waybill item">@Item.Destination.Name</div>
+                            <div class="waybill item">@CustomerName(Item.Destination)</div>
                         </td>
                     </tr>
                     <tr>
@@ -66,7 +66,7 @@
                     <tr>
                         <td colspan="3">
                             <div class="waybill label">@OriginLabel(Item, "Shipper")</div>
-                            <div class="waybill shipper">@Item.Origin.Name</div>
+                            <div class="waybill shipper">@CustomerName(Item.Origin)</div>
                         </td>
                     </tr>
                     @if (Item.IsCrossBorder() && CargoName(Item.Origin) != CargoName(Item.Destination))
@@ -100,10 +100,10 @@
                                 <span>@OriginInstruction(Item)</span>
                                 @if (Item.Origin.TrackOrArea.HasValue())
                                 {
-                                   <span>&commat;</span>
-                                   <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaColor; color: @Item.Origin.TrackOrAreaColor.TextColor()">@Item.Origin.TrackOrArea </span>
+                                    <span>&commat;</span>
+                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaColor; color: @Item.Origin.TrackOrAreaColor.TextColor()">@Item.Origin.TrackOrArea </span>
                                 }
-                           </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -140,6 +140,8 @@
 
     string DestinationInstruction(Waybill waybill) => UnloadingReady(waybill.Destination);
     string OriginInstruction(Waybill waybill) => LoadingReady(waybill.Origin);
+    string CustomerName(CargoCustomer me) => 
+        me.Name == "ImportAgent" || me.Name == "ExportAgent" ? GetLabelText(me.Name, me.Language) : me.Name;
 
     string CargoName(CargoCustomer? me) =>
         me is null ? string.Empty :
@@ -155,8 +157,9 @@
             $"{GetLabelText("LoadingReadyTime", me.Language)} {ReadyTime(me)} ";
 
     string UnloadingReady(CargoCustomer? me) =>
-        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ?
-        me.TrackOrArea.HasNoValue() ? string.Empty : $"{GetLabelText("Unload", me.Language)} " :
+        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.TrackOrArea.HasNoValue() ? string.Empty :
+        me.ReadyTime == "n/a" ?
+        $"{GetLabelText("Unload", me.Language)} " :
         $"{GetLabelText("UnloadingReadyTime", me.Language)} {ReadyTime(me)} ";
 
     string ReadyTime(CargoCustomer me) => (me.ReadyTimeIsSpecifiedInLayout ? GetLabelText(me.ReadyTime, me.Language) : me.ReadyTime).ToLowerInvariant();
@@ -166,7 +169,11 @@
 
 
     int TextSize(string? text, bool hasFlag) =>
-        string.IsNullOrWhiteSpace(text) ? 14 :
-        hasFlag && text.Length < 12 ? 14 :
-        text.Length < 15 ? 14 : 12;
+        string.IsNullOrWhiteSpace(text) ? Large :
+        hasFlag && text.Length < Small ? Large :
+        text.Length < 15 ? Large : Small;
+
+    const int Large = 14;
+    const int Small = 12;
+
 }

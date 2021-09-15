@@ -20,6 +20,7 @@
         <th>@Localizer["Name"]</th>
         <th align="center">@Localizer["IsGroupAdministrator"]</th>
         <th align="center">@Localizer["IsDataAdministrator"]</th>
+        <th align="center">@Localizer["MayBorrowGroupModules"]</th>
         <th align="center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
 
@@ -28,6 +29,7 @@
         <td>@member.Person.Name()</td>
         <td align="center">@member.IsGroupAdministrator.AsYesNo()</td>
         <td align="center">@member.IsDataAdministrator.AsYesNo()</td>
+        <td align="center">@member.MayBorrowModules().AsYesNo()</td>
         <td align="center">@member.Person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
             <AppButton Label="Modules" Href="@ModulesHref(member)" IconName="Modules" />
@@ -78,6 +80,6 @@
 
     string ModulesHref(GroupMember member) => $"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}";
     string StationsHref(GroupMember member) => $"Persons/{member.PersonId}/Stations/InGroup/{member.GroupId}";
-    string MemberEditHref(GroupMember member) => $"groups/{member.GroupId}/members/{member.Id}/edit";
-    string InviteHref(GroupMember member) => $"persons/{member.PersonId}/invite";
+    string MemberEditHref(GroupMember member) => $"Groups/{member.GroupId}/Members/{member.Id}/edit";
+    string InviteHref(GroupMember member) => $"Persons/{member.PersonId}/Invite";
 }

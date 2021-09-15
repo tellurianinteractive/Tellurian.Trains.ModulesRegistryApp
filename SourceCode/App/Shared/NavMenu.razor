@@ -43,13 +43,13 @@
         </AuthorizeView>
         <AuthorizeView Policy="@AppPolicyNames.Admin">
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="Persons/Index">
+                <NavLink class="nav-link" href="Persons">
                     <span class="@FontAwesome.People" aria-hidden="true" />@Localizer["ModuleOwners"]
                 </NavLink>
             </li>
         </AuthorizeView>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="ModuleStandards/Index">
+            <NavLink class="nav-link" href="ModuleStandards">
                 <span class="@FontAwesome.Standard" aria-hidden="true" />@Localizer["ModuleStandards"]
             </NavLink>
         </li>
@@ -65,7 +65,7 @@
         </li>
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="ExternalStations/Index">
+                <NavLink class="nav-link" href="ExternalStations">
                     <span class="@FontAwesome.Station" aria-hidden="true" />@Localizer["ExternalStations"]
                 </NavLink>
             </li>

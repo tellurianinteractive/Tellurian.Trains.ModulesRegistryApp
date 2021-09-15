@@ -466,6 +466,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export agent.
+        /// </summary>
+        internal static string ExportAgent {
+            get {
+                return ResourceManager.GetString("ExportAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fault.
         /// </summary>
         internal static string Fault {
@@ -597,6 +606,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Import {
             get {
                 return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import agent.
+        /// </summary>
+        internal static string ImportAgent {
+            get {
+                return ResourceManager.GetString("ImportAgent", resourceCulture);
             }
         }
         

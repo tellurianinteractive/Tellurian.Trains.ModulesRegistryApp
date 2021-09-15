@@ -150,7 +150,7 @@ else
 
     bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
 
-    string StationEditLink => HasStation(Module) ?
+    string StationEditLink => HasStation(Module) && Module.StationId.HasValue ?
         OwnershipRef.Href("Stations", Module.StationId.Value, "Edit") :
         "";
 

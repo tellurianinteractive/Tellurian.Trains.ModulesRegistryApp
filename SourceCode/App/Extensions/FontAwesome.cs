@@ -23,6 +23,7 @@ namespace ModulesRegistry.Extensions
         public const string Region = "fa fa-shield-alt";
         public const string Register = "fa fa-user-plus";
         public const string Save = "fa fa-save";
+        public const string SaveAll = "fa fa-save";
         public const string Settings = "fa fa-user-cog";
         public const string Show = "fa fa-info";
         public const string Station = "fa fa-school";
@@ -55,6 +56,7 @@ namespace ModulesRegistry.Extensions
             {nameof(Region), Region },
             {nameof(Register), Register },
             {nameof(Save), Save },
+            {nameof(SaveAll), SaveAll },
             {nameof(Settings), Settings },
             {nameof(Show), Show },
             {nameof(Station), Station },

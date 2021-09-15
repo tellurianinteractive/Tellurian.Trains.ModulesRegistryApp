@@ -22,7 +22,8 @@ else
 
         <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
         <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-        <div class="col-12">
+         <AppInputCheck Width="2" Label="MayBorrowGroupModules" @bind-Value="GroupMember.MayBorrowModules" />
+       <div class="col-12">
             <button type="submit" class="btn btn-sm btn-primary"><span class="accordion" aria-hidden="true" />@Localizer["Save"]</button>
         </div>
     </EditForm>

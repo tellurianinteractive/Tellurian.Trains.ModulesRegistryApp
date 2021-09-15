@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 
-@page "/Persons/Index"
-@page "/Persons/Index/{countryId:int}"
+@page "/Persons"
+@page "/Persons/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
 
@@ -27,6 +27,7 @@
         <th>@Localizer["Name"]</th>
         <th>@Localizer["City"]</th>
         <th align="center">@Localizer["Status"]</th>
+        <th></th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="person">
@@ -64,7 +65,7 @@
     {
         if (id > 0)
         {
-            Navigator.NavigateTo($"/Persons/Index/{id}");
+            Navigator.NavigateTo($"/Persons/Country/{id}");
         }
     }
 
@@ -79,7 +80,7 @@
         if (CountryId < 1)
         {
             var id = Principal.CountryId();
-            Navigator.NavigateTo($"/Persons/Index/{id}");
+            Navigator.NavigateTo($"/Persons/Country/{id}");
         }
         else
         {

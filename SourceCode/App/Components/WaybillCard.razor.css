@@ -15,7 +15,7 @@
 }
 
 .box {
-    height: 11mm;
+    height: 11.5mm;
     padding: 1px;
 }
 
@@ -29,7 +29,7 @@
 
 .name {
     font-weight: bold;
-    line-height: 15pt;
+    line-height: 17pt;
     width: 48mm;
     white-space: nowrap;
     overflow: hidden;

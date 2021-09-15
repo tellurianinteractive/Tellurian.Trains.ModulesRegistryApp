@@ -1047,4 +1047,10 @@
   <data name="French" xml:space="preserve">
     <value>Fransk</value>
   </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Gem alt</value>
+  </data>
+  <data name="MayBorrowGroupModules" xml:space="preserve">
+    <value>Må låne gruppens moduler?</value>
+  </data>
 </root>

@@ -13,7 +13,7 @@ else
     <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
         <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
     </div>
-    @foreach (var cargo in Customer.StationCustomerCargos.OrderBy(scc => scc.Id))
+    @foreach (var cargo in Customer.StationCustomerCargos)
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
@@ -53,13 +53,6 @@ else
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? ReadyTimeItems { get; set; }
 
-    List<StationCustomerCargo> StationCustomerCargoes = new List<StationCustomerCargo>();
-
-    protected override void OnParametersSet()
-    {
-        StationCustomerCargoes.AddRange( Customer!.StationCustomerCargos);
-    }
-
     void AddCargoFlow()
     {
         if (Customer is not null)
@@ -90,7 +83,7 @@ else
         }
     }
 
-    StationCustomerCargo DefaultCustomerCargo => new StationCustomerCargo { StationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8, TrackOrAreaColor="#FFFFFF" };
+    StationCustomerCargo DefaultCustomerCargo => new StationCustomerCargo { StationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8, TrackOrAreaColor = "#FFFFFF" };
 
     string AddButtonText => $"{Localizer["Add"]} {Localizer["CargoFlow"].ToString().ToLowerInvariant()}";
 

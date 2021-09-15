@@ -63,7 +63,11 @@ namespace ModulesRegistry
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
             services.AddAuthorizationPolicies();
-            services.AddDbContextFactory<ModulesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase")).EnableSensitiveDataLogging(Environment.IsDevelopment()));
+            services.AddDbContextFactory<ModulesDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"))
+                    .EnableSensitiveDataLogging(Environment.IsDevelopment());
+            });
 
             services.AddBlazoredToast();
             services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
