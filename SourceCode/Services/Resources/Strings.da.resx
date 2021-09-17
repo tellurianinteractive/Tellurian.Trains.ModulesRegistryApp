@@ -543,4 +543,7 @@
   <data name="ExportAgent" xml:space="preserve">
     <value>Eksport agent</value>
   </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Med det samme</value>
+  </data>
 </root>

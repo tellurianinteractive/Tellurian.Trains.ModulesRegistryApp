@@ -1,4 +1,7 @@
 ## Release Notes
+#### Version 1.4.7
+Release date 2021-09-20
+- **Immediately** added as *cargo ready time*. Thanks to Urban Johansson for the idéa.
 
 #### Version 1.4.6
 Release date 2021-09-15

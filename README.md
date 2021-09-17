@@ -19,7 +19,9 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status August 2021
+## Status September 2021
+New in September is printing of waybills for modules registerd for a meeting.
+* Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
 All functions for managing modules are now inplace, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Transfer of module *ownership* - part or whole - to other person or group.

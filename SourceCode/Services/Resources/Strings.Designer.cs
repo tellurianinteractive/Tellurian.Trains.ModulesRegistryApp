@@ -601,6 +601,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Immediately.
+        /// </summary>
+        internal static string Immediately {
+            get {
+                return ResourceManager.GetString("Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import.
         /// </summary>
         internal static string Import {

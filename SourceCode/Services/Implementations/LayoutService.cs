@@ -70,7 +70,7 @@ public class LayoutService
             //    .ConfigureAwait(false);
 
             var groupsId = await dbContext.GroupMembers.AsNoTracking()
-                .Where(gm => (gm.MayBorrowModules()) &&  gm.PersonId == participant.PersonId)
+                .Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator || gm.MayBorrowModules) &&  gm.PersonId == participant.PersonId)
                 .Select(gm => gm.GroupId)
                 .ToListAsync()
                 .ConfigureAwait(false);
