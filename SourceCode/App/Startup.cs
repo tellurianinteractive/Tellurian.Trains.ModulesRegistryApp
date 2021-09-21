@@ -39,7 +39,8 @@ namespace ModulesRegistry
                 .AddCookie();
             if (Environment.IsDevelopment())
             {
-                var s = new DefaultUserService { 
+                var s = new DefaultUserService
+                {
                     Username = Configuration.GetValue<string>("Username"),
                     Password = Configuration.GetValue<string>("Password")
                 };
@@ -101,9 +102,9 @@ namespace ModulesRegistry
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddRequestLocalization(options =>
             {
-                //options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
-                //options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
-                //options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
+                options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
+                options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
+                options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
             });
         }
 
@@ -116,9 +117,8 @@ namespace ModulesRegistry
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
+            app.UseSecurityHeaders(SecurityHeadersPolicy.CreateHeaderPolicyCollection(env));
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
             var supportedCultures = LanguageUtility.SupportedLanguages;
