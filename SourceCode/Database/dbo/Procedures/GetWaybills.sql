@@ -72,6 +72,7 @@ BEGIN
 		(@StationId IS NULL OR @StationId = CCS.StationId OR @StationId = CCC.StationId) AND
 		((@Sending <> 0 OR CCC.StationId = @StationId) OR (@Receiving <> 0 OR CCS.StationId=@StationId)) AND
 		(CCS.QuantityUnitId = CCC.QuantityUnitId) AND
+		--(CCS.PackageUnitId = CCC.PackageUnitId) AND
 		(CCS.FromYear IS NULL OR @UptoYear IS NULL OR CCS.FromYear <= @UptoYear) AND (CCS.UptoYear IS NULL OR @FromYear IS NULL OR CCS.UptoYear >= @FromYear) AND
 		(CCC.FromYear IS NULL OR @UptoYear IS NULL OR CCC.FromYear <= @UptoYear) AND (CCC.UptoYear IS NULL OR @FromYear IS NULL OR CCC.UptoYear >= @FromYear) AND
 		((CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId) OR (CCS.LayoutId= @LayoutId AND CCC.LayoutId = -1) OR (CCC.LayoutId = @LayoutId AND CCS.LayoutId = -1)) AND

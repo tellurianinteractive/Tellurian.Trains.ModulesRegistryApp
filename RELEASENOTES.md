@@ -1,7 +1,8 @@
 ## Release Notes
 #### Version 1.4.7
-Release date 2021-09-20
+Release date 2021-09-27
 - **Immediately** added as *cargo ready time*. Thanks to Urban Johansson for the idéa.
+- **Security headers** applied for improved security of the application.
 
 #### Version 1.4.6
 Release date 2021-09-15

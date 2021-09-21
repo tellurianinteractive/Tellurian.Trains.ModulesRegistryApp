@@ -37,10 +37,9 @@ namespace ModulesRegistry.Security
                     builder.AddStyleSrc().Self().UnsafeInline().From("https://cdn.jsdelivr.net").From("https://kit.fontawesome.com");
                     builder.AddBaseUri().Self();
                     builder.AddFrameAncestors().None();
-                    // due to Blazor
-                    builder.AddScriptSrc().Self().UnsafeInline().UnsafeEval();
+                    // Blazor Server seems to manage without unsafe inline and unsafe eval.
+                    builder.AddScriptSrc().Self(); //.UnsafeInline().UnsafeEval();
                 })
-                .RemoveServerHeader()
                 .AddPermissionsPolicy(builder =>
                 {
                     builder.AddAccelerometer().None();
