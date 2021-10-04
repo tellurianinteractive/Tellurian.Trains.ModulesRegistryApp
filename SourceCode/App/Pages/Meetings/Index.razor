@@ -28,7 +28,7 @@
     </TableHeader>
     <RowTemplate Context="item">
         <td>@item.meeting.Description</td>
-        <td>@item.meeting.OrganiserGroup.Country.EnglishName.Localized()</td>
+        <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
         <td>@item.meeting.PlaceName</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>

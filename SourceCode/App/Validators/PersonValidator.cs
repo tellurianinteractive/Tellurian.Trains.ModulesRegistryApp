@@ -40,7 +40,7 @@ namespace ModulesRegistry.Validators
 
             RuleFor(person => person.EmailAddresses)
                 .MaximumLength(50)
-                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).When(n => n.EmailAddresses.Length > 0)
+                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).When(n => n.EmailAddresses?.Length > 0)
                 .WithName(n => localizer[nameof(n.EmailAddresses)]);
 
             RuleFor(person => person.CountryId)

@@ -21,7 +21,7 @@ else
         <RowTemplate Context="contact">
             <th>@LanguageUtility.GetString(contact.Person.Country.EnglishName, null)</th>
             <th>@contact.Person.FullName()</th>
-            <td>@contact.IsGlobalAdministrator.AsYesNo()</td>
+            <td>@contact.IsGlobalAdministrator.AsYesOrNo()</td>
             <td>@contact.AdministratorAreaOfResposibility</td>
             <td>@GroupMemberships(contact.Person)</td>
         </RowTemplate>

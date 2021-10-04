@@ -16,7 +16,7 @@ public class MeetingService
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Meetings.Where(m => m.EndDate > TimeProvider.Now && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
             .Select(m => new Data.Api.Meeting(
-                m.Id, m.Description, m.PlaceName, m.OrganiserGroup.Country.EnglishName.Localized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().Localized())
+                m.Id, m.Description, m.PlaceName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().AsLocalized())
             { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)) })
             .ToListAsync()
             .ConfigureAwait(false);

@@ -130,6 +130,7 @@
     <Build Include="dbo\Listboxes\ListStationCustomer.sql" />
     <Build Include="dbo\Listboxes\ListUntimedCargoReadyTime.sql" />
     <Build Include="dbo\Procedures\GetWaybills.sql" />
+    <Build Include="dbo\Tables\LayoutParticipant.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

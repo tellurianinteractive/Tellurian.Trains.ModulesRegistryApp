@@ -39,7 +39,7 @@ public class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoDirections
-                .Select(cd => new ListboxItem(cd.Id, cd.FullName.Localized())).ToListAsync(); ;
+                .Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized())).ToListAsync(); ;
             return items
                 .OrderBy(l => l.Description).ToList();
         }
@@ -52,7 +52,7 @@ public class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoUnits
-                .Select(cu => new ListboxItem(cu.Id, cu.FullName.Localized())).ToListAsync();
+                .Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).ToListAsync();
             return items.OrderBy(l => l.Description).ToList();
         }
         return Array.Empty<ListboxItem>();
@@ -64,7 +64,7 @@ public class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoReadyTimes
-                .Select(crt => new ListboxItem(crt.Id, crt.FullName.Localized())).ToListAsync();
+                .Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).ToListAsync();
             return items.OrderBy(l => l.Id).ToList();
         }
         return Array.Empty<ListboxItem>();

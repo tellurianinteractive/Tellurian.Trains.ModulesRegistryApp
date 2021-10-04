@@ -15,7 +15,8 @@ public static class LanguageUtility
 
     public static string GetString(string resourceName, string? language)
     {
-        var culture = CurrentCulture;
+        if (string.IsNullOrWhiteSpace(resourceName)) return string.Empty;
+        var culture = CurrentCulture; 
         if (language.HasValue())
         {
             try
@@ -24,19 +25,23 @@ public static class LanguageUtility
             }
             catch (CultureNotFoundException)
             {
+                return $"Language '{language}' is invalid!";
             }
         }
         var result = Strings.ResourceManager.GetString(resourceName, culture);
         return result is null ? resourceName : result;
     }
+    
     /// <summary>
-    /// Returns the languages that are fully supported in user interface.
+    /// Returns a list of <see cref="CultureInfo"/> that are fully supported in user interface.
     /// </summary>
-    public static IList<CultureInfo> SupportedCultures => LanguageCultureMap.Values.Take(5).ToArray();
-    public static string[] SupportedLanguages => SupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
+    public static IList<CultureInfo> FullySupportedCultures => LanguageCultureMap.Values.Take(5).ToArray();
+    public static string[] FullySupportedLanguages => FullySupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
+
+    public static IEnumerable<CultureInfo> AllSupportedCultures => LanguageCultureMap.Values;
 
     /// <summary>
-    /// This list contains all languages that are fully or partia
+    /// This list contains all languages that are fully or partial supported
     /// </summary>
     private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
          new Dictionary<Language, CultureInfo>() {
@@ -45,6 +50,7 @@ public static class LanguageUtility
                  { Language.Danish, new CultureInfo("da") },
                  { Language.Norwegian, new CultureInfo("no") },
                  { Language.German, new CultureInfo("de") },
+                 // Not fully supported below:
                  { Language.Dutch, new CultureInfo("nl") },
                  { Language.Polish, new CultureInfo("pl") },
                  { Language.Italian, new CultureInfo("it") },
@@ -52,24 +58,24 @@ public static class LanguageUtility
         };
 
     public static CultureInfo SupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
-        SupportedCultures.SingleOrDefault(sc => sc.TwoLetterISOLanguageName.Equals(twoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase)) ?? DefaultCulture;
+        FullySupportedCultures.SingleOrDefault(sc => sc.TwoLetterISOLanguageName.Equals(twoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase)) ?? DefaultCulture;
 
-    public static string AsYesNo(this bool me) => me ? Strings.Yes : Strings.No;
+    public static string AsYesOrNo(this bool me) => me ? Strings.Yes : Strings.No;
     public static string AsYes(this bool me) => me ? Strings.Yes : string.Empty;
 
-    public static MarkupString AsYesNoWithColor(this bool me, bool invert = false) => new($"<span style=\"color: {me.YesNoColor(invert)};\">{me.AsYesNo()}</span>");
+    public static MarkupString AsYesOrNoWithColor(this bool me, bool invert = false) => new($"<span style=\"color: {me.YesNoColor(invert)};\">{me.AsYesOrNo()}</span>");
     private static string YesNoColor(this bool me, bool invert = false) => invert ? me ? "red" : "green" : me ? "green" : "red";
 
     /// <summary>
-    /// Uses the <paramref name="english"/> as key to find a localized text in <see cref="Strings"/> resources.
+    /// Uses the <paramref name="resourceKey"/> as key to find a localized text in <see cref="Strings"/> resources.
     /// </summary>
-    /// <param name="english">The key to find a localised  </param>
+    /// <param name="resourceKey">The key to find a localised  </param>
     /// <returns></returns>
-    public static string Localized(this string? english)
+    public static string AsLocalized(this string? resourceKey)
     {
-        if (english is null) return string.Empty;
-        var translated = ResourceManager.GetString(english);
-        return string.IsNullOrEmpty(translated) ? english : translated;
+        if (string.IsNullOrWhiteSpace(resourceKey)) return string.Empty;
+        var translated = ResourceManager.GetString(resourceKey);
+        return string.IsNullOrEmpty(translated) ? resourceKey : translated;
     }
 
     /// <summary>
@@ -93,9 +99,14 @@ public static class LanguageUtility
         return me.LocalizedNames().FirstOrDefault() ?? LocalizedText.Empty;
     }
 
-    public static IEnumerable<LocalizedText> LocalizedNames(this object me)
+    /// <summary>
+    /// This method is used to extract values of object properties that have a name that match a two-letter ISO language name.
+    /// </summary>
+    /// <param name="me">Usually a data entity that contains a set of language properties.</param>
+    /// <returns></returns>
+    internal static IEnumerable<LocalizedText> LocalizedNames(this object me)
     {
-        foreach (var language in SupportedCultures)
+        foreach (var language in AllSupportedCultures)
         {
             var value = language.TwoLetterISOLanguageName.GetPropertyValue(me);
             if (value is not null) yield return new LocalizedText(language.TwoLetterISOLanguageName, value);

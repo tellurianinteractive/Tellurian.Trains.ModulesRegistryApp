@@ -22,7 +22,7 @@ public class RegionService
 
         static string Description(Region region, bool singleCountry) =>
             singleCountry ? region.LocalName :
-            $"{region.Country.EnglishName.Localized()}: {region.LocalName}";
+            $"{region.Country.EnglishName.AsLocalized()}: {region.LocalName}";
     }
 
     public async Task<IEnumerable<Region>> AllAsync(ClaimsPrincipal? principal, int? maybeCountryId = null)

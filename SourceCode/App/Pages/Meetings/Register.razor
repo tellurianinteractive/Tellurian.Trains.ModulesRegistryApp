@@ -61,7 +61,7 @@ else
     <RowTemplate Context="item">
         <td>@item.Person.Name()</td>
         <td>@item.Person.CityName</td>
-        <td>@item.Person.Country.EnglishName.Localized()</td>
+        <td>@item.Person.Country.EnglishName.AsLocalized()</td>
         <td>@item.RegistrationTime.ToString("g")</td>
         <td>@ParticipantLayouts(item)</td>
         @if (IsMeetingOrganiser)

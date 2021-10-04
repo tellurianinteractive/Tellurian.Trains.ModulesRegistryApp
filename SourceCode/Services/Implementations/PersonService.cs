@@ -20,7 +20,7 @@ public sealed class PersonService
                 .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.GroupId == excludeGroupId && gm.PersonId == p.Id)))
                 .ToListAsync();
             return items
-                .Select(p => new ListboxItem(p.Id, countryId == 0 ? $"{p.Name()}, {p.CityName}, {p.Country.EnglishName.Localized()}" : $"{p.Name()}, {p.CityName}"))
+                .Select(p => new ListboxItem(p.Id, countryId == 0 ? $"{p.Name()}, {p.CityName}, {p.Country.EnglishName.AsLocalized()}" : $"{p.Name()}, {p.CityName}"))
                 .OrderBy(li => li.Description)
                 .ToList();
         }

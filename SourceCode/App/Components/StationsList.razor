@@ -28,8 +28,8 @@
     <RowTemplate Context="station">
         <td>@station.FullName</td>
         <td>@station.Signature</td>
-        <td align="center">@station.IsTerminus.AsYesNo()</td>
-        <td align="center">@station.IsShadow.AsYesNo()</td>
+        <td align="center">@station.IsTerminus.AsYesOrNo()</td>
+        <td align="center">@station.IsShadow.AsYesOrNo()</td>
         <td align="center">
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
         </td>

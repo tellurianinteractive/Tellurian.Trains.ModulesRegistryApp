@@ -1,4 +1,10 @@
 ## Release Notes
+
+#### Version 1.4.8
+Release date 2021-10-05
+- **Bug fix** of failing email validation when saving person's data.
+- **Bug fix** of getting back to country list of persons when saving person's data.
+
 #### Version 1.4.7
 Release date 2021-09-27
 - **Immediately** added as *cargo ready time*. Thanks to Urban Johansson for the idéa.

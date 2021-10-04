@@ -2,7 +2,7 @@
 
 public class LanguageService : ILanguageService
 {
-    public string[] GetSupportedLanguages() => LanguageUtility.SupportedLanguages;
+    public string[] GetSupportedLanguages() => LanguageUtility.FullySupportedLanguages;
 
     public LanguageLabels[] GetWaybillLabes() =>
         GetSupportedLanguages()

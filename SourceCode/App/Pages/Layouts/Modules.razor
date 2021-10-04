@@ -29,7 +29,7 @@ else if (IsParticipant || Principal.IsAnyAdministrator())
                 <RowTemplate Context="item">
                     <td>@item.Module.FullName</td>
                     <td width="120px">@item.RegisteredTime.ToString("d")</td>
-                    <td width="100px" align="center">@item.HasLayoutStation().AsYesNo()</td>
+                    <td width="100px" align="center">@item.HasLayoutStation().AsYesOrNo()</td>
                     <td>
                         @if (item.HasLayoutStation())
                         {

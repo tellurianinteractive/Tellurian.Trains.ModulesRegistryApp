@@ -25,7 +25,7 @@
     </TableHeader>
     <RowTemplate Context="region">
         <td style="color: @region.ForeColor; background-color: @region.BackColor; font-weight: bold">@region.LocalName</td>
-        <td><img src="images/flags/@(region.Country.DomainSuffix).png" /> @region.Country.EnglishName.Localized()</td>
+        <td><img src="images/flags/@(region.Country.DomainSuffix).png" /> @region.Country.EnglishName.AsLocalized()</td>
         <td>@region.Description</td>
         <td>
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))

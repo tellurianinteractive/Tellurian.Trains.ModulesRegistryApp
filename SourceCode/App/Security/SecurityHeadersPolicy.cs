@@ -7,7 +7,7 @@ namespace ModulesRegistry.Security
     public static class SecurityHeadersPolicy
     {
 
-        public static HeaderPolicyCollection CreateHeaderPolicyCollection(IWebHostEnvironment environment)
+        public static HeaderPolicyCollection CreateSecurityHeaderCollection(IWebHostEnvironment environment)
         {
             var policy = new HeaderPolicyCollection()
                 .AddFrameOptionsDeny()

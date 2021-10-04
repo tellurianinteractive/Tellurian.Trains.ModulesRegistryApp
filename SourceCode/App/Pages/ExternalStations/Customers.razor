@@ -24,7 +24,7 @@
     <RowTemplate Context="item">
         <td>@StationSymbol(item) @item.Station.FullName</td>
         <td>@item.CustomerName @item.OpenPeriod</td>
-        <td>@Flag(item) @item.Country.EnglishName.Localized()</td>
+        <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
         <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
         <td>@item.SupplyingCargo</td>
         <td>@item.ConsumingCargo</td>

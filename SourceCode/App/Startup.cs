@@ -103,8 +103,8 @@ namespace ModulesRegistry
             services.AddRequestLocalization(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
-                options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
-                options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
+                options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
+                options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
             });
         }
 
@@ -118,14 +118,14 @@ namespace ModulesRegistry
             {
                 app.UseExceptionHandler("/Error");
             }
-            app.UseSecurityHeaders(SecurityHeadersPolicy.CreateHeaderPolicyCollection(env));
+            app.UseSecurityHeaders(SecurityHeadersPolicy.CreateSecurityHeaderCollection(env));
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
-            var supportedCultures = LanguageUtility.SupportedLanguages;
+            var supportedCultures = LanguageUtility.FullySupportedLanguages;
             app.UseRequestLocalization(options =>
              {
-                 options.AddSupportedCultures(LanguageUtility.SupportedLanguages);
-                 options.AddSupportedUICultures(LanguageUtility.SupportedLanguages);
+                 options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
+                 options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
                  options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultCulture);
                  options.FallBackToParentCultures = true;
              });

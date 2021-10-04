@@ -13,7 +13,7 @@
 else
 {
     <h1><span class="@FontAwesome.Meeting" /> @Meeting.Description</h1>
-    @Item("Venue", $"{Meeting.PlaceName}, {Meeting.OrganiserGroup.Country.EnglishName.Localized()}")
+    @Item("Venue", $"{Meeting.PlaceName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.IsFremo ? $"{Meeting.OrganiserGroup.FullName}/FREMO" : $"{Meeting.OrganiserGroup.FullName}")
     @Item("Status", Meeting.Status.MeetingStatus())

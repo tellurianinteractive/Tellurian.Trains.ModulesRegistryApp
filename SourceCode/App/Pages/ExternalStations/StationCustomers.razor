@@ -20,7 +20,7 @@
     </TableHeader>
     <RowTemplate Context="item">
         <td>@item.CustomerName</td>
-        <td>@item.ExternalStationCustomerCargos.Any().AsYesNo()</td>
+        <td>@item.ExternalStationCustomerCargos.Any().AsYesOrNo()</td>
         <td>@item.OpenedYear</td>
         <td>@item.ClosedYear</td>
         <td>
