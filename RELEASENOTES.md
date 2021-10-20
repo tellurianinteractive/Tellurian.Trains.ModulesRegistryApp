@@ -4,6 +4,9 @@
 Release date 2021-10-20
 - **Styling update** to Bootstrap 5.1.3.
 - **Extended user status** added to *Module owners* list.
+- **Viewing regions** is now selectable per country.
+- **Viewing stations** with cargo customers is now selectable per country.
+- **No waybills to print** now shows information for what you need to get waybills printed.
 - **Fixed** issues with Font Awesome not accessible from CDN.
 
 #### Version 1.4.8

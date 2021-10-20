@@ -21,7 +21,7 @@ else
     <div class="row g-3">
         <AppDisplay Width="4" Label="Comment" Value="@Customer.Comment" HideLabelIfValueIsEmpty="true" />
     </div>
-    <TableTemplate Items="Customer.StationCustomerCargos.OrderBy(scc => scc.DirectionId)">
+    <TableTemplate Items="Customer.StationCustomerCargos.OrderBy(scc => scc.DirectionId)" RowStyle="ItemStyle">
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>
@@ -32,7 +32,7 @@ else
             <th>@Localizer["Finished"]</th>
             <th>@Localizer["OperatingPeriod"]</th>
         </TableHeader>
-        <RowTemplate Context="item">
+        <RowTemplate Context="item" >
             <td width="15%">@CargoTypeName(item)</td>
             <td width="10%">@PackagingUnit(item)</td>
             <td width="6%" align="center" style="color: @TrackOrAreaColour(item).TextColor(); background-color: @TrackOrAreaColour(item)">@TrackOrArea(item)</td>
@@ -73,4 +73,8 @@ else
         string.Empty;
     string FreightCustomerHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Edit";
 
+    string ItemStyle(StationCustomerCargo item) =>
+        item is null ? string.Empty :
+        item.IsLoading() ? "background-color: lightyellow" : "background-color: white";
 }
+        

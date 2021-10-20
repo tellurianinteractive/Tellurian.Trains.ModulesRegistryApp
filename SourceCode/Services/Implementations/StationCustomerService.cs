@@ -8,12 +8,15 @@ public class StationCustomerService
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     public StationCustomerService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-    public async Task<IEnumerable<StationCustomer>> AllAsync(ClaimsPrincipal? principal, int stationId)
+    public async Task<IEnumerable<StationCustomer>> AllAsync(ClaimsPrincipal? principal, int stationId, int customerId = 0)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).AsNoTracking().Where(sc => sc.StationId == stationId).ToListAsync();
+            return await dbContext.StationCustomers.AsNoTracking()
+                .Include(sc => sc.StationCustomerCargos)
+                .Where(sc => sc.StationId == stationId && (customerId == 0 || sc.Id == customerId))
+                .ToListAsync();
         }
         return Array.Empty<StationCustomer>();
     }

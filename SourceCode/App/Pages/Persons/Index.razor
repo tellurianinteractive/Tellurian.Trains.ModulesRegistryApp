@@ -13,12 +13,12 @@
 
 <PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" InitialSelectedId=CountryId  />
 
 @if (CountryId > 0)
 {
     <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="persons/0/edit/@CountryId"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+        <AppButton Href=@AddHref(CountryId) Label="Add" />
     </div>
 }
 
@@ -26,32 +26,37 @@
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["City"]</th>
-        <th>@Localizer["Actions"]</th>
         <th colspan="2" align="center">@Localizer["Status"]</th>
+        <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="person">
         <td>@person.Name()</td>
         <td>@person.CityName</td>
-        <td style="white-space: nowrap !important;">
-            @if (Principal.IsAuthorisedInCountry(person.CountryId))
-            {
-                <a class="btn btn-sm btn-primary" href="persons/@person.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-                <a class="btn btn-sm btn-info" href="persons/@person.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                <a class="btn btn-sm btn-info" href="persons/@person.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                @if (person.MayBeInvited())
-                {
-                    <a class="btn btn-sm btn-secondary" href="persons/@person.Id/invite"><span class="@FontAwesome.Invite" />@Localizer["Invite"]</a>
-                }
-                @if (person.UserId is null)
-                {
-                    <a class="btn btn-sm btn-danger" href="persons/@person.Id/delete"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</a>
-                }
-            }
-        </td>
         <td align="center"><span>@person.StatusIcon()</span></td>
         <td>
             <UserStatusView User="person.User"></UserStatusView>
         </td>
+        <td style="white-space: nowrap !important;">
+            @if (Principal.IsAuthorisedInCountry(person.CountryId))
+            {
+                <AppButton Href="@EditHref(person)" Label="Edit" />
+                <AppButton Href="@ModulesHref(person)" Label="Modules" />
+                <AppButton Href="@StationsHref(person)" Label="Stations"/>
+                @if (person.MayBeInvited())
+                {
+                    <AppButton Href="@InviteHref(person)" Label="Invite" />
+                }
+                @if (person.User is null)
+                {
+                    <AppButton Href="@DeleteHref(person)" Label="Delete" />
+                }
+                else if (person.User.IsLockedOut())
+                {
+                    <AppButton  Label="Reset" IsDisabled=true />
+                }
+            }
+        </td>
+
     </RowTemplate>
 </TableTemplate>
 
@@ -91,4 +96,11 @@
     }
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+
+    string AddHref(int countryId) => countryId > 0 ? $"persons/0/edit/{countryId}" : string.Empty;
+    string EditHref(Person person) => $"persons/{person.Id}/edit";
+    string ModulesHref(Person person) => $"persons/{person.Id}/modules";
+    string StationsHref(Person person) => $"persons/{person.Id}/stations";
+    string InviteHref(Person person) => $"persons/{person.Id}/stations";
+    string DeleteHref(Person person) => $"persons/{person.Id}/stations";
 }

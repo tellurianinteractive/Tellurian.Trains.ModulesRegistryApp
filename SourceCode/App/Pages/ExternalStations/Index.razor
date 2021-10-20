@@ -14,15 +14,15 @@
 
 <PageHeading ObjectName="ExternalStations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="true" />
 
-<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" />
+<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" InitialSelectedId="CountryId"/>
+
+@if (MayEdit)
+{
+    <AppButton Href="ExternalStations/0/Edit" Label="Add" />
+}
 
 @if (HasData)
 {
-    @if (MayEdit)
-    {
-        <a class="btn btn-primary btn-sm" href="ExternalStations/0/Edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
-    }
-
     <TableTemplate Items="ExternalStations">
         <TableHeader>
             <th>@Localizer["Name"]</th>
@@ -43,7 +43,7 @@
                 {
                 <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                 }
-            <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+            <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/StationCustomers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -63,7 +63,7 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountryItems = await CountryService.ListboxItemsAsync(Principal);
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
         RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
         if (CountryItems.Count() == 1) OnSelectedCountry(CountryItems.First().Id);
     }
@@ -105,7 +105,6 @@
     object? Owner => Country is not null ? Country : Region;
 
     bool MayEdit => ExternalStations is not null;
-
     bool HasData => ExternalStations is not null && ExternalStations.Count() > 0;
     bool CanSelectCountry => CountryItems is not null && CountryItems.Count() > 1;
 }

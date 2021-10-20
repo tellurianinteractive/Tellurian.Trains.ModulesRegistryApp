@@ -1,64 +1,68 @@
-﻿@using ModulesRegistry.Services.Projections
-
-@page "/ExternalStations/Customers"
+﻿@page "/ExternalStations/{stationid:int}/Customers/"
+@page "/ExternalStations/{stationid:int}/Customers/{customerId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 
-@inject StationCustomerService StationCustomerService
+@inject GroupService GroupService
+@inject CargoService CargoService
+@inject OperatingDayService OperatingDayService
 @inject ExternalStationService ExternalStationService
 
-<PageHeading ObjectName="FreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
-<TableTemplate Items="FreightCustomers?.OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)">
-    <TableHeader>
-        <th>@Localizer["Station"]</th>
-        <th>@Localizer["Name"]</th>
-        <th>@Localizer["Country"]</th>
-        <th>@Localizer["Region"]</th>
-        <th>@Localizer["Supplying"]</th>
-        <th>@Localizer["Consuming"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="item">
-        <td>@StationSymbol(item) @item.Station.FullName</td>
-        <td>@item.CustomerName @item.OpenPeriod</td>
-        <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
-        <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
-        <td>@item.SupplyingCargo</td>
-        <td>@item.ConsumingCargo</td>
-        <td>
-            @if (item.Station.IsExternal)
-            {
-                <AppButton Label="Show" Href="@ExternalHref(item.Station.Id, item.Id)" />
-            }
-            else
-            {
-                <AppButton Label="Show" Href="@InternalHref(item.Station.Id)" />
-            }
-        </td>
-    </RowTemplate>
-</TableTemplate>
+@if (MayEdit)
+{
+    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
+    <hr />
+}
+@if (StationCustomers is not null)
+{
+    @foreach (var customer in StationCustomers.OrderBy(sc => sc.CustomerName))
+    {
+        <ExternalStationCustomerItemView Customer="customer" MayEdit="MayEdit" CargoTypeItems="CargoTypeItems" PackagingUnits="PackagingUnits" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
+    }
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [Parameter] public int CustomerId { get; set; }
+
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? PackagingUnits;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    IEnumerable<ListboxItem>? ReadyTimeItems;
+
 
     ClaimsPrincipal? Principal;
-    IEnumerable<FreightCustomerInfo>? FreightCustomers;
-    IEnumerable<FreightCustomerInfo>? ExternalFreightCustomers;
-    IEnumerable<FreightCustomerInfo>? StationFreightCustomers;
+    Station? Station;
+    IEnumerable<ExternalStationCustomer>? StationCustomers;
+    bool MayEdit;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        ExternalFreightCustomers = await ExternalStationService.CustomersAsync(Principal, 0);
-        StationFreightCustomers = await StationCustomerService.CustomersAsync(Principal, 0);
-        FreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
+        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal, includeDefaultClasses: false);
+        PackagingUnits = EnumExtensions.CargoPackageUnitListboxItems();
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
     }
 
-    string InternalHref(int stationId) => $"Stations/{stationId}/Customers";
-    string ExternalHref(int stationId, int customerId) => $"ExternalStations/{stationId}/Customers/{customerId}";
-    MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
-    MarkupString Flag(FreightCustomerInfo me) => new(string.IsNullOrWhiteSpace(me.Country.DomainSuffix) ? string.Empty : $"<img src=\"images/flags/{me.Country.DomainSuffix}.png\" />");
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StationId > 0)
+        {
+            StationCustomers = await ExternalStationService.FindCustomersByIdAsync(Principal, StationId, CustomerId);
+        }
+    }
+
+    string FreightCustomerHref(int customerId) => $"/ExternalStations/{StationId}/Customers/{customerId}/Edit";
 }

@@ -243,7 +243,7 @@ namespace ModulesRegistry.Data
                     .HasConstraintName("FK_ExternalStationCustomerCargo_Cargo");
 
                 entity.HasOne(d => d.Direction)
-                    .WithMany(p => p.ExternalStationCustomerCargos)
+                    .WithMany()
                     .HasForeignKey(d => d.DirectionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExternalStationCustomerCargo_CargoDirection");
@@ -799,7 +799,7 @@ namespace ModulesRegistry.Data
                       .HasConstraintName("FK_CargoCustomer_Cargo");
 
                   entity.HasOne(d => d.Direction)
-                      .WithMany(p => p.StationCustomerCargos)
+                      .WithMany()
                       .HasForeignKey(d => d.DirectionId)
                       .OnDelete(DeleteBehavior.ClientSetNull)
                       .HasConstraintName("FK_CargoCustomer_CargoDirection");

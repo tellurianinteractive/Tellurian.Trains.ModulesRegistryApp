@@ -105,6 +105,20 @@ public class ExternalStationService
         return null;
     }
 
+    public async Task<IEnumerable<ExternalStationCustomer>> FindCustomersByIdAsync(ClaimsPrincipal? principal, int stationId, int customerId = 0)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.ExternalStationCustomers.AsNoTracking()
+                .Include(esc => esc.ExternalStation)
+                .Include(esc => esc.ExternalStationCustomerCargos)
+                .Where(esc => esc.ExternalStationId == stationId && (customerId==0 || esc.Id == customerId))
+                .ToListAsync();
+        }
+        return Array.Empty<ExternalStationCustomer>();
+    }
+
     public async Task<(int Count, string Message, ExternalStationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, ExternalStationCustomer entity)
     {
         if (principal.IsAuthenticated())

@@ -2,21 +2,23 @@
 @page "/Regions/{countryId:int}/Index"
 
 @inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+
 @inject RegionService RegionService
+@inject CountryService CountryService
+
 
 <PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" HelpContext="Regions" ShowHelpInitially="true" />
 
-@if (CountryId != 0)
-{
-    <a class="btn btn-info btn-sm" href="Regions/0/Index"><span class="fa fa-globe-europe" /> @Localizer.ShowAllInAll("Regions", "Countries")</a>
-}
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" InitialSelectedId=CountryId />
+
 
 @if (Principal.IsAnyAdministrator())
 {
     <AppButton Label="Add" Href="@EditHref(0)" />
 }
 
-<TableTemplate Items="Regions">
+<TableTemplate Items="Regions" HideNoRecordsToDisplay=true>
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Country"]</th>
@@ -41,16 +43,38 @@
     [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<Region>? Regions;
+    IEnumerable<ListboxItem>? Countries;
 
+
+    bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+
+
+    void OnSelectedCountry(int id)
+    {
+        if (id > 0)
+        {
+            Navigator.NavigateTo($"/Regions/{id}/Index");
+        }
+    }
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal, true);
+        Regions = Array.Empty<Region>();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        Regions = await RegionService.AllAsync(Principal, CountryId);
+        if (CountryId < 1)
+        {
+            var id = Principal.CountryId();
+            Navigator.NavigateTo($"/Regions/{id}/Index");
+        }
+        else
+        {
+            Regions = await RegionService.AllAsync(Principal, CountryId);
+        }
     }
 
     string EditHref(int id) => $"regions/{id}/edit";

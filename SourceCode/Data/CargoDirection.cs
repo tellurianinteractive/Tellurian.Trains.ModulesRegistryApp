@@ -8,8 +8,6 @@ namespace ModulesRegistry.Data
     {
         public CargoDirection()
         {
-            ExternalStationCustomerCargos = new HashSet<ExternalStationCustomerCargo>();
-            StationCustomerCargos = new HashSet<StationCustomerCargo>();
         }
 
         public int Id { get; set; }
@@ -17,7 +15,5 @@ namespace ModulesRegistry.Data
         public string ShortName { get; set; }
         public bool IsSupply { get; set; }
 
-        public virtual ICollection<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
-        public virtual ICollection<StationCustomerCargo> StationCustomerCargos { get; set; }
     }
 }

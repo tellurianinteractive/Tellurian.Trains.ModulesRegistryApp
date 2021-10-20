@@ -27,6 +27,7 @@ namespace ModulesRegistry.Extensions
         public const string Settings = "fa fa-user-cog";
         public const string Show = "fa fa-info";
         public const string Station = "fa fa-school";
+        public const string Stations = "fa fa-school";
         public const string Standard = "fa fa-pencil-ruler";
         public const string Transfer = "fa fa-people-carry";
         public const string Upload = "fa fa-file-upload";
@@ -60,6 +61,7 @@ namespace ModulesRegistry.Extensions
             {nameof(Settings), Settings },
             {nameof(Show), Show },
             {nameof(Station), Station },
+            {nameof(Stations), Stations },
             {nameof(Standard), Standard },
             {nameof(Transfer), Transfer },
             {nameof(Upload), Upload },

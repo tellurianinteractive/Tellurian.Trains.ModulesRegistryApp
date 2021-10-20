@@ -1,0 +1,64 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Customer is null)
+{
+
+}
+else
+{
+    <div style="display:flex; flex-direction:row;">
+        @if (MayEdit)
+        {
+            <div style="padding-right: 20pt">
+                <AppButton Label="Edit" Href="@FreightCustomerHref(Customer)" />
+            </div>
+        }
+        <div style="font-size:14pt; font-weight: bold">
+            @Customer.CustomerName
+        </div>
+    </div>
+
+    <TableTemplate Items="Customer.ExternalStationCustomerCargos.OrderBy(scc => scc.DirectionId)" RowStyle="ItemStyle">
+        <TableHeader>
+            <th>@Localizer["CargoType"]</th>
+            <th>@Localizer["PackagingUnit"]</th>
+            <th align="center">@Localizer["Days"]</th>
+            <th align="center">@Localizer["Direction"]</th>
+            <th>@Localizer["Quantity"]</th>
+            <th>@Localizer["OperatingPeriod"]</th>
+        </TableHeader>
+        <RowTemplate Context="item" >
+            <td width="15%">@CargoTypeName(item)</td>
+            <td width="10%">@PackagingUnit(item)</td>
+            <td width="6%" align="center">@OperatingDay(item)</td>
+            <td width="6%" align="center">@Direction(item)</td>
+            <td width="12%">@item.Quantity @QuantityUnit(item)</td>
+            <td width="10%">@((item.FromYear ?? item.ExternalStationCustomer.OpenedYear, item.UptoYear ?? item.ExternalStationCustomer.ClosedYear).AsPeriod())</td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+@code {
+    [Parameter] public ExternalStationCustomer? Customer { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? CargoTypeItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? PackagingUnits { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? ReadyTimeItems { get; set; }
+    [Parameter] public bool MayEdit { get; set; }
+
+    string CargoTypeName(ExternalStationCustomerCargo? it) => it is null ? string.Empty : string.IsNullOrWhiteSpace(it.SpecialCargoName) ? CargoType(it) : it.SpecialCargoName;
+    string CargoType(ExternalStationCustomerCargo? it) => it is null ? string.Empty : CargoTypeItems is not null ? CargoTypeItems.SingleOrDefault(i => i.Id == it.CargoId)?.Description ?? string.Empty : string.Empty;
+    string PackagingUnit(ExternalStationCustomerCargo it) => it is null || PackagingUnits is null ? string.Empty : PackagingUnits.SingleOrDefault(i => i.Id == it.PackageUnitId)?.Description ?? string.Empty;
+    string Direction(ExternalStationCustomerCargo? it) => it is not null && DirectionItems is not null ? DirectionItems.SingleOrDefault(i => i.Id == it.DirectionId)?.Description ?? string.Empty : string.Empty;
+    string QuantityUnit(ExternalStationCustomerCargo? it) => it is not null && QuantityUnitItems is not null ? QuantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
+    string OperatingDay(ExternalStationCustomerCargo? it) => it is not null && OperatingDayItems is not null ? OperatingDayItems.SingleOrDefault(i => i.Id == it.OperatingDayId)?.Description ?? string.Empty : string.Empty;
+
+    string FreightCustomerHref(ExternalStationCustomer? it) => it is null ? string.Empty : $"/ExternalStations/{it.ExternalStationId}/Customers/{it.Id}/Edit";
+
+    string ItemStyle(ExternalStationCustomerCargo item) =>
+        item is null ? string.Empty :
+        item.IsLoading() ? "background-color: lightyellow" : "background-color: white";
+}
+        

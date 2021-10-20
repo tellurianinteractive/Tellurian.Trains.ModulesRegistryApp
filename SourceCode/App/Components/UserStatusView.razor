@@ -10,6 +10,10 @@ else
     {
         <span>@Localizer["Invited"]: @User.RegistrationTime.ToString("d")</span>
     }
+    else if (User.IsLockedOut())
+    {
+        <span style="color: red">@Localizer["UserIsLockedOut"]</span>
+    }
     else if (User.LastSignInTime.HasValue)
     {
          <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.Value.ToString("d")</span>       

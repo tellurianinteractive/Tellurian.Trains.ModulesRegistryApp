@@ -1,4 +1,4 @@
-﻿@page "/ExternalStations/{id:int}/Customers"
+﻿@page "/ExternalStations/{id:int}/StationCustomers"
 
 @inject IStringLocalizer<App> Localizer
 
@@ -51,7 +51,7 @@
     }
 
     bool MayEdit => Station is not null && Principal.IsAuthenticated();
-    string CustomerEditHref(ExternalStationCustomer customer) => $"externalstations/{customer.ExternalStation.Id}/Customers/{customer.Id}";
-    string CustomerAddHref(ExternalStation? station) => station is null ? string.Empty : $"externalstations/{station.Id}/Customers/0";
+    string CustomerEditHref(ExternalStationCustomer customer) => $"externalstations/{customer.ExternalStation.Id}/Customers/{customer.Id}/Edit";
+    string CustomerAddHref(ExternalStation? station) => station is null ? string.Empty : $"externalstations/{station.Id}/Customers/0/Edit";
 
 }

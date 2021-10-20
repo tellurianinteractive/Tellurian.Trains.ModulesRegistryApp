@@ -9,6 +9,7 @@ public static class LanguageUtility
 {
     public const string DefaultLanguage = "en";
     public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
+    public static string CurrentLanguage => CurrentCulture.TwoLetterISOLanguageName;
     public static CultureInfo DefaultCulture => new(DefaultLanguage);
 
     private static readonly ResourceManager ResourceManager = Strings.ResourceManager;

@@ -1,4 +1,6 @@
 ﻿@page "/Stations/{stationid:int}/Customers"
+@page "/Stations/{stationid:int}/Customers/{customerId:int}"
+
 @page "/Stations/{stationid:int}/Customers/PersonOwned/{owningPersonId:int}"
 @page "/Stations/{stationid:int}/Customers/GroupOwned/{owningGroupId:int}"
 
@@ -18,8 +20,8 @@
 @if (MayEdit)
 {
     <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
+    <hr />
 }
-<hr/>
 @if (StationCustomers is not null)
 {
     @foreach (var customer in StationCustomers.OrderBy(sc => sc.CustomerName))
@@ -34,6 +36,7 @@
     [Parameter] public int StationId { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
+    [Parameter] public int CustomerId { get; set; }
 
     IEnumerable<ListboxItem>? OperatingDayItems;
     IEnumerable<ListboxItem>? CargoTypeItems;
@@ -66,7 +69,7 @@
         {
             var ownershipRef = ModuleOwnershipRef.PersonAndOrGroup(OwningPersonId, OwningGroupId);
             Station = await StationService.FindByIdWithVisibilityAsync(Principal, StationId, ownershipRef);
-            StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
+            StationCustomers = await StationCustomerService.AllAsync(Principal, StationId, CustomerId);
             MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
         }
     }

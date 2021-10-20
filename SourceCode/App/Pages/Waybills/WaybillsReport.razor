@@ -7,11 +7,13 @@
 
 @if (Items is null || LanguageLabels is null)
 {
-    <ActionMessage Label="CreatingReport"/>
+    <ActionMessage Label="CreatingReport" />
 }
 else if (Items.Count() == 0)
 {
-    <ActionMessage Label="NoWaybills"/>
+    <div style="padding: 1cm">
+        <ContentView ContentName="NoWaybills" />
+    </div>
 }
 else
 {
@@ -38,6 +40,6 @@ else
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         LanguageLabels = LanguageService.GetWaybillLabes();
-        Items = WaybillService.GetWaybills(Principal, LayoutId, LayoutStationId,  true );
+        Items = WaybillService.GetWaybills(Principal, LayoutId, LayoutStationId, true);
     }
 }

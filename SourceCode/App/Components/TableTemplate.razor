@@ -12,7 +12,7 @@ else if (Items.Count() == 0 && !HideNoRecordsToDisplay)
 }
 else
 {
-    <table class="table table-sm table-striped">
+    <table class="table table-sm">
         <thead>
             <tr>
                 @TableHeader
@@ -38,7 +38,7 @@ else
                     }
                     else
                     {
-                        <tr @key="@ItemKey(item)">
+                        <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
                             @RowTemplate(item)
                             @if (RowEditTemplate is not null)
                                 {
@@ -61,8 +61,10 @@ else
     [Parameter] public IEnumerable<TItem>? Items { get; set; }
     [Parameter] public bool HideNoRecordsToDisplay { get; set; }
     [Parameter] public Func<TItem, string>? Key { get; set; }
+    [Parameter] public Func<TItem, string>? RowStyle { get; set; }
 
     string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
+    string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
 
 
     string? EditedKey = null;

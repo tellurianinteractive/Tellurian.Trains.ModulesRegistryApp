@@ -1,0 +1,87 @@
+﻿@using ModulesRegistry.Services.Projections
+
+@page "/FreightCustomers"
+@page "/FreightCustomers/{countryId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+
+@inject CountryService CountryService
+@inject StationCustomerService StationCustomerService
+@inject ExternalStationService ExternalStationService
+
+<PageHeading ObjectName="FreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+
+<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="IsSelectCountryVisible" InitialSelectedId="CountryId" />
+
+
+<TableTemplate Items="AllFreightCustomers?.OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)">
+    <TableHeader>
+        <th>@Localizer["Station"]</th>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Region"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@StationSymbol(item) @item.Station.FullName</td>
+        <td>@item.CustomerName @item.OpenPeriod</td>
+        <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
+        <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
+        <td>
+            @if (item.Station.IsExternal)
+            {
+                <AppButton Label="Show" Href="@ExternalHref(item.Station.Id, item.Id)" />
+            }
+            else
+            {
+                <AppButton Label="Show" Href="@InternalHref(item.Station.Id, item.Id)" />
+            }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<FreightCustomerInfo>? AllFreightCustomers;
+    IEnumerable<FreightCustomerInfo>? ExternalFreightCustomers;
+    IEnumerable<FreightCustomerInfo>? StationFreightCustomers;
+    IEnumerable<ListboxItem>? CountryItems;
+
+    void OnSelectedCountry(int id)
+    {
+        if (id > 0)
+        {
+            Navigator.NavigateTo($"/FreightCustomers/{id}");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+        if (CountryId < 1)
+        {
+            Navigator.NavigateTo($"/FreightCustomers/{Principal.CountryId()}");
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        ExternalFreightCustomers = await ExternalStationService.CustomersAsync(Principal, CountryId);
+        StationFreightCustomers = await StationCustomerService.CustomersAsync(Principal, CountryId);
+        AllFreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
+    }
+
+    bool IsSelectCountryVisible => CountryItems?.Count() > 1 == true;
+
+    string InternalHref(int stationId, int customerId) => $"Stations/{stationId}/Customers/{customerId}";
+    string ExternalHref(int stationId, int customerId) => $"ExternalStations/{stationId}/Customers/{customerId}";
+    MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
+    MarkupString Flag(FreightCustomerInfo me) => new(string.IsNullOrWhiteSpace(me.Country.DomainSuffix) ? string.Empty : $"<img src=\"images/flags/{me.Country.DomainSuffix}.png\" />");
+}
