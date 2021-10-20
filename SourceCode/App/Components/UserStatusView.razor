@@ -1,0 +1,20 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (User is null)
+{
+    
+}
+else
+{
+    if (User.IsNeverLoggedIn())
+    {
+        <span>@Localizer["Invited"]: @User.RegistrationTime.ToString("d")</span>
+    }
+    else if (User.LastSignInTime.HasValue)
+    {
+         <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.Value.ToString("d")</span>       
+    }
+}
+@code {
+    [Parameter] public User? User { get; set; }
+}

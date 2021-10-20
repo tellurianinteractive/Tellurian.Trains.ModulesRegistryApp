@@ -47,8 +47,7 @@
 
 @media (min-width: 1081px) {
     .page {
-        flex-direction: row;
-    }
+        flex-direction: row;    }
 
     .sidebar {
         width: 250px;

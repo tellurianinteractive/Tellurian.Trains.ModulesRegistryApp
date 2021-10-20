@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.4.9
+Release date 2021-10-20
+- **Styling update** to Bootstrap 5.1.3.
+- **Extended user status** added to *Module owners* list.
+- **Fixed** issues with Font Awesome not accessible from CDN.
+
 #### Version 1.4.8
 Release date 2021-10-05
 - **Bug fix** of failing email validation when saving person's data.

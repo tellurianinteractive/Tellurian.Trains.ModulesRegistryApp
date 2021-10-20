@@ -5,6 +5,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject IMailSender MailSender
+@inject ITimeProvider TimeProvider
 @inject NavigationManager Navigator
 
 @inject PersonService PersonService
@@ -81,6 +82,7 @@ else
         if (Invitation is not null)
         {
             Invitation.Recipient.IsReadOnly = IsReadOnly;
+            Invitation.Recipient.RegistrationTime = TimeProvider.Now;
             _ = await UserService.UpdateAsync(Invitation.Recipient);
 
             var message = Invitation.AsMailMessage();

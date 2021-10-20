@@ -1053,4 +1053,7 @@
   <data name="MayBorrowGroupModules" xml:space="preserve">
     <value>Darf die Module der Gruppe ausleihen?</value>
   </data>
+  <data name="LastLoginTime" xml:space="preserve">
+    <value>Zuletzt eingeloggt</value>
+  </data>
 </root>

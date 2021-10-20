@@ -5,7 +5,7 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.4.8</Version>
+		<Version>1.4.9</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
@@ -217,6 +217,7 @@
 
 	<ItemGroup>
 		<Folder Include="Content\Images\" />
+		<Folder Include="wwwroot\css\fontawesome\" />
 	</ItemGroup>
 
 	<ItemGroup>
