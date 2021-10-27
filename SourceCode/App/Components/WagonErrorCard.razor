@@ -1,0 +1,23 @@
+﻿@inject IStringLocalizer<App> Localizer
+<Pocket BackColor="red" >
+    <div class="background">
+    <h1>@Localizer["WagonError"]</h1>
+    <ul>
+        <li>@Localizer["NonStandardWheelset"]</li>
+        <li>@Localizer["WrongBackToBackDistance"]</li>
+        <li>@Localizer["RollsSluggishly"]</li>
+        <li>@Localizer["NonStandardCoupling"]</li>
+        <li>@Localizer["CouplingNotFixed"]</li>
+        <li>@Localizer["CouplingTooLowOrHigh"]</li>
+        <li>@Localizer["WagonTooLightOrHeavy"]</li>
+        <li>@Localizer["WagonEasilyDerails"]</li>
+        <li>@Localizer["WagonHasLooseParts"]</li>
+        <li>@Localizer["OtherPleaseSpecify"]:<br/><br/>
+            ..................................................</li>
+    </ul>
+    </div>
+</Pocket>
+
+@code {
+
+}

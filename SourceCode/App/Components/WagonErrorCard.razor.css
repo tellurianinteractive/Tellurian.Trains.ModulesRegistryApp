@@ -1,0 +1,16 @@
+﻿.background {
+    color: white;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+ul {
+    list-style: url('/images/Square.png');
+    list-style-position: outside;
+    font-size: 8pt;
+}

@@ -1,7 +1,8 @@
-﻿<div class="pocket frame">
+﻿<div class="pocket frame" style="background-color: @BackColor">
     @ChildContent
 </div>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? BackColor { get; set; }
 }

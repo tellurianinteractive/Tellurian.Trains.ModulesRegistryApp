@@ -9,6 +9,7 @@
 @inject GroupService GroupService
 @inject CargoService CargoService
 @inject OperatingDayService OperatingDayService
+@inject StationService StationService
 @inject ExternalStationService ExternalStationService
 
 <PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
@@ -43,7 +44,7 @@
     ClaimsPrincipal? Principal;
     Station? Station;
     IEnumerable<ExternalStationCustomer>? StationCustomers;
-    bool MayEdit;
+    bool MayEdit = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -60,6 +61,7 @@
     {
         if (StationId > 0)
         {
+            Station = await StationService.FindByIdAsync(Principal, StationId);
             StationCustomers = await ExternalStationService.FindCustomersByIdAsync(Principal, StationId, CustomerId);
         }
     }

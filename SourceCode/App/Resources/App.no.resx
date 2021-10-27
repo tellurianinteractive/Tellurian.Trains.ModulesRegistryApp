@@ -1056,4 +1056,37 @@
   <data name="LastLoginTime" xml:space="preserve">
     <value>Sist logget inn</value>
   </data>
+  <data name="WagonError" xml:space="preserve">
+    <value>Vognfeil</value>
+  </data>
+  <data name="NonStandardWheelset" xml:space="preserve">
+    <value>Ikke-standard hjulsett</value>
+  </data>
+  <data name="WrongBackToBackDistance" xml:space="preserve">
+    <value>Feil back-to-back avstand</value>
+  </data>
+  <data name="RollsSluggishly" xml:space="preserve">
+    <value>Ruller tregt</value>
+  </data>
+  <data name="NonStandardCoupling" xml:space="preserve">
+    <value>Ikke standard kobling</value>
+  </data>
+  <data name="CouplingNotFixed" xml:space="preserve">
+    <value>Kobling ikke fast</value>
+  </data>
+  <data name="CouplingTooLowOrHigh" xml:space="preserve">
+    <value>Kobling for lav eller høy</value>
+  </data>
+  <data name="WagonTooLightOrHeavy" xml:space="preserve">
+    <value>Vognen er for lett eller tung</value>
+  </data>
+  <data name="WagonEasilyDerails" xml:space="preserve">
+    <value>Vogn sporer lett av</value>
+  </data>
+  <data name="WagonHasLooseParts" xml:space="preserve">
+    <value>Vognen har løse deler</value>
+  </data>
+  <data name="OtherPleaseSpecify" xml:space="preserve">
+    <value>Annet, spesifiser</value>
+  </data>
 </root>

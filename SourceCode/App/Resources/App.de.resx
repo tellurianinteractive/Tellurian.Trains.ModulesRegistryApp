@@ -1056,4 +1056,37 @@
   <data name="LastLoginTime" xml:space="preserve">
     <value>Zuletzt eingeloggt</value>
   </data>
+  <data name="WagonError" xml:space="preserve">
+    <value>Wagenfehler</value>
+  </data>
+  <data name="NonStandardWheelset" xml:space="preserve">
+    <value>Nicht standard Laufradsatz</value>
+  </data>
+  <data name="WrongBackToBackDistance" xml:space="preserve">
+    <value>Falscher Back-to-Back Abstand</value>
+  </data>
+  <data name="RollsSluggishly" xml:space="preserve">
+    <value>Rollt träge</value>
+  </data>
+  <data name="NonStandardCoupling" xml:space="preserve">
+    <value>Keine Standardkupplung</value>
+  </data>
+  <data name="CouplingNotFixed" xml:space="preserve">
+    <value>Kupplung nicht fest</value>
+  </data>
+  <data name="CouplingTooLowOrHigh" xml:space="preserve">
+    <value>Kupplung zu niedrig oder zu hoch</value>
+  </data>
+  <data name="WagonTooLightOrHeavy" xml:space="preserve">
+    <value>Wagen zu leicht oder zu schwer</value>
+  </data>
+  <data name="WagonEasilyDerails" xml:space="preserve">
+    <value>Wagen entgleist leicht</value>
+  </data>
+  <data name="WagonHasLooseParts" xml:space="preserve">
+    <value>Der Wagen hat lose Teile</value>
+  </data>
+  <data name="OtherPleaseSpecify" xml:space="preserve">
+    <value>Sonstiges, bitte angeben</value>
+  </data>
 </root>
