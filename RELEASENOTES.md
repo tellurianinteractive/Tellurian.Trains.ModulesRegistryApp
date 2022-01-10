@@ -1,5 +1,15 @@
 ## Release Notes
 
+#### Version 1.4.10
+Release date 2022-01-10
+
+**This release is startpoint for implementing a improved module meeting registration.**
+**Therefore, meeting registration is temporary disabled until new functionality is implemented.**
+
+Other features in this release are:
+- **Tools** added to menu, with a page containing useful links to tools and documentation to improve quality of module meetings.
+- **Meeting info** now visible for anybody, also non registered visitors to the Module Registry.
+
 #### Version 1.4.9
 Release date 2021-10-20
 - **Styling update** to Bootstrap 5.1.3.

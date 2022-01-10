@@ -11,31 +11,36 @@
 @inject ModuleStandardService ModuleStandardService
 @inject OperatingDayService OperatingDayService
 
-<PageHeading Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="Id.ToPageAction()" />
 
-<EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
-    <Inputs>
-        <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
-        <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-        <AppInputFill Width="5" />
-        <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
-        <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
-        <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
-        <AppInputFill Width="1" />
-        <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
-        <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
-        <AppInputFill Width="1" />
-        <h4>@Localizer["GameSettings"]</h4>
-        <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
-        <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
-        @*<AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true"/>
-            <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
-            <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
-    </Inputs>
-    <Buttons>
 
-    </Buttons>
-</EditTemplate>
+<PageHeading Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="Id.ToAddOrEditPageAction()" />
+
+@if (Layout is not null)
+{
+    <EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
+        <Inputs>
+            <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
+            <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
+            <AppInputFill Width="5" />
+            <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
+            <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
+            <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
+            <AppInputFill Width="1" />
+            <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
+            <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
+            <AppInputFill Width="1" />
+            <h4>@Localizer["GameSettings"]</h4>
+            <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
+            <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
+            @*<AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true"/>
+                <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
+                <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
+        </Inputs>
+        <Buttons>
+
+        </Buttons>
+    </EditTemplate>
+}
 
 
 @code {
@@ -57,7 +62,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdAsync(Principal, MeetingId);
+            Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
                 ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
@@ -89,12 +94,12 @@
     }
 
     Layout DefaultLayout(Meeting meeting) => new Layout
-    {
-        MeetingId = MeetingId,
-        ResponsibleGroupId = meeting.OrganiserGroupId,
-        RegistrationOpeningDate = DefaultRegistrationOpeningDate,
-        RegistrationClosingDate = DefaultRegistrationClosingDate
-    };
+        {
+            MeetingId = MeetingId,
+            ResponsibleGroupId = meeting.OrganiserGroupId,
+            RegistrationOpeningDate = DefaultRegistrationOpeningDate,
+            RegistrationClosingDate = DefaultRegistrationClosingDate
+        };
     string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Description} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
 
     DateTime DefaultRegistrationOpeningDate => Meeting?.StartDate.AddMonths(-6) ?? DateTime.Today;

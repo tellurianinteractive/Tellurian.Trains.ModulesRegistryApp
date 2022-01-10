@@ -1,6 +1,6 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class CargoService
+public sealed class CargoService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     public CargoService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;

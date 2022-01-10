@@ -27,6 +27,7 @@ namespace ModulesRegistry.Data
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<LayoutLine> LayoutLines { get; set; }
         public virtual DbSet<LayoutModule> LayoutModules { get; set; }
+        public virtual DbSet<LayoutParticipant> LayoutParticipants { get; set; }
         public virtual DbSet<LayoutStation> LayoutStations { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
@@ -136,20 +137,15 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.OperatingDay)
                     .WithMany()
-                    .HasForeignKey(d => d.OperatingDayId)
-                    .HasConstraintName("FK_CargoRelation_OperatingDay");
+                    .HasForeignKey(d => d.OperatingDayId);
 
-                 entity.HasOne(d => d.SupplierStationCustomerCargo)
-                    .WithMany()
-                    .HasForeignKey(d => d.SupplierStationCustomerCargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CargoRelation_CargoCustomer_Supplier");
+                entity.HasOne(d => d.SupplierStationCustomerCargo)
+                   .WithMany()
+                   .HasForeignKey(d => d.SupplierStationCustomerCargoId);
 
                 entity.HasOne(d => d.ConsumerStationCustomerCargo)
                      .WithMany()
-                     .HasForeignKey(d => d.ConsumerStationCustomerCargoId)
-                     .OnDelete(DeleteBehavior.ClientSetNull)
-                     .HasConstraintName("FK_CargoRelation_CargoCustomer_Consumer");
+                     .HasForeignKey(d => d.ConsumerStationCustomerCargoId);
             });
 
             modelBuilder.Entity<QuantityUnit>(entity =>
@@ -179,8 +175,7 @@ namespace ModulesRegistry.Data
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Languages)
-                    .HasMaxLength(10)
-                    .HasComment("A semicolon separated list of two-letter language codes.");
+                    .HasMaxLength(10);
             });
 
             modelBuilder.Entity<Document>(entity =>
@@ -210,8 +205,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.ExternalStations)
                     .HasForeignKey(d => d.RegionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStation_Region");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<ExternalStationCustomer>(entity =>
@@ -224,8 +218,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.ExternalStation)
                     .WithMany(p => p.ExternalStationCustomers)
-                    .HasForeignKey(d => d.ExternalStationId)
-                    .HasConstraintName("FK_ExternalStationCustomer_ExternalStation");
+                    .HasForeignKey(d => d.ExternalStationId);
             });
 
             modelBuilder.Entity<ExternalStationCustomerCargo>(entity =>
@@ -239,31 +232,26 @@ namespace ModulesRegistry.Data
                 entity.HasOne(e => e.Cargo)
                     .WithMany()
                     .HasForeignKey(d => d.CargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_Cargo");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.Direction)
                     .WithMany()
                     .HasForeignKey(d => d.DirectionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_CargoDirection");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.ExternalStationCustomer)
                     .WithMany(p => p.ExternalStationCustomerCargos)
                     .HasForeignKey(d => d.ExternalStationCustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_StationCustomer");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.OperatingDay)
                     .WithMany()
-                    .HasForeignKey(d => d.OperatingDayId)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_OperatingDay");
+                    .HasForeignKey(d => d.OperatingDayId);
 
                 entity.HasOne(e => e.QuantityUnit)
                     .WithMany()
                     .HasForeignKey(d => d.QuantityUnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExternalStationCustomerCargo_QuantityUnit");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Group>(entity =>
@@ -291,8 +279,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.GroupDomain)
                     .WithMany(p => p.Groups)
                     .HasForeignKey(d => d.GroupDomainId)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_Group_GroupDomain");
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<GroupDomain>(entity => entity.ToTable("GroupDomain"));
@@ -303,14 +290,12 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.GroupMembers)
-                    .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK_GroupMember_Group");
+                    .HasForeignKey(d => d.GroupId);
 
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.GroupMembers)
                     .HasForeignKey(d => d.PersonId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_GroupMember_Person");
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Layout>(entity =>
@@ -322,19 +307,15 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Meeting)
                     .WithMany(p => p.Layouts)
-                    .HasForeignKey(d => d.MeetingId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Layout_Meeting");
+                    .HasForeignKey(d => d.MeetingId);
 
                 entity.HasOne(d => d.ResponsibleGroup)
                     .WithMany()
-                    .HasForeignKey(d => d.ResponsibleGroupId)
-                    .HasConstraintName("FK_Layout_Group");
+                    .HasForeignKey(d => d.ResponsibleGroupId);
 
                 entity.HasOne(d => d.PrimaryModuleStandard)
                     .WithMany()
-                    .HasForeignKey(d => d.PrimaryModuleStandardId)
-                    .HasConstraintName("FK_Layout_ModuleStandard");
+                    .HasForeignKey(d => d.PrimaryModuleStandardId);
             });
 
             modelBuilder.Entity<LayoutLine>(entity =>
@@ -348,23 +329,19 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(e => e.FromLayoutStation)
                     .WithMany(e => e.StartingLines)
-                    .HasForeignKey(e => e.FromLayoutStationId)
-                    .HasConstraintName("FK_LayoutLine_FromLayoutStation");
+                    .HasForeignKey(e => e.FromLayoutStationId);
 
                 entity.HasOne(e => e.FromStationExit)
                     .WithMany()
-                    .HasForeignKey(e => e.FromStationExitId)
-                    .HasConstraintName("FK_LayoutLine_FromStationExit");
+                    .HasForeignKey(e => e.FromStationExitId);
 
                 entity.HasOne(e => e.ToLayoutStation)
-                   .WithMany(e => e.EndingLines)
-                   .HasForeignKey(e => e.ToLayoutStationId)
-                   .HasConstraintName("FK_LayoutLine_ToLayoutStation");
+                    .WithMany(e => e.EndingLines)
+                    .HasForeignKey(e => e.ToLayoutStationId);
 
                 entity.HasOne(e => e.ToStationExit)
-                   .WithMany()
-                   .HasForeignKey(e => e.ToStationExitId)
-                   .HasConstraintName("FK_LayoutLine_ToStationExit");
+                  .WithMany()
+                  .HasForeignKey(e => e.ToStationExitId);
             });
 
             modelBuilder.Entity<LayoutModule>(entity =>
@@ -374,31 +351,38 @@ namespace ModulesRegistry.Data
 
                 entity.ToTable("LayoutModule");
 
-                entity.HasOne(e => e.Layout)
+                entity.HasOne(e => e.LayoutParticipant)
                      .WithMany(e => e.LayoutModules)
-                     .HasForeignKey(e => e.LayoutId)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_LayoutModule_Layout");
+                     .HasForeignKey(e => e.LayoutParticipantId);
 
                 entity.HasOne(e => e.Module)
                       .WithMany()
-                      .HasForeignKey(e => e.ModuleId)
-                      .HasConstraintName("FK_LayoutModule_Module");
+                      .HasForeignKey(e => e.ModuleId);
 
-                entity.HasOne(e => e.Participant)
-                   .WithMany(e => e.LayoutModules)
-                   .HasForeignKey(e => e.ParticipantId)
-                   .HasConstraintName("FK_LayoutModule_Participant");
 
                 entity.HasOne(e => e.LayoutLine)
                    .WithMany(e => e.Lines)
-                   .HasForeignKey(e => e.LayoutLineId)
-                   .HasConstraintName("FK_LayoutModule_LayoutLine");
+                   .HasForeignKey(e => e.LayoutLineId);
 
                 entity.HasOne(e => e.LayoutStation)
                     .WithMany(e => e.LayoutModules)
-                    .HasForeignKey(e => e.LayoutStationId)
-                    .HasConstraintName("FK_LayoutModule_LayoutStation");
+                    .HasForeignKey(e => e.LayoutStationId);
+            });
+
+            modelBuilder.Entity<LayoutParticipant>(entity => {
+                entity.ToTable("LayoutParticipant");
+
+                entity.HasOne(e => e.Person)
+                    .WithMany()
+                    .HasForeignKey(e => e.PersonId);
+
+                entity.HasOne(e => e.MeetingParticipant)
+                    .WithMany()
+                    .HasForeignKey(e => e.MeetingParticipantId);
+
+                entity.HasOne(E => E.Layout)
+                    .WithMany()
+                    .HasForeignKey(e => e.LayoutId);
             });
 
             modelBuilder.Entity<LayoutStation>(entity =>
@@ -413,22 +397,19 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(e => e.Layout)
                      .WithMany(e => e.LayoutStations)
-                     .HasForeignKey(e => e.LayoutId)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_LayoutStation_Layout");
+                     .HasForeignKey(e => e.LayoutId);
 
                 entity.HasMany(e => e.Regions)
                     .WithMany(e => e.LayoutStations);
 
                 entity.HasOne(e => e.Station)
                      .WithOne()
-                     .HasForeignKey<LayoutStation>(e => e.StationId)
-                     .HasConstraintName("FK_LayoutStation_Station");
+                     .HasForeignKey<LayoutStation>(e => e.StationId);
 
                 entity.HasOne(e => e.OtherCountry)
                     .WithOne()
-                    .HasForeignKey<LayoutStation>(e => e.OtherCountryId)
-                    .HasConstraintName("FK_LayoutStation_OtherCountry");
+                    .HasForeignKey<LayoutStation>(e => e.OtherCountryId);
+
             });
 
             modelBuilder.Entity<Meeting>(entity =>
@@ -437,8 +418,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.OrganiserGroup)
                     .WithMany()
-                    .HasForeignKey(d => d.OrganiserGroupId)
-                    .HasConstraintName("FK_Meeting_Group");
+                    .HasForeignKey(d => d.OrganiserGroupId);
             });
 
             modelBuilder.Entity<MeetingParticipant>(entity =>
@@ -447,13 +427,15 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Meeting)
                     .WithMany(d => d.Participants)
-                    .HasForeignKey(d => d.MeetingId)
-                    .HasConstraintName("FK_MeetingParticipant_Meeting");
+                    .HasForeignKey(d => d.MeetingId);
 
                 entity.HasOne(d => d.Person)
                     .WithMany()
-                    .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK_MeetingParticipant_Person");
+                    .HasForeignKey(d => d.PersonId);
+
+                entity.HasMany(d => d.Layouts)
+                    .WithOne()
+                    .HasForeignKey(d => d.LayoutId);
             });
 
             modelBuilder.Entity<Module>(entity =>
@@ -476,31 +458,26 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.DwgDrawing)
                     .WithMany()
-                    .HasForeignKey(d => d.DwgDrawingId)
-                    .HasConstraintName("FK_Module_DwgDocument");
+                    .HasForeignKey(d => d.DwgDrawingId);
 
                 entity.HasOne(d => d.SkpDrawing)
                     .WithMany()
-                    .HasForeignKey(d => d.SkpDrawingId)
-                    .HasConstraintName("FK_Module_SkpDocument");
+                    .HasForeignKey(d => d.SkpDrawingId);
 
                 entity.HasOne(d => d.PdfDocumentation)
                     .WithMany()
                     .HasForeignKey(d => d.PdfDocumentationId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Module_PdfDocument");
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.Modules)
                     .HasForeignKey(d => d.ScaleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Module_Scale");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.Station)
                       .WithMany(p => p.Modules)
                       .HasForeignKey(d => d.StationId)
-                      .OnDelete(DeleteBehavior.SetNull)
-                      .HasConstraintName("FK_Module_Station");
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<ModuleExit>(entity =>
@@ -514,14 +491,12 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Module)
                     .WithMany(p => p.ModuleExits)
                     .HasForeignKey(d => d.ModuleId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_ModuleExit_Module");
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.GableType)
                     .WithMany()
                     .HasForeignKey(d => d.GableTypeId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_ModuleExit_ModuleGableType");
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<ModuleGableType>(entity =>
@@ -534,89 +509,89 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Scale)
                     .WithMany()
                     .HasForeignKey(d => d.ScaleId)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_ModuleGableType_Scale");
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(d => d.PdfDocument)
                     .WithMany()
                     .HasForeignKey(d => d.PdfDocumentId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_ModuleGableType_Document");
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<ModuleOwnership>(entity =>
             {
                 entity.ToTable("ModuleOwnership");
 
-                entity.Property(e => e.GroupId).HasComment("Owning organisation (if null, a Person must own it)");
+                entity.Property(e => e.GroupId)
+                    .HasComment("Owning organisation (if null, a Person must own it)");
 
                 entity.Property(e => e.OwnedShare)
                     .HasDefaultValueSql("((1))")
                     .HasComment("The ownerships share as 1/this value.");
 
-                entity.Property(e => e.PersonId).HasComment("Owning person (if null, an Organisation must own it)");
+                entity.Property(e => e.PersonId)
+                    .HasComment("Owning person (if null, an Organisation must own it)");
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.ModuleOwnerships)
-                    .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK_ModuleOwnership_Group");
+                    .HasForeignKey(d => d.GroupId);
 
                 entity.HasOne(d => d.Module)
                     .WithMany(p => p.ModuleOwnerships)
-                    .HasForeignKey(d => d.ModuleId)
-                    .HasConstraintName("FK_ModuleOwnership_Module");
+                    .HasForeignKey(d => d.ModuleId);
 
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.ModuleOwnerships)
-                    .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK_ModuleOwnership_Person");
+                    .HasForeignKey(d => d.PersonId);
             });
 
             modelBuilder.Entity<ModuleStandard>(entity =>
             {
                 entity.ToTable("ModuleStandard");
 
-                entity.Property(e => e.AcceptedNorm).HasMaxLength(255);
+                entity.Property(e => e.AcceptedNorm)
+                    .HasMaxLength(255);
 
-                entity.Property(e => e.Couplings).HasMaxLength(20);
+                entity.Property(e => e.Couplings)
+                    .HasMaxLength(20);
 
-                entity.Property(e => e.Electricity).HasMaxLength(20);
+                entity.Property(e => e.Electricity)
+                    .HasMaxLength(20);
 
-                entity.Property(e => e.PreferredTheme).HasMaxLength(20);
+                entity.Property(e => e.PreferredTheme)
+                    .HasMaxLength(20);
 
-                entity.Property(e => e.ShortName).HasMaxLength(10);
+                entity.Property(e => e.ShortName)
+                    .HasMaxLength(10);
 
-                entity.Property(e => e.TrackSystem).HasMaxLength(20);
+                entity.Property(e => e.TrackSystem)
+                    .HasMaxLength(20);
 
-                entity.Property(e => e.Wheelset).HasMaxLength(50);
+                entity.Property(e => e.Wheelset)
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.ModuleStandards)
                     .HasForeignKey(d => d.ScaleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ModuleStandard_Scale");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<NHM>(entity => entity.ToTable("NHM"));
 
             modelBuilder.Entity<OperatingBasicDay>(entity =>
             {
-                entity.HasKey(e => new { e.OperatingDayId, e.BasicDayId })
-                    .HasName("PK_OperatingDayId_BasicDayId");
+                entity.HasKey(e => new { e.OperatingDayId, e.BasicDayId });
 
                 entity.ToTable("OperatingBasicDay");
 
                 entity.HasOne(d => d.BasicDay)
                     .WithMany(p => p.OperatingBasicDayBasicDays)
                     .HasForeignKey(d => d.BasicDayId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OperatingBasicDay_BasicDays");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.OperatingDay)
                     .WithMany(p => p.OperatingBasicDayOperatingDays)
                     .HasForeignKey(d => d.OperatingDayId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OperatingBasicDay_OperatingDays");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<OperatingDay>(entity =>
@@ -670,13 +645,11 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Person_Country");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.User)
                     .WithOne(p => p.Person)
-                    .HasForeignKey<Person>(d => d.UserId)
-                    .HasConstraintName("FK_Person_User");
+                    .HasForeignKey<Person>(d => d.UserId);
             });
 
             modelBuilder.Entity<Property>(entity =>
@@ -720,8 +693,7 @@ namespace ModulesRegistry.Data
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Regions)
                     .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Region_Country");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Scale>(entity =>
@@ -747,8 +719,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Stations)
-                    .HasForeignKey(d => d.RegionId)
-                    .HasConstraintName("FK_Station_Region");
+                    .HasForeignKey(d => d.RegionId);
             });
 
             modelBuilder.Entity<StationCustomer>(entity =>
@@ -772,8 +743,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Station)
                     .WithMany(p => p.StationCustomers)
-                    .HasForeignKey(d => d.StationId)
-                    .HasConstraintName("FK_StationCustomer_Station");
+                    .HasForeignKey(d => d.StationId);
             });
 
             _ = modelBuilder.Entity<StationCustomerCargo>(entity =>
@@ -795,37 +765,31 @@ namespace ModulesRegistry.Data
                   entity.HasOne(e => e.Cargo)
                       .WithMany()
                       .HasForeignKey(d => d.CargoId)
-                      .OnDelete(DeleteBehavior.ClientSetNull)
-                      .HasConstraintName("FK_CargoCustomer_Cargo");
+                      .OnDelete(DeleteBehavior.ClientSetNull);
 
                   entity.HasOne(d => d.Direction)
                       .WithMany()
                       .HasForeignKey(d => d.DirectionId)
-                      .OnDelete(DeleteBehavior.ClientSetNull)
-                      .HasConstraintName("FK_CargoCustomer_CargoDirection");
+                      .OnDelete(DeleteBehavior.ClientSetNull);
 
                   entity.HasOne(d => d.OperatingDay)
                       .WithMany()
-                      .HasForeignKey(d => d.OperatingDayId)
-                      .HasConstraintName("FK_CargoCustomer_OperatingDay");
+                      .HasForeignKey(d => d.OperatingDayId);
 
                   entity.HasOne(d => d.ReadyTime)
                       .WithMany()
                       .HasForeignKey(d => d.ReadyTimeId)
-                      .OnDelete(DeleteBehavior.ClientSetNull)
-                      .HasConstraintName("FK_CargoCustomer_CargoReadyTime");
+                      .OnDelete(DeleteBehavior.ClientSetNull);
 
                   entity.HasOne(d => d.StationCustomer)
                       .WithMany(p => p.StationCustomerCargos)
                       .HasForeignKey(d => d.StationCustomerId)
-                      .HasConstraintName("FK_CargoCustomer_StationCustomer")
                       .OnDelete(DeleteBehavior.Cascade);
 
                   entity.HasOne(e => e.QuantityUnit)
                       .WithMany()
                       .HasForeignKey(d => d.QuantityUnitId)
-                      .OnDelete(DeleteBehavior.ClientSetNull)
-                      .HasConstraintName("FK_StationCustomerCargo_QuantityUnit");
+                      .OnDelete(DeleteBehavior.ClientSetNull);
               });
 
             modelBuilder.Entity<StationTrack>(entity =>
@@ -840,8 +804,7 @@ namespace ModulesRegistry.Data
 
                 entity.HasOne(d => d.Station)
                     .WithMany(p => p.StationTracks)
-                    .HasForeignKey(d => d.StationId)
-                    .HasConstraintName("FK_StationTrack_Station");
+                    .HasForeignKey(d => d.StationId);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -855,9 +818,11 @@ namespace ModulesRegistry.Data
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.HashedPassword).HasMaxLength(255);
+                entity.Property(e => e.HashedPassword)
+                    .HasMaxLength(255);
 
-                entity.Property(e => e.RegistrationTime).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.RegistrationTime)
+                    .HasDefaultValueSql("(getdate())");
             });
 
             OnModelCreatingPartial(modelBuilder);

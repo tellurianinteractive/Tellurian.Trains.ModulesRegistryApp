@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [dbo].[CustomerCargo]
 AS 
 SELECT -- Internal station customer cargo
-	LS.LayoutId,
+	LP.LayoutId,
 	SCC.Id,
 	SCC.OperatingDayId,
 	S.[Id] AS StationId,
@@ -38,7 +38,8 @@ FROM [Station] AS S
 	INNER JOIN [Cargo] AS C ON SCC.CargoId = C.Id
 	INNER JOIN [CargoDirection] AS CD ON SCC.DirectionId = CD.Id
 	INNER JOIN [CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId
-	LEFT JOIN [LayoutStation] AS LS ON LS.StationId = S.Id
+	LEFT JOIN [LayoutStation] AS LS ON LS.StationId = S.Id 
+	LEFT JOIN LayoutParticipant LP ON LS.LayoutParticipantId = LP.Id
 UNION
 SELECT -- External station customer cargo
 	-1 AS LayoutId,
@@ -77,7 +78,7 @@ FROM [ExternalStation] AS ES
 UNION
 
 SELECT -- Shadow yard suppliers
-	LS.LayoutId,
+	LP.LayoutId,
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
@@ -105,7 +106,8 @@ SELECT -- Shadow yard suppliers
 	NULL AS TrackOrArea,
 	'#ffffff' AS TrackOrAreaColor
 FROM 
-	LayoutStation LS
+	LayoutParticipant LP 
+	INNER JOIN LayoutStation LS ON LP.MeetingParticipantId = LP.Id
 	INNER JOIN Station S ON S.Id = LS.StationId
 	LEFT JOIN Region R ON R.Id = S.RegionId
 	JOIN Cargo AS C ON C.Id > 0
@@ -113,7 +115,7 @@ WHERE
 	S.IsShadow <> 0
 UNION
 SELECT -- Shadow yard consumers
-	LS.LayoutId,
+	LP.LayoutId,
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
@@ -141,7 +143,8 @@ SELECT -- Shadow yard consumers
 	NULL AS TrackOrArea,
 	'#ffffff' AS TrackOrAreaColor
 FROM 
-	LayoutStation LS
+	LayoutParticipant LP 
+	INNER JOIN LayoutStation LS ON LP.MeetingParticipantId = LP.Id	
 	INNER JOIN Station S ON S.Id = LS.StationId
 	LEFT JOIN Region R ON R.Id = S.RegionId
 	JOIN Cargo AS C ON C.Id > 0

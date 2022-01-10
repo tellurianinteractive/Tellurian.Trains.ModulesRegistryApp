@@ -2,7 +2,7 @@
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class DocumentService
+public sealed class DocumentService
 {
     public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
     public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station) };

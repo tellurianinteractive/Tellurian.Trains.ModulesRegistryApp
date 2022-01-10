@@ -7,11 +7,12 @@
         Add,
         Edit,
         Delete,
-        Error
+        Error,
+        Tools
     }
 
     public static class PageActionExtensions
     {
-        public static PageAction ToPageAction(this int id) => id == 0 ? PageAction.Add : PageAction.Edit;
+        public static PageAction ToAddOrEditPageAction(this int id) => id == 0 ? PageAction.Add : PageAction.Edit;
     }
 }

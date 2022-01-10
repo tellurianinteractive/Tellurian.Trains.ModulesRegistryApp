@@ -1,6 +1,6 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class LanguageService : ILanguageService
+public sealed class LanguageService : ILanguageService
 {
     public string[] GetSupportedLanguages() => LanguageUtility.FullySupportedLanguages;
 

@@ -9,7 +9,7 @@
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
-<PageHeading Label="FreightCustomer" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToPageAction()" HelpContext="ExternalStationCustomer" ShowHelpInitially="true" />
+<PageHeading Label="FreightCustomer" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStationCustomer" ShowHelpInitially="true" />
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>

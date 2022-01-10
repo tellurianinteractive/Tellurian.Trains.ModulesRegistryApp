@@ -12,7 +12,7 @@
 @inject CountryService CountryService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToPageAction()" HelpContext="Person" />
+<PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Person" />
 
 @if (Person is null)
 {

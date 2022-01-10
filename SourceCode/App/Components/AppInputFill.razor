@@ -1,7 +1,8 @@
-﻿<div class="@BootstrapWrapperCss"/>
+﻿<div class="@BootstrapWrapperCss">@Text</div>
 
 @code {
     [Parameter] public int? Width { get; set; }
+    [Parameter] public string? Text { get; set; }
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
 }

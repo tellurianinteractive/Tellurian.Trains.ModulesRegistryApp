@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizer<App> Localizer
-<Pocket BackColor="red" >
-    <div class="background">
+<Pocket BackColor="@BackColor" >
+    <div style="color: @TextColor">
     <h1>@Localizer["WagonError"]</h1>
     <ul>
         <li>@Localizer["NonStandardWheelset"]</li>
@@ -19,5 +19,8 @@
 </Pocket>
 
 @code {
+    [Parameter] public bool PrintBlackAndWhite { get; set; }
 
+    string BackColor => PrintBlackAndWhite ? "white" : "red";
+    string TextColor => PrintBlackAndWhite ? "black" : "white";
 }

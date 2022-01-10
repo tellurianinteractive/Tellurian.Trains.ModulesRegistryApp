@@ -1,6 +1,6 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class LayoutService
+public sealed class LayoutService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     private readonly ITimeProvider TimeProvider;
@@ -16,7 +16,7 @@ public class LayoutService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.LayoutModules.AsNoTracking()
-                .Where(ls => ls.Layout.MeetingId == meetingId)
+                .Where(ls => ls.LayoutParticipant.Layout.MeetingId == meetingId)
                 .CountAsync();
         }
         return -1;
@@ -101,23 +101,24 @@ public class LayoutService
     /// <param name="layoutId"></param>
     /// <param name="package"></param>
     /// <returns></returns>
-    public async Task<(int Count, string Message)> AddPackageModulesAsync(ClaimsPrincipal? principal, int layoutId, int participantId, ModulePackage package)
+    public async Task<(int Count, string Message)> AddPackageModulesAsync(ClaimsPrincipal? principal, int layoutParticipantId, ModulePackage package)
     {
         if (principal.IsAuthenticated())
         {
             var result = package.Modules.Count();
             using var dbContext = Factory.CreateDbContext();
-            var participant = await dbContext.MeetingParticipants.Include(mp => mp.Meeting).SingleOrDefaultAsync(mp => mp.Id == participantId);
+            var participant = await dbContext.LayoutParticipants
+                .SingleOrDefaultAsync(lp => lp.Id == layoutParticipantId);
             if (participant is null) return (-1, Resources.Strings.NotFound);
             foreach (var module in package.Modules)
             {
-                var existing = await dbContext.LayoutModules.SingleOrDefaultAsync(lm => lm.ModuleId == module.Id && lm.LayoutId == layoutId);
+                var existing = await dbContext.LayoutModules.SingleOrDefaultAsync(lm => lm.ModuleId == module.Id && lm.LayoutParticipantId == layoutParticipantId);
                 if (existing is null)
                 {
-                    var layoutModule = new LayoutModule { LayoutId = layoutId, ModuleId = module.Id, ParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
+                    var layoutModule = new LayoutModule { ModuleId = module.Id, LayoutParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
                     if (module.StationId.HasValue)
                     {
-                        var layoutStation = new LayoutStation { LayoutId = layoutId, StationId = module.StationId.Value };
+                        var layoutStation = new LayoutStation { StationId = module.StationId.Value };
                         layoutModule.LayoutStation = layoutStation;
                     }
                     dbContext.LayoutModules.Add(layoutModule);
@@ -133,7 +134,7 @@ public class LayoutService
         return (0, Resources.Strings.NotAuthorized);
     }
 
-    public async Task<IEnumerable<LayoutModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutId, int participantId = 0)
+    public async Task<IEnumerable<LayoutModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutParticipantId = 0)
     {
         if (principal.IsAuthenticated())
         {
@@ -141,8 +142,8 @@ public class LayoutService
             return await dbContext.LayoutModules
                 .Include(lm => lm.LayoutStation)
                 .Include(lm => lm.Module)
-                .Include(lm => lm.Participant).ThenInclude(p => p.Person)
-                .Where(lm => (participantId == 0 || lm.ParticipantId == participantId) && lm.LayoutId == layoutId)
+                .Include(lm => lm.LayoutParticipant).ThenInclude(p => p.MeetingParticipant).ThenInclude(mp => mp.Person)
+                .Where(lm => (layoutParticipantId == 0 || lm.LayoutParticipantId == layoutParticipantId))
                 .ToListAsync();
         }
         return Array.Empty<LayoutModule>();

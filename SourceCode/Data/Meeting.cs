@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 
@@ -37,5 +38,7 @@ namespace ModulesRegistry.Data
             it is not null && !it.IsCancelled() &&  it.Layouts.Any() && it.Layouts.Min(l => l.RegistrationOpeningDate) <= at && it.Layouts.Max(l => l.RegistrationClosingDate) > at;
 
         public static bool IsCancelled(this Meeting? it) => it is null || it.Status == (int)MeetingStatus.Canceled;
+        public static int DaysCount(this Meeting it) => (it.EndDate - it.StartDate).Days + 1;
+        public static string Day(this Meeting it,int day) => it.StartDate.AddDays(day-1).DayOfWeek.ToString();  
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class ExternalStationService
+public sealed class ExternalStationService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     public ExternalStationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;

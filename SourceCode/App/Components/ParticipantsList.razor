@@ -1,0 +1,41 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+<h3>@Localizer["Participants"]</h3>
+<TableTemplate Items="Participants">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["CityName"]</th>
+        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Registered"]</th>
+        <th>@Localizer["Withdrawn"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.Name</td>
+        <td>@item.CityName</td>
+        <td>@item.EnglishCountryName.AsLocalized()</td>
+        <td>@item.RegistrationTime.ToString("g")</td>
+        <td>@item.CancellationTime?.ToString("g")</td>
+        <td>
+            @if (MayRegister(item))
+            {
+                <AppButton Label="RegisterModules" Href="@RegistrationHref(item)" Type="primary" IconName="plus-square" />
+            }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [Parameter] public IEnumerable<Participant>? Participants { get; set; }
+    [Parameter] public bool CurrentPersonIsOrganiser { get; set; }
+    [Parameter] public int CurrentPersonId { get; set; }
+
+    bool MayRegister(Participant participant) => 
+        participant.LayoutId > 0 && (CurrentPersonIsOrganiser || (CurrentPersonId > 0 && participant.PersonId == CurrentPersonId));
+
+    string RegistrationHref(Participant participant) =>
+        participant.LayoutId > 0 ?
+            $"Layouts/Register/{participant.Id}" :
+            $"Meeting/Register/{participant.Id}";
+
+}

@@ -36,10 +36,8 @@ public class MeetingService
         return meetings.Select(m => (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()), m));
     }
 
-    public async Task<Meeting?> FindByIdAsync(ClaimsPrincipal? principal, int id)
+    public async Task<Meeting?> FindByIdAsync(int id)
     {
-        if (principal.IsAuthenticated())
-        {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Meetings.AsNoTracking()
                  .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
@@ -47,6 +45,17 @@ public class MeetingService
                  .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
                  .SingleOrDefaultAsync(m => m.Id == id)
                  .ConfigureAwait(false);
+    }
+
+    public async Task<Meeting?> FindByIdWithLayoutsAsync(ClaimsPrincipal? principal, int id)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Meetings.AsNoTracking()
+                .Include(m => m.Layouts)
+                .SingleOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
         }
         return null;
     }
@@ -58,8 +67,6 @@ public class MeetingService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Meetings.AsNoTracking()
                 .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
-                .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.Layout).ThenInclude(l => l.PrimaryModuleStandard)
-                .Include(m => m.Participants).ThenInclude(p => p.LayoutModules).ThenInclude(p => p.LayoutStation)
                 .SingleOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
         }
@@ -74,8 +81,8 @@ public class MeetingService
             var meetingId = await dbContext.Layouts.Where(l => l.Id == layoutId).Select(l => l.MeetingId).SingleOrDefaultAsync();
             return await dbContext.MeetingParticipants.AsNoTracking()
                 .Include(mp => mp.Person).ThenInclude(p => p.Country)
-                .Include(p => p.LayoutModules).ThenInclude(lm => lm.Module)
-                .Where(m => m.MeetingId == meetingId && (m.LayoutModules.Count == 0 || m.LayoutModules.Any(lm => lm.LayoutId == layoutId)))
+                .Include(p => p.Layouts).ThenInclude(lp => lp.Layout)
+                .Where(m => m.MeetingId == meetingId)
                 .ToListAsync()
                 .ConfigureAwait(false);
         }
@@ -199,6 +206,7 @@ public class MeetingService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
                 .Include(mp => mp.Person)
+                .Include(mp => mp.Layouts)
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
                 .ConfigureAwait(false);
         }
@@ -236,17 +244,17 @@ public class MeetingService
         return principal.SaveNotAuthorised<MeetingParticipant>();
     }
 
-    public async Task<(int Count, string Message)> CancelParticipaction(ClaimsPrincipal? principal, int paricipantId)
+    public async Task<(int Count, string Message)> CancelMeetingParticipaction(ClaimsPrincipal? principal, int meetingParicipantId)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.MeetingParticipants
-                .Include(mp => mp.LayoutModules)
-                .SingleOrDefaultAsync(mp => mp.Id == paricipantId)
+                .Include(mp => mp.Layouts).ThenInclude(lp => lp.LayoutModules)
+                .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)
                 .ConfigureAwait(false);
             if (existing is null) return Resources.Strings.NotFound.DeleteResult();
-            if (existing.LayoutModules.Count > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
+            if (existing.Layouts.Sum(lp => lp.LayoutModules.Count) > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
             dbContext.MeetingParticipants.Remove(existing);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();

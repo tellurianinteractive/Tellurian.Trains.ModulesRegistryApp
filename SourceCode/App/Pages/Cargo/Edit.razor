@@ -6,7 +6,7 @@
 @inject IToastService ToastService
 @inject CargoService CargoService
 
-<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToPageAction()" />
+<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToAddOrEditPageAction()" />
 
 <EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
     <Inputs>

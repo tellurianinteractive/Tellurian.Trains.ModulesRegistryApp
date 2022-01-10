@@ -19,8 +19,6 @@
 </div>
 
 @code {
-    public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
     protected override void OnInitialized()

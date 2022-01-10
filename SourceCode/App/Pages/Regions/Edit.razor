@@ -9,7 +9,7 @@
 @inject RegionService RegionService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToPageAction()" />
+<PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToAddOrEditPageAction()" />
 
 <EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>

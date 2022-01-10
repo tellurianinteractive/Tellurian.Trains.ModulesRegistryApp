@@ -8,11 +8,15 @@
 
 @if (Meeting is null)
 {
-
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
 }
 else
 {
     <h1><span class="@FontAwesome.Meeting" /> @Meeting.Description</h1>
+    @if ((MeetingStatus)Meeting.Status == MeetingStatus.Canceled )
+    {
+        <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
+    }
     @Item("Venue", $"{Meeting.PlaceName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.IsFremo ? $"{Meeting.OrganiserGroup.FullName}/FREMO" : $"{Meeting.OrganiserGroup.FullName}")
@@ -45,13 +49,14 @@ else
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+
     ClaimsPrincipal? Principal;
     Meeting? Meeting;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = await MeetingService.FindByIdAsync(Principal, Id);
+        Meeting = await MeetingService.FindByIdAsync(Id);
     }
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;

@@ -15,7 +15,7 @@
 @inject StationService StationService
 @inject ModuleStandardService ModuleStandardService
 
-<PageHeading ObjectName="Module" Owner="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToPageAction()" HelpContext="Module" />
+<PageHeading ObjectName="Module" Owner="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" />
 
 @if (Module is null)
 {
@@ -144,7 +144,7 @@ else
     }
 
     object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;
-    private string Heading => Localizer.HeadingText(null, "Module", OwningGroup is null ? OwningPerson : OwningGroup, Id.ToPageAction());
+    private string Heading => Localizer.HeadingText(null, "Module", OwningGroup is null ? OwningPerson : OwningGroup, Id.ToAddOrEditPageAction());
 
     bool HasStation([NotNullWhen(true)] Module? module) => module is not null && module.StationId.HasValue;
 

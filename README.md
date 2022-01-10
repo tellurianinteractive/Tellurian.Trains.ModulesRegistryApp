@@ -1,5 +1,8 @@
 # Module Registry App
-Welcome to the *open source* project for creating a registry for *model railway modules*.
+Welcome to the *open source* project for creating a registry for *model railway modules*
+and a *module meeting* magagement tool.
+
+The basic idea is to centralise data storage while decentralise data mnagement.
 
 You find the application [here](https://moduleregistry.azurewebsites.net/). 
 It is updated quite frequently, so check out the [release notes](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/RELEASENOTES.md).
@@ -19,15 +22,15 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status September 2021
+## Status January 2022
 New in September is printing of waybills for modules registerd for a meeting.
 * Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
-All functions for managing modules are now inplace, including:
+All functions for managing modules are now in place, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Transfer of module *ownership* - part or whole - to other person or group.
 * Manage *groups* and *members* and member's *modules*, *stations* and *station freight customers*.
 * Administrators can manage *meetings*, *regions*, *cargo types*, *module standards* and *module gables*.
-* Users and meeting organisers can add persons as *participants* and add their modules to a *layout*
+* **Temporary disabled**: Users and meeting organisers can add persons as *participants* and add their modules to a *layout*
 * Domains now change group visibiliy for groups within same domain. FREMO is a domain.
 * Help texts for most forms with recommendation how to enter data.
 * Supported languages: English, German, Danish, Swedish and Norwegian.

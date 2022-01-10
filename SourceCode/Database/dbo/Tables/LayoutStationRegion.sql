@@ -1,10 +1,10 @@
 ﻿CREATE TABLE [dbo].[LayoutStationRegion]
 (
-	[LayoutId]	INT NOT NULL,
-	[RegionId]	INT NOT NULL,
+    [LayoutStationId]	INT NOT NULL,
+    [RegionId]	        INT NOT NULL,
 
-	CONSTRAINT [FK_LayoutStationRegion_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]) ON DELETE CASCADE,
-	CONSTRAINT [FK_LayoutStationRegion_Region] FOREIGN KEY ([RegionId]) REFERENCES [dbo].[Region] ([Id]), 
-    CONSTRAINT [PK_LayoutStationRegion] PRIMARY KEY ([LayoutId], [RegionId]),
+    CONSTRAINT [PK_LayoutStationRegion] PRIMARY KEY ([LayoutStationId], [RegionId]),
+    CONSTRAINT [FK_LayoutStationRegion_LayoutStation] FOREIGN KEY ([LayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_LayoutStationRegion_Region] FOREIGN KEY ([RegionId]) REFERENCES [dbo].[Region] ([Id]), 
 )
 

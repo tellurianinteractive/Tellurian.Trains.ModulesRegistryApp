@@ -1,0 +1,21 @@
+﻿@page "/tools/wagonerrorcards"
+@page "/tools/wagonerrorcards/{PrintBlackAndWhite:bool}"
+@layout PrintLayout
+
+<div class="pagebreak">
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite" />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+    <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite"  />
+
+</div>
+
+@code {
+    [Parameter] public bool PrintBlackAndWhite { get; set; }
+}

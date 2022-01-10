@@ -10,10 +10,14 @@
     CONSTRAINT [PK_Meeting] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Meeting_Group] FOREIGN KEY ([OrganiserGroupId]) REFERENCES [dbo].[Group] ([Id])
 );
-
-
-
-
+GO
+CREATE TRIGGER [DeleteMeeting] ON [Meeting] INSTEAD OF DELETE
+AS
+BEGIN
+    DELETE FROM [MeetingParticipant] WHERE MeetingId IN (SELECT Id FROM DELETED)
+    DELETE FROM [Layout] WHERE MeetingId IN (SELECT Id FROM DELETED)
+    DELETE FROM [Meeting] WHERE Id IN (SELECT Id FROM DELETED)
+END
 GO
 
 

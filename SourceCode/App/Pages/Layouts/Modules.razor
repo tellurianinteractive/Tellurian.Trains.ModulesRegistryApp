@@ -17,31 +17,35 @@ else if (IsParticipant || Principal.IsAnyAdministrator())
     @foreach (var participant in MeetingParticipants.OrderBy(mp => mp.Person.FullName()))
     {
         <h3>@participant.Person.FullName(), @participant.Person.CityName</h3>
-        @if (participant.LayoutModules.Count > 0)
+        @foreach (var participantLayout in participant.Layouts)
         {
-            <TableTemplate Items="@participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
-                <TableHeader>
-                    <th>@Localizer["Module"]</th>
-                    <th width="120px">@Localizer["RegistrationTime"]</th>
-                    <th width="100px" align="center">@Localizer["IsStation"]</th>
-                    <th>@Localizer["Actions"] </th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.Module.FullName</td>
-                    <td width="120px">@item.RegisteredTime.ToString("d")</td>
-                    <td width="100px" align="center">@item.HasLayoutStation().AsYesOrNo()</td>
-                    <td>
-                        @if (item.HasLayoutStation())
-                        {
-                            <AppButton Label="Waybills" Href="@WaybillsHref(item)" />
-                        }
-                     </td>
-                </RowTemplate>
-            </TableTemplate>
-        }
-        else
-        {
-            <p>@Localizer["NoModulesRegistered"]</p>
+            @if (participantLayout.LayoutModules.Count > 0)
+            {
+                <h4>@participantLayout.Layout.Name()</h4>
+                <TableTemplate Items="participantLayout.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
+                    <TableHeader>
+                        <th>@Localizer["Module"]</th>
+                        <th width="120px">@Localizer["RegistrationTime"]</th>
+                        <th width="100px" align="center">@Localizer["IsStation"]</th>
+                        <th>@Localizer["Actions"] </th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.Module.FullName</td>
+                        <td width="120px">@item.RegisteredTime.ToString("d")</td>
+                        <td width="100px" align="center">@item.HasLayoutStation().AsYesOrNo()</td>
+                        <td>
+                            @if (item.HasLayoutStation())
+                            {
+                                <AppButton Label="Waybills" Href="@WaybillsHref(item)" />
+                            }
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
+            else
+            {
+                <p>@Localizer["NoModulesRegistered"]</p>
+            }
         }
     }
 }
@@ -68,7 +72,7 @@ else
 
     bool IsParticipant => Principal is not null && MeetingParticipants is not null && MeetingParticipants.Any(mp => mp.PersonId == Principal.PersonId());
 
-    string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
+    string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 
 }

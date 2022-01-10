@@ -29,6 +29,7 @@ namespace ModulesRegistry.Extensions
         public const string Station = "fa fa-school";
         public const string Stations = "fa fa-school";
         public const string Standard = "fa fa-pencil-ruler";
+        public const string Tools = "fa fa-tools";
         public const string Transfer = "fa fa-people-carry";
         public const string Upload = "fa fa-file-upload";
         public const string User = "fa fa-user";
@@ -63,6 +64,7 @@ namespace ModulesRegistry.Extensions
             {nameof(Station), Station },
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },
+            {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },
             {nameof(Upload), Upload },
             {nameof(User), User },

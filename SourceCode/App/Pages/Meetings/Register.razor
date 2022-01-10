@@ -1,4 +1,4 @@
-﻿@page "/Meetings/{id:int}/Register"
+﻿@page "/Meetings/{MeetingId:int}/Register"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -35,53 +35,36 @@ else
     }
     else if (Meeting.Id > 0 && PersonId > 0)
     {
-        if (IsMeetingOrganiser || Principal.IsAnyAdministrator()|| Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+        if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
         {
             <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
         }
+    }
 
+    if (Participant is not null)
+    {
+
+        <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
+            <Inputs>
+                <AppInputCheck Width="2" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
+                <AppInputCheck Width="2" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
+                <AppInputCheck Width="2" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
+                <AppInputCheck Width="2" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
+                <AppInputCheck Width="2" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
+                <AppInputDateNullable Width="4" @bind-Value="Participant.ArrivalTime" Label="ArrivalTime"/>
+            </Inputs>
+        </EditTemplate>
     }
 
     <hr />
 
-    <h3>@Localizer["Participants"]</h3>
-    <TableTemplate Items="Meeting.Participants">
-        <TableHeader>
-            <th>@Localizer["Name"]</th>
-            <th>@Localizer["CityName"]</th>
-            <th>@Localizer["Country"]</th>
-            <th>@Localizer["Registered"]</th>
-            <th>@Localizer["Layouts"]</th>
-            @if (IsMeetingOrganiser)
-        {
-            <th>@Localizer["Withdrawn"]</th>
-        }
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="item">
-        <td>@item.Person.Name()</td>
-        <td>@item.Person.CityName</td>
-        <td>@item.Person.Country.EnglishName.AsLocalized()</td>
-        <td>@item.RegistrationTime.ToString("g")</td>
-        <td>@ParticipantLayouts(item)</td>
-        @if (IsMeetingOrganiser)
-            {
-            <td>@item.CancellationTime?.ToString("g")</td>
-            }
-        <td>
-            @if (MayEdit(item))
-                {
-                <AppButton Label="RegisterModules" Href="@RegistrationHref(item.Meeting.Id, item.Id)" Type="primary" IconName="plus-square" />
-                <AppButton Label="Cancel" OnClickCallback="@(() => OnCancel(item.Id))" IsDisabled="true" />
-                }
-        </td>
-    </RowTemplate>
-</TableTemplate>
+
 }
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int Id { get; set; }
+    [Parameter] public int MeetingId { get; set; }
+
     ClaimsPrincipal? Principal;
 
     int CountryId;
@@ -92,16 +75,19 @@ else
     IEnumerable<ListboxItem>? PeopleItems;
 
     bool IsMeetingOrganiser;
-    bool MayEdit(MeetingParticipant mp) => !mp.CancellationTime.HasValue && (IsMeetingOrganiser || mp.PersonId == Principal.PersonId());
-    string RegistrationHref(int meetingId, int participantId) => $"Meeting/{meetingId}/Register/{participantId}/Modules";
-    string ParticipantLayouts(MeetingParticipant mp) => mp.LayoutModules.Any() ? string.Join(',', mp.LayoutModules.Select(lm => lm.Layout.Name()).Distinct()) : Localizer["NoModulesRegistered"].ToString();
+    bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && ( 
+        Principal.IsAnyAdministrator() || 
+        IsMeetingOrganiser || 
+        (!mp.CancellationTime.HasValue  && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
+
+    string ParticipantLayouts(MeetingParticipant mp) => string.Join(',', mp.Layouts.Select(lm => lm.Layout.Name()));
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Id > 0)
+        if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdWithParticipantsAsync(Principal, Id);
+            Meeting = await MeetingService.FindByIdWithLayoutsAsync(Principal, MeetingId);
             if (Meeting is not null)
             {
                 IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
@@ -117,9 +103,10 @@ else
         }
     }
 
+
     async Task OnSelectedCountry(int countryId)
     {
-        if (Id > 0 && countryId > 0)
+        if (MeetingId > 0 && countryId > 0)
         {
             CountryId = countryId;
             PersonId = 0;
@@ -129,10 +116,11 @@ else
 
     async Task OnSelectedPerson(int personId)
     {
-        if (Id > 0 && personId > 0)
+        if (MeetingId > 0 && personId > 0)
         {
             PersonId = personId;
-            Participant = await MeetingService.FindParticipantAsync(Principal, Id, personId) ?? new MeetingParticipant { PersonId = personId, MeetingId = Id, RegistrationTime = TimeProvider.Now };
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId) ??
+                new MeetingParticipant { PersonId = personId, MeetingId = MeetingId, RegistrationTime = TimeProvider.Now };
         }
     }
 
@@ -149,7 +137,7 @@ else
 
     async Task OnCancel(int particpantId)
     {
-        var result = await MeetingService.CancelParticipaction(Principal, particpantId);
+        var result = await MeetingService.CancelMeetingParticipaction(Principal, particpantId);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
