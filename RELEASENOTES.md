@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.4.11
+Release date 2022-01-13
+- **Loco Preparation Guide** translated to German and Swedish.
+- **Bug fix** of Invitation button in Module owners page.
+
 #### Version 1.4.10
 Release date 2022-01-10
 

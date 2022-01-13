@@ -30,7 +30,7 @@ Om du själv kan eller har någon som kan hjälpa dig, gör följande för att j
 – Om ditt lok går sönder träffen mötet finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
 
 #### Förberedelse av persontåg med lok och manövervagn
-– Det rekommenderas att loket och manövervagnen i andra änden har synkroniserade ljus som växlar med tågets riktning.
+Det rekommenderas att loket och manövervagnen i andra änden har synkroniserade ljus som växlar med tågets riktning.
 Det betyder att de måste ha samma DCC-adress och samma strålkastar- och bakgrundsbelysningsfunktioner. Dessa inställningar ändras i dekoderns inställningar.
 
 #### Förberedelse av FRED
@@ -41,8 +41,7 @@ FRED-körhandtaget är det enda som används vid FREMO-möten.
 - Även om du inte har en FRED på dina lok, förbered en FRED-dekal.
 
 #### Förberedelse av lokkort
-– Alla lok som kör linjetåg brukar ha lokkort.
-- Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
+Alla lok som kör linjetåg brukar ha lokkort. Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
 
 ### På mötet
 Du **får** inte sätta ett lok med en icke-reserverad adress på banan.
