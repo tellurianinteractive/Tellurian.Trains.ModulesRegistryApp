@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyName>ModulesRegistry.Services</AssemblyName>
 		<RootNamespace>ModulesRegistry.Services</RootNamespace>
-		<Version>1.4.10</Version>
+		<Version>1.5.0</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<Platforms>AnyCPU;x64</Platforms>
@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.26.0" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0-preview1.21237.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0" />
 		<PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
 	</ItemGroup>
 

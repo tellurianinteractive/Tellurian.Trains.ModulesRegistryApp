@@ -1,5 +1,8 @@
 ## Release Notes
 
+#### Version 1.5.0
+- **Upgrade to .NET 6.0, which has long time support to 2025.
+
 #### Version 1.4.11
 Release date 2022-01-13
 - **Loco Preparation Guide** translated to German and Swedish.
