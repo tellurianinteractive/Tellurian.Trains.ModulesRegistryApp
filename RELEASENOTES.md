@@ -4,6 +4,7 @@
 - **Upgrade to .NET 6.0, which has long time support to at least 2024.
 - **Refactored** to C# 10 syntax.
 - **Bug fix** of file upload of documents and drawings.
+- **Translations** for *Tools* page and *Loco prepararion guide*.
 
 #### Version 1.4.11
 Release date 2022-01-13
