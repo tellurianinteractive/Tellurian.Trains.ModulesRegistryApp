@@ -137,7 +137,7 @@ public sealed class CargoService
 
     }
 
-    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, $"{nhm.Code!.Substring(0, nhm.LevelDigits)} {nhm.LocalizedName()}");
+    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName()}");
 
     #endregion
 }

@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable disable
 
-#nullable disable
+namespace ModulesRegistry.Data;
 
-namespace ModulesRegistry.Data
+public class MeetingParticipant
 {
-    public class MeetingParticipant
+    public MeetingParticipant()
     {
-        public MeetingParticipant()
-        {
-            Layouts = new HashSet<LayoutParticipant>();
-        }
-        public int Id { get; set; }
-        public int PersonId { get; set; }
-        public int MeetingId { get; set; }
-        public bool ParticipateDay1 { get; set; }
-        public bool ParticipateDay2 { get; set; }
-        public bool ParticipateDay3 { get; set; }
-        public bool ParticipateDay4 { get; set; }
-        public bool ParticipateDay5 { get; set; }
-        public DateTime? ArrivalTime { get; set; }   
-
-        public DateTimeOffset RegistrationTime { get; set; }
-        public DateTimeOffset? CancellationTime { get; set; }
-
-        public virtual Person Person { get; set; }
-        public virtual Meeting Meeting { get; set; }
-        public virtual ICollection<LayoutParticipant> Layouts { get; set; }
+        Layouts = new HashSet<LayoutParticipant>();
     }
+    public int Id { get; set; }
+    public int PersonId { get; set; }
+    public int MeetingId { get; set; }
+    public bool ParticipateDay1 { get; set; }
+    public bool ParticipateDay2 { get; set; }
+    public bool ParticipateDay3 { get; set; }
+    public bool ParticipateDay4 { get; set; }
+    public bool ParticipateDay5 { get; set; }
+    public DateTime? ArrivalTime { get; set; }
+
+    public DateTimeOffset RegistrationTime { get; set; }
+    public DateTimeOffset? CancellationTime { get; set; }
+
+    public virtual Person Person { get; set; }
+    public virtual Meeting Meeting { get; set; }
+    public virtual ICollection<LayoutParticipant> Layouts { get; set; }
 }

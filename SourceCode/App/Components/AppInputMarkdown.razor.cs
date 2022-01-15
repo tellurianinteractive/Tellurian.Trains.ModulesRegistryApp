@@ -1,11 +1,10 @@
 ﻿using Markdig;
 using Microsoft.AspNetCore.Components;
 
-namespace ModulesRegistry.Components
+namespace ModulesRegistry.Components;
+
+public class AppInputMarkdownBase : ComponentBase
 {
-    public class AppInputMarkdownBase : ComponentBase
-    {
-        [Parameter] public string? Body { get; set; }
-        public string Preview => Markdown.ToHtml(Body ?? string.Empty);
-    }
+    [Parameter] public string? Body { get; set; }
+    public string Preview => Markdown.ToHtml(Body ?? string.Empty);
 }

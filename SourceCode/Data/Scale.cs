@@ -1,22 +1,19 @@
-﻿using System.Collections.Generic;
+﻿#nullable disable
 
-#nullable disable
+namespace ModulesRegistry.Data;
 
-namespace ModulesRegistry.Data
+public partial class Scale
 {
-    public partial class Scale
+    public Scale()
     {
-        public Scale()
-        {
-            ModuleStandards = new HashSet<ModuleStandard>();
-            Modules = new HashSet<Module>();
-        }
-
-        public int Id { get; set; }
-        public string ShortName { get; set; }
-        public int Denominator { get; set; }
-
-        public virtual ICollection<ModuleStandard> ModuleStandards { get; set; }
-        public virtual ICollection<Module> Modules { get; set; }
+        ModuleStandards = new HashSet<ModuleStandard>();
+        Modules = new HashSet<Module>();
     }
+
+    public int Id { get; set; }
+    public string ShortName { get; set; }
+    public int Denominator { get; set; }
+
+    public virtual ICollection<ModuleStandard> ModuleStandards { get; set; }
+    public virtual ICollection<Module> Modules { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿namespace ModulesRegistry.Data
+﻿namespace ModulesRegistry.Data;
+
+public enum ModuleExitDirection
 {
-    public enum ModuleExitDirection
-    {
-        Undefined = 0,
-        Eastwards = 1,
-        Westwards = 2
-    }
+    Undefined = 0,
+    Eastwards = 1,
+    Westwards = 2
 }

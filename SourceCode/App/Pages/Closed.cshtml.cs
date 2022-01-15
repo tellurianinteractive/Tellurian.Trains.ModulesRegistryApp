@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ModulesRegistry.Pages
+namespace ModulesRegistry.Pages;
+
+public class ClosedModel : PageModel
 {
-    public class ClosedModel : PageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }

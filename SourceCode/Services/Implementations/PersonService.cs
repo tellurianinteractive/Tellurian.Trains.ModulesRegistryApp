@@ -68,7 +68,7 @@ public sealed class PersonService
     {
         using var dbContext = Factory.CreateDbContext();
         var person = await dbContext.People.SingleOrDefaultAsync(p => p.UserId == userId);
-        if (principal.MayRead(person.Id))
+        if (person is not null && principal.MayRead(person.Id))
         {
             return person;
         }

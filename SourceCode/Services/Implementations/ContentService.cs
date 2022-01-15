@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Net.Http;
-
-namespace ModulesRegistry.Services.Implementations;
+﻿namespace ModulesRegistry.Services.Implementations;
 
 public sealed class ContentService
 {

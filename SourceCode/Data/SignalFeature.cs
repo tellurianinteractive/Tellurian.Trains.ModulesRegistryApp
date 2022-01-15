@@ -1,9 +1,8 @@
-﻿namespace ModulesRegistry.Data
+﻿namespace ModulesRegistry.Data;
+
+public enum SignalFeature
 {
-    public enum SignalFeature
-    {
-        No = 0,
-        Optional = 1,
-        Fixed = 2
-    }
+    No = 0,
+    Optional = 1,
+    Fixed = 2
 }

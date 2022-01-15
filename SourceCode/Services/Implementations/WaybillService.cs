@@ -12,7 +12,7 @@ public class WaybillService
         Factory = factory;
     }
 
-    public IEnumerable<Waybill>? GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false, bool sending = true, bool receiving = true)
+    public IEnumerable<Waybill>? GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false)
     {
         List<Waybill> waybills = new List<Waybill>(200);
         if (principal.IsAuthenticated())

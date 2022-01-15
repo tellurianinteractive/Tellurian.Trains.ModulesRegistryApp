@@ -1,9 +1,8 @@
 ﻿#nullable disable
 
-namespace ModulesRegistry.Data
+namespace ModulesRegistry.Data;
+
+public partial class User
 {
-    public partial class User
-    {
-        public virtual Person Person { get; set; }
-    }
+    public virtual Person Person { get; set; }
 }

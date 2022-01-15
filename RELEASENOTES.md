@@ -1,7 +1,9 @@
 ## Release Notes
 
 #### Version 1.5.0
-- **Upgrade to .NET 6.0, which has long time support to 2025.
+- **Upgrade to .NET 6.0, which has long time support to at least 2024.
+- **Refactored** to C# 10 syntax.
+- **Bug fix** of file upload of documents and drawings.
 
 #### Version 1.4.11
 Release date 2022-01-13

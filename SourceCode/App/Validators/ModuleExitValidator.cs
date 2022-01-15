@@ -1,21 +1,21 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
-namespace ModulesRegistry.Validators
+
+namespace ModulesRegistry.Validators;
+
+public class ModuleExitValidator : AbstractValidator<ModuleExit>
 {
-    public class ModuleExitValidator : AbstractValidator<ModuleExit>
+    public ModuleExitValidator(IStringLocalizer<App> localizer)
     {
-        public ModuleExitValidator(IStringLocalizer<App> localizer)
-        {
-            RuleFor(m => m.Label)
-                .NotEmpty()
-                .MinimumLength(1)
-                .MaximumLength(20)
-                .MustBeOrdinaryText(localizer)
-                .WithName(n => localizer["Direction"]);
-            RuleFor(m => m.GableTypeId)
-                .MustBeSelected(localizer)
-                .WithName(n => localizer["GableType"]);
-        }
+        RuleFor(m => m.Label)
+            .NotEmpty()
+            .MinimumLength(1)
+            .MaximumLength(20)
+            .MustBeOrdinaryText(localizer)
+            .WithName(n => localizer["Direction"]);
+        RuleFor(m => m.GableTypeId)
+            .MustBeSelected(localizer)
+            .WithName(n => localizer["GableType"]);
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace ModulesRegistry.Data
+﻿namespace ModulesRegistry.Data;
+
+public enum StationTrackDirection
 {
-    public enum StationTrackDirection
-    {
-        NotScheduled = 0,
-        EastWest = 1,
-        WestEast = 2,
-        Bidirectional = 10
-    }
+    NotScheduled = 0,
+    EastWest = 1,
+    WestEast = 2,
+    Bidirectional = 10
 }

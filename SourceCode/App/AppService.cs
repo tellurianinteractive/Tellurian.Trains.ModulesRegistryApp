@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ModulesRegistry
+namespace ModulesRegistry;
+
+public class AppService
 {
-    public class AppService
+    public static string AppVersion
     {
-        public static string AppVersion
+        get
         {
-            get
-            {
-                var version = Version;
-                if (version is null) return string.Empty;
-                return $"{version.Major}.{version.Minor}.{version.Build}";
-            }
+            var version = Version;
+            if (version is null) return string.Empty;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
-        private static Version? Version => Assembly.GetExecutingAssembly().GetName().Version;
     }
+    private static Version? Version => Assembly.GetExecutingAssembly().GetName().Version;
 }

@@ -1,6 +1,4 @@
 ﻿using ModulesRegistry.Services.Implementations;
-using System.Globalization;
-using System.IO;
 
 namespace ModulesRegistry.Services.Extensions;
 

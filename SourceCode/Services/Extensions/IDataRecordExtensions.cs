@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Globalization;
 using System.Resources;
 
 namespace ModulesRegistry.Services.Extensions;

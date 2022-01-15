@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ModulesRegistry.Services.Implementations
+﻿namespace ModulesRegistry.Services.Implementations
 {
     public sealed class LayoutParticipantService
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory;
-        private readonly ITimeProvider TimeProvider;
-        public LayoutParticipantService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+        public LayoutParticipantService(IDbContextFactory<ModulesDbContext> factory)
         {
             Factory = factory;
-            TimeProvider = timeProvider;
         }
 
         public async Task<IEnumerable<LayoutParticipant>> GetAllForLayout(ClaimsPrincipal principal, int layoutId)

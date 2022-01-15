@@ -1,61 +1,34 @@
 ﻿#nullable disable
 
-namespace ModulesRegistry.Data
+namespace ModulesRegistry.Data;
+
+public partial class StationCustomerCargo
 {
-    public partial class StationCustomerCargo
+    public StationCustomerCargo()
     {
-        public StationCustomerCargo()
-        {
-        }
-
-        public int Id { get; set; }
-        public int StationCustomerId { get; set; }
-        public int CargoId { get; set; }
-        public int PackageUnitId { get; set; }
-        public string TrackOrArea { get; set; }
-        public string TrackOrAreaColor { get; set; }
-        public string SpecificWagonClass { get; set; }
-        public string SpecialCargoName { get; set; }
-        public int DirectionId { get; set; }
-        public int OperatingDayId { get; set; }
-        public int QuantityUnitId { get; set; }
-        public int Quantity { get; set; }
-        public int? MaxTrainsetLength { get; set; }
-        public int ReadyTimeId { get; set; }
-        public short? FromYear { get; set; }
-        public short? UptoYear { get; set; }
-
-        public virtual Cargo Cargo { get; set; }
-        public virtual CargoDirection Direction { get; set; }
-        public virtual OperatingDay OperatingDay { get; set; }
-        public virtual QuantityUnit QuantityUnit { get; set; }
-        public virtual CargoReadyTime ReadyTime { get; set; }
-        public virtual StationCustomer StationCustomer { get; set; }
     }
 
-    public static class StationCustomerCargoExtensions
-    {
-        public static bool IsUnloading(this StationCustomerCargo me) => me.DirectionId == 1 || me.DirectionId == 3;
-        public static bool IsLoading(this StationCustomerCargo me) => me.DirectionId == 2 || me.DirectionId == 4;
+    public int Id { get; set; }
+    public int StationCustomerId { get; set; }
+    public int CargoId { get; set; }
+    public int PackageUnitId { get; set; }
+    public string TrackOrArea { get; set; }
+    public string TrackOrAreaColor { get; set; }
+    public string SpecificWagonClass { get; set; }
+    public string SpecialCargoName { get; set; }
+    public int DirectionId { get; set; }
+    public int OperatingDayId { get; set; }
+    public int QuantityUnitId { get; set; }
+    public int Quantity { get; set; }
+    public int? MaxTrainsetLength { get; set; }
+    public int ReadyTimeId { get; set; }
+    public short? FromYear { get; set; }
+    public short? UptoYear { get; set; }
 
-        public static StationCustomerCargo Clone(this StationCustomerCargo me) =>
-            new ()
-            {
-                CargoId = me.CargoId,
-                DirectionId = me.DirectionId,
-                OperatingDayId = me.OperatingDayId,
-                PackageUnitId = me.PackageUnitId,
-                FromYear = me.FromYear,
-                UptoYear = me.UptoYear,
-                QuantityUnitId = me.QuantityUnitId,
-                Quantity = me.Quantity,
-                ReadyTimeId = me.ReadyTimeId,
-                MaxTrainsetLength = me.MaxTrainsetLength,
-                SpecialCargoName = me.SpecialCargoName,
-                SpecificWagonClass = me.SpecificWagonClass,
-                StationCustomerId = me.StationCustomerId,
-                TrackOrArea = me.TrackOrArea,
-                TrackOrAreaColor = me.TrackOrAreaColor
-            };
-    }
+    public virtual Cargo Cargo { get; set; }
+    public virtual CargoDirection Direction { get; set; }
+    public virtual OperatingDay OperatingDay { get; set; }
+    public virtual QuantityUnit QuantityUnit { get; set; }
+    public virtual CargoReadyTime ReadyTime { get; set; }
+    public virtual StationCustomer StationCustomer { get; set; }
 }
