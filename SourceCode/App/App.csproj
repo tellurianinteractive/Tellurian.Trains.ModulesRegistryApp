@@ -44,6 +44,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\LocoPreparationGuide.no.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\LocoPreparationGuide.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\LocoPreparationGuide.de.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -51,6 +57,18 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\LocoPreparationGuide.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\ToolsInfo.no.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\ToolsInfo.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\ToolsInfo.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\ToolsInfo.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\ToolsInfo.md">

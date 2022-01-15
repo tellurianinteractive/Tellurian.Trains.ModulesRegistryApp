@@ -1089,4 +1089,7 @@
   <data name="OtherPleaseSpecify" xml:space="preserve">
     <value>Sonstiges, bitte angeben</value>
   </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Werkzeug</value>
+  </data>
 </root>
