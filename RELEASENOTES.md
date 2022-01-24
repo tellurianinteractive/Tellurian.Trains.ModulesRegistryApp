@@ -2,6 +2,7 @@
 
 #### Version 1.5.1
 Release date 2022-01-24
+_ **Packaging units** added: *bundles*, *big sacks* and *rolls*.
 - **Bug fix** of issue #138 Wrong station name in cargo station list.
 - **Bug fix** of issue #139 Back-button causes app to crash.
 

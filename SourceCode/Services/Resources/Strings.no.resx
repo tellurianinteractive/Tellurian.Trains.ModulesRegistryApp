@@ -546,4 +546,13 @@
   <data name="Immediately" xml:space="preserve">
     <value>Umiddelbart</value>
   </data>
+  <data name="Rolls" xml:space="preserve">
+    <value>Ruller</value>
+  </data>
+  <data name="BigSacks" xml:space="preserve">
+    <value>Storsekker</value>
+  </data>
+  <data name="Bundles" xml:space="preserve">
+    <value>Bunter</value>
+  </data>
 </root>

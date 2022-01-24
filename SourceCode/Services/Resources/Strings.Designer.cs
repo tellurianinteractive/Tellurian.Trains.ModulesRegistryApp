@@ -160,6 +160,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Big sacks.
+        /// </summary>
+        internal static string BigSacks {
+            get {
+                return ResourceManager.GetString("BigSacks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bottles.
         /// </summary>
         internal static string Bottles {
@@ -174,6 +183,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Boxes {
             get {
                 return ResourceManager.GetString("Boxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bundles.
+        /// </summary>
+        internal static string Bundles {
+            get {
+                return ResourceManager.GetString("Bundles", resourceCulture);
             }
         }
         
@@ -1056,6 +1074,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Removable {
             get {
                 return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rolls.
+        /// </summary>
+        internal static string Rolls {
+            get {
+                return ResourceManager.GetString("Rolls", resourceCulture);
             }
         }
         
