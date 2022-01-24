@@ -20,33 +20,33 @@
     }
     <hr />
 </div>
-    @code {
-        [Parameter] public string? IconClass { get; set; }
-        [Parameter] public string? Label { get; set; }
-        [Parameter] public string? ObjectName { get; set; }
-        [Parameter] public object? Owner { get; set; }
-        [Parameter] public PageAction PageAction { get; set; }
-        [Parameter] public string? HelpContext { get; set; }
-        [Parameter] public bool ShowHelpInitially { get; set; }
+@code {
+    [Parameter] public string? IconClass { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? ObjectName { get; set; }
+    [Parameter] public object? Owner { get; set; }
+    [Parameter] public PageAction PageAction { get; set; }
+    [Parameter] public string? HelpContext { get; set; }
+    [Parameter] public bool ShowHelpInitially { get; set; }
 
-        //bool HelpIsVisible { get; set; }
-        bool HelpIsHidden => PageHistory.IsShowningHelp != true;
-        bool IsHelpAvailable => HelpContext.HasValue();
-        string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help{HelpContext}";
+    //bool HelpIsVisible { get; set; }
+    bool HelpIsHidden => PageHistory.IsShowningHelp != true;
+    bool IsHelpAvailable => HelpContext.HasValue();
+    string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help{HelpContext}";
 
-        protected override void OnParametersSet()
-        {
-            if (PageHistory.IsShowningHelp is null) PageHistory.IsShowningHelp = ShowHelpInitially;
-        }
+    protected override void OnParametersSet()
+    {
+        if (PageHistory.IsShowningHelp is null) PageHistory.IsShowningHelp = ShowHelpInitially;
+    }
 
-        void ToggleHelp()
-        {
-            PageHistory.IsShowningHelp = !PageHistory.IsShowningHelp;
-        }
+    void ToggleHelp()
+    {
+        PageHistory.IsShowningHelp = !PageHistory.IsShowningHelp;
+    }
 
-        void Back()
-        {
-            PageHistory.NavigateBack();
-        }
+    void Back()
+    {
+        PageHistory.NavigateBack();
+    }
 
     }

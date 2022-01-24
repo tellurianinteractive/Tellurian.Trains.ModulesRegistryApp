@@ -30,13 +30,14 @@ public class PageHistory
     {
         if (!CanNavigateBack) return;
         var page = History[^2];
+        if (page == null) return;
         History.RemoveRange(History.Count - 2, 2);
         Navigator.NavigateTo(page.Url);
     }
 
     public bool? IsShowningHelp
     {
-        get => History.Last()?.ShowHelp ?? false;
+        get => History.Count <= 1 || History.Last()?.ShowHelp == true;
         set => History.Last().ShowHelp = value;
     }
 

@@ -42,7 +42,7 @@
 
 
     ClaimsPrincipal? Principal;
-    Station? Station;
+    ExternalStation? Station;
     IEnumerable<ExternalStationCustomer>? StationCustomers;
     bool MayEdit = false;
 
@@ -61,7 +61,7 @@
     {
         if (StationId > 0)
         {
-            Station = await StationService.FindByIdAsync(Principal, StationId);
+            Station = await ExternalStationService.FindByIdAsync(Principal, StationId);
             StationCustomers = await ExternalStationService.FindCustomersByIdAsync(Principal, StationId, CustomerId);
         }
     }

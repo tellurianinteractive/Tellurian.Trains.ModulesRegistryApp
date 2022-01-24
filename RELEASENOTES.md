@@ -1,6 +1,12 @@
 ## Release Notes
 
+#### Version 1.5.1
+Release date 2022-01-24
+- **Bug fix** of issue #138 Wrong station name in cargo station list.
+- **Bug fix** of issue #139 Back-button causes app to crash.
+
 #### Version 1.5.0
+Release date 2022-01-15
 - **Upgrade to .NET 6.0, which has long time support to at least 2024.
 - **Refactored** to C# 10 syntax.
 - **Bug fix** of file upload of documents and drawings.
