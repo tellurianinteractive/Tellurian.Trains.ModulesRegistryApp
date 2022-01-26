@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.5.2
+Release date 2022-01-27
+- **Content security policy** updated.
+
 #### Version 1.5.1
 Release date 2022-01-24
 _ **Packaging units** added: *bundles*, *big sacks* and *rolls*.
