@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RELEASENOTES.md = RELEASENOTES.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Import.Tests", "TestCode\Import.Tests\Import.Tests.csproj", "{6F1B2610-39CD-45BE-890B-C1D66BD72B24}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
@@ -58,14 +56,6 @@ Global
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|x64.ActiveCfg = Release|x64
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|x64.Build.0 = Release|x64
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Debug|x64.ActiveCfg = Debug|x64
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Debug|x64.Build.0 = Debug|x64
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Release|x64.ActiveCfg = Release|x64
-		{6F1B2610-39CD-45BE-890B-C1D66BD72B24}.Release|x64.Build.0 = Release|x64
 		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|x64.ActiveCfg = Debug|x64
@@ -107,8 +97,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = SingleSheet
-		RESX_NeutralResourcesLanguage = en-GB
 		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
+		RESX_NeutralResourcesLanguage = en-GB
+		RESX_ExcelExportMode = SingleSheet
 	EndGlobalSection
 EndGlobal

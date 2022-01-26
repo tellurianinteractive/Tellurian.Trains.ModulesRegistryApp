@@ -32,8 +32,8 @@ public static class SecurityHeadersPolicy
                 builder.AddStyleSrc().Self().UnsafeInline().From("https://cdn.jsdelivr.net").From("https://kit.fontawesome.com");
                 builder.AddBaseUri().Self();
                 builder.AddFrameAncestors().None();
-                // Blazor Server seems to manage without unsafe inline and unsafe eval.
                 builder.AddScriptSrc().Self().UnsafeInline(); //.WithHash256(""); //.UnsafeEval();
+                builder.AddUpgradeInsecureRequests();
                 })
             .AddPermissionsPolicy(builder =>
             {
