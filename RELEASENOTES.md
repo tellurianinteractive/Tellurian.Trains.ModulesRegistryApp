@@ -3,6 +3,7 @@
 #### Version 1.5.2
 Release date 2022-01-27
 - **Content security policy** updated.
+- **PDF documents** now opens directly when clicked. Drawing files still needs to be downloaded before opening.
 
 #### Version 1.5.1
 Release date 2022-01-24

@@ -1,11 +1,12 @@
 ﻿@if (DocumentId.HasValue)
 {
-    <a href="documents/@DocumentId.Value"><img src="@ImgSrc" class="icon" /></a>
+    <a href="@Href"><img src="@ImgSrc" class="icon" /></a>
 }
 
 @code {
     [Parameter] public int? DocumentId { get; set; }
     [Parameter] public string? FileExtension { get; set; }
 
+    string Href => $"documents/{DocumentId}";
     string ImgSrc => $"images/{FileExtension}.png";
 }

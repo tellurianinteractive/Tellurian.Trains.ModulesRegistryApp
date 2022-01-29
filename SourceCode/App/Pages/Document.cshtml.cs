@@ -18,6 +18,8 @@ public class DocumentModel : PageModel
         var document = await DocumentService.FindByIdAsync(id);
         if (document is null) return NotFound();
         var name = await DocumentService.GetDocumentName(id);
-        return File(document.Content, document.ContentType, $"{name}.{document.FileExtension.TrimEnd()}");
+        return (document.ContentType == "application/pdf") ?
+            File(document.Content, document.ContentType) :
+            File(document.Content, document.ContentType, $"{name}.{document.FileExtension}");
     }
 }
