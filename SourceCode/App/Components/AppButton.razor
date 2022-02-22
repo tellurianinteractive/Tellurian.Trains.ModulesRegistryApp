@@ -9,7 +9,7 @@ else if (IsSubmit)
 }
 else
 {
-    <button class="@ButtonClass" disabled="@Disabled" @onclick="OnClickCallback.InvokeAsync"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
+    <button class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
 }
 @code {
     [Parameter] public string Label { get; set; } = "Button";
@@ -20,6 +20,7 @@ else
     [Parameter] public string? Type { get; set; }
     [Parameter] public string IconName { get; set; } = string.Empty;
     [Parameter] public bool IsSubmit { get; set; }
+    [Parameter] public int OnClickParameter { get; set; }
 
     protected override void OnParametersSet()
     {

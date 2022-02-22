@@ -1,36 +1,5 @@
-﻿## Forbered dit lokomotiv til modultræffet
-Her er nogle retningslinjer for at forberede dine lokomotiver, før du sætter dem på sporet
-ved modultræf.
-
-### Forberedelse inden mødet
-Det er de ting, du kan gøre derhjemme eller i klubben, inden du rejser til mødet.
- 
-#### Forberedelse af dekoderindstillinger
-Hvis du har evnerne eller har nogen, der kan hjælpe dig, så gør følgende for at justere indstillingerne for din loko DCC-dekoder:
-- Læs CV 29. Bits er nummereret fra 0 til 7.
-  - Hvis bit 2 er indstillet, indikerer det analog drift. Denne skal slås fra ved at sætte denne bit til nul. Dette forhindrer lokomotivet i at haste med fuld fart, hvis en booster svigter.
-  - Hvis bit 3 er indstillet, indikerer det, at RailCom er aktiveret. Dette skal slås fra ved at sætte denne bit til nul. Dette gør DCC lidt mere effektivt.
-  - Anbefalede CV 29-værdier er:
-	- 0 er et loko med kort adresse 1-99 og 14 hastighedstrin.
-	- 2 er et loko med kort adresse 1-99 og 28/126 hastighedstrin.
-	- 32 er et loko med lang adresse 128-9999 og 14 hastighedstrin.
-	- 34 er et lokomotiv med lang adresse 128-9999 og 28/126 trin.
-	- For lokomotiv i *omvendt* retning, læg 1 til ovenstående CV29-værdier.
-- Hvis CV 19 er > 0, er dette den adresse, lokomotivet vil svare på. Det anbefales at indstille CV 19=0 for at deaktivere denne adresse.
-- Lokoadresse nummer 3 er forbudt. Dette er den mest almindelige standardadresse for nye dekodere.
-- Få dit lokomotiv til at starte og stoppe jævnt, ideelt set en hastighed, der er proportional med, hvor meget du drejer på FRED-knappen. Et lokomotiv, der springer væk, er ikke sjovt at køre.
-  - CV 3 styrer accelerationen, og du kan bruge enhver værdi, men ikke for lang.
-  - CV 4 styrer retardation, og du bør bruge en lille værdi, så lokomotivet kan stoppes på en kort strækning.
-- Lokomotivets tophastighed skal være "sikker". Juster værdi CV 5 for dette.
-
-#### Klargøring af lokomotivet
-- Rengør hjulene og kkontaktbladene for optimalt strømforbrug.
-- Hvis dit lokomotiv har ## Forbered dit loko til modulmødet
-Her er nogle retningslinjer for at forberede dine lokomotiver, før du sætter dem på sporet
-ved modulmøder.
-
-### Forberedelse inden mødet
-Det er de ting, du kan gøre derhjemme eller i klubben, inden du rejser til mødet.
+﻿### Forberedelse inden træf
+Det er de ting, du kan gøre derhjemme eller i klubben, inden du rejser til træffet.
  
 #### Forberedelse af dekoderindstillinger
 Hvis du har evnerne eller har nogen, der kan hjælpe dig, så gør følgende for at justere indstillingerne for din loko DCC-dekoder:
@@ -51,10 +20,16 @@ Hvis du har evnerne eller har nogen, der kan hjælpe dig, så gør følgende for
 - Lokomotivets tophastighed skal være "sikker". Juster værdi CV 5 for dette.
 
 #### Klargøring af lokomaskiner
+- Brug hjul, der opfylder kravene, [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betragtes som et minimumskrav,
+men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) er ofte påkrævet.
 - Rengør hjulene og kraftkontaktbladene for optimalt strømforbrug.
 - Hvis dit lokomotiv har gummiringe forskridsikre, så tjek at de er i orden. Hjul til gummiringe vil ikke køre godt uden disse ringe.
 - Test dine lokomotiver før mødet ved at køre dem på en bane, ikke kun i en testleje.
 - Hvis dit loko svigter under mødet, er der forhåbentlig nogen, der kan stille et reservelok til rådighed. Så tag nogle ekstra lokomotiver med.
+ 
+For H0-lokomotiver:
+- Brug FREMO-godkendte koblinger - *Fleischmann 6511* eller [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detalje).
+- Juster hjulet back-to-back til at være 14,5 mm ± 0,1 mm.
 
 #### Klargøring af passagertog med stytrevogn
 Det anbefales, at lokomotivet og styrevognen i den anden ende har synkroniseret lys, der skifter med togenes retning.

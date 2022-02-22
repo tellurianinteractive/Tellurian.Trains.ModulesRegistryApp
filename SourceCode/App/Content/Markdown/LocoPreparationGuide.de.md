@@ -24,10 +24,16 @@ Wenn Sie die Fähigkeit haben oder jemanden haben, der Ihnen helfen kann, gehen 
 - Höchstgeschwindigkeit der Lok sollte „sicher“ sein. Stellen Sie dazu den Wert CV 5 ein.
 
 #### Vorbereitung der Lokmaschinerie
+- Verwenden Sie Räder, die den Erfüllungsanforderungen entsprechen: [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) sollte als Mindestanforderung angesehen werden,
+aber [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) ist oft erforderlich.
 - Reinigen Sie die Räder und Stromkontaktmesser für einen optimalen Stromverbrauch.
 - Wenn Ihre Lok Rutschschutzgummiringe hat, überprüfen Sie, ob diese in Ordnung sind. Lokomotiven mit Rädern für Rutschschutz-Gummiringe werden ohne diese Ringe nicht gut fahren.
 - Testen Sie Ihre Lokomotiven vor dem Treffen, indem Sie sie auf einem Gleis fahren, nicht nur auf einem Prüfstand.
 - Wenn Ihre Lok während des Treffens ausfällt, gibt es hoffentlich jemanden, der eine Ersatzlok zur Verfügung stellen kann. Bringen Sie also ein paar zusätzliche Loks mit.
+ 
+Für H0-Lokomotiven:
+- FREMO-zugelassene Kupplungen verwenden - *Fleischmann 6511* oder [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detail).
+- Rad Back-to-back auf 14,5 mm ± 0,1 mm einstellen.
 
 #### Vorbereitung von Wendezug-Personenzügen
 - Es wird empfohlen, dass die Lok und der Steuerwagen am anderen Ende synchronisierte Lichter haben, die sich mit der Zugrichtung ändern.

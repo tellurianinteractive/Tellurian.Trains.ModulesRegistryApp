@@ -1,9 +1,11 @@
 ## Release Notes
 
 #### Version 1.5.2
-Release date 2022-01-27
+Release date 2022-02-11
 - **Content security policy** updated.
 - **PDF documents** now opens directly when clicked. Drawing files still needs to be downloaded before opening.
+- **Start page** image lesser in height.
+- **Loco preparation guide** updated. You find it under the **Tools** menu.
 
 #### Version 1.5.1
 Release date 2022-01-24

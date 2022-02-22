@@ -28,6 +28,12 @@ If you have the skill or have someone that can help you, do the following to adj
 - If your loco has slip protection rubber rings, check that they are okay. Locos with wheels for slip protection rubber rings will not run well without these rings.
 - Test your locos before the meeting by running them on a track, not just in a test bed.
 - If your loco fails during the meeting, there will hopefully be someone that can provide a spare loco. So bring some extra locos.
+- Use wheels that meets the meeting requirements, [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) should be regarded as a minimum requirement,
+- but [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) is often required.
+ 
+For H0-locomotives:
+- Use FREMO-approved couplings - *Fleischmann 6511* or [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detail).
+- Adjust wheel back-to-back to be 14.5mm ± 0.1 mm. 
 
 #### Preparation of push-pull passenger trains
 - It is recommended that the loco and the control car in the other end has synchronized lights that shifts with the trains direction. 

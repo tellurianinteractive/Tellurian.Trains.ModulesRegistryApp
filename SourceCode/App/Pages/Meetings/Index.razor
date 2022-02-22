@@ -37,8 +37,8 @@
             <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
             @if (MayRegister(item.meeting))
             {
-@*                <AppButton IconName="Register" Label="Register" IsDisabled=true Href="@MeetingHref(item.meeting.Id, "register")" />
-*@            }
+                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")" />
+            }
             @if (item.MayEdit)
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
