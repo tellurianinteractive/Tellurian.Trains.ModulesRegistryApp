@@ -1,4 +1,4 @@
-﻿@page "/LayoutParticipant/{LayoutParticipantId:int}/Modules"
+﻿@page "/MeetingParticipants/{MeetingParticipantId:int}/Layouts/{LayoutId:int}/RegisterModules"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -8,75 +8,80 @@
 
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
+@inject LayoutParticipantService LayoutParticipantService
 @inject CountryService CountryService
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
 <PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
-
 <div>
-    <h2>@Localizer["Participant"]: @Participant?.Person.Name()</h2>
+    <h2>@Localizer["Participant"]: @MeetingParticipant?.Person.Name()</h2>
 </div>
+@if (LayoutParticipant is null)
+{
+    <AppButton Label="Register" OnClickCallback="OnRegisterParticipation" />
+}
+else
+{
 
-<ListboxSelector ItemType="Layout" Items="LayoutItems" IsVisible="@(LayoutItems.Count() > 1)" OnSelected="OnSelectedLayout" />
+    <div style="margin-top: 12pt">
+        @if (Layout is not null)
+        {
 
-<div style="margin-top: 12pt">
-    @if (Layout is not null)
-    {
+            <h3>@Localizer["AvailableModules"]</h3>
+            <TableTemplate Items="Packages" Key="Key">
+                <TableHeader>
+                    <th>@Localizer["Package"]</th>
+                    <th>@Localizer["Modules"]</th>
+                    <th>@Localizer["Actions"]</th>
+                </TableHeader>
+                <RowTemplate Context="item">
+                    <td>@item.Name</td>
+                    <td>@item.ToString()</td>
+                    <td>
+                        <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                    </td>
+                </RowTemplate>
+            </TableTemplate>
 
-        <h3>@Localizer["AvailableModules"]</h3>
-        <TableTemplate Items="Packages" Key="Key">
-            <TableHeader>
-                <th>@Localizer["Package"]</th>
-                <th>@Localizer["Modules"]</th>
-                <th>@Localizer["Actions"]</th>
-            </TableHeader>
-            <RowTemplate Context="item">
-                <td>@item.Name</td>
-                <td>@item.ToString()</td>
-                <td>
-                    <AppButton Label="Add" OnClickCallback="@(() => OnRegister(item.Id))" IsDisabled="false" />
-                </td>
-            </RowTemplate>
-        </TableTemplate>
+            <h3>@Localizer["RegisteredModules"]</h3>
 
-        <h3>@Localizer["RegisteredModules"]</h3>
-
-        <TableTemplate Items="RegisteredModules">
-            <TableHeader>
-                <th>@Localizer["Package"]</th>
-                <th>@Localizer["Module"]</th>
-                <th>@Localizer["RegistrationTime"]</th>
-                <th>@Localizer["Position"] </th>
-                <th>@Localizer["Actions"]</th>
-            </TableHeader>
-            <RowTemplate Context="item">
-                <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
-                <td>@item.Module.FullName</td>
-                <td>@item.RegisteredTime.ToString("g")</td>
-                <td>@item.LayoutPosition()</td>
-                <td>
-                    @if (MayCancel(item))
-                    {
+            <TableTemplate Items="RegisteredModules">
+                <TableHeader>
+                    <th>@Localizer["Package"]</th>
+                    <th>@Localizer["Module"]</th>
+                    <th>@Localizer["RegistrationTime"]</th>
+                    <th>@Localizer["Position"] </th>
+                    <th>@Localizer["Actions"]</th>
+                </TableHeader>
+                <RowTemplate Context="item">
+                    <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
+                    <td>@item.Module.FullName</td>
+                    <td>@item.RegisteredTime.ToString("g")</td>
+                    <td>@item.LayoutPosition()</td>
+                    <td>
+                        @if (MayCancel(item))
+                        {
                     <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
-                    }
+                        }
             </td>
         </RowTemplate>
     </TableTemplate>
-    }
-</div>
+        }
+    </div>
+}
+
 @code {
 
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int LayoutParticipantId { get; set; }
-    [Obsolete, Parameter] public int ParticipantId { get; set; }
-    [Obsolete, Parameter] public int MeetingId { get; set; }
+    [Parameter] public int MeetingParticipantId { get; set; }
+    [Parameter] public int LayoutId { get; set; }
 
     ClaimsPrincipal? Principal;
 
     Meeting? Meeting;
     Layout? Layout;
-    MeetingParticipant? Participant;
+    MeetingParticipant? MeetingParticipant;
     LayoutParticipant? LayoutParticipant;
     ModuleOwnershipRef? OwnershipRef;
     IEnumerable<Module>? Modules = Array.Empty<Module>();
@@ -89,17 +94,24 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (LayoutParticipantId > 0)
+        if (MeetingParticipantId > 0)
         {
-            Meeting = await MeetingService.FindByIdAsync(MeetingId);
-            if (Meeting is not null)
+            MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
+            if (MeetingParticipant is not null && LayoutId > 0)
             {
-                if (Meeting.Layouts.Count == 1) Layout = Meeting.Layouts.First();
-                Participant = await MeetingService.FindParticipantAsync(Principal, LayoutParticipantId);
-                if (Participant is not null)
+                Meeting = await MeetingService.FindByIdAsync(MeetingParticipant.MeetingId);
+                if (Meeting is not null)
                 {
-                    OwnershipRef = ModuleOwnershipRef.Person(Participant.PersonId);
-                    await Update();
+                    Layout = Meeting.Layouts.Single(l => l.Id == LayoutId);
+                    LayoutParticipant = await LayoutParticipantService.GetByIdAsync(Principal, MeetingParticipant.Id, LayoutId);
+                    if (LayoutParticipant is not null)
+                    {
+                        if (LayoutParticipant is not null)
+                        {
+                            OwnershipRef = ModuleOwnershipRef.Person(LayoutParticipant.PersonId);
+                            await Update();
+                        }
+                    }
                 }
             }
         }
@@ -107,31 +119,31 @@
 
     async Task<IEnumerable<Module>> AllModules(ModuleOwnershipRef ownershipRef)
     {
-        if (Participant is not null && Layout is not null)
+        if (LayoutParticipant is not null && Layout is not null)
         {
-            return await LayoutService.GetAvailableModules(Principal, Participant, Layout);
+            return await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
         }
-        return Array.Empty<Module>();
-        //return  (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
+        return (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
     }
 
-
-    async Task OnSelectedLayout(int layoutId)
+    async Task OnRegisterParticipation()
     {
-        var layout = MeetingLayout(layoutId);
-        if (layout is not null)
+        if (MeetingParticipant is not null && Layout is not null)
         {
-            Layout = layout;
+            var participant = new LayoutParticipant { LayoutId = Layout.Id, MeetingParticipantId = MeetingParticipant.Id, PersonId = MeetingParticipant.PersonId };
+            var result = await LayoutParticipantService.SaveAsync(Principal, participant);
+            LayoutParticipant = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
     }
 
-    async Task OnRegister(int packageId)
+    async Task OnRegisterPackage(int packageId)
     {
         var package = Packages?.SingleOrDefault(p => p.Id == packageId);
-        if (package is not null && Layout is not null)
+        if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
-            var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipantId, package);
+            var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
@@ -139,29 +151,27 @@
 
     async Task OnCancel(int layoutModuleId)
     {
-        if (Layout is not null && Participant is not null)
+        if (Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.RemoveModuleAsync(Principal, layoutModuleId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
-
     }
 
     async Task Update()
     {
-        if (Layout is not null && Participant is not null)
+        if (Layout is not null && LayoutParticipant is not null)
         {
-            Modules = await LayoutService.GetAvailableModules(Principal, Participant, Layout);
-            RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutParticipantId);
+            Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
+            RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutParticipant.Id);
             AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
             Packages = AvailableModules.AsPackages();
         }
     }
 
-    Layout? MeetingLayout(int layoutId) => Meeting?.Layouts.SingleOrDefault(l => l.Id == layoutId);
     string Key(ModulePackage package) => package.Name;
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !RegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> RegisteredModuleIds => RegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Name())).ToList();
-}
+    }

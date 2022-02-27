@@ -28,7 +28,7 @@ public sealed class LayoutService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.LayoutStations.AsNoTracking()
-                .Where(ls => ls.LayoutId == layoutId)
+                .Where(ls => ls.LayoutParticipantId == layoutId)
                 .ToListAsync();
         }
         return Array.Empty<LayoutStation>();
@@ -58,16 +58,11 @@ public sealed class LayoutService
         return (0, Resources.Strings.NotAuthorized, entity);
     }
 
-    public async Task<IEnumerable<Module>> GetAvailableModules(ClaimsPrincipal? principal, MeetingParticipant participant, Layout layout)
+    public async Task<IEnumerable<Module>> GetAvailableModules(ClaimsPrincipal? principal, LayoutParticipant participant, Layout layout)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            //var registeredModulesId = await dbContext.LayoutModules.AsNoTracking()
-            //    .Where(lm => lm.LayoutId == layout.Id && lm.ParticipantId == participant.Id)
-            //    .Select(lm => lm.ModuleId)
-            //    .ToListAsync()
-            //    .ConfigureAwait(false);
 
             var groupsId = await dbContext.GroupMembers.AsNoTracking()
                 .Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator || gm.MayBorrowModules) &&  gm.PersonId == participant.PersonId)
@@ -118,7 +113,7 @@ public sealed class LayoutService
                     var layoutModule = new LayoutModule { ModuleId = module.Id, LayoutParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
                     if (module.StationId.HasValue)
                     {
-                        var layoutStation = new LayoutStation { StationId = module.StationId.Value };
+                        var layoutStation = new LayoutStation { StationId = module.StationId.Value, LayoutParticipantId = layoutParticipantId };
                         layoutModule.LayoutStation = layoutStation;
                     }
                     dbContext.LayoutModules.Add(layoutModule);

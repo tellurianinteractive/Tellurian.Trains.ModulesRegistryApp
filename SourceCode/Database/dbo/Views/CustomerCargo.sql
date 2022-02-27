@@ -5,8 +5,8 @@ SELECT -- Internal station customer cargo
 	SCC.Id,
 	SCC.OperatingDayId,
 	S.[Id] AS StationId,
-	S.FullName AS StationName,
-	S.Signature AS StationSignature,
+	COALESCE(LS.OtherName, S.FullName) AS StationName,
+	COALESCE(LS.OtherSignature, S.Signature) AS StationSignature,
 	SCC.CargoId,
 	CD.IsSupply,
 	CD.IsInternational,
@@ -82,8 +82,8 @@ SELECT -- Shadow yard suppliers
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
-	S.FullName AS StationName,
-	S.Signature AS StationSignature,
+	COALESCE(LS.OtherName, S.FullName) AS StationName,
+	COALESCE(LS.OtherSignature, S.Signature) AS StationSignature,
 	C.Id AS GargoId,
 	1 AS IsSupply,
 	1 AS IsInternational,
@@ -107,7 +107,7 @@ SELECT -- Shadow yard suppliers
 	'#ffffff' AS TrackOrAreaColor
 FROM 
 	LayoutParticipant LP 
-	INNER JOIN LayoutStation LS ON LP.MeetingParticipantId = LP.Id
+	INNER JOIN LayoutStation LS ON LS.LayoutParticipantId = LP.Id
 	INNER JOIN Station S ON S.Id = LS.StationId
 	LEFT JOIN Region R ON R.Id = S.RegionId
 	JOIN Cargo AS C ON C.Id > 0
@@ -119,8 +119,8 @@ SELECT -- Shadow yard consumers
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
-	S.FullName AS StationName,
-	S.Signature AS StationSignature,
+	COALESCE(LS.OtherName, S.FullName) AS StationName,
+	COALESCE(LS.OtherSignature, S.Signature) AS StationSignature,
 	C.Id AS GargoId,
 	0 AS IsSupply,
 	1 AS IsInternational,
@@ -144,7 +144,7 @@ SELECT -- Shadow yard consumers
 	'#ffffff' AS TrackOrAreaColor
 FROM 
 	LayoutParticipant LP 
-	INNER JOIN LayoutStation LS ON LP.MeetingParticipantId = LP.Id	
+	INNER JOIN LayoutStation LS ON LS.LayoutParticipantId = LP.Id	
 	INNER JOIN Station S ON S.Id = LS.StationId
 	LEFT JOIN Region R ON R.Id = S.RegionId
 	JOIN Cargo AS C ON C.Id > 0

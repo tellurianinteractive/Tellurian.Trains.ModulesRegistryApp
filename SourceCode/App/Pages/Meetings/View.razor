@@ -39,7 +39,7 @@ else
             </div>
             @if (Principal.IsAuthenticated())
             {
-                @*<AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@ModulesLink(item.Id)" />*@
+                <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
             }
         }
     }
@@ -60,7 +60,7 @@ else
     }
 
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;
-    string ModulesLink(int id) => $"layouts/{id}/modules";
+    string LayoutModulesLink(int id) => $"layouts/{id}/modules";
 
     MarkupString Item(string label, string text, string element = "div") => new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
 }

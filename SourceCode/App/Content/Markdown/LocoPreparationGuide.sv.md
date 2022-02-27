@@ -49,10 +49,11 @@ FRED-körhandtaget är det enda som används vid FREMO-möten.
 
 #### Förberedelse av lokkort
 Alla lok som kör linjetåg brukar ha lokkort. Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
+Lokkort kan du t.ex. tillverka med [Lok- och vagnkortsappen](https://wagoncardapp.azurewebsites.net/).
 
-### På mötet
-Du **får** inte sätta ett lok med en icke-reserverad adress på banan.
+### På modulträffen
+Du **får inte** sätta ett lok med en icke-reserverad adress på banan.
 Vid modulträffar ska lokadresser samordnas. Det finns två huvudsakliga sätt att göra detta:
 - **Använd reserverade FREMO-lokadresser:** du har fått en uppsättning lokadresser av FREMO, eller så måste du låna en reserverad adress från en som har, eller
-- **Använd adressreservation per möte:** Boka din befintliga lokadress i förväg eller på platsen innan du sätter den på banan.
-Om din adress redan är upptagen av någon annan måste du reservera en annan adress som är gratis och ändra ditt loks adress till den.
+- **Använd adressreservation per träff:** Boka din befintliga lokadress i förväg eller på plats.
+Om din adress redan är upptagen av någon annan måste du reservera en annan adress som är ledig och ändra lokadressen till den.

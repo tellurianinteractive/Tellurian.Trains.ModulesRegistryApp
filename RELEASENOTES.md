@@ -1,4 +1,8 @@
 ## Release Notes
+#### Version 1.6.0
+Release date 2022-02-27
+- **New meeting registration** is ready.
+- **Waybills** can now be printed again for layout stations.
 
 #### Version 1.5.2
 Release date 2022-02-11

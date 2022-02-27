@@ -53,7 +53,7 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Meetings.AsNoTracking()
-                .Include(m => m.Layouts)
+                .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
                 .SingleOrDefaultAsync(m => m.Id == id)
                 .ConfigureAwait(false);
         }
@@ -157,7 +157,7 @@ public class MeetingService
         if (principal is not null)
         {
             using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.Layouts.Include(l => l.LayoutModules).Where(l => l.Id == layoutId && l.MeetingId == meetingId).SingleOrDefaultAsync();
+            var existing = await dbContext.Layouts.Include(l => l.LayoutParticipants).Where(l => l.Id == layoutId && l.MeetingId == meetingId).SingleOrDefaultAsync();
             if (existing is null) return (-1).DeleteResult();
             dbContext.Layouts.Remove(existing);
             var result = await dbContext.SaveChangesAsync();
@@ -193,6 +193,7 @@ public class MeetingService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
                 .Include(mp => mp.Person)
+                .Include(mp => mp.Layouts)
                 .SingleOrDefaultAsync(mp => mp.Id == participantId)
                 .ConfigureAwait(false);
         }

@@ -27,7 +27,11 @@ public class WaybillService
                 };
 
                 command.Parameters.AddWithValue("@LayoutId", layoutId);
-                if (stationId.HasValue) command.Parameters.AddWithValue("@StationId", stationId);
+                if (stationId.HasValue) { 
+                    command.Parameters.AddWithValue("@StationId", stationId);
+                    command.Parameters.AddWithValue("@Receiving", true);
+                    command.Parameters.AddWithValue("@Sending", matchShadowYards);
+                }
                 command.Parameters.AddWithValue("@MatchShadowYard", matchShadowYards);
                 try
                 {

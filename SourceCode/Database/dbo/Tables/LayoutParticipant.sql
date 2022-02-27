@@ -4,7 +4,8 @@
     [MeetingParticipantId]  INT                NOT NULL,
     [LayoutId]              INT                NOT NULL,
     CONSTRAINT [PK_LayoutParticipant] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_LayoutParticipant_MeetingParticipant] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[MeetingParticipant] ([Id]),
+    CONSTRAINT [FK_LayoutParticipant_MeetingParticipant] FOREIGN KEY ([MeetingParticipantId]) REFERENCES [dbo].[MeetingParticipant] ([Id]),
+    CONSTRAINT [FK_LayoutParticipant_Person] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id]),
     CONSTRAINT [FK_LayoutParticipant_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id])
 );
 GO

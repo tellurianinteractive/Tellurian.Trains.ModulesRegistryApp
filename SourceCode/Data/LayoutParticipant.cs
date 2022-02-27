@@ -22,3 +22,9 @@ public class LayoutParticipant
 
 }
 
+public static class LayoutParticipantExtensions
+{
+    public static bool IsValid(this LayoutParticipant me) =>
+        me is not null && me.MeetingParticipantId > 0 && me.LayoutId > 0 && me.PersonId > 0;
+}
+

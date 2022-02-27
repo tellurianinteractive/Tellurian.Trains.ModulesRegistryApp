@@ -322,11 +322,6 @@ public partial class ModulesDbContext : DbContext
         {
             entity.ToTable("LayoutLine");
 
-            entity.HasOne(e => e.Layout)
-                .WithMany(e => e.LayoutLines)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(e => e.LayoutId);
-
             entity.HasOne(e => e.FromLayoutStation)
                 .WithMany(e => e.StartingLines)
                 .HasForeignKey(e => e.FromLayoutStationId);
@@ -342,6 +337,7 @@ public partial class ModulesDbContext : DbContext
             entity.HasOne(e => e.ToStationExit)
               .WithMany()
               .HasForeignKey(e => e.ToStationExitId);
+
         });
 
         modelBuilder.Entity<LayoutModule>(entity =>
@@ -359,7 +355,6 @@ public partial class ModulesDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(e => e.ModuleId);
 
-
             entity.HasOne(e => e.LayoutLine)
                .WithMany(e => e.Lines)
                .HasForeignKey(e => e.LayoutLineId);
@@ -367,6 +362,11 @@ public partial class ModulesDbContext : DbContext
             entity.HasOne(e => e.LayoutStation)
                 .WithMany(e => e.LayoutModules)
                 .HasForeignKey(e => e.LayoutStationId);
+
+            entity.HasOne(e => e.LayoutParticipant)
+                .WithMany(e => e.LayoutModules)
+                .HasForeignKey(e => e.LayoutParticipantId);
+
         });
 
         modelBuilder.Entity<LayoutParticipant>(entity =>
@@ -381,24 +381,25 @@ public partial class ModulesDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(e => e.MeetingParticipantId);
 
-            entity.HasOne(E => E.Layout)
-                .WithMany()
+            entity.HasOne(e => e.Layout)
+                .WithMany(e => e.LayoutParticipants)
                 .HasForeignKey(e => e.LayoutId);
+
         });
 
         modelBuilder.Entity<LayoutStation>(entity =>
         {
+            entity.ToTable("LayoutStation");
+
             entity.Property(e => e.OtherName)
                  .HasMaxLength(50);
 
             entity.Property(e => e.OtherSignature)
                   .HasMaxLength(5);
 
-            entity.ToTable("LayoutStation");
-
-            entity.HasOne(e => e.Layout)
+            entity.HasOne(e => e.LayoutParticipant)
                  .WithMany(e => e.LayoutStations)
-                 .HasForeignKey(e => e.LayoutId);
+                 .HasForeignKey(e => e.LayoutParticipantId);
 
             entity.HasMany(e => e.Regions)
                 .WithMany(e => e.LayoutStations);

@@ -150,4 +150,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="IncompleteData" xml:space="preserve">
+    <value>Incomplete data</value>
+  </data>
 </root>

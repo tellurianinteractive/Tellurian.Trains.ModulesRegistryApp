@@ -61,6 +61,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incomplete data.
+        /// </summary>
+        public static string IncompleteData {
+            get {
+                return ResourceManager.GetString("IncompleteData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invited.
         /// </summary>
         public static string Invited {

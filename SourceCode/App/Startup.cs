@@ -78,6 +78,7 @@ public class Startup
         services.AddScoped<GroupCategoryService>();
         services.AddScoped<GroupService>();
         services.AddScoped<LayoutService>();
+        services.AddScoped<LayoutParticipantService>();
         services.AddScoped<MeetingService>();
         services.AddScoped<ModuleService>();
         services.AddScoped<ModuleGableTypeService>();
