@@ -91,8 +91,8 @@ SELECT -- Shadow yard suppliers
 	1 AS IsShadowYard,
 	'' AS DefaultClasses,
 	COALESCE(LS.OtherCountryId, R.CountryId) AS CountryId,
-	COALESCE(R.BackColor, '#FFFFFF') AS BackColor,
-	COALESCE(R.ForeColor, '#000000') AS ForeColor,
+	'#FFFFFF' AS BackColor,
+	'#000000' AS ForeColor,
 	'ImportAgent' AS CustomerName,
 	NULL AS FromYear,
 	NULL AS UptoYear,
@@ -110,6 +110,7 @@ FROM
 	INNER JOIN LayoutStation LS ON LS.LayoutParticipantId = LP.Id
 	INNER JOIN Station S ON S.Id = LS.StationId
 	LEFT JOIN Region R ON R.Id = S.RegionId
+	--LEFT JOIN Region LSR ON R.Id = LS.
 	JOIN Cargo AS C ON C.Id > 0
 WHERE
 	S.IsShadow <> 0
@@ -128,8 +129,8 @@ SELECT -- Shadow yard consumers
 	1 AS IsShadowYard,
 	'' AS DefaultClasses,
 	COALESCE(LS.OtherCountryId, R.CountryId) AS CountryId,
-	COALESCE(R.BackColor, '#FFFFFF') AS BackColor,
-	COALESCE(R.ForeColor, '#000000') AS ForeColor,
+	'#FFFFFF' AS BackColor,
+	'#000000' AS ForeColor,
 	'ExportAgent' AS CustomerName,
 	NULL AS FromYear,
 	NULL AS UptoYear,

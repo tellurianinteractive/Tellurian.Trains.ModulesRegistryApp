@@ -1,4 +1,12 @@
 ## Release Notes
+
+#### Version 1.6.1
+Release date 2022-02-28
+- **Optimised waybill printing** where printing for a specific station 
+only contains relevant waybills and no duplicates printed for other stations.
+- **Region colour** for shadow stations destination and origin removed, 
+because these are considered as a station in the layout.
+
 #### Version 1.6.0
 Release date 2022-02-27
 - **New meeting registration** is ready.
@@ -19,7 +27,7 @@ _ **Packaging units** added: *bundles*, *big sacks* and *rolls*.
 
 #### Version 1.5.0
 Release date 2022-01-15
-- **Upgrade to .NET 6.0, which has long time support to at least 2024.
+- **Upgrade to .NET 6.0**, which has long time support to at least 2024.
 - **Refactored** to C# 10 syntax.
 - **Bug fix** of file upload of documents and drawings.
 - **Translations** for *Tools* page and *Loco prepararion guide*.

@@ -23,7 +23,7 @@ else if (IsParticipant || Principal.IsAnyAdministrator())
 
             <TableTemplate Items="participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
-                    <th>@Localizer["Module"]</th>
+                    <th width="70%">@Localizer["Module"]</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
                     <th width="100px" align="center">@Localizer["IsStation"]</th>
                     <th>@Localizer["Actions"] </th>

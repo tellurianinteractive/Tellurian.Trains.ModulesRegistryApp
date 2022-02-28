@@ -16,6 +16,8 @@
     [ReadyTimeId]        INT           NOT NULL,
     [FromYear]           SMALLINT      NULL,
     [UptoYear]           SMALLINT      NULL,
+    [EmptyReturn]        BIT           CONSTRAINT [DF_StationCustomerCargo_EmptyReturn] DEFAULT ((0)) NOT NULL,
+    [MatchReturn]        BIT           CONSTRAINT [DF_StationCustomerCargo_MatchReturn] DEFAULT ((0)) NOT NULL
     CONSTRAINT [PK_CustomerCargo] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_CustomerCargo_Cargo] FOREIGN KEY ([CargoId]) REFERENCES [dbo].[Cargo] ([Id]),
     CONSTRAINT [FK_CustomerCargo_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),

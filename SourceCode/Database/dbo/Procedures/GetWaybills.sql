@@ -51,6 +51,8 @@ BEGIN
 		C.DA,
 		C.DE,
 		C.EN,
+		C.FR,
+		C.IT,
 		C.NL,
 		C.NO,
 		C.PL,
@@ -69,10 +71,10 @@ BEGIN
 		((CCS.IsInternational <> 0 AND CCC.IsInternational <> 0) OR (CCS.CountryId = CCC.CountryId)) AND
 		((CCS.Id = 0 AND CCC.Id <> 0 AND CCC.IsInternal <>0) OR (CCC.Id = 0 AND CCS.Id <> 0 AND CCS.IsInternal <> 0) OR (CCS.Id <> 0 AND CCC.Id <> 0)) AND
 		(CCS.StationId <> CCC.StationId) AND 
-		(@StationId IS NULL OR @StationId = CCS.StationId OR @StationId = CCC.StationId) AND
-		((@Sending <> 0 OR CCC.StationId = @StationId) OR (@Receiving <> 0 OR CCS.StationId=@StationId)) AND
+		(@StationId IS NULL  OR (@StationId = CCS.StationId AND (CCC.IsInternal = 0 OR (CCC.IsShadowYard <> 0 ) AND @MatchShadowYard <> 0))  OR @StationId = CCC.StationId) AND
+		( (@Sending <> 0 OR CCC.StationId = @StationId)  OR  (@Receiving <> 0 OR CCS.StationId=@StationId) ) AND
 		(CCS.QuantityUnitId = CCC.QuantityUnitId) AND
-		--(CCS.PackageUnitId = CCC.PackageUnitId) AND
+		(CCS.PackageUnitId = 0 OR CCC.PackageUnitId = 0 OR CCS.PackageUnitId = CCC.PackageUnitId) AND
 		(CCS.FromYear IS NULL OR @UptoYear IS NULL OR CCS.FromYear <= @UptoYear) AND (CCS.UptoYear IS NULL OR @FromYear IS NULL OR CCS.UptoYear >= @FromYear) AND
 		(CCC.FromYear IS NULL OR @UptoYear IS NULL OR CCC.FromYear <= @UptoYear) AND (CCC.UptoYear IS NULL OR @FromYear IS NULL OR CCC.UptoYear >= @FromYear) AND
 		((CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId) OR (CCS.LayoutId= @LayoutId AND CCC.LayoutId = -1) OR (CCC.LayoutId = @LayoutId AND CCS.LayoutId = -1)) AND
