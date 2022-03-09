@@ -5,7 +5,7 @@
 This page describes the ways you can contribute. 
 In general, contribution requires you to have a [GitHub account](https://github.com/).
 However, translations can be also submitted through e-mail.
-For most contributions, you need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
+For most other contributions, you need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
 
 ## As Test User
 As a test user you use the application and report back with:
@@ -15,21 +15,20 @@ As a test user you use the application and report back with:
 ## As Translator
 If you want the application in yet another language, you can make a translation.
 
+
 #### Adding the new language to the app
 There are two main ways to add your translation to the app:
-- Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it.
-- Send translated files in a ZIP-file. 
-
-##### Using Git and GitHub
+- Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it. 
 You need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).
 You can *check-out* the repository, add a translation and then submit a *pull-request*.
+- Or just send translated files in a ZIP-file. 
 
-### Files to translate
+#### Files to translate
 Below a description of what files to translate. There are two types of files:
 - **Markdown texts** (.md) are text files using the simple [*markdown* syntax](https://www.markdownguide.org/).
 - **Resource files** (.resx) are text files using XML syntax.
 
-#### Markdown texts
+##### Markdown texts
 Markdown texts are longer texts with formatting. They are located [here](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Content/Markdown). 
 1. Make a copy of the *English version*. These are the one without a language code in the file name, example *About.md*.
 2. Rename your copied files to use your language's two letter language code, example *About.hu.md* for Hungarian.
@@ -40,7 +39,7 @@ After translation with Google, you can refine the translation if necessary.
 
 > NOTE: Do not translate the file *TermsOfUse.md*.
 
-#### Resource files
+##### Resource files
 Resource files are XML-files with shorter texts or single words. However, the content is very noisy, and its important to not
 change anything but the translated words/sentences. The files are located in three places:
 * App.xx.resx [App/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Resources),
@@ -54,7 +53,7 @@ Where *xx* is the two-letter language code for the translated language.
 3. Translate the texts and save. It is important to preserve the placeholders like {0} {1} etc.
 4. Add the translated files to your local repository.
 
-#### When the Translation Is Ready
+##### When the Translation Is Ready
 If you are working with GitHub, commit locally and name it as *Translated to x* where x is the name of the langauge. 
 Create a pull-request and push it to the remote repository.
 Otherwise; send an email with the translated files.
@@ -65,20 +64,20 @@ If you want to contribute to the development of the application, there are two m
 - As a **Database administrator**; analyse an optimize performance, suggest improvements of how queries are made using *Entity Framework*.
 - As a **DevOps specialist**; setting up an maintaining DevOps for application and database.
 
-> NOTE: Full development with deployment and testing against a database must be made with Visual Studio on a Windows machine.
+> NOTE: Full development with deployment and testing against a database must be made with Visual Studio on a Windows or machine.
 > Changing source code can be made in any text editing tool on any platform, and the application can be build using the *dotnet* Command Line Interface,
 > which comes with the .NET SDK installation for your platform.
 
-
-#### Skills
+##### Recommended Skills
 To contribute, you need some experience in the following fields:
-* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the latest version of .NET, from nov 2020 it is .NET 5.0, and from nov 2021 it is .NET 6.0.
-* Coding in **C#, HTML, CSS** and **SQL**. Both backend and web user interface is written in C#.
-* Using [**Blazor**](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) as web user interface framework. We do <u>not</u> use JavaScript based frameworks like Angular, React or Vue.
-* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer.
-* Using [**Sql Server**](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for local development and tests, and [**Azure SQL Database**](https://azure.microsoft.com/en-us/products/azure-sql/database/) as production database.
+* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the latest version of .NET, from nov 2021 it is .NET 6.0.
+* Using [**Blazor**](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) as web user interface framework. We do <u>not</u> use JavaScript based frameworks like Angular, React or Vue. Front-end is written in **C#**, **HTML** and **CSS**.
+* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer. Back-end is written in **C#**.
+* Using [**Sql Server**](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for local development and tests, and [**Azure SQL Database**](https://azure.microsoft.com/en-us/products/azure-sql/database/) as production database. The database structure and some logic are coded in **SQL**.
 * Using [**Visual Studio**](https://visualstudio.microsoft.com/) as development environment.
 Visual Studio has excellent support for coding and publishing apps written in C#, HTML/CSS, and built in database design- and deployment tools. 
+There is a free version available.
+* Knowledge of version management in **GitHub**.
 * Setting up DevOps using GitHub actions and Azure DevOps deployment slots. This is not in place, and help is needed.
 
 If you have experiences from writing web applications using HTML/CSS and JAVA, 
@@ -110,7 +109,7 @@ In order to run the application locally, you also need to install *SQL Server*.
 3. In the *Publish dialog* you select your local server and giv the database a name of your choice.
 4. The database is created and the schema is published to the database.
 5. You need to fill some tables with data. In the folder *dbo/Scripts/Initial data* are SQL-scrips per table that you need to run. You can open a file, connect to your database, and execute these SQL-script.
-6. You can also request a fresh copy of the production database using the [*sqlpackage.exe*](https://docs.microsoft.com/en-us/sql/tools/sqlpackage/) utiity program and then import this to your local database.
+6. You can also request a fresh copy of the production database using the [*sqlpackage.exe*](https://docs.microsoft.com/en-us/sql/tools/sqlpackage/) utility program and then import this create a local database.
 
 After the database is created and filled with initial data, you need to configure the application to connect to it.
 1. Store the database connection string in your local [app secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets) using the key *ConnectionStrings:TimetablePlanningDatabase*.
