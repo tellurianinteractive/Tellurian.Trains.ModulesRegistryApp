@@ -23,7 +23,6 @@ for maintaning data about *model railway modules* with the following qualities:
 - Available as a cloud application.
 
 ## Status March 2022
-* Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
 All functions for managing modules are now in place, including:
 * Managing your *modules*, *stations* and *station freight customers*.
 * Transfer of module *ownership* - part or whole - to other person or group.
@@ -34,6 +33,7 @@ All functions for managing modules are now in place, including:
 * Help texts for most forms with recommendation how to enter data.
 * Supported languages: English, German, Danish, Swedish and Norwegian.
 
+> Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
 ## Planned work
 You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
 
