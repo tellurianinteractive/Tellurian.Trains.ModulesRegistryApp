@@ -19,7 +19,7 @@ static public class DbContextExtensions
     public static (int Count, string Message, T? Entity) SaveNotAuthorised<T>(this ClaimsPrincipal? _) =>
         (0, Strings.NotAuthorized, default);
     public static (int Count, string Message, T? Entity) NothingToUpdate<T>(this ClaimsPrincipal? _) =>
-        (0, Strings.NotFound, default);
+        (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.NotFound.ToLowerInvariant()}", default);
 
     public static (int Count, string Message) DeleteResult(this int count) =>
         (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
@@ -32,6 +32,9 @@ static public class DbContextExtensions
 
     public static (int Count, string Message) DeleteNotAuthorized<T>(this ClaimsPrincipal? _) =>
         (0, Strings.NotAuthorized);
+
+    public static (int Count, string Message) NotFoundResult<T>(this ClaimsPrincipal? _) =>
+        (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.NotFound.ToLowerInvariant()}");
 
     public static (int Count, string Message, T? Entity) AlreadyExists<T>(this T? _) =>
         (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.AlreadyExists.ToLowerInvariant()}", default);

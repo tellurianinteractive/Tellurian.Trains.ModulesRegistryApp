@@ -22,17 +22,22 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-## Status January 2022
-* Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
+## Status April 2022
 All functions for managing modules are now in place, including:
-* Managing your *modules*, *stations* and *station freight customers*.
-* Transfer of module *ownership* - part or whole - to other person or group.
-* Manage *groups* and *members* and member's *modules*, *stations* and *station freight customers*.
-* Administrators can manage *meetings*, *regions*, *cargo types*, *module standards* and *module gables*.
-* **Temporary disabled**: Users and meeting organisers can add persons as *participants* and add their modules to a *layout*
-* Domains now change group visibiliy for groups within same domain. FREMO is a domain.
-* Help texts for most forms with recommendation how to enter data.
-* Supported languages: English, German, Danish, Swedish and Norwegian.
+* Managing **your modules, stations and station freight customers**.
+* **Transfer of module ownership** - part or whole - to other person or group.
+* **Manage groups and group members**, includinng group member's modules, stations and station freight customers.
+* Administrators can **manage meetings, regions, cargo types, module standards and module gables**.
+* Users and meeting organisers can **register a participant** and add modules to a layout.
+* **Create waybills** for individual or all stations at a meeting. 
+Take a look at the [**example waybills**](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for past real meetings.
+* Domains **change group visibiliy** for groups within same domain. 
+'FREMO' is currently the only domain and makes all FREMO groups visible across countries.
+* **Help texts** for most forms with recommendation how to enter data.
+* **Supported languages:**
+  * in user interface: **English, German, Danish, Swedish and Norwegian**.
+  * Cargo types in four additional languages: **French, Dutch, Italian and Polish**.
+  * Waybills for **cross border freights are bi-language**, with sender and receiver information in respective language.
 
 ## Planned work
 You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 

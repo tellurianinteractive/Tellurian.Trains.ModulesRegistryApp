@@ -3,6 +3,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject ITimeProvider TimeProvider
+@inject IToastService ToastService
 
 @inject MeetingService MeetingService
 @inject GroupService GroupService
@@ -43,6 +44,10 @@
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
             }
+            @if (MayDelete(item.meeting))
+            {
+                <AppButton Label="Delete" Href="@MeetingHref(item.meeting.Id, "delete")" />
+            }
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -53,9 +58,14 @@
     [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
-    bool MayRegister(Meeting meeting) => 
-        Principal.IsAnyAdministrator() || 
+    bool MayRegister(Meeting meeting) =>
+        Principal.IsAnyAdministrator() ||
         (Principal.IsAuthenticated() && meeting.IsOpenForRegistration(TimeProvider.Now.DateTime));
+
+    bool MayDelete(Meeting meeting) =>
+        Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
+
+
 
     string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
 

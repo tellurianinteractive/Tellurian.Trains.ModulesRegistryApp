@@ -166,6 +166,22 @@ public class MeetingService
         return principal.DeleteNotAuthorized<Layout>();
     }
 
+    public async Task<(int Count, string? Message)> DeleteAllAsync(ClaimsPrincipal? principal, Meeting meeting)
+    {
+        if (principal is not null && principal.IsAnyAdministrator())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.Meetings
+                .SingleOrDefaultAsync(m => m.Id == meeting.Id)
+                .ConfigureAwait(false);
+            if (existing is null) return principal.NotFoundResult<Meeting>();
+            dbContext.Meetings.Remove(existing);
+            var result = await dbContext.SaveChangesAsync();
+            return result.DeleteResult();
+        }
+        return principal.DeleteNotAuthorized<Meeting>();
+    }
+
     public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting entity)
     {
         var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();

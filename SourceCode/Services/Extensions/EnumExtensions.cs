@@ -27,6 +27,7 @@ public static class EnumExtensions
 
     public static IEnumerable<ListboxItem> ObjectVisibilityListboxItems() =>
         Enum.GetValues<ObjectVisibility>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+
     public static IEnumerable<ListboxItem> StationTrackDirectionListboxItems() =>
         Enum.GetValues<StationTrackDirection>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
     public static IEnumerable<string> StationTrackDirections() =>
@@ -37,5 +38,8 @@ public static class EnumExtensions
 
     public static IEnumerable<ListboxItem> CargoPackageUnitListboxItems(string language) =>
         Enum.GetValues<CargoPackagingUnit>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString(), language.AsCultureInfo()) ?? value.ToString()));
+
+    public static IEnumerable<ListboxItem> LandscapeSeasonListboxItems() =>
+        Enum.GetValues<LandscapeSeason>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
 }

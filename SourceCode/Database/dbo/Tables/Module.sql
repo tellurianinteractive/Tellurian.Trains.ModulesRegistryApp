@@ -21,6 +21,7 @@
     [IsStandAlone]          BIT            CONSTRAINT [DF_Module_IsStandAlone] DEFAULT ((1)) NOT NULL,
     [FunctionalState]       INT            CONSTRAINT [DF_Module_FunctionalState] DEFAULT ((0)) NOT NULL,
     [LandscapeState]        INT            CONSTRAINT [DF_Module_LandscapeState] DEFAULT ((0)) NOT NULL,
+    [LandscapeSeason]       INT           CONSTRAINT [DF_Module_LandscapeSeason] DEFAULT ((0)) NOT NULL,
     [DwgDrawingId]          INT            NULL,
     [SkpDrawingId]          INT            NULL,
     [PdfDocumentationId]    INT            NULL,

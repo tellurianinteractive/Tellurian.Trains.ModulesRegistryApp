@@ -1,7 +1,16 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject IJSRuntime JSRuntime
+
 @if (Href.HasValue())
 {
-    <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]</a>
+    @if (OpenInNewTab)
+    {
+        <button class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
+    }
+    else
+    {
+        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]</a>
+    }
 }
 else if (IsSubmit)
 {
@@ -21,6 +30,7 @@ else
     [Parameter] public string IconName { get; set; } = string.Empty;
     [Parameter] public bool IsSubmit { get; set; }
     [Parameter] public int OnClickParameter { get; set; }
+    [Parameter] public bool OpenInNewTab { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -28,6 +38,11 @@ else
         {
             IconName = Label ?? "info";
         }
+    }
+
+    async Task NavigateToNewTab()
+    {
+        await JSRuntime.InvokeAsync<object>("open", Href, "_blank");
     }
 
 

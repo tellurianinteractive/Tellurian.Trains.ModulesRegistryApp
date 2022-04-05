@@ -3,6 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IJSRuntime JSRuntime
 
 @inject MeetingService MeetingService
 @inject LayoutParticipantService LayoutParticipantService
@@ -35,7 +36,7 @@ else if (IsParticipant || Principal.IsAnyAdministrator())
                     <td>
                         @if (item.HasLayoutStation())
                         {
-                            <AppButton Label="Waybills" Href="@WaybillsHref(item)" />
+                            <AppButton Label="Waybills" Href="@WaybillsHref(item)" OpenInNewTab=true />
                         }
                     </td>
                 </RowTemplate>
@@ -73,7 +74,11 @@ else
     bool IsParticipant => LayoutParticipants is not null && LayoutParticipants.Any(lp => lp.PersonId == Principal.PersonId());
 
     string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
-    
+
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 
+    async Task NavigateToNewTab(LayoutModule it)
+    {
+        await JSRuntime.InvokeAsync<object>("open", WaybillsHref(it), "_blank");
+    }
 }

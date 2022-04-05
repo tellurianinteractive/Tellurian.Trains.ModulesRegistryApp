@@ -555,4 +555,16 @@
   <data name="Bundles" xml:space="preserve">
     <value>Bunter</value>
   </data>
+  <data name="Winter" xml:space="preserve">
+    <value>Vinter</value>
+  </data>
+  <data name="Autumn" xml:space="preserve">
+    <value>Efterår</value>
+  </data>
+  <data name="Spring" xml:space="preserve">
+    <value>Forår</value>
+  </data>
+  <data name="Summer" xml:space="preserve">
+    <value>Sommer</value>
+  </data>
 </root>

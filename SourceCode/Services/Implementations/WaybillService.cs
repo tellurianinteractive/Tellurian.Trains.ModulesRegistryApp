@@ -12,7 +12,7 @@ public class WaybillService
         Factory = factory;
     }
 
-    public IEnumerable<Waybill>? GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false)
+    public async Task<IEnumerable<Waybill>?> GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false)
     {
         List<Waybill> waybills = new List<Waybill>(200);
         if (principal.IsAuthenticated())
@@ -27,7 +27,8 @@ public class WaybillService
                 };
 
                 command.Parameters.AddWithValue("@LayoutId", layoutId);
-                if (stationId.HasValue) { 
+                if (stationId.HasValue)
+                {
                     command.Parameters.AddWithValue("@StationId", stationId);
                     command.Parameters.AddWithValue("@Receiving", true);
                     command.Parameters.AddWithValue("@Sending", matchShadowYards);
@@ -36,11 +37,29 @@ public class WaybillService
                 try
                 {
                     connection.Open();
-                    var reader = command.ExecuteReader();
+                    var reader = await command.ExecuteReaderAsync();
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
                         waybills.Add(MapWaybill(reader, resourceManager));
+                        var last = waybills.Last();
+                        if (last is null) continue;
+                        if (last.EmptyReturn)
+                        {
+                            var empty = new Waybill
+                            {
+                                Destination = last.Origin,
+                                Epoch = last.Epoch,
+                                OperatorName = last.OperatorName,
+                                Origin = last.Destination,
+                                Quantity = 0,
+                                WagonClass = last.WagonClass,
+                            };
+                            var language = new CultureInfo(last.Origin?.Language ?? "en");
+                            if (language is not null && empty.Destination is not null)
+                                empty.Destination.CargoName = resourceManager.GetString("Empty",language) ?? string.Empty;
+                            waybills.Add(empty);
+                        }
                     }
                 }
                 catch (Exception)
@@ -97,10 +116,13 @@ public class WaybillService
                 ReadyTimeIsSpecifiedInLayout = record.GetBool("DestinationReadyTimeIsSpecifiedInLayout"),
                 TrackOrArea = record.GetString("ReceiverTrackOrArea"),
                 TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor")
+
             },
             Quantity = record.GetInt("Quantity"),
             OperatorName = string.Empty, // To be supported
-            WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass
+            WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass,
+            EmptyReturn = record.GetBool("EmptyReturn"),
+            MatchReturn = record.GetBool("MatchReturn")
         };
     }
 

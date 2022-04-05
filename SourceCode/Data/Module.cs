@@ -48,6 +48,7 @@ public partial class Module
     public int SignalFeature { get; set; }
     public int OverheadLineFeature { get; set; }
     public short? SpeedLimit { get; set; }
+    public int LandscapeSeason { get; set; }
 
     public virtual Document DwgDrawing { get; set; }
     public virtual Document SkpDrawing { get; set; }

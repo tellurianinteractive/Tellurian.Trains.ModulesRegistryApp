@@ -1,5 +1,13 @@
 ## Release Notes
 
+#### Version 1.6.2
+Release date 2022-04-05
+- **Landscape season** added for modules. Issue #129.
+- **Deletion of module meeting** can now be made by an *administrator*, and only if no modules are registered. 
+Deletion also requests confirmation to avoid deletions by mistake. Issue #128.
+- **Waybills created in own window**. Issue #135.
+- **Updated Readme** to reflect status in April 2022.
+
 #### Version 1.6.1
 Release date 2022-02-28
 - **Optimised waybill printing** where printing for a specific station 

@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using System.Security.Claims;
+
 namespace ModulesRegistry.Data;
 
 public class Meeting
@@ -34,4 +36,6 @@ public static class MeetingExtensions
     public static bool IsCancelled(this Meeting? it) => it is null || it.Status == (int)MeetingStatus.Canceled;
     public static int DaysCount(this Meeting it) => (it.EndDate - it.StartDate).Days + 1;
     public static string Day(this Meeting it, int day) => it.StartDate.AddDays(day - 1).DayOfWeek.ToString();
+
 }
+

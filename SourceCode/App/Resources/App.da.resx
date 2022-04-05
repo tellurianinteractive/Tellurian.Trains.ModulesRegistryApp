@@ -1092,4 +1092,7 @@
   <data name="Tools" xml:space="preserve">
     <value>Værktøjer</value>
   </data>
+  <data name="LandscapeSeason" xml:space="preserve">
+    <value>Sæson</value>
+  </data>
 </root>

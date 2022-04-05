@@ -8,6 +8,8 @@ public class Waybill
     public string Epoch { get; set; } = string.Empty;
     public string WagonClass { get; set; } = string.Empty;
     public int Quantity { get; set; }
+    public bool EmptyReturn { get; set; }
+    public bool MatchReturn { get; set; }
 }
 
 public static class WaybillExtensions

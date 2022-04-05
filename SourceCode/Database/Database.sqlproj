@@ -131,6 +131,7 @@
     <Build Include="dbo\Listboxes\ListUntimedCargoReadyTime.sql" />
     <Build Include="dbo\Procedures\GetWaybills.sql" />
     <Build Include="dbo\Tables\LayoutParticipant.sql" />
+    <Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

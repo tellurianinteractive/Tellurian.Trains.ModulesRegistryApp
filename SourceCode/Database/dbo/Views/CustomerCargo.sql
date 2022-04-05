@@ -30,7 +30,9 @@ SELECT -- Internal station customer cargo
 	CASE
 		WHEN SCC.TrackOrAreaColor IS NOT NULL AND SCC.TrackOrAreaColor <> '#ffffff' THEN SCC.TrackOrAreaColor
 		ELSE SC.TrackOrAreaColor
-	END AS TrackOrAreaColor
+	END AS TrackOrAreaColor,
+	SCC.EmptyReturn,
+	SCC.MatchReturn
 FROM [Station] AS S 
 	INNER JOIN [Region] AS R ON S.RegionId = R.Id 
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
@@ -68,7 +70,9 @@ SELECT -- External station customer cargo
 	NULL AS ReadyTime,
 	0 AS ReadyTimeIsSpecifiedInLayout,
 	NULL AS TrackOrArea,
-	'#ffffff' AS TrackOrAreaColor
+	'#ffffff' AS TrackOrAreaColor,
+	0 AS EmptyReturn,
+	0 AS MatchReturn
 FROM [ExternalStation] AS ES 
 	INNER JOIN [Region] AS R ON ES.RegionId = R.Id 
 	INNER JOIN [ExternalStationCustomer] AS ESC ON ESC.ExternalStationId = ES.Id
@@ -104,7 +108,9 @@ SELECT -- Shadow yard suppliers
 	NULL AS ReadyTime,
 	0 AS ReadyTimeIsSpecifiedInLayout,
 	NULL AS TrackOrArea,
-	'#ffffff' AS TrackOrAreaColor
+	'#ffffff' AS TrackOrAreaColor,
+	0 AS EmptyReturn,
+	0 AS MatchReturn
 FROM 
 	LayoutParticipant LP 
 	INNER JOIN LayoutStation LS ON LS.LayoutParticipantId = LP.Id
@@ -142,7 +148,9 @@ SELECT -- Shadow yard consumers
 	NULL AS ReadyTime,
 	0 AS ReadyTimeIsSpecifiedInLayout,
 	NULL AS TrackOrArea,
-	'#ffffff' AS TrackOrAreaColor
+	'#ffffff' AS TrackOrAreaColor,
+	0 AS EmptyReturn,
+	0 AS MatchReturn
 FROM 
 	LayoutParticipant LP 
 	INNER JOIN LayoutStation LS ON LS.LayoutParticipantId = LP.Id	
