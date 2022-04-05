@@ -39,6 +39,7 @@ Take a look at the [**example waybills**](https://github.com/tellurianinteractiv
   * Cargo types in four additional languages: **French, Dutch, Italian and Polish**.
   * Waybills for **cross border freights are bi-language**, with sender and receiver information in respective language.
 
+> Take a look at [waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for real meetings.
 ## Planned work
 You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
 
