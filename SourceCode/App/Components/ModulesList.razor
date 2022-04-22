@@ -87,7 +87,9 @@
         module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : 
         module.FullName);
 
-    MarkupString Status(Module module) => new( $"<span class=\"{(module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle")}\"/>");
+    MarkupString Status(Module module) => new( $"<span title=\"{StatusTitle(module)}\" class=\"{StatusSymbol(module)}\"/>");
+    string StatusSymbol(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
+    string StatusTitle(Module module) => module.IsUnavailable ? Localizer["Unavailable"] : Localizer["Available"];
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 

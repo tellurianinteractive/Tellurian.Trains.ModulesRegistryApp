@@ -1095,4 +1095,10 @@
   <data name="LandscapeSeason" xml:space="preserve">
     <value>Årstid</value>
   </data>
+  <data name="Available" xml:space="preserve">
+    <value>Tilgjengelig</value>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Utilgjengelig</value>
+  </data>
 </root>
