@@ -25,6 +25,7 @@ else
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>
+            <th align="center">@Localizer["Class"]</th>
             <th align="center">@Localizer["Place"]</th>
             <th align="center">@Localizer["Days"]</th>
             <th align="center">@Localizer["Direction"]</th>
@@ -32,9 +33,10 @@ else
             <th>@Localizer["Finished"]</th>
             <th>@Localizer["OperatingPeriod"]</th>
         </TableHeader>
-        <RowTemplate Context="item" >
+        <RowTemplate Context="item">
             <td width="15%">@CargoTypeName(item)</td>
             <td width="10%">@PackagingUnit(item)</td>
+            <td width="10%">@(item.SpecificWagonClass ?? item.Cargo?.DefaultClasses) </td>
             <td width="6%" align="center" style="color: @TrackOrAreaColour(item).TextColor(); background-color: @TrackOrAreaColour(item)">@TrackOrArea(item)</td>
             <td width="6%" align="center">@OperatingDay(item)</td>
             <td width="6%" align="center">@Direction(item)</td>
@@ -66,7 +68,7 @@ else
     string QuantityUnit(StationCustomerCargo? it) => it is not null && QuantityUnitItems is not null ? QuantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
     string OperatingDay(StationCustomerCargo? it) => it is not null && OperatingDayItems is not null ? OperatingDayItems.SingleOrDefault(i => i.Id == it.OperatingDayId)?.Description ?? string.Empty : string.Empty;
     string ReadyTime(StationCustomerCargo? it) => it is not null && ReadyTimeItems is not null ? ReadyTimeItems.SingleOrDefault(i => i.Id == it.ReadyTimeId)?.Description ?? string.Empty : string.Empty;
-    string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is  null ?
+    string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is null ?
         string.Empty :
         it.IsLoading() ? $"{Localizer["LoadingReady"]} {ReadyTime(it).ToLowerInvariant()}" :
         it.IsUnloading() ? $"{Localizer["UnloadingReady"]} {ReadyTime(it).ToLowerInvariant()}" :
@@ -77,4 +79,4 @@ else
         item is null ? string.Empty :
         item.IsLoading() ? "background-color: lightyellow" : "background-color: white";
 }
-        
+

@@ -43,6 +43,13 @@ else
             }
         </div>
     }
+    @if (Customer.StationCustomerCargos.Count > 0)
+    {
+        <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+            <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
+        </div>
+    }
+
 }
 
 @code {

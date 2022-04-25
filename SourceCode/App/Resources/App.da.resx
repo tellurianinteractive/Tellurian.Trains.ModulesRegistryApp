@@ -1104,4 +1104,7 @@
   <data name="FrequentlyAskedQuestions" xml:space="preserve">
     <value>Ofte stillede spørgsmål</value>
   </data>
+  <data name="Class" xml:space="preserve">
+    <value>Litra</value>
+  </data>
 </root>

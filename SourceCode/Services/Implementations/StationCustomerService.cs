@@ -14,7 +14,7 @@ public class StationCustomerService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.StationCustomers.AsNoTracking()
-                .Include(sc => sc.StationCustomerCargos)
+                .Include(sc => sc.StationCustomerCargos).ThenInclude(scc => scc.Cargo)
                 .Where(sc => sc.StationId == stationId && (customerId == 0 || sc.Id == customerId))
                 .ToListAsync();
         }
