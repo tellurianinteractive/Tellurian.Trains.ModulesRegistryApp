@@ -2,6 +2,7 @@
 AS 
 SELECT -- Internal station customer cargo
 	LP.LayoutId,
+	0 AS ExcludeLayoutId,
 	SCC.Id,
 	SCC.OperatingDayId,
 	S.[Id] AS StationId,
@@ -43,8 +44,55 @@ FROM [Station] AS S
 	LEFT JOIN [LayoutStation] AS LS ON LS.StationId = S.Id 
 	LEFT JOIN LayoutParticipant LP ON LS.LayoutParticipantId = LP.Id
 UNION
+SELECT -- Modules not present in the current layout
+	COALESCE(L.Id,0) AS LayoutId,
+	COALESCE(L.Id,0) AS ExcludeLayoutId,
+	SCC.Id,
+	SCC.OperatingDayId,
+	S.Id AS StationId,
+	S.FullName AS StationName,
+	S.Signature AS StationSignature,
+	SCC.CargoId,
+	CD.IsSupply,
+	CD.IsInternational,
+	0 AS IsInternal,
+	0 AS IsShadowYard,
+	C.DefaultClasses,
+	R.CountryId,
+	R.BackColor,
+	R.ForeColor,
+	SC.CustomerName,
+	COALESCE(SCC.FromYear, SC.OpenedYear) AS FromYear,
+	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
+	SCC.Quantity,
+	SCC.QuantityUnitId,
+	SCC.PackageUnitId,
+	SCC.SpecificWagonClass,
+	SCC.SpecialCargoName,
+	CRT.ShortName AS ReadyTime,
+	CRT.IsSpecifiedInLayout AS ReadyTimeIsSpecifiedInLayout,
+	COALESCE(SCC.TrackOrArea, SC.TrackOrArea) AS TrackOrArea,
+	CASE
+		WHEN SCC.TrackOrAreaColor IS NOT NULL AND SCC.TrackOrAreaColor <> '#ffffff' THEN SCC.TrackOrAreaColor
+		ELSE SC.TrackOrAreaColor
+	END AS TrackOrAreaColor,
+	SCC.EmptyReturn,
+	SCC.MatchReturn
+FROM 
+	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
+	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
+	INNER JOIN [StationCustomerCargo] AS SCC ON SCC.StationCustomerId = SC.Id
+	INNER JOIN [Cargo] AS C ON C.Id = SCC.CargoId
+	INNER JOIN [CargoDirection] AS CD ON SCC.DirectionId = CD.Id
+	INNER JOIN [CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId
+	LEFT JOIN LayoutStation LS ON LS.StationId = S.Id
+	LEFT JOIN LayoutParticipant LP ON LP.Id = LS.LayoutParticipantId
+	LEFT JOIN Layout AS L ON L.Id = LP.LayoutId
+	LEFT JOIN Meeting AS M ON M.Id = L.MeetingId
+UNION
 SELECT -- External station customer cargo
 	-1 AS LayoutId,
+	0 AS ExcludeLayoutId,
 	-ESCC.Id AS Id,
 	ESCC.OperatingDayId,
 	-ES.[Id] AS StationId,
@@ -83,6 +131,7 @@ UNION
 
 SELECT -- Shadow yard suppliers
 	LP.LayoutId,
+	0 AS ExcludeLayoutId,
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
@@ -123,6 +172,7 @@ WHERE
 UNION
 SELECT -- Shadow yard consumers
 	LP.LayoutId,
+	0 AS ExcludeLayoutId,
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,

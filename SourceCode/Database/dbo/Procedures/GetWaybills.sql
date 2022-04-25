@@ -70,6 +70,7 @@ BEGIN
 		Country AS CC ON CC.Id = CCC.CountryId INNER JOIN
 		CargoUnit AS CU ON CU.Id = CCS.QuantityUnitId 
 	WHERE 
+		(CCS.ExcludeLayoutId <> @LayoutId) AND (CCC.ExcludeLayoutId <> @LayoutId) AND
 		(CCS.IsSupply <> 0 AND CCC.IsSupply = 0) AND
 		((CCS.IsInternational <> 0 AND CCC.IsInternational <> 0) OR (CCS.CountryId = CCC.CountryId)) AND
 		((CCS.Id = 0 AND CCC.Id <> 0 AND CCC.IsInternal <>0) OR (CCC.Id = 0 AND CCS.Id <> 0 AND CCS.IsInternal <> 0) OR (CCS.Id <> 0 AND CCC.Id <> 0)) AND
