@@ -1101,4 +1101,7 @@
   <data name="Unavailable" xml:space="preserve">
     <value>Nicht verfügbar</value>
   </data>
+  <data name="FrequentlyAskedQuestions" xml:space="preserve">
+    <value>Häufig gestellte Fragen</value>
+  </data>
 </root>
