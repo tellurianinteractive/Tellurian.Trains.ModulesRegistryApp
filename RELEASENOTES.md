@@ -1,5 +1,14 @@
 ## Release Notes
 
+#### Version 1.6.3
+Release date 2022-04-26
+- **Waybills** now also generated to/from station modules not present in a layout.
+- **Waybills** now print *quantity* of *packaging unit* when type of quantity is *pieces*.
+- **Wagon class** added in cargo customer overview.
+- **Tooltip** for *module status* added.
+- **Missing translations** added.
+
+
 #### Version 1.6.2
 Release date 2022-04-05
 - **Landscape season** added for modules. Issue #129.

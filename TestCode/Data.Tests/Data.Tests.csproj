@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyName>ModulesRegistry.Data.Tests</AssemblyName>
 		<RootNamespace>ModulesRegistry.Data.Tests</RootNamespace>
-		<Version>1.5.0</Version>
+		<Version>1.6.0</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
