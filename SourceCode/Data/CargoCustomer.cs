@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Data;
+﻿using ModulesRegistry.Data.Extensions;
+
+namespace ModulesRegistry.Data;
 
 public class CargoCustomer
 {
@@ -18,4 +20,15 @@ public class CargoCustomer
     public bool ReadyTimeIsSpecifiedInLayout { get; set; }
     public string TrackOrArea { get; set; } = string.Empty;
     public string TrackOrAreaColor { get; set; } = string.Empty;
+}
+
+public static class CargoCustomerExtensions
+{
+    public static string TrackOrAreaBackColor(this CargoCustomer item) =>
+       item is null || item.TrackOrAreaColor.HasNoValue() == true || item.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
+       item.TrackOrAreaColor;
+
+    public static string TrackOrAreaForeColor(this CargoCustomer item) =>
+        item.TrackOrAreaBackColor().TextColor();
+
 }

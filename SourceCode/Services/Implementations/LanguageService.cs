@@ -6,6 +6,6 @@ public sealed class LanguageService : ILanguageService
 
     public LanguageLabels[] GetWaybillLabes() =>
         GetSupportedLanguages()
-            .Select(l => l.CreateLabels(WaybillExtensions.LabelResourceKeys))
+            .Select(l => l.CreateLabels(Data.WaybillExtensions.LabelResourceKeys))
             .ToArray();
 }

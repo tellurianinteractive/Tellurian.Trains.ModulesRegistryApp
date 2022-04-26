@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Services.Implementations;
+﻿using Microsoft.Extensions.Localization;
+using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Services.Extensions;
 
@@ -18,4 +19,7 @@ public static class CultureInfoExtensions
 
     public static CultureInfo AsCultureInfo(this string? twoLetterISOLanguageName) =>
         twoLetterISOLanguageName.SupportedOrDefaultCulture();
+
+   
+
 }

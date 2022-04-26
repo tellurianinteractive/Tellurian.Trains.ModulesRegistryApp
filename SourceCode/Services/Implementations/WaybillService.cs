@@ -119,6 +119,8 @@ public class WaybillService
 
             },
             Quantity = record.GetInt("Quantity"),
+            QuantityUnitId = record.GetInt("QuantityUnitId"),
+            PackagingUnit = (CargoPackagingUnit)record.GetInt("OriginPackageUnitId"),
             OperatorName = string.Empty, // To be supported
             WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass,
             EmptyReturn = record.GetBool("EmptyReturn"),

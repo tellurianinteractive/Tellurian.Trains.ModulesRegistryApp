@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Data;
+﻿using ModulesRegistry.Data.Extensions;
+
+namespace ModulesRegistry.Data;
 
 public class Waybill
 {
@@ -8,6 +10,8 @@ public class Waybill
     public string Epoch { get; set; } = string.Empty;
     public string WagonClass { get; set; } = string.Empty;
     public int Quantity { get; set; }
+    public int QuantityUnitId { get; set; }
+    public CargoPackagingUnit PackagingUnit { get; set; }
     public bool EmptyReturn { get; set; }
     public bool MatchReturn { get; set; }
 }
@@ -50,4 +54,10 @@ public static class WaybillExtensions
         $"images/flags/{me.Destination.DomainSuffix}.png";
 
     public static bool IsCrossBorder(this Waybill me) => me.Origin?.DomainSuffix != me.Destination?.DomainSuffix;
+
+    public static string DestinationTrackOrAreaColor(this Waybill item) =>
+        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
+        item.Destination.TrackOrAreaColor;
+
+
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services;
 using ModulesRegistry.Shared;
 using System.Text;
 
@@ -82,4 +83,17 @@ public static class LocalizedStringExtensions
     public static string DocumentIconHref(this int? id, string fileExtension) =>
         id.HasValue ? $"/images/{fileExtension}.png" : string.Empty;
 
+
+    public static string DualLanguageLabel(this IStringLocalizer localizer, string? langaugeCode, string resourceKey, string? englishText) =>
+        DualLanguageLabel(localizer, null, langaugeCode, resourceKey, englishText);
+
+    public static string DualLanguageLabel(this IStringLocalizer localizer, IEnumerable<LanguageLabels>? languageLabels, string? langaugeCode, string resourceKey, string? englishText)
+    {
+        if (englishText is null) englishText = resourceKey;
+        var localText = localizer[resourceKey].Value;
+        if (languageLabels is not null && langaugeCode is not null) localText = languageLabels.GetLabelText(resourceKey, langaugeCode);
+        if (string.IsNullOrWhiteSpace(localText)) localText = localizer[resourceKey];
+        if (string.IsNullOrWhiteSpace(localText) || englishText == localText) return englishText!;
+        return $"{englishText}/{localText}";
+    }
 }

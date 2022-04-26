@@ -567,4 +567,25 @@
   <data name="Summer" xml:space="preserve">
     <value>Sommer</value>
   </data>
+  <data name="FlatRackContainer20" xml:space="preserve">
+    <value>20' Flat stativ beholder</value>
+  </data>
+  <data name="FlatRackContainer40" xml:space="preserve">
+    <value>40' Flat stativ beholder</value>
+  </data>
+  <data name="HighCubeContainer20" xml:space="preserve">
+    <value>20' High cube container</value>
+  </data>
+  <data name="HighCubeContainer40" xml:space="preserve">
+    <value>40' High cube container</value>
+  </data>
+  <data name="HighCubeReeferContainer40" xml:space="preserve">
+    <value>40' High cube kjølecontainer</value>
+  </data>
+  <data name="OpenTopContainer20" xml:space="preserve">
+    <value>20' Åpen toppbeholder</value>
+  </data>
+  <data name="OpenTopContainer40" xml:space="preserve">
+    <value>40' Åpen toppbeholder</value>
+  </data>
 </root>

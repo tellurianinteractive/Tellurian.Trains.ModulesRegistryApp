@@ -33,7 +33,7 @@
                     <tr>
                         <td colspan="3" class="waybill destination">
                             <div class="waybill label">@DestinationLabel(Item, "CargoUnit", "Cargo unit")</div>
-                            <div class="waybill item">@Item.Destination.QuantityUnitName</div>
+                            <div class="waybill item">@Item.DestinationQuantityUnit()</div>
                         </td>
                     </tr>
                     <tr>
@@ -45,7 +45,7 @@
                                 @if (Item.Destination.TrackOrArea.HasValue())
                                 {
                                     <span>&commat;</span>
-                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @DestinationTrackOrAreaColor(Item); color: @DestinationTrackOrAreaColor(Item).TextColor()"> @Item.Destination.TrackOrArea </span>
+                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Destination.TrackOrAreaBackColor(); color: @Item.Destination.TrackOrAreaForeColor()"> @Item.Destination.TrackOrArea </span>
                                 }
                             </div>
                         </td>
@@ -117,30 +117,19 @@
     [Parameter] public IEnumerable<LanguageLabels>? LanguageLabels { get; set; }
 
     string OriginLabel(Waybill item, string resourceKey, string? englishText = null) =>
-        Label(item.Origin?.Language, resourceKey, englishText);
+        Localizer.DualLanguageLabel(LanguageLabels, item.Origin?.Language, resourceKey, englishText);
 
     string DestinationLabel(Waybill item, string resourceKey, string? englishText = null) =>
-        Label(item.Destination?.Language, resourceKey, englishText);
+        Localizer.DualLanguageLabel(LanguageLabels, item.Destination?.Language, resourceKey, englishText);
 
     string DestinationTrackOrAreaColor(Waybill item) =>
-        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" : item.Destination.TrackOrAreaColor;
-
-    string Label(string? langaugeCode, string resourceKey, string? englishText)
-    {
-        if (englishText is null) englishText = resourceKey;
-        var localText = Localizer[resourceKey].Value;
-        if (LanguageLabels != null && langaugeCode != null)
-        {
-            localText = LanguageLabels.GetLabelText(resourceKey, langaugeCode);
-            if (string.IsNullOrWhiteSpace(localText)) englishText = Localizer[resourceKey];
-        }
-        if (englishText == localText || string.IsNullOrWhiteSpace(localText)) return englishText!;
-        return $"{englishText}/{localText}";
-    }
+        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" : 
+        item.Destination.TrackOrAreaColor;
 
     string DestinationInstruction(Waybill waybill) => UnloadingReady(waybill.Destination);
     string OriginInstruction(Waybill waybill) => LoadingReady(waybill.Origin);
-    string CustomerName(CargoCustomer me) => 
+
+    string CustomerName(CargoCustomer me) =>
         me.Name == "ImportAgent" || me.Name == "ExportAgent" ? GetLabelText(me.Name, me.Language) : me.Name;
 
     string CargoName(CargoCustomer? me) =>

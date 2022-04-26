@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using ModulesRegistry.Data.Extensions;
+
 namespace ModulesRegistry.Data;
 
 public static class StationCustomerCargoExtensions
