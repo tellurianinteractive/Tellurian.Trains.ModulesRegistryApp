@@ -2,6 +2,7 @@
 
 #### Version 1.6.3
 Release date 2022-04-26
+- **Statistics** per country of usage.
 - **Waybills** now also generated to/from station modules not present in a layout.
 - **Waybills** now print *quantity* of *packaging unit* when type of quantity is *pieces*.
 - **Wagon class** added in cargo customer overview.

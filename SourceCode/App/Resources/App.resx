@@ -1107,4 +1107,13 @@
   <data name="Class" xml:space="preserve">
     <value>Class</value>
   </data>
+  <data name="CountriesStatistics" xml:space="preserve">
+    <value>Country Statistics</value>
+  </data>
+  <data name="CargoCustomers" xml:space="preserve">
+    <value>Freight customers</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
 </root>

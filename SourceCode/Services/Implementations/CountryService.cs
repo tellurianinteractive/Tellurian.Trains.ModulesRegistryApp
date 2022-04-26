@@ -21,4 +21,11 @@ public sealed class CountryService
         var countries = await dbContext.Countries.ToListAsync();
         return countries.AsEnumerable().Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id)).Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized())).ToList();
     }
+
+    public async Task<IEnumerable<CountryStatistics>> GetCountryStatisticsAsync()
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.CountriesStatistics.ToListAsync();
+
+    }
 }

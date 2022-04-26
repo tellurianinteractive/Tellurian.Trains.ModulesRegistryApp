@@ -1,0 +1,43 @@
+﻿@page "/Country/Statistics"
+
+@inject IStringLocalizer<App> Localizer
+@inject CountryService CountryService
+
+<PageHeading Label="CountriesStatistics" IconClass="@FontAwesome.Tools" PageAction="@PageAction.List" />
+@if (CountryStatistics is null)
+{
+    <ActionMessage Label="FecthingData" />
+}
+else
+{
+    <TableTemplate Items="CountryStatistics.OrderByDescending(cs => cs.ModulesCount)">
+        <TableHeader>
+            <th colspan="2">@Localizer["Country"] </th>
+            <th>@Localizer["Modules"] </th>
+            <th>@Localizer["Stations"] </th>
+            <th>@Localizer["CargoCustomers"] </th>
+            <th>@Localizer["ExternalStations"] </th>
+            <th>@Localizer["ExternalFreightCustomers"] </th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td width="5%"><img src="@FlagSrc(item)" /></td>
+            <td width="15%">@Localizer[item.EnglishName]</td>
+            <td width="15%">@item.ModulesCount</td>
+            <td width="15%">@item.StationsCount</td>
+            <td width="15%">@item.StationCustomersCount</td>
+            <td width="15%">@item.ExternalStationsCount</td>
+            <td width="15%">@item.ExternalCustomersCount</td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+@code {
+        IEnumerable<CountryStatistics>? CountryStatistics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CountryStatistics = await CountryService.GetCountryStatisticsAsync();
+    }
+
+    string FlagSrc(CountryStatistics cs) => $"images/flags/{cs.DomainSuffix}.png";
+}

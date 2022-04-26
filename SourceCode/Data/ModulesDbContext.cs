@@ -17,6 +17,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<CargoRelation> CargoRelations { get; set; }
     public virtual DbSet<QuantityUnit> CargoUnits { get; set; }
     public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<CountryStatistics> CountriesStatistics { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
     public virtual DbSet<ExternalStation> ExternalStations { get; set; }
     public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
@@ -176,6 +177,11 @@ public partial class ModulesDbContext : DbContext
 
             entity.Property(e => e.Languages)
                 .HasMaxLength(10);
+        });
+
+        modelBuilder.Entity<CountryStatistics>(entity =>
+        {
+            entity.ToView("CountryStatistics").HasNoKey();
         });
 
         modelBuilder.Entity<Document>(entity =>

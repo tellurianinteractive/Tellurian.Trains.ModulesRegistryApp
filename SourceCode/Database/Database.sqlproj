@@ -132,6 +132,7 @@
     <Build Include="dbo\Procedures\GetWaybills.sql" />
     <Build Include="dbo\Tables\LayoutParticipant.sql" />
     <Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
+    <Build Include="dbo\Views\CountryStatistics.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
