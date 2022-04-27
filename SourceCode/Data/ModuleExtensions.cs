@@ -46,7 +46,8 @@ public static class ModuleExtensions
             SignalFeature = me.SignalFeature,
             SpeedLimit = me.SpeedLimit,
             StandardId = me.StandardId,
-            Theme = me.Theme
+            Straight = me.Straight,
+            Theme = me.Theme,
         };
 
     static string CloneFullName(this Module module)

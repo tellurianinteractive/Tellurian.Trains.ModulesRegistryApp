@@ -64,7 +64,7 @@ LEFT JOIN
 	FROM 
 		ExternalStationCustomer AS ESC
 		INNER JOIN ExternalStation AS ES ON ESC.ExternalStationId = ES.Id
-		INNER JOIN Region AS R ON R.id = ES.RegionId
+		INNER JOIN Region AS R ON R.Id = ES.RegionId
 		INNER JOIN Country AS C ON C.Id = R.CountryId
 	GROUP BY
 		C.EnglishName

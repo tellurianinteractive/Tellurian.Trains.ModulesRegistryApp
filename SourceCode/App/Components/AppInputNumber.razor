@@ -68,7 +68,7 @@
     }
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
-    string NumberStep => Step is null ? "1" : Step;
+    string NumberStep => Step is null ? "1" : CurrentValue is double ? ".1" : Step;
     string LabelText => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? Localizer[Label].Value : $"{Localizer[Label]}&nbsp;({Unit})";
 
     private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);

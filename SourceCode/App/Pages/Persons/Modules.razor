@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Modules" Owner="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 
-<ModulesList Modules="OwnedModules" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
+<ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

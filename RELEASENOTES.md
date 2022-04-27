@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.6.4
+Release date 2022-04-27
+- **Module angle** now has one decimal.
+- **Persons modules** now sorted alpabetical.
+- **Bug fix** in cloning module data, *straight* value was not cloned.
+
 #### Version 1.6.3
 Release date 2022-04-26
 - **Statistics** per country of usage.
