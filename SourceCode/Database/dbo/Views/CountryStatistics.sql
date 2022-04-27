@@ -1,15 +1,27 @@
 ﻿CREATE VIEW [dbo].[CountryStatistics] AS
-SELECT Modules.EnglishName, Modules.DomainSuffix, ModulesCount, StationsCount, StationCustomersCount, ExternalStationsCount, ExternalCustomersCount FROM
+SELECT Modules.EnglishName, Modules.DomainSuffix, COALESCE(ModulesCount, 0) AS ModulesCount, StationsCount, StationCustomersCount, ExternalStationsCount, ExternalCustomersCount, ActiveUsersCount FROM
 ( 
 	SELECT
-		C.EnglishName, C.DomainSuffix, COUNT(M.Id) AS [ModulesCount]
+		EnglishName, DomainSuffix, COUNT(Id) AS [ModulesCount]
 	FROM
-		Module AS M 
-		INNER JOIN ModuleOwnership AS MO ON MO.ModuleId = M.Id
-		INNER JOIN Person AS P ON P.Id = MO.PersonId
-		INNER JOIN Country AS C ON C.Id = P.CountryId
+		(	SELECT 
+				C.EnglishName, C.DomainSuffix, M.Id
+			FROM 
+				Country AS C 
+				LEFT JOIN Person AS P ON P.CountryId = C.Id
+				LEFT JOIN ModuleOwnership AS MO ON MO.PersonId = P.Id
+				LEFT JOIN Module AS M ON M.Id = MO.ModuleId
+			UNION
+			SELECT 
+				C.EnglishName, C.DomainSuffix, M.Id
+			FROM 
+				Country AS C 
+				LEFT JOIN [Group] AS G ON G.CountryId = C.Id
+				LEFT JOIN ModuleOwnership AS MO ON MO.GroupId = G.Id
+				LEFT JOIN Module AS M ON M.Id = MO.ModuleId
+		) AS M
 	GROUP BY
-		C.EnglishName, C.DomainSuffix
+		M.EnglishName, M.DomainSuffix
 ) AS Modules
 LEFT JOIN
 (
@@ -51,7 +63,7 @@ LEFT JOIN
 		C.EnglishName, Count(ES.Id) AS ExternalStationsCount
 	FROM 
 		ExternalStation AS ES
-		INNER JOIN Region AS R ON R.id = ES.RegionId
+		INNER JOIN Region AS R ON R.Id = ES.RegionId
 		INNER JOIN Country AS C ON C.Id = R.CountryId
 	GROUP BY
 		C.EnglishName
@@ -70,5 +82,16 @@ LEFT JOIN
 		C.EnglishName
 
 )
-AS ExternalStationCustomers ON ExternalStationCustomers.EnglishName = Modules.EnglishName
+AS ExternalCustomers ON ExternalCustomers.EnglishName = Modules.EnglishName
+LEFT JOIN
+(
+	SELECT 
+		C.EnglishName, Count(U.Id) AS ActiveUsersCount
+	FROM
+		[User] AS U INNER JOIN [Person] AS P ON U.Id = P.UserId
+		INNER JOIN [Country] AS C ON C.Id = P.CountryId
+	WHERE U.LastSignInTime IS NOT NULL
+	GROUP BY
+		C.EnglishName
+) AS ActiveUsers ON ActiveUsers.EnglishName = Modules.EnglishName
 
