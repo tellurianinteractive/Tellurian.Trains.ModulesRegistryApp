@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.6.5
+Release date 2022-05-01
+- **Drop down menu** now shows on screens up tp 1280 px. 
+- **External stations** for user's country now show up direcly without need for selecting country.
+
 #### Version 1.6.4
 Release date 2022-04-27
 - **Module angle** now has one decimal.

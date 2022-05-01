@@ -1,22 +1,31 @@
 {
   "dependencies": {
-    "secrets1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/TellurianTrains",
-      "type": "secrets.keyVault",
-      "connectionId": "ConnectionStrings--TimetablePlanningDatabase",
-      "secretStore": "AzureAppSettings"
-    },
     "signalr1": {
+      "secretStore": "AzureKeyVault",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/ModuleRegistry",
       "type": "signalr.azure",
-      "connectionId": "Azure__SignalR__ConnectionString",
-      "secretStore": "AzureKeyVault"
+      "connectionId": "Azure__SignalR__ConnectionString"
     },
     "mssql1": {
+      "secretStore": "AzureKeyVault",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/telluriantrains/databases/Tellurian.Trains.Database",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings--TimetablePlanningDatabase",
-      "secretStore": "AzureKeyVault"
+      "connectionId": "ConnectionStrings--TimetablePlanningDatabase"
+    },
+    "secrets1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/TellurianTrains",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri",
+      "dynamicId": null
+    },
+    "appConfig1": {
+      "ignored": "true",
+      "type": "appConfig.azure"
+    },
+    "identityapp1": {
+      "ignored": "true",
+      "type": "identityapp"
     }
   }
 }

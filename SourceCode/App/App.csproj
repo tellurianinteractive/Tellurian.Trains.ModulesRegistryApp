@@ -5,17 +5,21 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.6.4</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>1.6.5</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
-
+	
+	<PropertyGroup>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
+		<PackageReference Include="Azure.Identity" Version="1.4.0" />
 		<PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
 		<PackageReference Include="Blazored.Toast" Version="3.2.2" />
 		<PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
@@ -26,6 +30,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" NoWarn="NU1605" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.15.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
 			<PrivateAssets>all</PrivateAssets>

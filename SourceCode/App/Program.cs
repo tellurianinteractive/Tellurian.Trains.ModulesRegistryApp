@@ -23,7 +23,7 @@ public class Program
                 config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}", true);
                 if (context.HostingEnvironment.IsProduction())
                 {
-                    var builtConfig = config.Build();
+                    //var builtConfig = config.Build();
                     var secretClient = new SecretClient(new Uri("https://telluriantrains.vault.azure.net/"), new DefaultAzureCredential());
                     config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                 }

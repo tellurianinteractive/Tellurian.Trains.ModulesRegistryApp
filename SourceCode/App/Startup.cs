@@ -51,6 +51,7 @@ public class Startup
         });
         services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" }));
         services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; }); ;
+        if (Environment.IsProduction()) services.AddSignalR().AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
         services.AddHttpContextAccessor();
         services.AddScoped<HttpContextAccessor>();
         services.AddHttpClient();

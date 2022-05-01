@@ -66,6 +66,7 @@
         CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
         RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
         if (CountryItems.Count() == 1) OnSelectedCountry(CountryItems.First().Id);
+        if(Principal.CountryId() > 0) OnSelectedCountry(Principal.CountryId());
     }
 
     protected override async Task OnParametersSetAsync()
