@@ -96,9 +96,9 @@ It normally comes bundled with *.NET SDK* and *Git*-tooling, or you can opt-in d
 3. Install the following extensions from within Visual Studio:
 - *ResXManager*,
 - *Markdown Editor*, 
-3. Clone the *Module Registry App* repository from GitHub. You can do that from within Visual Studio.
-4. Open the solution and verify that it compiles.
-5. You can now make modifications and pull-requests.
+4. Clone the *Module Registry App* repository from GitHub. You can do that from within Visual Studio.
+5. Open the solution and verify that it compiles.
+6. You can now make modifications and pull-requests.
 
 #### Working with databases
 >Please report back any problems with this instruction.
