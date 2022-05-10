@@ -588,4 +588,7 @@
   <data name="OpenTopContainer40" xml:space="preserve">
     <value>40' Åpen toppbeholder</value>
   </data>
+  <data name="Plates" xml:space="preserve">
+    <value>Plater</value>
+  </data>
 </root>

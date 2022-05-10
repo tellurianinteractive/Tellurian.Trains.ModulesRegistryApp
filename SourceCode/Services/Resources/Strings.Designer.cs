@@ -1024,6 +1024,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plates.
+        /// </summary>
+        internal static string Plates {
+            get {
+                return ResourceManager.GetString("Plates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparing.
         /// </summary>
         internal static string Preparing {

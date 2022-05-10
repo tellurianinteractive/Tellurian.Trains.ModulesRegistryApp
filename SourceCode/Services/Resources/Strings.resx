@@ -588,4 +588,7 @@
   <data name="Summer" xml:space="preserve">
     <value>Summer</value>
   </data>
+  <data name="Plates" xml:space="preserve">
+    <value>Plates</value>
+  </data>
 </root>

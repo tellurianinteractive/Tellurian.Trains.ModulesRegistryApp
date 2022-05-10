@@ -10,6 +10,7 @@ public enum CargoPackagingUnit
     BigSacks = 9,
     Pallets = 5,
     Bottles = 6,
+    Plates = 11,
     Rolls = 8,
     Bundles = 10,
     CargoRacks = 7,
