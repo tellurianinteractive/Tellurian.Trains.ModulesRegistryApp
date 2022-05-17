@@ -33,6 +33,7 @@ public static class ClaimsPrincipalExtensions
     public static int UserId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.UserId);
     public static int PersonId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.PersonId);
     public static int CountryId(this ClaimsPrincipal? me) => me.GetInt32(AppClaimTypes.CountryId);
+    public static int CountryId(this ClaimsPrincipal? principal, int? maybeCountryId) => maybeCountryId ?? (principal.IsGlobalAdministrator() ? 0 : principal.CountryId());
     public static bool IsDemo(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.Demo);
     public static bool IsReadOnly(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.ReadOnly);
     public static bool MayUploadSkpDrawing(this ClaimsPrincipal? me) => me.GetBool(AppClaimTypes.MayUploadSkpDrawing);

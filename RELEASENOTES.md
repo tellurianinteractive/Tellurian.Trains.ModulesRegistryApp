@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.6.6
+Release date 2022-05-17
+- **Representative station** for a *region*, which will be origin or destination of cargo for that region (issue #143).
+- **Listboxes data** optimised by using database views instead of *Entity Framework* complex queries.
+
 #### Version 1.6.5
 Release date 2022-05-01
 - **Drop down menu** now shows on screens up tp 1280 px. 

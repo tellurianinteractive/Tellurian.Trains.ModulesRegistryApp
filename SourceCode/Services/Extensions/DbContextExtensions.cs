@@ -1,5 +1,6 @@
 ﻿using ModulesRegistry.Services.Resources;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Services.Extensions;
 
@@ -41,5 +42,6 @@ static public class DbContextExtensions
 
     public static (int Count, string Message) NotFound<T>(this T? _) =>
         (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.NotFound.ToLowerInvariant()}");
+
 
 }

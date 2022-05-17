@@ -19,8 +19,10 @@ public partial class Region
     public string Description { get; set; }
     public string ForeColor { get; set; }
     public string BackColor { get; set; }
+    public int? RepresentativeExternalStationId { get; set; }
 
     public virtual Country Country { get; set; }
+    public virtual ExternalStation RepresentativeExternalStation { get; set; }
     public virtual ICollection<ExternalStation> ExternalStations { get; set; }
     public virtual ICollection<Station> Stations { get; set; }
     public virtual ICollection<LayoutStation> LayoutStations { get; set; }

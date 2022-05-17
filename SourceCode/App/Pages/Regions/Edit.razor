@@ -6,6 +6,7 @@
 @inject IToastService ToastService
 @inject PageHistory PageHistory
 
+@inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 @inject CountryService CountryService
 
@@ -14,6 +15,7 @@
 <EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
         <AppInputSelect Width="2" @bind-Value="Region.CountryId" Items="CountryItems" Label="Country" ShowPleaseSelect="true" />
+        <AppInputSelectNullable Width="3" @bind-Value="Region.RepresentativeExternalStationId" Label="RepresentativeStation" Items="ExternalStationsItems" ShowNoneOption="true" />
         <AppInputText Width="3" @bind-Value="Region.LocalName" Label="Name" TextColor="@Region.BackColor.TextColor()" BackColor="@Region.BackColor" />
         <AppInputColor Width="2" @bind-Value="Region.BackColor" Label="BackColor" />
         <AppInputText Width="12" @bind-Value="Region.Description" Label="Description" />
@@ -29,16 +31,18 @@
     ClaimsPrincipal? Principal;
     Region Region = new Region();
     IEnumerable<ListboxItem>? CountryItems;
+    IEnumerable<ListboxItem>?ExternalStationsItems;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountryItems = await CountryService.ListboxItemsAsync(Principal);
     }
 
     protected override async Task OnParametersSetAsync()
     {
         Region = Id > 0 ? await RegionService.FindById(Principal, Id) ?? Default : Default;
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
+        ExternalStationsItems = await ExternalStationService.ListboxItemsAsync(Principal, Region.CountryId, Region.Id);
     }
 
     Region Default => new Region { CountryId = Principal.CountryId() };

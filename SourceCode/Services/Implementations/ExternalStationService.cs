@@ -7,6 +7,20 @@ public sealed class ExternalStationService
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     public ExternalStationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
+
+    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? maybeCountryId, int? maybeRegionId)
+    {
+        if (principal is null ) return Enumerable.Empty<ListboxItem>();
+        var countryId = principal.CountryId(maybeCountryId);
+        var sql = string.Empty;
+        if (maybeRegionId.HasValue) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {maybeRegionId.Value}";
+        else if (countryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {countryId}";
+        else sql = $"SELECT * FROM ListExternalStation";
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.ListboxItems.FromSqlRaw(sql).OrderBy(l => l.Description).ToListAsync();
+    }
+
+
     public async Task<IEnumerable<ExternalStation>> GetAllInRegion(ClaimsPrincipal? principal, int regionId)
     {
         if (principal.IsAuthenticated())

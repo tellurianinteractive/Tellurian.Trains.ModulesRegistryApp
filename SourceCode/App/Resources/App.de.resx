@@ -1116,4 +1116,10 @@
   <data name="Statistics" xml:space="preserve">
     <value>Statistiken</value>
   </data>
+  <data name="RepresentativeStation" xml:space="preserve">
+    <value>Repräsentative Station</value>
+  </data>
+  <data name="NotDefined" xml:space="preserve">
+    <value>Nicht definiert</value>
+  </data>
 </root>

@@ -8,9 +8,10 @@ public sealed class CargoService
     public async Task<IEnumerable<Data.Api.CargoType>> CargoTypesAsync()
     {
         using var dbContext = Factory.CreateDbContext();
-        var result = await dbContext.Cargos.ToListAsync();
+        var result = await dbContext.Cargos.ToReadOnlyListAsync();
         if (result is null) return Array.Empty<Data.Api.CargoType>();
-        return result.Select(c => new Data.Api.CargoType(c.Id, c.NhmCode, c.DefaultClasses) { Translations = c.LocalizedNames().Select(ln => new Data.Api.Translation(ln.Language, ln.Value)) }).ToList();
+        return result
+            .Select(c => new Data.Api.CargoType(c.Id, c.NhmCode, c.DefaultClasses) { Translations = c.LocalizedNames().Select(ln => new Data.Api.Translation(ln.Language, ln.Value)) }).ToList();
     }
 
     public async Task<IEnumerable<ListboxItem>> CargoListboxItemsAsync(ClaimsPrincipal? principal, bool includeDefaultClasses = true)
@@ -18,15 +19,16 @@ public sealed class CargoService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.Cargos
-                .ToListAsync();
+            var items = await dbContext.Cargos.ToReadOnlyListAsync();
             if (includeDefaultClasses)
             {
-                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})")).OrderBy(l => l.Description).ToList();
+                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})"))
+                    .OrderBy(l => l.Description).ToList();
             }
             else
             {
-                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value}")).OrderBy(l => l.Description).ToList();
+                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value}"))
+                    .OrderBy(l => l.Description).ToList();
 
             }
         }
@@ -39,7 +41,7 @@ public sealed class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoDirections
-                .Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized())).ToListAsync(); ;
+                .Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized())).ToReadOnlyListAsync();
             return items
                 .OrderBy(l => l.Description).ToList();
         }
@@ -52,7 +54,7 @@ public sealed class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoUnits
-                .Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).ToListAsync();
+                .Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).ToReadOnlyListAsync();
             return items.OrderBy(l => l.Description).ToList();
         }
         return Array.Empty<ListboxItem>();
@@ -64,7 +66,7 @@ public sealed class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoReadyTimes
-                .Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).ToListAsync();
+                .Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).ToReadOnlyListAsync();
             return items.OrderBy(l => l.Id).ToList();
         }
         return Array.Empty<ListboxItem>();
@@ -73,14 +75,14 @@ public sealed class CargoService
     public async Task<IEnumerable<Cargo>> GetAll()
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Cargos.ToListAsync();
+        return await dbContext.Cargos.ToReadOnlyListAsync();
     }
 
     public async Task<Cargo?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal is null) return null;
         using var dbContext = Factory.CreateDbContext();
-        if (principal.IsAnyAdministrator()) return await dbContext.Cargos.FindAsync(id);
+        if (principal.IsAnyAdministrator()) return await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         return null;
     }
 
@@ -88,18 +90,18 @@ public sealed class CargoService
     {
         if (principal is null) return principal.SaveNotAuthorised<Cargo>();
         using var dbContext = Factory.CreateDbContext();
-        var existing = await dbContext.Cargos.FindAsync(entity.Id);
+        var existing = await dbContext.Cargos.FindAsync(entity.Id).ConfigureAwait(false);
         if (existing is null)
         {
             dbContext.Cargos.Add(entity);
-            var result = await dbContext.SaveChangesAsync();
+            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(entity);
         }
         else
         {
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
             if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync();
+            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(existing);
         }
     }
@@ -107,10 +109,10 @@ public sealed class CargoService
     {
         if (principal is null) return principal.DeleteNotAuthorized<Cargo>();
         using var dbContext = Factory.CreateDbContext();
-        var existing = await dbContext.Cargos.FindAsync(id);
+        var existing = await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         if (existing is null) return principal.NotFound();
         dbContext.Remove(existing);
-        var result = await dbContext.SaveChangesAsync();
+        var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
         return result.DeleteResult();
     }
 
@@ -123,14 +125,25 @@ public sealed class CargoService
             using var dbContext = Factory.CreateDbContext();
             if (subItemsToId.HasValue)
             {
-                if (subItemsToId.Value == 0) return await dbContext.NhmCodes.Where(c => c.LevelDigits <= 4).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();
+                if (subItemsToId.Value == 0) return await dbContext.NhmCodes
+                        .Where(c => c.LevelDigits <= 4)
+                        .OrderBy(c => c.Id)
+                        .Select(c => ListboxItem(c))
+                        .ToReadOnlyListAsync();
                 var min = subItemsToId + 1;
                 var max = min + 999999;
-                return await dbContext.NhmCodes.Where(c => c.Id >= min && c.Id <= max).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();
+                return await dbContext.NhmCodes
+                    .Where(c => c.Id >= min && c.Id <= max)
+                    .OrderBy(c => c.Id).Select(c => ListboxItem(c))
+                    .ToReadOnlyListAsync();
             }
             else
             {
-                return await dbContext.NhmCodes.Where(c => c.LevelDigits == 2).OrderBy(c => c.Id).Select(c => ListboxItem(c)).ToListAsync();
+                return await dbContext.NhmCodes
+                    .Where(c => c.LevelDigits == 2)
+                    .OrderBy(c => c.Id)
+                    .Select(c => ListboxItem(c))
+                    .ToReadOnlyListAsync();
             }
         }
         return Array.Empty<ListboxItem>();

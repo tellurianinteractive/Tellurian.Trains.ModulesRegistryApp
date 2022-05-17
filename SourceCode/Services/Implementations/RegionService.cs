@@ -9,16 +9,17 @@ public class RegionService
     {
         if (principal is not null)
         {
-            var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.IsGlobalAdministrator() ? 0 : principal.CountryId();
+            var countryId = principal.CountryId(maybeCountryId);
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Regions.AsNoTracking()
-                .Where(r => countryId == 0 || r.CountryId == countryId).Include(r => r.Country).ToListAsync();
+                .Where(r => countryId == 0 || r.CountryId == countryId)
+                .Include(r => r.Country).ToReadOnlyListAsync();
             return items.Select(r => new ListboxItem(r.Id, Description(r, maybeCountryId > 0)))
                 .OrderBy(l => l.Description)
                 .AsEnumerable();
 
         }
-        return Array.Empty<ListboxItem>();
+        return Enumerable.Empty<ListboxItem>();
 
         static string Description(Region region, bool singleCountry) =>
             singleCountry ? region.LocalName :
@@ -29,12 +30,13 @@ public class RegionService
     {
         if (principal is not null)
         {
-            var countryId = maybeCountryId.HasValue ? maybeCountryId : principal.IsGlobalAdministrator() ? 0 : principal.CountryId();
+            var countryId = principal.CountryId(maybeCountryId);
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Regions.AsNoTracking()
+            return await dbContext.Regions
                 .Where(r => countryId == 0 || r.CountryId == countryId)
                 .Include(r => r.Country)
-                .ToListAsync();
+                .Include(r => r.RepresentativeExternalStation)
+                .ToReadOnlyListAsync();
 
         }
         return Array.Empty<Region>();

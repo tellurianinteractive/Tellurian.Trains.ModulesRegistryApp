@@ -30,6 +30,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<LayoutModule> LayoutModules { get; set; }
     public virtual DbSet<LayoutParticipant> LayoutParticipants { get; set; }
     public virtual DbSet<LayoutStation> LayoutStations { get; set; }
+    public virtual DbSet<ListboxItem> ListboxItems { get; set; }    
     public virtual DbSet<Meeting> Meetings { get; set; }
     public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
     public virtual DbSet<Module> Modules { get; set; }
@@ -702,6 +703,11 @@ public partial class ModulesDbContext : DbContext
                 .WithMany(p => p.Regions)
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(s => s.RepresentativeExternalStation)
+                .WithOne()
+                .HasForeignKey<Region>(s => s.RepresentativeExternalStationId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Scale>(entity =>

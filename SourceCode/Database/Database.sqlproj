@@ -133,6 +133,9 @@
     <Build Include="dbo\Tables\LayoutParticipant.sql" />
     <Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
     <Build Include="dbo\Views\CountryStatistics.sql" />
+    <Build Include="dbo\Tables\StationCustomerWaybill.sql" />
+    <Build Include="dbo\Tables\LayoutStationTrack.sql" />
+    <Build Include="dbo\Listboxes\RegionRepresentialExternStationListbox.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

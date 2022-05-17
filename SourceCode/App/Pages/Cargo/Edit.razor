@@ -2,6 +2,7 @@
 
 @attribute [Authorize(Policy = "Admin")]
 
+@inject PageHistory PageHistory
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject CargoService CargoService
@@ -60,6 +61,8 @@
         var result = await CargoService.SaveAsync(Principal, Cargo);
         if (result.Entity is not null)  Cargo = result.Entity;
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        await Task.Delay(1000);
+        if (PageHistory.CanNavigateBack) PageHistory.NavigateBack();
     }
 
     async Task OnTopLevelNhmChanged(int id)
