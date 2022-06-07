@@ -10,7 +10,7 @@
     [FR]             NVARCHAR (50) NULL,
     [IT]             NVARCHAR (50) NULL,
     [NL]             NVARCHAR (50) NULL,
-    [NO]             NVARCHAR (50) NULL,
+    [NB]             NVARCHAR (50) NULL,
     [PL]             NVARCHAR (50) NULL,
     [SV]             NVARCHAR (50) NULL,
     CONSTRAINT [PK_Cargo] PRIMARY KEY CLUSTERED ([Id] ASC)

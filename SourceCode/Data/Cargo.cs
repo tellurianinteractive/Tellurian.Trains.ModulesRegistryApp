@@ -19,7 +19,7 @@ public partial class Cargo
     public string FR { get; set; }
     public string IT { get; set; }
     public string NL { get; set; }
-    public string NO { get; set; }
+    public string NB { get; set; }
     public string PL { get; set; }
     public string SV { get; set; }
 }

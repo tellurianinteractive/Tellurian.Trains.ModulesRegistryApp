@@ -32,7 +32,7 @@ public class CargoValidator : AbstractValidator<Cargo>
         RuleFor(m => m.DA).NotEmpty().MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Danish"]);
         RuleFor(m => m.FR).MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["French"]);
         RuleFor(m => m.NL).MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Dutch"]);
-        RuleFor(m => m.NO).NotEmpty().MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Norwegian"]);
+        RuleFor(m => m.NB).NotEmpty().MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Norwegian"]);
         RuleFor(m => m.PL).MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Polish"]);
         RuleFor(m => m.SV).NotEmpty().MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["Swedish"]);
     }

@@ -58,7 +58,7 @@ BEGIN
 		C.FR,
 		C.IT,
 		C.NL,
-		C.NO,
+		C.NB,
 		C.PL,
 		C.SV
 	FROM

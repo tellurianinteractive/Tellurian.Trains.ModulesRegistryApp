@@ -32,7 +32,7 @@ public sealed class GroupService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Groups.AsNoTracking()
-                .Where(g => (g.CountryId == countryId) || (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)))
+                .Where(g => (g.CountryId == countryId) /*|| (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)) */)
                 .Include(g => g.GroupDomain)
                 .Include(g => g.Country)
                 .OrderBy(g => g.FullName)

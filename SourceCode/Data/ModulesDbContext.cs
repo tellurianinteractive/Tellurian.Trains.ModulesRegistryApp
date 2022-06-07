@@ -88,9 +88,9 @@ public partial class ModulesDbContext : DbContext
                  .HasMaxLength(50)
                  .HasColumnName("NL");
 
-            entity.Property(e => e.NO)
+            entity.Property(e => e.NB)
                  .HasMaxLength(50)
-                 .HasColumnName("NO");
+                 .HasColumnName("NB");
 
             entity.Property(e => e.PL)
                  .HasMaxLength(50)

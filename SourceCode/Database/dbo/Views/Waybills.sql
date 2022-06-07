@@ -28,7 +28,7 @@ SELECT
 	C.DE,
 	C.EN,
 	C.NL,
-	C.NO,
+	C.NB,
 	C.PL,
 	C.SV
 FROM

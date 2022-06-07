@@ -1,14 +1,15 @@
-﻿## Förbered ditt lok för modulmötet
-Här är några riktlinjer för att förbereda dina lok innan du sätter dem på rätt spår
+﻿## Förbered ditt lok till modulträffen
+Här är några riktlinjer för att förbereda dina lok innan du sätter dem på spåret
 på modulträffar.
 
-### Förberedelse inför möte
-Det här är de saker du kan göra hemma eller på klubben innan du reser till mötet.
+### Förberedelse inför träffen
+Det här är de saker du kan göra hemma eller på klubben innan du reser till träffen.
  
 #### Förberedelse av dekoderinställningar
 Om du själv kan eller har någon som kan hjälpa dig, gör följande för att justera inställningarna för ditt loks DCC-dekoder:
 - Läs CV 29. Bitarna är numrerade från 0 till 7.
-  - Om bit 2 är inställd indikerar det analog drift. Denna måste stängas av genom att nollställa denna bit. Detta förhindrar att loket rusar i full fart om en booster går sönder.
+  - Om bit 2 är inställd indikerar det analog drift. Denna måste stängas av genom att nollställa denna bit. 
+	Detta förhindrar att loket rusar i full fart om en booster går sönder.
   - Rekommenderade CV 29-värden är:
 	- 0 är ett lok med kort adress 1-99 och 14 hastighetssteg.
 	- 2 är ett lok med kort adress 1-99 och 28/126 hastighetssteg.
@@ -16,17 +17,18 @@ Om du själv kan eller har någon som kan hjälpa dig, gör följande för att j
 	- 34 är ett lok med lång adress 128-9999 och 28/126 hastighetssteg.
 	- För lok i *omvänd* riktning, lägg till 1 till ovanstående CV29-värden.
 - Om CV 19 är > 0 är detta adressen som loket kommer att svara på. Det rekommenderas att ställa in CV 19=0 för att inaktivera denna adress.
-- Lokadress nummer 3 är förbjuden. Detta är den vanligaste standardadressen för nya avkodare.
-- Få ditt lok att starta och stanna mjukt, helst en hastighet som är proportionell mot hur mycket du vrider på FRED-ratten. Ett lok som hoppar iväg är inte kul att köra.
-  - CV 3 styr accelerationen och du kan använda vilket värde som helst, men inte för länge.
-  - CV 4 kontrollerar retardation och du bör använda ett litet värde så att loket kan stoppas på en kort sträcka.
+- Lokadress nummer 3 är förbjuden. Detta är den vanligaste standardadressen för nya lokdekodrar.
+- Få ditt lok att starta och stanna mjukt, helst en hastighet som är proportionell mot hur mycket du vrider på FRED-ratten. 
+Ett lok som hoppar iväg är inte kul att köra.
+  - CV 3 styr accelerationen och du kan använda vilket värde som helst, men inte allt för långsam acceleration.
+  - CV 4 kontrollerar inbromsning och du bör använda ett litet värde så att loket kan stoppas på en kort sträcka.
 - Lokets toppfart bör vara "säker". Justera värdet CV 5 för detta.
 
 #### Förberedelse av lokmaskineri
 - Använd hjul som uppfyller kraven: [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bör betraktas som ett minimikrav,
 men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) krävs ofta.
-- Rengör hjulen och kraftkontaktbladen för optimal energiförbrukning.
-- Om ditt lok har slirskydd, kontrollera att de är okej. Lok med hjul avsedda för slirskydd kommer inte att fungera bra utan dessa ringar.
+- Rengör hjulen och kontaktblecken för optimal strömupptagning.
+- Om ditt lok har slirskydd, kontrollera att de är okej. Lok med hjul avsedda för slirskydd kommer inte att fungera bra utan dessa.
 – Testa dina lok före träffen genom att köra dem på en bana, inte bara i en provbädd.
 – Om ditt lok går sönder träffen mötet finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
 
@@ -36,15 +38,16 @@ eller [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/ba
 - Justera hjulens back-to-back mått till 14,5 mm ± 0,1 mm.
 
 #### Förberedelse av persontåg med lok och manövervagn
-Det rekommenderas att loket och manövervagnen i andra änden har synkroniserade ljus som växlar med tågets riktning.
+Det rekommenderas att loket och manövervagnen i andra änden av tåget har synkroniserade ljus som växlar med tågets riktning.
 Det betyder att de måste ha samma DCC-adress och samma strålkastar- och bakgrundsbelysningsfunktioner. Dessa inställningar ändras i dekoderns inställningar.
 
 #### Förberedelse av FRED
 FRED-körhandtaget är det enda som används vid FREMO-möten.
 - Se till att din FRED har märkts med operatör, littera och fordonsnummer, exempel **DB MZ 1456**. Detta hjälper människor att hitta rätt FRED.
 - Det rekommenderas också att ange viktiga lokfunktioner på FRED-dekalen. Minst ljusfunktioner, signalhorn och motor bör dokumenteras.
-- Observera att funktioner ovanför F8 ibland inte fungerar vid FREMO-träffar, på grund av begränsningar i den digitala centralen som används. Så gör alla viktiga funktioner tillgängliga på F1-F8.
-- Även om du inte har en FRED på dina lok, förbered en FRED-dekal.
+- Observera att funktioner ovanför F8 ibland inte fungerar vid FREMO-träffar, på grund av begränsningar i den digitala centralen som används. 
+Så gör alla viktiga funktioner tillgängliga på F1-F8.
+- Även om du inte har en egen FRED till dina lok så förbered en FRED-dekal att använda i en lånad FRED.
 
 #### Förberedelse av lokkort
 Alla lok som kör linjetåg brukar ha lokkort. Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
