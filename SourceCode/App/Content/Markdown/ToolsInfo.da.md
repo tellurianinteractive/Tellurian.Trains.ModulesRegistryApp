@@ -11,8 +11,8 @@ Disse kort har et rent og letlæseligt design, der sparer blæk/toner.
 Kortene indeholder grundlæggende informationer om et køretøj, der passer til de fleste modulmøder.
 Kort kan udskrives på flere sprog.
 
-#### Hurtigt-ur i skyen
-Dette er det [hurtige ur](https://telluriantrainsclocksappserver.azurewebsites.net/)
+#### Hurtig-ur i skyen
+Dette er det [hurtig ur](https://telluriantrainsclocksappserver.azurewebsites.net/)
 som altid er tilgængelig og ikke kræver lokal installation.
 Det understøtter de fleste europæiske sprog og har flere nyttige funktioner end noget andet hurtigt ur. Lær mere:
 - Læs [ofte stillede spørgsmål](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/Frequently-Asked-Questions)

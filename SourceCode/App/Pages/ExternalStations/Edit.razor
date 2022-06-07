@@ -21,8 +21,9 @@
     <Buttons>
         @if (Station?.Id > 0)
         {
-            <a class="btn btn-secondary btn-sm" href="ExternalStations/@Station.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
-        }
+            <AppButton Href="@CustomersHref" ObjectName="FreightCustomers" Label="Edit"/>
+@*            <a class="btn btn-secondary btn-sm" href="ExternalStations/@Station.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+*@        }
     </Buttons>
 </EditTemplate>
 
@@ -55,5 +56,7 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    string CustomersHref => $"ExternalStations/{Station.Id}/StationCustomers";
 
 }

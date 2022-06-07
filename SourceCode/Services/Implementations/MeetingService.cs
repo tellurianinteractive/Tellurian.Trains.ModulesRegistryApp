@@ -81,7 +81,7 @@ public class MeetingService
             var meetingId = await dbContext.Layouts.Where(l => l.Id == layoutId).Select(l => l.MeetingId).SingleOrDefaultAsync();
             return await dbContext.MeetingParticipants.AsNoTracking()
                 .Include(mp => mp.Person).ThenInclude(p => p.Country)
-                .Include(p => p.Layouts).ThenInclude(lp => lp.Layout)
+                .Include(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout)
                 .Where(m => m.MeetingId == meetingId)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -209,7 +209,7 @@ public class MeetingService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
                 .Include(mp => mp.Person)
-                .Include(mp => mp.Layouts)
+                .Include(mp => mp.LayoutParticipations)
                 .SingleOrDefaultAsync(mp => mp.Id == participantId)
                 .ConfigureAwait(false);
         }
@@ -223,7 +223,7 @@ public class MeetingService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
                 .Include(mp => mp.Person)
-                .Include(mp => mp.Layouts)
+                .Include(mp => mp.LayoutParticipations)
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
                 .ConfigureAwait(false);
         }
@@ -267,11 +267,11 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.MeetingParticipants
-                .Include(mp => mp.Layouts).ThenInclude(lp => lp.LayoutModules)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.LayoutModules)
                 .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)
                 .ConfigureAwait(false);
             if (existing is null) return Resources.Strings.NotFound.DeleteResult();
-            if (existing.Layouts.Sum(lp => lp.LayoutModules.Count) > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
+            if (existing.LayoutParticipations.Sum(lp => lp.LayoutModules.Count) > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
             dbContext.MeetingParticipants.Remove(existing);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();

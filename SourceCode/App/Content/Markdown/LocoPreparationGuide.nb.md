@@ -9,8 +9,7 @@ Dette er tingene du kan gjøre hjemme eller i klubben før du reiser til treffet
 Hvis du har ferdighetene eller har noen som kan hjelpe deg, gjør følgende for å justere innstillingene til loco DCC-dekoderen:
 - Les CV 29. Bits er nummerert fra 0 til 7.
   - Hvis bit 2 er satt, indikerer det analog drift. Denne må slås av ved å sette denne biten til null. Dette hindrer lokomotivet i å rushe i full fart hvis en booster svikter.
-  - Hvis bit 3 er satt, indikerer det at RailCom er på. Denne må slås av ved å sette denne biten til null. Dette gjør DCC litt mer effektivt.
-  - Anbefalte CV 29-verdier er:
+   - Anbefalte CV 29-verdier er:
     - 0 er et loko med kort adresse 1-99 og 14 hastighetstrinn.
     - 2 er et loko med kort adresse 1-99 og 28/126 hastighetstrinn.
     - 32 er et loko med lang adresse 128-9999 og 14 hastighetstrinn.

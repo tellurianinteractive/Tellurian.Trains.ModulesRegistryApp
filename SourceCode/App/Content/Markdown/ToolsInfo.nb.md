@@ -6,7 +6,7 @@ Denne [guiden](/tools/locopreparationguide) forteller hvordan du forbereder loko
 #### Lag vogn- og lokokort online
 Det er flere ressurser og måter å lage vogn- og lokokort på.
 
-[online-appen](https://wagoncardapp.azurewebsites.net/) gjør det veldig enkelt å lage og skrive ut slike kort i A6L-format, egnet for de fleste H0-treff.
+[Online-appen](https://wagoncardapp.azurewebsites.net/) gjør det veldig enkelt å lage og skrive ut slike kort i A6L-format, egnet for de fleste H0-treff.
 Disse kortene har et rent og lettlest design som sparer blekk/toner.
 Kortene inneholder grunnleggende informasjon om et kjøretøy, egnet for de fleste modultreff.
 Kort kan skrives ut på flere språk.

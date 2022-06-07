@@ -1122,4 +1122,10 @@
   <data name="NotDefined" xml:space="preserve">
     <value>Ikke defineret</value>
   </data>
+  <data name="Participate" xml:space="preserve">
+    <value>Deltage</value>
+  </data>
+  <data name="LatestArrivalTime" xml:space="preserve">
+    <value>Seneste ankomsttid</value>
+  </data>
 </root>

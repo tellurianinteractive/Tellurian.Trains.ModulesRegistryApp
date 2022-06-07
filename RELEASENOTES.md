@@ -1,9 +1,20 @@
 ## Release Notes
 
 #### Version 1.6.6
-Release date 2022-05-17
+Release date 2022-06-17
 - **Representative station** for a *region*, which will be origin or destination of cargo for that region (issue #143).
 - **Listboxes data** optimised by using database views instead of *Entity Framework* complex queries.
+- **Server Timeout** increased from 3 to 10 minutes, so the request to *Reload* should happen more infrequently.
+- **Norwegian** now have the correct language code NB (and not NO), that will make the user interface to display in Norwegian bokmål.
+- **Language Select** is now possible to override your browser's request language settings. Append *?culture=XX* to the url, where XX is the two-letter ISO language code.
+The following langauges are supported: 
+  - DA=Danish, 
+  - DE=German, 
+  - EN=English, 
+  - NB=Norwegian (bokmål),
+  - SV=Swedish.
+  > Example use German: https://moduleregistry.azurewebsites.net/?culture=DE
+- **Selected Language** is now stored in cookie and overrides your browser's request language settings. 
 
 #### Version 1.6.5
 Release date 2022-05-01

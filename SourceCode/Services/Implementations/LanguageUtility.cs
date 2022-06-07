@@ -6,7 +6,7 @@ namespace ModulesRegistry.Services.Implementations;
 
 public static class LanguageUtility
 {
-    public const string DefaultLanguage = "en";
+    public const string DefaultLanguage = "en-UK";
     public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
     public static string CurrentLanguage => CurrentCulture.TwoLetterISOLanguageName;
     public static CultureInfo DefaultCulture => new(DefaultLanguage);
@@ -45,16 +45,16 @@ public static class LanguageUtility
     /// </summary>
     private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
          new Dictionary<Language, CultureInfo>() {
-                 { Language.English, new CultureInfo("en") },
-                 { Language.Swedish, new CultureInfo("sv") },
-                 { Language.Danish, new CultureInfo("da") },
-                 { Language.Norwegian, new CultureInfo("no") },
-                 { Language.German, new CultureInfo("de") },
+                 { Language.English, new CultureInfo("en-GB") },
+                 { Language.Swedish, new CultureInfo("sv-SE") },
+                 { Language.Danish, new CultureInfo("da-DK") },
+                 { Language.Norwegian, new CultureInfo("nb-NO") },
+                 { Language.German, new CultureInfo("de-DE") },
                  // Not fully supported below:
-                 { Language.Dutch, new CultureInfo("nl") },
-                 { Language.Polish, new CultureInfo("pl") },
-                 { Language.Italian, new CultureInfo("it") },
-                 { Language.French, new CultureInfo("fr") },
+                 { Language.Dutch, new CultureInfo("nl-NL") },
+                 { Language.Polish, new CultureInfo("pl-PL") },
+                 { Language.Italian, new CultureInfo("it-IT") },
+                 { Language.French, new CultureInfo("fr-FR") },
         };
 
     public static CultureInfo SupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>

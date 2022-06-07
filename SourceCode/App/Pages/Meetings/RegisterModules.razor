@@ -23,11 +23,9 @@
 }
 else
 {
-
     <div style="margin-top: 12pt">
         @if (Layout is not null)
         {
-
             <h3>@Localizer["AvailableModules"]</h3>
             <TableTemplate Items="Packages" Key="Key">
                 <TableHeader>
@@ -56,11 +54,11 @@ else
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
-                    <td>@item.Module.FullName</td>
-                    <td>@item.RegisteredTime.ToString("g")</td>
-                    <td>@item.LayoutPosition()</td>
-                    <td>
-                        @if (MayCancel(item))
+            <td>@item.Module.FullName</td>
+            <td>@item.RegisteredTime.ToString("g")</td>
+            <td>@item.LayoutPosition()</td>
+            <td>
+                @if (MayCancel(item))
                         {
                     <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
                         }

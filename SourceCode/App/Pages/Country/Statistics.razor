@@ -21,7 +21,7 @@ else
         </TableHeader>
         <RowTemplate Context="item">
             <td width="5%"><img src="@FlagSrc(item)" /></td>
-            <td width="15%">@Localizer[item.EnglishName]</td>
+            <td width="15%">@item.EnglishName.AsLocalized()</td>
             <td width="15%">@item.ModulesCount</td>
             <td width="15%">@item.StationsCount</td>
             <td width="15%">@item.StationCustomersCount</td>

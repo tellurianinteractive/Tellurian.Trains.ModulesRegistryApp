@@ -9,7 +9,6 @@ These are the things that you can do at home or club before travelling to the me
 If you have the skill or have someone that can help you, do the following to adjust the settings of your loco DCC-decoder:
 - Read CV 29. Bits are numbered from 0 to 7. 
   - If bit 2 is set it indicates analogue operation. This must be turned of by setting this bit to zero. This prevents the loco to rush at full speed if a booster fails.
-  - If bit 3 is set it indicates RailCom is on. This must be turned off by setting this bit to zero. This makes DCC a little more efficient.
   - Recommended CV 29 values are:
 	- 0 is a loco with short address 1-99 and 14 speed steps.
 	- 2 is a loco with short address 1-99 and 28/126 speed steps.
@@ -18,7 +17,8 @@ If you have the skill or have someone that can help you, do the following to adj
 	- For loco in *reverse* direction, add 1 to the above CV29 values.
 - If CV 19 is > 0 this is the address the loco will respond to. Its recommended to set CV 19=0 to disable this address.
 - Loco address number 3 is forbidden. This is the most common default address of new decoders.
-- Make your loco start and stop smooth, ideally a speed that is proportional to how much you turn the FRED knob. A loco that jumps away is not fun to drive.
+- Make your loco start and stop smooth, ideally a speed that is proportional to how much you turn the FRED knob. 
+A loco that jumps away is not fun to drive.
   - CV 3 controls acceleration and you can use any value, but not too long.
   - CV 4 controls retardation and you should use a small value so the loco can be stopped on a short stretch.
 - Top speed of loco should be “safe”. Adjust value CV 5 for this. 

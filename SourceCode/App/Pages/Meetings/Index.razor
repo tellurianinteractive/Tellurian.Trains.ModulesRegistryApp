@@ -36,9 +36,9 @@
         <td class="@MeetingStatusCssClass(item.meeting)" align="center">@item.meeting.Status.MeetingStatus()</td>
         <td>
             <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
-            @if (MayRegister(item.meeting))
+            @if (item.meeting.MayRegister(TimeProvider.Now.DateTime, Principal))
             {
-                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")" />
+                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"  />
             }
             @if (item.MayEdit)
             {
@@ -58,17 +58,13 @@
     [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
-    bool MayRegister(Meeting meeting) =>
-        Principal.IsAnyAdministrator() ||
-        (Principal.IsAuthenticated() && meeting.IsOpenForRegistration(TimeProvider.Now.DateTime));
 
     bool MayDelete(Meeting meeting) =>
         Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
 
-
-
     string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
 
+    
     string MeetingStatusCssClass(Meeting meeting) =>
         meeting.IsCancelled() ? "meeting cancelled" :
         meeting.IsOpenForRegistration(TimeProvider.Now.Date) ? "meeting open" :

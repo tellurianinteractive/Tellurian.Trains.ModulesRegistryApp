@@ -32,6 +32,7 @@ public class Program
                     config.AddUserSecrets<Program>();
                 }
             })
+        
             .ConfigureLogging(logging =>
             {
                 logging.ClearProviders();

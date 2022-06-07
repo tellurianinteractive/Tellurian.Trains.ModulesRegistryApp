@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using ModulesRegistry.Services.Implementations;
+﻿using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Services.Extensions;
 

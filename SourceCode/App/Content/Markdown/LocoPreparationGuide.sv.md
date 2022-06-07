@@ -9,7 +9,6 @@ Det här är de saker du kan göra hemma eller på klubben innan du reser till m
 Om du själv kan eller har någon som kan hjälpa dig, gör följande för att justera inställningarna för ditt loks DCC-dekoder:
 - Läs CV 29. Bitarna är numrerade från 0 till 7.
   - Om bit 2 är inställd indikerar det analog drift. Denna måste stängas av genom att nollställa denna bit. Detta förhindrar att loket rusar i full fart om en booster går sönder.
-  - Om bit 3 är inställd indikerar det att RailCom är på. Detta måste stängas av genom att sätta denna bit till noll. Detta gör DCC lite mer effektivt.
   - Rekommenderade CV 29-värden är:
 	- 0 är ett lok med kort adress 1-99 och 14 hastighetssteg.
 	- 2 är ett lok med kort adress 1-99 och 28/126 hastighetssteg.

@@ -31,7 +31,7 @@ else
         <ul>
             <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
             <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
-            <li>@Localizer["ArrivalTime"]: <strong>@Participant.ArrivalTime?.ToString("t")</strong> </li>
+            <li>@Localizer["LatestArrivalTime"]: <strong>@Participant.ArrivalTime?.ToString("t")</strong> </li>
         </ul>
     }
     else if (Meeting.Id > 0 && PersonId > 0)
@@ -47,9 +47,9 @@ else
 
         <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
             <Inputs>
-                <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="ArrivalTime" />
+                <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
                 <AppInputFill Width="10" />
-                <AppInputFill Width="2" Text="@Localizer["ParticipateDays"]" />
+                <h3>@Localizer["Days"]</h3>
                 <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
                 <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
                 <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
@@ -64,12 +64,12 @@ else
                 <TableHeader>
                     <th>@Localizer["Layout"]</th>
                     <th>@Localizer["Note"]</th>
-                    <th>@Localizer["Action"]</th>
+                    <th>@Localizer["Actions"]</th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
                     <td>@item.Layout?.Note</td>
-                    <td><AppButton IconName="Layout" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
+                    <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
                 </RowTemplate>
             </TableTemplate>
         }
@@ -98,7 +98,7 @@ else
         IsMeetingOrganiser ||
         (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
-    string ParticipantLayouts(MeetingParticipant mp) => string.Join(',', mp.Layouts.Select(lm => lm.Layout.Name()));
+    string ParticipantLayouts(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Name()));
 
     protected override async Task OnParametersSetAsync()
     {
@@ -166,9 +166,9 @@ else
         if (Participant is null) return;
         var added = Meeting?.Layouts.SingleOrDefault(l => l.Id == layoutId);
         if (added is null) return;
-        if (Participant.Layouts.Any(l => l.Id == layoutId)) return;
+        if (Participant.LayoutParticipations.Any(l => l.Id == layoutId)) return;
         LayoutParticipant layoutParticipant = new() { LayoutId = layoutId, MeetingParticipantId = Participant.Id, PersonId = Participant.PersonId };
-        Participant.Layouts.Add(layoutParticipant);
+        Participant.LayoutParticipations.Add(layoutParticipant);
         PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
     }
     string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Name}";
@@ -177,8 +177,8 @@ else
     void OnCancelParticipateInLayout(int layoutId)
     {
         if (Participant is null) return;
-        var removed = Participant.Layouts.SingleOrDefault(l => l.LayoutId == layoutId);
-        if (removed is not null) Participant.Layouts.Remove(removed);
+        var removed = Participant.LayoutParticipations.SingleOrDefault(l => l.LayoutId == layoutId);
+        if (removed is not null) Participant.LayoutParticipations.Remove(removed);
         PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
     }
 
@@ -186,10 +186,10 @@ else
 
     static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
     {
-        if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return Array.Empty<LayoutParticipation>();
+        if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return Enumerable.Empty<LayoutParticipation>();
         var personsLayoutParticipations = meetingLayouts.Select(ml => new LayoutParticipation(ml, participant));
-        if (participant?.Layouts is null || participant.Layouts.Count() == 0) return personsLayoutParticipations;
-        foreach (var participantLayout in participant.Layouts)
+        //if (participant?.Layouts is null || participant.Layouts.Count() == 0) return personsLayoutParticipations;
+        foreach (var participantLayout in participant.LayoutParticipations)
         {
             var p = personsLayoutParticipations.SingleOrDefault(x => x.Layout?.Id == participantLayout.LayoutId);
             if (p is not null) p.IsParticipating = true;
@@ -198,6 +198,7 @@ else
     }
 
     string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
-    string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Change"] : Localizer["Register"];
+    string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
+    string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";
 
 }

@@ -1,11 +1,20 @@
 ﻿@page "/"
 @namespace ModulesRegistry.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using System.Globalization
+@using Microsoft.AspNetCore.Localization
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<App> Localizer
 @{
     Layout = null;
+    this.HttpContext.Response.Cookies.Append(
+        CookieRequestCultureProvider.DefaultCookieName,
+        CookieRequestCultureProvider.MakeCookieValue(
+            new RequestCulture(
+                CultureInfo.CurrentCulture,
+                CultureInfo.CurrentUICulture)));
 }
 
 <!DOCTYPE html>

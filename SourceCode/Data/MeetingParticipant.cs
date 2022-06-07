@@ -6,7 +6,7 @@ public class MeetingParticipant
 {
     public MeetingParticipant()
     {
-        Layouts = new HashSet<LayoutParticipant>();
+        LayoutParticipations = new HashSet<LayoutParticipant>();
     }
     public int Id { get; set; }
     public int PersonId { get; set; }
@@ -23,5 +23,5 @@ public class MeetingParticipant
 
     public virtual Person Person { get; set; }
     public virtual Meeting Meeting { get; set; }
-    public virtual ICollection<LayoutParticipant> Layouts { get; set; }
+    public virtual ICollection<LayoutParticipant> LayoutParticipations { get; set; }
 }

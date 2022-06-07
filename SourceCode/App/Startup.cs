@@ -46,11 +46,16 @@ public class Startup
         services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.AllowTrailingCommas = true;
-                //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                options.JsonSerializerOptions.WriteIndented = true;
+            //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.WriteIndented = true;
         });
         services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" }));
-        services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; }); ;
+        services.AddServerSideBlazor()
+            .AddCircuitOptions(options =>
+            {
+                options.DetailedErrors = true;
+                options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(10);
+            }); ;
         if (Environment.IsProduction()) services.AddSignalR().AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
         services.AddHttpContextAccessor();
         services.AddScoped<HttpContextAccessor>();
@@ -94,12 +99,6 @@ public class Startup
         services.AddScoped<WaybillService>();
 
         services.AddLocalization(options => options.ResourcesPath = "Resources");
-        services.AddRequestLocalization(options =>
-        {
-            options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultLanguage);
-            options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
-            options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
-        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -116,26 +115,28 @@ public class Startup
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
         var supportedCultures = LanguageUtility.FullySupportedLanguages;
-        app.UseRequestLocalization(options =>
-         {
-             options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
-             options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
-             options.DefaultRequestCulture = new RequestCulture(LanguageUtility.DefaultCulture);
-             options.FallBackToParentCultures = true;
-         });
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseRequestLocalization(options =>
+          {
+              options.SetDefaultCulture(LanguageUtility.DefaultLanguage);
+              options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
+              options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
+              options.FallBackToParentCultures = true;
+              options.FallBackToParentUICultures = true;
+          });
         app.UseApiUserAuthentication();
         app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
         var isClosed = Configuration.GetValue("Status:Closed", false);
+
         app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapBlazorHub();
-            endpoints.MapFallbackToPage("/_Host");
-        });
+       {
+           endpoints.MapControllers();
+           endpoints.MapBlazorHub();
+           endpoints.MapFallbackToPage("/_Host");
+       });
     }
 }

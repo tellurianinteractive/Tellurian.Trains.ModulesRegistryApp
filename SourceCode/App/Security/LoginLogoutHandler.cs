@@ -37,7 +37,7 @@ internal static class LoginLogoutHandler
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true,
-                RedirectUri = model.Request.Host.Value
+                RedirectUri = model.Request.Path
             };
             if (claims.Any())
             {

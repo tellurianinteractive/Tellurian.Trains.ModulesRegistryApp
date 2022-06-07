@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<RuntimeFrameworkVersion>6.0.5</RuntimeFrameworkVersion>
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
@@ -18,28 +19,28 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
-		<PackageReference Include="Azure.Identity" Version="1.4.0" />
+		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+		<PackageReference Include="Azure.Identity" Version="1.6.0" />
 		<PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
 		<PackageReference Include="Blazored.Toast" Version="3.2.2" />
 		<PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
-		<PackageReference Include="Blazorise.Bootstrap" Version="0.9.5.4" />
-		<PackageReference Include="Blazorise.Components" Version="0.9.5.4" />
-		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.5.4" />
-		<PackageReference Include="Markdig" Version="0.26.0" />
+		<PackageReference Include="Blazorise.Bootstrap" Version="1.0.4" />
+		<PackageReference Include="Blazorise.Components" Version="1.0.4" />
+		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.0.4" />
+		<PackageReference Include="Markdig" Version="0.30.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" NoWarn="NU1605" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" NoWarn="NU1605" />
 		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.15.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.17.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="1.22.1" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.5" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.24.1" />
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.16.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -58,13 +59,13 @@
 		<None Update="Content\Markdown\FAQ.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.no.md">
+		<None Update="Content\Markdown\FAQ.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\FAQ.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\LocoPreparationGuide.no.md">
+		<None Update="Content\Markdown\LocoPreparationGuide.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\LocoPreparationGuide.da.md">
@@ -79,7 +80,7 @@
 		<None Update="Content\Markdown\LocoPreparationGuide.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\ToolsInfo.no.md">
+		<None Update="Content\Markdown\ToolsInfo.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\ToolsInfo.da.md">
@@ -94,7 +95,7 @@
 		<None Update="Content\Markdown\ToolsInfo.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\NoWaybills.no.md">
+		<None Update="Content\Markdown\NoWaybills.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\NoWaybills.da.md">
@@ -136,7 +137,7 @@
 		<None Update="Content\Markdown\HelpAddGroupMember.de.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.no.md">
+		<None Update="Content\Markdown\HelpAddGroupMember.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\HelpAddGroupMember.md">
@@ -166,7 +167,7 @@
 		<None Update="Content\Markdown\HelpModule.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HomeUser.no.md">
+		<None Update="Content\Markdown\HomeUser.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\PasswordReset.no.md">
@@ -187,7 +188,7 @@
 		<None Update="Content\Markdown\PasswordReset.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\About.no.md">
+		<None Update="Content\Markdown\About.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\About.da.md">
@@ -208,19 +209,19 @@
 		<None Update="Content\Markdown\Contact.da.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\Contact.no.md">
+		<None Update="Content\Markdown\Contact.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Contact.sv.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HomeNotAuthorized.no.md">
+		<None Update="Content\Markdown\HomeNotAuthorized.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HomeNoUser.no.md">
+		<None Update="Content\Markdown\HomeNoUser.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\Invitation.no.md">
+		<None Update="Content\Markdown\Invitation.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Invitation.de.md">

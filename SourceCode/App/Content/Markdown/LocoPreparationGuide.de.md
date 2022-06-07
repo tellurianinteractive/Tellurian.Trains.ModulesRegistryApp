@@ -9,7 +9,6 @@ Dies sind die Dinge, die Sie zu Hause oder im Club erledigen können, bevor Sie 
 Wenn Sie die Fähigkeit haben oder jemanden haben, der Ihnen helfen kann, gehen Sie wie folgt vor, um die Einstellungen Ihres Lok-DCC-Decoders anzupassen:
 - CV 29 lesen. Bits sind von 0 bis 7 nummeriert.
   - Wenn Bit 2 gesetzt ist, zeigt dies den Analogbetrieb an. Dies muss ausgeschaltet werden, indem dieses Bit auf Null gesetzt wird. Dadurch wird verhindert, dass die Lok bei Ausfall eines Boosters auf Hochtouren rast.
-  - Wenn Bit 3 gesetzt ist, zeigt dies an, dass RailCom eingeschaltet ist. Dies muss ausgeschaltet werden, indem dieses Bit auf Null gesetzt wird. Das macht DCC etwas effizienter.
   - Empfohlene Werte für CV 29 sind:
 	- 0 ist eine Lok mit Kurzadresse 1-99 und 14 Fahrstufen.
 	- 2 ist eine Lok mit Kurzadresse 1-99 und 28/126 Fahrstufen.

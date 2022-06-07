@@ -442,7 +442,7 @@ public partial class ModulesDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(d => d.PersonId);
 
-            entity.HasMany(d => d.Layouts)
+            entity.HasMany(d => d.LayoutParticipations)
                 .WithOne()
                 .HasForeignKey(d => d.LayoutId);
         });
