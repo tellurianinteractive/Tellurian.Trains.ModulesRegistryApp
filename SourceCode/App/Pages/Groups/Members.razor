@@ -15,7 +15,7 @@
     <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
 }
 
-<TableTemplate Items="Group.GroupMembers">
+<TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.FullName())">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th align="center">@Localizer["IsGroupAdministrator"]</th>

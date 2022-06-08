@@ -11,7 +11,7 @@
     <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
 }
 
-<TableTemplate Items="ModuleStandards">
+<TableTemplate Items="ModuleStandards?.OrderBy(ms => ms.Scale.Denominator)">
     <TableHeader>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Name"]</th>

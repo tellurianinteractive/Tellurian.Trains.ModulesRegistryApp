@@ -13,7 +13,7 @@ public class CargoController : ControllerBase
     }
     private readonly CargoService CargoService;
 
-    [Route("all")]
+    [Route("")]
     public async Task<IActionResult> Index()
     {
         var cargoTypes = await CargoService.CargoTypesAsync();

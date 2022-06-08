@@ -14,13 +14,13 @@
 
 <TableTemplate Items="GableTypes?.OrderBy(gt => gt.Scale.Denominator).ThenBy(gt => gt.Designation)">
     <TableHeader>
-        <th>@Localizer["Designation"]</th>
         <th>@Localizer["Scale"]</th>
+        <th>@Localizer["Designation"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
-        <td>@item.Designation</td>
         <td>@item.Scale.Display()</td>
+        <td>@item.Designation</td>
         <td>
             @if (Principal.IsAnyAdministrator())
             {

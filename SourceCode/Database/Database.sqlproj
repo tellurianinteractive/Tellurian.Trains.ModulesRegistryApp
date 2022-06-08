@@ -69,8 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\MeetingParticipant.sql" />
-    <Build Include="dbo\Tables\CargoRelation.sql" />
-    <Build Include="dbo\Tables\CargoRelationWagon.sql" />
     <Build Include="dbo\Tables\OperatingDay.sql" />
     <Build Include="dbo\Tables\StationCustomerCargo.sql" />
     <Build Include="dbo\Tables\Property.sql" />

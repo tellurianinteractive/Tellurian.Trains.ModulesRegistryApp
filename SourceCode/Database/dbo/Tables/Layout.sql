@@ -4,7 +4,7 @@
     [ResponsibleGroupId]             INT            NOT NULL,
     [PrimaryModuleStandardId]        INT            NOT NULL,
     [Theme]                          NVARCHAR (100) NULL,
-    [Note]                           NVARCHAR (100) NULL,
+    [Note]                           NVARCHAR (1000) NULL,
     [FirstYear]                      SMALLINT       NULL,
     [LastYear]                       SMALLINT       NULL,
     [StartWeekdayId]                 INT            NULL,
