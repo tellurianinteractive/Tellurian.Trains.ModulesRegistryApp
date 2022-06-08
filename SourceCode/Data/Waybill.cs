@@ -11,7 +11,7 @@ public class Waybill
     public string WagonClass { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public int QuantityUnitId { get; set; }
-    public CargoPackagingUnit PackagingUnit { get; set; }
+    public int PackagingUnitId { get; set; }
     public bool EmptyReturn { get; set; }
     public bool MatchReturn { get; set; }
 }

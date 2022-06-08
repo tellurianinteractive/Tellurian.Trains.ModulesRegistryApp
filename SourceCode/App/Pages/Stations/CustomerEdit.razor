@@ -38,7 +38,7 @@
         }
     </Buttons>
     <SubInputs>
-        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
+        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" PackagingUnitItems="PackagingUnitItems" />
     </SubInputs>
 </EditTemplate>
 
@@ -55,6 +55,7 @@
     IEnumerable<ListboxItem>? DirectionItems;
     IEnumerable<ListboxItem>? QuantityUnitItems;
     IEnumerable<ListboxItem>? ReadyTimeItems;
+    IEnumerable<ListboxItem>? PackagingUnitItems;
 
     bool DeleteDialogOpen { get; set; }
     int DeletedId;
@@ -68,6 +69,7 @@
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
         QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
         ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
     }
 
     protected override async Task OnParametersSetAsync()

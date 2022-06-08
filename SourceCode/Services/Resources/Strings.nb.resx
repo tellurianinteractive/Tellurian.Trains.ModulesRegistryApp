@@ -448,7 +448,7 @@
     <value>Lastestativ</value>
   </data>
   <data name="LiquidContainer" xml:space="preserve">
-    <value>Væskebeholder</value>
+    <value>Væskeveholder</value>
   </data>
   <data name="DryContainer10" xml:space="preserve">
     <value>10' Tørrcontainer</value>
@@ -568,10 +568,10 @@
     <value>Sommer</value>
   </data>
   <data name="FlatRackContainer20" xml:space="preserve">
-    <value>20' Flat stativ beholder</value>
+    <value>20' Flat stativ container</value>
   </data>
   <data name="FlatRackContainer40" xml:space="preserve">
-    <value>40' Flat stativ beholder</value>
+    <value>40' Flat stativ container</value>
   </data>
   <data name="HighCubeContainer20" xml:space="preserve">
     <value>20' High cube container</value>
@@ -583,12 +583,84 @@
     <value>40' High cube kjølecontainer</value>
   </data>
   <data name="OpenTopContainer20" xml:space="preserve">
-    <value>20' Åpen toppbeholder</value>
+    <value>20' Åpen topp container</value>
   </data>
   <data name="OpenTopContainer40" xml:space="preserve">
-    <value>40' Åpen toppbeholder</value>
+    <value>40' Åpen topp container</value>
   </data>
   <data name="Plates" xml:space="preserve">
     <value>Plater</value>
+  </data>
+  <data name="Bale" xml:space="preserve">
+    <value>Bal</value>
+  </data>
+  <data name="Barrel" xml:space="preserve">
+    <value>Tønne</value>
+  </data>
+  <data name="BigSack" xml:space="preserve">
+    <value>Storsekk</value>
+  </data>
+  <data name="Bottle" xml:space="preserve">
+    <value>Flaske</value>
+  </data>
+  <data name="Box" xml:space="preserve">
+    <value>Eske</value>
+  </data>
+  <data name="Bundle" xml:space="preserve">
+    <value>Bunt</value>
+  </data>
+  <data name="CargoRack" xml:space="preserve">
+    <value>Lastestativ</value>
+  </data>
+  <data name="DryContainers10" xml:space="preserve">
+    <value>10' Tørrcontainere</value>
+  </data>
+  <data name="DryContainers20" xml:space="preserve">
+    <value>20' Tørrcontainers</value>
+  </data>
+  <data name="DryContainers40" xml:space="preserve">
+    <value>40' Tørrcontainere</value>
+  </data>
+  <data name="FlatRackContainers20" xml:space="preserve">
+    <value>20' Flat stativ containere</value>
+  </data>
+  <data name="FlatRackContainers40" xml:space="preserve">
+    <value>40' Flat stativ containere</value>
+  </data>
+  <data name="HighCubeContainers20" xml:space="preserve">
+    <value>20' High cube containere</value>
+  </data>
+  <data name="HighCubeContainers40" xml:space="preserve">
+    <value>40' High cube containere</value>
+  </data>
+  <data name="HighCubeReeferContainers40" xml:space="preserve">
+    <value>40' High cube kjølecontainere</value>
+  </data>
+  <data name="LiquidContainers" xml:space="preserve">
+    <value>Væskebeholdere</value>
+  </data>
+  <data name="OpenTopContainers20" xml:space="preserve">
+    <value>20' Åpen topp containere</value>
+  </data>
+  <data name="OpenTopContainers40" xml:space="preserve">
+    <value>40' Åpen topp containere</value>
+  </data>
+  <data name="Pallet" xml:space="preserve">
+    <value>Pall</value>
+  </data>
+  <data name="Plate" xml:space="preserve">
+    <value>Plate</value>
+  </data>
+  <data name="ReeferContainers20" xml:space="preserve">
+    <value>20' Frysecontainere</value>
+  </data>
+  <data name="ReeferContainers40" xml:space="preserve">
+    <value>40' Frysecontainere</value>
+  </data>
+  <data name="Roll" xml:space="preserve">
+    <value>Rulle</value>
+  </data>
+  <data name="Sack" xml:space="preserve">
+    <value>Sekk</value>
   </data>
 </root>

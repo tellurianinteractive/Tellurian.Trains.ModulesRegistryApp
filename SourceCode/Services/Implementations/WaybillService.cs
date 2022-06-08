@@ -18,6 +18,7 @@ public class WaybillService
         if (principal.IsAuthenticated())
         {
             var dbContext = Factory.CreateDbContext();
+            var packagingUnits = await dbContext.CargoPackagingUnits.AsNoTracking().ToListAsync().ConfigureAwait(false);
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
@@ -41,7 +42,7 @@ public class WaybillService
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
-                        waybills.Add(MapWaybill(reader, resourceManager));
+                        waybills.Add(MapWaybill(reader, resourceManager, packagingUnits));
                         var last = waybills.Last();
                         if (last is null) continue;
                         if (last.EmptyReturn)
@@ -71,12 +72,10 @@ public class WaybillService
         return waybills;
     }
 
-    private static Waybill MapWaybill(IDataRecord record, ResourceManager resourceManager)
+    private static Waybill MapWaybill(IDataRecord record, ResourceManager resourceManager, IEnumerable<CargoPackagingUnit> packagingUnits)
     {
         string originLanguage = record.GetString("OriginLanguages", "EN").FirstItem("EN");
         string destinationLanguage = record.GetString("DestinationLanguages", "EN").FirstItem("EN");
-        var originPackageUnits = EnumExtensions.CargoPackageUnitListboxItems(originLanguage);
-        var destinationPackageUnits = EnumExtensions.CargoPackageUnitListboxItems(destinationLanguage);
         var wagonClass = record.GetString("DefaultClasses");
         var specialWagonClass = record.GetString("SpecificWagonClass");
         return new()
@@ -90,7 +89,7 @@ public class WaybillService
                 ForeColor = record.GetString("OriginForeColor"),
                 BackColor = record.GetString("OriginBackColor"),
                 CargoName = record.GetString(originLanguage),
-                PackageUnitName = PackageUnitName(originPackageUnits, record.GetInt("OriginPackageUnitId")),
+                PackageUnitName = PackageUnitName(packagingUnits, record.GetInt("OriginPackageUnitId"), originLanguage),
                 QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, originLanguage),
                 IsInternal = record.GetBool("OriginIsInternal"),
                 OperationDaysFlags = record.GetByte("SendingDayFlag"),
@@ -108,7 +107,7 @@ public class WaybillService
                 ForeColor = record.GetString("DestinationForeColor"),
                 BackColor = record.GetString("DestinationBackColor"),
                 CargoName = record.GetString(destinationLanguage),
-                PackageUnitName = PackageUnitName(destinationPackageUnits, record.GetInt("DestinationPackageUnitId")),
+                PackageUnitName = PackageUnitName(packagingUnits, record.GetInt("DestinationPackageUnitId"), destinationLanguage),
                 QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, destinationLanguage),
                 IsInternal = record.GetBool("DestinationIsInternal"),
                 OperationDaysFlags = record.GetByte("ReceivingDayFlag"),
@@ -120,7 +119,7 @@ public class WaybillService
             },
             Quantity = record.GetInt("Quantity"),
             QuantityUnitId = record.GetInt("QuantityUnitId"),
-            PackagingUnit = (CargoPackagingUnit)record.GetInt("OriginPackageUnitId"),
+            PackagingUnitId = record.GetInt("OriginPackageUnitId"),
             OperatorName = string.Empty, // To be supported
             WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass,
             EmptyReturn = record.GetBool("EmptyReturn"),
@@ -128,7 +127,7 @@ public class WaybillService
         };
     }
 
-    static string PackageUnitName(IEnumerable<ListboxItem>? items, int id) =>
+    static string PackageUnitName(IEnumerable<CargoPackagingUnit>? items, int id, string language) =>
         items is null || id == 0 ? string.Empty :
-        items.SingleOrDefault(i => i.Id == id)?.Description ?? string.Empty;
+        items.SingleOrDefault(i => i.Id == id)?.PluralResourceCode.LocalizedName(language.AsCultureInfo()).Value ?? string.Empty;
 }

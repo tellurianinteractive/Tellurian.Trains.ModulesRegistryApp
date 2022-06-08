@@ -26,7 +26,7 @@
 {
     @foreach (var customer in StationCustomers.OrderBy(sc => sc.CustomerName))
     {
-        <StationCustomerItemView Customer="customer" MayEdit="MayEdit" CargoTypeItems="CargoTypeItems" PackagingUnits="PackagingUnits" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
+        <StationCustomerItemView Customer="customer" MayEdit="MayEdit" CargoTypeItems="CargoTypeItems" PackagingUnitItems="PackagingUnitItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" />
     }
 }
 
@@ -40,10 +40,10 @@
 
     IEnumerable<ListboxItem>? OperatingDayItems;
     IEnumerable<ListboxItem>? CargoTypeItems;
-    IEnumerable<ListboxItem>? PackagingUnits;
     IEnumerable<ListboxItem>? DirectionItems;
     IEnumerable<ListboxItem>? QuantityUnitItems;
     IEnumerable<ListboxItem>? ReadyTimeItems;
+    IEnumerable<ListboxItem>? PackagingUnitItems;
 
 
     ClaimsPrincipal? Principal;
@@ -55,11 +55,11 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal, includeDefaultClasses: false);
-        PackagingUnits = EnumExtensions.CargoPackageUnitListboxItems();
         DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
         QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
         ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
 
     }
 

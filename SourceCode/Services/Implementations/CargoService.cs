@@ -72,6 +72,19 @@ public sealed class CargoService
         return Array.Empty<ListboxItem>();
     }
 
+    public async Task<IEnumerable<ListboxItem>> CargoPackagingUnitListboxItemsAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var items = await dbContext.CargoPackagingUnits
+                .Select(crt => new ListboxItem(crt.Id, crt.PluralResourceCode.AsLocalized()) { DisplayOrder = crt.DisplayOrder }).ToReadOnlyListAsync();
+            return items.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Description);
+        }
+        return Array.Empty<ListboxItem>();
+
+    }
+
     public async Task<IEnumerable<Cargo>> GetAll()
     {
         using var dbContext = Factory.CreateDbContext();

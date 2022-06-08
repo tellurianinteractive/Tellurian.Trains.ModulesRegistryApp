@@ -591,4 +591,76 @@
   <data name="Plates" xml:space="preserve">
     <value>Skivor</value>
   </data>
+  <data name="Bale" xml:space="preserve">
+    <value>Bal</value>
+  </data>
+  <data name="Barrel" xml:space="preserve">
+    <value>Fat</value>
+  </data>
+  <data name="BigSack" xml:space="preserve">
+    <value>Storsäck</value>
+  </data>
+  <data name="Bottle" xml:space="preserve">
+    <value>Flaska</value>
+  </data>
+  <data name="Box" xml:space="preserve">
+    <value>Låda</value>
+  </data>
+  <data name="Bundle" xml:space="preserve">
+    <value>Bunt</value>
+  </data>
+  <data name="CargoRack" xml:space="preserve">
+    <value>Lasthållare</value>
+  </data>
+  <data name="DryContainers10" xml:space="preserve">
+    <value>10' Torrcontainers</value>
+  </data>
+  <data name="DryContainers20" xml:space="preserve">
+    <value>20' Torrcontainers</value>
+  </data>
+  <data name="DryContainers40" xml:space="preserve">
+    <value>40' Torrcontainers</value>
+  </data>
+  <data name="FlatRackContainers20" xml:space="preserve">
+    <value>20' Flat rack containers</value>
+  </data>
+  <data name="FlatRackContainers40" xml:space="preserve">
+    <value>40' Flat rack containers</value>
+  </data>
+  <data name="HighCubeContainers20" xml:space="preserve">
+    <value>20' High cube containers</value>
+  </data>
+  <data name="HighCubeContainers40" xml:space="preserve">
+    <value>40' High cube containers</value>
+  </data>
+  <data name="HighCubeReeferContainers40" xml:space="preserve">
+    <value>40' High cube kylcontainers</value>
+  </data>
+  <data name="LiquidContainers" xml:space="preserve">
+    <value>Vätskebehållare</value>
+  </data>
+  <data name="OpenTopContainers20" xml:space="preserve">
+    <value>20' Öppen topp containers</value>
+  </data>
+  <data name="OpenTopContainers40" xml:space="preserve">
+    <value>40' Öppen topp containers</value>
+  </data>
+  <data name="Pallet" xml:space="preserve">
+    <value>Pall</value>
+  </data>
+  <data name="Plate" xml:space="preserve">
+    <value>Skiva</value>
+  </data>
+  <data name="ReeferContainers20" xml:space="preserve">
+    <value>20' Kylcontainers</value>
+  </data>
+  <data name="ReeferContainers40" xml:space="preserve">
+    <value>40' Kylcontainers</value>
+  </data>
+  <data name="Roll" xml:space="preserve">
+    <value>Rulle</value>
+  </data>
+  <data name="Sack" xml:space="preserve">
+    <value>Säck</value>
+  </data>
 </root>

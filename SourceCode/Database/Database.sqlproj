@@ -134,6 +134,8 @@
     <Build Include="dbo\Tables\StationCustomerWaybill.sql" />
     <Build Include="dbo\Tables\LayoutStationTrack.sql" />
     <Build Include="dbo\Listboxes\RegionRepresentialExternStationListbox.sql" />
+    <Build Include="dbo\Tables\CargoPackagingUnit.sql" />
+    <Build Include="dbo\Listboxes\ListCargoPackagingUnit.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

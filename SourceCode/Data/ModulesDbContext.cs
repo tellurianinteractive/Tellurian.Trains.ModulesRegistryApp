@@ -13,6 +13,7 @@ public partial class ModulesDbContext : DbContext
 
     public virtual DbSet<Cargo> Cargos { get; set; }
     public virtual DbSet<CargoDirection> CargoDirections { get; set; }
+    public virtual DbSet<CargoPackagingUnit> CargoPackagingUnits { get; set; }
     public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
     public virtual DbSet<CargoRelation> CargoRelations { get; set; }
     public virtual DbSet<QuantityUnit> CargoUnits { get; set; }
@@ -118,6 +119,21 @@ public partial class ModulesDbContext : DbContext
             entity.Property(e => e.ShortName)
                 .IsRequired()
                 .HasMaxLength(4);
+        });
+
+        modelBuilder.Entity<CargoPackagingUnit>(entity =>
+        {
+            entity.ToTable("CargoPackagingUnit");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.Property(e => e.SingularResourceCode)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.PluralResourceCode)
+                .IsRequired()
+                .HasMaxLength(50);
         });
 
         modelBuilder.Entity<CargoReadyTime>(entity =>

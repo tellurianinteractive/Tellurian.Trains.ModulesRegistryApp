@@ -17,7 +17,7 @@ else
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
-            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="EnumExtensions.CargoPackageUnitListboxItems()" />
+            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="PackagingUnitsItems" />
             <AppInputFill Width="6" />
 
             <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
@@ -47,6 +47,7 @@ else
     [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? PackagingUnitsItems { get; set; }
 
     void AddCargoFlow()
     {

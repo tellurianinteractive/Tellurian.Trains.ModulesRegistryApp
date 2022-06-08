@@ -43,19 +43,20 @@ else
             <td width="12%">@item.Quantity @QuantityUnit(item)</td>
             <td width="20%">@ReadyLoadingOrUnloading(item)</td>
             <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
-        </RowTemplate>
-    </TableTemplate>
+    </RowTemplate>
+</TableTemplate>
 
 }
 
 @code {
     [Parameter] public StationCustomer? Customer { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? CargoTypeItems { get; set; }
-    [Parameter] public IEnumerable<ListboxItem>? PackagingUnits { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? ReadyTimeItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? PackagingUnitItems { get; set; }
+
     [Parameter] public bool MayEdit { get; set; }
 
     string TrackOrArea(StationCustomerCargo? it) => it is not null ? it.TrackOrArea.HasValue() ? it.TrackOrArea : it.StationCustomer.TrackOrArea : string.Empty;
@@ -63,7 +64,7 @@ else
 
     string CargoTypeName(StationCustomerCargo? it) => it is null ? string.Empty : string.IsNullOrWhiteSpace(it.SpecialCargoName) ? CargoType(it) : it.SpecialCargoName;
     string CargoType(StationCustomerCargo? it) => it is null ? string.Empty : CargoTypeItems is not null ? CargoTypeItems.SingleOrDefault(i => i.Id == it.CargoId)?.Description ?? string.Empty : string.Empty;
-    string PackagingUnit(StationCustomerCargo it) => it is null || PackagingUnits is null ? string.Empty : PackagingUnits.SingleOrDefault(i => i.Id == it.PackageUnitId)?.Description ?? string.Empty;
+    string PackagingUnit(StationCustomerCargo it) => it is null || PackagingUnitItems is null ? string.Empty : PackagingUnitItems.SingleOrDefault(i => i.Id == it.PackageUnitId)?.Description ?? string.Empty;
     string WagonClasses(StationCustomerCargo it) => it is null || it.Cargo is null ? string.Empty : it.SpecificWagonClass.HasValue() ? it.SpecificWagonClass : it.Cargo.DefaultClasses;
     string Direction(StationCustomerCargo? it) => it is not null && DirectionItems is not null ? DirectionItems.SingleOrDefault(i => i.Id == it.DirectionId)?.Description ?? string.Empty : string.Empty;
     string QuantityUnit(StationCustomerCargo? it) => it is not null && QuantityUnitItems is not null ? QuantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;

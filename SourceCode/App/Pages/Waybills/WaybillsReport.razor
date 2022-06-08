@@ -19,7 +19,7 @@ else
 {
     @foreach (var itemsPerPage in Items.ItemsPerPage(10))
     {
-        <div class="pagebreak">
+        <div >
             @foreach (var item in itemsPerPage)
             {
                 <WaybillCard Item="@item" LanguageLabels="@LanguageLabels"></WaybillCard>

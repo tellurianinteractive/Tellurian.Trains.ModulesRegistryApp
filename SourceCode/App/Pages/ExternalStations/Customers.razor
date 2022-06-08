@@ -50,7 +50,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal, includeDefaultClasses: false);
-        PackagingUnits = EnumExtensions.CargoPackageUnitListboxItems();
+        PackagingUnits = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
         DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
         QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);

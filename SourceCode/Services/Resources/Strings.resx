@@ -591,4 +591,76 @@
   <data name="Plates" xml:space="preserve">
     <value>Plates</value>
   </data>
+  <data name="Bale" xml:space="preserve">
+    <value>Bale</value>
+  </data>
+  <data name="Barrel" xml:space="preserve">
+    <value>Barrel</value>
+  </data>
+  <data name="BigSack" xml:space="preserve">
+    <value>Big sack</value>
+  </data>
+  <data name="Bottle" xml:space="preserve">
+    <value>Bottle</value>
+  </data>
+  <data name="Box" xml:space="preserve">
+    <value>Box</value>
+  </data>
+  <data name="Bundle" xml:space="preserve">
+    <value>Bundle</value>
+  </data>
+  <data name="CargoRack" xml:space="preserve">
+    <value>Cargo rack</value>
+  </data>
+  <data name="DryContainers10" xml:space="preserve">
+    <value>10' Dry containers</value>
+  </data>
+  <data name="DryContainers20" xml:space="preserve">
+    <value>20' Dry containers</value>
+  </data>
+  <data name="DryContainers40" xml:space="preserve">
+    <value>40' Dry contrainers</value>
+  </data>
+  <data name="FlatRackContainers20" xml:space="preserve">
+    <value>20' Flat rack containers</value>
+  </data>
+  <data name="FlatRackContainers40" xml:space="preserve">
+    <value>40' Flat rack containers</value>
+  </data>
+  <data name="HighCubeContainers20" xml:space="preserve">
+    <value>20' High cube containers</value>
+  </data>
+  <data name="HighCubeContainers40" xml:space="preserve">
+    <value>40' High cube containers</value>
+  </data>
+  <data name="HighCubeReeferContainers40" xml:space="preserve">
+    <value>40' High cube reefer containers</value>
+  </data>
+  <data name="LiquidContainers" xml:space="preserve">
+    <value>Liquid containers</value>
+  </data>
+  <data name="OpenTopContainers20" xml:space="preserve">
+    <value>20' Open top containers</value>
+  </data>
+  <data name="OpenTopContainers40" xml:space="preserve">
+    <value>40' Open top containers</value>
+  </data>
+  <data name="Pallet" xml:space="preserve">
+    <value>Pallet</value>
+  </data>
+  <data name="Plate" xml:space="preserve">
+    <value>Plate</value>
+  </data>
+  <data name="ReeferContainers20" xml:space="preserve">
+    <value>20' Reefer containers</value>
+  </data>
+  <data name="ReeferContainers40" xml:space="preserve">
+    <value>40' Reefer containers</value>
+  </data>
+  <data name="Roll" xml:space="preserve">
+    <value>Roll</value>
+  </data>
+  <data name="Sack" xml:space="preserve">
+    <value>Sack</value>
+  </data>
 </root>
