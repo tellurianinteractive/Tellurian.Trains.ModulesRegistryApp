@@ -51,5 +51,10 @@ public class PersonValidator : AbstractValidator<Person>
             .MaximumLength(10)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.FremoOwnerSignature)]);
+
+        RuleFor(person => person.FremoReservedAdresses)
+            .MaximumLength(200)
+            .MustBeLocoAdresses(localizer)
+            .WithName(n => localizer[nameof(n.FremoReservedAdresses)]);
     }
 }

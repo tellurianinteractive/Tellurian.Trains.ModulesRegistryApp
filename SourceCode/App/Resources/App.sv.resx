@@ -1128,4 +1128,10 @@
   <data name="LatestArrivalTime" xml:space="preserve">
     <value>Senaste ankomsttid</value>
   </data>
+  <data name="MustBeValidDccAdresses" xml:space="preserve">
+    <value>måste vara giltiga DCC-adresser</value>
+  </data>
+  <data name="FremoReservedAdresses" xml:space="preserve">
+    <value>FREMO-reserverade lokadresser</value>
+  </data>
 </root>

@@ -1,7 +1,12 @@
 ## Release Notes
 
+#### Version 1.6.7
+Release date 2022-06-15
+- **Reserved loco adresses** assigned by FREMO can now be entered for a *person*. 
+These adresses will be reserved for the person when reistering for a meeting layout.
+
 #### Version 1.6.6
-Release date 2022-06-17
+Release date 2022-06-07
 - **Representative station** for a *region*, which will be origin or destination of cargo for that region (issue #143).
 - **Listboxes data** optimised by using database views instead of *Entity Framework* complex queries.
 - **Server Timeout** increased from 3 to 10 minutes, so the request to *Reload* should happen more infrequently.

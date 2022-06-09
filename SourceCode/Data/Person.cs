@@ -19,6 +19,7 @@ public partial class Person
     public int CountryId { get; set; }
     public int? UserId { get; set; }
     public string FremoOwnerSignature { get; set; }
+    public string FremoReservedAdresses { get; set; }
 
     public virtual Country Country { get; set; }
     public virtual User User { get; set; }

@@ -31,6 +31,8 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
         <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
 
         <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
+        <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" />
+
         <div class="col-12">
             <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" />@Localizer["Save"]</button>
         </div>
@@ -65,7 +67,7 @@ else
     {
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person, IsGroupAdministrator);
-        if (result.Count< 1)
+        if (result.Count < 1)
         {
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
@@ -79,7 +81,7 @@ else
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);
             Navigator.NavigateTo(AfterSaveHref);
-             
+
         }
 
     }
