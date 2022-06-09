@@ -31,7 +31,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
         <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
 
         <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
-        <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" />
+        <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" />@Localizer["Save"]</button>

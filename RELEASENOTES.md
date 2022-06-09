@@ -1,8 +1,11 @@
 ## Release Notes
 
 #### Version 1.6.7
-Release date 2022-06-15
-- **Reserved loco adresses** assigned by FREMO can now be entered for a *person*. 
+Release date 2022-06-19
+- **API Improvements** where users with API-access now can retrieve their API-key at the **Settings** page.
+The routing is also improved. Currently the API supports *meetings* and *cargoes*.
+- **Sorted Lists** of modules, stations, gables and module standards.
+- **Reserved Loco Adresses** assigned by FREMO can now be entered for a *person*. 
 These addresses will be reserved for the person when reistering for a meeting layout.
 - **Help Texts Update** and some translations to all supported languages.
 

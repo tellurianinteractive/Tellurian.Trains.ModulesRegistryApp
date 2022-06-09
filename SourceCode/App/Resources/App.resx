@@ -1134,4 +1134,7 @@
   <data name="FremoReservedAdresses" xml:space="preserve">
     <value>FREMO reserved loco addresses</value>
   </data>
+  <data name="LocoAddressExample" xml:space="preserve">
+    <value>Example: 2000-2099,3201,3350-3355</value>
+  </data>
 </root>
