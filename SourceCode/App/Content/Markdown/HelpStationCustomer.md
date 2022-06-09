@@ -17,6 +17,8 @@ Defines any cargo that is relevant that the customer supply or consume:
 - **Cargo type** must be selected. Try to select a correct cargo type, or a similar one.
 If the list does ontain the cargo that your looking for,
 administrators can add new cargo, so ask any of them to help you with that.
+- **Packaging Unit** is an additional information of how the cargo is packed, i.e. the units of loaded or unloaded items, 
+and it also include most types of *containers*. You can also set it as *not applicable*.
 - **Wagon Class** gives you an option to specify a specific wagon class 
 that overrides the default wagon classes for the *cargo type*.
 - **Other name** gives you an option to override the name of the *cargo type*. 
@@ -29,7 +31,7 @@ where *cargo matching* is used.
 *Import* and *export* will make waybill matching cross border, *send* and *receice* 
 will obly match waybills with customers in the same country. 
 - **Ouantity** and **Quantity unit** is volume of cargo in each shipment. 
-The simplest way is to use *wagons* or *transet*, but other more advanced cargo volumes can be used,
+The simplest way is to use *wagons* or *trainset*, but other more advanced cargo volumes can be used,
 that forces the user to calculate how many wagons are actually needed, in repect to each wagon type's capacity.
 - **Max trainset length** is the maximum number of *wagons* that can be recieved in one trainset.
 - **Loading/Unloading ready** is used to control when wagons becomes ready to use 

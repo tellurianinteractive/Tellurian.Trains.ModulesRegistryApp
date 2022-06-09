@@ -3,7 +3,8 @@
 #### Version 1.6.7
 Release date 2022-06-15
 - **Reserved loco adresses** assigned by FREMO can now be entered for a *person*. 
-These adresses will be reserved for the person when reistering for a meeting layout.
+These addresses will be reserved for the person when reistering for a meeting layout.
+- **Help Texts Update** and some translations to all supported languages.
 
 #### Version 1.6.6
 Release date 2022-06-07
