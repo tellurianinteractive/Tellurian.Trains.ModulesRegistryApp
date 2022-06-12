@@ -2,6 +2,7 @@
 @page "/Stations/{stationid:int}/Customers/{customerId:int}"
 
 @page "/Stations/{stationid:int}/Customers/PersonOwned/{owningPersonId:int}"
+@page "/Stations/{stationid:int}/Customers/PersonOwned/{owningPersonId:int}/InGroup/{owningGroupId:int}"
 @page "/Stations/{stationid:int}/Customers/GroupOwned/{owningGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]

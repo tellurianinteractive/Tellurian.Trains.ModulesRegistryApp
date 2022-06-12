@@ -26,7 +26,7 @@
 
     </TableHeader>
     <RowTemplate Context="station">
-        <td>@station.FullName</td>
+        <td>@Name(station)</td>
         <td>@station.Signature</td>
         <td align="center">@station.IsTerminus.AsYesOrNo()</td>
         <td align="center">@station.IsShadow.AsYesOrNo()</td>
@@ -60,4 +60,10 @@
 
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
+
+        MarkupString Name(Station station) => new(
+        station.HasConfigurationLabel() ? $"{station.FullName} <span class=\"fa fa-ruler\" /> {station.ConfigurationLabel()}" : 
+        station.HasPackageLabel() ? $"{station.FullName} <span class=\"fa fa-truck-loading\" /> {station.PackageLabel()}" : 
+        station.FullName);
+
 }

@@ -1,11 +1,18 @@
 ## Release Notes
 
+#### Version 1.6.8
+Release date 2022-06-12
+- **Bux fix** of issue #154 freight customers for extenal stations cauing error. Thanks to Robert Halvarsson for reporting this.
+- **Bug fix** of issue #142 group admininstrator cannot edit member's station customers. Thanks to Anders Östvall for reporting this.
+- **Country and Flags** in external stations freight customer list only shows when all countries are shown.
+- **Station List** now display *variant* or *package* label for the module associated with the station.
+
 #### Version 1.6.7
-Release date 2022-06-19
+Release date 2022-06-10
 - **API Improvements** where users with API-access now can retrieve their API-key at the **Settings** page.
 The routing is also improved. Currently the API supports *meetings* and *cargoes*.
 - **Sorted Lists** of modules, stations, gables and module standards.
-- **Reserved Loco Adresses** assigned by FREMO can now be entered for a *person*. 
+- **Reserved Loco Adresses** assigned by FREMO can now be entered for a *person*. Issue #152.
 These addresses will be reserved for the person when reistering for a meeting layout.
 - **Help Texts Update** and some translations to all supported languages.
 

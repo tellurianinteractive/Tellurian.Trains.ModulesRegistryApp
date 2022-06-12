@@ -21,14 +21,20 @@
     <TableHeader>
         <th>@Localizer["Station"]</th>
         <th>@Localizer["Name"]</th>
-        <th>@Localizer["Country"]</th>
+        @if (NoCountrySelected)
+        {
+            <th>@Localizer["Country"]</th>
+        }
         <th>@Localizer["Region"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
         <td>@StationSymbol(item) @item.Station.FullName</td>
         <td>@item.CustomerName @item.OpenPeriod</td>
-        <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
+        @if (NoCountrySelected)
+        {
+            <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
+        }
         <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
         <td>
             @if (item.Station.IsExternal)
@@ -52,6 +58,8 @@
     IEnumerable<FreightCustomerInfo>? ExternalFreightCustomers;
     IEnumerable<FreightCustomerInfo>? StationFreightCustomers;
     IEnumerable<ListboxItem>? CountryItems;
+
+    bool NoCountrySelected => CountryId == 0;
 
     void OnSelectedCountry(int id)
     {

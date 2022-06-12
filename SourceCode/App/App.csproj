@@ -2,13 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RuntimeFrameworkVersion>6.0.5</RuntimeFrameworkVersion>
+		<RuntimeFrameworkVersion>6.0.3</RuntimeFrameworkVersion>
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.6.7</Version>
+		<Version>1.6.8</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
+		<DisableCheckingDuplicateNuGetItems>true</DisableCheckingDuplicateNuGetItems>
 	</PropertyGroup>
 	
 	<PropertyGroup>
