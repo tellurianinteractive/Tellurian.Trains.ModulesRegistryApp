@@ -1,9 +1,13 @@
 ## Release Notes
 
+#### Version 1.6.9
+Release dare 2022-07-17
+- **Security update** with latest patches from Microsoft.
+
 #### Version 1.6.8
 Release date 2022-06-12
-- **Bux fix** of issue #154 freight customers for extenal stations cauing error. Thanks to Robert Halvarsson for reporting this.
-- **Bug fix** of issue #142 group admininstrator cannot edit member's station customers. Thanks to Anders Östvall for reporting this.
+- **Bug fix** of issue #154 freight customers for external stations causing error. Thanks to Robert Halvarsson for reporting this.
+- **Bug fix** of issue #142 group administrator cannot edit member's station customers. Thanks to Anders Östvall for reporting this.
 - **Country and Flags** in external stations freight customer list only shows when all countries are shown.
 - **Station List** now display *variant* or *package* label for the module associated with the station.
 
@@ -12,18 +16,18 @@ Release date 2022-06-10
 - **API Improvements** where users with API-access now can retrieve their API-key at the **Settings** page.
 The routing is also improved. Currently the API supports *meetings* and *cargoes*.
 - **Sorted Lists** of modules, stations, gables and module standards.
-- **Reserved Loco Adresses** assigned by FREMO can now be entered for a *person*. Issue #152.
-These addresses will be reserved for the person when reistering for a meeting layout.
+- **Reserved Loco Addresses** assigned by FREMO can now be entered for a *person*. Issue #152.
+These addresses will be reserved for the person when registering for a meeting layout.
 - **Help Texts Update** and some translations to all supported languages.
 
 #### Version 1.6.6
 Release date 2022-06-07
 - **Representative station** for a *region*, which will be origin or destination of cargo for that region (issue #143).
-- **Listboxes data** optimised by using database views instead of *Entity Framework* complex queries.
+- **List boxes data** optimised by using database views instead of *Entity Framework* complex queries.
 - **Server Timeout** increased from 3 to 10 minutes, so the request to *Reload* should happen more infrequently.
 - **Norwegian** now have the correct language code NB (and not NO), that will make the user interface to display in Norwegian bokmål.
 - **Language Select** is now possible to override your browser's request language settings. Append *?culture=XX* to the url, where XX is the two-letter ISO language code.
-The following langauges are supported: 
+The following languages are supported: 
   - DA=Danish, 
   - DE=German, 
   - EN=English, 
@@ -34,13 +38,13 @@ The following langauges are supported:
 
 #### Version 1.6.5
 Release date 2022-05-01
-- **Drop down menu** now shows on screens up tp 1280 px. 
-- **External stations** for user's country now show up direcly without need for selecting country.
+- **Drop down menu** now shows on screens up to 1280 px. 
+- **External stations** for user's country now show up directly without need for selecting country.
 
 #### Version 1.6.4
 Release date 2022-04-27
 - **Module angle** now has one decimal.
-- **Persons modules** now sorted alpabetical.
+- **Persons modules** now sorted alphabetical.
 - **Bug fix** in cloning module data, *straight* value was not cloned.
 
 #### Version 1.6.3
@@ -49,7 +53,7 @@ Release date 2022-04-26
 - **Waybills** now also generated to/from station modules not present in a layout.
 - **Waybills** now print *quantity* of *packaging unit* when type of quantity is *pieces*.
 - **Wagon class** added in cargo customer overview.
-- **Tooltip** for *module status* added.
+- **Tool-tip** for *module status* added.
 - **Missing translations** added.
 
 
@@ -89,9 +93,9 @@ _ **Packaging units** added: *bundles*, *big sacks* and *rolls*.
 #### Version 1.5.0
 Release date 2022-01-15
 - **Upgrade to .NET 6.0**, which has long time support to at least 2024.
-- **Refactored** to C# 10 syntax.
+- **Re-factored** to C# 10 syntax.
 - **Bug fix** of file upload of documents and drawings.
-- **Translations** for *Tools* page and *Loco prepararion guide*.
+- **Translations** for *Tools* page and *Loco preparation guide*.
 
 #### Version 1.4.11
 Release date 2022-01-13
@@ -101,7 +105,7 @@ Release date 2022-01-13
 #### Version 1.4.10
 Release date 2022-01-10
 
-**This release is startpoint for implementing a improved module meeting registration.**
+**This release is starting point for implementing a improved module meeting registration.**
 **Therefore, meeting registration is temporary disabled until new functionality is implemented.**
 
 Other features in this release are:
@@ -115,7 +119,7 @@ Release date 2021-10-20
 - **Viewing regions** is now selectable per country.
 - **Viewing stations** with cargo customers is now selectable per country, and content has been restructured to be more consistent.
 - **No waybills to print** now shows information for what you need to get waybills printed.
-- **Repeted invitation** now updates user's registration time.
+- **Repented invitation** now updates user's registration time.
 - **Fixed** issues with Font Awesome not accessible from CDN.
 
 #### Version 1.4.8
