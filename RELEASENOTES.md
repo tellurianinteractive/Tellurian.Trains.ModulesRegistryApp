@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.6.10
+Release date 2022-08-02+
+- **Bug fix** of missing translations of *cargo packaging units*.
+
 #### Version 1.6.9
 Release dare 2022-07-17
 - **Security update** with latest patches from Microsoft.

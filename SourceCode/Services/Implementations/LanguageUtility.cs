@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ModulesRegistry.Services.Resources;
+using System.Diagnostics;
 using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -13,7 +14,7 @@ public static class LanguageUtility
 
     private static readonly ResourceManager ResourceManager = Strings.ResourceManager;
 
-    public static string GetString(string resourceName, string? language)
+    public static string GetString(string resourceName, string? language = null)
     {
         if (string.IsNullOrWhiteSpace(resourceName)) return string.Empty;
         var culture = CurrentCulture; 

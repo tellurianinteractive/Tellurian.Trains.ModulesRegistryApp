@@ -78,7 +78,7 @@ public sealed class CargoService
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.CargoPackagingUnits
-                .Select(crt => new ListboxItem(crt.Id, crt.PluralResourceCode.AsLocalized()) { DisplayOrder = crt.DisplayOrder }).ToReadOnlyListAsync();
+                .Select(cpu => new ListboxItem(cpu.Id, cpu.PluralResourceCode.AsLocalized()) { DisplayOrder = cpu.DisplayOrder }).ToReadOnlyListAsync();
             return items.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Description);
         }
         return Array.Empty<ListboxItem>();
