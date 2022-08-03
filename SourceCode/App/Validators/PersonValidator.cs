@@ -39,8 +39,9 @@ public class PersonValidator : AbstractValidator<Person>
             .WithName(n => localizer[nameof(n.CityName)]);
 
         RuleFor(person => person.EmailAddresses)
+            .NotEmpty()
             .MaximumLength(50)
-            .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).When(n => n.EmailAddresses?.Length > 0)
+            .MustBeValidEmailAdresses(localizer)
             .WithName(n => localizer[nameof(n.EmailAddresses)]);
 
         RuleFor(person => person.CountryId)

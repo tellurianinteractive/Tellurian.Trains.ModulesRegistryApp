@@ -5,53 +5,21 @@
 @inject IToastService ToastService
 @inject NavigationManager Navigator
 @inject ContentService ContentService
-
 @inject UserService UserService
 
-<PageHeading Label="UserSettings" IconClass="@FontAwesome.Settings" PageAction="PageAction.List"/>
+<PageHeading Label="UserSettings" IconClass="@FontAwesome.Settings" PageAction="PageAction.List" />
+
 
 <AuthorizeView Policy="User">
     <Authorized>
-        @if (User is null)
-        {
-            <p class="alert alert-info"><span class="fa fa-info-circle"/> @Localizer["Nothing to se here yet!"]</p>
-        }
-        else
-        {
-            if (User.IsApiAccessPermitted)
-            {
-                <h4>@Localizer["YourApiKey"]</h4>
-                <p>@User.ObjectId</p>
-            }
-        }
+        <UserEditView Id="@Principal.UserId()" />
     </Authorized>
 </AuthorizeView>
-<AuthorizeView>
-    <Authorized>
-    </Authorized>
-    <NotAuthorized>
-        <h3><span class="fa fa-key" /> @Localizer["ResetPassword"]</h3>
-        <ContentView ContentName="PasswordReset" />
-        @if (HaveRead)
-        {
-            <div class="row g-3">
-                <div class="col-md-5">
-                    <label class="form-control-label" for="email">@Localizer["Email"]</label>
-                    <input class="form-control" id="email" type="text" @bind="@EmailAddress" />
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-sm" @onclick="OnRequestNewPassword"><span class="fa fa-paper-plane" /> @Localizer["Send"]</button>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="col-12">
-                <button type="button" class="btn btn-primary btn-sm" @onclick="IHaveRead"><span class="fa fa-user-check" /> @Localizer["IHaveReadAndUnderstand"]</button>
-            </div>
-        }
-    </NotAuthorized>
 
+<AuthorizeView>
+    <NotAuthorized>
+        <PasswordResetView />
+    </NotAuthorized>
 </AuthorizeView>
 
 @code {
@@ -59,39 +27,12 @@
     ClaimsPrincipal? Principal;
     User? User;
 
-    PasswordResetRequest? PasswordResetRequest;
-    string? EmailAddress;
-    bool HaveRead;
-
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (Principal.IsAuthenticated())
         {
             User = await UserService.FindByIdAsync(Principal.UserId());
-
         }
     }
-
-    async Task OnRequestNewPassword()
-    {
-        var requestor = await UserService.ResetPasswordAsync(EmailAddress);
-        if (requestor is null) return;
-        if (requestor.IsPasswordResetPermitted())
-        {
-            var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
-            PasswordResetRequest = new PasswordResetRequest(requestor, Localizer["PasswordResetHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
-            if (PasswordResetRequest.IsValid)
-            {
-                var message = PasswordResetRequest.AsMailMessage();
-                if (message is not null)
-                {
-                    var result = await MailSender.SendMailMessageAsync(message);
-                    ToastService.ShowSuccessOrFailure(Localizer, result, "PasswordResetMailSent");
-                }
-            }
-        }
-    }
-
-    void IHaveRead() => HaveRead = true;
 }

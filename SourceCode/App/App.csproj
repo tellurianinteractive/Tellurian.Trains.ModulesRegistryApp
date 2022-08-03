@@ -55,6 +55,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\UserSettingsEdit.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\UserSettingsEdit.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\UserSettingsEdit.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\UserSettingsEdit.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\UserSettingsEdit.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\FAQ.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

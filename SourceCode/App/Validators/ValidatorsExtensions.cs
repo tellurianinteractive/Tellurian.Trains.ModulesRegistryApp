@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
+using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
 
@@ -65,6 +66,15 @@ public static class ValidatorsExtensions
 
     public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
+
+    public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
+     builder.Must(value => value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
+
+    private static bool IsValidEmailAddress(this string? email)
+    {
+        if (email == null) return false;
+        return Regex.IsMatch(email, @"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    }
     private static bool IsText(this string? text)
     {
         if (string.IsNullOrEmpty(text)) return true;

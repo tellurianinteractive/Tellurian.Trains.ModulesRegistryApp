@@ -2,6 +2,7 @@
 
 #### Version 1.6.10
 Release date 2022-08-02+
+- **Users** can now edit theri *email address* and *city of residence* under **Settings**.
 - **Bug fix** of missing translations of *cargo packaging units*.
 
 #### Version 1.6.9

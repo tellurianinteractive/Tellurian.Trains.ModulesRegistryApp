@@ -568,7 +568,7 @@
     <value>Återställ lösenord</value>
   </data>
   <data name="UserSettings" xml:space="preserve">
-    <value>Inställningar</value>
+    <value>Användarinställningar</value>
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Jag har läst och förstått</value>
@@ -1136,5 +1136,14 @@
   </data>
   <data name="LocoAddressExample" xml:space="preserve">
     <value>Exempel: 2000-2099,3201,3350-3355</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="AdministratorSettings" xml:space="preserve">
+    <value>Administratörsinställningar</value>
+  </data>
+  <data name="MustBeValidEmailAddresses" xml:space="preserve">
+    <value>måste vara giltiga e-postadresser separerade med semikolon</value>
   </data>
 </root>

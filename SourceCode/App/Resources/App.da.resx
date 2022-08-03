@@ -1137,4 +1137,13 @@
   <data name="LocoAddressExample" xml:space="preserve">
     <value>Eksempel: 2000-2099,3201,3350-3355</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
+  <data name="AdministratorSettings" xml:space="preserve">
+    <value>Administrator indstillinger</value>
+  </data>
+  <data name="MustBeValidEmailAddresses" xml:space="preserve">
+    <value>skal være gyldige e-mailadresser adskilt af semikolon</value>
+  </data>
 </root>

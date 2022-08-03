@@ -21,6 +21,17 @@ public sealed class UserService
         return await dbContext.Users.Where(u => u.EmailAddress == emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
     }
 
+    public async Task<User?> SetEmailAsync(int id, string? emailAddress)
+    {
+        if (!emailAddress.IsEmailAddress()) return null;
+        using var dbContext = Factory.CreateDbContext();
+        var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+        if (user is null) return null;
+        user.EmailAddress = emailAddress;
+        await dbContext.SaveChangesAsync();
+        return await FindByObjectIdAsync(dbContext, user.ObjectId.ToString().ToUpperInvariant());
+    }
+
     public async Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password)
     {
         if (!emailAddress.IsEmailAddress() || password.HasNoValue()) return null;

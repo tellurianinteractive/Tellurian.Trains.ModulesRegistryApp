@@ -1,0 +1,83 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject UserService UserService
+@inject PersonService PersonService
+@inject CountryService CountryService
+
+<h3>@Localizer["UserSettings"]</h3>
+
+@if (User is null || Person is null)
+{
+    <p class="alert alert-info"><span class="fa fa-info-circle" /> @Localizer["Nothing to se here yet!"]</p>
+}
+else
+{
+    <ContentView ContentName="UserSettingsEdit" />
+    <EditTemplate Item="Person" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputText Width="4" Label="FirstName" @bind-Value="@Person.FirstName" IsDisabled=true />
+            <AppInputText Width="4" Label="MiddleName" @bind-Value="@Person.MiddleName" IsDisabled=true />
+            <AppInputText Width="4" Label="LastName" @bind-Value="@Person.LastName" IsDisabled=true />
+
+            <AppInputText Width="6" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
+            <AppInputText Width="6" Label="CityName" @bind-Value="@Person.CityName" />
+            <AppInputSelect Width="4" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
+            <AppDisplay Width="6" Label="ApiKey" Value="@ApiKey" BackColor="#e9ecef" />
+
+        </Inputs>
+    </EditTemplate>
+    <br />
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    User? User;
+    Person? Person;
+    IEnumerable<ListboxItem> CountryItems = Enumerable.Empty<ListboxItem>();
+
+    string ApiKey => User?.IsApiAccessPermitted == true ? User?.ObjectId.ToString() ?? "-" : "-";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Id = PreventUserFromEditOtherUser();
+        if (Principal.IsAuthenticated())
+        {
+            User = await UserService.FindByIdAsync(Id);
+            if (User is not null) Person = User.Person;
+        }
+    }
+
+    private int PreventUserFromEditOtherUser() => Principal.IsCountryAdministrator() ? Id : Principal.UserId();
+
+    async Task OnValidSubmit()
+    {
+        if (Person is not null)
+        {
+            var result = await PersonService.SaveAsync(Principal, Person);
+            if (result.Entity is not null)
+            {
+                Person = result.Entity;
+                User = await UpdateUserEmailAddress(Person.PrimaryEmail());
+            }
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+    async Task<User?> UpdateUserEmailAddress(string emailAddress)
+    {
+        if (User is not null)
+        {
+            return await UserService.SetEmailAsync(Id, emailAddress);
+        }
+        return null;
+    }
+
+}
