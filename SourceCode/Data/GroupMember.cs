@@ -14,9 +14,3 @@ public partial class GroupMember
     public virtual Group Group { get; set; }
     public virtual Person Person { get; set; }
 }
-
-public static class GroupMemberExtensions
-{
-    public static bool MayBorrowModules(this GroupMember me) =>
-        me.IsDataAdministrator || me.IsGroupAdministrator || me.MayBorrowModules;
-}

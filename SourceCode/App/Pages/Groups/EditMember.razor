@@ -8,7 +8,7 @@
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Member" Owner="GroupMember?.Person"  IconClass="@FontAwesome.Group" PageAction="PageAction.Edit"/>
+<PageHeading ObjectName="Member" Owner="GroupMember?.Person" IconClass="@FontAwesome.Group" PageAction="PageAction.Edit" />
 
 @if (GroupMember is null)
 {
@@ -16,17 +16,13 @@
 }
 else
 {
-    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
-
-        <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-        <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-         <AppInputCheck Width="2" Label="MayBorrowGroupModules" @bind-Value="GroupMember.MayBorrowModules" />
-       <div class="col-12">
-            <button type="submit" class="btn btn-sm btn-primary"><span class="accordion" aria-hidden="true" />@Localizer["Save"]</button>
-        </div>
-    </EditForm>
+    <EditTemplate Item="GroupMember" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
+            <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+            <AppInputCheck Width="2" Label="MayBorrowGroupModules" @bind-Value="GroupMember.MayBorrowModules" />
+        </Inputs>
+    </EditTemplate>
 }
 
 @code {

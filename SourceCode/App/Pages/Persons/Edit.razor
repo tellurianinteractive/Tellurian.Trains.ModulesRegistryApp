@@ -45,7 +45,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
         </Inputs>
     </EditTemplate>
 
-    @if (User.IsLockedOut()) {
+    @if (User is not null && User.IsLockedOut()) {
         <br/>
         <h3>@Localizer["UserIsLockedOut"]</h3>
         <AppButton Label="Unlock" OnClickCallback="UnlockUser" />
