@@ -19,5 +19,6 @@ public partial class User
     public bool IsApiAccessPermitted { get; set; }
     public string HashedPassword { get; set; }
     public int PasswordResetAttempts { get; set; }
+    public int FailedLoginAttempts { get; set; }
     public bool MayUploadSkpDrawing { get; set; }
 }

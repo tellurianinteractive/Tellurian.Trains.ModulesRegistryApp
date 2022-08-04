@@ -1,8 +1,10 @@
 ## Release Notes
 
 #### Version 1.6.10
-Release date 2022-08-02+
+Release date 2022-08-04
 - **Users** can now edit their *email address* and *city of residence* under **Settings**.
+- **User rights** can now be changed by a country administrator when editing module owners form. 
+- **Locked out user** can now be reset by a country administrator when editing module owners form.
 - **Bug fix** of missing translations of *cargo packaging units*.
 
 #### Version 1.6.9

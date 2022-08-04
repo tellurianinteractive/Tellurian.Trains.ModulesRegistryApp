@@ -19,14 +19,22 @@ internal static class LoginLogoutHandler
         await SignOut();
 
         var user = await userService.FindByEmailAsync(username);
-        if (user is not null && user.Person is not null && password.IsSamePasswordAs(user.HashedPassword))
+        if (user is not null)
         {
-            var claims = new List<Claim>
+
+            if (user.Person is not null && password.IsSamePasswordAs(user.HashedPassword))
+            {
+                var claims = new List<Claim>
                 {
                     new Claim(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
                     new Claim(ClaimTypes.Email, user.EmailAddress),
                 };
-            await TrySignIn(user, claims);
+                await TrySignIn(user, claims);
+            }
+            else
+            {
+                _ = await userService.UpdateFailedLoginAttempts(user.Id);
+            }
         }
 
         return model.LocalRedirect(returnUrl);
@@ -50,6 +58,10 @@ internal static class LoginLogoutHandler
                 {
 
                 }
+            }
+            else
+            {
+                _ = await userService.UpdateFailedLoginAttempts(user.Id);
             }
         }
 

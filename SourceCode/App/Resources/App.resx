@@ -537,9 +537,6 @@
   <data name="FremoName" xml:space="preserve">
     <value>FREMO name</value>
   </data>
-  <data name="IsGlobalAdministrator" xml:space="preserve">
-    <value>Is global administrator?</value>
-  </data>
   <data name="Station" xml:space="preserve">
     <value>Station</value>
   </data>
@@ -1145,5 +1142,29 @@
   </data>
   <data name="MustBeValidEmailAddresses" xml:space="preserve">
     <value>must be valid email addresses separated by semicolon</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Is global administrator?</value>
+  </data>
+  <data name="IsCountryAdministrator" xml:space="preserve">
+    <value>Is country administrator?</value>
+  </data>
+  <data name="IsApiAccessPermitted" xml:space="preserve">
+    <value>Is API access permitted?</value>
+  </data>
+  <data name="MayUploadSkpDrawing" xml:space="preserve">
+    <value>May upload SketchUp drawing?</value>
+  </data>
+  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
+    <value>Administrator's area of responsibility</value>
+  </data>
+  <data name="PasswordResetAttempts" xml:space="preserve">
+    <value>Number of password reset attempts</value>
+  </data>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Number of failed login attempts</value>
+  </data>
+  <data name="UserIsLockedOut" xml:space="preserve">
+    <value>User is locked out!</value>
   </data>
 </root>

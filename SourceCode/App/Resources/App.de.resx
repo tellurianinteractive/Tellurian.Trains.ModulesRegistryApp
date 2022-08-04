@@ -537,9 +537,6 @@
   <data name="FremoName" xml:space="preserve">
     <value>FREMO Name</value>
   </data>
-  <data name="IsGlobalAdministrator" xml:space="preserve">
-    <value>Ist globaler Administrator?</value>
-  </data>
   <data name="Station" xml:space="preserve">
     <value>Bahnhof</value>
   </data>
@@ -964,7 +961,7 @@
     <value>Andere Wagenklasse</value>
   </data>
   <data name="PasswordResetFailed" xml:space="preserve">
-    <value>Passwort zurücksetzen fehlgeschlagen</value>
+    <value>Anzahl der Versuche zum Zurücksetzen des Passworts</value>
   </data>
   <data name="Transfer" xml:space="preserve">
     <value>Übertragen</value>
@@ -1145,5 +1142,29 @@
   </data>
   <data name="MustBeValidEmailAddresses" xml:space="preserve">
     <value>müssen gültige, durch Semikolon getrennte E-Mail-Adressen sein</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Ist globaler Administrator?</value>
+  </data>
+  <data name="IsCountryAdministrator" xml:space="preserve">
+    <value>Ist Landesadministrator?</value>
+  </data>
+  <data name="IsApiAccessPermitted" xml:space="preserve">
+    <value>Ist der API-Zugriff erlaubt?</value>
+  </data>
+  <data name="MayUploadSkpDrawing" xml:space="preserve">
+    <value>Darf SketchUp-Zeichnung hochladen?</value>
+  </data>
+  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
+    <value>Verantwortungsbereich des Administrators</value>
+  </data>
+  <data name="PasswordResetAttempts" xml:space="preserve">
+    <value>Versuche zum Zurücksetzen des Passworts</value>
+  </data>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Anzahl der fehlgeschlagenen Anmeldeversuche</value>
+  </data>
+  <data name="UserIsLockedOut" xml:space="preserve">
+    <value>Benutzer ist gesperrt!</value>
   </data>
 </root>

@@ -83,7 +83,7 @@ public sealed class UserService
         using var dbContext = Factory.CreateDbContext();
         User? existing = null;
         if (emailAddress.IsEmailAddress()) existing = await FindByEmailAsync(emailAddress);
-        if (existing is null) existing = await FindByObjectIdAsync(dbContext, objectId);
+        existing ??= await FindByObjectIdAsync(dbContext, objectId);
         if (existing is not null) return existing;
 
         if (!emailAddress.IsEmailAddress()) return null;
@@ -127,6 +127,16 @@ public sealed class UserService
         if (user is null) return null;
         user.LastSignInTime = time;
         user.PasswordResetAttempts = 0;
+        var count = await dbContext.SaveChangesAsync();
+        return count == 0 ? null : user;
+    }
+
+    public async Task<User?> UpdateFailedLoginAttempts(int userId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var user = await dbContext.Users.FindAsync(userId);
+        if (user is null) return null;
+        user.FailedLoginAttempts++;
         var count = await dbContext.SaveChangesAsync();
         return count == 0 ? null : user;
     }

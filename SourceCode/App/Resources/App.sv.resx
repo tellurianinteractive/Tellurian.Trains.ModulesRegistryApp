@@ -537,9 +537,6 @@
   <data name="FremoName" xml:space="preserve">
     <value>FREMO-namn</value>
   </data>
-  <data name="IsGlobalAdministrator" xml:space="preserve">
-    <value>Är global administratör?</value>
-  </data>
   <data name="Station" xml:space="preserve">
     <value>Station</value>
   </data>
@@ -1145,5 +1142,29 @@
   </data>
   <data name="MustBeValidEmailAddresses" xml:space="preserve">
     <value>måste vara giltiga e-postadresser separerade med semikolon</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Är global administratör?</value>
+  </data>
+  <data name="IsCountryAdministrator" xml:space="preserve">
+    <value>Är landsadministratör?</value>
+  </data>
+  <data name="IsApiAccessPermitted" xml:space="preserve">
+    <value>Är API-åtkomst tillåten?</value>
+  </data>
+  <data name="MayUploadSkpDrawing" xml:space="preserve">
+    <value>Får ladda upp SketchUp-ritning?</value>
+  </data>
+  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
+    <value>Administratörs ansvarsområde</value>
+  </data>
+  <data name="PasswordResetAttempts" xml:space="preserve">
+    <value>Antalet lösenordsåterställningsförsök</value>
+  </data>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Antal misslyckade inloggningsförsök</value>
+  </data>
+  <data name="UserIsLockedOut" xml:space="preserve">
+    <value>Användaren är utelåst!</value>
   </data>
 </root>

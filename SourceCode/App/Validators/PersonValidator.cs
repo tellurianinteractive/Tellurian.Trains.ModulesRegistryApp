@@ -39,7 +39,6 @@ public class PersonValidator : AbstractValidator<Person>
             .WithName(n => localizer[nameof(n.CityName)]);
 
         RuleFor(person => person.EmailAddresses)
-            .NotEmpty()
             .MaximumLength(50)
             .MustBeValidEmailAdresses(localizer)
             .WithName(n => localizer[nameof(n.EmailAddresses)]);

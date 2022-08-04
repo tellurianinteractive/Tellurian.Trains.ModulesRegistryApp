@@ -7,6 +7,7 @@ namespace ModulesRegistry.Services.Extensions;
 
 public static class UserExtensions
 {
+    public const int MaxFailedLoginAttempts = 3;
     public static string? PreferredLanguage(this User me) =>
         me.Person is null || me.Person.Country is null ? null :
         me.Person.Country.Languages.Items()[0];
@@ -58,7 +59,7 @@ public static class UserExtensions
         me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
 
     public static bool IsLockedOut([NotNullWhen(true)] this User? me) =>
-        me is null || me.PasswordResetAttempts > PasswordResetRequest.MaxRequests;
+        me is null || me.PasswordResetAttempts > PasswordResetRequest.MaxRequests || me.FailedLoginAttempts > MaxFailedLoginAttempts;
 
     public static string GetMessageHtml(this UserInvitation me)
     {

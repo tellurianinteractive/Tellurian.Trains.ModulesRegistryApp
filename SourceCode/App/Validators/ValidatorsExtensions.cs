@@ -68,7 +68,7 @@ public static class ValidatorsExtensions
         builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
 
     public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-     builder.Must(value => value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
+     builder.Must(value => string.IsNullOrEmpty(value) || value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
 
     private static bool IsValidEmailAddress(this string? email)
     {
