@@ -66,8 +66,9 @@ FRED-kørehåndtag er det eneste, der skal bruges til FREMO-møder.
 - Selvom du ikke har en FRED til dine lokomotiver, skal du forberede et FRED-klistermærke.
 
 #### Forberedelse af lokokort
-Alle lokomotiver, der kører rutetog, skal normalt have et lokokort.
-Et lokokort skal have et gennemsigtigt indskudt kreditkortstørrelse, hvor lokomotivet vil blive sat.
+- Alle lokomotiver, der kører rutetog, skal normalt have et lokokort.
+- Et lokokort skal have et gennemsigtigt indskudt kreditkortstørrelse, hvor lokomotivet vil blive sat.
+- Lokokort kan du f.eks. fremstille med [Lok og vognkortappen](https://wagoncardapp.azurewebsites.net/).
 
 ### Til mødet
 Man **kan** ikke bare sætte et lokomotiv med en ikke-reserveret adresse på banen.

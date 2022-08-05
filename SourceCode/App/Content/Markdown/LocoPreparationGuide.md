@@ -29,7 +29,7 @@ A loco that jumps away is not fun to drive.
 - Test your locos before the meeting by running them on a track, not just in a test bed.
 - If your loco fails during the meeting, there will hopefully be someone that can provide a spare loco. So bring some extra locos.
 - Use wheels that meets the meeting requirements, [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) should be regarded as a minimum requirement,
-- but [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) is often required.
+but [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) is often required.
  
 For H0-locomotives:
 - Use FREMO-approved couplings - *Fleischmann 6511* or [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detail).
@@ -49,10 +49,11 @@ The FRED-throttle is the only one to be used at FREMO meetings.
 #### Preparation of Loco card
 - All locos that run scheduled trains usually must have a loco card. 
 - A loco card must have a transparent pocked in credit card size, where the loco schedule will be put.
+- You can make loco cards with the [Loco and wagon card app](https://wagoncardapp.azurewebsites.net/).
 
 ### At the meeting
 You **cannot** just put a loco with a non-reserved address on the track.
 At module meetings, loco addresses must be coordinated. There are two main ways to do this:
 - **Use reserved FREMO-loco addresses:** you have been given a set of loco-addresses by FREMO, or you have to borrow a reserved address from one that has, or
 - **Use per-meeting address reservation:** Reserv your existing loco-address in advance or at the venue before putting it on the track. 
-If your address already is occupied by someobe else, you must reserve another address that is free, and change your loco's address to that one.
+If your address already is occupied by someone else, you must reserve another address that is free, and change your loco's address to that one.

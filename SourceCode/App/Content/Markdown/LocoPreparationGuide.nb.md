@@ -48,8 +48,9 @@ FRED-kørehåndtak er den eneste som skal brukes på FREMO-treff.
 #### Utarbeidelse av Loco-kort
 – Alle lok som kjører rutetog skal vanligvis ha lokokort.
 - Et lokokort må ha en gjennomsiktig innpakket kredittkortstørrelse, hvor omløpskort vil bli satt.
+- Lokomotivkort kan du f.eks. produsere med [lokomotiv- og vognkort-appen](https://wagoncardapp.azurewebsites.net/).### På møtet
 
-### På møtet
+#### På treffet
 Du **kan ikke** bare sette et loko med en ikke-reservert adresse på banen.
 Ved modulmøter skal lokoadresser koordineres. Det er to hovedmåter å gjøre dette på:
 - **Bruk reserverte FREMO-lokoadresser:** du har fått et sett med lokoadresser av FREMO, eller du må låne en reservert adresse fra en som har, eller

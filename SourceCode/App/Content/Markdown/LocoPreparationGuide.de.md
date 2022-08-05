@@ -48,6 +48,7 @@ Der FRED-Regel ist der einzige, der bei FREMO-Treffen verwendet wird.
 #### Vorbereitung der Lokkarte
 - Alle Loks, die planmäßige Züge fahren, müssen normalerweise eine Lokkarte haben.
 - Eine Lokkarte muss eine transparente Tasche in Kreditkartengröße haben, wo der Lokfahrplan abgelegt wird.
+- Lokkarte können Sie z.B. erstellt mit der [Lok- und Wagenkarten-App](https://wagoncardapp.azurewebsites.net/).
 
 ### Bei der Versammlung
 Sie **können** nicht einfach eine Lok mit einer nicht reservierten Adresse auf das Gleis stellen.

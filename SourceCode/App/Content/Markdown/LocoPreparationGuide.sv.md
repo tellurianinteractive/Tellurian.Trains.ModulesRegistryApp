@@ -50,8 +50,9 @@ Så gör alla viktiga funktioner tillgängliga på F1-F8.
 - Även om du inte har en egen FRED till dina lok så förbered en FRED-dekal att använda i en lånad FRED.
 
 #### Förberedelse av lokkort
-Alla lok som kör linjetåg brukar ha lokkort. Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
-Lokkort kan du t.ex. tillverka med [Lok- och vagnkortsappen](https://wagoncardapp.azurewebsites.net/).
+- Alla lok som kör linjetåg brukar ha lokkort. 
+- Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
+- Lokkort kan du t.ex. tillverka med [Lok- och vagnkortsappen](https://wagoncardapp.azurewebsites.net/).
 
 ### På modulträffen
 Du **får inte** sätta ett lok med en icke-reserverad adress på banan.
