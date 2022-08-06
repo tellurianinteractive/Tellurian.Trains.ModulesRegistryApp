@@ -152,7 +152,7 @@ public sealed class ModuleService
                     return await dbContext.Modules.AsNoTracking()
                      .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.GroupId == ownerRef.GroupId))
                      .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
-                     .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
+                     .Include(m => m.ModuleExits).ThenInclude(me => me.EndProfile)
                      .SingleOrDefaultAsync();
                 }
             }
@@ -161,7 +161,7 @@ public sealed class ModuleService
                 return await dbContext.Modules.AsNoTracking()
                     .Where(m => m.Id == id && m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId))
                     .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                    .Include(m => m.ModuleExits).ThenInclude(me => me.GableType)
+                    .Include(m => m.ModuleExits).ThenInclude(me => me.EndProfile)
                     .SingleOrDefaultAsync();
             }
         }

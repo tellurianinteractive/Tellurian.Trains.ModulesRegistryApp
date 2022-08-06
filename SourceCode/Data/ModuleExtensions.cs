@@ -24,7 +24,7 @@ public static class ModuleExtensions
             ModuleExits = me.ModuleExits.Select(it => new ModuleExit
             {
                 Direction = it.Direction,
-                GableTypeId = it.GableTypeId,
+                EndProfileId = it.EndProfileId,
                 Label = it.Label
             }).ToArray(),
             ModuleOwnerships = me.ModuleOwnerships.Select(it => new ModuleOwnership

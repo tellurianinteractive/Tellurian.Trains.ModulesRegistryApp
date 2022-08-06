@@ -1,0 +1,47 @@
+﻿@page "/ModuleStandards/EndProfiles"
+
+@inject IStringLocalizer<App> Localizer
+@inject ModuleEndProfileService ModuleEndProfileService
+
+<PageHeading Label="ModuleEndProfiles" IconClass="@FontAwesome.Standard" PageAction="PageAction.List" />
+
+@if (Principal.IsAnyAdministrator())
+{
+    <AppButton Label="Add" Href="@EndProfileEditLink(0)" IsDisabled="MayNotEdit" />
+}
+
+
+
+<TableTemplate Items="ModuleEndProfiles?.OrderBy(gt => gt.Scale.Denominator).ThenBy(gt => gt.Designation)">
+    <TableHeader>
+        <th>@Localizer["Scale"]</th>
+        <th>@Localizer["Designation"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.Scale.Display()</td>
+        <td>@item.Designation</td>
+        <td>
+            <AppButton Label="Edit" Href="@EndProfileEditLink(item.Id)" IsDisabled="MayNotEdit" />
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<ModuleEndProfile>? ModuleEndProfiles;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (Principal is not null)
+        {
+            ModuleEndProfiles = (await ModuleEndProfileService.GetAllAsync()).OrderBy(i => i.Designation);
+        }
+    }
+
+    string EndProfileEditLink(int id) => $"ModuleStandards/EndProfiles/{id}/Edit";
+    bool MayNotEdit => !Principal.IsAnyAdministrator();
+
+}

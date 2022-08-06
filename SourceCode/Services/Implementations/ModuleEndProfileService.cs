@@ -1,9 +1,9 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class ModuleGableTypeService
+public class ModuleEndProfileService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ModuleGableTypeService(IDbContextFactory<ModulesDbContext> factory)
+    public ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory)
     {
         Factory = factory;
     }
@@ -11,41 +11,41 @@ public class ModuleGableTypeService
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int? scaleId)
     {
         var dbContext = Factory.CreateDbContext();
-        return await dbContext.ModuleGableTypes.AsNoTracking()
+        return await dbContext.ModuleEndProfiles.AsNoTracking()
             .Where(mgt => !scaleId.HasValue || mgt.ScaleId == scaleId)
             .Select(mgt => new ListboxItem(mgt.Id, mgt.Designation))
             .ToListAsync()
             .ConfigureAwait(false);
     }
 
-    public async Task<IEnumerable<ModuleGableType>> GetAllAsync()
+    public async Task<IEnumerable<ModuleEndProfile>> GetAllAsync()
     {
         var dbContext = Factory.CreateDbContext();
-        return await dbContext.ModuleGableTypes.AsNoTracking()
+        return await dbContext.ModuleEndProfiles.AsNoTracking()
             .Include(mgt => mgt.Scale)
             .ToListAsync()
             .ConfigureAwait(false);
     }
 
-    public async Task<ModuleGableType?> FindByIdAsync(ClaimsPrincipal? principal, int id)
+    public async Task<ModuleEndProfile?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.IsAnyAdministrator())
         {
             var dbContext = Factory.CreateDbContext();
-            return await dbContext.ModuleGableTypes.FindAsync(id).ConfigureAwait(false);
+            return await dbContext.ModuleEndProfiles.FindAsync(id).ConfigureAwait(false);
         }
         return null;
     }
 
-    public async Task<(int Count, string Message, ModuleGableType? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleGableType entity)
+    public async Task<(int Count, string Message, ModuleEndProfile? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleEndProfile entity)
     {
         if (principal.IsAnyAdministrator())
         {
             var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.ModuleGableTypes.FindAsync(entity.Id).ConfigureAwait(false);
+            var existing = await dbContext.ModuleEndProfiles.FindAsync(entity.Id).ConfigureAwait(false);
             if (existing is null)
             {
-                dbContext.ModuleGableTypes.Add(entity);
+                dbContext.ModuleEndProfiles.Add(entity);
             }
             else
             {
@@ -55,6 +55,6 @@ public class ModuleGableTypeService
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(existing ?? entity);
         }
-        return principal.SaveNotAuthorised<ModuleGableType>();
+        return principal.SaveNotAuthorised<ModuleEndProfile>();
     }
 }

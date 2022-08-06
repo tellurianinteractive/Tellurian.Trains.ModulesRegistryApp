@@ -96,7 +96,7 @@
     <Build Include="dbo\Tables\ModuleOwnership.sql" />
     <Build Include="dbo\Tables\ModuleExit.sql" />
     <Build Include="dbo\Tables\NHM.sql" />
-    <Build Include="dbo\Tables\ModuleGableType.sql" />
+    <Build Include="dbo\Tables\ModuleEndProfile.sql" />
     <Build Include="dbo\Tables\CargoDirection.sql" />
     <Build Include="dbo\Tables\Layout.sql" />
     <Build Include="dbo\Tables\Cargo.sql" />

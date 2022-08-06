@@ -87,7 +87,7 @@ public class Startup
         services.AddScoped<LayoutParticipantService>();
         services.AddScoped<MeetingService>();
         services.AddScoped<ModuleService>();
-        services.AddScoped<ModuleGableTypeService>();
+        services.AddScoped<ModuleEndProfileService>();
         services.AddScoped<ModuleStandardService>();
         services.AddScoped<OperatingDayService>();
         services.AddScoped<PersonService>();

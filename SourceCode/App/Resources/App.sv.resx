@@ -468,20 +468,17 @@
   <data name="PleaseReadAndAccept" xml:space="preserve">
     <value>Vänligen läs och acceptera.</value>
   </data>
-  <data name="Gables" xml:space="preserve">
-    <value>Gavlar</value>
+  <data name="EndPlates" xml:space="preserve">
+    <value>Ändstycken</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Riktning</value>
   </data>
-  <data name="GableType" xml:space="preserve">
-    <value>Typ av gavel</value>
+  <data name="EndProfile" xml:space="preserve">
+    <value>Ändprofil</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Antal sektioner</value>
-  </data>
-  <data name="ModuleGables" xml:space="preserve">
-    <value>Modulgavlar</value>
   </data>
   <data name="ThisContentWasModified" xml:space="preserve">
     <value>Detta innehåll ändrades {0:d} {0:t}</value>
@@ -569,9 +566,6 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Jag har läst och förstått</value>
-  </data>
-  <data name="Gable" xml:space="preserve">
-    <value>Gavel</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Spår</value>
@@ -1166,5 +1160,8 @@
   </data>
   <data name="UserIsLockedOut" xml:space="preserve">
     <value>Användaren är utelåst!</value>
+  </data>
+  <data name="ModuleEndProfiles" xml:space="preserve">
+    <value>Moduländprofiler</value>
   </data>
 </root>

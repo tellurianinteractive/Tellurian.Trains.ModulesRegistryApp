@@ -2,13 +2,13 @@
 
 public class PropertyService
 {
-    private const string GableType = "GableType";
+    private const string EndProfile = "EndProfile";
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     public PropertyService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
 
-    public Task<IEnumerable<ListboxItem>> GetGableTypeListboxItemsAsync() => GetListboxItemsAsync(GableType);
-    public Task<int> RemoveGableType(string value) => RemoveProperty(GableType, value);
-    public Task<IEnumerable<ListboxItem>> AddGableType(string value) => AddProperty(GableType, value);
+    public Task<IEnumerable<ListboxItem>> GetEndProfileListboxItemsAsync() => GetListboxItemsAsync(EndProfile);
+    public Task<int> RemoveEndProfile(string value) => RemoveProperty(EndProfile, value);
+    public Task<IEnumerable<ListboxItem>> AddEndProfile(string value) => AddProperty(EndProfile, value);
 
 
     public async Task<IEnumerable<ListboxItem>> GetListboxItemsAsync(string name)

@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.6.11
+Release date 2022-08-06
+- **End profile** is now the new term for previous *module gable*. 
+Thanks to Gino Damen, Klaus Weibezahn, and Dirk Witvrouwen.
+The change is made not only int the user interface, but in all code and in the database.
+
 #### Version 1.6.10
 Release date 2022-08-04
 - **Users** can now edit their *email address* and *city of residence* under **Settings**.
@@ -22,7 +28,7 @@ Release date 2022-06-12
 Release date 2022-06-10
 - **API Improvements** where users with API-access now can retrieve their API-key at the **Settings** page.
 The routing is also improved. Currently the API supports *meetings* and *cargoes*.
-- **Sorted Lists** of modules, stations, gables and module standards.
+- **Sorted Lists** of modules, stations, end profiles and module standards.
 - **Reserved Loco Addresses** assigned by FREMO can now be entered for a *person*. Issue #152.
 These addresses will be reserved for the person when registering for a meeting layout.
 - **Help Texts Update** and some translations to all supported languages.
@@ -141,7 +147,7 @@ Release date 2021-09-27
 
 #### Version 1.4.6
 Release date 2021-09-15
-- **H0-US gables** added.
+- **H0-US end profiles** added.
 - **Group owned modules** can now be submitted to meetings by *group administrators* or group member that *may borrow the group's modules*. The latter is a new checkbox for group members.
 - **Waybill typography** improved and *import agent* and *export agent* are now translated to origin and destination languages.
 - **Bug fix** of making group-owned module to a station.
@@ -154,7 +160,7 @@ Release date 2021-09-06
 
 #### Version 1.4.4
 Release date 2021-09-05
-- **Gables list** are now sorted by scale and gable name.
+- **End profile list** are now sorted by scale and end profile name.
 - **Cargo flow** help text and field labels updated to better describe meaning of fields.
 - **Cargo lists** now shows NMH-code and is sorted in NHM-code order. 
 Read more about [NHM-codes](https://uic.org/freight/freight-IT/article/nhm).
@@ -331,7 +337,7 @@ Release date 2021-04-29
 - **Latest registration date** for modules added for layouts. Each layout in a meeting can have different dates.
 - **Make station** now gets a default name of associated module, but you can change it.
 - **Module standards** page now made public.
-- **Module gable types** page now made public and with improved add/edit for administrators.
+- **Module end profiles** page now made public and with improved add/edit for administrators.
 - **Cargo types** page now made public.
 - **Regions** page now made public.
 - **Document download** now working. You can download all documentation file types.
@@ -447,7 +453,7 @@ Release date 2021-03-30
 
 #### Version 0.8.9
 Release date 2021-03-28
-- **Exits** new name of gables in module edit form.
+- **Exits** new name of end profiles in module edit form.
 - **Bug fix** of issue #23 adding group owned stations.
 - **Bug fix** of rounding length and speed for modules.
 #### Version 0.8.8
@@ -486,9 +492,9 @@ Release date 2021-03-20
 
 #### Version 0.8.3
 Release date 2021-03-16
-- **Bug fix** of error when adding *module gables*.
-- **Validation** added for *module gables*.
-- **Changed** layout for adding *module gables* and *station tracks*.
+- **Bug fix** of error when adding *module end profiles*.
+- **Validation** added for *module end profiles*.
+- **Changed** layout for adding *module end profiles* and *station tracks*.
 
 #### Version 0.8.2
 Release date 2021-03-11
@@ -544,8 +550,8 @@ Release date 2021-03-04
 - *Terms of use* updated.
 - User now required to accept *terms of use* in order to use application.
 - Additional data about modules: *catenary description*, *number of sections*
-and *gables* with *direction* and *type of gable*.
-- Administration of gable types.
+and *end plates* with *direction* and *end profiles*.
+- Administration of *end profiles**.
 
 #### Version 0.5.1
 Release date 2021-02-28

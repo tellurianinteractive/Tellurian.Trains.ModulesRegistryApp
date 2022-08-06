@@ -4,9 +4,9 @@ using ModulesRegistry.Data;
 
 namespace ModulesRegistry.Validators;
 
-public class ModuleGableTypeValidator : AbstractValidator<ModuleGableType>
+public class ModuleEndProfileValidator : AbstractValidator<ModuleEndProfile>
 {
-    public ModuleGableTypeValidator(IStringLocalizer<App> localizer)
+    public ModuleEndProfileValidator(IStringLocalizer<App> localizer)
     {
         RuleFor(m => m.Designation)
             .NotEmpty()

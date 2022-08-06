@@ -35,8 +35,8 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<Meeting> Meetings { get; set; }
     public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
     public virtual DbSet<Module> Modules { get; set; }
+    public virtual DbSet<ModuleEndProfile> ModuleEndProfiles { get; set; }
     public virtual DbSet<ModuleExit> ModuleExits { get; set; }
-    public virtual DbSet<ModuleGableType> ModuleGableTypes { get; set; }
     public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
     public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
     public virtual DbSet<NHM> NhmCodes { get; set; }
@@ -505,28 +505,10 @@ public partial class ModulesDbContext : DbContext
                   .OnDelete(DeleteBehavior.SetNull);
         });
 
-        modelBuilder.Entity<ModuleExit>(entity =>
+
+        modelBuilder.Entity<ModuleEndProfile>(entity =>
         {
-            entity.ToTable("ModuleExit");
-
-            entity.Property(e => e.Label)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.HasOne(d => d.Module)
-                .WithMany(p => p.ModuleExits)
-                .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.GableType)
-                .WithMany()
-                .HasForeignKey(d => d.GableTypeId)
-                .OnDelete(DeleteBehavior.NoAction);
-        });
-
-        modelBuilder.Entity<ModuleGableType>(entity =>
-        {
-            entity.ToTable("ModuleGableType");
+            entity.ToTable("ModuleEndProfile");
 
             entity.Property(e => e.Designation)
                 .IsRequired();
@@ -542,6 +524,24 @@ public partial class ModulesDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<ModuleExit>(entity =>
+        {
+            entity.ToTable("ModuleExit");
+
+            entity.Property(e => e.Label)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.HasOne(d => d.Module)
+                .WithMany(p => p.ModuleExits)
+                .HasForeignKey(d => d.ModuleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.EndProfile)
+                .WithMany()
+                .HasForeignKey(d => d.EndProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
         modelBuilder.Entity<ModuleOwnership>(entity =>
         {
             entity.ToTable("ModuleOwnership");

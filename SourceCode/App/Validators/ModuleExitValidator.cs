@@ -14,8 +14,8 @@ public class ModuleExitValidator : AbstractValidator<ModuleExit>
             .MaximumLength(20)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer["Direction"]);
-        RuleFor(m => m.GableTypeId)
+        RuleFor(m => m.EndProfileId)
             .MustBeSelected(localizer)
-            .WithName(n => localizer["GableType"]);
+            .WithName(n => localizer["EndProfile"]);
     }
 }

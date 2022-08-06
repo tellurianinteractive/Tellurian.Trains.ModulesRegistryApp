@@ -2,7 +2,7 @@
 
 namespace ModulesRegistry.Data;
 
-public class ModuleGableType
+public class ModuleEndProfile
 {
     public int Id { get; set; }
     public int ScaleId { get; set; }

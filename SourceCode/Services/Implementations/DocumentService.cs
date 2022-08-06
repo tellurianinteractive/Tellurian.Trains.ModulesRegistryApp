@@ -40,7 +40,7 @@ public sealed class DocumentService
             .Select(s => s.FullName)
             .SingleOrDefaultAsync();
         if (name is not null) return name;
-        name = await dbContext.ModuleGableTypes.AsNoTracking()
+        name = await dbContext.ModuleEndProfiles.AsNoTracking()
             .Where(mgt => mgt.PdfDocumentId == id)
             .Select(mgt => mgt.Designation)
             .SingleOrDefaultAsync();

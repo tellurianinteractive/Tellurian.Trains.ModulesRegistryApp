@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizer<App> Localizer
-@inject ModuleGableTypeService ModuleGableTypeService
+@inject ModuleEndProfileService ModuleEndProfileService
 
 @if (Module is null)
 {
@@ -16,7 +16,7 @@ else
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="2" Label="Direction" @bind-Value="exit.Direction" Items="EnumExtensions.StationEntryDirectionsListboxItems()" />
             <AppInputText Width="2" Label="Designation" @bind-Value="exit.Label" />
-            <AppInputSelect Width="2" Label="GableType" @bind-Value="exit.GableTypeId" Items="GableTypeItems" ShowPleaseSelect="true" />
+            <AppInputSelect Width="2" Label="EndProfile" @bind-Value="exit.EndProfileId" Items="EndProfileItems" ShowPleaseSelect="true" />
             @if (exit.Id > 0)
             {
                 <div class="col-md-2">
@@ -30,18 +30,18 @@ else
 
 @code {
     [Parameter] public Module? Module { get; set; }
-    IEnumerable<ListboxItem>? GableTypeItems;
+    IEnumerable<ListboxItem>? EndProfileItems;
 
     protected override async Task OnParametersSetAsync()
     {
-        GableTypeItems = (await ModuleGableTypeService.ListboxItemsAsync(Module?.ScaleId)).OrderBy(i => i.Description);
+        EndProfileItems = (await ModuleEndProfileService.ListboxItemsAsync(Module?.ScaleId)).OrderBy(i => i.Description);
     }
 
     void Add()
     {
         if (Module is not null)
         {
-            Module.ModuleExits.Add(new ModuleExit { Label = $"{Localizer["Gable"]}-{Module.ModuleExits.Count + 1}" });
+            Module.ModuleExits.Add(new ModuleExit { Label = $"{Localizer["EndProfile"]}-{Module.ModuleExits.Count + 1}" });
             StateHasChanged();
         }
     }

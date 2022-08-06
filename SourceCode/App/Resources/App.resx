@@ -471,20 +471,17 @@
   <data name="PleaseReadAndAccept" xml:space="preserve">
     <value>Please read and accept.</value>
   </data>
-  <data name="Gables" xml:space="preserve">
-    <value>Gables</value>
+  <data name="EndPlates" xml:space="preserve">
+    <value>End plates</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Direction</value>
   </data>
-  <data name="GableType" xml:space="preserve">
-    <value>Type of gable</value>
+  <data name="EndProfile" xml:space="preserve">
+    <value>End profile</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Number of sections</value>
-  </data>
-  <data name="ModuleGables" xml:space="preserve">
-    <value>Module gables</value>
   </data>
   <data name="SignalFeature" xml:space="preserve">
     <value>Has signal?</value>
@@ -569,9 +566,6 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>I have read and understand</value>
-  </data>
-  <data name="Gable" xml:space="preserve">
-    <value>Gable</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Track</value>
@@ -1166,5 +1160,8 @@
   </data>
   <data name="UserIsLockedOut" xml:space="preserve">
     <value>User is locked out!</value>
+  </data>
+  <data name="ModuleEndProfiles" xml:space="preserve">
+    <value>Module end profiles</value>
   </data>
 </root>

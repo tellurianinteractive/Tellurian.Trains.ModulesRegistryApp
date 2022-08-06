@@ -141,7 +141,7 @@ public class MeetingService
                 if (existingLayout is null) existing.Layouts.Add(layout);
                 else dbContext.Entry(existingLayout).CurrentValues.SetValues(layout);
             }
-            foreach (var gable in existing.Layouts) if (!entity.Layouts.Any(mg => mg.Id == gable.Id)) dbContext.Remove(gable);
+            foreach (var layout in existing.Layouts) if (!entity.Layouts.Any(mg => mg.Id == layout.Id)) dbContext.Remove(layout);
         }
 
         static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>

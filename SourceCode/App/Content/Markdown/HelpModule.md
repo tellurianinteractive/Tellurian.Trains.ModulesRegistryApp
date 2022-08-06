@@ -49,7 +49,7 @@ You can control who can view your module and station data:
 >When you submit a module to a meeting, the organising group's *data aministrator* can also modify data for your module/station. 
 
 #### Exits
-Each gable of a module represents an *exit*.
+Each end plate of a module represents an *exit*.
 Most modules only have two *exits*, for example line-modules; you will have one in each direction: *east* and *west*.
 When the track ends on the module, you add only one exit.
 

@@ -25,7 +25,7 @@ All functions for managing modules are now in place, including:
 * Managing **your modules, stations and station freight customers**.
 * **Transfer of module ownership** - part or whole - to other person or group.
 * **Manage groups and group members**, includinng group member's modules, stations and station freight customers.
-* Administrators can **manage meetings, regions, cargo types, module standards and module gables**.
+* Administrators can **manage meetings, regions, cargo types, module standards and module end profiles**.
 * Users and meeting organisers can **register a participant** and add modules to a layout.
 * **Create waybills** for individual or all stations at a meeting. 
 Take a look at the [**example waybills**](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for past real meetings.

@@ -468,20 +468,17 @@
   <data name="PleaseReadAndAccept" xml:space="preserve">
     <value>Vennligst les og godta.</value>
   </data>
-  <data name="Gables" xml:space="preserve">
-    <value>Gavler</value>
+  <data name="EndPlates" xml:space="preserve">
+    <value>Endeplater</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>Retning</value>
   </data>
-  <data name="GableType" xml:space="preserve">
-    <value>Type gavl</value>
+  <data name="EndProfile" xml:space="preserve">
+    <value>Endeprofile</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Antall seksjoner</value>
-  </data>
-  <data name="ModuleGables" xml:space="preserve">
-    <value>Modulgavler</value>
   </data>
   <data name="ThisContentWasModified" xml:space="preserve">
     <value>Dette innholdet ble endret {0:d} {0:t}</value>
@@ -569,9 +566,6 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Jeg har lest og forstått</value>
-  </data>
-  <data name="Gable" xml:space="preserve">
-    <value>Gavl</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Spor</value>
@@ -1166,5 +1160,8 @@
   </data>
   <data name="UserIsLockedOut" xml:space="preserve">
     <value>Brukeren er utestengt!</value>
+  </data>
+  <data name="ModuleEndProfiles" xml:space="preserve">
+    <value>Modul endeprofiler</value>
   </data>
 </root>
