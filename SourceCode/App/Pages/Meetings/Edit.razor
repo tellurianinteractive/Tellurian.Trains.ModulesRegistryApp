@@ -35,8 +35,7 @@
     @if (MayEdit)
     {
         <div>
-            <a class="btn btn-secondary btn-sm" href="Meetings/@Id/Layouts/0"><span class="@FontAwesome.Add" /> @Localizer.AddOrEdit("Layout", true)</a>
-
+            <AppButton Label="Add" ObjectName="Layout" Href="@LayoutHref(0)"/>
         </div>
     }
     <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">

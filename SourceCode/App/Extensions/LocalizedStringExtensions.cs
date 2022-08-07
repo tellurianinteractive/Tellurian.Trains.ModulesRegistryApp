@@ -3,6 +3,7 @@ using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services;
 using ModulesRegistry.Shared;
+using System.Globalization;
 using System.Text;
 
 namespace ModulesRegistry.Extensions;
@@ -34,7 +35,7 @@ public static class LocalizedStringExtensions
             text.Append(' ');
             //text.Append(me["For"].Value.ToLowerInvariant());
             //text.Append(' ');
-            text.Append(owner.Name());
+            text.Append(me.Name(owner));
         }
         return text.ToString();
 
@@ -45,16 +46,17 @@ public static class LocalizedStringExtensions
     private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
         string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
 
-    private static string Name(this object? me) =>
-        me switch
+    private static string Name(this IStringLocalizer me, object? owner) =>
+        owner switch
         {
             Person p => p.FullName(),
             Group g => g.FullName,
             Station s => s.FullName,
             ExternalStation es => es.FullName,
-            Meeting m => $"{m.Description} {m.PlaceName} {m.StartDate:MMMM yyyy}",
+            Meeting m => $"{m.Description} {m.PlaceName}, {m.StartDate:MMMM yyyy}",
             Module mo => mo.FullName,
             Region r => r.LocalName,
+            Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",
             _ => string.Empty
         };
 
@@ -80,6 +82,15 @@ public static class LocalizedStringExtensions
     public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
 
     public static string Value(this IStringLocalizer me, string key) => me[key].Value;
+
+
+    private static string ObjectNameToLower(this LocalizedString me) =>
+        CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
+        {
+            "de" => me.Value,
+            _ => me.Value.ToLowerInvariant()
+        };
+
     public static string DocumentIconHref(this int? id, string fileExtension) =>
         id.HasValue ? $"/images/{fileExtension}.png" : string.Empty;
 
@@ -89,7 +100,7 @@ public static class LocalizedStringExtensions
 
     public static string DualLanguageLabel(this IStringLocalizer localizer, IEnumerable<LanguageLabels>? languageLabels, string? langaugeCode, string resourceKey, string? englishText)
     {
-        if (englishText is null) englishText = resourceKey;
+        englishText ??= resourceKey;
         var localText = localizer[resourceKey].Value;
         if (languageLabels is not null && langaugeCode is not null) localText = languageLabels.GetLabelText(resourceKey, langaugeCode);
         if (string.IsNullOrWhiteSpace(localText)) localText = localizer[resourceKey];

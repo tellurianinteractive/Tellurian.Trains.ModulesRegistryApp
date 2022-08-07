@@ -32,7 +32,7 @@
     //bool HelpIsVisible { get; set; }
     bool HelpIsHidden => PageHistory.IsShowningHelp != true;
     bool IsHelpAvailable => HelpContext.HasValue();
-    string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help{HelpContext}";
+    string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help/{HelpContext}";
 
     protected override void OnParametersSet()
     {

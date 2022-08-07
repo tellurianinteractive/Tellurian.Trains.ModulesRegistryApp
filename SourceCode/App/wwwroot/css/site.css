@@ -94,3 +94,10 @@ h4 {
     color: red;
 }
 
+blockquote {
+
+    padding-left: 10px;
+    border-left: 3px solid red;
+    color: red
+}
+

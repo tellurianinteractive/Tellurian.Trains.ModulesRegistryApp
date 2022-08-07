@@ -22,12 +22,10 @@ public static class StringExtensions
         if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
         return Markdown.ToHtml(markdown, Pipeline());
 
-        static MarkdownPipeline Pipeline()
-        {
-            var builder = new MarkdownPipelineBuilder();
-            builder.UseAdvancedExtensions();
-            return builder.Build();
-        }
+        static MarkdownPipeline Pipeline() => 
+            new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .Build();
     }
 
 
@@ -37,7 +35,7 @@ public static class StringExtensions
     public static bool IsPermittedFileExtension(this string? it) =>
         it is not null && DocumentService.PermittedFileExtenstions.Contains(it.ToLowerInvariant());
 
-   
+
 
     #region GUID string
 

@@ -55,6 +55,57 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\Help\Layout.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Layout.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Layout.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Layout.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Layout.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Meeting.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Meeting.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Meeting.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\Meeting.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterModules.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterModules.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterModules.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterModules.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterParticipant.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterParticipant.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterParticipant.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\RegisterParticipant.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\UserSettingsEdit.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -85,16 +136,16 @@
 		<None Update="Content\Markdown\FAQ.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpPerson.sv.md">
+		<None Update="Content\Markdown\Help\Person.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpPerson.nb.md">
+		<None Update="Content\Markdown\Help\Person.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpPerson.da.md">
+		<None Update="Content\Markdown\Help\Person.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpPerson.de.md">
+		<None Update="Content\Markdown\Help\Person.de.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\LocoPreparationGuide.nb.md">
@@ -142,61 +193,61 @@
 		<None Update="Content\Markdown\NoWaybills.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpCargoTypes.de.md">
+		<None Update="Content\Markdown\Help\CargoTypes.de.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpRegisterModules.md">
+		<None Update="Content\Markdown\Help\RegisterModules.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpRegisterParticipant.md">
+		<None Update="Content\Markdown\Help\RegisterParticipant.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpRegions.md">
+		<None Update="Content\Markdown\Help\Regions.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpExternalStation.md">
+		<None Update="Content\Markdown\Help\ExternalStation.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpExternalStations.md">
+		<None Update="Content\Markdown\Help\ExternalStations.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.sv.md">
+		<None Update="Content\Markdown\Help\AddGroupMember.sv.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.da.md">
+		<None Update="Content\Markdown\Help\AddGroupMember.da.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.de.md">
+		<None Update="Content\Markdown\Help\AddGroupMember.de.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.nb.md">
+		<None Update="Content\Markdown\Help\AddGroupMember.nb.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpAddGroupMember.md">
+		<None Update="Content\Markdown\Help\AddGroupMember.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpPerson.md">
+		<None Update="Content\Markdown\Help\Person.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpMeeting.md">
+		<None Update="Content\Markdown\Help\Meeting.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpGroup.md">
+		<None Update="Content\Markdown\Help\Group.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpCargoTypes.md">
+		<None Update="Content\Markdown\Help\CargoTypes.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpExternalStationCustomer.md">
+		<None Update="Content\Markdown\Help\ExternalStationCustomer.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpStationCustomer.md">
+		<None Update="Content\Markdown\Help\StationCustomer.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpStation.md">
+		<None Update="Content\Markdown\Help\Station.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\HelpModule.md">
+		<None Update="Content\Markdown\Help\Module.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\HomeUser.nb.md">
