@@ -1164,4 +1164,7 @@
   <data name="ModuleEndProfiles" xml:space="preserve">
     <value>Modul endeprofiler</value>
   </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Kom igang</value>
+  </data>
 </root>

@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.6.12
+Release date 2022-08-09
+- **Get Started** page added.
+- **Help texts** for module meeting related things are now translated to all the supported languages.
+- **API** extended with *layout* thematic operation period.
+
 #### Version 1.6.11
 Release date 2022-08-06
 - **End profile** is now the new term for previous *module gable*. 
