@@ -6,6 +6,8 @@ namespace ModulesRegistry.Validators;
 
 public class MeetingValidator : AbstractValidator<Meeting>
 {
+    public const int MaxDetailsLength = 2000;
+    public const int MaxAccomodationLenght = 1000;
     public MeetingValidator(IStringLocalizer<App> localizer)
     {
         RuleFor(m => m.OrganiserGroupId)
@@ -16,11 +18,19 @@ public class MeetingValidator : AbstractValidator<Meeting>
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer["Venue"]);
-        RuleFor(m => m.Description)
+        RuleFor(m => m.Name)
             .NotEmpty()
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .WithName(n => localizer[nameof(n.Description)]);
+            .WithName(n => localizer[nameof(n.Name)]);
+        RuleFor(m => m.Details)
+            .NotEmpty()
+            .MaximumLength(MaxDetailsLength)
+            .WithName(n => localizer[nameof(n.Details)]);
+        RuleFor(m => m.Accomodation)
+            .NotEmpty()
+            .MaximumLength(MaxAccomodationLenght)
+            .WithName(n => localizer[nameof(n.Accomodation)]);
         RuleFor(m => m.StartDate)
             .NotEmpty()
             .GreaterThan(DateTime.Now.AddDays(-7))

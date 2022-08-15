@@ -1167,4 +1167,19 @@
   <data name="GetStarted" xml:space="preserve">
     <value>Kom i gang</value>
   </data>
+  <data name="Accomodation" xml:space="preserve">
+    <value>Overnatting</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>av</value>
+  </data>
+  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
+    <value>IKKE beskriv hva som gjelder for individuelle sporoppsett nedenfor!</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Forhåndsvisning</value>
+  </data>
+  <data name="Characters" xml:space="preserve">
+    <value>Tegn</value>
+  </data>
 </root>

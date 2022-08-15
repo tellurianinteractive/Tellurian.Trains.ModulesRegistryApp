@@ -646,7 +646,7 @@
     <value>Status</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Einzelheiten</value>
+    <value>Details</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Beschreibung</value>
@@ -1166,5 +1166,20 @@
   </data>
   <data name="GetStarted" xml:space="preserve">
     <value>Loslegen</value>
+  </data>
+  <data name="Accomodation" xml:space="preserve">
+    <value>Unterkunft</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>von</value>
+  </data>
+  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
+    <value>Beschreiben Sie NICHT, was unten für einzelne Streckenlayouts gilt!</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="Characters" xml:space="preserve">
+    <value>Zeichen</value>
   </data>
 </root>

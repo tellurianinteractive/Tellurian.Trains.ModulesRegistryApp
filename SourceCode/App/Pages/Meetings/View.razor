@@ -12,8 +12,8 @@
 }
 else
 {
-    <h1><span class="@FontAwesome.Meeting" /> @Meeting.Description</h1>
-    @if ((MeetingStatus)Meeting.Status == MeetingStatus.Canceled )
+    <h1><span class="@FontAwesome.Meeting" /> @Meeting.Name</h1>
+    @if ((MeetingStatus)Meeting.Status == MeetingStatus.Canceled)
     {
         <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
     }
@@ -21,6 +21,9 @@ else
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.IsFremo ? $"{Meeting.OrganiserGroup.FullName}/FREMO" : $"{Meeting.OrganiserGroup.FullName}")
     @Item("Status", Meeting.Status.MeetingStatus())
+    <MarkdownView Label="Details" Markdown="@Meeting.Details" />
+    <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
+
     @if (Meeting.Layouts.Any())
     {
         <hr />

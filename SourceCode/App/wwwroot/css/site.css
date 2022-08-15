@@ -101,3 +101,33 @@ blockquote {
     color: red
 }
 
+.markdown {
+    margin-top: 1em;
+}
+    .markdown h1 {
+        font-size: 18pt;
+        border-bottom: 1px solid gray;
+    }
+    .markdown h2 {
+        font-size: 14pt;
+        font-weight: bold;
+        line-height: 14pt;
+    }
+    .markdown h3 {
+        font-size: 12pt;
+        font-weight: bold;
+        line-height: 12pt;
+    }
+    .markdown h4 {
+        font-size: 12pt;
+        font-weight: normal;
+        text-decoration: underline;
+        line-height: 12pt;
+    }
+    .markdown p, li {
+        line-height: 13pt;
+        margin-top: 0px;
+        padding: 0px;
+    }
+
+

@@ -15,13 +15,15 @@
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
         <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="true" />
-        <AppInputText Width="3" @bind-Value="Meeting.PlaceName" Label="Venue" />
-        <AppInputText Width="5" @bind-Value="Meeting.Description" Label="Description" />
-
+        <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.PlaceName" />
+        <AppInputText Width="5" Label="Name" @bind-Value="Meeting.Name" />
         <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" />
         <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
         <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
+        <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
+        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.MaxDetailsLength"/>
+        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.MaxAccomodationLenght" />
     </Inputs>
     <Buttons>
 

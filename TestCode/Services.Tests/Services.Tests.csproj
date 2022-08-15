@@ -5,7 +5,7 @@
 		<IsPackable>false</IsPackable>
 		<AssemblyName>ModulesRegistry.Services.Tests</AssemblyName>
 		<RootNamespace>ModulesRegistry.Services.Tests</RootNamespace>
-		<Version>1.6.9</Version>
+		<Version>1.6.13</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>

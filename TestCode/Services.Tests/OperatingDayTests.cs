@@ -40,7 +40,7 @@ public class OperatingDayTests
         var days = flags.GetDays(true);
         Assert.AreEqual(1, days.Length);
         Assert.AreEqual(0, days[0].Number);
-        Assert.AreEqual("Demand", flags.OperationDays(true).ShortName);
+        Assert.AreEqual("On demand", flags.OperationDays(true).ShortName);
 
     }
 }

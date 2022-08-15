@@ -1,12 +1,32 @@
-﻿@inherits AppInputMarkdownBase
+﻿@inject IStringLocalizer<App> Localizer
+@inherits AppInputBase<string>
 
-<div class="row">
-    <div class="col-6">
-        <textarea class="form-control" @bind-value="Body" @bind-value:event="oninput"></textarea>
+<div class="row" style="margin-top: 1em">
+    <div class="col-6" >
+        @if (!string.IsNullOrWhiteSpace(Label))
+        {
+            <label class="form-control-label" for="@Label"><strong>@Localizer[Label] (@Localizer["Markdown"])</strong></label>
+        }
+        <textarea rows="20" id="@Label" class="form-control" @bind-value="CurrentValue" @bind-value:event="oninput"></textarea>
     </div>
-    <div class="col-6">
+    <div class="col-6" style="@PreviewCss">
+        <label class="form-control-label"><strong>@Localizer["Preview"] (@NumberOfCharacters @Localizer["of"] @MaxNumberOfCharacters @Localizer["Characters"])</strong></label>
+        <div class="markdown">
         @((MarkupString)Preview)
+        </div>
     </div>
 </div>
 @code {
+    [Parameter] public  int MaxNumberOfCharacters { get; set; }
+    string Preview => Markdown.ToHtml(CurrentValue ?? string.Empty);
+    int NumberOfCharacters => CurrentValue is null ? 0 : CurrentValue.Length;
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
+    }
+
+    string PreviewCss => NumberOfCharacters > MaxNumberOfCharacters ? "background-color: red; color: white;" : string.Empty;
 }

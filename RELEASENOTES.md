@@ -2,7 +2,11 @@
 
 #### Version 1.6.13
 Release date 2022-08-15
-- **Operation Days** drop down now displays days in order, with the most common ones first, and the rest by the first day (issue #148)
+- **Meetings** can now be described with additional free texts for *details* and *accomodation* using *markdown*.
+NOTE that similar functionality will be added soon for individual *meeting layouts*.
+- **Operation Days** drop down now displays days in order, with the most common ones first, 
+and the rest by the first day (issue #148)
+
 #### Version 1.6.12
 Release date 2022-08-09
 - **Get Started** page added.

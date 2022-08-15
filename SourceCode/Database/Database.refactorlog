@@ -21,4 +21,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="DisplayQuantity" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9f3c34de-2fb8-4921-9f50-28b5cdd0c116" ChangeDateTime="08/15/2022 12:38:54">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[Accpmodation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Accommodation" />
+  </Operation>
 </Operations>
