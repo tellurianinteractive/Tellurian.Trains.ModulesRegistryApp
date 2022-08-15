@@ -1,7 +1,8 @@
 ﻿@page "/tools"
 
-<PageHeading  PageAction="@PageAction.Tools" IconClass="@FontAwesome.Tools" />
+@attribute [Authorize(Policy = "User")]
 
+<PageHeading  PageAction="@PageAction.Tools" IconClass="@FontAwesome.Tools" />
 <ContentView ContentName="ToolsInfo" ShowModificationTime=true />
 
 @code {

@@ -124,10 +124,11 @@ blockquote {
         text-decoration: underline;
         line-height: 12pt;
     }
-    .markdown p, li {
-        line-height: 13pt;
-        margin-top: 0px;
-        padding: 0px;
+    .markdown p {
+        line-height: 12pt;
+    }
+    .markdown li {
+        line-height: 14pt;
     }
 
 

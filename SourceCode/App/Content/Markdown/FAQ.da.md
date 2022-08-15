@@ -1,4 +1,13 @@
-﻿#### Jeg kan ikke logge ind
+﻿#### Kan nogen bruge modulregistret?
+Alle modulmodeljernbaner inden for EU, Norge, Storbritannien og Schweiz
+kan bruge applikationen gratis.
+
+#### Er det kun til H0?
+Nej, alle med moduler i enhver skala og tema kan bruge modulregistret.
+Nogle få funktioner, for eksempel fragtbrevene, er implementeret fra
+et H0 perspektiv, men kan også passe til andre skalaer, hvis brugen er ens.
+
+#### Jeg kan ikke logge ind
 Hvis du af en eller anden grund ikke kan logge ind, er her nogle råd:
 1. Først og fremmest skal du inviteres til at kunne oprette en konto og logge ind.
 2. Du skal tillade cookies fra https://moduleregistry.azurewebsites.net/.

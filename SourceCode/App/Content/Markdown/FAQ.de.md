@@ -1,4 +1,13 @@
-﻿#### Ich kann mich nicht anmelden
+﻿#### Kann jeder die Modulregistrierung verwenden?
+Alle Modulmodellbahner innerhalb der Europäischen Union, Norwegen, Großbritannien und der Schweiz
+können die Anwendung kostenlos nutzen.
+
+#### Ist es nur für H0?
+Nein, jeder mit Modulen in jedem Umfang und Thema kann die Modulregistrierung verwenden.
+Einige Funktionen, zum Beispiel die Frachtbriefe, werden von implementiert
+eine H0-Perspektive, passt aber auch in andere Maßstäbe, wenn die Verwendung ähnlich ist.
+
+#### Ich kann mich nicht anmelden
 Wenn Sie sich aus irgendeinem Grund nicht anmelden können, hier einige Ratschläge:
 1. Zunächst müssen Sie eingeladen werden, um ein Konto erstellen und sich anmelden zu können.
 2. Sie müssen Cookies von https://moduleregistry.azurewebsites.net/ zulassen.

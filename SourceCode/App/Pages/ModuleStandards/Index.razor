@@ -1,7 +1,8 @@
 ﻿@page "/ModuleStandards"
 
-@inject IStringLocalizer<App> Localizer
+@attribute [Authorize(Policy = "User")]
 
+@inject IStringLocalizer<App> Localizer
 @inject ModuleStandardService ModuleStandardService
 
 <PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List"/>

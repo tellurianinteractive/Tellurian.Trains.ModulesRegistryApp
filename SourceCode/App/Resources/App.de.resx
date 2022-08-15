@@ -1182,4 +1182,7 @@
   <data name="Characters" xml:space="preserve">
     <value>Zeichen</value>
   </data>
+  <data name="FetchingData" xml:space="preserve">
+    <value>Daten werden abgerufen...</value>
+  </data>
 </root>

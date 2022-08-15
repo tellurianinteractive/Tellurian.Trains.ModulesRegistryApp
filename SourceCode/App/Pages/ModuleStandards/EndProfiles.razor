@@ -1,5 +1,7 @@
 ﻿@page "/ModuleStandards/EndProfiles"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject ModuleEndProfileService ModuleEndProfileService
 

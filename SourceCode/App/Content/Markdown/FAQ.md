@@ -1,4 +1,13 @@
-﻿#### I cannot login
+﻿#### Can Anyone Use the Module Registry?
+All module model railwayers withing the European Union, Norway, United Kingdom and Switzerland 
+can use the application for free.
+
+#### Is It Only For H0?
+No, anyone with modules in any scale and theme can use the Module Registry.
+A few features, for example the waybills, are implemented from
+a H0 perspective, but may also fit also other scales if the usage is similar.
+
+#### I cannot login
 If you for some reason cannot login, here are some advices:
 1. First of all, you must be invited to be able to create an account and login.
 2. You must permitt cookies from https://moduleregistry.azurewebsites.net/.

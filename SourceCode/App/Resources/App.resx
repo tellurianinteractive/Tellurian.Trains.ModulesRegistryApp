@@ -1182,4 +1182,7 @@
   <data name="Characters" xml:space="preserve">
     <value>Characters</value>
   </data>
+  <data name="FetchingData" xml:space="preserve">
+    <value>Fetching data...</value>
+  </data>
 </root>
