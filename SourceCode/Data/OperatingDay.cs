@@ -12,6 +12,7 @@ public partial class OperatingDay
 
     public int Id { get; set; }
     public byte Flag { get; set; }
+    public int DisplayOrder { get; set; }
     public string FullName { get; set; }
     public string ShortName { get; set; }
     public bool IsBasicDay { get; set; }
@@ -22,6 +23,7 @@ public partial class OperatingDay
     public bool IsFriday { get; set; }
     public bool IsSaturday { get; set; }
     public bool IsSunday { get; set; }
+    public bool IsSundayFirst { get; set; }
 
     public virtual ICollection<OperatingBasicDay> OperatingBasicDayBasicDays { get; set; }
     public virtual ICollection<OperatingBasicDay> OperatingBasicDayOperatingDays { get; set; }

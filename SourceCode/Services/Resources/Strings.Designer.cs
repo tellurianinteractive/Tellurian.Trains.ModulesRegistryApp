@@ -1051,6 +1051,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On demand.
+        /// </summary>
+        internal static string OnDemand {
+            get {
+                return ResourceManager.GetString("OnDemand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On demand.
+        /// </summary>
+        internal static string OnDemandShort {
+            get {
+                return ResourceManager.GetString("OnDemandShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only posts.
         /// </summary>
         internal static string OnlyPosts {
@@ -1668,6 +1686,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Westwards {
             get {
                 return ResourceManager.GetString("Westwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When needed.
+        /// </summary>
+        internal static string WhenNeeded {
+            get {
+                return ResourceManager.GetString("WhenNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When needed.
+        /// </summary>
+        internal static string WhenNeededShort {
+            get {
+                return ResourceManager.GetString("WhenNeededShort", resourceCulture);
             }
         }
         

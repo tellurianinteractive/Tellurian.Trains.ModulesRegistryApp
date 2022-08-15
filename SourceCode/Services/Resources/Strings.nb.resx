@@ -663,4 +663,16 @@
   <data name="Sack" xml:space="preserve">
     <value>Sekk</value>
   </data>
+  <data name="OnDemand" xml:space="preserve">
+    <value>På forespørsel</value>
+  </data>
+  <data name="OnDemandShort" xml:space="preserve">
+    <value>På forespørsel</value>
+  </data>
+  <data name="WhenNeeded" xml:space="preserve">
+    <value>Når det trengs</value>
+  </data>
+  <data name="WhenNeededShort" xml:space="preserve">
+    <value>Når det trengs</value>
+  </data>
 </root>

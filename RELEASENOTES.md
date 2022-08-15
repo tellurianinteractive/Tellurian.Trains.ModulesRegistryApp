@@ -1,5 +1,8 @@
 ## Release Notes
 
+#### Version 1.6.13
+Release date 2022-08-15
+- **Operation Days** drop down now displays days in order, with the most common ones first, and the rest by the first day (issue #148)
 #### Version 1.6.12
 Release date 2022-08-09
 - **Get Started** page added.

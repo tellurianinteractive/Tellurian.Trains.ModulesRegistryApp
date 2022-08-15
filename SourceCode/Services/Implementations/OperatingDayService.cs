@@ -25,8 +25,8 @@ public class OperatingDayService
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.OperatingDays.AsNoTracking()
-            .OrderBy(od => od.Flag)
-            .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays(CultureInfo.CurrentCulture).ShortName))
+            .OrderBy(od => od.DisplayOrder)
+            .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays(od.IsSundayFirst,CultureInfo.CurrentCulture).ShortName))
             .ToListAsync();
     }
 }

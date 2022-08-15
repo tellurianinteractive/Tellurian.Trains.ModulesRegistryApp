@@ -1,7 +1,7 @@
 ﻿using ModulesRegistry.Services.Resources;
 using System.Text;
 
-namespace ModulesRegistry.Services.Extensions; 
+namespace ModulesRegistry.Services.Extensions;
 
 public class OperationDays
 {
@@ -27,19 +27,23 @@ public static class OperationDaysExtensions
             new Day(7, 0x40, "Sunday"),
             new Day(0, 0x80, "OnDemand") };
 
-    private static Day[] GetDays(this byte flags) =>
+    internal static Day[] GetDays(this byte flags, bool haveSundayFirst = false) =>
         flags == Days[0].Flag ? new Day[] { Days[0] } :
-        flags == Days[8].Flag ? new Day[] { Days[8] } :
+        flags >= Days[8].Flag ? new Day[] { Days[8] } :
+        haveSundayFirst ? Days.Where(d => d.Number == 7 && (d.Flag & flags) > 0).Concat(Days.Where(d => d.Number > 0 && d.Number < 7 && (d.Flag & flags) > 0)).ToArray() :
         Days.Where(d => d.Number > 0 && (d.Flag & flags) > 0).ToArray();
 
     public static int DisplayOrder(this byte flags) => ~flags;
 
     public static byte And(this byte flags, byte and) => (byte)(flags & and);
 
-    public static OperationDays OperationDays(this byte flags, CultureInfo? culture = null)
+    public static OperationDays OperationDays(this byte flags, CultureInfo? culture = null) =>
+        OperationDays(flags, false, culture);
+
+    public static OperationDays OperationDays(this byte flags, bool isSundayFirst, CultureInfo? culture = null)
     {
-        if (culture is null) culture = CultureInfo.CurrentCulture;
-        var days = GetDays(flags);
+        culture ??= CultureInfo.CurrentCulture;
+        var days = GetDays(flags, isSundayFirst);
         var isDaily = flags == 0x7F;
         var fullName = new StringBuilder(20);
         var shortName = new StringBuilder(10);
@@ -47,14 +51,14 @@ public static class OperationDaysExtensions
         var and = Strings.ResourceManager.GetString("And", culture) ?? "and";
         if (days.Length == 1)
         {
-            fullName.Append(days[0].FullName(culture));
-            shortName.Append(days[0].ShortName(culture));
+            fullName.Append(days[0].GetLocalizedFullName(culture));
+            shortName.Append(days[0].GetLocalizedShortName(culture));
         }
         else
         {
             var dayNumber = 0;
             var lastDayNumber = days.Last().Number;
-            if (days.IsConsectutive())
+            if (days.IsConsectutive(isSundayFirst))
             {
                 Append(days[0], fullName, shortName, culture);
                 Append(to, "-", fullName, shortName);
@@ -102,8 +106,8 @@ public static class OperationDaysExtensions
     private static void Append(Day day, StringBuilder fullNames, StringBuilder shortNames, CultureInfo culture, bool toLower = false)
     {
 
-        fullNames.Append(toLower && Strings.DayNameCasing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? day.FullName(culture).ToLowerInvariant() : day.FullName(culture));
-        shortNames.Append(day.ShortName(culture));
+        fullNames.Append(toLower && Strings.DayNameCasing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? day.GetLocalizedFullName(culture).ToLowerInvariant() : day.GetLocalizedFullName(culture));
+        shortNames.Append(day.GetLocalizedShortName(culture));
     }
     public static void Append(this string fullText, string shortText, StringBuilder fullNames, StringBuilder shortNames)
     {
@@ -127,14 +131,14 @@ internal class Day
     public byte Number { get; }
     private string FullNameResourceKey { get; }
     private string ShortNameResourceKey { get; }
-    public string ShortName(CultureInfo culture)
+    public string GetLocalizedShortName(CultureInfo culture)
     {
         var resourceManager = Strings.ResourceManager;
         if (resourceManager == null) return string.Empty;
         return resourceManager.GetString(ShortNameResourceKey, culture) ?? string.Empty;
     }
 
-    public string FullName(CultureInfo culture)
+    public string GetLocalizedFullName(CultureInfo culture)
     {
         var resourceManager = Strings.ResourceManager;
         if (resourceManager == null) return string.Empty;
@@ -145,5 +149,7 @@ internal class Day
 
 internal static class DayExtensions
 {
-    public static bool IsConsectutive(this Day[] days) => days.Length == days.Last().Number - days[0].Number + 1;
+    public static bool IsConsectutive(this Day[] days, bool isSundaysFirst = false) =>
+        isSundaysFirst && days[0].Number == 7 ? days.Length == days[^1].Number - days[1].Number + 2 :
+        days.Length == days.Last().Number - days[0].Number + 1;
 }
