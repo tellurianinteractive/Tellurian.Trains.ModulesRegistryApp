@@ -102,11 +102,10 @@ blockquote {
 }
 
 .markdown {
-    margin-top: 1em;
+    margin-top: 0.7em;
 }
     .markdown h1 {
         font-size: 18pt;
-        border-bottom: 1px solid gray;
     }
     .markdown h2 {
         font-size: 14pt;
@@ -125,10 +124,12 @@ blockquote {
         line-height: 12pt;
     }
     .markdown p {
-        line-height: 12pt;
+        line-height: 1.4;
+        margin-top: 4pt;
+        margin-bottom: 4pt;
     }
     .markdown li {
-        line-height: 14pt;
+        line-height: 1.4;
     }
 
 

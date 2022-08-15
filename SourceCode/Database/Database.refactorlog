@@ -28,4 +28,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Accommodation" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="391b3746-bcbe-4bbb-b22e-3cfc30814af1" ChangeDateTime="08/15/2022 19:54:30">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[Description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Details" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="95c994de-f97d-4d2c-85ea-b672b3fb87e6" ChangeDateTime="08/15/2022 19:56:44">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[Accommodation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Accomodation" />
+  </Operation>
 </Operations>

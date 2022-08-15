@@ -1185,4 +1185,7 @@
   <data name="FetchingData" xml:space="preserve">
     <value>Henter data...</value>
   </data>
+  <data name="NoParticipantsRegistered" xml:space="preserve">
+    <value>Ingen deltagere tilmeldt</value>
+  </data>
 </root>

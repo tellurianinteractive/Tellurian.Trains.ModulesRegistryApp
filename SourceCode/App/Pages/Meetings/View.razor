@@ -1,5 +1,7 @@
 ﻿@page "/Meetings/{id:int}/View"
 
+@attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 
@@ -21,31 +23,9 @@ else
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.IsFremo ? $"{Meeting.OrganiserGroup.FullName}/FREMO" : $"{Meeting.OrganiserGroup.FullName}")
     @Item("Status", Meeting.Status.MeetingStatus())
+    <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)"/>
     <MarkdownView Label="Details" Markdown="@Meeting.Details" />
     <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
-
-    @if (Meeting.Layouts.Any())
-    {
-        <hr />
-        <h2><span class="@FontAwesome.Layout" />@Localizer["Layouts"]</h2>
-        @foreach (var item in Meeting.Layouts)
-        {
-            <div style="padding-top: 10pt; border-top: 1px solid black; min-height: 40pt">
-                @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
-                @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
-                @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
-                @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
-                @Item("Organiser", item.ResponsibleGroup.FullName)
-                @Item("Note", item.Note)
-                @Item("OperationTheme", item.Theme)
-                @Item("Period", OperatingPeriod(item))
-            </div>
-            @if (Principal.IsAuthenticated())
-            {
-                <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
-            }
-        }
-    }
 }
 
 @code
@@ -62,8 +42,8 @@ else
         Meeting = await MeetingService.FindByIdAsync(Id);
     }
 
-    string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;
-    string LayoutModulesLink(int id) => $"layouts/{id}/modules";
+    string LayoutsHref(int id) => $"meetings/{id}/layouts/view";
 
-    MarkupString Item(string label, string text, string element = "div") => new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
+    MarkupString Item(string label, string text, string element = "div") => 
+        new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
 }

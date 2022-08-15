@@ -1,0 +1,73 @@
+﻿@page "/Meetings/{id:int}/Layouts/Edit"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject MeetingService MeetingService
+
+<PageHeading Label="Layouts" Owner="@Meeting" IconClass="Layout" />
+@if (Meeting is not null)
+{
+    @if (MayEdit)
+    {
+        <div>
+            <AppButton Label="Add"  Href="@LayoutHref(0)" />
+        </div>
+    }
+    <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">
+        <TableHeader>
+            <th>@Localizer["PrimaryModuleStandard"]</th>
+            <th>@Localizer["ResponsibleGroup"]</th>
+            <th>@Localizer["OperatingPeriod"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="meetingLayout">
+            <td>@meetingLayout.PrimaryModuleStandard.ShortName</td>
+            <td>@meetingLayout.ResponsibleGroup.FullName</td>
+            <td>@OperatingPeriod(meetingLayout)</td>
+            <td>
+                @if (MayEdit)
+                {
+                    <AppButton Label="Edit" Href="@LayoutHref(meetingLayout.Id)" />
+                    <AppButton Label="Modules" Href="@LayoutModulesHref(meetingLayout.Id)" />
+                    <AppButton Label="Waybills" Href="@WaybillsHref(meetingLayout.Id)" />
+                    <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
+                }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+    bool MayEdit;
+    string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
+    string LayoutModulesHref(int id) => $"layouts/{id}/modules";
+    string WaybillsHref(int id) => $"reports/waybills/layout/{id}";
+    string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? new Meeting() : new Meeting();
+        if (Meeting is not null)
+        {
+            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
+        }
+    }
+
+    async Task DeleteLayout(int layoutId)
+    {
+        if (Meeting is not null)
+        {
+            var result = await MeetingService.DeleteLayoutAsync(Principal, Meeting.Id, layoutId);
+            if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Id) ?? new Meeting();
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
+}

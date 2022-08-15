@@ -21,20 +21,17 @@
         <Inputs>
             <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
             <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-            <AppInputFill Width="5" />
+            <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
             <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
-            <AppInputFill Width="1" />
-            <AppInputText Width="6" @bind-Value="Layout.Theme" Label="Theme" />
-            <AppInputText Width="6" @bind-Value="Layout.Note" Label="Note" />
-            <AppInputFill Width="1" />
             <h4>@Localizer["GameSettings"]</h4>
             <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
             <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
-            @*<AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true"/>
-                <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
-                <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />*@
+            <AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true" />
+            <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
+            <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />
+            <AppInputMarkdown @bind-Value="Layout.Note" Label="Note" MaxNumberOfCharacters="@LayoutValidator.MaxNoteLength" />
         </Inputs>
         <Buttons>
 

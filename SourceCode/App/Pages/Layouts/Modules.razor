@@ -9,12 +9,16 @@
 @inject LayoutParticipantService LayoutParticipantService
 @inject LayoutService LayoutService
 
-<PageHeading Label="RegisteredModules" ObjectName="Layout" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading Label="RegisteredModules" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 @if (LayoutParticipants is null)
 {
-
+    <ActionMessage Label="FetchingData" />
 }
-else if (IsParticipant || Principal.IsAnyAdministrator())
+else if (LayoutParticipants.Count() == 0)
+{
+    <ActionMessage Label="NoParticipantsRegistered" />
+}
+else
 {
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.FullName()))
     {
@@ -48,10 +52,6 @@ else if (IsParticipant || Principal.IsAnyAdministrator())
             <ActionMessage Label="NoModulesRegistered" AlertType="warning" />
         }
     }
-}
-else
-{
-    <ActionMessage Label="NotAuthorised" AlertType="warning" />
 }
 
 

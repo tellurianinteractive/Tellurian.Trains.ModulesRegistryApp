@@ -7,8 +7,8 @@
     [EndDate]          DATETIME      NOT NULL,
     [Status]           INT           NOT NULL,
     [IsFremo]          BIT           CONSTRAINT [DF_Meeting_IsFremoMeeting] DEFAULT ((0)) NOT NULL,
-    [Accommodation]    NVARCHAR(MAX) NULL, 
-    [Description]      NVARCHAR(MAX) NULL, 
+    [Accomodation]    NVARCHAR(MAX) NULL, 
+    [Details]      NVARCHAR(MAX) NULL, 
     CONSTRAINT [PK_Meeting] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Meeting_Group] FOREIGN KEY ([OrganiserGroupId]) REFERENCES [dbo].[Group] ([Id])
 );

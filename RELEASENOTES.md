@@ -5,6 +5,10 @@ Release date 2022-08-17
 - **Menu items** previously publicly visible are now accessible only for logged in users.
 - **FAQ** page added.
 - **Text content** formatting improved for better readability.
+- **Meeting** views are splitted over several pages: 1) meeting details, 2) layout details and 3) participants and registered modules.
+- **Layout** can now be described in detail using *markdown*.
+- **Completed translations** of all help- and information texts, 
+except for *Terms of Use* that will continue to be in English only.
 
 #### Version 1.6.13
 Release date 2022-08-15

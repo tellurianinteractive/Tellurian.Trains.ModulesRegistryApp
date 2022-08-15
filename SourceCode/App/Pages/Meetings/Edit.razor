@@ -21,47 +21,14 @@
         <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
         <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
+        <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
-        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.MaxDetailsLength"/>
+        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.MaxDetailsLength" />
         <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.MaxAccomodationLenght" />
     </Inputs>
     <Buttons>
-
     </Buttons>
 </EditTemplate>
-
-
-@if (Meeting is not null)
-{
-    <h3 style="margin-top:12pt"><span class="fa fa-project-diagram" /> @Localizer["Layouts"]</h3>
-    @if (MayEdit)
-    {
-        <div>
-            <AppButton Label="Add" ObjectName="Layout" Href="@LayoutHref(0)"/>
-        </div>
-    }
-    <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">
-        <TableHeader>
-            <th>@Localizer["PrimaryModuleStandard"]</th>
-            <th>@Localizer["ResponsibleGroup"]</th>
-            <th>@Localizer["OperatingPeriod"]</th>
-            <th>@Localizer["Actions"]</th>
-        </TableHeader>
-        <RowTemplate Context="meetingLayout">
-            <td>@meetingLayout.PrimaryModuleStandard.ShortName</td>
-            <td>@meetingLayout.ResponsibleGroup.FullName</td>
-            <td>@OperatingPeriod(meetingLayout)</td>
-            <td>
-                @if (MayEdit)
-                {
-                <AppButton Label="Edit" Href="@LayoutHref(meetingLayout.Id)" />
-                <AppButton Label="Modules" Href="@LayoutModulesHref(meetingLayout.Id)" />
-                <AppButton Label="Waybills" Href="@WaybillsHref(meetingLayout.Id)" />
-                <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
-                }
-        </td>
-    </RowTemplate>
-</TableTemplate>
 }
 
 
@@ -81,7 +48,7 @@
         if (Meeting is not null)
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
-            MayEdit = (Id == 0 && Principal.IsAuthenticated()) ||  (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
+            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
         }
     }
@@ -96,22 +63,10 @@
         }
     }
 
-    async Task DeleteLayout(int layoutId)
-    {
-        if (Meeting is not null)
-        {
-            var result = await MeetingService.DeleteLayoutAsync(Principal, Meeting.Id, layoutId);
-            if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Id) ?? new Meeting();
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
-
-    string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
-    string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
-    string LayoutModulesHref(int id) => $"layouts/{id}/modules";
-    string WaybillsHref(int id) => $"reports/waybills/layout/{id}";
     bool DatesIsLocked(Meeting meeting) =>
         !Principal.IsCountryAdministrator() &&
-        ( meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
+        (meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
           RegisteredModulesCount > 0);
+
+    string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
 }

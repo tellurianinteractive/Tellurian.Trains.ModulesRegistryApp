@@ -6,6 +6,7 @@ namespace ModulesRegistry.Validators;
 
 public class LayoutValidator : AbstractValidator<Layout>
 {
+    public const int MaxNoteLength = 2000;
     public LayoutValidator(IStringLocalizer<App> localizer)
     {
         RuleFor(m => m.MeetingId)
@@ -28,8 +29,7 @@ public class LayoutValidator : AbstractValidator<Layout>
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Theme)]);
         RuleFor(m => m.Note)
-            .MaximumLength(100)
-            .MustBeOrdinaryText(localizer)
+            .MaximumLength(MaxNoteLength)
             .WithName(n => localizer[nameof(n.Note)]);
         RuleFor(m => m.FirstYear)
             .MustBeValidYear(localizer)
