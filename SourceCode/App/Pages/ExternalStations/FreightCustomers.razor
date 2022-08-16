@@ -39,11 +39,11 @@
         <td>
             @if (item.Station.IsExternal)
             {
-                <AppButton Label="Show" Href="@ExternalHref(item.Station.Id, item.Id)" />
+                <AppButton Label="View" Href="@ExternalHref(item.Station.Id, item.Id)" />
             }
             else
             {
-                <AppButton Label="Show" Href="@InternalHref(item.Station.Id, item.Id)" />
+                <AppButton Label="View" Href="@InternalHref(item.Station.Id, item.Id)" />
             }
         </td>
     </RowTemplate>

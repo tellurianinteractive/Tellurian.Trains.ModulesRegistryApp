@@ -2,7 +2,7 @@
 Welcome to the *open source* project for creating a registry for *model railway modules*
 and a *module meeting* magagement tool.
 
-The basic idea is to centralise data storage while decentralise data mnagement. 
+The basic idea is to centralise data storage while decentralise data management. 
 You find the application [here](https://moduleregistry.azurewebsites.net/). 
 It is updated quite frequently, so check out the [release notes](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/RELEASENOTES.md).
 
@@ -20,25 +20,26 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-#### Status June 2022
+#### Status August 2022
 All functions for managing modules are now in place, including:
 * Managing **your modules, stations and station freight customers**.
 * **Transfer of module ownership** - part or whole - to other person or group.
-* **Manage groups and group members**, includinng group member's modules, stations and station freight customers.
-* Administrators can **manage meetings, regions, cargo types, module standards and module end profiles**.
+* **Manage groups and group members**, including group member's modules, stations and station freight customers.
+* Administrators can **manage meetings, external stations, regions, cargo types, module standards and module end profiles**.
 * Users and meeting organisers can **register a participant** and add modules to a layout.
 * **Create waybills** for individual or all stations at a meeting. 
-Take a look at the [**example waybills**](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for past real meetings.
-* Domains **change group visibiliy** for groups within same domain. 
-'FREMO' is currently the only domain and makes all FREMO groups visible across countries.
+Take a look at the [example waybills](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/Examples) created for past real meetings.
+* Domains **change group visibiliy** for groups within same domain. FREMO is domain.
+* **User management** for administrators and regular users.
 * **Help texts** for most forms with recommendation how to enter data.
 * **Supported languages:**
   * in user interface: **English, German, Danish, Swedish and Norwegian**.
   * Cargo types in four additional languages: **French, Dutch, Italian and Polish**.
   * Waybills for **cross border freights are bi-language**, with sender and receiver information in respective language.
 
-#### Planned work
+#### Forthcoming work
 You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
+You are welcome to contribute, there is a [guide](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md) describing different ways to to that.
 
 ## Related Projects
 #### Timetable Planning App
