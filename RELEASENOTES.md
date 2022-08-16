@@ -1,7 +1,7 @@
 ## Release Notes
 
 #### Version 1.6.14
-Release date 2022-08-17
+Release date 2022-08-16
 - **Menu items** previously publicly visible are now accessible only for logged in users.
 - **FAQ** page added.
 - **Text content** formatting improved for better readability.
