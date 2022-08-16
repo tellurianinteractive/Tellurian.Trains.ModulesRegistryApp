@@ -1,7 +1,5 @@
 ﻿@page "/Meetings/{id:int}/View"
 
-@attribute [Authorize(Policy = "User")]
-
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 
@@ -19,9 +17,9 @@ else
     {
         <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
     }
-    @Item("Venue", $"{Meeting.PlaceName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
+    @Item("Venue", $"{Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
-    @Item("Organiser", Meeting.IsFremo ? $"{Meeting.OrganiserGroup.FullName}/FREMO" : $"{Meeting.OrganiserGroup.FullName}")
+    @Item("Organiser", Meeting.Organiser())
     @Item("Status", Meeting.Status.MeetingStatus())
     <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)"/>
     <MarkdownView Label="Details" Markdown="@Meeting.Details" />

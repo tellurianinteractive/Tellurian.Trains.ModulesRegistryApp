@@ -1,6 +1,6 @@
 ﻿namespace ModulesRegistry.Data.Api;
 
-public record Meeting(int Id, string Name, string Location, string Country, string Organiser, DateTime Start, DateTime End, bool IsFremo, string Status)
+public record Meeting(int Id, string Name, string Location, string Country, string Organiser, DateTime Start, DateTime End, string? GroupDomain, string Status)
 {
     public IEnumerable<Layout> Layouts { get; init; } = Array.Empty<Layout>();
 };

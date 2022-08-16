@@ -30,7 +30,7 @@
     <RowTemplate Context="item">
         <td>@item.meeting.Name</td>
         <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
-        <td>@item.meeting.PlaceName</td>
+        <td>@item.meeting.CityName</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
         <td class="@MeetingStatusCssClass(item.meeting)" align="center">@item.meeting.Status.MeetingStatus()</td>
@@ -61,9 +61,6 @@
 
     bool MayDelete(Meeting meeting) =>
         Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
-
-    string MeetingOrganiser(Meeting it) => it.IsFremo ? $"{it.OrganiserGroup.FullName}/FREMO" : it.OrganiserGroup.FullName;
-
     
     string MeetingStatusCssClass(Meeting meeting) =>
         meeting.IsCancelled() ? "meeting cancelled" :

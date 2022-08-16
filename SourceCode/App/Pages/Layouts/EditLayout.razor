@@ -97,7 +97,7 @@
             RegistrationOpeningDate = DefaultRegistrationOpeningDate,
             RegistrationClosingDate = DefaultRegistrationClosingDate
         };
-    string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Name} {Meeting.PlaceName} {Meeting.StartDate.ToString("MMMM yyyy")}";
+    string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Name} {Meeting.CityName} {Meeting.StartDate.ToString("MMMM yyyy")}";
 
     DateTime DefaultRegistrationOpeningDate => Meeting?.StartDate.AddMonths(-6) ?? DateTime.Today;
     DateTime DefaultRegistrationClosingDate => Meeting?.StartDate.AddMonths(-2) ?? DateTime.Today.AddMonths(2);

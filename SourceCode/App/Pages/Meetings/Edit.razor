@@ -14,23 +14,24 @@
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
+        <AppInputText Width="4" Label="Name" @bind-Value="Meeting.Name" />
         <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="true" />
-        <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.PlaceName" />
-        <AppInputText Width="5" Label="Name" @bind-Value="Meeting.Name" />
         <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" />
         <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
+
+        <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
+        <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
-        <AppInputCheck Width="2" @bind-Value="Meeting.IsFremo" Label="IsFremo" />
-        <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
+        <AppInputSelectNullable Width="4" Label="GroupDomain" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
+
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
         <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.MaxDetailsLength" />
         <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.MaxAccomodationLenght" />
     </Inputs>
     <Buttons>
+        <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
     </Buttons>
 </EditTemplate>
-}
-
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -38,6 +39,7 @@
     ClaimsPrincipal? Principal;
     Meeting Meeting = new Meeting();
     IEnumerable<ListboxItem>? OrganiserItems;
+    IEnumerable<ListboxItem>? GroupDomainItems;
     bool MayEdit;
     int RegisteredModulesCount;
 
@@ -50,6 +52,7 @@
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
             MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
+            GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
         }
     }
 

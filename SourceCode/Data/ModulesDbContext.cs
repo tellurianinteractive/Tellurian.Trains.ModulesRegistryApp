@@ -444,6 +444,10 @@ public partial class ModulesDbContext : DbContext
             entity.HasOne(d => d.OrganiserGroup)
                 .WithMany()
                 .HasForeignKey(d => d.OrganiserGroupId);
+
+            entity.HasOne(d => d.GroupDomain)
+                .WithMany()
+                .HasForeignKey(d => d.GroupDomainId);
         });
 
         modelBuilder.Entity<MeetingParticipant>(entity =>

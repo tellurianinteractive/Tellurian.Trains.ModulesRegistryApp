@@ -16,7 +16,7 @@ else
 {
     @foreach (var item in Meeting.Layouts)
     {
-        <div style="padding-top: 10pt; padding-bottom: 6px; border-bottom: 3px solid gray; min-height: 40pt">
+        <div style="padding-top: 10pt; padding-bottom: 6px;">
             @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
             @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
             @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
@@ -29,6 +29,7 @@ else
                 <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
             }
             <MarkdownView Label="Details" Markdown="@item.Note"/>
+            <hr/>
         </div>
     }
 }

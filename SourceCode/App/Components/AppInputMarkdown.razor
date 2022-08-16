@@ -9,7 +9,7 @@
         }
         @if (IsVisible)
         {
-            <textarea rows="20" id="@Label" class="form-control" @bind-value="CurrentValue" @bind-value:event="oninput"></textarea>
+            <textarea rows="5" id="@Label" class="form-control" @bind-value="CurrentValue" @bind-value:event="oninput"></textarea>
         }
     </div>
     <div class="col-6" style="@PreviewCss">

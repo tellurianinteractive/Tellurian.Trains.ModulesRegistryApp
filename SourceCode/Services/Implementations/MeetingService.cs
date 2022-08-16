@@ -15,9 +15,13 @@ public class MeetingService
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Meetings.Where(m => m.EndDate > TimeProvider.Now && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
-            .Select(m => new Data.Api.Meeting(
-                m.Id, m.Name, m.PlaceName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.IsFremo, ((MeetingStatus)m.Status).ToString().AsLocalized())
-            { Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note) { FirstYear=l.FirstYear, LastYear=l.LastYear}) })
+            .Include(m => m.GroupDomain)
+            .Select(m =>
+                new Data.Api.Meeting(m.Id, m.Name, m.CityName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.GroupDomain.Name, ((MeetingStatus)m.Status).ToString().AsLocalized())
+                {
+                    Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)
+                    { FirstYear = l.FirstYear, LastYear = l.LastYear })
+                })
             .ToListAsync()
             .ConfigureAwait(false);
     }
@@ -38,13 +42,14 @@ public class MeetingService
 
     public async Task<Meeting?> FindByIdAsync(int id)
     {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings.AsNoTracking()
-                 .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
-                 .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
-                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
-                 .SingleOrDefaultAsync(m => m.Id == id)
-                 .ConfigureAwait(false);
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Meetings.AsNoTracking()
+             .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
+             .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
+             .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
+             .Include(m => m.GroupDomain)
+             .SingleOrDefaultAsync(m => m.Id == id)
+             .ConfigureAwait(false);
     }
 
     public async Task<Meeting?> FindByIdWithLayoutsAsync(ClaimsPrincipal? principal, int id)

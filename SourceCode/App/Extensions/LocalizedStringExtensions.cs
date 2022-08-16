@@ -53,7 +53,7 @@ public static class LocalizedStringExtensions
             Group g => g.FullName,
             Station s => s.FullName,
             ExternalStation es => es.FullName,
-            Meeting m => $"{m.Name} {m.PlaceName}, {m.StartDate:MMMM yyyy}",
+            Meeting m => $"{m.Name} {m.CityName}, {m.StartDate:MMMM yyyy}",
             Module mo => mo.FullName,
             Region r => r.LocalName,
             Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",

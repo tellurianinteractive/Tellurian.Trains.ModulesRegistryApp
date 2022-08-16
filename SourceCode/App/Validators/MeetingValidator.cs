@@ -13,22 +13,24 @@ public class MeetingValidator : AbstractValidator<Meeting>
         RuleFor(m => m.OrganiserGroupId)
             .MustBeSelected(localizer)
             .WithName(n => localizer["Organiser"]);
-        RuleFor(m => m.PlaceName)
+        RuleFor(m => m.CityName)
             .NotEmpty()
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .WithName(n => localizer["Venue"]);
+            .WithName(n => localizer[nameof(n.CityName)]);
+        RuleFor(m => m.VenueName)
+           .MaximumLength(50)
+           .MustBeOrdinaryText(localizer)
+           .WithName(n => localizer[nameof(n.VenueName)]);
         RuleFor(m => m.Name)
             .NotEmpty()
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Name)]);
         RuleFor(m => m.Details)
-            .NotEmpty()
             .MaximumLength(MaxDetailsLength)
             .WithName(n => localizer[nameof(n.Details)]);
         RuleFor(m => m.Accomodation)
-            .NotEmpty()
             .MaximumLength(MaxAccomodationLenght)
             .WithName(n => localizer[nameof(n.Accomodation)]);
         RuleFor(m => m.StartDate)

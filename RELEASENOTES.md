@@ -6,6 +6,7 @@ Release date 2022-08-16
 - **FAQ** page added.
 - **Text content** formatting improved for better readability.
 - **Meeting** views are splitted over several pages: 1) meeting details, 2) layout details and 3) participants and registered modules.
+- **Meeting** *isFremo* checkbox replaced with selecting a *group domain*, for example FREMO if the meeting is a FREMO-meeting.
 - **Layout** can now be described in detail using *markdown*.
 - **Completed translations** of all help- and information texts, 
 except for *Terms of Use* that will continue to be in English only.
