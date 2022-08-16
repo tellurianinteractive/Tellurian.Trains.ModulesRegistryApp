@@ -62,13 +62,13 @@ else
         {
             <TableTemplate Items="@PersonsLayoutParticipation">
                 <TableHeader>
-                    <th>@Localizer["Layout"]</th>
-                    <th>@Localizer["Note"]</th>
-                    <th>@Localizer["Actions"]</th>
+                    <th width="15%">@Localizer["Layout"]</th>
+                    <th>@Localizer["Details"]</th>
+                    <th width="100px">@Localizer["Actions"]</th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
-                    <td>@item.Layout?.Note</td>
+                    <td><MarkdownView Markdown="@item.Layout?.Note"/></td>
                     <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
                 </RowTemplate>
             </TableTemplate>
