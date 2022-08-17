@@ -238,7 +238,7 @@
     <value>Ist Datenadministrator?</value>
   </data>
   <data name="City" xml:space="preserve">
-    <value>Wohnort</value>
+    <value>Ort</value>
   </data>
   <data name="Community" xml:space="preserve">
     <value>Gemeinschaft</value>
@@ -271,7 +271,7 @@
     <value>Aktionen</value>
   </data>
   <data name="CityName" xml:space="preserve">
-    <value>Wohnort</value>
+    <value>Ort</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>

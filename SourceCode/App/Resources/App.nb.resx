@@ -241,7 +241,7 @@
     <value>Er dataadministrator?</value>
   </data>
   <data name="City" xml:space="preserve">
-    <value>Hjemsted</value>
+    <value>Sted</value>
   </data>
   <data name="Community" xml:space="preserve">
     <value>Samfunnsorganisasjon</value>
@@ -271,7 +271,7 @@
     <value>Handlinger</value>
   </data>
   <data name="CityName" xml:space="preserve">
-    <value>Hjemsted</value>
+    <value>Stednavn</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Etternavn</value>

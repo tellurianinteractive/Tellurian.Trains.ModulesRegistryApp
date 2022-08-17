@@ -145,7 +145,7 @@
     <value>Email</value>
   </data>
   <data name="CityName" xml:space="preserve">
-    <value>City</value>
+    <value>City name</value>
   </data>
   <data name="IsUser" xml:space="preserve">
     <value>Is user?</value>
