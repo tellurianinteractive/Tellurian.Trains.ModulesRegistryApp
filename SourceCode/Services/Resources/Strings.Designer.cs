@@ -844,6 +844,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internal meeting.
+        /// </summary>
+        internal static string Internal {
+            get {
+                return ResourceManager.GetString("Internal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Italy.
         /// </summary>
         internal static string Italy {
@@ -1299,6 +1308,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string ReeferContainers40 {
             get {
                 return ResourceManager.GetString("ReeferContainers40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registration closed.
+        /// </summary>
+        internal static string RegistrationClosed {
+            get {
+                return ResourceManager.GetString("RegistrationClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registration open.
+        /// </summary>
+        internal static string RegistrationOpen {
+            get {
+                return ResourceManager.GetString("RegistrationOpen", resourceCulture);
             }
         }
         

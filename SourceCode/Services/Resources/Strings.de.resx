@@ -675,4 +675,13 @@
   <data name="WhenNeededShort" xml:space="preserve">
     <value>Bei Bedarf</value>
   </data>
+  <data name="Internal" xml:space="preserve">
+    <value>Internes Treffen</value>
+  </data>
+  <data name="RegistrationOpen" xml:space="preserve">
+    <value>Anmeldung geöffnet</value>
+  </data>
+  <data name="RegistrationClosed" xml:space="preserve">
+    <value>Anmeldung geschlossen</value>
+  </data>
 </root>

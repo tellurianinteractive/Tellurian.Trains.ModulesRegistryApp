@@ -4,6 +4,10 @@ namespace ModulesRegistry.Data;
 
 public partial class StationCustomerCargo
 {
+    public static StationCustomerCargo Default(int customerId) => 
+        new () { StationCustomerId = customerId, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8, TrackOrAreaColor = "#FFFFFF" };
+
+
     public StationCustomerCargo()
     {
     }

@@ -15,6 +15,7 @@ public partial class Country
     public string EnglishName { get; set; }
     public string DomainSuffix { get; set; }
     public string Languages { get; set; }
+    public bool IsFullySupported { get; set; }
 
     public virtual ICollection<Group> Groups { get; set; }
     public virtual ICollection<Person> People { get; set; }

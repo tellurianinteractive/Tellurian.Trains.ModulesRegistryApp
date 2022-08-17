@@ -22,9 +22,9 @@
         <th>@Localizer["Meeting"]</th>
         <th>@Localizer["Country"]</th>
         <th>@Localizer["Venue"]</th>
-        <th>@Localizer["StartDate"]</th>
-        <th>@Localizer["EndDate"]</th>
-        <th>@Localizer["Status"]</th>
+        <th style ="text-align: center">@Localizer["StartDate"]</th>
+        <th style="text-align: center">@Localizer["EndDate"]</th>
+        <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
@@ -33,7 +33,7 @@
         <td>@item.meeting.CityName</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
-        <td class="@MeetingStatusCssClass(item.meeting)" align="center">@item.meeting.Status.MeetingStatus()</td>
+        <td class="@MeetingStatusCssClass(item.meeting)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td>
         <td>
             <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
             @if (item.meeting.MayRegister(TimeProvider.Now.DateTime, Principal))
@@ -61,11 +61,8 @@
 
     bool MayDelete(Meeting meeting) =>
         Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
-    
-    string MeetingStatusCssClass(Meeting meeting) =>
-        meeting.IsCancelled() ? "meeting cancelled" :
-        meeting.IsOpenForRegistration(TimeProvider.Now.Date) ? "meeting open" :
-        "meeting closed";
+
+    string MeetingStatusCssClass(Meeting meeting) => $"meeting {meeting.StatusResourceName(TimeProvider.LocalTime).ToLowerInvariant()}";
 
     string MeetingHref(int id, string? function) =>
         string.IsNullOrWhiteSpace(function) ? $"meetings/{id}" : $"meetings/{id}/{function}";

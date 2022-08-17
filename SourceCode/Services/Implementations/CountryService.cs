@@ -18,8 +18,11 @@ public sealed class CountryService
     {
         if (principal is null) return Array.Empty<ListboxItem>();
         using var dbContext = Factory.CreateDbContext();
-        var countries = await dbContext.Countries.ToListAsync();
-        return countries.AsEnumerable().Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id)).Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized())).ToList();
+        var countries = await dbContext.Countries.AsNoTracking().ToListAsync();
+        return countries.AsEnumerable()
+            .Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id))
+            .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
+            .ToList();
     }
 
     public async Task<IEnumerable<CountryStatistics>> GetCountryStatisticsAsync()

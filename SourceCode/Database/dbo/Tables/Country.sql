@@ -4,6 +4,7 @@
     [DomainSuffix] NCHAR (2)     NOT NULL,
     [Languages]    NVARCHAR (10) NULL,
     [TimeZoneName] NVARCHAR (50) NULL,
+    [IsFullySupported] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

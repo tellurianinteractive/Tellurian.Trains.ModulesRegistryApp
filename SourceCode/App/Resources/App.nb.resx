@@ -1194,4 +1194,10 @@
   <data name="GroupDomain" xml:space="preserve">
     <value>Gruppedomene</value>
   </data>
+  <data name="InPartnershipWith" xml:space="preserve">
+    <value>I samarbeid med</value>
+  </data>
+  <data name="IsOrganiserInternal" xml:space="preserve">
+    <value>Er internt for arrangøren?</value>
+  </data>
 </root>

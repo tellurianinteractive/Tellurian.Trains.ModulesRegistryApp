@@ -675,4 +675,13 @@
   <data name="WhenNeededShort" xml:space="preserve">
     <value>Vid behov</value>
   </data>
+  <data name="Internal" xml:space="preserve">
+    <value>Intern träff</value>
+  </data>
+  <data name="RegistrationOpen" xml:space="preserve">
+    <value>Anmälan öppen</value>
+  </data>
+  <data name="RegistrationClosed" xml:space="preserve">
+    <value>Anmälan stängd</value>
+  </data>
 </root>

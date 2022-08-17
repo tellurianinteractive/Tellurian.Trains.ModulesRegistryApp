@@ -19,16 +19,16 @@
         <th>@Localizer["NHMCode"]</th>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["DefaultClasses"]</th>
-        <th>@Localizer["FromYear"]</th>
-        <th>@Localizer["UptoYear"]</th>
+        <th style="text-align: center">@Localizer["FromYear"]</th>
+        <th style="text-align: center">@Localizer["UptoYear"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="cargo">
         <td>@cargo.NhmCodeOrEmpty()</td>
         <td>@cargo.LocalizedName()</td>
         <td>@cargo.DefaultClasses</td>
-        <td>@cargo.FromYear</td>
-        <td>@cargo.UptoYear</td>
+        <td style="text-align: center">@cargo.FromYear</td>
+        <td style="text-align: center">@cargo.UptoYear</td>
         <td>
             @if (MayEdit)
             {

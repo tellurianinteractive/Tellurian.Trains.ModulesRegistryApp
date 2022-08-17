@@ -25,11 +25,11 @@ else
             <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
             <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
             <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
-            <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@ReadyTimeLabel(cargo)" ShowPleaseSelect="true" Items="ReadyTimeItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@cargo.ReadyTimeLabel()" ShowPleaseSelect="true" Items="ReadyTimeItems" />
 
             <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
             <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
-            <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@BackColor(cargo)" TextColor="@BackColor(cargo).TextColor()" />
+            <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@cargo.TrackOrAreaBackColour()" TextColor="@cargo.TrackOrAreaForeColor()" />
             <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="OtherColor" />
             <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="OtherFromYear" />
             <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="OtherUptoYear" />
@@ -65,7 +65,7 @@ else
     {
         if (Customer is not null)
         {
-            Customer.StationCustomerCargos.Add(DefaultCustomerCargo);
+            Customer.StationCustomerCargos.Add(StationCustomerCargo.Default(Customer.Id));
         }
     }
 
@@ -91,17 +91,6 @@ else
         }
     }
 
-    StationCustomerCargo DefaultCustomerCargo => new StationCustomerCargo { StationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, ReadyTimeId = 1, OperatingDayId = 8, TrackOrAreaColor = "#FFFFFF" };
-
     string AddButtonText => $"{Localizer["Add"]} {Localizer["CargoFlow"].ToString().ToLowerInvariant()}";
 
-    string? BackColor(StationCustomerCargo cargo) =>
-        cargo is not null && cargo.TrackOrArea.HasValue() && cargo.TrackOrAreaColor.HasValue() && cargo.TrackOrAreaColor != "#ffffff" ? cargo.TrackOrAreaColor :
-        Customer is not null && cargo?.TrackOrArea.HasValue() == true && Customer.TrackOrArea.Equals(cargo?.TrackOrArea) && Customer.TrackOrAreaColor.HasValue() ? Customer?.TrackOrAreaColor : null;
-
-    string? TrackOrArea(StationCustomerCargo cargo) =>
-        cargo is not null && cargo.TrackOrArea.HasValue() ? cargo.TrackOrArea :
-        Customer is not null && Customer.TrackOrArea.HasValue() ? Customer.TrackOrArea : null;
-
-    string? ReadyTimeLabel(StationCustomerCargo cargo) => cargo is null ? null : cargo.IsUnloading() ? "UnloadingReady" : "LoadingReady";
 }

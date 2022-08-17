@@ -32,7 +32,10 @@ public static class StringExtensions
     public static bool IsHexColor([NotNullWhen(true)] this string? maybeColor) =>
         !string.IsNullOrWhiteSpace(maybeColor) && Regex.IsMatch(maybeColor, HexColorRegEx);
 
-    public static bool IsWhiteColor([NotNullWhen(true)] this string? maybeColor) => string.IsNullOrWhiteSpace(maybeColor) || maybeColor.ToUpperInvariant() == "#FFFFFF";
+    public static bool IsWhiteColor([NotNullWhen(true)] this string? maybeColor) => 
+        string.IsNullOrWhiteSpace(maybeColor) || 
+        maybeColor.ToUpperInvariant() == "#FFFFFF" ||
+        maybeColor.Equals("white", StringComparison.OrdinalIgnoreCase);
 
     #endregion
 }

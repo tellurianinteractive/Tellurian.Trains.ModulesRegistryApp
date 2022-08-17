@@ -11,10 +11,11 @@ public class MeetingService
         TimeProvider = timeProvider;
     }
 
-    public async Task<IEnumerable<Data.Api.Meeting>> Meetings(int? countryId)
+    public async Task<IEnumerable<Data.Api.Meeting>> GetMeetingsAsync(int? countryId)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Meetings.Where(m => m.EndDate > TimeProvider.Now && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
+        return await dbContext.Meetings.AsNoTracking()
+            .Where(m => m.EndDate > TimeProvider.Now && !m.IsOrganiserInternal && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
             .Include(m => m.GroupDomain)
             .Select(m =>
                 new Data.Api.Meeting(m.Id, m.Name, m.CityName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.GroupDomain.Name, ((MeetingStatus)m.Status).ToString().AsLocalized())
@@ -33,12 +34,22 @@ public class MeetingService
             .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
-            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
+            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator || gm.PersonId == principal.PersonId()))
             .Include(m => m.Layouts)
             .ToListAsync()
             .ConfigureAwait(false);
-        return meetings.Select(m => (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()), m));
+        return meetings.Where(m => principal.IsAnyAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
+            .Select(m =>
+            (
+                principal.IsGlobalAdministrator() ||
+                principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) ||
+                m.OrganiserGroup.GroupMembers.Any(gm => (gm.IsGroupAdministrator || gm.IsDataAdministrator) && gm.PersonId == principal.PersonId())
+            , m)
+        );
     }
+
+
+
 
     public async Task<Meeting?> FindByIdAsync(int id)
     {
@@ -129,7 +140,6 @@ public class MeetingService
         }
         static async Task<(int Count, string Message, Meeting? Entity)> UpdateExisting(ModulesDbContext dbContext, Meeting entity, Meeting existing)
         {
-            if (IsMovedTooFarInTime(existing, entity)) return (0, "MeetingDatesCannotBeChanged", entity);
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
             AddOrRemoveLayouts(dbContext, entity, existing);
             if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
@@ -152,9 +162,6 @@ public class MeetingService
         static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>
                 dbContext.Entry(entity).State == EntityState.Unchanged &&
                 entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged);
-
-        static bool IsMovedTooFarInTime(Meeting existing, Meeting entity) =>
-            Math.Abs((existing.StartDate - entity.StartDate).TotalDays) > 7 || Math.Abs((existing.EndDate - entity.EndDate).TotalDays) > 7;
     }
 
     public async Task<(int Count, string? Message)> DeleteLayoutAsync(ClaimsPrincipal? principal, int meetingId, int layoutId)

@@ -56,46 +56,64 @@ a, .btn-link {
 .fa {
     padding-right: 4pt;
 }
+
 .btn {
-    margin-right:5px;
+    margin-right: 5px;
 }
+
 .icon {
     width: 32px;
     height: 32px;
     margin-right: 6px;
 }
+
 h1 {
     font-size: 24pt;
     font-weight: bold;
 }
+
 h2 {
     font-size: 18pt;
     font-weight: bold;
 }
+
 h3 {
     font-size: 14pt;
     font-weight: bold;
 }
+
 h4 {
     font-size: 14pt;
     font-weight: bold;
 }
 
 .meeting {
+}
 
-}
-.meeting.open {
-    color: green;
-}
-.meeting.closed {
-    color: black;
-}
-.meeting.cancelled {
-    color: red;
-}
+    .meeting.internal {
+        color: darkgray;
+    }
+
+    .meeting.approved {
+        color: green;
+    }
+
+    .meeting.registrationopen {
+        color: darkgreen;
+        font-weight: bold;
+    }
+
+    .meeting.registrationclosed {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .meeting.canceled {
+        color: red;
+        font-weight: bold;
+    }
 
 blockquote {
-
     padding-left: 10px;
     border-left: 3px solid red;
     color: red
@@ -104,32 +122,36 @@ blockquote {
 .markdown {
     margin-top: 0.7em;
 }
+
     .markdown h1 {
         font-size: 18pt;
     }
+
     .markdown h2 {
         font-size: 14pt;
         font-weight: bold;
         line-height: 14pt;
     }
+
     .markdown h3 {
         font-size: 12pt;
         font-weight: bold;
         line-height: 12pt;
     }
+
     .markdown h4 {
         font-size: 12pt;
         font-weight: normal;
         text-decoration: underline;
         line-height: 12pt;
     }
+
     .markdown p {
         line-height: 1.4;
         margin-top: 4pt;
         margin-bottom: 4pt;
     }
+
     .markdown li {
         line-height: 1.4;
     }
-
-

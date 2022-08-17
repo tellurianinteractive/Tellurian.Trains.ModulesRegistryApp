@@ -26,18 +26,18 @@
     <TableTemplate Items="ExternalStations">
         <TableHeader>
             <th>@Localizer["Name"]</th>
-            <th>@Localizer["Signature"]</th>
+            <th style="text-align: center">@Localizer["Signature"]</th>
             <th>@Localizer["Note"]</th>
-            <th>@Localizer["OpenedYear"]</th>
-            <th>@Localizer["ClosedYear"]</th>
+            <th style="text-align: center">@Localizer["OpenedYear"]</th>
+            <th style="text-align: center">@Localizer["ClosedYear"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.FullName</td>
-            <td>@item.Signature</td>
+            <td style="text-align: center">@item.Signature</td>
             <td>@item.Note</td>
-            <td>@item.OpenedYear</td>
-            <td>@item.ClosedYear</td>
+            <td style="text-align: center">@item.OpenedYear</td>
+            <td style="text-align: center">@item.ClosedYear</td>
             <td>
                 @if (MayEdit)
                 {

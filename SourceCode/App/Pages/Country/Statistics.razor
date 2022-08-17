@@ -13,20 +13,20 @@ else
     <TableTemplate Items="CountryStatistics.OrderByDescending(cs => cs.ModulesCount)">
         <TableHeader>
             <th colspan="2">@Localizer["Country"] </th>
-            <th>@Localizer["Modules"] </th>
-            <th>@Localizer["Stations"] </th>
-            <th>@Localizer["CargoCustomers"] </th>
-            <th>@Localizer["ExternalStations"] </th>
-            <th>@Localizer["ExternalFreightCustomers"] </th>
+            <th style="text-align: center">@Localizer["Modules"] </th>
+            <th style="text-align: center">@Localizer["Stations"] </th>
+            <th style="text-align: center">@Localizer["CargoCustomers"] </th>
+            <th style="text-align: center">@Localizer["ExternalStations"] </th>
+            <th style="text-align: center">@Localizer["ExternalFreightCustomers"] </th>
         </TableHeader>
         <RowTemplate Context="item">
             <td width="5%"><img src="@FlagSrc(item)" /></td>
-            <td width="15%">@item.EnglishName.AsLocalized()</td>
-            <td width="15%">@item.ModulesCount</td>
-            <td width="15%">@item.StationsCount</td>
-            <td width="15%">@item.StationCustomersCount</td>
-            <td width="15%">@item.ExternalStationsCount</td>
-            <td width="15%">@item.ExternalCustomersCount</td>
+            <td width="10%">@item.EnglishName.AsLocalized()</td>
+            <td width="15%" style="text-align: center">@item.ModulesCount</td>
+            <td width="15%" style="text-align: center">@item.StationsCount</td>
+            <td width="15%" style="text-align: center">@item.StationCustomersCount</td>
+            <td width="15%" style="text-align: center">@item.ExternalStationsCount</td>
+            <td width="15%" style="text-align: center">@item.ExternalCustomersCount</td>
         </RowTemplate>
     </TableTemplate>
 }

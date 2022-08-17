@@ -53,7 +53,7 @@ else
     {
         if (Customer is not null)
         {
-            Customer.ExternalStationCustomerCargos.Add(DefaultCustomerCargo);
+            Customer.ExternalStationCustomerCargos.Add(ExternalStationCustomerCargo.Default(Customer.Id));
             StateHasChanged();
         }
 
@@ -68,8 +68,5 @@ else
         }
     }
 
-    ExternalStationCustomerCargo DefaultCustomerCargo => new ExternalStationCustomerCargo { ExternalStationCustomerId = Customer!.Id, DirectionId = 1, QuantityUnitId = 4, OperatingDayId = 8 };
     string AddButtonText => $"{Localizer["Add"]} {Localizer["CargoFlow"].ToString().ToLowerInvariant()}";
-
-    string? ReadyTimeLabel(StationCustomerCargo cargo) => cargo is null ? null : cargo.DirectionId == 1 || cargo.DirectionId == 4 ? "UnloadingReady" : "LoadingReady";
 }

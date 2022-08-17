@@ -1,5 +1,12 @@
 ## Release Notes
 
+#### version 1.6.15
+Release date 2022-08-17
+- **Meeting** can now be flagged as *internal* for the organising group. 
+Only logged in group members will see this meeting and can register.
+- **Meeting Status** extended and show now if meeting is *open* or *closed* for registration.
+A meeting is closed for registration when all layouts are closed for registration.
+
 #### Version 1.6.14
 Release date 2022-08-16
 - **Menu items** previously publicly visible are now accessible only for logged in users.

@@ -17,7 +17,7 @@ public class MeetingController : ControllerBase
     [Route("{countryId:int?}", Order = 1)]
     public async Task<IActionResult> Index(int? countryId)
     {
-        var meetings = await MeetingService.Meetings(countryId > 0 ? countryId : null);
+        var meetings = await MeetingService.GetMeetingsAsync(countryId > 0 ? countryId : null);
         if (meetings.Any()) return Ok(meetings);
         return NotFound();
     }

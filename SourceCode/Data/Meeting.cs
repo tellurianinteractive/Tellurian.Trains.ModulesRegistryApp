@@ -12,6 +12,7 @@ public class Meeting
 
     public int Id { get; set; }
     public int OrganiserGroupId { get; set; }
+    public bool IsOrganiserInternal { get; set; }
     public int? GroupDomainId { get; set; }
     public string CityName { get; set; }
     public string VenueName { get; set; }
@@ -31,9 +32,7 @@ public class Meeting
 
 public static class MeetingExtensions
 {
-    public static string Organiser(this Meeting? me) =>
-        me is null ? string.Empty :
-        me.GroupDomainId.HasValue ? $"{me.OrganiserGroup.FullName}/{me.GroupDomain?.Name}" : 
-        $"{me.OrganiserGroup.FullName}";
+
+    
 }
 

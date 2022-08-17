@@ -136,6 +136,8 @@
     <Build Include="dbo\Listboxes\RegionRepresentialExternStationListbox.sql" />
     <Build Include="dbo\Tables\CargoPackagingUnit.sql" />
     <Build Include="dbo\Listboxes\ListCargoPackagingUnit.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.CargoPackagingUnit.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
