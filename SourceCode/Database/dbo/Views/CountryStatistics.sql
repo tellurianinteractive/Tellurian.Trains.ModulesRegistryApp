@@ -11,6 +11,8 @@ SELECT Modules.EnglishName, Modules.DomainSuffix, COALESCE(ModulesCount, 0) AS M
 				LEFT JOIN Person AS P ON P.CountryId = C.Id
 				LEFT JOIN ModuleOwnership AS MO ON MO.PersonId = P.Id
 				LEFT JOIN Module AS M ON M.Id = MO.ModuleId
+			WHERE
+				C.IsFullySupported <> 0
 			UNION
 			SELECT 
 				C.EnglishName, C.DomainSuffix, M.Id
@@ -19,6 +21,8 @@ SELECT Modules.EnglishName, Modules.DomainSuffix, COALESCE(ModulesCount, 0) AS M
 				LEFT JOIN [Group] AS G ON G.CountryId = C.Id
 				LEFT JOIN ModuleOwnership AS MO ON MO.GroupId = G.Id
 				LEFT JOIN Module AS M ON M.Id = MO.ModuleId
+			WHERE
+				C.IsFullySupported <> 0
 		) AS M
 	GROUP BY
 		M.EnglishName, M.DomainSuffix

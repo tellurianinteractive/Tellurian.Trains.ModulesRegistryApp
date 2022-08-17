@@ -18,7 +18,7 @@ public sealed class CountryService
     {
         if (principal is null) return Array.Empty<ListboxItem>();
         using var dbContext = Factory.CreateDbContext();
-        var countries = await dbContext.Countries.AsNoTracking().Where(c => c.IsFullySupported).ToListAsync();
+        var countries = await dbContext.Countries.AsNoTracking().Where(c => c.IsFullySupported).ToListAsync().ConfigureAwait(false);
         return countries.AsEnumerable()
             .Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id))
             .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
