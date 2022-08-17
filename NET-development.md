@@ -1,5 +1,7 @@
 # .NET Development
-*By Stefan Fjällemark, Tellurian Interactive AB, Sweden, August 2022*
+*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, August 2022*
+
+> *Updated 2022-08-17 with more information about SQL Server projects*
 
 This article aim to describe technology choices, when developing software in modern .NET.
 At the time of writing 2022, all new .NET development should use .NET 6 or later.
@@ -38,9 +40,13 @@ Visual Studio is a Windows only application, but there is also a separate versio
 - **SQL Server** has a free *developer edition* that is a full featured version with some limitations. 
 There is also a free *express edition* ideal for smaller applications. 
 SQL Server also has a cloud version but no free tier, the smallest SQL Server cloud database
-const around €5 per month.
+cost around €5 per month.
 - **SQL Server Management Studio** is a free Windows application for SQL Server database creation and management.
 It works with both local databases and cloud databases. It will be installed with the *SQL Server Developer Edition*.
+- **Visual Studio** has great support for building and maintaing databases in *Microsoft SQL Server*. 
+Firstly, you have similar access to the database as with *Sql Server Management Studio*, and 
+secondly, there is a special *Database* project type, which you can maintain your SQL code
+with version control and deploy updates and migrations to your existing database or create new ones.
 
 ### User interfaces
 There are a lot of ways to create applications  with a user interface with .NET. 
@@ -48,6 +54,7 @@ The main factor is the target platform you intend to build software for:
 - **Windows only**: You intend to develop an application that should only run on Windows machines.
 - **Web**: The application should be accessible in a web browser.
 - **Cross platform**: Your app should run on *ioS*, *Andriod*, *masOs* and/or *Windows*.
+
 ##### Technologies:
 - **Windows Forms** is a simple and fast way to create Windows only applications with simple forms.
 - **Windows Presentation Foundation** abbreviate **WPF** is a more advanced way to create 
@@ -133,3 +140,4 @@ handling issues, project plans etc. GitHub is free to use for most hobbyist proj
 - **[gPRC on .NET](https://docs.microsoft.com/en-us/aspnet/core/grpc/)**
 - **[GitHub](https://github.com/)**
 - **[SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)**
+- **[SQL Server Database projects](https://docs.microsoft.com/en-us/visualstudio/data-tools/creating-and-managing-databases-and-data-tier-applications-in-visual-studio)**
