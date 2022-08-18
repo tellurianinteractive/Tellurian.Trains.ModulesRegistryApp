@@ -2,6 +2,7 @@
 
 namespace ModulesRegistry.Data;
 
+// TODO: Used for waybill creation, not mapped to an entity. Maybe move to another namespace/localtion?
 public class CargoCustomer
 {
     public string Name { get; set; } = string.Empty;

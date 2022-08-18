@@ -19,7 +19,7 @@
 {
     <EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
         <Inputs>
-            <AppInputSelect Width="4" @bind-Value="Layout.ResponsibleGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
+            <AppInputSelect Width="4" @bind-Value="Layout.OrganisingGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
             <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
             <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
@@ -31,7 +31,7 @@
             <AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true" />
             <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
             <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />
-            <AppInputMarkdown @bind-Value="Layout.Note" Label="Note" MaxNumberOfCharacters="@LayoutValidator.MaxNoteLength" />
+            <AppInputMarkdown @bind-Value="Layout.Details" Label="Note" MaxNumberOfCharacters="@LayoutValidator.MaxNoteLength" />
         </Inputs>
         <Buttons>
 
@@ -93,7 +93,7 @@
     Layout DefaultLayout(Meeting meeting) => new Layout
         {
             MeetingId = MeetingId,
-            ResponsibleGroupId = meeting.OrganiserGroupId,
+            OrganisingGroupId = meeting.OrganiserGroupId,
             RegistrationOpeningDate = DefaultRegistrationOpeningDate,
             RegistrationClosingDate = DefaultRegistrationClosingDate
         };

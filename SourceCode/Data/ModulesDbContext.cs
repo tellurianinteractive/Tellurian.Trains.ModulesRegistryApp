@@ -16,7 +16,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<CargoPackagingUnit> CargoPackagingUnits { get; set; }
     public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
     public virtual DbSet<CargoRelation> CargoRelations { get; set; }
-    public virtual DbSet<QuantityUnit> CargoUnits { get; set; }
+    public virtual DbSet<CargoQuantityUnit> CargoUnits { get; set; }
     public virtual DbSet<Country> Countries { get; set; }
     public virtual DbSet<CountryStatistics> CountriesStatistics { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
@@ -66,280 +66,22 @@ public partial class ModulesDbContext : DbContext
     {
         modelBuilder.HasAnnotation("Relational:Collation", "Finnish_Swedish_CI_AS");
 
-        modelBuilder.Entity<Cargo>(entity =>
-        {
-            entity.ToTable("Cargo");
-
-            entity.Property(e => e.DefaultClasses).HasMaxLength(10);
-            entity.Property(e => e.NhmCode).HasColumnName("NHMCode");
-
-            entity.Property(e => e.EN)
-                .HasMaxLength(50)
-                .HasColumnName("EN");
-
-            entity.Property(e => e.DA)
-                .HasMaxLength(50)
-                .HasColumnName("DA");
-
-            entity.Property(e => e.DE)
-                .HasMaxLength(50)
-                .HasColumnName("DE");
-
-            entity.Property(e => e.NL)
-                 .HasMaxLength(50)
-                 .HasColumnName("NL");
-
-            entity.Property(e => e.NB)
-                 .HasMaxLength(50)
-                 .HasColumnName("NB");
-
-            entity.Property(e => e.PL)
-                 .HasMaxLength(50)
-                 .HasColumnName("PL");
-
-            entity.Property(e => e.SV)
-                .HasMaxLength(50)
-                .HasColumnName("SV");
-
-            entity.HasOne<NHM>()
-                .WithMany()
-                .HasForeignKey(e => e.NhmCode);
-        });
-
-        modelBuilder.Entity<CargoDirection>(entity =>
-        {
-            entity.ToTable("CargoDirection");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(10);
-
-            entity.Property(e => e.ShortName)
-                .IsRequired()
-                .HasMaxLength(4);
-        });
-
-        modelBuilder.Entity<CargoPackagingUnit>(entity =>
-        {
-            entity.ToTable("CargoPackagingUnit");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.SingularResourceCode)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.PluralResourceCode)
-                .IsRequired()
-                .HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<CargoReadyTime>(entity =>
-        {
-            entity.ToTable("CargoReadyTime");
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(20);
-
-            entity.Property(e => e.ShortName)
-                .IsRequired()
-                .HasMaxLength(10);
-        });
-
-        modelBuilder.Entity<CargoRelation>(entity =>
-        {
-            entity.ToTable("CargoRelation");
-
-            entity.HasOne(d => d.OperatingDay)
-                .WithMany()
-                .HasForeignKey(d => d.OperatingDayId);
-
-            entity.HasOne(d => d.SupplierStationCustomerCargo)
-               .WithMany()
-               .HasForeignKey(d => d.SupplierStationCustomerCargoId);
-
-            entity.HasOne(d => d.ConsumerStationCustomerCargo)
-                 .WithMany()
-                 .HasForeignKey(d => d.ConsumerStationCustomerCargoId);
-        });
-
-        modelBuilder.Entity<QuantityUnit>(entity =>
-        {
-            entity.ToTable("CargoUnit");
-
-            entity.Property(e => e.Designation)
-                .IsRequired()
-                .HasMaxLength(6);
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(12);
-        });
-
-        modelBuilder.Entity<Country>(entity =>
-        {
-            entity.ToTable("Country");
-
-            entity.Property(e => e.DomainSuffix)
-                .IsRequired()
-                .HasMaxLength(2)
-                .IsFixedLength(true);
-
-            entity.Property(e => e.EnglishName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Languages)
-                .HasMaxLength(10);
-        });
-
-        modelBuilder.Entity<CountryStatistics>(entity =>
-        {
-            entity.ToView("CountryStatistics").HasNoKey();
-        });
-
-        modelBuilder.Entity<Document>(entity =>
-        {
-            entity.ToTable("Document");
-
-            entity.Property(e => e.FileExtension)
-                .IsRequired()
-                .HasMaxLength(5)
-                .IsFixedLength(true);
-        });
-
-        modelBuilder.Entity<ExternalStation>(entity =>
-        {
-            entity.ToTable("ExternalStation");
-
-            entity.Property(e => e.Note).HasMaxLength(20);
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Signature)
-                .IsRequired()
-                .HasMaxLength(6);
-
-            entity.HasOne(d => d.Region)
-                .WithMany(p => p.ExternalStations)
-                .HasForeignKey(d => d.RegionId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<ExternalStationCustomer>(entity =>
-        {
-            entity.ToTable("ExternalStationCustomer");
-
-            entity.Property(e => e.CustomerName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.HasOne(d => d.ExternalStation)
-                .WithMany(p => p.ExternalStationCustomers)
-                .HasForeignKey(d => d.ExternalStationId);
-        });
-
-        modelBuilder.Entity<ExternalStationCustomerCargo>(entity =>
-        {
-            entity.ToTable("ExternalStationCustomerCargo");
-
-            entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
-
-            entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
-
-            entity.HasOne(e => e.Cargo)
-                .WithMany()
-                .HasForeignKey(d => d.CargoId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.Direction)
-                .WithMany()
-                .HasForeignKey(d => d.DirectionId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.ExternalStationCustomer)
-                .WithMany(p => p.ExternalStationCustomerCargos)
-                .HasForeignKey(d => d.ExternalStationCustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.OperatingDay)
-                .WithMany()
-                .HasForeignKey(d => d.OperatingDayId);
-
-            entity.HasOne(e => e.QuantityUnit)
-                .WithMany()
-                .HasForeignKey(d => d.QuantityUnitId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<Group>(entity =>
-        {
-            entity.ToTable("Group");
-
-            entity.Property(e => e.Category)
-                .IsRequired()
-                .HasMaxLength(20);
-
-            entity.Property(e => e.CityName).HasMaxLength(50);
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.ShortName).HasMaxLength(10);
-
-            entity.HasOne(d => d.Country)
-                .WithMany(p => p.Groups)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Group_Country");
-
-            entity.HasOne(d => d.GroupDomain)
-                .WithMany(p => p.Groups)
-                .HasForeignKey(d => d.GroupDomainId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        modelBuilder.Entity<GroupDomain>(entity => entity.ToTable("GroupDomain"));
-
-        modelBuilder.Entity<GroupMember>(entity =>
-        {
-            entity.ToTable("GroupMember");
-
-            entity.HasOne(d => d.Group)
-                .WithMany(p => p.GroupMembers)
-                .HasForeignKey(d => d.GroupId);
-
-            entity.HasOne(d => d.Person)
-                .WithMany(p => p.GroupMembers)
-                .HasForeignKey(d => d.PersonId)
-                .OnDelete(DeleteBehavior.NoAction);
-        });
-
-        modelBuilder.Entity<Layout>(entity =>
-        {
-            entity.Property(e => e.Note)
-                .HasMaxLength(50);
-
-            entity.ToTable("Layout");
-
-            entity.HasOne(d => d.Meeting)
-                .WithMany(p => p.Layouts)
-                .HasForeignKey(d => d.MeetingId);
-
-            entity.HasOne(d => d.ResponsibleGroup)
-                .WithMany()
-                .HasForeignKey(d => d.ResponsibleGroupId);
-
-            entity.HasOne(d => d.PrimaryModuleStandard)
-                .WithMany()
-                .HasForeignKey(d => d.PrimaryModuleStandardId);
-        });
+        modelBuilder.MapCargo();
+        modelBuilder.MapCargoDirection();
+        modelBuilder.MapCargoPackagingUnit();
+        modelBuilder.MapCargoQuantityUnit();
+        modelBuilder.MapCargoReadyTime();
+        modelBuilder.MapCargoRelation();
+        modelBuilder.MapCountry();
+        modelBuilder.MapCountryStatistics();
+        modelBuilder.MapDocument();
+        modelBuilder.MapExternalStation();
+        modelBuilder.MapExternalStationCustomer();
+        modelBuilder.MapExternalStationCustomerCargo();
+        modelBuilder.MapGroup();
+        modelBuilder.MapGroupDomain();
+        modelBuilder.MapGroupMember();
+        modelBuilder.MapLayout();
 
         modelBuilder.Entity<LayoutLine>(entity =>
         {
@@ -780,7 +522,9 @@ public partial class ModulesDbContext : DbContext
                 .HasForeignKey(d => d.StationId);
         });
 
-        _ = modelBuilder.Entity<StationCustomerCargo>(entity =>
+        modelBuilder.MapStationCustomerWaybill();
+
+        modelBuilder.Entity<StationCustomerCargo>(entity =>
           {
               entity.ToTable("StationCustomerCargo");
 
@@ -816,7 +560,7 @@ public partial class ModulesDbContext : DbContext
                   .OnDelete(DeleteBehavior.ClientSetNull);
 
               entity.HasOne(d => d.StationCustomer)
-                  .WithMany(p => p.StationCustomerCargos)
+                  .WithMany(p => p.Cargos)
                   .HasForeignKey(d => d.StationCustomerId)
                   .OnDelete(DeleteBehavior.Cascade);
 

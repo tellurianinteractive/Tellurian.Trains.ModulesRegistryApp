@@ -2,7 +2,8 @@
 Ein Modultreffen ist ein einmaliges Ereignis mit einem Start- und einem Enddatum.
 Das erste und letzte Datum für die Registrierung von Modulen gilt pro Layout.
 
-> HINWEIS: Sie können die Sitzungstage nicht ändern, wenn Module angemeldet sind oder später als sieben Tage vor dem ersten Sitzungsdatum.
+> HINWEIS: Sie können das Treffendatum nicht ändern, wenn Module angemeldet sind 
+> oder später als sieben Tage vor dem ersten Datum des Treffens.
 
 ### Gleisanlage
 Sie können beliebig viele Gleisanlage hinzufügen.

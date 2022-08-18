@@ -42,8 +42,8 @@ public static class StationCustomerProjections
             me.Station.Region is not null ? new RegionInfo(me.Station.Region.LocalName, me.Station.Region.ForeColor, me.Station.Region.BackColor) : new RegionInfo("", "#000000", "#FAFAFA")
         );
 
-    private static string SupplyingCargo(this StationCustomer customer) => customer.StationCustomerCargos.Count > 0 ? string.Join(", ", customer.StationCustomerCargos.Where(escc => escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
-    private static string ConsumingCargo(this StationCustomer customer) => customer.StationCustomerCargos.Count > 0 ? string.Join(", ", customer.StationCustomerCargos.Where(escc => !escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
+    private static string SupplyingCargo(this StationCustomer customer) => customer.Cargos.Count > 0 ? string.Join(", ", customer.Cargos.Where(escc => escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
+    private static string ConsumingCargo(this StationCustomer customer) => customer.Cargos.Count > 0 ? string.Join(", ", customer.Cargos.Where(escc => !escc.Direction.IsSupply).Select(escc => CargoName(escc)).Distinct()) : Strings.None;
 
     private static string CargoName(this StationCustomerCargo? it) => it is null ? string.Empty : it.Cargo.NhmCode == 0 ? $"{it.Cargo.LocalizedName().Value} ({it.QuantityUnit.FullName.AsLocalized().ToLowerInvariant()})" : it.Cargo.LocalizedName().Value;
     private static string OpenPeriod(this StationCustomer? it) => it is null ? string.Empty : it.OpenedYear.HasValue || it.ClosedYear.HasValue ? $"{it.OpenedYear}-{it.ClosedYear}" : string.Empty;

@@ -26,6 +26,10 @@
     "identityapp1": {
       "ignored": "true",
       "type": "identityapp"
+    },
+    "apis1": {
+      "ignored": "true",
+      "type": "apis.azure"
     }
   }
 }

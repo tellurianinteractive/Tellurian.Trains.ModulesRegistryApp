@@ -20,7 +20,7 @@ public class MeetingService
             .Select(m =>
                 new Data.Api.Meeting(m.Id, m.Name, m.CityName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.GroupDomain.Name, ((MeetingStatus)m.Status).ToString().AsLocalized())
                 {
-                    Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Note)
+                    Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Details)
                     { FirstYear = l.FirstYear, LastYear = l.LastYear })
                 })
             .ToListAsync()
@@ -55,7 +55,7 @@ public class MeetingService
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Meetings.AsNoTracking()
-             .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
+             .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
              .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
@@ -121,7 +121,7 @@ public class MeetingService
         static async Task<(int Count, string Message, Meeting? Entity)> AddOrUpdate(ModulesDbContext dbContext, Meeting entity)
         {
             var existing = await dbContext.Meetings
-                .Include(m => m.Layouts).ThenInclude(l => l.ResponsibleGroup)
+                .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup)
                 .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
                 .SingleOrDefaultAsync(m => m.Id == entity.Id)

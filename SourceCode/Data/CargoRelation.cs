@@ -1,7 +1,8 @@
-﻿#nullable disable
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
 
+#nullable disable
 public partial class CargoRelation
 {
     public int Id { get; set; }
@@ -16,4 +17,27 @@ public partial class CargoRelation
     public virtual OperatingDay OperatingDay { get; set; }
     public virtual Operator Operator { get; set; }
     public virtual StationCustomerCargo SupplierStationCustomerCargo { get; set; }
+}
+
+#nullable enable
+
+internal static class CargoRelationMapper
+{
+    public static void MapCargoRelation(this ModelBuilder builder) =>
+        builder.Entity<CargoRelation>(entity =>
+        {
+            entity.ToTable("CargoRelation");
+
+            entity.HasOne(d => d.OperatingDay)
+                .WithMany()
+                .HasForeignKey(d => d.OperatingDayId);
+
+            entity.HasOne(d => d.SupplierStationCustomerCargo)
+               .WithMany()
+               .HasForeignKey(d => d.SupplierStationCustomerCargoId);
+
+            entity.HasOne(d => d.ConsumerStationCustomerCargo)
+                 .WithMany()
+                 .HasForeignKey(d => d.ConsumerStationCustomerCargoId);
+        });
 }

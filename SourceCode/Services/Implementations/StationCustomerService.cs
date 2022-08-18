@@ -14,7 +14,7 @@ public class StationCustomerService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.StationCustomers.AsNoTracking()
-                .Include(sc => sc.StationCustomerCargos).ThenInclude(scc => scc.Cargo)
+                .Include(sc => sc.Cargos).ThenInclude(scc => scc.Cargo)
                 .Where(sc => sc.StationId == stationId && (customerId == 0 || sc.Id == customerId))
                 .ToListAsync();
         }
@@ -26,7 +26,7 @@ public class StationCustomerService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).AsNoTracking().SingleOrDefaultAsync(sc => sc.Id == id);
+            return await dbContext.StationCustomers.Include(sc => sc.Cargos).AsNoTracking().SingleOrDefaultAsync(sc => sc.Id == id);
         }
         return null;
     }
@@ -42,9 +42,9 @@ public class StationCustomerService
             var items = await dbContext.StationCustomers.AsNoTracking()
                 .Where(sc => (countryId == 0 || sc.Station.Region.CountryId == countryId))
                 .OrderBy(sc => sc.Station.FullName).ThenBy(esc => esc.CustomerName)
-                .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Direction)
-                .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.Cargo)
-                .Include(sc => sc.StationCustomerCargos).ThenInclude(escc => escc.QuantityUnit)
+                .Include(sc => sc.Cargos).ThenInclude(escc => escc.Direction)
+                .Include(sc => sc.Cargos).ThenInclude(escc => escc.Cargo)
+                .Include(sc => sc.Cargos).ThenInclude(escc => escc.QuantityUnit)
                 .Include(sc => sc.Station).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
                 .ToListAsync();
             return items.Select(i => i.ToFreightCustomerInfo());
@@ -79,7 +79,7 @@ public class StationCustomerService
         {
             var station = await dbContext.Stations.FindAsync(entity.StationId);
             if (station is null) return principal.SaveNotAuthorised<StationCustomer>();
-            var existing = dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).SingleOrDefault(sc => sc.Id == entity.Id);
+            var existing = dbContext.StationCustomers.Include(sc => sc.Cargos).SingleOrDefault(sc => sc.Id == entity.Id);
             return existing is null ?
                 await AddNew(dbContext, principal, station, entity) :
                 await UpdateExisting(dbContext, principal, station, entity, existing);
@@ -103,19 +103,19 @@ public class StationCustomerService
 
         static void AddOrRemoveCustomerCargos(ModulesDbContext dbContext, StationCustomer entity, StationCustomer existing)
         {
-            foreach (var cargo in entity.StationCustomerCargos)
+            foreach (var cargo in entity.Cargos)
             {
                 cargo.TrackOrAreaColor = cargo.TrackOrAreaColor?.ToLowerInvariant();
-                var current = existing.StationCustomerCargos.AsQueryable().FirstOrDefault(scc => scc.Id == cargo.Id);
-                if (current is null) existing.StationCustomerCargos.Add(cargo);
+                var current = existing.Cargos.AsQueryable().FirstOrDefault(scc => scc.Id == cargo.Id);
+                if (current is null) existing.Cargos.Add(cargo);
                 else dbContext.Entry(current).CurrentValues.SetValues(cargo);
             }
-            foreach (var cargo in existing.StationCustomerCargos) if (!entity.StationCustomerCargos.Any(st => st.Id == cargo.Id)) dbContext.Remove(cargo);
+            foreach (var cargo in existing.Cargos) if (!entity.Cargos.Any(st => st.Id == cargo.Id)) dbContext.Remove(cargo);
         }
 
         static bool IsUnchanged(ModulesDbContext dbContext, StationCustomer customer) =>
             dbContext.Entry(customer).State == EntityState.Unchanged &&
-            customer.StationCustomerCargos.All(scc => dbContext.Entry(scc).State == EntityState.Unchanged);
+            customer.Cargos.All(scc => dbContext.Entry(scc).State == EntityState.Unchanged);
     }
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int customerId)
@@ -123,10 +123,10 @@ public class StationCustomerService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.StationCustomers.Include(sc => sc.StationCustomerCargos).SingleOrDefaultAsync(sc => sc.Id == customerId);
+            var existing = await dbContext.StationCustomers.Include(sc => sc.Cargos).SingleOrDefaultAsync(sc => sc.Id == customerId);
             if (existing is not null)
             {
-                foreach (var cargoflow in existing.StationCustomerCargos) dbContext.StationCustomerCargos.Remove(cargoflow);
+                foreach (var cargoflow in existing.Cargos) dbContext.StationCustomerCargos.Remove(cargoflow);
                 dbContext.StationCustomers.Remove(existing);
                 var result = await dbContext.SaveChangesAsync();
                 return result.DeleteResult();

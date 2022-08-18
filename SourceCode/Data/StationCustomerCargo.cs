@@ -32,7 +32,7 @@ public partial class StationCustomerCargo
     public virtual Cargo Cargo { get; set; }
     public virtual CargoDirection Direction { get; set; }
     public virtual OperatingDay OperatingDay { get; set; }
-    public virtual QuantityUnit QuantityUnit { get; set; }
+    public virtual CargoQuantityUnit QuantityUnit { get; set; }
     public virtual CargoReadyTime ReadyTime { get; set; }
     public virtual StationCustomer StationCustomer { get; set; }
 }

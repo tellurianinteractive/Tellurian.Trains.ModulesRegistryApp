@@ -21,7 +21,7 @@ else
     <div class="row g-3">
         <AppDisplay Width="4" Label="Comment" Value="@Customer.Comment" HideLabelIfValueIsEmpty="true" />
     </div>
-    <TableTemplate Items="Customer.StationCustomerCargos.OrderBy(scc => scc.DirectionId)" RowStyle="ItemStyle">
+    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="ItemStyle">
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>

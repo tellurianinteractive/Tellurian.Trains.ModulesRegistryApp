@@ -21,14 +21,14 @@ else
             @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
             @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
             @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
-            @Item("Organiser", item.ResponsibleGroup.FullName)
+            @Item("Organiser", item.OrganisingGroup.FullName)
             @Item("OperationTheme", item.Theme)
             @Item("Period", OperatingPeriod(item))
             @if (Principal.IsAuthenticated())
             {
                 <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
             }
-            <MarkdownView Label="Details" Markdown="@item.Note"/>
+            <MarkdownView Label="Details" Markdown="@item.Details"/>
             <hr/>
         </div>
     }

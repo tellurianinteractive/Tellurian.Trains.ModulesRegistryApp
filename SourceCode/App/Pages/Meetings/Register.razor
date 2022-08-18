@@ -68,7 +68,7 @@ else
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
-                    <td><MarkdownView Markdown="@item.Layout?.Note"/></td>
+                    <td><MarkdownView Markdown="@item.Layout?.Details"/></td>
                     <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
                 </RowTemplate>
             </TableTemplate>

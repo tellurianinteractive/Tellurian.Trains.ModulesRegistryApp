@@ -2,7 +2,8 @@
 Et modultræf er en enkelt lejlighed med en start- og en slutdato.
 Første og sidste dato for tilmelding af moduler er pr. banelayout.
 
-> BEMÆRK: Du vil ikke kunne ændre mødedagene, når moduler er tilmeldt eller senere end syv dage før første mødedato.
+> BEMÆRK: Du vil ikke kunne ændre træfdato, når moduler er tilmeldt 
+> eller senere end syv dage før første træfdato.
 
 ### Banelayouts
 Du kan tilføje et hvilket som helst antal banelayouts.

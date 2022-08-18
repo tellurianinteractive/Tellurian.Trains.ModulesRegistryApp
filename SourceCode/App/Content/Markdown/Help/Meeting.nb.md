@@ -2,7 +2,8 @@
 Et modultreff er en enkelt anledning med en start- og en sluttdato.
 Første og siste dato for å registrere moduler er per baneopsett.
 
-> MERK: Du vil ikke kunne endre møtedagene når moduler registreres eller senere enn syv dager før første møtedato.
+> MERK: Du vil ikke kunne endre treffdato når moduler registreres eller 
+> senere enn syv dager før første treffdato.
 
 ### Baneoppsett
 Du kan legge til et hvilket som helst antall baneoppsett.

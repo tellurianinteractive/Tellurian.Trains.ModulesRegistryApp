@@ -4,9 +4,9 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
-@inject NavigationManager Navigation
-
 @inject PersonService PersonService
+
+@inject PageHistory PageHistory
 
 <PageHeading ObjectName="Person" Owner="@Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" />
 
@@ -44,6 +44,6 @@ else
         var result = await PersonService.DeleteAsync(Principal, Id.Value);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
-        Navigation.NavigateTo("/Persons/Index");
+        if (PageHistory.CanNavigateBack) PageHistory.NavigateBack();
     }
 }

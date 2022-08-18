@@ -1,7 +1,8 @@
-﻿#nullable disable
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
 
+#nullable disable
 public partial class Country
 {
     public Country()
@@ -20,4 +21,27 @@ public partial class Country
     public virtual ICollection<Group> Groups { get; set; }
     public virtual ICollection<Person> People { get; set; }
     public virtual ICollection<Region> Regions { get; set; }
+}
+
+#nullable enable
+
+internal static class CountryMapper
+{
+    public static void MapCountry(this ModelBuilder builder) =>
+        builder.Entity<Country>(entity =>
+        {
+            entity.ToTable("Country");
+
+            entity.Property(e => e.DomainSuffix)
+                .IsRequired()
+                .HasMaxLength(2)
+                .IsFixedLength(true);
+
+            entity.Property(e => e.EnglishName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Languages)
+                .HasMaxLength(10);
+        });
 }

@@ -13,7 +13,7 @@ else
     <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
         <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
     </div>
-    @foreach (var cargo in Customer.StationCustomerCargos)
+    @foreach (var cargo in Customer.Cargos)
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
@@ -43,7 +43,7 @@ else
             }
         </div>
     }
-    @if (Customer.StationCustomerCargos.Count > 0)
+    @if (Customer.Cargos.Count > 0)
     {
         <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
             <button type="button" class="btn btn-sm btn-secondary" @onclick="AddCargoFlow"><span class="@FontAwesome.Add" /> @AddButtonText</button>
@@ -65,7 +65,7 @@ else
     {
         if (Customer is not null)
         {
-            Customer.StationCustomerCargos.Add(StationCustomerCargo.Default(Customer.Id));
+            Customer.Cargos.Add(StationCustomerCargo.Default(Customer.Id));
         }
     }
 
@@ -73,11 +73,11 @@ else
     {
         if (Customer is not null && id > 0)
         {
-            var existing = Customer.StationCustomerCargos.SingleOrDefault(scc => scc.Id == id);
+            var existing = Customer.Cargos.SingleOrDefault(scc => scc.Id == id);
             if (existing is not null)
             {
                 var cloned = existing.Clone();
-                Customer.StationCustomerCargos.Add(cloned);
+                Customer.Cargos.Add(cloned);
             }
         }
     }
@@ -86,8 +86,8 @@ else
     {
         if (Customer is not null && id > 0)
         {
-            var item = Customer.StationCustomerCargos.SingleOrDefault(scc => scc.Id == id);
-            if (item is not null) Customer.StationCustomerCargos.Remove(item);
+            var item = Customer.Cargos.SingleOrDefault(scc => scc.Id == id);
+            if (item is not null) Customer.Cargos.Remove(item);
         }
     }
 

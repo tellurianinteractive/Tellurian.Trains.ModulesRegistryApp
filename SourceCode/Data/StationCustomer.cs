@@ -6,7 +6,8 @@ public partial class StationCustomer
 {
     public StationCustomer()
     {
-        StationCustomerCargos = new HashSet<StationCustomerCargo>();
+        Cargos = new HashSet<StationCustomerCargo>();
+        Waybills = new HashSet<StationCustomerWaybill>();
     }
 
     public int Id { get; set; }
@@ -20,5 +21,7 @@ public partial class StationCustomer
     public short? ClosedYear { get; set; }
 
     public virtual Station Station { get; set; }
-    public virtual ICollection<StationCustomerCargo> StationCustomerCargos { get; set; }
+    public virtual ICollection<StationCustomerCargo> Cargos { get; set; }
+    public virtual ICollection<StationCustomerWaybill> Waybills { get; set; }
+
 }

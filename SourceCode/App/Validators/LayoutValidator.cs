@@ -12,9 +12,9 @@ public class LayoutValidator : AbstractValidator<Layout>
         RuleFor(m => m.MeetingId)
             .MustBeSelected(localizer)
             .WithName(n => localizer["Meeting"]);
-        RuleFor(m => m.ResponsibleGroupId)
+        RuleFor(m => m.OrganisingGroupId)
             .MustBeSelected(localizer)
-            .WithName(n => localizer[nameof(n.ResponsibleGroup)]);
+            .WithName(n => localizer[nameof(n.OrganisingGroup)]);
         RuleFor(m => m.PrimaryModuleStandardId)
             .MustBeSelected(localizer)
             .WithName(n => localizer[nameof(n.PrimaryModuleStandard)]);
@@ -28,9 +28,9 @@ public class LayoutValidator : AbstractValidator<Layout>
             .MaximumLength(100)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Theme)]);
-        RuleFor(m => m.Note)
+        RuleFor(m => m.Details)
             .MaximumLength(MaxNoteLength)
-            .WithName(n => localizer[nameof(n.Note)]);
+            .WithName(n => localizer[nameof(n.Details)]);
         RuleFor(m => m.FirstYear)
             .MustBeValidYear(localizer)
             .WithName(n => localizer[nameof(n.FirstYear)]);

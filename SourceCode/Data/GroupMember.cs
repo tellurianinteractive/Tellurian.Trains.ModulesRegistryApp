@@ -1,7 +1,8 @@
-﻿#nullable disable
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
 
+#nullable disable
 public partial class GroupMember
 {
     public int Id { get; set; }
@@ -13,4 +14,24 @@ public partial class GroupMember
 
     public virtual Group Group { get; set; }
     public virtual Person Person { get; set; }
+}
+
+#nullable enable
+
+internal static class GroupMemberMapper
+{
+    public static void MapGroupMember(this ModelBuilder builder) =>
+        builder.Entity<GroupMember>(entity =>
+        {
+            entity.ToTable("GroupMember");
+
+            entity.HasOne(d => d.Group)
+                .WithMany(p => p.GroupMembers)
+                .HasForeignKey(d => d.GroupId);
+
+            entity.HasOne(d => d.Person)
+                .WithMany(p => p.GroupMembers)
+                .HasForeignKey(d => d.PersonId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
 }

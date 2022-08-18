@@ -1,7 +1,8 @@
-﻿#nullable disable
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
 
+#nullable disable
 public partial class ExternalStationCustomerCargo
 {
     public static ExternalStationCustomerCargo Default(int customerId) => 
@@ -24,7 +25,7 @@ public partial class ExternalStationCustomerCargo
     public virtual CargoDirection Direction { get; set; }
     public virtual ExternalStationCustomer ExternalStationCustomer { get; set; }
     public virtual OperatingDay OperatingDay { get; set; }
-    public virtual QuantityUnit QuantityUnit { get; set; }
+    public virtual CargoQuantityUnit QuantityUnit { get; set; }
 }
 
 #nullable enable
@@ -49,6 +50,41 @@ public static class ExternalStationCustomerCargoExtensions
 
     public static string QuantityUnit(this ExternalStationCustomerCargo? it, IEnumerable<ListboxItem>? quantityUnitItems) 
         => it is not null && quantityUnitItems is not null ? quantityUnitItems.SingleOrDefault(i => i.Id == it.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
+}
 
+internal static class ExternalStationCustomerCargoMapper
+{
+    public static void MapExternalStationCustomerCargo(this ModelBuilder builder) =>
+        builder.Entity<ExternalStationCustomerCargo>(entity =>
+        {
+            entity.ToTable("ExternalStationCustomerCargo");
 
+            entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
+
+            entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
+
+            entity.HasOne(e => e.Cargo)
+                .WithMany()
+                .HasForeignKey(d => d.CargoId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Direction)
+                .WithMany()
+                .HasForeignKey(d => d.DirectionId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.ExternalStationCustomer)
+                .WithMany(p => p.ExternalStationCustomerCargos)
+                .HasForeignKey(d => d.ExternalStationCustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.OperatingDay)
+                .WithMany()
+                .HasForeignKey(d => d.OperatingDayId);
+
+            entity.HasOne(e => e.QuantityUnit)
+                .WithMany()
+                .HasForeignKey(d => d.QuantityUnitId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
 }

@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.6.16
+Release date 2022-08-18
+- This release is a preparation phase for the fortcoming waybill functionality.
+- 
 #### version 1.6.15
 Release date 2022-08-17
 - **Meeting** can now be flagged as *internal* for the organising group. 
