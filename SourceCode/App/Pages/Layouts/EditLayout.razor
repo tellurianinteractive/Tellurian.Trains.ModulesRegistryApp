@@ -10,6 +10,7 @@
 @inject GroupService GroupService
 @inject ModuleStandardService ModuleStandardService
 @inject OperatingDayService OperatingDayService
+@inject PersonService PersonService
 
 
 
@@ -19,8 +20,9 @@
 {
     <EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
         <Inputs>
-            <AppInputSelect Width="4" @bind-Value="Layout.OrganisingGroupId" Label="Organiser" Items="ResponsibleGroupItems" />
+            <AppInputSelect Width="4" @bind-Value="Layout.OrganisingGroupId" Label="ResponsibleGroup" Items="ResponsibleGroupItems" />
             <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
+            <AppInputSelectNullable Width="3" @bind-Value="Layout.ContactPersonId" Label="ContactPerson" Items="ContactPersonItems" ShowNoneOption=true />
             <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
@@ -51,6 +53,8 @@
     IEnumerable<ListboxItem>? ResponsibleGroupItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
     IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? ContactPersonItems;
+
 
     bool MayEdit;
 
@@ -62,11 +66,12 @@
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
+                Layout = Id > 0 ? Meeting.Layouts.SingleOrDefault(l => l.Id == Id) ?? DefaultLayout(Meeting) : DefaultLayout(Meeting);
                 ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
                 ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
                 OperatingDayItems = await OperatingDayService.BasicDaysItemsAsync();
+                ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Layout.OrganisingGroupId);
                 MayEdit = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
-                Layout = Id > 0 ? Meeting.Layouts.SingleOrDefault(l => l.Id == Id) ?? DefaultLayout(Meeting) : DefaultLayout(Meeting);
             }
             else
             {
@@ -79,6 +84,8 @@
         }
     }
 
+
+
     async Task OnValidSubmit()
     {
         if (Meeting is not null && Layout is not null)
@@ -86,6 +93,7 @@
             Meeting.Layouts.Add(Layout);
             var result = await LayoutService.SaveAsync(Principal, Layout);
             Layout = result.Entity;
+            ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Meeting.OrganiserGroupId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }

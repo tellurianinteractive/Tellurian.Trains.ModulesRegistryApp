@@ -1,0 +1,97 @@
+﻿@page "/Stations/Waybills/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject PageHistory PageHistory
+
+@inject StationCustomerService StationCustomerService
+@inject CargoService CargoService
+@inject RegionService RegionService
+@inject OperatingDayService OperatingDayService
+@inject StationService StationService
+
+<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+
+<div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+    <AppButton Label="Add" OnClickCallback="AddWaybill" />
+</div>
+
+@if (Customer is null)
+{
+    <ActionMessage Label="LoadingData" />
+}
+else if (Customer.Waybills.Count() == 0)
+{
+    <ActionMessage Label="NoRecordsToDisplay" />
+}
+else
+{
+    <EditTemplate Item="Customer">
+        <Inputs></Inputs>
+        <SubInputs>
+            <CustomerWaybillEdit Customer="Customer" MyCargoItems="MyCargoItems" OperatingDayItems="OperatingDayItems" RegionItems="RegionItems" />
+        </SubInputs>
+    </EditTemplate>
+    
+}        
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Station? Station;
+    StationCustomer? Customer;
+
+    IEnumerable<ListboxItem>? MyCargoItems;
+    IEnumerable<ListboxItem>? RegionItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StationId > 0 && Id > 0)
+        {
+            Station = await StationService.FindByIdAsync(Principal, StationId);
+            if (Station is null) return;
+
+            Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+            if (Customer?.Cargos is not null)
+            {
+                MyCargoItems = Customer.Cargos.Select(c => new ListboxItem(c.Id, c.ShortDescription())).OrderBy(l => l.Description).ToList();
+            }
+            RegionItems = await RegionService.ListboxItemsAsync(Principal, Station.Region?.CountryId);
+        }
+    }
+
+    async Task GenerateWaybills()
+    {
+
+
+        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+    }
+
+
+    void AddWaybill()
+    {
+        if (Customer is not null)
+        {
+            Customer.Waybills.Add(StationCustomerWaybill.Default(Customer.Id));
+        }
+        StateHasChanged();
+    }
+
+    IEnumerable<ListboxItem>? MyFreights =>
+        Customer is null ? Enumerable.Empty<ListboxItem>() :
+        Customer.Cargos.Select(c => new ListboxItem(c.Id, c.ShortDescription()));
+
+}

@@ -13,10 +13,10 @@ public class StationCustomerService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomers.AsNoTracking()
+            return await dbContext.StationCustomers
                 .Include(sc => sc.Cargos).ThenInclude(scc => scc.Cargo)
                 .Where(sc => sc.StationId == stationId && (customerId == 0 || sc.Id == customerId))
-                .ToListAsync();
+                .ToReadOnlyListAsync();
         }
         return Array.Empty<StationCustomer>();
     }
@@ -27,9 +27,8 @@ public class StationCustomerService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.StationCustomers.AsNoTracking()
-                .Include(sc => sc.Cargos)
-                .Include(sc => sc.Waybills)
-                .SingleOrDefaultAsync(sc => sc.Id == id);
+                .Include(sc => sc.Cargos).ThenInclude(c => c.Cargo)
+                .ReadOnlySingleOrDefaultAsync(sc => sc.Id == id);
         }
         return null;
     }
@@ -42,14 +41,14 @@ public class StationCustomerService
         {
             var countryId = maybeCountryId ?? principal.CountryId();
             using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.StationCustomers.AsNoTracking()
+            var items = await dbContext.StationCustomers
                 .Where(sc => (countryId == 0 || sc.Station.Region.CountryId == countryId))
                 .OrderBy(sc => sc.Station.FullName).ThenBy(esc => esc.CustomerName)
                 .Include(sc => sc.Cargos).ThenInclude(escc => escc.Direction)
                 .Include(sc => sc.Cargos).ThenInclude(escc => escc.Cargo)
                 .Include(sc => sc.Cargos).ThenInclude(escc => escc.QuantityUnit)
                 .Include(sc => sc.Station).ThenInclude(es => es.Region).ThenInclude(r => r.Country)
-                .ToListAsync();
+                .ToReadOnlyListAsync();
             return items.Select(i => i.ToFreightCustomerInfo());
         }
         return Array.Empty<FreightCustomerInfo>();
@@ -60,13 +59,14 @@ public class StationCustomerService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomerWaybills.AsNoTracking()
+            return await dbContext.StationCustomerWaybills
                 .Where(s => s.StationCustomerId == customerId)
                 .Include(s => s.OtherRegion)
                 .Include(s => s.OperatingDay)
                 .Include(s => s.StationCustomerCargo)
                 .Include(s => s.OtherCustomerCargo)
-                .ToListAsync();
+                .ToReadOnlyListAsync();
+            ;
 
         }
         return Array.Empty<StationCustomerWaybill>();

@@ -1,5 +1,55 @@
-﻿<h3>View</h3>
+﻿@page "/Meetings/{id:int}/Layouts/View"
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject MeetingService MeetingService
+@inject GroupService GroupService
+
+<PageHeading Label="Layouts" Owner="@Meeting" IconClass="Layout" />
+
+@if (Meeting is null || Meeting.Layouts.Count() == 0)
+{
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else
+{
+    @foreach (var item in Meeting.Layouts)
+    {
+        <div style="padding-top: 10pt; padding-bottom: 6px;">
+            @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
+            @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
+            @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
+            @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
+            @Item("Organiser", item.OrganisingGroup.FullName)
+            @if (item.ContactPersonId.HasValue) @Item("ContactPerson", item.ContactPerson.Name())
+            @Item("OperationTheme", item.Theme)
+            @Item("Period", OperatingPeriod(item))
+            @if (Principal.IsAuthenticated())
+            {
+                <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
+            }
+            <MarkdownView Label="Details" Markdown="@item.Details"/>
+            <hr/>
+        </div>
+    }
+}
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Meeting = await MeetingService.FindByIdAsync(Id);
+    }
+
+    MarkupString Item(string label, string text, string element = "div") => new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
+    string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;
+    string LayoutModulesLink(int id) => $"layouts/{id}/modules";
 
 }

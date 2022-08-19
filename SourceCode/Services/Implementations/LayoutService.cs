@@ -39,6 +39,7 @@ public sealed class LayoutService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
+            if (!entity.ModuleRegistrationClosingDate.HasValue) entity.ModuleRegistrationClosingDate = entity.RegistrationClosingDate;
             var existing = await dbContext.Layouts.SingleOrDefaultAsync(l => l.Id == entity.Id);
             if (existing is null)
             {

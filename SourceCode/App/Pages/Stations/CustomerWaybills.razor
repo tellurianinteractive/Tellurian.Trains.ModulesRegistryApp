@@ -1,4 +1,4 @@
-﻿@page "/Stations/{StationId:int}/Customers/{id:int}/Waybills"
+﻿@page "/Stations/Customers/{id:int}/Waybills"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -7,30 +7,60 @@
 @inject PageHistory PageHistory
 
 @inject StationCustomerService StationCustomerService
+@inject CargoService CargoService
+@inject RegionService RegionService
+@inject OperatingDayService OperatingDayService
+@inject StationService StationService
+@inject StationCustomerWaybillsService WaybillService
 
-<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" HelpContext="StationCustomerWaybill" />
+<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
+<div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+    <AppButton Label="Add" Href="link to add" />
+</div>
 
-@if (Customer is null)
+@if (Waybills is null)
 {
-    <ActionMessage AlertType="Info" Label="LoadingData" />
+    <ActionMessage Label="LoadingData" />
 }
-else if (Customer.Waybills.Count() == 0)
+else if (Waybills.IsNullOrEmpty())
 {
-    <ActionMessage AlertType="Info" Label="NoData" />
+        <ActionMessage Label="NoRecordsToDisplay" />
 }
 else
 {
-    <CustomerWaybillsEdit Customer="Customer" />
+    <TableTemplate Items="Waybills">
+        <TableHeader>
+            <th>@Localizer["Direction"]</th>
+            <th>@Localizer["Customer"]</th>
+            <th>@Localizer["Region"]</th>
+            <th>@Localizer["Cargo"]</th>
+            <th>@Localizer["OperatingDay"]</th>
+            <th>@Localizer["HasEmptyReturn"]</th>
+            <th>@Localizer["PrintCount"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.StationCustomerCargo.Direction.ShortNameLocalized()</td>
+            <td>@item.StationCustomerCargo.StationCustomer.CustomerName</td>
+            <td style="@RegionStyle(item.OtherRegion)">@item.OtherRegion.LocalName</td>
+            <td>@item.OtherCustomerCargo.LocalizedName()</td>
+            <td>@item.OperatingDay.ShortName</td>
+            <td>@item.HasEmptyReturn.AsYesOrNo()</td>
+            <td>@item.PrintCount</td>
+        </RowTemplate>
+    </TableTemplate>
 }
+
+
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
-    [Parameter] public int StationId { get; set; }
 
     ClaimsPrincipal? Principal;
     StationCustomer? Customer;
+    IEnumerable<StationCustomerWaybill>? Waybills;
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,15 +69,13 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+        if (Id > 0)
+        {
+            Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+            Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
+        }
     }
 
-    async Task GenerateWaybills()
-    {
+    string RegionStyle(Region? region) => region is null ? string.Empty : $"backcolor: {region.BackColor}; color: {region.ForeColor}";
 
-        
-        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
-    }
-
-  
 }

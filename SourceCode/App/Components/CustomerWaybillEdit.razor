@@ -1,0 +1,37 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+
+@if (Customer is null || Customer.Waybills is null)
+{
+
+}
+else
+{
+    foreach (var waybill in Customer.Waybills)
+    {
+        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+            <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@waybill.IsGenerated()" />
+            <AppDisplay Width="4" Label="OtherCustomer" Value="@waybill.OtherCustomerCargo.LongDescription()" />
+            <AppInputSelectNullable Width="4" Label="Region" @bind-Value="waybill.OtherRegionId" Items="RegionItems" IsDisabled="@RegionFieldIsDisabled(waybill)" />
+            <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
+            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="waybill.PrintCount" />
+            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="waybill.PrintPerOperatingDay" AlignWithFields=true />
+            <AppInputFill Width="5" />
+            <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="waybill.HasEmptyReturn" />
+            @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="waybill.IsExpressCargo" />*@
+            @*<AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="waybill.IsCoolingTransport" />*@
+            <AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="waybill.HideLoadingTimes" />
+            <AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="waybill.HideUnloadingTimes" />
+        </div>
+    }
+}
+
+
+@code {
+    [Parameter] public StationCustomer? Customer { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? MyCargoItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? RegionItems { get; set; }
+    [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+
+    bool RegionFieldIsDisabled(StationCustomerWaybill waybill) => waybill.IsGenerated() || waybill.OtherCustomerCargoId > 0 == true;
+}

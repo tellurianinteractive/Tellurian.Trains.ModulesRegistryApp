@@ -4,6 +4,7 @@
 Release date 2022-08-19
 - **Help texts** corrections and additions.
 - **Formatting** fixes in tables and other places.
+- **Contact Person** added for *layout*
 - Further preparations for the fortcoming waybill functionality.
 
 #### Version 1.6.16

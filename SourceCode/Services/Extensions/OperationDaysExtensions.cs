@@ -131,16 +131,18 @@ internal class Day
     public byte Number { get; }
     private string FullNameResourceKey { get; }
     private string ShortNameResourceKey { get; }
-    public string GetLocalizedShortName(CultureInfo culture)
+    public string GetLocalizedShortName(CultureInfo? specificCulture = null)
     {
         var resourceManager = Strings.ResourceManager;
+        var culture = specificCulture ?? CultureInfo.CurrentCulture;
         if (resourceManager == null) return string.Empty;
         return resourceManager.GetString(ShortNameResourceKey, culture) ?? string.Empty;
     }
 
-    public string GetLocalizedFullName(CultureInfo culture)
+    public string GetLocalizedFullName(CultureInfo? specificCulture = null)
     {
         var resourceManager = Strings.ResourceManager;
+        var culture = specificCulture ?? CultureInfo.CurrentCulture;
         if (resourceManager == null) return string.Empty;
         return resourceManager.GetString(FullNameResourceKey, culture) ?? string.Empty;
     }

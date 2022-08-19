@@ -76,7 +76,6 @@ public class Startup
         if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
         if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
         services.AddScoped<CargoService>();
-        services.AddScoped<StationCustomerService>();
         services.AddScoped<ContentService>();
         services.AddScoped<CountryService>();
         services.AddScoped<DocumentService>();
@@ -94,6 +93,8 @@ public class Startup
         services.AddScoped<PropertyService>();
         services.AddScoped<RegionService>();
         services.AddScoped<StationService>();
+        services.AddScoped<StationCustomerService>();
+        services.AddScoped<StationCustomerWaybillsService>();
         services.AddScoped<ScaleService>();
         services.AddScoped<UserService>();
         services.AddScoped<WaybillService>();

@@ -23,21 +23,20 @@ public class MeetingService
                     Layouts = m.Layouts.Select(l => new Data.Api.Layout(l.Id, l.Theme, l.PrimaryModuleStandard.ShortName, l.PrimaryModuleStandard.Scale.Denominator, l.Details)
                     { FirstYear = l.FirstYear, LastYear = l.LastYear })
                 })
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToReadOnlyListAsync();
     }
 
     public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
     {
         using var dbContext = Factory.CreateDbContext();
-        var meetings = await dbContext.Meetings.AsNoTracking()
+        var meetings = await dbContext.Meetings
             .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator || gm.PersonId == principal.PersonId()))
             .Include(m => m.Layouts)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToReadOnlyListAsync();
+
         return meetings.Where(m => principal.IsAnyAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
             .Select(m =>
             (
@@ -48,19 +47,16 @@ public class MeetingService
         );
     }
 
-
-
-
     public async Task<Meeting?> FindByIdAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Meetings.AsNoTracking()
+        return await dbContext.Meetings
              .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
              .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
+             .Include(m => m.Layouts).ThenInclude(l => l.ContactPerson)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
-             .SingleOrDefaultAsync(m => m.Id == id)
-             .ConfigureAwait(false);
+             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Meeting?> FindByIdWithLayoutsAsync(ClaimsPrincipal? principal, int id)
@@ -68,10 +64,9 @@ public class MeetingService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings.AsNoTracking()
+            return await dbContext.Meetings
                 .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
-                .SingleOrDefaultAsync(m => m.Id == id)
-                .ConfigureAwait(false);
+                .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
         }
         return null;
     }
@@ -81,10 +76,9 @@ public class MeetingService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings.AsNoTracking()
+            return await dbContext.Meetings
                 .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
-                .SingleOrDefaultAsync(m => m.Id == id)
-                .ConfigureAwait(false);
+                .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
         }
         return null;
     }
@@ -95,12 +89,11 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             var meetingId = await dbContext.Layouts.Where(l => l.Id == layoutId).Select(l => l.MeetingId).SingleOrDefaultAsync();
-            return await dbContext.MeetingParticipants.AsNoTracking()
+            return await dbContext.MeetingParticipants
                 .Include(mp => mp.Person).ThenInclude(p => p.Country)
                 .Include(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout)
                 .Where(m => m.MeetingId == meetingId)
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToReadOnlyListAsync();
         }
         return Array.Empty<MeetingParticipant>();
     }

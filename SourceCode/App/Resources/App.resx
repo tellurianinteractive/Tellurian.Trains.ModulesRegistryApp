@@ -1200,4 +1200,7 @@
   <data name="IsOrganiserInternal" xml:space="preserve">
     <value>Is internal for the organiser?</value>
   </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Contact person</value>
+  </data>
 </root>

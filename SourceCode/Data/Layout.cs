@@ -13,7 +13,7 @@ public class Layout
     public int Id { get; set; }
     public int MeetingId { get; set; }
     public int OrganisingGroupId { get; set; }
-    public int ContactPersonId { get; set; }
+    public int? ContactPersonId { get; set; }
     public int PrimaryModuleStandardId { get; set; }
     public DateTime RegistrationOpeningDate { get; set; }
     public DateTime RegistrationClosingDate { get; set; }

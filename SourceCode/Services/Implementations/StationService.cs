@@ -33,6 +33,7 @@ public class StationService
                  .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && (ownershipRef.IsNone || m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
                  .Include(m => m.StationTracks)
                  .Include(m => m.Modules)
+                 .Include( m => m.Region)
                  .SingleOrDefaultAsync()
                  .ConfigureAwait(false);
         }
@@ -50,6 +51,7 @@ public class StationService
                  .Where(s => s.Id == id && s.Modules.Any(m => (m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
                  .Include(m => m.StationTracks)
                  .Include(m => m.Modules)
+                 .Include(m => m.Region)
                  .SingleOrDefaultAsync()
                  .ConfigureAwait(false);
         }

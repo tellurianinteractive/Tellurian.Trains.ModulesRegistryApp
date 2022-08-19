@@ -14,7 +14,26 @@ public sealed class GroupService
     {
         using var dbContext = Factory.CreateDbContext();
         var id = countryId ?? principal.CountryId();
-        return await dbContext.Groups.AsNoTracking().Where(g => principal.IsGlobalAdministrator() || g.CountryId == id).Select(g => new ListboxItem(g.Id, g.FullName)).ToListAsync();
+        return await dbContext.Groups
+            .Where(g =>  g.CountryId == id)
+            .OrderBy(g => g.FullName)
+            .Select(g => new ListboxItem(g.Id, g.FullName))
+            .ToReadOnlyListAsync();
+    }
+
+    public async Task<IEnumerable<ListboxItem>> MemberListboxItemsAsync(ClaimsPrincipal? principal, int? groupId)
+    {
+        if (principal.IsAuthenticated() && groupId > 0 == true)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.GroupMembers
+                .Where(gm => gm.GroupId == groupId.Value)
+                .Include(gm => gm.Person)
+                .Select(gd => new ListboxItem(gd.PersonId, gd.Person.Name()))
+                .ToReadOnlyListAsync();
+        }
+        return Array.Empty<ListboxItem>();
+
     }
     public async Task<IEnumerable<ListboxItem>> GroupDomainListboxItemsAsync(ClaimsPrincipal? principal)
     {
