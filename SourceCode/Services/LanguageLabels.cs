@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace ModulesRegistry.Services;
+﻿namespace ModulesRegistry.Services;
 
 public class LanguageLabel
 {

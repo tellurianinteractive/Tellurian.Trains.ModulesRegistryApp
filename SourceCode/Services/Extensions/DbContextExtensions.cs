@@ -1,6 +1,5 @@
 ﻿using ModulesRegistry.Services.Resources;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Services.Extensions;
 

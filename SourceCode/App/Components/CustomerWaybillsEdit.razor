@@ -1,0 +1,68 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@inject CargoService CargoService
+@inject RegionService RegionService
+@inject OperatingDayService OperatingDayService
+
+@if (Customer is null || Customer.Waybills is null)
+{
+
+}
+else
+{
+    <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+        <AppButton Label="Add" OnClickCallback="AddWaybill" />
+    </div>
+    @foreach (var waybill in Customer.Waybills)
+    {
+        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+            <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="waybill.StationCustomerCargoId" Items="MyFreights" ShowPleaseSelect="true" IsDisabled="@waybill.IsGenerated()" />
+            <AppDisplay Width="4" Label="OtherCustomer" Value="@waybill.OtherCustomerCargo.LongDescription()" />
+            <AppInputSelectNullable Width="4" Label="Region" @bind-Value="waybill.OtherRegionId" Items="RegionItems" IsDisabled="@waybill.IsGenerated()" />
+            <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
+            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="waybill.PrintCount" />
+            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="waybill.PrintPerOperatingDay" AlignWithFields=true />
+            <AppInputFill Width="10" />
+            <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="waybill.HasEmptyReturn" />
+            <AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="waybill.IsExpressCargo" />
+            <AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="waybill.IsCoolingTransport" />
+            <AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="waybill.HideLoadingTimes" />
+            <AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="waybill.HideUnloadingTimes" />
+        </div>
+    }
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public StationCustomer? Customer { get; set; }
+
+    ClaimsPrincipal? Principal;
+
+    IEnumerable<ListboxItem>? MyCargoItems;
+    IEnumerable<ListboxItem>? RegionItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        RegionItems = await RegionService.ListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+    }
+    protected override void OnParametersSet()
+    {
+    }
+
+
+    void AddWaybill()
+    {
+        if (Customer is not null)
+        {
+            Customer.Waybills.Add(StationCustomerWaybill.Default(Customer.Id));
+        }
+    }
+
+    IEnumerable<ListboxItem>? MyFreights =>
+        Customer is null ? Enumerable.Empty<ListboxItem>() :
+        Customer.Cargos.Select(c => new ListboxItem(c.Id, c.ShortDescription()));
+
+}

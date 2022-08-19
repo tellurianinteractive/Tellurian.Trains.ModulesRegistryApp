@@ -70,6 +70,18 @@
 		<None Update="Content\Markdown\GetStarted.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Content\Markdown\Help\CountryStatistics.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\CountryStatistics.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\CountryStatistics.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\CountryStatistics.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Help\Layout.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -95,6 +107,9 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Help\Meeting.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\CountryStatistics.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Help\RegisterModules.de.md">
@@ -381,7 +396,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Content\Images\" />
 		<Folder Include="wwwroot\css\fontawesome\" />
 	</ItemGroup>
 

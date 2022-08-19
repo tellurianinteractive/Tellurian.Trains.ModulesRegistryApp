@@ -11,7 +11,7 @@ Enhver, der er interesseret i at vedligeholde strukturerede data om *modeljernba
 og alle, der arrangerer *modultræf*.
 
 #### Gratis
-Webapplikationen er ikke-kommerciel og gratis at bruge af enhver modulbanehobbyist inden for EU, Schweiz og Norge.
+Webapplikationen er ikke-kommerciel og gratis at bruge af enhver modulbanehobbyist inden for EU, Storbritannien, Schweiz og Norge.
 
 #### Bidrage
 Applikationen er udviklet som *åben kildekode*.

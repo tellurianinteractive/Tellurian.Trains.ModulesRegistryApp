@@ -26,14 +26,17 @@ public class StationCustomerService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomers.Include(sc => sc.Cargos).AsNoTracking().SingleOrDefaultAsync(sc => sc.Id == id);
+            return await dbContext.StationCustomers.AsNoTracking()
+                .Include(sc => sc.Cargos)
+                .Include(sc => sc.Waybills)
+                .SingleOrDefaultAsync(sc => sc.Id == id);
         }
         return null;
     }
     public Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity) =>
         SaveAsync(principal, stationId, entity, principal.AsModuleOwnershipRef());
 
-    public async Task<IEnumerable<FreightCustomerInfo>> CustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
+    public async Task<IEnumerable<FreightCustomerInfo>> GetCustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
     {
         if (principal.IsAuthenticated())
         {
@@ -50,6 +53,33 @@ public class StationCustomerService
             return items.Select(i => i.ToFreightCustomerInfo());
         }
         return Array.Empty<FreightCustomerInfo>();
+    }
+
+    public async Task<IEnumerable<StationCustomerWaybill>> GetCustomerWaybills(ClaimsPrincipal? principal, int customerId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.StationCustomerWaybills.AsNoTracking()
+                .Where(s => s.StationCustomerId == customerId)
+                .Include(s => s.OtherRegion)
+                .Include(s => s.OperatingDay)
+                .Include(s => s.StationCustomerCargo)
+                .Include(s => s.OtherCustomerCargo)
+                .ToListAsync();
+
+        }
+        return Array.Empty<StationCustomerWaybill>();
+    }
+
+
+    public async Task<int> GenerateWaybillsAsync(ClaimsPrincipal? principal, int stationCustomerId)
+    {
+        // NOTE: For performance reason, the business logic is implemented in the stored procedure that gets called.
+        using var dbContext = Factory.CreateDbContext();
+
+        return await Task.FromResult(0);
+
     }
 
     public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)

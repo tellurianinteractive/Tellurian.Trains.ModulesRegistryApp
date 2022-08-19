@@ -82,7 +82,7 @@
     protected override async Task OnParametersSetAsync()
     {
         ExternalFreightCustomers = await ExternalStationService.CustomersAsync(Principal, CountryId);
-        StationFreightCustomers = await StationCustomerService.CustomersAsync(Principal, CountryId);
+        StationFreightCustomers = await StationCustomerService.GetCustomersAsync(Principal, CountryId);
         AllFreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
     }
 

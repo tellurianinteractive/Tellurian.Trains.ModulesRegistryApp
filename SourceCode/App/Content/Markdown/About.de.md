@@ -11,7 +11,8 @@ Alle, die strukturierte Daten zu *Modelleisenbahnmodulen* pflegen möchten
 und jeder, der *Modultreffen* organisiert.
 
 #### Kostenlos
-Die Webanwendung ist nicht kommerziell und kann von jedem Modulbahn-Hobbyisten in der Europäischen Union, der Schweiz und Norwegen kostenlos verwendet werden.
+Die Webanwendung ist nicht kommerziell und kann von jedem Moduleisenbahn-Bastler kostenlos verwendet werden
+innerhalb der Europäischen Union, Großbritannien, der Schweiz und Norwegen.
 
 #### Beitragen
 Die Anwendung wird als *Open Source* entwickelt.

@@ -7,3 +7,4 @@ so be sure that you enter your email correct.
 * You have only a **limited number of attempts** to reset your password, 
 then you will be blocked.
 * **Look in your spam folder** if you don't receive the mail within a few minutes.
+* **Se i din spam-mappe**, hvis du ikke modtager mailen inden for et par minutter.

@@ -5,6 +5,7 @@ namespace ModulesRegistry.Data;
 #nullable disable
 public partial class CargoDirection
 {
+
     public CargoDirection()
     {
     }

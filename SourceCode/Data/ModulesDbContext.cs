@@ -50,6 +50,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<Station> Stations { get; set; }
     public virtual DbSet<StationCustomer> StationCustomers { get; set; }
     public virtual DbSet<StationCustomerCargo> StationCustomerCargos { get; set; }
+    public virtual DbSet<StationCustomerWaybill> StationCustomerWaybills { get; set; } 
     public virtual DbSet<StationTrack> StationTracks { get; set; }
     public virtual DbSet<User> Users { get; set; }
 

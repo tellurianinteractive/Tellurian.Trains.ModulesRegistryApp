@@ -856,7 +856,7 @@
     <value>Geben Sie mindestens {0} Zeichen ein</value>
   </data>
   <data name="ExternalStations" xml:space="preserve">
-    <value>Externe Stationen</value>
+    <value>Externe Banhöfe</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Anmerkung</value>

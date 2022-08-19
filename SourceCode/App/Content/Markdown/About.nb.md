@@ -11,7 +11,8 @@ Alle som er interessert i å opprettholde strukturerte data om *modelljernbanemo
 og alle som arrangerer *modultreff*.
 
 #### Gratis
-Nettapplikasjonen er ikke-kommersiell og gratis å bruke av alle modulbanehobbyister i EU, Sveits og Norge.
+Nettapplikasjonen er ikke-kommersiell og gratis å bruke av enhver moduljernbanehobbyist
+innen EU, Storbritannia, Sveits og Norge.
 
 #### Bidra
 Applikasjonen er utviklet som *åpen kildekode*.

@@ -11,6 +11,7 @@ else
         {
             <div style="padding-right: 20pt">
                 <AppButton Label="Edit" Href="@FreightCustomerHref(Customer)" />
+                <AppButton Label="Waybills" Href="@FreightCustomerWaybillsHref(Customer)" />
             </div>
         }
         <div style="font-size:14pt; font-weight: bold">
@@ -67,6 +68,7 @@ else
         string.Empty;
 
     string FreightCustomerHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Edit";
+    string FreightCustomerWaybillsHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Waybills";
 
     string ItemStyle(StationCustomerCargo item) =>
         item is null ? string.Empty :

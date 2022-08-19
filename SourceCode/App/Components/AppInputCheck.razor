@@ -4,6 +4,10 @@
 @inject IStringLocalizer<App> Localizer
 
 <div class="@WidthCss">
+    @if (AlignWithFields)
+    {
+        <br/>
+    }
     @if (IsVisible)
     {
         <div class="form-check">
@@ -17,6 +21,7 @@
 </div>
 
 @code {
+    [Parameter] public bool AlignWithFields { get; set; }
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         result = value is not null && (value.Equals("1") || value.Equals("true", StringComparison.OrdinalIgnoreCase));

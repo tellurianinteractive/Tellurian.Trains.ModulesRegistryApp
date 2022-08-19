@@ -4,6 +4,10 @@ namespace ModulesRegistry.Data;
 
 public partial class OperatingDay
 {
+    /// <summary>
+    /// This is the Id for Daily in the database.
+    /// </summary>
+    public const int Daily = 8;
     public OperatingDay()
     {
         OperatingBasicDayBasicDays = new HashSet<OperatingBasicDay>();

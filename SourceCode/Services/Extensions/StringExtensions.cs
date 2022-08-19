@@ -9,6 +9,10 @@ namespace ModulesRegistry.Services.Extensions;
 
 public static class StringExtensions
 {
+    internal static string Localized(this string? text) =>
+        string.IsNullOrWhiteSpace(text) ? string.Empty :
+        Resources.Strings.ResourceManager.GetString(text) ?? text;
+
     public static string? Max(this string? me, int max) =>
         me is null ? null : me.Length < max ? me : me[0..max];
 

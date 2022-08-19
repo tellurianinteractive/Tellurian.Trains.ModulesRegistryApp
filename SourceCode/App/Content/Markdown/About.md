@@ -11,7 +11,8 @@ Anyone who is interested in maintaining structured data about *model railway mod
 and anyone who arranges *module meetings*.
 
 #### Free of Charge
-The web application is non-commercial and free to use by any module railway hobbyist within the European Union, Switzerland and Norway.
+The web application is non-commercial and free to use by any module railway hobbyist 
+within the European Union, United Kingdom, Switzerland and Norway.
 
 #### Contribute
 The application is developed as *open source*.

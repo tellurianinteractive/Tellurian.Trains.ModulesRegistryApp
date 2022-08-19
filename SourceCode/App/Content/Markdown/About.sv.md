@@ -11,7 +11,8 @@ Alla som är intresserade av att underhålla strukturerad data om *modelljärnv�
 och alla som arrangerar modulräffar.
 
 #### Kostnadsfritt
-Webbapplikationen är icke-kommersiell och gratis att använda av alla moduljärnvägshobbyister inom Europeiska unionen, Schweiz och Norge.
+Webbapplikationen är icke-kommersiell och gratis att använda av alla moduljärnvägshobbyister 
+inom Europeiska unionen, Storbrittannien, Schweiz och Norge.
 
 #### Bidra
 Applikationen är utvecklad som *öppen källkod*.

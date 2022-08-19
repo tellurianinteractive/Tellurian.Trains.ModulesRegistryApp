@@ -1,0 +1,53 @@
+﻿@page "/Stations/{StationId:int}/Customers/{id:int}/Waybills"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject PageHistory PageHistory
+
+@inject StationCustomerService StationCustomerService
+
+<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" HelpContext="StationCustomerWaybill" />
+
+
+@if (Customer is null)
+{
+    <ActionMessage AlertType="Info" Label="LoadingData" />
+}
+else if (Customer.Waybills.Count() == 0)
+{
+    <ActionMessage AlertType="Info" Label="NoData" />
+}
+else
+{
+    <CustomerWaybillsEdit Customer="Customer" />
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    StationCustomer? Customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+    }
+
+    async Task GenerateWaybills()
+    {
+
+        
+        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+    }
+
+  
+}

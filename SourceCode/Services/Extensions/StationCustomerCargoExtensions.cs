@@ -1,19 +1,35 @@
-﻿
-using ModulesRegistry.Data.Extensions;
+﻿namespace ModulesRegistry.Services.Extensions;
 
-namespace ModulesRegistry.Data;
+public static class CargoDirectionExtensions
+{
+    public static string ShortNameLocalized(this CargoDirection? it) =>
+         it is null ? string.Empty :
+         it.ShortName.Localized();
+
+    public static string FullNameLocalized(this CargoDirection? it) =>
+         it is null ? string.Empty :
+         it.FullName.Localized();
+}
 
 public static class StationCustomerCargoExtensions
 {
+    public static string ShortDescription(this StationCustomerCargo? me) =>
+        me is null ? string.Empty :
+        $"{me.Direction.ShortNameLocalized()} {me.CargoType()}";
+
+    public static string LongDescription(this StationCustomerCargo? me) =>
+        me is null ? string.Empty :
+        $"{me.StationCustomer.CustomerName} {me.StationCustomer.Station?.FullName}: {me.Direction.ShortNameLocalized()} {me.CargoType()}";
+
     public static bool IsUnloading(this StationCustomerCargo me) => me.DirectionId == 1 || me.DirectionId == 3;
     public static bool IsLoading(this StationCustomerCargo me) => me.DirectionId == 2 || me.DirectionId == 4;
 
-    public static string? ReadyTimeLabel(this StationCustomerCargo cargo) => 
-        cargo is null ? null : 
-        cargo.IsUnloading() ? "UnloadingReady" : 
+    public static bool IsGenerated(this StationCustomerWaybill me) => !me.IsManuallyCreated;
+
+    public static string? ReadyTimeLabel(this StationCustomerCargo cargo) =>
+        cargo is null ? null :
+        cargo.IsUnloading() ? "UnloadingReady" :
         "LoadingReady";
-
-
 
     public static string? TrackOrArea(this StationCustomerCargo? cargo) =>
         cargo is null ? null :
@@ -34,9 +50,14 @@ public static class StationCustomerCargoExtensions
         cargo.StationCustomer is not null && cargo.StationCustomer.TrackOrArea.Equals(cargo?.TrackOrArea) && cargo.StationCustomer.TrackOrAreaColor.HasValue() ? cargo.StationCustomer.TrackOrAreaColor : 
         null;
 
+ 
     public static string CargoDirection(this StationCustomerCargo? it, IEnumerable<ListboxItem>? cargoDirectionItems) => 
         it is not null && cargoDirectionItems is not null ? cargoDirectionItems.SingleOrDefault(i => i.Id == it.DirectionId)?.Description ?? string.Empty : string.Empty;
 
+    public static string CargoType(this StationCustomerCargo? it) =>
+        it is null ? string.Empty :
+        it.SpecialCargoName.HasValue() ? it.SpecialCargoName :
+        it.Cargo.Localized();
 
     public static string CargoTypeName(this StationCustomerCargo? it, IEnumerable<ListboxItem>? cargoTypeItems) => 
         it is null ? string.Empty : 
@@ -66,6 +87,21 @@ public static class StationCustomerCargoExtensions
         it is null || it.Cargo is null ? string.Empty : 
         it.SpecificWagonClass.HasValue() ? it.SpecificWagonClass : 
         it.Cargo.DefaultClasses;
+
+    private static string Localized(this Cargo? it) =>
+        it is null ? string.Empty :
+        CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
+        {
+            "da" => it.DA,
+            "de" => it.DE,
+            "fr" => it.FR,
+            "it" => it.IT,
+            "nb" => it.NB,
+            "nl" => it.NL,
+            "pl" => it.PL,
+            "sv" => it.SV,
+            _ => it.EN,
+        };
 
     public static StationCustomerCargo Clone(this StationCustomerCargo me) =>
         new()

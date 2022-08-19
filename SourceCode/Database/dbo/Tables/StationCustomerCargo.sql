@@ -19,12 +19,12 @@
     [EmptyReturn]        BIT           CONSTRAINT [DF_StationCustomerCargo_EmptyReturn] DEFAULT ((0)) NOT NULL,
     [MatchReturn]        BIT           CONSTRAINT [DF_StationCustomerCargo_MatchReturn] DEFAULT ((0)) NOT NULL
     CONSTRAINT [PK_CustomerCargo] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_CustomerCargo_StationCustomer] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_CustomerCargo_Cargo] FOREIGN KEY ([CargoId]) REFERENCES [dbo].[Cargo] ([Id]),
     CONSTRAINT [FK_CustomerCargo_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),
     CONSTRAINT [FK_CustomerCargo_CargoDirection] FOREIGN KEY ([DirectionId]) REFERENCES [dbo].[CargoDirection] ([Id]),
     CONSTRAINT [FK_CustomerCargo_CargoReadyTime] FOREIGN KEY ([ReadyTimeId]) REFERENCES [dbo].[CargoReadyTime] ([Id]),
     CONSTRAINT [FK_CustomerCargo_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
-    CONSTRAINT [FK_CustomerCargo_StationCustomer] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id]) ON DELETE CASCADE
 );
 
 

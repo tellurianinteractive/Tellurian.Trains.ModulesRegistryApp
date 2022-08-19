@@ -3,7 +3,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject CountryService CountryService
 
-<PageHeading Label="CountriesStatistics" IconClass="fa fa-flag" PageAction="@PageAction.List" />
+<PageHeading Label="CountriesStatistics" IconClass="fa fa-flag" PageAction="@PageAction.List"  HelpContext="CountryStatistics" ShowHelpInitially=true/>
 @if (CountryStatistics is null)
 {
     <ActionMessage Label="FecthingData" />

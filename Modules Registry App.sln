@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NET-development.md = NET-development.md
 		README.md = README.md
 		RELEASENOTES.md = RELEASENOTES.md
+		SYSTEMDESIGN.md = SYSTEMDESIGN.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}"
@@ -98,8 +99,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
-		RESX_NeutralResourcesLanguage = en-GB
 		RESX_ExcelExportMode = SingleSheet
+		RESX_NeutralResourcesLanguage = en-GB
+		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
 	EndGlobalSection
 EndGlobal
