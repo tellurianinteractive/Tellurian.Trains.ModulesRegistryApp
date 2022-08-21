@@ -1,4 +1,4 @@
-﻿@page "/Stations/Customers/{id:int}/Waybills"
+﻿@page "/Stations/{stationId:int}/Customers/{id:int}/Waybills"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -25,7 +25,7 @@
 }
 else if (Waybills.IsNullOrEmpty())
 {
-        <ActionMessage Label="NoRecordsToDisplay" />
+    <ActionMessage Label="NoRecordsToDisplay" />
 }
 else
 {
@@ -38,17 +38,19 @@ else
             <th>@Localizer["OperatingDay"]</th>
             <th>@Localizer["HasEmptyReturn"]</th>
             <th>@Localizer["PrintCount"]</th>
-            <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.StationCustomerCargo.Direction.ShortNameLocalized()</td>
             <td>@item.StationCustomerCargo.StationCustomer.CustomerName</td>
-            <td style="@RegionStyle(item.OtherRegion)">@item.OtherRegion.LocalName</td>
+            <td style="@item.OtherRegion.Style()">@item.OtherRegion.LocalName</td>
             <td>@item.OtherCustomerCargo.LocalizedName()</td>
             <td>@item.OperatingDay.ShortName</td>
             <td>@item.HasEmptyReturn.AsYesOrNo()</td>
             <td>@item.PrintCount</td>
         </RowTemplate>
+        <RowEditTemplate Context="item">
+            <CustomerWaybillEdit Waybill="@item" />
+        </RowEditTemplate>
     </TableTemplate>
 }
 
@@ -57,9 +59,13 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    [Parameter] public int StationId { get; set; }
 
     ClaimsPrincipal? Principal;
+    Station? Station;
     StationCustomer? Customer;
+
+    bool MayEdit;
     IEnumerable<StationCustomerWaybill>? Waybills;
 
     protected override async Task OnInitializedAsync()
@@ -69,13 +75,11 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Id > 0)
+        if (Id > 0 && StationId > 0)
         {
+
             Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
             Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
         }
     }
-
-    string RegionStyle(Region? region) => region is null ? string.Empty : $"backcolor: {region.BackColor}; color: {region.ForeColor}";
-
 }

@@ -1,7 +1,5 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
 
-@attribute [Authorize(Policy = "User")]
-
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject ITimeProvider TimeProvider
@@ -13,70 +11,77 @@
 
 <PageHeading Label="Registration" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
 
-@if (Meeting is null)
-{
-}
-else
-{
-    @if (IsMeetingOrganiser)
-    {
-        <h3>@Localizer["SelectPersonToRegister"]</h3>
-        <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
-        <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" InitialSelectedId="PersonId" />
-    }
-
-    @if (Participant?.Id > 0)
-    {
-        <h4>@Localizer["Registered"]</h4>
-        <ul>
-            <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
-            <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
-            <li>@Localizer["LatestArrivalTime"]: <strong>@Participant.ArrivalTime?.ToString("t")</strong> </li>
-        </ul>
-    }
-    else if (Meeting.Id > 0 && PersonId > 0)
-    {
-        if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+<AuthorizeView>
+    <NotAuthorized>
+        <ContentView ContentName="AttendToMeeting" />
+    </NotAuthorized>
+    <Authorized>
+        @if (Meeting is null)
         {
-            <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
         }
-    }
-
-    if (Participant is not null)
-    {
-
-        <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
-            <Inputs>
-                <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
-                <AppInputFill Width="10" />
-                <h3>@Localizer["Days"]</h3>
-                <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
-                <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
-                <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
-                <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
-                <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
-            </Inputs>
-        </EditTemplate>
-        <hr />
-        @if (Participant.Id > 0)
+        else
         {
-            <TableTemplate Items="@PersonsLayoutParticipation">
-                <TableHeader>
-                    <th width="15%">@Localizer["Layout"]</th>
-                    <th>@Localizer["Details"]</th>
-                    <th width="100px">@Localizer["Actions"]</th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
-                    <td><MarkdownView Markdown="@item.Layout?.Details"/></td>
-                    <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
-                </RowTemplate>
-            </TableTemplate>
+            @if (IsMeetingOrganiser)
+            {
+                <h3>@Localizer["SelectPersonToRegister"]</h3>
+                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
+                <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" InitialSelectedId="PersonId" />
+            }
+
+            @if (Participant?.Id > 0)
+            {
+                <h4>@Localizer["Registered"]</h4>
+                <ul>
+                    <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
+                    <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
+                    <li>@Localizer["LatestArrivalTime"]: <strong>@Participant.ArrivalTime?.ToString("t")</strong> </li>
+                </ul>
+            }
+            else if (Meeting.Id > 0 && PersonId > 0)
+            {
+                if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+                {
+                    <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
+                }
+            }
+
+            if (Participant is not null)
+            {
+
+                <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
+                    <Inputs>
+                        <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
+                        <AppInputFill Width="10" />
+                        <h3>@Localizer["Days"]</h3>
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
+                    </Inputs>
+                </EditTemplate>
+                <hr />
+                @if (Participant.Id > 0)
+                {
+                    <TableTemplate Items="@PersonsLayoutParticipation">
+                        <TableHeader>
+                            <th width="15%">@Localizer["Layout"]</th>
+                            <th>@Localizer["Details"]</th>
+                            <th width="100px">@Localizer["Actions"]</th>
+                        </TableHeader>
+                        <RowTemplate Context="item">
+                            <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
+                            <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
+                            <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
+                        </RowTemplate>
+                    </TableTemplate>
+                }
+            }
+
+
         }
-    }
-
-
-}
+    </Authorized>
+</AuthorizeView>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -105,7 +110,7 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync(Principal, MeetingId);
+            Meeting = await MeetingService.FindByIdWithLayoutsAsync( MeetingId);
             if (Meeting is not null)
             {
                 IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
@@ -149,7 +154,7 @@ else
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting, Participant);
             Participant = result.Entity;
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync(Principal, Meeting.Id);
+            Meeting = await MeetingService.FindByIdWithLayoutsAsync( Meeting.Id);
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }

@@ -14,6 +14,7 @@
     [RegistrationClosingDate]        SMALLDATETIME  NOT NULL,
     [RegistrationOpeningDate]        SMALLDATETIME  NOT NULL,
     [ModuleRegistrationClosingDate]  SMALLDATETIME  NULL,
+    [IsRegistrationPermitted]        BIT            NOT NULL DEFAULT 1,
     CONSTRAINT [PK_Layout] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Layout_OrganisingGroup] FOREIGN KEY ([OrganisingGroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Layout_ResponsiblePerson] FOREIGN KEY ([ContactPersonId]) REFERENCES [dbo].[Person] ([Id]),

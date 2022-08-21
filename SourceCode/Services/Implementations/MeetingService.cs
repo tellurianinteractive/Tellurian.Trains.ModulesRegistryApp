@@ -59,16 +59,12 @@ public class MeetingService
              .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 
-    public async Task<Meeting?> FindByIdWithLayoutsAsync(ClaimsPrincipal? principal, int id)
+    public async Task<Meeting?> FindByIdWithLayoutsAsync(int id)
     {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings
-                .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
-                .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
-        }
-        return null;
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Meetings
+            .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
+            .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Meeting?> FindByIdWithParticipantsAsync(ClaimsPrincipal? principal, int id)

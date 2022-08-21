@@ -13,7 +13,9 @@ public static class MeetingExtensions
         it is null || it.Status == (int)MeetingStatus.Canceled;
 
     public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null && !it.IsCancelled() && it.Layouts.Any() && 
+        it is not null && 
+        !it.IsCancelled() && 
+        it.Layouts.Any(l => l.IsRegistrationPermitted) && 
         it.Layouts.Any(l => l.RegistrationOpeningDate <= at) && 
         it.Layouts.Any(l => l.RegistrationClosingDate >= at);
 

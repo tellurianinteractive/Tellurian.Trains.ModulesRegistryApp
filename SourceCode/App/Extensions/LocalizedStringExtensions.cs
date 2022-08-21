@@ -57,6 +57,7 @@ public static class LocalizedStringExtensions
             Module mo => mo.FullName,
             Region r => r.LocalName,
             Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",
+            StationCustomer sc => $"{sc.CustomerName}",
             _ => string.Empty
         };
 

@@ -1,37 +1,42 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
 
-@if (Customer is null || Customer.Waybills is null)
+@if (Waybill is null)
 {
 
 }
 else
 {
-    foreach (var waybill in Customer.Waybills)
-    {
-        <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-            <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@waybill.IsGenerated()" />
-            <AppDisplay Width="4" Label="OtherCustomer" Value="@waybill.OtherCustomerCargo.LongDescription()" />
-            <AppInputSelectNullable Width="4" Label="Region" @bind-Value="waybill.OtherRegionId" Items="RegionItems" IsDisabled="@RegionFieldIsDisabled(waybill)" />
-            <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
-            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="waybill.PrintCount" />
-            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="waybill.PrintPerOperatingDay" AlignWithFields=true />
+    <EditTemplate Item="Waybill">
+        <Inputs>
+            <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="Waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@Waybill.IsGenerated()" />
+            @if (Waybill.IsGenerated())
+            {
+                <AppDisplay Width="4" Label="OtherCustomer" Value="@Waybill.OtherCustomerCargo.LongDescription()" />
+            }
+            else
+            {
+                <AppInputSelectNullable Width="4" Label="Region" @bind-Value="Waybill.OtherRegionId" Items="RegionItems" />
+
+            }
+            <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="Waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
+            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
+            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Waybill.PrintPerOperatingDay" AlignWithFields=true />
             <AppInputFill Width="5" />
-            <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="waybill.HasEmptyReturn" />
-            @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="waybill.IsExpressCargo" />*@
-            @*<AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="waybill.IsCoolingTransport" />*@
-            <AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="waybill.HideLoadingTimes" />
-            <AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="waybill.HideUnloadingTimes" />
-        </div>
-    }
+            <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Waybill.HasEmptyReturn" />
+            @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="Waybill.IsExpressCargo" />*@
+            @*<AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="Waybill.IsCoolingTransport" />*@
+            <AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="Waybill.HideLoadingTimes" />
+            <AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="Waybill.HideUnloadingTimes" />
+        </Inputs>
+    </EditTemplate>
+
 }
 
 
 @code {
-    [Parameter] public StationCustomer? Customer { get; set; }
+    [Parameter] public StationCustomerWaybill? Waybill { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? MyCargoItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? RegionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
-
-    bool RegionFieldIsDisabled(StationCustomerWaybill waybill) => waybill.IsGenerated() || waybill.OtherCustomerCargoId > 0 == true;
 }

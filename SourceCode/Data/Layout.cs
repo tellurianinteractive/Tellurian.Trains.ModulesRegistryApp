@@ -15,6 +15,7 @@ public class Layout
     public int OrganisingGroupId { get; set; }
     public int? ContactPersonId { get; set; }
     public int PrimaryModuleStandardId { get; set; }
+    public bool IsRegistrationPermitted { get; set; } = true;
     public DateTime RegistrationOpeningDate { get; set; }
     public DateTime RegistrationClosingDate { get; set; }
     public DateTime? ModuleRegistrationClosingDate { get; set; }

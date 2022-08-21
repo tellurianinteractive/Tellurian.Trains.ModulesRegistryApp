@@ -1203,4 +1203,10 @@
   <data name="ContactPerson" xml:space="preserve">
     <value>Contact person</value>
   </data>
+  <data name="IsRegistrationPermitted" xml:space="preserve">
+    <value>Is registration permitted?</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
 </root>

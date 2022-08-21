@@ -1,5 +1,12 @@
 ## Release Notes
 
+#### Version 1.6.18
+Release date 2022-08-21
+- **Meeting Registration** feedback for non-logged-in site visitors is improved, with instructions to how register.
+- **Layout Registration** can now be disabled for registration by users of the Module Registry.
+If all layouts in a module meeting are disabled for registration, the meeting will never appear to be open for registration.
+- **Layout Help** is updated to reflect the new features introduced for meeting track layouts.
+
 #### Version 1.6.17
 Release date 2022-08-19
 - **Help texts** corrections and additions.

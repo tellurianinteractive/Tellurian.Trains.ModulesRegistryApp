@@ -24,7 +24,6 @@ public static class StationCustomerCargoExtensions
     public static bool IsUnloading(this StationCustomerCargo me) => me.DirectionId == 1 || me.DirectionId == 3;
     public static bool IsLoading(this StationCustomerCargo me) => me.DirectionId == 2 || me.DirectionId == 4;
 
-    public static bool IsGenerated(this StationCustomerWaybill me) => !me.IsManuallyCreated;
 
     public static string? ReadyTimeLabel(this StationCustomerCargo cargo) =>
         cargo is null ? null :

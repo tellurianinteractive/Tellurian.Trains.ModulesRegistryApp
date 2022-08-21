@@ -35,14 +35,14 @@
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
         <td class="@MeetingStatusCssClass(item.meeting)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td>
         <td>
-            <a class="btn btn-info btn-sm" href="Meetings/@item.meeting.Id/View"><span class="@FontAwesome.View" /> @Localizer["View"]</a>
-            @if (item.meeting.MayRegister(TimeProvider.Now.DateTime, Principal))
-            {
-                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"  />
-            }
+            <AppButton Label="View" Href="@MeetingHref(item.meeting.Id, "view")"/>
             @if (item.MayEdit)
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
+            }
+            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
+            {
+                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")" IsDisabled />
             }
             @if (MayDelete(item.meeting))
             {
