@@ -138,6 +138,11 @@
     <Build Include="dbo\Listboxes\ListCargoPackagingUnit.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoPackagingUnit.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
+    <Build Include="dbo\Views\ModuleCustomerCargo.sql" />
+    <Build Include="dbo\Views\ExternalCustomerCargo.sql" />
+    <Build Include="dbo\Views\LayoutCustomerCargo.sql" />
+    <Build Include="dbo\Tables\ExternalStationWaybill.sql" />
+    <Build Include="dbo\Procedures\AddGerenratedModuleWaybills.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -11,6 +11,7 @@ public class StationCustomerWaybillsService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.StationCustomerWaybills
                 .Where(x => x.StationCustomerId == stationCustomerId)
+                .Include(w => w.StationCustomer)
                 .Include(w => w.StationCustomerCargo).ThenInclude(c => c.Direction)
                 .Include(w => w.OperatingDay)
                 .Include(w => w.OtherCustomerCargo).ThenInclude(c => c.Cargo)
@@ -22,4 +23,9 @@ public class StationCustomerWaybillsService
         return Enumerable.Empty<StationCustomerWaybill>();
     }
 
+    public async Task<int> AddGeneratedModuleCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return  await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedModuleWaybills] @StationCustomerId={ stationCustomerId}");
+    }
 }

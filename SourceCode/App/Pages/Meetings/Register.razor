@@ -13,6 +13,10 @@
 
 <AuthorizeView>
     <NotAuthorized>
+        @if (Meeting.IsNotYetOpenForRegistration(TimeProvider.LocalTime)) 
+        {
+            <ActionMessage AlertType="Warning" Label="MeetingIsNotYetOpenForRegistration"/>
+        }
         <ContentView ContentName="AttendToMeeting" />
     </NotAuthorized>
     <Authorized>
@@ -39,7 +43,7 @@
             }
             else if (Meeting.Id > 0 && PersonId > 0)
             {
-                if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.Now.Date))
+                if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
                 {
                     <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
                 }
@@ -72,7 +76,14 @@
                         <RowTemplate Context="item">
                             <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
-                            <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
+                            @if(item.Layout?.IsRegistrationPermitted == true)
+                            {
+                                <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                         </RowTemplate>
                     </TableTemplate>
                 }

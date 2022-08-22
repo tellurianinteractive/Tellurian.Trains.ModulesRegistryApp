@@ -21,8 +21,6 @@ public class StationCustomerWaybill
     public int SequenceNumber { get; set; }
     public bool IsManuallyCreated { get; set; }
     public bool HasEmptyReturn { get; set; }
-    public bool IsExpressCargo { get; set; }
-    public bool IsCoolingTransport { get; set; }
     public bool HideLoadingTimes { get; set; }
     public bool HideUnloadingTimes { get; set; }
     public bool PrintPerOperatingDay { get; set; }

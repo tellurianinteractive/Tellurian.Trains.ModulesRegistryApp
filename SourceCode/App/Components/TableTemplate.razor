@@ -4,7 +4,7 @@
 
 @if (Items is null)
 {
-    <ActionMessage Label="GettingData" IconName="hourglass" />
+    <ActionMessage Label="GettingData" AlertType="Wait"/>
 }
 else if (Items.Count() == 0 && !HideNoRecordsToDisplay)
 {

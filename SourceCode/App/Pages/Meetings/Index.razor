@@ -42,7 +42,7 @@
             }
             @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
             {
-                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")" IsDisabled />
+                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
             }
             @if (MayDelete(item.meeting))
             {

@@ -3,6 +3,7 @@ AS
 SELECT -- Internal station customer cargo
 	LP.LayoutId,
 	0 AS ExcludeLayoutId,
+	SCC.StationCustomerId,
 	SCC.Id,
 	SCC.OperatingDayId,
 	S.[Id] AS StationId,
@@ -47,6 +48,7 @@ UNION
 SELECT -- Modules not present in the current layout
 	COALESCE(L.Id,0) AS LayoutId,
 	COALESCE(L.Id,0) AS ExcludeLayoutId,
+	SCC.StationCustomerId,
 	SCC.Id,
 	SCC.OperatingDayId,
 	S.Id AS StationId,
@@ -93,6 +95,7 @@ UNION
 SELECT -- External station customer cargo
 	-1 AS LayoutId,
 	0 AS ExcludeLayoutId,
+	-ESCC.ExternalStationCustomerId,
 	-ESCC.Id AS Id,
 	ESCC.OperatingDayId,
 	-ES.[Id] AS StationId,
@@ -132,6 +135,7 @@ UNION
 SELECT -- Shadow yard suppliers
 	LP.LayoutId,
 	0 AS ExcludeLayoutId,
+	0 AS StationCustomerId,	
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,
@@ -173,6 +177,7 @@ UNION
 SELECT -- Shadow yard consumers
 	LP.LayoutId,
 	0 AS ExcludeLayoutId,
+	0 AS StationCustomerId,
 	0 AS Id,
 	8 AS OperatingDayId,
 	LS.StationId,

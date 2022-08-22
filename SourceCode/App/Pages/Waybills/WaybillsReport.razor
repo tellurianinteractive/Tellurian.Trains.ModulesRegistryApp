@@ -42,7 +42,7 @@ else
         if (!IsLoading)
         {
             IsLoading = true;
-            LanguageLabels = LanguageService.GetWaybillLabes();
+            LanguageLabels = LanguageService.GetWaybillLabels();
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             Items = await WaybillService.GetWaybills(Principal, LayoutId, LayoutStationId, true);
         }

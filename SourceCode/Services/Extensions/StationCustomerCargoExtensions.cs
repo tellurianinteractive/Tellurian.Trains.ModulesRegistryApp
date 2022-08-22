@@ -6,7 +6,7 @@ public static class CargoDirectionExtensions
          it is null ? string.Empty :
          it.ShortName.Localized();
 
-    public static string FullNameLocalized(this CargoDirection? it) =>
+    public static string LongNameLocalized(this CargoDirection? it) =>
          it is null ? string.Empty :
          it.FullName.Localized();
 }
@@ -19,7 +19,7 @@ public static class StationCustomerCargoExtensions
 
     public static string LongDescription(this StationCustomerCargo? me) =>
         me is null ? string.Empty :
-        $"{me.StationCustomer.CustomerName} {me.StationCustomer.Station?.FullName}: {me.Direction.ShortNameLocalized()} {me.CargoType()}";
+        $"{me.StationCustomer.Station?.FullName}, {me.StationCustomer.CustomerName}: {me.CargoType()}";
 
     public static bool IsUnloading(this StationCustomerCargo me) => me.DirectionId == 1 || me.DirectionId == 3;
     public static bool IsLoading(this StationCustomerCargo me) => me.DirectionId == 2 || me.DirectionId == 4;

@@ -35,10 +35,13 @@ public class PageHistory
         Navigator.NavigateTo(page.Url);
     }
 
-    public bool? IsShowningHelp
+    public bool IsShowningHelp
     {
-        get => History.Count <= 1 || History.Last()?.ShowHelp == true;
-        set => History.Last().ShowHelp = value;
+        get => History.Any() && History.Last().ShowHelp == true;
+        set
+        {
+            if (History.Any()) History.Last().ShowHelp = value;
+        }
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)

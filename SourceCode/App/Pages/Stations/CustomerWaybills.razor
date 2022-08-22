@@ -16,12 +16,14 @@
 <PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
 <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-    <AppButton Label="Add" Href="link to add" />
+    <AppButton Label="Generate" IconName="cog" OnClickCallback="GenerateWaybills"/>
+    <AppButton Label="Add" Href="link to add" IsDisabled=true/>
+    <AppButton Label="Preview" Href="" IsDisabled=true />
 </div>
 
 @if (Waybills is null)
 {
-    <ActionMessage Label="LoadingData" />
+    <ActionMessage Label="LoadingData" AlertType="Wait" />
 }
 else if (Waybills.IsNullOrEmpty())
 {
@@ -32,21 +34,19 @@ else
     <TableTemplate Items="Waybills">
         <TableHeader>
             <th>@Localizer["Direction"]</th>
-            <th>@Localizer["Customer"]</th>
+            <th>@Localizer["FreightCustomer"]</th>
             <th>@Localizer["Region"]</th>
             <th>@Localizer["Cargo"]</th>
-            <th>@Localizer["OperatingDay"]</th>
-            <th>@Localizer["HasEmptyReturn"]</th>
-            <th>@Localizer["PrintCount"]</th>
+            <th>@Localizer["Days"]</th>
+            <th style="text-align: center">@Localizer["PrintCount"]</th>
         </TableHeader>
         <RowTemplate Context="item">
-            <td>@item.StationCustomerCargo.Direction.ShortNameLocalized()</td>
-            <td>@item.StationCustomerCargo.StationCustomer.CustomerName</td>
-            <td style="@item.OtherRegion.Style()">@item.OtherRegion.LocalName</td>
-            <td>@item.OtherCustomerCargo.LocalizedName()</td>
+            <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
+            <td>@item.OtherCustomerCargo.LongDescription()</td>
+            <td style="@item.OtherRegion.Style()">@item.OtherRegion?.LocalName</td>
+            <td>@item.OtherCustomerCargo.Cargo.LocalizedName()</td>
             <td>@item.OperatingDay.ShortName</td>
-            <td>@item.HasEmptyReturn.AsYesOrNo()</td>
-            <td>@item.PrintCount</td>
+            <td align="center">@item.PrintCount</td>
         </RowTemplate>
         <RowEditTemplate Context="item">
             <CustomerWaybillEdit Waybill="@item" />
@@ -62,10 +62,8 @@ else
     [Parameter] public int StationId { get; set; }
 
     ClaimsPrincipal? Principal;
-    Station? Station;
     StationCustomer? Customer;
 
-    bool MayEdit;
     IEnumerable<StationCustomerWaybill>? Waybills;
 
     protected override async Task OnInitializedAsync()
@@ -81,5 +79,12 @@ else
             Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
             Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
         }
+    }
+
+    async Task GenerateWaybills()
+    {
+        var result = await WaybillService.AddGeneratedModuleCustomerWaybills(Principal, Id);
+        Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
+        StateHasChanged();
     }
 }

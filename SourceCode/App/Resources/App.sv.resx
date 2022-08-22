@@ -1209,4 +1209,13 @@
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
   </data>
+  <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
+    <value>Träffen är ännu inte öppen för registrering</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Antal</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generera</value>
+  </data>
 </root>

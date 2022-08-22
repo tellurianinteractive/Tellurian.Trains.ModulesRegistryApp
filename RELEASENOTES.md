@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.6.19
+Release date 2022-08-22
+- **Meeting Registration** now displays message if you try yo register too early.
+- **Alerts** are now styled in a consequent way.
+
 #### Version 1.6.18
 Release date 2022-08-21
 - **Meeting Registration** feedback for non-logged-in site visitors is improved, with instructions to how register.

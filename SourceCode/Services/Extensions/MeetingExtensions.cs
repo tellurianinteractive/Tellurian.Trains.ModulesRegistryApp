@@ -6,25 +6,39 @@ public static class MeetingExtensions
     public static int DaysCount(this Meeting it) =>
          (it.EndDate - it.StartDate).Days + 1;
 
-    public static string Day(this Meeting it, int day) => 
+    public static string Day(this Meeting it, int day) =>
         it.StartDate.AddDays(day - 1).DayOfWeek.ToString();
 
     public static bool IsCancelled(this Meeting? it) =>
         it is null || it.Status == (int)MeetingStatus.Canceled;
 
-    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null && 
-        !it.IsCancelled() && 
-        it.Layouts.Any(l => l.IsRegistrationPermitted) && 
-        it.Layouts.Any(l => l.RegistrationOpeningDate <= at) && 
-        it.Layouts.Any(l => l.RegistrationClosingDate >= at);
+    public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
+        it is not null &&
+        it.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
 
-    public static bool IsClosedForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null && it.Layouts.Any() && it.Layouts.Any(l => l.RegistrationClosingDate <= at);
+    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
+        it is not null &&
+        it.Layouts.Any(l => l.IsOpenForRegistration(at));
+
+    public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
+        it is null ||
+        !it.Layouts.Any(l => l.IsOpenForRegistration(at));
+
+    private static bool IsRegistrationAvailable(this Meeting it) =>
+        !it.Layouts.Any(l => l.IsRegistrationPermitted);
 
     public static bool MayRegister(this Meeting? it, DateTime at, ClaimsPrincipal? principal) =>
        principal is not null && principal.IsAnyAdministrator() ||
         (principal.IsAuthenticated() && it.IsOpenForRegistration(at));
+
+    private static bool IsOpenForRegistration(this Layout it, DateTime at) =>
+        it.IsRegistrationPermitted &&
+        it.RegistrationOpeningDate <= at &&
+        it.RegistrationClosingDate.AddDays(1) > at;
+
+    private static bool IsNotYetOpenForRegistration(this Layout it, DateTime at) =>
+        it.IsRegistrationPermitted &&
+        it.RegistrationOpeningDate > at;
 
     public static string Organiser(this Meeting? me) =>
         me is null ? string.Empty :
@@ -34,6 +48,7 @@ public static class MeetingExtensions
     public static string StatusResourceName(this Meeting? me, DateTime at) =>
         me is null ? string.Empty :
         me.IsOrganiserInternal ? "Internal" :
+        me.IsRegistrationAvailable() || me.IsNotYetOpenForRegistration(at) ? ((MeetingStatus)me.Status).ToString() :
         me.IsOpenForRegistration(at) ? "RegistrationOpen" :
         me.IsClosedForRegistration(at) ? "RegistrationClosed" :
         ((MeetingStatus)me.Status).ToString();

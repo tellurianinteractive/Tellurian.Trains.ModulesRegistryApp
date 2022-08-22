@@ -3,7 +3,7 @@
 public interface ILanguageService
 {
     string[] GetSupportedLanguages();
-    LanguageLabels[] GetWaybillLabes();
+    LanguageLabels[] GetWaybillLabels();
 
 }
 

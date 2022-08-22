@@ -1,11 +1,7 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
-<div class="alert alert-@AlertType mt-3">
-    <span class="fa fa-@IconName" />@Localizer[Label]
+<div class="@AlertCss">
+    <span class="@IconCss"/><strong>@Localizer[Label]</strong>
 </div>
 
-@code {
-    [Parameter] public string Label { get; set; } = "ActionInProgress";
-    [Parameter] public string? IconName { get; set; } = "info-circle";
-    [Parameter] public string? AlertType { get; set; } = "info";
-}
+

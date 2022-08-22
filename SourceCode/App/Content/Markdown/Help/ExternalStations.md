@@ -8,7 +8,7 @@ Use external stations when you miss matchning freight suppliers or customers
 in the current layout, and want something historically correct on your waybills, 
 rather that just a neutral shadow station region colour.
 
-**NOTE**: **External stations must be entered with historically correct data
-about the station and its customers.**
+**NOTE**: **External stations should be entered with historically correct data
+about the station and its customers, including relevant time periods for when the cargo was exchanged.**
 **The data is used in any cargo matching for any meeting,
 and incorrect data will wrongly match customers or cargo from different periods**.
