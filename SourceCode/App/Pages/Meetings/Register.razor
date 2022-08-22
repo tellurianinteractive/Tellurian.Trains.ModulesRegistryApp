@@ -11,13 +11,13 @@
 
 <PageHeading Label="Registration" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
 
+@if (Meeting.IsNotYetOpenForRegistration(TimeProvider.LocalTime))
+{
+    <ActionMessage AlertType="Warning" Label="MeetingIsNotYetOpenForRegistration" />
+}
 <AuthorizeView>
     <NotAuthorized>
-        @if (Meeting.IsNotYetOpenForRegistration(TimeProvider.LocalTime)) 
-        {
-            <ActionMessage AlertType="Warning" Label="MeetingIsNotYetOpenForRegistration"/>
-        }
-        <ContentView ContentName="AttendToMeeting" />
+         <ContentView ContentName="AttendToMeeting" />
     </NotAuthorized>
     <Authorized>
         @if (Meeting is null)
