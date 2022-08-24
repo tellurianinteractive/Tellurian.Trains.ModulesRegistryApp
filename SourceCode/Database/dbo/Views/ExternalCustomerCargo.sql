@@ -1,38 +1,50 @@
-﻿CREATE VIEW [dbo].[ExternalCustomerCargo]
-	AS SELECT 
-	ESCC.Id AS Id,
-	ESCC.ExternalStationCustomerId AS StationCustomerId,
-	ESCC.OperatingDayId,
-	ES.[Id] AS StationId,
-	ES.FullName AS StationName,
-	ES.Signature AS StationSignature,
-	ESCC.CargoId,
+﻿CREATE VIEW [dbo].[ExternalCustomerCargo] AS 
+SELECT
+	SCC.ExternalStationCustomerId AS StationCustomerId,
+	SCC.Id AS StationCustomerCargoId,
+	SCC.OperatingDayId,
+	SCC.CargoId,
+	SCC.Quantity,
+	SCC.QuantityUnitId,
+	SCC.PackageUnitId,
+	SCC.SpecificWagonClass,
+	SCC.SpecialCargoName,
+	CD.IsSupply AS IsEmptyReturn,
+	CAST (0 AS BIT) AS MatchReturn,
+	COALESCE(SCC.FromYear, SC.OpenedYear) AS FromYear,
+	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
+	'' AS TrackOrArea,
+	'' AS TrackOrAreaColor,
+	SC.Id AS CustomerId,
+	SC.CustomerName,
 	CD.IsSupply,
 	CD.IsInternational,
-	0 AS IsInternal,
-	0 AS IsShadowYard,
-	C.DefaultClasses,
-	R.CountryId,
+	'' AS ReadyTime,
+	CU.FullName AS QuantityUnitName,
+	CASE
+		WHEN CPU.Id=3 AND SCC.Quantity <=1 THEN CPU.SingularResourceCode
+		ELSE CPU.PluralResourceCode
+	END AS PackagingUnit,
+	S.Id AS StationId,
+	S.FullName AS StationName,
+	S.Signature AS StationSignature,
 	R.Id AS RegionId,
+	R.CountryId,
 	R.BackColor,
 	R.ForeColor,
-	ESC.CustomerName,
-	COALESCE(ESCC.FromYear, ESC.OpenedYear) AS FromYear,
-	COALESCE(ESCC.UptoYear, ESC.ClosedYear) AS UptoYear,
-	ESCC.Quantity,
-	ESCC.QuantityUnitId,
-	ESCC.PackageUnitId,
-	ESCC.SpecificWagonClass,
-	ESCC.SpecialCargoName,
-	NULL AS ReadyTime,
-	0 AS ReadyTimeIsSpecifiedInLayout,
-	NULL AS TrackOrArea,
-	'#ffffff' AS TrackOrAreaColor,
-	0 AS EmptyReturn,
-	0 AS MatchReturn
-FROM [ExternalStation] AS ES 
-	INNER JOIN [Region] AS R ON ES.RegionId = R.Id 
-	INNER JOIN [ExternalStationCustomer] AS ESC ON ESC.ExternalStationId = ES.Id
-	INNER JOIN [ExternalStationCustomerCargo] AS ESCC ON ESCC.ExternalStationCustomerId = ESC.Id
-	INNER JOIN [Cargo] AS C ON ESCC.CargoId = C.Id
-	INNER JOIN [CargoDirection] AS CD ON ESCC.DirectionId = CD.Id
+	C.Languages,
+	C.DomainSuffix,
+	OD.Flag AS OperatingDayFlag,
+	OD.DisplayOrder AS OperatingDayDisplayOrder,
+	CAST (0 AS BIT) AS IsModuleStation,
+	CAST (0 AS BIT) AS IsShadowYard
+
+FROM 
+	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
+	INNER JOIN [Country] AS C ON C.Id = R.CountryId
+	INNER JOIN [ExternalStationCustomer] AS SC ON SC.ExternalStationId = S.Id
+	INNER JOIN [ExternalStationCustomerCargo] AS SCC ON SCC.ExternalStationCustomerId = SC.Id
+	INNER JOIN [CargoPackagingUnit] AS CPU ON CPU.Id = SCC.PackageUnitId
+	INNER JOIN [CargoDirection] AS CD ON SCC.DirectionId = CD.Id
+	INNER JOIN [CargoUnit] AS CU ON CU.Id = SCC.QuantityUnitId
+	INNER JOIN [OperatingDay] AS OD ON OD.Id = SCC.OperatingDayId

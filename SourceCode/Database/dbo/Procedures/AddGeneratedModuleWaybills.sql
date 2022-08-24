@@ -1,13 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[AddGeneratedModuleWaybills]
 	@StationCustomerId INT
 AS
+-- The columns in this stored procedures must match table StationCustomerWaybill
 BEGIN
 	SET NOCOUNT ON
 	INSERT INTO StationCustomerWaybill
 	SELECT
 		ME.StationCustomerId AS [StationCustomerId],
-		ME.Id AS [StationCustomerCargoId],
-		OTHER.Id AS [OtherCustomerCargoId],
+		ME.StationCustomerCargoId AS [StationCustomerCargoId],
+		OTHER.StationCustomerCargoId AS [OtherStationCustomerCargoId],
+		NULL AS [OtherExternalCustomerCargoId],
 		OTHER.RegionId AS [OtherRegionId],
 		ME.OperatingDayId AS OperatingDayId,
 		0 AS [IsManuallyCreated],
@@ -20,7 +22,7 @@ BEGIN
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN
 		ModuleCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
-		StationCustomerWaybill AS SCW ON ME.Id = SCW.StationCustomerCargoId AND OTHER.Id = SCW.OtherCustomerCargoId
+		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
 	WHERE
 		ME.StationCustomerId = @StationCustomerId
 		AND ME.StationCustomerId <> OTHER.StationCustomerId

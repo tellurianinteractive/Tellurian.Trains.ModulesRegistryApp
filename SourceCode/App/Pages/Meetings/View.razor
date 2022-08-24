@@ -21,7 +21,11 @@ else
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.Organiser())
     @Item("Status", Meeting.Status.MeetingStatus())
-    <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)"/>
+
+    @Item("RegistrationOpens", $"{Meeting.RegistrationOpensDate():ddd d MMM yyyy}")
+    @Item("RegistrationCloses", $"{Meeting.RegistrationClosingDate():ddd d MMM yyyy}")
+
+    <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)" />
     <MarkdownView Label="Details" Markdown="@Meeting.Details" />
     <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
 }

@@ -12,6 +12,14 @@ public static class MeetingExtensions
     public static bool IsCancelled(this Meeting? it) =>
         it is null || it.Status == (int)MeetingStatus.Canceled;
 
+    public static DateTime? RegistrationOpensDate(this Meeting? it) =>
+        it is null || !it.IsRegistrationAvailable() ? null :
+        it.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);
+
+    public static DateTime? RegistrationClosingDate(this Meeting? it) =>
+        it is null || !it.IsRegistrationAvailable() ? null :
+        it.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.RegistrationClosingDate);
+
     public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
         it is not null &&
         it.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
@@ -25,7 +33,7 @@ public static class MeetingExtensions
         !it.Layouts.Any(l => l.IsOpenForRegistration(at));
 
     private static bool IsRegistrationAvailable(this Meeting it) =>
-        !it.Layouts.Any(l => l.IsRegistrationPermitted);
+        it.Layouts.Any(l => l.IsRegistrationPermitted);
 
     public static bool MayRegister(this Meeting? it, DateTime at, ClaimsPrincipal? principal) =>
        principal is not null && principal.IsAnyAdministrator() ||

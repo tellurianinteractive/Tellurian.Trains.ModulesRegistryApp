@@ -142,7 +142,14 @@
     <Build Include="dbo\Views\ExternalCustomerCargo.sql" />
     <Build Include="dbo\Views\LayoutCustomerCargo.sql" />
     <Build Include="dbo\Tables\ExternalStationWaybill.sql" />
-    <Build Include="dbo\Procedures\AddGerenratedModuleWaybills.sql" />
+    <Build Include="dbo\Procedures\AddGeneratedModuleWaybills.sql" />
+    <Build Include="dbo\Views\SupplierCustomerCargo.sql" />
+    <Build Include="dbo\Views\ConsumerCustomerCargo.sql" />
+    <Build Include="dbo\Procedures\AddGeneratedExternalWaybills.sql" />
+    <Build Include="dbo\Views\ModuleConsumerWaybill.sql" />
+    <Build Include="dbo\Views\ExternalConsumerWaybill.sql" />
+    <Build Include="dbo\Views\ModuleSupplierWaybill.sql" />
+    <Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
