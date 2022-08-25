@@ -15,7 +15,7 @@ public class Password
 public class PasswordPolicy : ValidationAttribute
 {
     public static int MinimumLength { get; set; } = 10;
-    public static (int Minimum, string Characters) Letters { get; set; } = (4, "ABCDEFGHIJKLMNOPQRSTUÜVXYZÅÄÆÖØabcdefghijklmnopqrstuüvxyzåäæöø");
+    public static (int Minimum, string Characters) Letters { get; set; } = (4, "ABCDEFGHIJKLMNOPQRSTUÜVWXYZÅÄÆÖØabcdefghijklmnopqrstuüvwxyzåäæöø");
     public static (int Minimum, string Characters) Digits { get; set; } = (1, "0123456789");
     public static (int Minimum, string Characters) Special { get; set; } = (1, "!#¤%&?§()[]+*_");
 
@@ -29,12 +29,14 @@ public class PasswordPolicy : ValidationAttribute
             var letters = 0;
             var digits = 0;
             var special = 0;
+            var  invalid = 0;
             var count = 0;
             foreach (var c in text)
             {
                 if (Letters.Characters.Contains(c)) { count++; letters++; }
-                if (Digits.Characters.Contains(c)) { count++; digits++; }
-                if (Special.Characters.Contains(c)) { count++; special++; }
+                else if (Digits.Characters.Contains(c)) { count++; digits++; }
+                else if (Special.Characters.Contains(c)) { count++; special++; }
+                else { invalid++; }
             }
             return text.Length == count && letters >= Letters.Minimum && digits >= Digits.Minimum && special >= Special.Minimum;
         }

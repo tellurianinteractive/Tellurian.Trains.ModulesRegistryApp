@@ -50,3 +50,6 @@ FROM
 	SupplierCustomerCargo SENDER ON SCW.StationCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
 	ConsumerCustomerCargo RECEIVER ON RECEIVER.IsModuleStation <> 0 AND SCW.OtherStationCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN
 	Cargo AS C ON C.Id = SENDER.CargoId
+WHERE
+	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
+	(C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear )

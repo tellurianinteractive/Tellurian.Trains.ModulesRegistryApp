@@ -15,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NET-development.md = NET-development.md
 		README.md = README.md
 		RELEASENOTES.md = RELEASENOTES.md
-		SYSTEMDESIGN.md = SYSTEMDESIGN.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}"
@@ -25,6 +24,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Api", "SourceCode\Data.Api\Data.Api.csproj", "{6397D024-FED8-4979-B4C7-B5676D5200BF}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "SourceCode\Database\Database.sqlproj", "{4A4992F4-A2FE-42AC-A2A8-8218900C5966}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System design documents", "System design documents", "{00E89979-CC4B-4FDE-9677-27BE19105636}"
+	ProjectSection(SolutionItems) = preProject
+		System Design Documents\Creations of waybills.md = System Design Documents\Creations of waybills.md
+		System Design Documents\Overview.md = System Design Documents\Overview.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,9 +103,12 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00E89979-CC4B-4FDE-9677-27BE19105636} = {5941055C-D2E9-4640-A78B-C5B349AE6F84}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
-		RESX_NeutralResourcesLanguage = en-GB
 		RESX_ExcelExportMode = SingleSheet
+		RESX_NeutralResourcesLanguage = en-GB
+		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
 	EndGlobalSection
 EndGlobal

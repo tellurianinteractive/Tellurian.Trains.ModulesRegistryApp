@@ -10,7 +10,7 @@ public class PasswordTests
     public void IsValidPasswords()
     {
         var policy = new PasswordPolicy();
-        Assert.IsTrue(policy.IsValid("FonjMonj899cc!"));
+        Assert.IsTrue(policy.IsValid("Fremo2?!wW"));
     }
 
     [TestMethod]

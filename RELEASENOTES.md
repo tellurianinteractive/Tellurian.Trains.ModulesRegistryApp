@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.6.20
+Release date 2022-08-25
+- **Bug fix** of password validation when containing 'W' or 'w'. Thanks to Detlef Born.
+- **Bug fix** module meeting status.
+
 #### Version 1.6.19
 Release date 2022-08-22
 - **Meeting Registration** now displays message if you try yo register too early.
