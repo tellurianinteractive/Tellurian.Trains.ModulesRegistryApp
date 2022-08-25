@@ -13,9 +13,9 @@ public sealed class GroupService
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId)
     {
         using var dbContext = Factory.CreateDbContext();
-        var id = countryId ?? principal.CountryId();
+        var id = principal.IsAnyAdministrator() ? 0 : countryId ?? principal.CountryId();
         return await dbContext.Groups
-            .Where(g =>  g.CountryId == id)
+            .Where(g =>  g.CountryId == id || id == 0)
             .OrderBy(g => g.FullName)
             .Select(g => new ListboxItem(g.Id, g.FullName))
             .ToReadOnlyListAsync();

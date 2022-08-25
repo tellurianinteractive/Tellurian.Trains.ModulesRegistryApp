@@ -20,8 +20,9 @@
 <TableTemplate Items="Meetings">
     <TableHeader>
         <th>@Localizer["Meeting"]</th>
-        <th>@Localizer["Country"]</th>
+        <th>@Localizer["Venue"]</th>
         <th>@Localizer["City"]</th>
+        <th>@Localizer["Country"]</th>
         <th style ="text-align: center">@Localizer["StartDate"]</th>
         <th style="text-align: center">@Localizer["EndDate"]</th>
         <th style="text-align: center">@Localizer["Status"]</th>
@@ -29,8 +30,9 @@
     </TableHeader>
     <RowTemplate Context="item">
         <td>@item.meeting.Name</td>
-        <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
+        <td>@item.meeting.VenueName</td>
         <td>@item.meeting.CityName</td>
+        <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
         <td class="@MeetingStatusCssClass(item.meeting)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td>

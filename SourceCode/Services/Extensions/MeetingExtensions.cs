@@ -30,7 +30,7 @@ public static class MeetingExtensions
 
     public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
         it is null ||
-        it.Layouts.All(l => l.RegistrationClosingDate <= at);
+        it.Layouts.Any() && it.Layouts.All(l => l.RegistrationClosingDate <= at);
 
     private static bool IsRegistrationAvailable(this Meeting it) =>
         it.Layouts.Any(l => l.IsRegistrationPermitted);
