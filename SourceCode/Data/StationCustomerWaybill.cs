@@ -15,7 +15,8 @@ public class StationCustomerWaybill
     public int Id { get; set; }
     public int StationCustomerId { get; set; }
     public int StationCustomerCargoId { get; set; }
-    public int? OtherCustomerCargoId { get; set; }
+    public int? OtherStationCustomerCargoId { get; set; }
+    public int? OtherExternalCustomerCargoId { get; set; }
     public int? OtherRegionId { get; set; }
     public int OperatingDayId { get; set; }
     public int SequenceNumber { get; set; }
@@ -28,7 +29,8 @@ public class StationCustomerWaybill
 
     public virtual StationCustomer StationCustomer { get; set; }
     public virtual StationCustomerCargo StationCustomerCargo { get; set; }
-    public virtual StationCustomerCargo OtherCustomerCargo { get; set; }
+    public virtual StationCustomerCargo OtherStationCustomerCargo { get; set; }
+    public virtual ExternalStationCustomerCargo OtherExternalCustomerCargo { get; set; }
     public virtual Region OtherRegion { get; set; }
     public virtual OperatingDay OperatingDay { get; set; }
 }
@@ -50,9 +52,13 @@ internal static class StationCustomerWaybillMapper
                .WithMany()
                .HasForeignKey(e => e.StationCustomerCargoId);
 
-            entity.HasOne(e => e.OtherCustomerCargo)
+            entity.HasOne(e => e.OtherStationCustomerCargo)
                 .WithMany()
-                .HasForeignKey(e => e.OtherCustomerCargoId);
+                .HasForeignKey(e => e.OtherStationCustomerCargoId);
+
+            entity.HasOne(e => e.OtherExternalCustomerCargo)
+               .WithMany()
+               .HasForeignKey(e => e.OtherExternalCustomerCargoId);
 
             entity.HasOne(e => e.OtherRegion)
                 .WithMany()

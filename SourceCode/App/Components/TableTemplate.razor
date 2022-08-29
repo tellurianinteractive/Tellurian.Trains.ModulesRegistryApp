@@ -4,7 +4,7 @@
 
 @if (Items is null)
 {
-    <ActionMessage Label="GettingData" AlertType="Wait"/>
+    <ActionMessage Label="GettingData" AlertType="Wait" />
 }
 else if (Items.Count() == 0 && !HideNoRecordsToDisplay)
 {
@@ -29,10 +29,12 @@ else
                 {
                     @if (RowEditTemplate is not null && IsEditItem(item))
                     {
-                        <tr @key="@ItemKey(item)">
-                            @RowEditTemplate(item)
-                            <td>
-                                <button class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" /> @Localizer["Save"]</button>
+                        <tr  @key="@ItemKey(item)">
+                            <td colspan="@EditColspan">
+                                @RowEditTemplate(item)
+                            </td>
+                            <td width="100px">
+                                <AppButton Label="Save" OnClickCallback="@(() => Save(ItemKey(item)))" />
                             </td>
                         </tr>
                     }
@@ -41,11 +43,11 @@ else
                         <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
                             @RowTemplate(item)
                             @if (RowEditTemplate is not null)
-                                {
-                                    <td>
-                                        <button class="btn btn-sm btn-primary"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</button>
-                                    </td>
-                                }
+                            {
+                                <td>
+                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(ItemKey(item)))" />
+                                </td>
+                            }
                         </tr>
                     }
                 }
@@ -62,6 +64,8 @@ else
     [Parameter] public bool HideNoRecordsToDisplay { get; set; }
     [Parameter] public Func<TItem, string>? Key { get; set; }
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
+    [Parameter] public int EditColspan { get; set; } = 2;
+
 
     string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
@@ -69,4 +73,14 @@ else
 
     string? EditedKey = null;
     bool IsEditItem(TItem item) => EditedKey is not null && ItemKey(item) == EditedKey;
+
+    void Edit(string key)
+    {
+        EditedKey = key;
+    }
+
+    void Save(string key)
+    {
+        EditedKey = null;
+    }
 }

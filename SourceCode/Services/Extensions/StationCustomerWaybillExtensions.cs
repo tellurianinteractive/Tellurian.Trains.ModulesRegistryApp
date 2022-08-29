@@ -11,5 +11,5 @@ public static class StationCustomerWaybillExtensions
         Resources.Strings.ResourceManager.GetString(it.OperatingDay.ShortName) ?? it.OperatingDay.ShortName;
 
     public static bool IsGenerated(this StationCustomerWaybill it) =>
-        !it.IsManuallyCreated || it.OtherCustomerCargoId.HasValue;
+        !it.IsManuallyCreated || it.OtherStationCustomerCargoId.HasValue;
 }

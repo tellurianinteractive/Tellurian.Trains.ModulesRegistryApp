@@ -87,7 +87,7 @@ public static class StationCustomerCargoExtensions
         it.SpecificWagonClass.HasValue() ? it.SpecificWagonClass : 
         it.Cargo.DefaultClasses;
 
-    private static string Localized(this Cargo? it) =>
+    internal static string Localized(this Cargo? it) =>
         it is null ? string.Empty :
         CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
         {

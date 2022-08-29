@@ -1,6 +1,4 @@
-﻿using System.Resources;
-
-namespace ModulesRegistry.Services.Implementations;
+﻿namespace ModulesRegistry.Services.Implementations;
 
 public class OperatingDayService
 {
@@ -17,7 +15,7 @@ public class OperatingDayService
         return await dbContext.OperatingDays.AsNoTracking()
             .Where(od => od.IsBasicDay)
             .OrderBy(od => od.Flag)
-            .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays(CultureInfo.CurrentCulture).ShortName))
+            .Select(od => new ListboxItem(od.Id, od.ShortNameLocalized()))
             .ToListAsync();
     }
 
@@ -26,7 +24,7 @@ public class OperatingDayService
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.OperatingDays.AsNoTracking()
             .OrderBy(od => od.DisplayOrder)
-            .Select(od => new ListboxItem(od.Id, od.Flag.OperationDays(od.IsSundayFirst,CultureInfo.CurrentCulture).ShortName))
+            .Select(od => new ListboxItem(od.Id, od.ShortNameLocalized()))
             .ToListAsync();
     }
 }

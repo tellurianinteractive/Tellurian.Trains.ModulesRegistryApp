@@ -24,7 +24,7 @@
     <input class="form-control" type="text" @bind="@PersonalMessage" @bind:event="oninput" @onkeyup="@UpdateMessage" />
     <div>
         <input class="form-check" type="checkbox" @bind="@IsReadOnly" />
-        <label class="form-check-label">@Localizer["IsReadOnly"]</label>
+        <label class="form-check-label">@Localizer["UserIsReadOnly"]</label>
     </div>
     <div class="col-12">
         <button class="btn btn-primary" @onclick="Send"><span class="@FontAwesome.Invite" />@Localizer["Send"]</button>

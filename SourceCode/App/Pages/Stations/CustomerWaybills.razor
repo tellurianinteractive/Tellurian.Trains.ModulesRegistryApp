@@ -16,8 +16,8 @@
 <PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
 <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-    <AppButton Label="Generate" IconName="cog" OnClickCallback="GenerateWaybills"/>
-    <AppButton Label="Add" Href="link to add" IsDisabled=true/>
+    <AppButton Label="Generate" IconName="cog" OnClickCallback="GenerateWaybills" />
+    <AppButton Label="Add" Href="" IsDisabled=true />
     <AppButton Label="Preview" Href="" IsDisabled=true />
 </div>
 
@@ -31,7 +31,7 @@ else if (Waybills.IsNullOrEmpty())
 }
 else
 {
-    <TableTemplate Items="Waybills">
+    <TableTemplate Items="Waybills" EditColspan="6">
         <TableHeader>
             <th>@Localizer["Direction"]</th>
             <th>@Localizer["FreightCustomer"]</th>
@@ -42,14 +42,20 @@ else
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
-            <td>@item.OtherCustomerCargo.LongDescription()</td>
-            <td style="@item.OtherRegion.Style()">@item.OtherRegion?.LocalName</td>
-            <td>@item.OtherCustomerCargo.Cargo.LocalizedName()</td>
-            <td>@item.OperatingDay.ShortName</td>
+            <td>
+                @item.OtherStationCustomerCargo?.LongDescription()
+                @item.OtherExternalCustomerCargo?.LongDescription()
+            </td>
+            <td style="@item.OtherRegion?.Style()">@item.OtherRegion?.LocalName</td>
+            <td>
+                @item.OtherStationCustomerCargo?.Cargo.LocalizedName()
+                @item.OtherExternalCustomerCargo?.Cargo.LocalizedName()
+            </td>
+            <td>@item.OperatingDay.ShortNameLocalized()</td>
             <td align="center">@item.PrintCount</td>
         </RowTemplate>
         <RowEditTemplate Context="item">
-            <CustomerWaybillEdit Waybill="@item" />
+            <CustomerWaybillEdit Waybill="@item" OperatingDayItems="OperationDayItems" RegionItems="RegionItems"/>
         </RowEditTemplate>
     </TableTemplate>
 }
@@ -65,10 +71,14 @@ else
     StationCustomer? Customer;
 
     IEnumerable<StationCustomerWaybill>? Waybills;
+    IEnumerable<ListboxItem>? OperationDayItems;
+    IEnumerable<ListboxItem>? RegionItems;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        OperationDayItems = await OperatingDayService.AllDaysItemsAsync();
+        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -83,7 +93,7 @@ else
 
     async Task GenerateWaybills()
     {
-        var result = await WaybillService.AddGeneratedModuleCustomerWaybills(Principal, Id);
+        var result = await WaybillService.AddGeneratedCustomerWaybills(Principal, Id);
         Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
         StateHasChanged();
     }

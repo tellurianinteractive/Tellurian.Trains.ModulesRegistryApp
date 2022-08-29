@@ -1218,4 +1218,10 @@
   <data name="Generate" xml:space="preserve">
     <value>Generer</value>
   </data>
+  <data name="InvitationToModuleRegistry" xml:space="preserve">
+    <value>Invitation til Modulregistret</value>
+  </data>
+  <data name="UserIsReadOnly" xml:space="preserve">
+    <value>Brugeren har kun læseadgang?</value>
+  </data>
 </root>

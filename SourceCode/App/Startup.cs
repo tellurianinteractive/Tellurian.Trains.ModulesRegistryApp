@@ -73,8 +73,10 @@ public class Startup
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<ITimeProvider, SystemTimeProvider>();
         services.AddScoped<PageHistory>();
-        if (Environment.IsProduction()) services.AddScoped<IMailSender, CloudMailSender>();
-        if (Environment.IsDevelopment()) services.AddScoped<IMailSender, LoggingOnlyMailSender>();
+        //if (Environment.IsProduction()) 
+            services.AddScoped<IMailSender, CloudMailSender>();
+        //if (Environment.IsDevelopment()) 
+        //    services.AddScoped<IMailSender, LoggingOnlyMailSender>();
         services.AddScoped<CargoService>();
         services.AddScoped<ContentService>();
         services.AddScoped<CountryService>();

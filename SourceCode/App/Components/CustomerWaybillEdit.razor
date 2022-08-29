@@ -3,16 +3,16 @@
 
 @if (Waybill is null)
 {
-
+    <p>No waybill</p>
 }
 else
 {
-    <EditTemplate Item="Waybill">
+    <EditTemplate Item="Waybill" ShowSaveButton=false>
         <Inputs>
             <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="Waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@Waybill.IsGenerated()" />
             @if (Waybill.IsGenerated())
             {
-                <AppDisplay Width="4" Label="OtherCustomer" Value="@Waybill.OtherCustomerCargo.LongDescription()" />
+                <AppDisplay Width="4" Label="OtherCustomer" Value="@Waybill.OtherStationCustomerCargo.LongDescription()" />
             }
             else
             {
@@ -20,9 +20,8 @@ else
 
             }
             <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="Waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
-            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
-            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Waybill.PrintPerOperatingDay" AlignWithFields=true />
-            <AppInputFill Width="5" />
+            <AppInputNumber Width="1" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
+            <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Waybill.PrintPerOperatingDay" />
             <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Waybill.HasEmptyReturn" />
             @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="Waybill.IsExpressCargo" />*@
             @*<AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="Waybill.IsCoolingTransport" />*@

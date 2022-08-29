@@ -64,7 +64,7 @@ public class StationCustomerService
                 .Include(s => s.OtherRegion)
                 .Include(s => s.OperatingDay)
                 .Include(s => s.StationCustomerCargo)
-                .Include(s => s.OtherCustomerCargo)
+                .Include(s => s.OtherStationCustomerCargo)
                 .ToReadOnlyListAsync();
             ;
 

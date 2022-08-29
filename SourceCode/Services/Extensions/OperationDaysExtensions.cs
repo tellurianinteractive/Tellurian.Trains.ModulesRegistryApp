@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Data;
+using ModulesRegistry.Services.Resources;
 using System.Text;
 
 namespace ModulesRegistry.Services.Extensions;
@@ -12,6 +13,15 @@ public class OperationDays
     public override bool Equals(object? obj) => obj is OperationDays other && other.ShortName.Equals(ShortName, StringComparison.OrdinalIgnoreCase);
     public override int GetHashCode() => ShortName.GetHashCode(StringComparison.OrdinalIgnoreCase);
     public override string ToString() => ShortName;
+}
+
+public static class OperatingDayExtensions
+{
+    public static string ShortNameLocalized(this OperatingDay day) =>
+        day.Flag.OperationDays().ShortName;
+
+    public static string FullNameLocalised(this OperatingDay day) =>
+        day.Flag.OperationDays().FullName;
 }
 
 public static class OperationDaysExtensions
