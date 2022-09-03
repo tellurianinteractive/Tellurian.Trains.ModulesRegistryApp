@@ -150,6 +150,7 @@
     <Build Include="dbo\Views\ExternalConsumerWaybill.sql" />
     <Build Include="dbo\Views\ModuleSupplierWaybill.sql" />
     <Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
+    <Build Include="dbo\Views\StationScale.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

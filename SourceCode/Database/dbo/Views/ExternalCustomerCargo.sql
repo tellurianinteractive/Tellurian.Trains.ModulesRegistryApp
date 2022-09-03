@@ -37,7 +37,8 @@ SELECT
 	OD.Flag AS OperatingDayFlag,
 	OD.DisplayOrder AS OperatingDayDisplayOrder,
 	CAST (0 AS BIT) AS IsModuleStation,
-	CAST (0 AS BIT) AS IsShadowYard
+	CAST (0 AS BIT) AS IsShadowYard,
+	0 AS ScaleId 
 
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
