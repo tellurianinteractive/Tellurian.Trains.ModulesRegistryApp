@@ -41,7 +41,7 @@ SELECT
 	0 AS ScaleId 
 
 FROM 
-	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
+	[ExternalStation] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId
 	INNER JOIN [ExternalStationCustomer] AS SC ON SC.ExternalStationId = S.Id
 	INNER JOIN [ExternalStationCustomerCargo] AS SCC ON SCC.ExternalStationCustomerId = SC.Id

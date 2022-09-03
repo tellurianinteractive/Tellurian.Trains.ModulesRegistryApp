@@ -1,5 +1,6 @@
 ﻿@page "/reports/waybills/layout/{layoutId:int}"
 @page "/reports/waybills/layout/{layoutId:int}/station/{layoutStationId:int}"
+@page "/reports/waybills/station/{stationId:int}"
 @layout PrintLayout
 @inject IStringLocalizer<App> Localizer
 @inject ILanguageService LanguageService
@@ -29,6 +30,7 @@ else
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int StationId { get; set; }
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int? LayoutStationId { get; set; }
 
@@ -44,7 +46,10 @@ else
             IsLoading = true;
             LanguageLabels = LanguageService.GetWaybillLabels();
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            Items = await WaybillService.GetWaybills(Principal, LayoutId, LayoutStationId, true);
+            if (StationId > 0)
+            {
+                Items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, true);
+            }
         }
     }
 }

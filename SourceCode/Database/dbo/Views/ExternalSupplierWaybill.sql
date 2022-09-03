@@ -6,6 +6,8 @@
 -- ExternalSupplierWaybill (this)
 -- ExternalConsumerWaybill
 SELECT
+	SENDER.StationId AS OriginStationId,
+	SENDER.StationCustomerId AS OriginStationCustomerId,
 	SENDER.StationName AS OriginStationName,
 	SENDER.CustomerName AS SenderName,
 	SENDER.TrackOrArea AS SenderTrackOrArea,
@@ -22,6 +24,8 @@ SELECT
 	SENDER.QuantityUnitName AS QuanityUnitResourceName,
 	SENDER.PackagingUnit AS PackagingUnitResourceName,
 	CAST (1 AS BIT) OriginIsExternal,
+	RECEIVER.StationId AS DestinationStationId,
+	RECEIVER.StationCustomerId AS DestinationStationCustomerId,
 	RECEIVER.StationName AS DestinationStationName,
 	RECEIVER.CustomerName AS ReceiverName,
 	RECEIVER.TrackOrArea AS ReceiverTrackOrArea,
@@ -47,8 +51,8 @@ SELECT
 	C.SV
 FROM
 	StationCustomerWaybill AS SCW INNER JOIN
-	SupplierCustomerCargo RECEIVER ON SCW.StationCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN
-	ConsumerCustomerCargo SENDER ON RECEIVER.IsModuleStation = 0 AND SCW.OtherExternalCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
+	ConsumerCustomerCargo RECEIVER ON SCW.StationCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN
+	SupplierCustomerCargo SENDER ON SENDER.IsModuleStation = 0 AND SCW.OtherExternalCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
 	Cargo AS C ON C.Id = SENDER.CargoId
 WHERE
 	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND

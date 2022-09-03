@@ -6,6 +6,8 @@
 -- ExternalSupplierWaybill
 -- ExternalConsumerWaybill (this)
 SELECT
+	SENDER.StationId AS OriginStationId,
+	SENDER.StationCustomerId AS OriginStationCustomerId,
 	SENDER.StationName AS OriginStationName,
 	SENDER.CustomerName AS SenderName,
 	SENDER.TrackOrArea AS SenderTrackOrArea,
@@ -22,6 +24,8 @@ SELECT
 	SENDER.QuantityUnitName AS QuanityUnitResourceName,
 	SENDER.PackagingUnit AS PackagingUnitResourceName,
 	CAST (1 AS BIT) OriginIsExternal,
+	RECEIVER.StationId AS DestinationStationId,
+	RECEIVER.StationCustomerId AS DestinationStationCustomerId,
 	RECEIVER.StationName AS DestinationStationName,
 	RECEIVER.CustomerName AS ReceiverName,
 	RECEIVER.TrackOrArea AS ReceiverTrackOrArea,

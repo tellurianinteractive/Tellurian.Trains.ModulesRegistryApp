@@ -27,7 +27,7 @@ BEGIN
 		ME.StationCustomerId = @StationCustomerId
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply
-		AND ME.QuantityUnitId = OTHER.QuantityUnitId
+		--AND ME.QuantityUnitId = OTHER.QuantityUnitId
 		AND (ME.CountryId = OTHER.CountryId OR ME.IsInternational <> 0 AND OTHER.IsInternational <>0) 
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
 		AND (ME.UptoYear IS NULL OR OTHER.FromYear IS NULL OR ME.UptoYear >= OTHER.FromYear )

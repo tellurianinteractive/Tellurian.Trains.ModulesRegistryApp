@@ -113,8 +113,8 @@
     <Build Include="dbo\Tables\LayoutStation.sql" />
     <Build Include="dbo\Tables\LayoutStationRegion.sql" />
     <Build Include="dbo\Tables\LayoutLine.sql" />
-    <Build Include="dbo\Views\CustomerCargo.sql" />
-    <Build Include="dbo\Views\Waybills.sql" />
+    <Build Include="dbo\Views\XCustomerCargo.sql" />
+    <Build Include="dbo\Views\XWaybills.sql" />
     <Build Include="dbo\Listboxes\ListBasicDay.sql" />
     <Build Include="dbo\Listboxes\ListCargoDirection.sql" />
     <Build Include="dbo\Listboxes\ListCargoReadyTime.sql" />
@@ -151,6 +151,7 @@
     <Build Include="dbo\Views\ModuleSupplierWaybill.sql" />
     <Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
     <Build Include="dbo\Views\StationScale.sql" />
+    <Build Include="dbo\Procedures\GetStationCustomerWaybills.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

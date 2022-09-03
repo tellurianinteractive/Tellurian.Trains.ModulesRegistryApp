@@ -20,7 +20,8 @@
 
 @if (MayEdit)
 {
-    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
+    <AppButton Label="Add" Href="@FreightCustomerHref(0)" />
+    <AppButton Label="Waybills" Href="@WaybillsHref(StationId)" IsDisabled="@(StationId < 1)" />
     <hr />
 }
 @if (StationCustomers is not null)
@@ -84,4 +85,5 @@
     }
 
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";
+    string WaybillsHref(int stationId) => $"/reports/waybills/station/{stationId}";
 }
