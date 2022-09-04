@@ -18,4 +18,8 @@
     CONSTRAINT [FK_ExternalStationCustomerCargo_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
     CONSTRAINT [FK_ExternalStationCustomerCargo_StationCustomer] FOREIGN KEY ([ExternalStationCustomerId]) REFERENCES [dbo].[ExternalStationCustomer] ([Id]) ON DELETE CASCADE
 );
+GO
+CREATE NONCLUSTERED INDEX [IX_ExternalStationCustomerCargo_StationCustomerId]
+    ON [dbo].[ExternalStationCustomerCargo] ([ExternalStationCustomerId] ASC)
+    INCLUDE ([CargoId], [PackageUnitId], [DirectionId] ,[OperatingDayId], [QuantityUnitId])
 

@@ -18,13 +18,13 @@ public class WaybillService
         if (principal.IsAuthenticated())
         {
             var dbContext = Factory.CreateDbContext();
-            var packagingUnits = await dbContext.CargoPackagingUnits.AsNoTracking().ToListAsync().ConfigureAwait(false);
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
                 var command = new SqlCommand("GetStationCustomerWaybills", connection)
                 {
-                    CommandType = CommandType.StoredProcedure
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout=120
                 };
                 command.Parameters.AddWithValue("@StationId", stationId);
                 command.Parameters.AddWithValue("StationCustomerId", stationCustomerId);
@@ -32,12 +32,12 @@ public class WaybillService
                 command.Parameters.AddWithValue("@Receiving", receiving);
                 try
                 {
-                    connection.Open();
+                    connection.Open( );
                     var reader = await command.ExecuteReaderAsync();
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
-                        waybills.Add(MapWaybill(reader, resourceManager, packagingUnits));
+                        waybills.Add(MapWaybill(reader, resourceManager,  stationId));
                         var last = waybills.Last();
                         if (last is null) continue;
                         if (last.EmptyReturn)
@@ -60,7 +60,7 @@ public class WaybillService
                 }
                 catch (Exception)
                 {
-                    return waybills;
+                    throw;
                 }
             }
         }
@@ -74,7 +74,6 @@ public class WaybillService
         if (principal.IsAuthenticated())
         {
             var dbContext = Factory.CreateDbContext();
-            var packagingUnits = await dbContext.CargoPackagingUnits.AsNoTracking().ToListAsync().ConfigureAwait(false);
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
@@ -98,7 +97,7 @@ public class WaybillService
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
-                        waybills.Add(MapWaybill(reader, resourceManager, packagingUnits));
+                        waybills.Add(MapWaybill(reader, resourceManager,  stationId ?? 0));
                         var last = waybills.Last();
                         if (last is null) continue;
                         if (last.EmptyReturn)
@@ -128,12 +127,14 @@ public class WaybillService
         return waybills;
     }
 
-    private static Waybill MapWaybill(IDataRecord record, ResourceManager resourceManager, IEnumerable<CargoPackagingUnit> packagingUnits)
+    private static Waybill MapWaybill(IDataRecord record, ResourceManager resourceManager, int stationId)
     {
         string originLanguage = record.GetString("OriginLanguages", "EN").FirstItem("EN");
         string destinationLanguage = record.GetString("DestinationLanguages", "EN").FirstItem("EN");
         var wagonClass = record.GetString("DefaultClasses");
         var specialWagonClass = record.GetString("SpecificWagonClass");
+        var originIsInternal = record.GetBool("OriginIsModuleStation") && record.GetInt("OriginStationId") == stationId;
+        var destinationIsInternal = record.GetBool("DestinationIsModuleStation") && record.GetInt("DestinationStationId") == stationId;
         return new()
         {
             Origin = new CargoCustomer
@@ -142,16 +143,18 @@ public class WaybillService
                 Name = record.GetString("SenderName"),
                 Language = originLanguage,
                 DomainSuffix = record.GetString("OriginDomainSuffix"),
-                ForeColor = record.GetString("OriginForeColor"),
-                BackColor = record.GetString("OriginBackColor"),
+                ForeColor = originIsInternal ? "#000000" : record.GetString("OriginForeColor"),
+                BackColor = originIsInternal ? "#FFFFFF" : record.GetString("OriginBackColor"),
                 CargoName = record.GetString(originLanguage),
-                PackageUnitName = record.GetStringResourceForLanguage("PackagingUnitResourceName", resourceManager, originLanguage),
-                QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, originLanguage),
-                IsInternal = !record.GetBool("OriginIsExternal"),
+                PackageUnitName = record.GetLocalizedString("PackagingUnitResourceName", resourceManager, originLanguage),
+                QuantityUnitName = record.GetLocalizedString("QuanityUnitResourceName", resourceManager, originLanguage),
+                IsInternal = originIsInternal,
                 OperationDaysFlags = record.GetByte("SendingDayFlag"),
-                ReadyTime = record.GetString("SenderReadyTime"),
+                ReadyTime = record.GetLocalizedString("SenderReadyTime", resourceManager, originLanguage),
                 TrackOrArea = record.GetString("SenderTrackOrArea"),
-                TrackOrAreaColor = record.GetString("SenderTrackOrAreaColor")
+                TrackOrAreaColor = record.GetString("SenderTrackOrAreaColor"),
+                FromYear = record.GetNullableInt("SenderFromYear", null),
+                UptoYear = record.GetNullableInt("SenderUptoYear", null)
             },
             Destination = new CargoCustomer
             {
@@ -159,29 +162,25 @@ public class WaybillService
                 StationName = record.GetString("DestinationStationName"),
                 Language = destinationLanguage,
                 DomainSuffix = record.GetString("DestinationDomainSuffix"),
-                ForeColor = record.GetString("DestinationForeColor"),
-                BackColor = record.GetString("DestinationBackColor"),
+                ForeColor = destinationIsInternal ? "#000000" : record.GetString("DestinationForeColor"),
+                BackColor = destinationIsInternal ? "#FFFFFF" : record.GetString("DestinationBackColor"),
                 CargoName = record.GetString(destinationLanguage),
-                PackageUnitName = record.GetStringResourceForLanguage("PackagingUnitResourceName", resourceManager, destinationLanguage),
-                QuantityUnitName = record.GetStringResourceForLanguage("QuanityUnitResourceName", resourceManager, destinationLanguage),
-                IsInternal = !record.GetBool("DestinationIsExternal"),
+                PackageUnitName = record.GetLocalizedString("PackagingUnitResourceName", resourceManager, destinationLanguage),
+                QuantityUnitName = record.GetLocalizedString("QuanityUnitResourceName", resourceManager, destinationLanguage),
+                IsInternal = destinationIsInternal,
                 OperationDaysFlags = record.GetByte("ReceivingDayFlag"),
-                ReadyTime = record.GetString("ReceiverReadyTime"),
+                ReadyTime = record.GetLocalizedString("ReceiverReadyTime", resourceManager, destinationLanguage),
                 TrackOrArea = record.GetString("ReceiverTrackOrArea"),
-                TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor")
-
+                TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor"),
+                FromYear = record.GetNullableInt("ReceiverFromYear", null),
+                UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
             },
             Quantity = record.GetInt("Quantity"),
-            QuantityUnitId = record.GetInt("QuantityUnitId"),
-            PackagingUnitId = record.GetInt("OriginPackageUnitId"),
             OperatorName = string.Empty, // To be supported
             WagonClass = string.IsNullOrWhiteSpace(specialWagonClass) ? wagonClass : specialWagonClass,
+            Id = record.GetInt("Id"),
             //EmptyReturn = record.GetBool("EmptyReturn"),
             //MatchReturn = record.GetBool("MatchReturn")
         };
     }
-
-    static string PackageUnitName(IEnumerable<CargoPackagingUnit>? items, int id, string language) =>
-        items is null || id == 0 ? string.Empty :
-        items.SingleOrDefault(i => i.Id == id)?.PluralResourceCode.LocalizedName(language.AsCultureInfo()).Value ?? string.Empty;
 }

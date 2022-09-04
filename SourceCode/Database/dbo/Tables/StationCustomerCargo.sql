@@ -26,6 +26,10 @@
     CONSTRAINT [FK_CustomerCargo_CargoReadyTime] FOREIGN KEY ([ReadyTimeId]) REFERENCES [dbo].[CargoReadyTime] ([Id]),
     CONSTRAINT [FK_CustomerCargo_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
 );
+GO
+CREATE NONCLUSTERED INDEX [IX_StationCustomerCargo_StationCustomerId]
+    ON [dbo].[StationCustomerCargo] ([StationCustomerId] ASC)
+    INCLUDE ([CargoId], [PackageUnitId], [DirectionId] ,[OperatingDayId], [QuantityUnitId])
 
 
 

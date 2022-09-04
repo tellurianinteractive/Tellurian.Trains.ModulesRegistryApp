@@ -21,7 +21,7 @@
 @if (MayEdit)
 {
     <AppButton Label="Add" Href="@FreightCustomerHref(0)" />
-    <AppButton Label="Waybills" Href="@WaybillsHref(StationId)" IsDisabled="@(StationId < 1)" />
+    <AppButton Label="Waybills" Href="@WaybillsHref(StationId)" IsDisabled="@(StationId < 1)" IconName="@FontAwesome.Print"/>
     <hr />
 }
 @if (StationCustomers is not null)

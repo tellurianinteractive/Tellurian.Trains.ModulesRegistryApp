@@ -15,6 +15,7 @@ namespace ModulesRegistry.Components
             "stop" => "fa fa-exclamation-circle",
             "wait" => "fa fa-hourglass",
             "warning" => "fa fa-exclamation-triangle",
+            "spinning" => "fa fa-spinner",
             _ => "fa fa-info-circle",
         };
 

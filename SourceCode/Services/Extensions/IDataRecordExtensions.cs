@@ -5,6 +5,7 @@ namespace ModulesRegistry.Services.Extensions;
 
 public static class IDataRecordExtensions
 {
+    private const bool ThrowOnMissingColumnName = false;
     public static string GetString(this IDataRecord me, string columnName, string defaultValue = "")
     {
         var i = me.GetColumIndex(columnName, false);
@@ -13,9 +14,10 @@ public static class IDataRecordExtensions
         return (string.IsNullOrWhiteSpace(s)) ? defaultValue : s;
     }
 
-    public static string GetStringResourceForLanguage(this IDataRecord me, string columnName, ResourceManager resourceManager, string language, string defaultValue = "")
+    public static string GetLocalizedString(this IDataRecord me, string columnName, ResourceManager resourceManager, string language, string defaultValue = "")
     {
         var resourceKey = me.GetString(columnName, defaultValue);
+        if (resourceKey == "NotApplicable") return defaultValue;
         var culture = new CultureInfo(language);
         if (resourceKey.HasValue())
         {
@@ -47,6 +49,18 @@ public static class IDataRecordExtensions
         if (value is short a) return a;
         throw new InvalidOperationException(columnName);
     }
+
+    public static int? GetNullableInt(this IDataRecord me, string columnName, short? defaultValue)
+    {
+        var i = me.GetColumIndex(columnName, false);
+        if (i < 0) return defaultValue;
+        if (me.IsDBNull(i)) return defaultValue;
+        var value = me.GetValue(i);
+        if (value is int b) return b;
+        if (value is short a) return a;
+        throw new InvalidOperationException(columnName);
+    }
+
 
     public static double GetDouble(this IDataRecord me, string columnName, double defaultValue = 0)
     {
@@ -104,7 +118,7 @@ public static class IDataRecordExtensions
         try { i = me.GetOrdinal(columnName); }
         catch (IndexOutOfRangeException)
         {
-            if (throwOnNotFound) throw new InvalidOperationException(columnName);
+            if (throwOnNotFound || ThrowOnMissingColumnName) throw new InvalidOperationException(columnName);
         }
         return i;
     }

@@ -34,7 +34,7 @@ else
                                 @RowEditTemplate(item)
                             </td>
                             <td width="100px">
-                                <AppButton Label="Save" OnClickCallback="@(() => Save(ItemKey(item)))" />
+                                <AppButton Label="Save" OnClickCallback="@(() => Save(ItemKey(item)))" IsDisabled="IsReadOnly" />
                             </td>
                         </tr>
                     }
@@ -45,7 +45,7 @@ else
                             @if (RowEditTemplate is not null)
                             {
                                 <td>
-                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(ItemKey(item)))" />
+                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(ItemKey(item)))" IsDisabled="IsReadOnly" />
                                 </td>
                             }
                         </tr>
@@ -65,8 +65,9 @@ else
     [Parameter] public Func<TItem, string>? Key { get; set; }
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
     [Parameter] public int EditColspan { get; set; } = 2;
+    [Parameter] public bool MayEdit { get; set; } = true;
 
-
+    bool IsReadOnly => !MayEdit;
     string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
 

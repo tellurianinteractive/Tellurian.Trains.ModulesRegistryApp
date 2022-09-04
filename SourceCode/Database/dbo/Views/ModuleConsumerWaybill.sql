@@ -6,6 +6,7 @@
 -- ExternalSupplierWaybill
 -- ExternalConsumerWaybill
 SELECT
+	SCW.Id,
 	SENDER.StationId AS OriginStationId,
 	SENDER.StationCustomerId AS OriginStationCustomerId,
 	SENDER.StationName AS OriginStationName,
@@ -20,9 +21,13 @@ SELECT
 	SENDER.OperatingDayFlag AS SendingDayFlag,
 	SENDER.IsModuleStation AS OriginIsModuleStation,
 	SENDER.SpecialCargoName,
+	SENDER.SpecificWagonClass,
+	SENDER.QuantityUnitId,
 	SENDER.Quantity,
 	SENDER.QuantityUnitName AS QuanityUnitResourceName,
 	SENDER.PackagingUnit AS PackagingUnitResourceName,
+	SENDER.FromYear AS SenderFromYear,
+	SENDER.UptoYear AS SenderUptoYear,
 	CAST (1 AS BIT) AS OriginIsExternal,
 	RECEIVER.StationId AS DestinationStationId,
 	RECEIVER.StationCustomerId AS DestinationStationCustomerId,
@@ -37,6 +42,8 @@ SELECT
 	RECEIVER.ReadyTime AS ReceiverReadyTime,
 	RECEIVER.OperatingDayFlag AS ReceivingDayFlag,
 	RECEIVER.IsModuleStation AS DestinationIsModuleStation,
+	RECEIVER.FromYear AS ReceiverFromYear,
+	RECEIVER.UptoYear AS ReceiverUptoYear,
 	CAST (1 AS BIT) AS DestinationIsExternal,
 	C.DefaultClasses,
 	C.NHMCode,

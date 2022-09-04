@@ -8,7 +8,7 @@
 
 @if (Items is null)
 {
-    <p>Creating...</p>
+    <ActionMessage Label="CreatingReport" AlertType="Spinning" />
 }
 else if (Items.Count() == 0)
 {
@@ -41,6 +41,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Items = null;
         if (!IsLoading)
         {
             IsLoading = true;
@@ -48,7 +49,7 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (StationId > 0)
             {
-                Items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, true);
+                Items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, false);
             }
         }
     }

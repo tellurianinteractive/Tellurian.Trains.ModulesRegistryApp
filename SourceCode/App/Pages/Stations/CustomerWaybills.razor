@@ -13,12 +13,12 @@
 @inject StationService StationService
 @inject StationCustomerWaybillsService WaybillService
 
-<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
 
 <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
     <AppButton Label="Generate" IconName="cog" OnClickCallback="GenerateWaybills" />
     <AppButton Label="Add" Href="" IsDisabled=true />
-    <AppButton Label="Preview" Href="" IsDisabled=true />
+    <AppButton Label="Preview" Href="" IsDisabled=true IconName="@FontAwesome.Print" />
 </div>
 
 @if (Waybills is null)
@@ -31,7 +31,7 @@ else if (Waybills.IsNullOrEmpty())
 }
 else
 {
-    <TableTemplate Items="Waybills" EditColspan="6">
+    <TableTemplate Items="Waybills" EditColspan="6" MayEdit=false>
         <TableHeader>
             <th>@Localizer["Direction"]</th>
             <th>@Localizer["FreightCustomer"]</th>

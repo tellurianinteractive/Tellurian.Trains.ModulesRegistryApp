@@ -684,4 +684,7 @@
   <data name="RegistrationClosed" xml:space="preserve">
     <value>Anmeldung geschlossen</value>
   </data>
+  <data name="YearsInOperation" xml:space="preserve">
+    <value>Jahre in Betrieb</value>
+  </data>
 </root>

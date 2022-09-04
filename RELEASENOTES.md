@@ -1,5 +1,18 @@
 ## Release Notes
 
+#### Version 1.7.0
+Release date 2022-09-04
+
+This is a major release with an improved **waybill** handling. 
+Many thanks to Fredrik Petterson, a Swedish FREMO-member, that suggested waybill handling similar to *Yellow Pages*.
+In this release, this goal is partly implemented.
+- **Customer Waybill** can now be generated for your freight customers. These are saved for later. 
+The generation matches all your existing freights with freights at other module stations in the same scale, plus all external stations.
+In upcoming releses of the Module Registry, you will be able to edit waybills for return freights, printed count etc. and
+also create additional waybills.
+- **Waybill printing** is now possible. In this relase, you can print all waybills for your station.
+In upcoming releases, you will also be able to print each freight customer separately, and select what to print etc.
+
 #### Version 1.6.21
 Release date 2022-08-29
 - **Sender Email** now verified so that invitations and password reset mails is not likley to end up in your spam folder.

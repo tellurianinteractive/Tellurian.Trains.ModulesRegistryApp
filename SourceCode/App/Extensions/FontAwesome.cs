@@ -18,6 +18,7 @@ public static class FontAwesome
     public const string Note = "fa fa-exclamation";
     public const string Ok = "fa fa-check-circle";
     public const string People = "fa fa-user-friends";
+    public const string Print = "fa fa-print";
     public const string Question = "fa fa-question-circle";
     public const string Region = "fa fa-shield-alt";
     public const string Register = "fa fa-user-plus";
@@ -54,6 +55,7 @@ public static class FontAwesome
             {nameof(Note), Note },
             {nameof(Ok), Ok },
             {nameof(People), People },
+            {nameof(Print), Print },
             {nameof(Question), Question },
             {nameof(Region), Region },
             {nameof(Register), Register },

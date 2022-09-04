@@ -4,6 +4,7 @@ namespace ModulesRegistry.Data;
 
 public class Waybill
 {
+    public int Id { get; set; } 
     public CargoCustomer? Origin { get; set; }
     public CargoCustomer? Destination { get; set; }
     public string OperatorName { get; set; } = string.Empty;
@@ -11,7 +12,6 @@ public class Waybill
     public string WagonClass { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public int QuantityUnitId { get; set; }
-    public int PackagingUnitId { get; set; }
     public bool EmptyReturn { get; set; }
     public bool MatchReturn { get; set; }
 }
@@ -43,7 +43,8 @@ public static class WaybillExtensions
             "Origin",
             "Shipper",
             "Unload",
-            "UnloadingReadyTime"
+            "UnloadingReadyTime",
+            "YearsInOperation"
         };
 
     public static string FlagOriginSrc(this Waybill me) =>

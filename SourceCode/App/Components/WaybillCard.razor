@@ -66,13 +66,22 @@
                     <tr>
                         <td colspan="3">
                             <div class="waybill label">@OriginLabel(Item, "Shipper")</div>
-                            <div class="waybill shipper">@CustomerName(Item.Origin)</div>
+                            <div class="waybill shipper"> @CustomerName(Item.Origin) </div>
                         </td>
                     </tr>
+                    @if (HasLimitedYears(Item.Origin))
+                    {
+                        <tr>
+                            <td colspan="3">
+                                <div class="waybill label">@OriginLabel(Item, "YearsInOperation", "Years in operation")</div>
+                                <div class="waybill shipper">@CustomerYears(Item.Origin)</div>
+                            </td>
+                        </tr>
+                    }
                     @if (Item.IsCrossBorder() && CargoName(Item.Origin) != CargoName(Item.Destination))
                     {
                         <tr>
-                            <td colspan="3" class="waybill">
+                            <td class="waybill">
                                 <div class="waybill label">@OriginLabel(Item, "Cargo")</div>
                                 <div class="waybill item">@CargoName(Item.Origin)</div>
                             </td>
@@ -106,6 +115,9 @@
                             </div>
                         </td>
                     </tr>
+                    @*                    <tr colspan="3">
+                <div class="waybill label">Id = @Item.Id</div>
+                </tr>*@
                 </tbody>
             </table>
         </div>
@@ -123,7 +135,7 @@
         Localizer.DualLanguageLabel(LanguageLabels, item.Destination?.Language, resourceKey, englishText);
 
     string DestinationTrackOrAreaColor(Waybill item) =>
-        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" : 
+        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
         item.Destination.TrackOrAreaColor;
 
     string DestinationInstruction(Waybill waybill) => UnloadingReady(waybill.Destination);
@@ -131,6 +143,12 @@
 
     string CustomerName(CargoCustomer me) =>
         me.Name == "ImportAgent" || me.Name == "ExportAgent" ? GetLabelText(me.Name, me.Language) : me.Name;
+
+    string CustomerYears(CargoCustomer me) =>
+        HasLimitedYears(me) ?
+        $"{me.FromYear}-{me.UptoYear}" : string.Empty;
+
+    bool HasLimitedYears(CargoCustomer me) => me.FromYear.HasValue || me.UptoYear.HasValue;
 
     string CargoName(CargoCustomer? me) =>
         me is null ? string.Empty :

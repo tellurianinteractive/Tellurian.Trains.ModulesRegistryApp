@@ -21,6 +21,8 @@ public class CargoCustomer
     public bool ReadyTimeIsSpecifiedInLayout { get; set; }
     public string TrackOrArea { get; set; } = string.Empty;
     public string TrackOrAreaColor { get; set; } = string.Empty;
+    public int? FromYear { get; set; }
+    public int? UptoYear { get; set; }
 }
 
 public static class CargoCustomerExtensions

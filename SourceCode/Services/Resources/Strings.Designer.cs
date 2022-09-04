@@ -1753,6 +1753,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Years in operation.
+        /// </summary>
+        internal static string YearsInOperation {
+            get {
+                return ResourceManager.GetString("YearsInOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         internal static string Yes {

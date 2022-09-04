@@ -1224,4 +1224,7 @@
   <data name="UserIsReadOnly" xml:space="preserve">
     <value>User has only read access?</value>
   </data>
+  <data name="CreatingReport" xml:space="preserve">
+    <value>Creating report...</value>
+  </data>
 </root>
