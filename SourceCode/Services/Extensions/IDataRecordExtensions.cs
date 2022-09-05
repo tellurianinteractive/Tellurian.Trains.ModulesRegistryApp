@@ -1,31 +1,16 @@
 ﻿using System.Data;
-using System.Resources;
 
 namespace ModulesRegistry.Services.Extensions;
 
 public static class IDataRecordExtensions
 {
-    private const bool ThrowOnMissingColumnName = false;
+    private const bool ThrowOnMissingColumnName = true;
     public static string GetString(this IDataRecord me, string columnName, string defaultValue = "")
     {
         var i = me.GetColumIndex(columnName, false);
         if (i < 0 || me.IsDBNull(i)) return defaultValue;
         var s = me.GetString(me.GetOrdinal(columnName));
         return (string.IsNullOrWhiteSpace(s)) ? defaultValue : s;
-    }
-
-    public static string GetLocalizedString(this IDataRecord me, string columnName, ResourceManager resourceManager, string language, string defaultValue = "")
-    {
-        var resourceKey = me.GetString(columnName, defaultValue);
-        if (resourceKey == "NotApplicable") return defaultValue;
-        var culture = new CultureInfo(language);
-        if (resourceKey.HasValue())
-        {
-            var resourceValue = resourceManager.GetString(resourceKey, culture);
-            if (resourceValue.HasValue()) return resourceValue;
-            return resourceKey;
-        }
-        return defaultValue;
     }
 
     public static byte GetByte(this IDataRecord me, string columnName)

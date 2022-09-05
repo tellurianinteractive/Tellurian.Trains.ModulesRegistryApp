@@ -16,6 +16,4 @@ public class LanguageController : ControllerBase
     [HttpGet("all/supported")]
     public IActionResult GetSupportedLanguages() => Ok(Service.GetSupportedLanguages());
 
-    [HttpGet("all/labels/waybills")]
-    public IActionResult GetWaybillLabels() => Ok(Service.GetWaybillLabels());
 }

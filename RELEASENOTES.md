@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.7.1
+Release date 2022-09-05
+- **Waybill design** slightly improved.
+
 #### Version 1.7.0
 Release date 2022-09-04
 

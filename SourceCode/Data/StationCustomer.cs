@@ -4,6 +4,9 @@ namespace ModulesRegistry.Data;
 
 public partial class StationCustomer
 {
+    public const string ImportingCustomerResourceName = "ImportAgent";
+    public const string ExportingCustomerResourceName = "ExportAgent";
+
     public StationCustomer()
     {
         Cargos = new HashSet<StationCustomerCargo>();

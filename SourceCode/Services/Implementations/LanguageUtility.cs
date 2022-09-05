@@ -7,14 +7,14 @@ namespace ModulesRegistry.Services.Implementations;
 
 public static class LanguageUtility
 {
-    public const string DefaultLanguage = "en-UK";
-    public static CultureInfo CurrentCulture => System.Threading.Thread.CurrentThread.CurrentCulture;
+    public const string DefaultLanguage = "en";
     public static string CurrentLanguage => CurrentCulture.TwoLetterISOLanguageName;
-    public static CultureInfo DefaultCulture => new(DefaultLanguage);
+    public static CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
+    public static CultureInfo DefaultCulture => LanguageCultureMap[Language.English];
 
     private static readonly ResourceManager ResourceManager = Strings.ResourceManager;
 
-    public static string GetString(string resourceName, string? language = null)
+    public static string GetLocalizedString(this string? resourceName, string? language = null)
     {
         if (string.IsNullOrWhiteSpace(resourceName)) return string.Empty;
         var culture = CurrentCulture; 

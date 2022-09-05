@@ -7,12 +7,12 @@
             <table width="100%">
                 <tbody>
                     <tr>
-                        <td colspan="3" class="box destination" style="color: @Item.Destination.ForeColor; background-color: @Item.Destination.BackColor">
-                            <div class="waybill label">@DestinationLabel(Item, "Destination")</div>
-                            <div class="waybill name" style="font-size: @TextSize(Item.Destination.StationName, Item.IsCrossBorder())pt">
+                        <td colspan="3" class="box destination" style="color: @Item.Destination.ForeColor(Item); background-color: @Item.Destination.BackColor(Item)">
+                            <div class="waybill label">@Item.Destination.DualLanguageLabel("Destination")</div>
+                            <div class="waybill name" style="font-size: @TextSize(Item.Destination.StationName, Item.IsCrossBorder())">
                                 @if (Item.IsCrossBorder())
                                 {
-                                    <span class="flag"><img src="@Item.FlagDestinationSrc()" /></span>
+                                    <span class="flag"><img src="@Item.Destination.FlagSrc()" /></span>
                                 }
                                 <span>@Item.Destination.StationName</span>
                             </div>
@@ -20,28 +20,27 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="waybill destination">
-                            <div class="waybill label">@DestinationLabel(Item, "Consignee")</div>
-                            <div class="waybill item">@CustomerName(Item.Destination)</div>
+                            <div class="waybill label">@Item.Destination.DualLanguageLabel("Consignee")</div>
+                            <div class="waybill item">@Item.Destination.CustomerName()</div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3" class="waybill destination">
-                            <div class="waybill label">@DestinationLabel(Item, "Cargo")</div>
-                            <div class="waybill item">@CargoName(Item.Destination)</div>
+                            <div class="waybill label">@Item.Destination.DualLanguageLabel("Cargo")</div>
+                            <div class="waybill item">@Item.Destination.CargoName()</div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3" class="waybill destination">
-                            <div class="waybill label">@DestinationLabel(Item, "CargoUnit", "Cargo unit")</div>
+                            <div class="waybill label">@Item.Destination.DualLanguageLabel("CargoUnit", "Cargo unit")</div>
                             <div class="waybill item">@Item.DestinationQuantityUnit()</div>
                         </td>
                     </tr>
                     <tr>
-
                         <td colspan="3" class="waybill destination">
-                            <div class="waybill label">@DestinationLabel(Item, "Instructions")</div>
+                            <div class="waybill label">@Item.Destination.DualLanguageLabel("Instructions")</div>
                             <div class="waybill instruction">
-                                <span>@DestinationInstruction(Item)</span>
+                                <span>@Item.Destination.UnloadingReady()</span>
                                 @if (Item.Destination.TrackOrArea.HasValue())
                                 {
                                     <span>&commat;</span>
@@ -53,11 +52,11 @@
 
                     <tr>
                         <td colspan="3" class="box origin" style="color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
-                            <div class="waybill label">@OriginLabel(Item, "Origin")</div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel( "Origin")</div>
                             <div class="waybill name" style="font-size: @TextSize(Item.Origin.StationName, Item.IsCrossBorder())pt">
                                 @if (Item.IsCrossBorder())
                                 {
-                                    <span class="flag"><img src="@Item.FlagOriginSrc()" /></span>
+                                    <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
                                 }
                                 <span>@Item.Origin.StationName</span>
                             </div>
@@ -65,48 +64,48 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <div class="waybill label">@OriginLabel(Item, "Shipper")</div>
-                            <div class="waybill shipper"> @CustomerName(Item.Origin) </div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel( "Shipper")</div>
+                            <div class="waybill shipper"> @Item.Origin.CustomerName() </div>
                         </td>
                     </tr>
-                    @if (HasLimitedYears(Item.Origin))
+                    @if (Item.Origin.HasLimitedYearsInOperation())
                     {
                         <tr>
                             <td colspan="3">
-                                <div class="waybill label">@OriginLabel(Item, "YearsInOperation", "Years in operation")</div>
-                                <div class="waybill shipper">@CustomerYears(Item.Origin)</div>
+                                <div class="waybill label">@Item.Origin.DualLanguageLabel("YearsInOperation", "Years in operation")</div>
+                                <div class="waybill smaller">@Item.Origin.YearsInOperation()</div>
                             </td>
                         </tr>
                     }
-                    @if (Item.IsCrossBorder() && CargoName(Item.Origin) != CargoName(Item.Destination))
+                    @if (Item.IsCrossBorder() && Item.HasDifferentCargoTranslations())
                     {
                         <tr>
                             <td class="waybill">
-                                <div class="waybill label">@OriginLabel(Item, "Cargo")</div>
-                                <div class="waybill item">@CargoName(Item.Origin)</div>
+                                <div class="waybill label">@Item.Origin.DualLanguageLabel("Cargo")</div>
+                                <div class="waybill smaller">@Item.Origin.CargoName()</div>
                             </td>
                         </tr>
                     }
                     <tr>
                         <td>
-                            <div class="waybill label">@OriginLabel(Item, "Carrier")</div>
-                            <div class="waybill item">@Item.OperatorName</div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel("Carrier")</div>
+                            <div class="waybill smaller">@Item.OperatorName</div>
                         </td>
                         <td>
-                            <div class="waybill label">@OriginLabel(Item, "Days")</div>
-                            <div class="waybill item">@Item.Origin.OperationDaysFlags.OperationDays(Item.Origin.Language.AsCultureInfo()).ShortName</div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel("Days")</div>
+                            <div class="waybill smaller">@Item.Origin.OperationDaysFlags.OperationDays(Item.Origin.Languages.AsCultureInfo()).ShortName</div>
 
                         </td>
                         <td>
-                            <div class="waybill label">@OriginLabel(Item, "Class")</div>
-                            <div class="waybill item">@Item.WagonClass</div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel("Class")</div>
+                            <div class="waybill smaller">@Item.DefaultWagonClass</div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <div class="waybill label">@OriginLabel(Item, "Instructions")</div>
+                            <div class="waybill label">@Item.Origin.DualLanguageLabel("Instructions")</div>
                             <div class="waybill instruction">
-                                <span>@OriginInstruction(Item)</span>
+                                <span>@Item.Origin.LoadingReady()</span>
                                 @if (Item.Origin.TrackOrArea.HasValue())
                                 {
                                     <span>&commat;</span>
@@ -126,61 +125,13 @@
 
 @code {
     [Parameter] public Waybill? Item { get; set; }
-    [Parameter] public IEnumerable<LanguageLabels>? LanguageLabels { get; set; }
 
-    string OriginLabel(Waybill item, string resourceKey, string? englishText = null) =>
-        Localizer.DualLanguageLabel(LanguageLabels, item.Origin?.Language, resourceKey, englishText);
-
-    string DestinationLabel(Waybill item, string resourceKey, string? englishText = null) =>
-        Localizer.DualLanguageLabel(LanguageLabels, item.Destination?.Language, resourceKey, englishText);
-
-    string DestinationTrackOrAreaColor(Waybill item) =>
-        item.Destination is null || item.Destination.TrackOrAreaColor.HasNoValue() == true || item.Destination.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
-        item.Destination.TrackOrAreaColor;
-
-    string DestinationInstruction(Waybill waybill) => UnloadingReady(waybill.Destination);
-    string OriginInstruction(Waybill waybill) => LoadingReady(waybill.Origin);
-
-    string CustomerName(CargoCustomer me) =>
-        me.Name == "ImportAgent" || me.Name == "ExportAgent" ? GetLabelText(me.Name, me.Language) : me.Name;
-
-    string CustomerYears(CargoCustomer me) =>
-        HasLimitedYears(me) ?
-        $"{me.FromYear}-{me.UptoYear}" : string.Empty;
-
-    bool HasLimitedYears(CargoCustomer me) => me.FromYear.HasValue || me.UptoYear.HasValue;
-
-    string CargoName(CargoCustomer? me) =>
-        me is null ? string.Empty :
-        me.PackageUnitName.HasValue() ? $"{me.CargoName} {In(me)} {me.PackageUnitName.ToLowerInvariant()}" :
-        me.CargoName;
-
-    string In(CargoCustomer me) => GetLabelText("In", me.Language);
-
-    string LoadingReady(CargoCustomer? me) =>
-        me is null ? string.Empty :
-        string.IsNullOrWhiteSpace(me.ReadyTime) || me.ReadyTime == "n/a" ?
-            me.TrackOrArea.HasNoValue() ? string.Empty : $"{GetLabelText("Load", me.Language)} " :
-            $"{GetLabelText("LoadingReadyTime", me.Language)} {ReadyTime(me)} ";
-
-    string UnloadingReady(CargoCustomer? me) =>
-        me is null || string.IsNullOrWhiteSpace(me.ReadyTime) || me.TrackOrArea.HasNoValue() ? string.Empty :
-        me.ReadyTime == "n/a" ?
-        $"{GetLabelText("Unload", me.Language)} " :
-        $"{GetLabelText("UnloadingReadyTime", me.Language)} {ReadyTime(me)} ";
-
-    string ReadyTime(CargoCustomer me) => (me.ReadyTimeIsSpecifiedInLayout ? GetLabelText(me.ReadyTime, me.Language) : me.ReadyTime).ToLowerInvariant();
-
-    string GetLabelText(string resourceKey, string language) =>
-        LanguageLabels is null ? string.Empty : LanguageLabels.GetLabelText(resourceKey, language);
-
-
-    int TextSize(string? text, bool hasFlag) =>
+    string TextSize(string? text, bool hasFlag) =>
         string.IsNullOrWhiteSpace(text) ? Large :
-        hasFlag && text.Length < Small ? Large :
+        hasFlag && text.Length < 12 ? Large :
         text.Length < 15 ? Large : Small;
 
-    const int Large = 14;
-    const int Small = 12;
+    const string Large = "14pt";
+    const string Small = "12pt";
 
 }

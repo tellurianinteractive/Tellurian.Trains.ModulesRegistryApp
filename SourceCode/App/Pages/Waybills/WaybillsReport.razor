@@ -23,7 +23,7 @@ else
         <div >
             @foreach (var item in itemsPerPage)
             {
-                <WaybillCard Item="@item" LanguageLabels="@LanguageLabels"></WaybillCard>
+                <WaybillCard Item="@item"></WaybillCard>
             }
         </div>
     }
@@ -36,7 +36,6 @@ else
 
     ClaimsPrincipal? Principal;
     IEnumerable<Waybill>? Items { get; set; }
-    IEnumerable<LanguageLabels>? LanguageLabels { get; set; }
     bool IsLoading = false;
 
     protected override async Task OnInitializedAsync()
@@ -45,7 +44,6 @@ else
         if (!IsLoading)
         {
             IsLoading = true;
-            LanguageLabels = LanguageService.GetWaybillLabels();
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (StationId > 0)
             {

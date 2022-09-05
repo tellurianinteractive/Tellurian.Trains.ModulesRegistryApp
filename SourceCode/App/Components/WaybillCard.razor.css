@@ -6,7 +6,7 @@
 .label {
     font-size: 7pt;
     max-height: 9pt;
-    line-height: 9pt;
+    line-height: 8pt;
     vertical-align: top;
 }
 
@@ -44,6 +44,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.smaller {
+    font-weight: bold;
+    font-size: 10pt;
+    min-height: 11pt;
 }
 
 .flag {

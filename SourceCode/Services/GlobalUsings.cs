@@ -3,6 +3,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using ModulesRegistry.Data;
 global using ModulesRegistry.Data.Extensions;
+global using ModulesRegistry.Services.Models;
 global using ModulesRegistry.Services.Extensions;
 global using System;
 global using System.Collections.Generic;
