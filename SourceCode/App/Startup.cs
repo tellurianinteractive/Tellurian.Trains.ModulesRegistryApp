@@ -1,7 +1,6 @@
 using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ModulesRegistry.Data;
@@ -73,10 +72,10 @@ public class Startup
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<ITimeProvider, SystemTimeProvider>();
         services.AddScoped<PageHistory>();
-        //if (Environment.IsProduction()) 
+        if (Environment.IsProduction())
             services.AddScoped<IMailSender, CloudMailSender>();
-        //if (Environment.IsDevelopment()) 
-        //    services.AddScoped<IMailSender, LoggingOnlyMailSender>();
+        if (Environment.IsDevelopment())
+            services.AddScoped<IMailSender, LoggingOnlyMailSender>();
         services.AddScoped<CargoService>();
         services.AddScoped<ContentService>();
         services.AddScoped<CountryService>();
@@ -106,14 +105,9 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-        }
+        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+        else app.UseExceptionHandler("/Error");
+
         app.UseSecurityHeaders(SecurityHeadersPolicy.CreateSecurityHeaderCollection(env));
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
@@ -133,7 +127,6 @@ public class Startup
         app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
-        var isClosed = Configuration.GetValue("Status:Closed", false);
 
         app.UseEndpoints(endpoints =>
        {

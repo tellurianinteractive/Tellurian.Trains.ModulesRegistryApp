@@ -61,6 +61,13 @@ public static class LocalizedStringExtensions
             _ => string.Empty
         };
 
+   private static string ObjectNameToLower(this LocalizedString me) =>
+        CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
+        {
+            "de" => me.Value,
+            _ => me.Value.ToLowerInvariant()
+        };    
+    
     public static string Select(this IStringLocalizer me, string objectName) =>
         $"{me["Select"]} {me[objectName].Value.ToLowerInvariant()}";
 
@@ -80,32 +87,8 @@ public static class LocalizedStringExtensions
 
 
     public static string NotFound<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["NotFound"].Value.ToLowerInvariant()}";
+
     public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
 
     public static string Value(this IStringLocalizer me, string key) => me[key].Value;
-
-
-    private static string ObjectNameToLower(this LocalizedString me) =>
-        CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
-        {
-            "de" => me.Value,
-            _ => me.Value.ToLowerInvariant()
-        };
-
-    public static string DocumentIconHref(this int? id, string fileExtension) =>
-        id.HasValue ? $"/images/{fileExtension}.png" : string.Empty;
-
-
-    public static string DualLanguageLabel(this IStringLocalizer localizer, string? langaugeCode, string resourceKey, string? englishText) =>
-        DualLanguageLabel(localizer, null, langaugeCode, resourceKey, englishText);
-
-    public static string DualLanguageLabel(this IStringLocalizer localizer, IEnumerable<LanguageLabels>? languageLabels, string? langaugeCode, string resourceKey, string? englishText)
-    {
-        englishText ??= resourceKey;
-        var localText = localizer[resourceKey].Value;
-        if (languageLabels is not null && langaugeCode is not null) localText = languageLabels.GetLabelText(resourceKey, langaugeCode);
-        if (string.IsNullOrWhiteSpace(localText)) localText = localizer[resourceKey];
-        if (string.IsNullOrWhiteSpace(localText) || englishText == localText) return englishText!;
-        return $"{englishText}/{localText}";
-    }
 }

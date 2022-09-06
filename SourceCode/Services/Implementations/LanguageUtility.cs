@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ModulesRegistry.Services.Resources;
-using System.Diagnostics;
 using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -58,7 +57,7 @@ public static class LanguageUtility
                  { Language.French, new CultureInfo("fr-FR") },
         };
 
-    public static CultureInfo SupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
+    public static CultureInfo FullySupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
         FullySupportedCultures.SingleOrDefault(sc => sc.TwoLetterISOLanguageName.Equals(twoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase)) ?? DefaultCulture;
 
     public static string AsYesOrNo(this bool me) => me ? Strings.Yes : Strings.No;
@@ -96,7 +95,7 @@ public static class LanguageUtility
     {
         var language = culture.TwoLetterISOLanguageName;
         var value = language.GetPropertyValue(me);
-        if (value is not null) return new LocalizedText(language, value);
+        if (value is not null) return new (language, value);
         return me.LocalizedNames().FirstOrDefault() ?? LocalizedText.Empty;
     }
 

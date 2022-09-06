@@ -1,4 +1,5 @@
 ﻿namespace ModulesRegistry.Services;
+
 public struct EditableItem<T>
 {
     public EditableItem(T item) => Item = item;

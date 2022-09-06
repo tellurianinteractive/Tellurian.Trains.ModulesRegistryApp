@@ -23,16 +23,11 @@ public static class WaybillExtensions
 
 public static class CargoCustomerExtensions
 {
-    internal static string Language(this CargoCustomer me)
-    {
-        if (me.Languages.Length == 2) return me.Languages;
-        var languages = me.Languages.Split(',');
-        return languages.Length > 0 ? languages[0] : LanguageUtility.DefaultLanguage;
-    }
-
-    public static string FlagSrc(this CargoCustomer? me) =>
-        me is null ? string.Empty :
-        $"images/flags/{me.DomainSuffix}.png";
+    public static string CargoName(this CargoCustomer? me) =>
+         me is null ? string.Empty :
+         me.PackagingUnitResourceKey.HasValue() && me.PackagingUnitResourceKey != "NotApplicable" ?
+             $"{me.CargoName.GetLocalizedString(me.Language())} {"In".GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
+             me.CargoName.GetLocalizedString(me.Language());
 
     public static string CustomerName(this CargoCustomer? me) =>
         me is null ? string.Empty :
@@ -40,16 +35,29 @@ public static class CargoCustomerExtensions
         me.Name == StationCustomer.ExportingCustomerResourceName ? me.Name.GetLocalizedString(me.Language()) :
         me.Name;
 
-    public static string YearsInOperation(this CargoCustomer? me) =>
-        me.HasLimitedYearsInOperation() ? $"{me.FromYear}-{me.UptoYear}" : string.Empty;
+    public static string FlagSrc(this CargoCustomer? me) =>
+        me is null ? string.Empty :
+        $"images/flags/{me.DomainSuffix}.png";
+
+    public static bool IsInternal(this CargoCustomer? me, Waybill waybill) =>
+        me is not null && me.IsModuleStation && me.StationId == waybill.OwnerStationId;
+
+    internal static string Language(this CargoCustomer me)
+    {
+        if (me.Languages.Length == 2) return me.Languages;
+        var languages = me.Languages.Split(',');
+        return languages.Length > 0 ? languages[0] : LanguageUtility.DefaultLanguage;
+    }
 
     public static bool HasLimitedYearsInOperation([NotNullWhen(true)] this CargoCustomer? me) =>
-        me is not null && (me.FromYear.HasValue || me.UptoYear.HasValue);
-    public static string CargoName(this CargoCustomer? me) =>
-        me is null ? string.Empty :
-        me.PackagingUnitResourceKey.HasValue() && me.PackagingUnitResourceKey != "NotApplicable" ?
-            $"{me.CargoName.GetLocalizedString(me.Language())} {"In".GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
-            me.CargoName.GetLocalizedString(me.Language());
+         me is not null && (me.FromYear.HasValue || me.UptoYear.HasValue);
+
+    public static string OperationDays(this CargoCustomer? me) =>
+        me is null || me.OperationDaysFlags == 0 ? string.Empty :
+        me.OperationDaysFlags.OperationDays(me.Language().AsCultureInfo()).ShortName;
+
+    public static string YearsInOperation(this CargoCustomer? me) =>
+        me.HasLimitedYearsInOperation() ? $"{me.FromYear}-{me.UptoYear}" : string.Empty;
 
     public static string DualLanguageLabel(this CargoCustomer it, string resourceKey, string? otherEnglishText = null)
     {
@@ -67,11 +75,10 @@ public static class CargoCustomerExtensions
     public static string BackColor(this CargoCustomer? me, Waybill waybill) =>
          me is null || me.IsInternal(waybill) ? "#FFFFFF" : me.ForeColor;
 
-    public static bool IsInternal(this CargoCustomer? me, Waybill waybill) =>
-        me is not null && me.IsModuleStation && me.StationId == waybill.OwnerStationId;
 
     internal static string QuantityUnit(this CargoCustomer me) =>
         me.QuantityUnitResourceKey.GetLocalizedString(me.Language());
+
     internal static string PackagingUnit(this CargoCustomer me) =>
          me.PackagingUnitResourceKey.GetLocalizedString(me.Language());
 

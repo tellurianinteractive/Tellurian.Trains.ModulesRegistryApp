@@ -53,7 +53,7 @@
                     <tr>
                         <td colspan="3" class="box origin" style="color: @Item.Origin.ForeColor; background-color: @Item.Origin.BackColor">
                             <div class="waybill label">@Item.Origin.DualLanguageLabel( "Origin")</div>
-                            <div class="waybill name" style="font-size: @TextSize(Item.Origin.StationName, Item.IsCrossBorder())pt">
+                            <div class="waybill name" style="font-size: @TextSize(Item.Origin.StationName, Item.IsCrossBorder())">
                                 @if (Item.IsCrossBorder())
                                 {
                                     <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
@@ -93,7 +93,7 @@
                         </td>
                         <td>
                             <div class="waybill label">@Item.Origin.DualLanguageLabel("Days")</div>
-                            <div class="waybill smaller">@Item.Origin.OperationDaysFlags.OperationDays(Item.Origin.Languages.AsCultureInfo()).ShortName</div>
+                            <div class="waybill smaller">@Item.Origin.OperationDays()</div>
 
                         </td>
                         <td>
