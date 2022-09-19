@@ -1227,4 +1227,10 @@
   <data name="CreatingReport" xml:space="preserve">
     <value>Creating report...</value>
   </data>
+  <data name="LokAndWagonCards" xml:space="preserve">
+    <value>Loco- and wagon cards</value>
+  </data>
+  <data name="FastClock" xml:space="preserve">
+    <value>Fast clock</value>
+  </data>
 </root>
