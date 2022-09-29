@@ -1,12 +1,11 @@
 ## Release Notes
 
-#### Version 1.7.3
-Release date 2022-09-19
-- **Extended Menu** with links to *loco- and wagon card app* and *fast clock app*.
-- 
 #### Version 1.7.2
-Release date 2022-09-06
+Release date 2022-09-29
 - **Meeting Specific Waybills** disabled until feature is changed and tested.
+- **Extended Menu** with links to *loco- and wagon card app* and *fast clock app*.
+- **Bug fix** of meeting info, where venue was missing.
+
 #### Version 1.7.1
 Release date 2022-09-05
 - **Waybill design** slightly improved.
