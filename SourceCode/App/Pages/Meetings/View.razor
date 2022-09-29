@@ -17,7 +17,7 @@ else
     {
         <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
     }
-    @Item("Venue", $"{Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
+    @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.Organiser())
     @Item("Status", Meeting.Status.MeetingStatus())
