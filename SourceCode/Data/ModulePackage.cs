@@ -5,15 +5,17 @@
 /// </summary>
 public class ModulePackage
 {
-    public ModulePackage(int id, ModulePackageType type, string name, IEnumerable<Module> modules)
+    public ModulePackage(int id, ModulePackageType type, string name, string ownerName, IEnumerable<Module> modules)
     {
         Id = id;
         Name = name;
+        OwnerName = ownerName;
         Modules = modules;
         PackageType = type;
     }
     public int Id { get; }
     public string Name { get; }
+    public string OwnerName { get; }
     public IEnumerable<Module> Modules { get; }
     public ModulePackageType PackageType { get; }
     public int ScaleId { get; init; }

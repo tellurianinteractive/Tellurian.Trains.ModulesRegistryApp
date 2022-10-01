@@ -35,18 +35,19 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
             @if (Principal.IsAnyAdministrator() && User is not null)
             {
                 <AppInputCheck Width="3" Label="IsGlobalAdministrator" @bind-Value="User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
-                <AppInputCheck Width="3" Label="IsCountryAdministrator" @bind-Value="User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator"/>
+                <AppInputCheck Width="3" Label="IsCountryAdministrator" @bind-Value="User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
                 <AppInputCheck Width="3" Label="IsApiAccessPermitted" @bind-Value="User.IsApiAccessPermitted" />
                 <AppInputCheck Width="3" Label="MayUploadSkpDrawing" @bind-Value="User.MayUploadSkpDrawing" />
                 <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
-                <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="User.PasswordResetAttempts" IsDisabled=true/>
-                <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="User.FailedLoginAttempts" IsDisabled=true/>
+                <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="User.PasswordResetAttempts" IsDisabled=true />
+                <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="User.FailedLoginAttempts" IsDisabled=true />
             }
         </Inputs>
     </EditTemplate>
 
-    @if (User is not null && User.IsLockedOut()) {
-        <br/>
+    @if (User is not null && User.IsLockedOut())
+    {
+        <br />
         <h3>@Localizer["UserIsLockedOut"]</h3>
         <AppButton Label="Unlock" OnClickCallback="UnlockUser" />
     }
@@ -82,7 +83,7 @@ else
     {
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person, IsGroupAdministrator);
-        if (User is not null)  User = await UserService.UpdateAsync(User);
+        if (User is not null) User = await UserService.UpdateAsync(User);
         if (result.Count < 1)
         {
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
@@ -101,12 +102,9 @@ else
 
     }
 
-    async Task UnlockUser() {
-        if (User is not null) {
-            User.FailedLoginAttempts = 0;
-            User.PasswordResetAttempts = 0;
-            await UserService.UpdateAsync(User);
-        }
+    async Task UnlockUser()
+    {
+        User = await UserService.UnlockUser(User);
     }
 
     private bool IsGroupAdministrator => Group is not null && Group.GroupMembers.Any(gm => gm.PersonId == Principal.PersonId() && gm.IsGroupAdministrator);

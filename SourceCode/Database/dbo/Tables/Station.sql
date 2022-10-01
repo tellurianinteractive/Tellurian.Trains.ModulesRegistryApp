@@ -10,7 +10,12 @@
     CONSTRAINT [FK_Station_Document] FOREIGN KEY ([PdfInstructionId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Station_Region] FOREIGN KEY ([RegionId]) REFERENCES [dbo].[Region] ([Id])
 );
-
+GO
+CREATE TRIGGER [DeleteStation] ON [Station] INSTEAD OF DELETE 
+AS
+BEGIN
+    DELETE FROM [StationCustomer] WHERE [StationId] IN (SELECT [Id] FROM DELETED)
+END
 
 
 

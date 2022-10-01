@@ -35,7 +35,7 @@ public static class ModulePackageExtensions
                 }
             }
         }
-        return packages.Select((p, i) => new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
+        return packages.Select((p, i) => new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value),  p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
 
         static ModulePackageType PackageType(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) => items.First().Type;
         static string PackageName(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
@@ -44,8 +44,8 @@ public static class ModulePackageExtensions
                ModulePackageType.Package => items.First().Module.PackageLabel,
                _ => items.First().Module.FullName
            };
-
-
+        static string OwnerName(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
+            string.Join(", ", items.First().Module.ModuleOwnerships.OwnerNames());
 
     }
     public static string ModuleNames(this ModulePackage it) =>
@@ -54,5 +54,6 @@ public static class ModulePackageExtensions
                   ModulePackageType.Variants => string.Join(", ", it.Modules.Select(i => i.ConfigurationLabel)),
                   _ => string.Join(", ", it.Modules.Select(m => m.FullName))
               };
+
 
 }

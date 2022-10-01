@@ -1041,7 +1041,7 @@
   <data name="SaveAll" xml:space="preserve">
     <value>Spara allt</value>
   </data>
-  <data name="MayBorrowGroupModules" xml:space="preserve">
+  <data name="MayBorrowGroupsModules" xml:space="preserve">
     <value>Får låna gruppens moduler?</value>
   </data>
   <data name="LastLoginTime" xml:space="preserve">
@@ -1232,5 +1232,8 @@
   </data>
   <data name="FastClock" xml:space="preserve">
     <value>Snabbklocka</value>
+  </data>
+  <data name="MemberMayBorrowMyModules" xml:space="preserve">
+    <value>Får medlem låna mina moduler?</value>
   </data>
 </root>

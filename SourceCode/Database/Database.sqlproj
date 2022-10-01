@@ -152,6 +152,8 @@
     <Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
     <Build Include="dbo\Views\StationScale.sql" />
     <Build Include="dbo\Procedures\GetStationCustomerWaybills.sql" />
+    <Build Include="dbo\Tables\MeetingPurchaseableItem.sql" />
+    <Build Include="dbo\Tables\MeetingParticipantPurchasedItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -19,8 +19,19 @@ public partial class ModuleOwnership
 
 #nullable enable
 
+public enum GroupOwnershipType
+{
+    Unknown = 0,
+    Personal = 1,
+    Group = 2,
+    Combined = 3,
+}
+
 public static class ModuleOwnershipExtensions
 {
+    public static string OwnerNames(this IEnumerable<ModuleOwnership> us) =>
+        string.Join(", ", us.First().Module.ModuleOwnerships.Select(mo => mo.OwnerName()));
+
     public static string OwnerName(this ModuleOwnership? me) =>
         me is null ? string.Empty :
         me.Group is not null ? me.Group.FullName :
@@ -54,4 +65,12 @@ public static class ModuleOwnershipExtensions
         if (value < Rational.Zero) return (false, (double)value);
         return (true, (double)value);
     }
+
+    public static GroupOwnershipType OwnershipType(this ModuleOwnership me) =>
+        me.PersonId > 0 && me.GroupId > 0 ? GroupOwnershipType.Combined :
+        me.PersonId > 0 ? GroupOwnershipType.Personal :
+        me.GroupId > 0 ? GroupOwnershipType.Group :
+        GroupOwnershipType.Unknown;
+
+
 }

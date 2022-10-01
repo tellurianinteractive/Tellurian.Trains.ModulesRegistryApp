@@ -9,10 +9,15 @@
     [OpenedYear]       SMALLINT     NULL,
     [ClosedYear]       SMALLINT     NULL,
     CONSTRAINT [PK_StationCustomer] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_StationCustomer_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_StationCustomer_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id])
 );
-
-
+GO
+CREATE TRIGGER [DeleteStationCustomer] ON [StationCustomer] INSTEAD OF DELETE 
+AS
+BEGIN
+    DELETE FROM [StationCustomerWaybill] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [StationCustomerCargo] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
+END
 
 
 GO

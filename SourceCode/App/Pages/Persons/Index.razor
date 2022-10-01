@@ -10,6 +10,7 @@
 
 @inject PersonService PersonService
 @inject CountryService CountryService
+@inject UserService UserService
 
 <PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
@@ -52,7 +53,11 @@
                 }
                 else if (person.User.IsLockedOut())
                 {
-                    <AppButton  Label="Reset" IsDisabled=true />
+                    <AppButton Label="Reset" OnClickCallback="@(() => UnlockUser(person.User))" />
+                }
+                @if (Principal.IsGlobalAdministrator() && person.HasIdExcept(Principal.Id()))
+                {
+                    <AppButton Label="LoginAs" IsDisabled=true IconName="@FontAwesome.People" />
                 }
             }
         </td>
@@ -93,6 +98,11 @@
         {
             People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
         }
+    }
+
+    async Task UnlockUser(User? user)
+    {
+        user = await UserService.UnlockUser(user);
     }
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;

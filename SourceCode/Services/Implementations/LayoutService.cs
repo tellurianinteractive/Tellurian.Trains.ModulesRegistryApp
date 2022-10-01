@@ -66,23 +66,29 @@ public sealed class LayoutService
             using var dbContext = Factory.CreateDbContext();
 
             var groupsId = await dbContext.GroupMembers.AsNoTracking()
-                .Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator || gm.MayBorrowModules) &&  gm.PersonId == participant.PersonId)
+                .Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator || gm.MayBorrowGroupsModules) && gm.PersonId == participant.PersonId)
                 .Select(gm => gm.GroupId)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
             var modules = await dbContext.Modules.AsNoTracking()
-                .Include(m => m.ModuleOwnerships)
+                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(m => m.Standard)
                 .Where(m => m.ScaleId == layout.PrimaryModuleStandard.ScaleId)
                 .ToListAsync()
                 .ConfigureAwait(false);
+
+            var personsIdYouCanBorrowModulesFrom = await dbContext.GroupMembers.AsNoTracking()
+                .Where(gm => gm.MemberMayBorrowMyModules && gm.Group.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
+                .Select(gm => gm.PersonId).ToListAsync().ConfigureAwait(false);
             ;
+
             if (modules is not null)
             {
                 return modules
                    .Where(m => m.ModuleOwnerships.Any(
-                        mo => mo.PersonId == participant.PersonId || groupsId.Any(id => id == mo.GroupId)));
+                        mo => mo.PersonId == participant.PersonId || personsIdYouCanBorrowModulesFrom.Any(id => id == mo.PersonId) || groupsId.Any(id => id == mo.GroupId)));
             }
         }
         return Array.Empty<Module>();
@@ -137,7 +143,7 @@ public sealed class LayoutService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.LayoutModules
                 .Include(lm => lm.LayoutStation)
-                .Include(lm => lm.Module)
+                .Include(lm => lm.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(lm => lm.LayoutParticipant).ThenInclude(p => p.MeetingParticipant).ThenInclude(mp => mp.Person)
                 .Where(lm => (layoutParticipantId == 0 || lm.LayoutParticipantId == layoutParticipantId))
                 .ToListAsync();

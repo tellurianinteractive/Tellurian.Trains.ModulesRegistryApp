@@ -4,6 +4,8 @@ namespace ModulesRegistry.Data;
 
 public partial class User
 {
+    public const int MaxPasswordResetAttempts = 3;
+    public const int MaxFailedLoginAttempts = 3;
     public int Id { get; set; }
     public Guid ObjectId { get; set; }
     public string EmailAddress { get; set; }

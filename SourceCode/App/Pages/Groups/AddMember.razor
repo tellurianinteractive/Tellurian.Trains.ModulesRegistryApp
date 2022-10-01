@@ -43,8 +43,10 @@
             <ValidationMessage For="@(() => GroupMember.Person)" />
         </div>
         <AppInputFill Width="8" />
-        <AppInputCheck Width="2" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-        <AppInputCheck Width="2" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+        <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
+        <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
+        <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="GroupMember.MayBorrowGroupsModules" />
+        <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="GroupMember.MemberMayBorrowMyModules" />
         <div class="col-12">
             <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
         </div>

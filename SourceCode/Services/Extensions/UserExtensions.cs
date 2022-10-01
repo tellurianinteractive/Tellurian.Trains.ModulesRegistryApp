@@ -109,6 +109,19 @@ public static class UserExtensions
         me.Append(message.Recipient.Person.FirstName);
         me.AppendLine("</h1>");
     }
+
+    public async static Task<User?> UnlockUser(this UserService service, User? user)
+    {
+        if(user is not null && (user.PasswordResetAttempts > User.MaxPasswordResetAttempts || user.FailedLoginAttempts > User.MaxFailedLoginAttempts))
+        {
+            user.PasswordResetAttempts = 0;
+            user.FailedLoginAttempts = 0;
+            return await service.UpdateAsync(user) ?? user;
+        }
+        return user;
+    }
+
+    public static bool HasIdExcept(this Person? me, int? id) => id.HasValue && me is not null && me.UserId.HasValue && me.UserId.Value != id;
 }
 
 public abstract record UserMessage(User Recipient, string Subject, TextContent Message)

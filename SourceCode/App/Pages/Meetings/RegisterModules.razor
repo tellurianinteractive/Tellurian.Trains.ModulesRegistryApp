@@ -30,11 +30,13 @@ else
             <TableTemplate Items="Packages" Key="Key">
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
+                    <th>@Localizer["Owner"]</th>
                     <th>@Localizer["Modules"]</th>
                     <th>@Localizer["Actions"]</th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Name</td>
+                    <td>@item.OwnerName</td>
                     <td>@item.ToString()</td>
                     <td>
                         <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
@@ -47,6 +49,7 @@ else
             <TableTemplate Items="RegisteredModules">
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
+                    <th>@Localizer["Owner"]</th>
                     <th>@Localizer["Module"]</th>
                     <th>@Localizer["RegistrationTime"]</th>
                     <th>@Localizer["Position"] </th>
@@ -54,17 +57,18 @@ else
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
-            <td>@item.Module.FullName</td>
-            <td>@item.RegisteredTime.ToString("g")</td>
-            <td>@item.LayoutPosition()</td>
-            <td>
-                @if (MayCancel(item))
+                    <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
+                    <td>@item.Module.FullName</td>
+                    <td>@item.RegisteredTime.ToString("g")</td>
+                    <td>@item.LayoutPosition()</td>
+                    <td>
+                        @if (MayCancel(item))
                         {
-                    <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
+                            <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
                         }
-            </td>
-        </RowTemplate>
-    </TableTemplate>
+                    </td>
+                </RowTemplate>
+            </TableTemplate>
         }
     </div>
 }
@@ -172,4 +176,4 @@ else
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !RegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> RegisteredModuleIds => RegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Name())).ToList();
-    }
+}

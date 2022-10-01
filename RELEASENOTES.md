@@ -1,5 +1,11 @@
 ## Release Notes
 
+#### Version 1.7.3
+Release date 2022-10-01
+- **Group member** may give permission that group members may borrow his/her modules for module meetings.
+- **Module owners** now shows up in module registration page for a meeting layout.
+- **Bug fix** of deleting freigh customer cargo flow. Related waybills will now also be deleted.
+
 #### Version 1.7.2
 Release date 2022-09-29
 - **Meeting Specific Waybills** disabled until feature is changed and tested.
