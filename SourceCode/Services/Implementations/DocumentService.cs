@@ -18,7 +18,9 @@ public sealed class DocumentService
     public async Task<Document?> FindByIdAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Documents.FindAsync(id);
+        var document = await dbContext.Documents.FindAsync(id);
+        if (document is not null) document.FileExtension = document.FileExtension.TrimEnd(); // Fixes NCHAR(5) in database.
+        return document;
     }
 
     /// <summary>

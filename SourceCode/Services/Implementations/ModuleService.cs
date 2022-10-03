@@ -61,6 +61,25 @@ public sealed class ModuleService
         return false;
     }
 
+    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Modules.AsNoTracking()
+                .Where(m => m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId))
+                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+                .Include(m => m.Station)
+                .Include(m => m.Scale)
+                .Include(m => m.Standard)
+                .OrderBy(m => m.Scale.Denominator).ThenBy(m => m.FullName)
+                .ToListAsync();
+
+        }
+        return Enumerable.Empty<Module>();
+    }
+
     public Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
 
     public async Task<IEnumerable<Module>> GetAllAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)

@@ -4,6 +4,8 @@
 Release date 2022-10-03
 - **Bulk** added as goods packaging unit.
 - **Food** has now a separate entry in meeting description.
+- **Module list** added for overview.
+- **Bug fix** of downloaded file names. Removed trailing spaces so they can be opened in appropriate app.
 
 #### Version 1.7.3
 Release date 2022-10-01

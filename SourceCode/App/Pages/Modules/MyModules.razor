@@ -1,0 +1,26 @@
+﻿@page "/Modules/Index"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+
+@inject ModuleService ModuleService
+
+<PageHeading ObjectName="Modules" IconClass="@FontAwesome.Module" PageAction="PageAction.List"/>
+
+<ModulesList Modules="Modules" MayEdit="MayEdit" Principal="Principal"/>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<Module>? Modules;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Modules = await ModuleService.GetAllAsync(Principal);
+    }
+
+    private bool MayEdit => Principal is not null;
+}

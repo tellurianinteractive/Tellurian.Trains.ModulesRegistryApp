@@ -1,26 +1,84 @@
-﻿@page "/Modules/Index"
+﻿@page "/Modules"
+@page "/Modules/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
-
 @inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
 
 @inject ModuleService ModuleService
+@inject CountryService CountryService
 
-<PageHeading ObjectName="Modules" IconClass="@FontAwesome.Module" PageAction="PageAction.List"/>
 
-<ModulesList Modules="Modules" MayEdit="MayEdit" Principal="Principal"/>
+<PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
+
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" InitialSelectedId=CountryId />
+
+<TableTemplate Items="Modules">
+    <TableHeader>
+        <th>@Localizer["Scale"]</th>
+        <th>@Localizer["Name"]</th>
+        <th>@Localizer["IsPartOfStation"]</th>
+        <th>@Localizer["Standard"]</th>
+        <th>@Localizer["Owners"]</th>
+        @if (Principal.IsAnyAdministrator())
+        {
+            <th>@Localizer["Actions"]</th>
+        }
+    </TableHeader>
+    <RowTemplate Context="module">
+        <td>1:@module.Scale.Denominator</td>
+        <td>@module.FullName</td>
+        <td>@module.StationName()</td>
+        <td>@module.Standard.ShortName</td>
+        <td>@module.OwnerNames()</td>
+        @if (Principal.IsAnyAdministrator())
+        {
+            <td><AppButton Label="Edit" Href="@EditHref(module)" /></td>
+        }
+    </RowTemplate>
+</TableTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
 
-    ClaimsPrincipal? Principal;
-    IEnumerable<Module>? Modules;
+    private ClaimsPrincipal? Principal;
+    private IEnumerable<Module>? Modules;
+    private IEnumerable<ListboxItem>? Countries;
+
+    private void OnSelectedCountry(int id)
+    {
+        if (id > 0)
+        {
+            Navigator.NavigateTo($"/Modules/Country/{id}");
+        }
+    }
+
+    private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal);
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Modules = await ModuleService.GetAllAsync(Principal);
+        if (CountryId < 1)
+        {
+            var id = Principal.CountryId();
+            Navigator.NavigateTo($"/Modules/Country/{id}");
+        }
+        else
+        {
+            Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId);
+        }
     }
 
-    private bool MayEdit => Principal is not null;
+    string EditHref(Module? module) =>
+        module is null ? string.Empty :
+        module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
+        $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
+
 }
