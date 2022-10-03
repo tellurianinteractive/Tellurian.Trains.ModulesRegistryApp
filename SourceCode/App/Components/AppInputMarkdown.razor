@@ -3,7 +3,7 @@
 
 <div class="row" style="margin-top: 1em">
     <div class="col-6">
-        @if (!string.IsNullOrWhiteSpace(Label))
+        @if (Label.HasValue())
         {
             <label class="form-control-label" for="@Label"><strong>@Localizer[Label] (@Localizer["Markdown"])</strong></label>
         }
@@ -17,6 +17,11 @@
         @if (IsVisible)
         {
             <div class="markdown">
+                @if (Label.HasValue())
+                {
+                <h1>@Localizer[Label]</h1>
+                    
+                }
                 @((MarkupString)Preview)
             </div>
         }
@@ -24,6 +29,7 @@
 </div>
 @code {
     [Parameter] public int MaxNumberOfCharacters { get; set; }
+
     string Preview => Markdown.ToHtml(CurrentValue ?? string.Empty);
     int NumberOfCharacters => CurrentValue is null ? 0 : CurrentValue.Length;
 

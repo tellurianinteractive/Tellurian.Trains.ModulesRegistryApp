@@ -241,6 +241,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bulk.
+        /// </summary>
+        internal static string Bulk {
+            get {
+                return ResourceManager.GetString("Bulk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bundle.
         /// </summary>
         internal static string Bundle {

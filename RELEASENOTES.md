@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.7.4
+Release date 2022-10-03
+- **Bulk** added as goods packaging unit.
+- **Food** has now a separate entry in meeting description.
+
 #### Version 1.7.3
 Release date 2022-10-01
 - **Group member** may give permission that group members may borrow his/her modules for module meetings.

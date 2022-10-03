@@ -1236,4 +1236,10 @@
   <data name="MemberMayBorrowMyModules" xml:space="preserve">
     <value>Kan et medlem låne modulene mine?</value>
   </data>
+  <data name="Food" xml:space="preserve">
+    <value>Mat</value>
+  </data>
+  <data name="ExternalLink" xml:space="preserve">
+    <value>Ekstern lenke</value>
+  </data>
 </root>

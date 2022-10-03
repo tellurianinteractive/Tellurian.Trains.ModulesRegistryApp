@@ -22,6 +22,7 @@ public class Meeting
     public int Status { get; set; }
     public string Details { get; set; }
     public string Accomodation { get; set; }
+    public string Food { get; set; }
     public virtual Group OrganiserGroup { get; set; }
     public virtual GroupDomain GroupDomain { get; set; }
     public virtual ICollection<Layout> Layouts { get; set; }

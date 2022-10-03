@@ -6,7 +6,7 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.7.3</Version>
+		<Version>1.7.4</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
 		<DisableCheckingDuplicateNuGetItems>true</DisableCheckingDuplicateNuGetItems>
@@ -21,27 +21,27 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
-		<PackageReference Include="Azure.Identity" Version="1.6.0" />
+		<PackageReference Include="Azure.Identity" Version="1.7.0" />
 		<PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
 		<PackageReference Include="Blazored.Toast" Version="3.2.2" />
 		<PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
-		<PackageReference Include="Blazorise.Bootstrap" Version="1.0.6" />
-		<PackageReference Include="Blazorise.Components" Version="1.0.6" />
-		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.0.6" />
-		<PackageReference Include="Markdig" Version="0.30.2" />
+		<PackageReference Include="Blazorise.Bootstrap" Version="1.1.1" />
+		<PackageReference Include="Blazorise.Components" Version="1.1.1" />
+		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.1" />
+		<PackageReference Include="Markdig" Version="0.30.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" NoWarn="NU1605" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.7" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.9" NoWarn="NU1605" />
 		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.18.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.18.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.7" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.1" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.9" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.3" />
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.17.0" />
-		<PackageReference Include="NuGet.CommandLine" Version="6.2.1">
+		<PackageReference Include="NuGet.CommandLine" Version="6.3.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

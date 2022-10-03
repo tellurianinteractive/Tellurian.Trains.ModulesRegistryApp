@@ -16,7 +16,7 @@
     <Inputs>
         <AppInputText Width="4" Label="Name" @bind-Value="Meeting.Name" />
         <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="true" />
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" />
         <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
 
         <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
@@ -26,8 +26,9 @@
         <AppInputCheck Width="4" Label="IsOrganiserInternal" @bind-Value="Meeting.IsOrganiserInternal" />
 
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
-        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.MaxDetailsLength" />
-        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.MaxAccomodationLenght" />
+        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.DetailsMaxLength" />
+        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.AccomodationMaxLenght" />
+        <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
     </Inputs>
     <Buttons>
         <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
@@ -65,6 +66,12 @@
             if (result.Entity is not null) Meeting = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
+    }
+
+    void OnStartDateChanged()
+    {
+        Meeting.EndDate = Meeting.StartDate.AddDays(4);
+        StateHasChanged();
     }
 
     bool DatesIsLocked(Meeting meeting) =>

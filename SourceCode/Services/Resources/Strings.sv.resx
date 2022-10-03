@@ -687,4 +687,7 @@
   <data name="YearsInOperation" xml:space="preserve">
     <value>År i drift</value>
   </data>
+  <data name="Bulk" xml:space="preserve">
+    <value>Bulk</value>
+  </data>
 </root>
