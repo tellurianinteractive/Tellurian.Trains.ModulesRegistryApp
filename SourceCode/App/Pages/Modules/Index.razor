@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" InitialSelectedId=CountryId />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
 
 <TableTemplate Items="Modules">
     <TableHeader>
@@ -33,7 +33,7 @@
         <td>@module.OwnerNames()</td>
         @if (Principal.IsAnyAdministrator())
         {
-            <td><AppButton Label="Edit" Href="@EditHref(module)" /></td>
+            <td><AppButton Label="Edit" Href="@EditHref(module)" IsDisabled="(!MayEdit(module))" /></td>
         }
     </RowTemplate>
 </TableTemplate>
@@ -50,11 +50,14 @@
     {
         if (id > 0)
         {
+            CountryId = id;
             Navigator.NavigateTo($"/Modules/Country/{id}");
         }
+
     }
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+    private bool MayEdit(Module module) => Principal.IsGlobalAdministrator() || module.OwningPersonsIds().Contains(Principal.PersonId());
 
 
     protected async override Task OnInitializedAsync()
@@ -67,8 +70,8 @@
     {
         if (CountryId < 1)
         {
-            var id = Principal.CountryId();
-            Navigator.NavigateTo($"/Modules/Country/{id}");
+            CountryId= Principal.CountryId();
+            Navigator.NavigateTo($"/Modules/Country/{CountryId}");
         }
         else
         {
@@ -76,9 +79,11 @@
         }
     }
 
+
     string EditHref(Module? module) =>
         module is null ? string.Empty :
         module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
         $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
 
+    
 }

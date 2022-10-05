@@ -19,19 +19,17 @@
     [Parameter] public EventCallback<int> OnSelected { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool IsVisible { get; set; }
-    [Parameter] public int InitialSelectedId { get; set; }
+    [Parameter] public int SelectedId { get; set; }
     int Id { get; set; }
 
     protected override void OnParametersSet()
     {
-        if (Id == 0)
-        {
-            Id = InitialSelectedId;
-        }
+        Id = SelectedId;
     }
 
     private async Task OnSelectedItem()
     {
+        SelectedId = Id;
         await OnSelected.InvokeAsync(Id);
     }
 

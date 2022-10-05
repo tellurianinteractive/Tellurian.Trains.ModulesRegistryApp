@@ -14,7 +14,7 @@
 
 <PageHeading ObjectName="FreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
-<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="IsSelectCountryVisible" InitialSelectedId="CountryId" />
+<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
 
 <TableTemplate Items="AllFreightCustomers?.OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)">

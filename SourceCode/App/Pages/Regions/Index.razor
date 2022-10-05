@@ -12,7 +12,7 @@
 
 <PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" HelpContext="Regions" ShowHelpInitially="true" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" InitialSelectedId=CountryId />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
 
 
 @if (Principal.IsAnyAdministrator())

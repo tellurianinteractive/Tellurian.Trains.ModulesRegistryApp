@@ -14,7 +14,7 @@
 
 @if (MayEdit)
 {
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" InitialSelectedId="@CountryId" />
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId="@CountryId" />
 
     <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <FluentValidationValidator />

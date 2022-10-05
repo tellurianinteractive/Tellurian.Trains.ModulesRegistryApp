@@ -28,8 +28,8 @@
             @if (IsMeetingOrganiser)
             {
                 <h3>@Localizer["SelectPersonToRegister"]</h3>
-                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" InitialSelectedId="CountryId" />
-                <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" InitialSelectedId="PersonId" />
+                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" />
+                <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
             }
 
             @if (Participant?.Id > 0)
