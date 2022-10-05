@@ -1429,6 +1429,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send {0}..
+        /// </summary>
+        internal static string SendDays {
+            get {
+                return ResourceManager.GetString("SendDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shipper.
         /// </summary>
         internal static string Shipper {

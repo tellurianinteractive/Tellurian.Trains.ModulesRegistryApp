@@ -31,7 +31,7 @@ else if (Waybills.IsNullOrEmpty())
 }
 else
 {
-    <TableTemplate Items="Waybills" EditColspan="6" MayEdit=false>
+    <TableTemplate Items="Waybills" EditColspan="6" MayEdit=true >
         <TableHeader>
             <th>@Localizer["Direction"]</th>
             <th>@Localizer["FreightCustomer"]</th>
@@ -97,4 +97,12 @@ else
         Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
         StateHasChanged();
     }
+
+    async Task SaveAsync(StationCustomerWaybill item)
+    {
+        var result = await WaybillService.SaveAsync(Principal, item);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        await Task.Delay(3000);
+    }
+
 }

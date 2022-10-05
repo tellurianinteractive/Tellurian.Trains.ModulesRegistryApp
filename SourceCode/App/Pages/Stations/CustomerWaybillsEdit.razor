@@ -28,10 +28,10 @@ else if (Customer.Waybills.Count() == 0)
 }
 else
 {
-    <EditTemplate Item="Customer">
+    <EditTemplate Item="Customer" ShowSaveButton="false">
         <Inputs></Inputs>
         <SubInputs>
-            <CustomerWaybillEdit Customer="Customer" MyCargoItems="MyCargoItems" OperatingDayItems="OperatingDayItems" RegionItems="RegionItems" />
+            <CustomerWaybillEdit Customer="Customer" MyCargoItems="MyCargoItems" OperatingDayItems="OperatingDayItems" RegionItems="RegionItems"  />
         </SubInputs>
     </EditTemplate>
     

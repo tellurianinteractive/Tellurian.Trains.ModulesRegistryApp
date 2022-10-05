@@ -6,7 +6,8 @@ SELECT TOP (100) PERCENT
     R.Id AS RegionId, 
     R.CountryId,
     R.BackColor,
-    R.ForeColor
+    R.ForeColor,
+    0 AS DisplayOrder
 FROM 
     ExternalStation ES INNER JOIN
     Region R ON ES.RegionId = R.Id INNER JOIN

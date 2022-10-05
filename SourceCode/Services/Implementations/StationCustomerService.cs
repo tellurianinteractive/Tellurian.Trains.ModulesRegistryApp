@@ -88,6 +88,16 @@ public class StationCustomerService
         {
             entity.StationId = stationId;
             entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
+            entity.TrackOrArea = entity.TrackOrArea.ValueOrNull();
+            if (entity.Cargos is not null)
+            {
+                foreach (var cargo in entity.Cargos)
+                {
+                    cargo.TrackOrArea = cargo.TrackOrArea.ValueOrNull();
+                    cargo.SpecialCargoName = cargo.SpecialCargoName.ValueOrNull();
+                    cargo.SpecificWagonClass = cargo.SpecificWagonClass.ValueOrNull();
+                }
+            }
             if (ownerRef.IsGroup)
             {
                 using var dbContext = Factory.CreateDbContext();

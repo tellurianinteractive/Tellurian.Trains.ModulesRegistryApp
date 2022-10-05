@@ -1,6 +1,7 @@
 ﻿@typeparam TItem
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 
 @if (Items is null)
 {
@@ -29,12 +30,19 @@ else
                 {
                     @if (RowEditTemplate is not null && IsEditItem(item))
                     {
-                        <tr  @key="@ItemKey(item)">
+                        <tr @key="@ItemKey(item)">
                             <td colspan="@EditColspan">
                                 @RowEditTemplate(item)
                             </td>
-                            <td width="100px">
-                                <AppButton Label="Save" OnClickCallback="@(() => Save(ItemKey(item)))" IsDisabled="IsReadOnly" />
+                            <td width="110px">
+                                @if (CanSave)
+                                {
+                                    <AppButton Label="Save" OnClickCallback="@(() => Save(item))"/>
+                                }
+                                else
+                                {
+                                    <AppButton Label="Cancel" OnClickCallback="@(() => Cancel())" />
+                                }
                             </td>
                         </tr>
                     }
@@ -45,7 +53,7 @@ else
                             @if (RowEditTemplate is not null)
                             {
                                 <td>
-                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(ItemKey(item)))" IsDisabled="IsReadOnly" />
+                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(item))" IsDisabled="IsReadOnly" />
                                 </td>
                             }
                         </tr>
@@ -66,8 +74,11 @@ else
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
     [Parameter] public int EditColspan { get; set; } = 2;
     [Parameter] public bool MayEdit { get; set; } = true;
+    [Parameter] public EventCallback<TItem>? OnSave { get; set; }
+
 
     bool IsReadOnly => !MayEdit;
+    bool CanSave => MayEdit && OnSave is not null;
     string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
 
@@ -75,12 +86,19 @@ else
     string? EditedKey = null;
     bool IsEditItem(TItem item) => EditedKey is not null && ItemKey(item) == EditedKey;
 
-    void Edit(string key)
+    void Edit(TItem item)
     {
-        EditedKey = key;
+        EditedKey = ItemKey(item);
     }
 
-    void Save(string key)
+    async Task Save(TItem item)
+    {
+        EditedKey = null;
+        if (item is null) return;
+        await OnSave?.InvokeAsync(item);
+    }
+
+    async Task Cancel()
     {
         EditedKey = null;
     }

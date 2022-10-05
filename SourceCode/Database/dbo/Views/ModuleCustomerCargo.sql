@@ -15,7 +15,7 @@ SELECT
 	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
 	COALESCE(SCC.TrackOrArea, SC.TrackOrArea) AS TrackOrArea,
 	CASE
-		WHEN SCC.TrackOrAreaColor IS NOT NULL AND SCC.TrackOrAreaColor <> '#ffffff' THEN SCC.TrackOrAreaColor
+		WHEN SCC.TrackOrAreaColor IS NOT NULL THEN SCC.TrackOrAreaColor
 		ELSE SC.TrackOrAreaColor
 	END AS TrackOrAreaColor,
 	SC.Id AS CustomerId,

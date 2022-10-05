@@ -37,8 +37,10 @@ public static class OperationDaysExtensions
             new Day(7, 0x40, "Sunday"),
             new Day(0, 0x80, "OnDemand") };
 
-    internal static Day[] GetDays(this byte flags, bool haveSundayFirst = false) =>
-        flags == Days[0].Flag ? new Day[] { Days[0] } :
+
+    internal static Day[] GetDays(this byte flags, bool haveSundayFirst = false, bool expandDays = false) =>
+
+        !expandDays && flags == Days[0].Flag ? new Day[] { Days[0] } :
         flags >= Days[8].Flag ? new Day[] { Days[8] } :
         haveSundayFirst ? Days.Where(d => d.Number == 7 && (d.Flag & flags) > 0).Concat(Days.Where(d => d.Number > 0 && d.Number < 7 && (d.Flag & flags) > 0)).ToArray() :
         Days.Where(d => d.Number > 0 && (d.Flag & flags) > 0).ToArray();

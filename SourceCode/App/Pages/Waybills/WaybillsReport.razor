@@ -6,11 +6,11 @@
 @inject ILanguageService LanguageService
 @inject WaybillService WaybillService
 
-@if (Items is null)
+@if (Waybills is null)
 {
     <ActionMessage Label="CreatingReport" AlertType="Spinning" />
 }
-else if (Items.Count() == 0)
+else if (Waybills.Count() == 0)
 {
     <div style="padding: 1cm">
         <ContentView ContentName="NoWaybills" />
@@ -18,7 +18,7 @@ else if (Items.Count() == 0)
 }
 else
 {
-    @foreach (var itemsPerPage in Items.ItemsPerPage(10))
+    @foreach (var itemsPerPage in Waybills.ItemsPerPage(Waybill.ItemsPerPage))
     {
         <div >
             @foreach (var item in itemsPerPage)
@@ -35,19 +35,20 @@ else
     [Parameter] public int? LayoutStationId { get; set; }
 
     ClaimsPrincipal? Principal;
-    IEnumerable<Waybill>? Items { get; set; }
+    IEnumerable<Waybill>? Waybills { get; set; }
     bool IsLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
-        Items = null;
+        Waybills = null;
         if (!IsLoading)
         {
             IsLoading = true;
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (StationId > 0)
             {
-                Items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, false);
+                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, false);
+                Waybills = items.AsPrintableWaybills();
             }
         }
     }

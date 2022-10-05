@@ -1242,4 +1242,22 @@
   <data name="ExternalLink" xml:space="preserve">
     <value>Eksterne link</value>
   </data>
+  <data name="PrintPerOperatingDay" xml:space="preserve">
+    <value>Udskriv pr. driftsdag</value>
+  </data>
+  <data name="HasEmptyReturn" xml:space="preserve">
+    <value>Har tom retur?</value>
+  </data>
+  <data name="HideLoadingTimes" xml:space="preserve">
+    <value>Skjul lastningstider?</value>
+  </data>
+  <data name="HideUnloadingTimes" xml:space="preserve">
+    <value>Skjul aflæsningstider?</value>
+  </data>
+  <data name="SecondCustomer" xml:space="preserve">
+    <value>Anden kunde</value>
+  </data>
+  <data name="PrintCount" xml:space="preserve">
+    <value>Antal print</value>
+  </data>
 </root>

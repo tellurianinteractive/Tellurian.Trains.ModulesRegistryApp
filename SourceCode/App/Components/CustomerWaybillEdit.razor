@@ -1,4 +1,6 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject StationCustomerWaybillsService WaybillService
 
 
 @if (Waybill is null)
@@ -7,20 +9,20 @@
 }
 else
 {
-    <EditTemplate Item="Waybill" ShowSaveButton=false>
+    <EditTemplate Item="Waybill" OnValidSubmit="SaveAsync" TItem="StationCustomerWaybill">
         <Inputs>
             <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="Waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@Waybill.IsGenerated()" />
             @if (Waybill.IsGenerated())
             {
-                <AppDisplay Width="4" Label="OtherCustomer" Value="@Waybill.OtherStationCustomerCargo.LongDescription()" />
+                <AppDisplay Width="4" Label="SecondCustomer" Value="@Waybill.OtherStationCustomerCargo.LongDescription()" />
             }
             else
             {
                 <AppInputSelectNullable Width="4" Label="Region" @bind-Value="Waybill.OtherRegionId" Items="RegionItems" />
 
             }
-            <AppInputSelect Width="2" Label="OperatingDay" @bind-Value="Waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
-            <AppInputNumber Width="1" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
+            <AppInputSelect Width="2" Label="Days" @bind-Value="Waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
+            <AppInputNumber Width="2" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
             <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Waybill.PrintPerOperatingDay" />
             <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Waybill.HasEmptyReturn" />
             @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="Waybill.IsExpressCargo" />*@
@@ -34,8 +36,27 @@ else
 
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public StationCustomerWaybill? Waybill { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? MyCargoItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? RegionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+
+    ClaimsPrincipal? Principal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+
+    async Task SaveAsync()
+    {
+        if (Waybill is null) return;
+        var result = await WaybillService.SaveAsync(Principal, Waybill);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        await Task.Delay(3000);
+
+    }
+
 }

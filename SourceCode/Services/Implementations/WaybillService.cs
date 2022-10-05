@@ -12,6 +12,7 @@ public class WaybillService
         Factory = factory;
     }
 
+
     public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
     {
         List<Waybill> waybills = new List<Waybill>(200);
@@ -38,24 +39,6 @@ public class WaybillService
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId));
-                        var last = waybills.Last();
-                        if (last is null) continue;
-                        if (last.EmptyReturn)
-                        {
-                            var empty = new Waybill
-                            {
-                                Destination = last.Origin,
-                                Epoch = last.Epoch,
-                                OperatorName = last.OperatorName,
-                                Origin = last.Destination,
-                                Quantity = 0,
-                                DefaultWagonClass = last.DefaultWagonClass,
-                            };
-                            var language = new CultureInfo(last.Origin?.Languages ?? "en");
-                            if (language is not null && empty.Destination is not null)
-                                empty.Destination.CargoName = resourceManager.GetString("Empty", language) ?? string.Empty;
-                            waybills.Add(empty);
-                        }
                     }
                 }
                 catch (Exception)
@@ -100,7 +83,7 @@ public class WaybillService
                         waybills.Add(reader.MapWaybill(stationId ?? 0));
                         var last = waybills.Last();
                         if (last is null) continue;
-                        if (last.EmptyReturn)
+                        if (last.HasEmptyReturn)
                         {
                             var empty = new Waybill
                             {
@@ -181,7 +164,9 @@ internal static class WaybillMapper
             OperatorName = string.Empty, // To be supported
             DefaultWagonClass = record.GetString("DefaultClasses"),
             SpecialWagonClass = record.GetString("SpecificWagonClass"),
-            //EmptyReturn = record.GetBool("EmptyReturn"),
+            PrintCount = record.GetInt("PrintCount"),
+            PrintPerOperatingDay = record.GetBool("PrintPerOperatingDay"),
+            HasEmptyReturn = record.GetBool("HasEmptyReturn"),
             //MatchReturn = record.GetBool("MatchReturn")
         };
     }

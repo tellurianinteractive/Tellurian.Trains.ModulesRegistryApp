@@ -21,6 +21,28 @@ public class CargoCustomer
     public string TrackOrAreaColor { get; set; } = string.Empty;
     public int? FromYear { get; set; }
     public int? UptoYear { get; set; }
+
+    public CargoCustomer Clone => new() { 
+        Name = Name,
+        StationId = StationId,
+        StationName = StationName,
+        ForeColor = ForeColor,
+        BackColor = BackColor,
+        Languages = Languages,
+        DomainSuffix = DomainSuffix,
+        CargoName = CargoName,
+        SpecialCargoName = SpecialCargoName,
+        QuantityUnitResourceKey = QuantityUnitResourceKey,
+        PackagingUnitResourceKey = PackagingUnitResourceKey,
+        OperationDaysFlags = OperationDaysFlags,
+        IsModuleStation = IsModuleStation,
+        ReadyTimeResourceKey = ReadyTimeResourceKey,
+        DisplayReadyTime = DisplayReadyTime,
+        TrackOrArea = TrackOrArea,
+        TrackOrAreaColor = TrackOrAreaColor,
+        FromYear = FromYear,
+        UptoYear = UptoYear,
+    };
 }
 
 public static class CargoCustomerExtensions

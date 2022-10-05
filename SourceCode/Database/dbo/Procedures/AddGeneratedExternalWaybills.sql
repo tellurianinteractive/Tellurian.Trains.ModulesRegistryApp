@@ -22,7 +22,7 @@ BEGIN
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN
 		ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
-		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
+		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherExternalCustomerCargoId
 	WHERE
 		ME.StationCustomerId = @StationCustomerId
 		AND ME.StationCustomerId <> OTHER.StationCustomerId

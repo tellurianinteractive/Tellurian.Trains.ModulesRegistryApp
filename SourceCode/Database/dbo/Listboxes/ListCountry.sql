@@ -1,6 +1,6 @@
 ﻿CREATE VIEW dbo.ListCountry
 AS
-SELECT TOP (100) PERCENT Id, EnglishName
+SELECT TOP (100) PERCENT Id, EnglishName, 0 AS DisplayOrder
 FROM     dbo.Country
 ORDER BY EnglishName
 

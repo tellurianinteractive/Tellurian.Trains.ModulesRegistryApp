@@ -54,4 +54,20 @@ public class StationCustomerWaybillsService
         }
         return 0;
     }
+
+    public async Task<(int Count, string Message, StationCustomerWaybill? Entity)> SaveAsync(ClaimsPrincipal? principal, StationCustomerWaybill entity)
+    {
+        if (principal.IsAuthenticated())
+        {
+            var dbContext = Factory.CreateDbContext();
+            var existing = dbContext.StationCustomerWaybills.FirstOrDefault(x => x.Id == entity.Id);
+            if (existing is null) return principal.SaveNotAuthorised<StationCustomerWaybill>();
+            dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            return result.SaveResult(existing);
+
+        }
+        return principal.SaveNotAuthorised<StationCustomerWaybill>();
+    }
+
 }

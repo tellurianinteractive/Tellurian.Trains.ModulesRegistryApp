@@ -5,13 +5,13 @@
 }
 
     .pocket.frame {
-        width: 52mm;
+        width: 48mm;
         height: 92mm;
         padding: 0pt;
         margin: 0pt;
         border-color: gainsboro;
         border-width: 1px;
         border-style: solid;
-        padding: 2pt;
+        padding: 0pt;
         display: inline-block;
     }

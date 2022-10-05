@@ -3,6 +3,21 @@
     font-weight: 600;
 }
 
+.emptyreturn {
+    stroke: black;
+    stroke-width: 0.4px;
+    fill: transparent;
+    opacity: 0.5;
+    position: absolute;
+    top: 26mm;
+    left: 3mm;
+    bottom: 0px;
+    right: 0px;
+    width: 45mm;
+}
+
+
+
 .label {
     font-size: 7pt;
     max-height: 9pt;
@@ -27,10 +42,10 @@
         border: 2px solid gray;
     }
 
-.name {
+.name { /* font-size is set dynamically in code */
     font-weight: bold;
     line-height: 17pt;
-    width: 48mm;
+    width: 44mm;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -38,9 +53,9 @@
 
 .shipper {
     font-weight: bold;
-    font-size: 11pt;
-    min-height: 13pt;
-    width: 48mm;
+    font-size: 10pt;
+    min-height: 12pt;
+    width: 46mm;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -48,7 +63,7 @@
 
 .smaller {
     font-weight: bold;
-    font-size: 10pt;
+    font-size: 8pt;
     min-height: 11pt;
 }
 
@@ -59,9 +74,9 @@
 
 .item {
     font-weight: bold;
-    font-size: 11pt;
-    min-height: 13pt;
-    max-width: 48mm;
+    font-size: 10pt;
+    min-height: 12pt;
+    max-width: 46mm;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -69,7 +84,7 @@
 
 .instruction {
     font-weight: bold;
-    font-size: 9pt;
-    line-height: 11pt;
-    min-height: 11pt;
+    font-size: 7pt;
+    line-height: 9pt;
+    min-height: 10pt;
 }

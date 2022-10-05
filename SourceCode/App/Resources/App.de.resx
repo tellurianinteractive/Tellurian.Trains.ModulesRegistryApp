@@ -1242,4 +1242,22 @@
   <data name="ExternalLink" xml:space="preserve">
     <value>Externer Link</value>
   </data>
+  <data name="PrintPerOperatingDay" xml:space="preserve">
+    <value>Ausdruck pro Betriebstag</value>
+  </data>
+  <data name="HasEmptyReturn" xml:space="preserve">
+    <value>Hat leere Rückkehr?</value>
+  </data>
+  <data name="HideLoadingTimes" xml:space="preserve">
+    <value>Ladezeiten verbergen?</value>
+  </data>
+  <data name="HideUnloadingTimes" xml:space="preserve">
+    <value>Entladezeiten ausblenden?</value>
+  </data>
+  <data name="SecondCustomer" xml:space="preserve">
+    <value>Zweiter Kunde</value>
+  </data>
+  <data name="PrintCount" xml:space="preserve">
+    <value>Anzahl der Drucke</value>
+  </data>
 </root>

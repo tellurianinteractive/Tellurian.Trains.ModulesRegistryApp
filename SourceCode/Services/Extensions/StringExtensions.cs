@@ -32,6 +32,9 @@ public static class StringExtensions
             .Build();
     }
 
+    internal static string? ValueOrNull(this string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null : value;
+
 
     public static bool IsEmailAddress([NotNullWhen(true)] this string? me) =>
         me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");

@@ -1,9 +1,12 @@
 ﻿CREATE VIEW dbo.ListExternalStationCustomer
 AS
-SELECT TOP (100) PERCENT dbo.ExternalStationCustomer.Id, dbo.ExternalStationCustomer.CustomerName + ', ' + dbo.ExternalStation.FullName AS Description, dbo.Region.CountryId
-FROM     dbo.ExternalStation INNER JOIN
-                  dbo.ExternalStationCustomer ON dbo.ExternalStation.Id = dbo.ExternalStationCustomer.ExternalStationId INNER JOIN
-                  dbo.Region ON dbo.ExternalStation.RegionId = dbo.Region.Id
+SELECT TOP (100) PERCENT 
+    dbo.ExternalStationCustomer.Id, dbo.ExternalStationCustomer.CustomerName + ', ' + dbo.ExternalStation.FullName AS Description, 
+    dbo.Region.CountryId
+FROM     
+    dbo.ExternalStation INNER JOIN
+    dbo.ExternalStationCustomer ON dbo.ExternalStation.Id = dbo.ExternalStationCustomer.ExternalStationId INNER JOIN
+    dbo.Region ON dbo.ExternalStation.RegionId = dbo.Region.Id
 ORDER BY Description
 
 GO

@@ -690,4 +690,7 @@
   <data name="Bulk" xml:space="preserve">
     <value>Massen</value>
   </data>
+  <data name="SendDays" xml:space="preserve">
+    <value>{0} versenden.</value>
+  </data>
 </root>

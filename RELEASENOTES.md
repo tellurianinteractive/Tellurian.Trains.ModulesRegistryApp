@@ -1,5 +1,17 @@
 ## Release Notes
 
+#### Version 1.7.5
+Release date 2022-10-06
+##### Waybill Improvements
+- **Changed size** from 52 mm width to 48 mm, you now print 12 waybills per page instead of previous 10.
+
+Options to set for each waybill in your freight customers list:
+- **Empty return** waybills can now be created. Just check *Has empty return* for the selected waybill.
+- **Number to print** can now be set for each waybill. Set to zero disables printing.
+- **Print per operating day** is now possible. The waybill will be printed accoring the union set of operating days given for 
+the origin and destination freight customers cargo flow.
+
+> NOTE: Printing options adds up. Number to print x operating days x 2 for empty returns.
 #### Version 1.7.4
 Release date 2022-10-03
 - **Bulk** added as goods packaging unit.
