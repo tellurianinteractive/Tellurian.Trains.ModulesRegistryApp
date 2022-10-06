@@ -1260,4 +1260,7 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Antal att skriva ut</value>
   </data>
+  <data name="Package" xml:space="preserve">
+    <value>Låda</value>
+  </data>
 </root>

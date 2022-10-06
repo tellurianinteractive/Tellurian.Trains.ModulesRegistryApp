@@ -1260,4 +1260,7 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Antal print</value>
   </data>
+  <data name="Package" xml:space="preserve">
+    <value>Bokz</value>
+  </data>
 </root>

@@ -1260,4 +1260,7 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Number of prints</value>
   </data>
+  <data name="Package" xml:space="preserve">
+    <value>Box</value>
+  </data>
 </root>
