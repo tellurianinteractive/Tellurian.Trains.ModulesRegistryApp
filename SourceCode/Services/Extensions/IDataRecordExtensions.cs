@@ -99,7 +99,7 @@ public static class IDataRecordExtensions
 
     private static int GetColumIndex(this IDataRecord me, string columnName, bool throwOnNotFound = true)
     {
-        var i = -1;
+        int i;
         try { i = me.GetOrdinal(columnName); }
         catch (IndexOutOfRangeException)
         {

@@ -41,7 +41,7 @@ else
                                 }
                                 else
                                 {
-                                    <AppButton Label="Cancel" OnClickCallback="@(() => Cancel())" />
+                                    <AppButton Label="Cancel" OnClickCallback="Cancel" />
                                 }
                             </td>
                         </tr>
@@ -91,14 +91,14 @@ else
         EditedKey = ItemKey(item);
     }
 
-    async Task Save(TItem item)
+    void Save(TItem item)
     {
         EditedKey = null;
-        if (item is null) return;
-        await OnSave?.InvokeAsync(item);
+        //if (item is null || OnSave is null) return;
+        //await OnSave.InvokeAsync(item);
     }
 
-    async Task Cancel()
+    void Cancel()
     {
         EditedKey = null;
     }

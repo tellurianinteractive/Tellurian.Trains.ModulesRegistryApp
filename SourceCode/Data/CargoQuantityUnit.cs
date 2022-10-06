@@ -10,7 +10,6 @@ public partial class CargoQuantityUnit
     }
 
     public int Id { get; set; }
-    [Obsolete("Use the resoutce codes.")]
     public string FullName { get; set; }
     public string Designation { get; set; }
     public string SingularResourceCode { get; set; }
