@@ -1,10 +1,7 @@
 ﻿## Zur Teilnahme am Modultreffen
 Vielen Dank für Ihr Interesse an der Teilnahme am Modultreffen!
 
-> Sie erhalten diese Meldung, weil Sie nicht berechtigt sind
-> um sich zum Modultreffen anzumelden.
-
-Um sich zum Modultreffen anzumelden, müssen Sie sich anmelden.
+> Um sich zum Modultreffen anzumelden, müssen Sie sich anmelden.
 
 Wenn Sie kein Benutzerkonto haben, gibt es zwei Möglichkeiten:
 1. Erstellen Sie ein Benutzerkonto. Sie müssen sich an Ihren Landesadministrator wenden, um eine Einladung zu erhalten, ein Benutzer zu werden.

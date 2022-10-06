@@ -1,4 +1,6 @@
-﻿#### Hjälptexter
+﻿*Modulträffar är sociala evenemang. Det här fotot är från Grimslövsträffen 2020 i Sverige.*
+
+#### Hjälptexter
 De flesta formulär har hjälptexter som hjälper dig att fylla i data. 
 Klicka bara på *frågetecken* i sidans övre vänstra hörn.
 
@@ -6,7 +8,7 @@ Klicka bara på *frågetecken* i sidans övre vänstra hörn.
 
 Som *gruppadministratör* kan du
 - du kan lägga till och underhålla alla gruppmedlemmars moduler.
-- skapa och administrera modulmöten.
+- skapa och administrera modulträffar.
 
 Kontakta en av landadministratörerna för att skapa en grupp och lägga till dig som gruppadministratör.
 Sedan kan du lägga till nya medlemmar i gruppen.

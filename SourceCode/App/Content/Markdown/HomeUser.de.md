@@ -1,4 +1,6 @@
-﻿#### Hilfetexte
+﻿*Modultreffen sind gesellschaftliche Veranstaltungen. Dieses Foto stammt vom Grimslöv-Treffen 2020 in Schweden.*
+
+#### Hilfetexte
 Die meisten Formulare enthalten Hilfetexte, die Sie beim Ausfüllen von Daten unterstützen. 
 Klicken Sie einfach auf das *Fragezeichen* in der oberen linken Ecke der Seite.
 

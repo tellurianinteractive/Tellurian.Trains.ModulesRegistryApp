@@ -1,9 +1,7 @@
 ﻿## At deltage i modultræfet
 Tak for din interesse i at deltage i modultræfet!
 
-> Du får denne besked, fordi du ikke er autoriseret for at tilmelde dig modultræfet.
-
-Du skal logge ind for at tilmelde dig træfet.
+> Du skal logge ind for at tilmelde dig træfet.
 
 Hvis du ikke har en brugerkonto, er der to muligheder:
 1. Få en brugerkonto. Du skal kontakte din landeadministrator for at få en invitation til at blive bruger.

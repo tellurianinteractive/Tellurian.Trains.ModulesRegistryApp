@@ -1,4 +1,6 @@
-﻿# Die **Modulregistrierung** ist eine Site zum Verwalten von Daten über Modelleisenbahnmodule in jedem Maßstab.
+﻿*Modultreffen sind gesellschaftliche Veranstaltungen. Dieses Foto stammt vom Grimslöv-Treffen 2020 in Schweden.*
+
+# Die **Modulregistrierung** ist eine Site zum Verwalten von Daten über Modelleisenbahnmodule in jedem Maßstab.
 Das Modulregister kann europaweit verwendet werden und ist in mehreren Sprachen verfügbar: Englisch, Deutsch, Dänisch, Schwedisch und Norwegisch.
 
 #### Neuer Benutzer?

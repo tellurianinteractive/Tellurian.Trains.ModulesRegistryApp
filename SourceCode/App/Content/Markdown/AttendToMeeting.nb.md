@@ -1,10 +1,7 @@
 ﻿## Å delta på modultreffet
 Takk for interessen for å delta på modultreffet!
 
-> Du får denne meldingen fordi du ikke er autorisert
-> for å melde deg på modultreffet.
-
-Du må logge inn for å melde deg på modultreffet.
+> Du må logge inn for å melde deg på modultreffet.
 
 Hvis du ikke har en brukerkonto, er det to alternativer:
 1. Skaff deg en brukerkonto. Du må kontakte landsadministratoren din for å få en invitasjon til å bli bruker.

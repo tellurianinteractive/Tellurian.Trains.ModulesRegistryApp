@@ -1,4 +1,6 @@
-﻿#### Hjælpstekster
+﻿*Modultræf er sociale arrangementer. Dette billede er fra Grimslöv-træffet i 2020 i Sverige.*
+
+#### Hjælpstekster
 De fleste formularer har hjælpetekster, der guider dig, hvordan du udfylder data. 
 Klik bare på *spørgsmålstegn* i øverste venstre hjørne af siden.
 

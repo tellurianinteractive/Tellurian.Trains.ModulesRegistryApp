@@ -1,10 +1,7 @@
 ﻿## To Attend To Meeting
 Thank you for your interest in participating in the module meeting!
 
-> You get this message because your are not authorized 
-> to register to the module meeting.
-
-You need to login in order to register to the module meeting.
+> You need to login in order to register to the module meeting.
 
 If you don't have a user account there are two options:
 1. Get a user account. You have to contact your country administrator to get an invitation to become a user.

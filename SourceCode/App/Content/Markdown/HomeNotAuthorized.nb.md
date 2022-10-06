@@ -1,4 +1,6 @@
-﻿# **Modulregistret** er et nettsted for å opprettholde data om modell jernbanemoduler i hvilken som helst skala.
+﻿*Modultreffer er sosiale arrangementer. Dette bildet er fra Grimslöv-treffet i Sverige i 2020.*
+
+# **Modulregistret** er et nettsted for å opprettholde data om modell jernbanemoduler i hvilken som helst skala.
 Modulregisteret kan brukes over hele Europa og er tilgjengelig på flere språk: engelsk, tysk, dansk, svensk og norsk.
 
 #### Ny bruker?
