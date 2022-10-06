@@ -21,7 +21,7 @@ public static class WaybillExtensions
                         foreach (var day in item.OperatingDayFlag.GetDays(false, true))
                         {
                             var clone = item.Clone;
-                            item.OperatingDayFlag = day.Flag;
+                            clone.OperatingDayFlag = day.Flag;
 
                             result.Add(clone);
                             if (clone.HasEmptyReturn) result.Add(clone.EmptyReturn());
@@ -75,10 +75,14 @@ public static class WaybillExtensions
     public static bool HasDifferentCargoTranslations(this Waybill? me) =>
         me is not null && !me.Origin.CargoName().Equals(me.Destination.CargoName());
 
-    public static string SendingDays(this Waybill? me) =>
-       me is not null && me.PrintPerOperatingDay ?
-        me.IsEmptyReturn ? string.Format(Resources.Strings.SendDays, LanguageUtility.GetLocalizedString("WhenNeeded", me.Origin!.Language()).ToLowerInvariant()) :
-        string.Format(Resources.Strings.SendDays, LanguageUtility.GetLocalizedString(me.OperatingDayFlag.OperationDays().FullName, me.Origin!.Language())) : string.Empty;
+    public static string SendingDays(this Waybill? me)
+    {
+        if (me is null || !me.PrintPerOperatingDay || me.Origin is null) return string.Empty;
+        var culture = new CultureInfo(me.Origin.Language());
+        return
+            me.IsEmptyReturn ? string.Format(Resources.Strings.SendDays, LanguageUtility.GetLocalizedString("WhenNeeded", me.Origin!.Language()).ToLowerInvariant()) :
+            string.Format(LanguageUtility.GetLocalizedString("SendDays", me.Origin!.Language()), me.OperatingDayFlag.OperationDays(culture).FullName);        
+    }
 
     public static string LoadingReady(this Waybill? me) =>
         me is null || me.HideLoadingTimes ? string.Empty :

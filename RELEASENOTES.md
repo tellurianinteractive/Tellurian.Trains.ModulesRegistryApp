@@ -1,5 +1,9 @@
 ## Release Notes
 
+#### Version 1.7.6
+Release date 2022-10-07
+- **Bug fix** of waybill sending days language.
+- 
 #### Version 1.7.5
 Release date 2022-10-06
 ##### Waybill Improvements

@@ -159,6 +159,7 @@ internal class Day
         return resourceManager.GetString(FullNameResourceKey, culture) ?? string.Empty;
     }
 
+    public override string ToString() => FullNameResourceKey;
 }
 
 internal static class DayExtensions
