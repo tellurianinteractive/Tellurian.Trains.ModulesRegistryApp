@@ -13,17 +13,19 @@ SELECT
 	SCC.MatchReturn,
 	COALESCE(SCC.FromYear, SC.OpenedYear) AS FromYear,
 	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
-	COALESCE(SCC.TrackOrArea, SC.TrackOrArea) AS TrackOrArea,
-	CASE
-		WHEN SCC.TrackOrAreaColor IS NOT NULL THEN SCC.TrackOrAreaColor
-		ELSE SC.TrackOrAreaColor
-	END AS TrackOrAreaColor,
+	SC.TrackOrArea AS CustomerTrackOrArea,
+	SC.TrackOrAreaColor AS CustomerTrackOrAreaColor,
+	SCC.TrackOrArea AS CargoTrackOrArea,
+	SCC.TrackOrAreaColor AS CargoTrackOrAreaColor,
 	SC.Id AS CustomerId,
 	SC.CustomerName,
 	CD.IsSupply,
 	CD.IsInternational,
 	CRT.ShortName AS ReadyTime,
-	CU.FullName AS QuantityUnitName,
+	CASE
+		WHEN SCC.Quantity <=1 THEN CU.SingularResourceCode
+		ELSE CU.PluralResourceCode
+	END AS QuantityUnitResourceCode,
 	CASE
 		WHEN CPU.Id=3 AND SCC.Quantity <=1 THEN CPU.SingularResourceCode
 		ELSE CPU.PluralResourceCode

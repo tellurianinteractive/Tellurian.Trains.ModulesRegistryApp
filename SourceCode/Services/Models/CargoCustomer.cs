@@ -19,10 +19,13 @@ public class CargoCustomer
     public bool DisplayReadyTime { get; set; } = true;
     public string TrackOrArea { get; set; } = string.Empty;
     public string TrackOrAreaColor { get; set; } = string.Empty;
+    public string CargoTrackOrArea { get; set; } = string.Empty;
+    public string CargoTrackOrAreaColor { get; set; } = string.Empty;
     public int? FromYear { get; set; }
     public int? UptoYear { get; set; }
 
-    public CargoCustomer Clone => new() { 
+    public CargoCustomer Clone => new()
+    {
         Name = Name,
         StationId = StationId,
         StationName = StationName,
@@ -40,6 +43,8 @@ public class CargoCustomer
         DisplayReadyTime = DisplayReadyTime,
         TrackOrArea = TrackOrArea,
         TrackOrAreaColor = TrackOrAreaColor,
+        CargoTrackOrArea = CargoTrackOrArea,
+        CargoTrackOrAreaColor = CargoTrackOrAreaColor,
         FromYear = FromYear,
         UptoYear = UptoYear,
     };
@@ -48,10 +53,18 @@ public class CargoCustomer
 public static class CargoCustomerExtensions
 {
     public static string TrackOrAreaBackColor(this CargoCustomer item) =>
-       item is null || item.TrackOrAreaColor.HasNoValue() == true || item.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
-       item.TrackOrAreaColor;
+        item == null ? string.Empty :
+        item.CargoTrackOrAreaColor.IsHexColor() && ! item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
+        item.TrackOrAreaColor.IsHexColor() ? item.TrackOrAreaColor :
+        "#808080";
 
-    public static string TrackOrAreaForeColor(this CargoCustomer item) =>
+    public static string TrackOrAreaTextColor(this CargoCustomer item) =>
         item.TrackOrAreaBackColor().TextColor();
+
+    public static string TrackOrAreaDesignation(this CargoCustomer item) =>
+        item is null ? string.Empty :
+        item.CargoTrackOrArea.HasValue() ? item.CargoTrackOrArea :
+        item.TrackOrArea.HasValue() ? item.TrackOrArea :
+        string.Empty;
 
 }

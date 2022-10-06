@@ -51,20 +51,21 @@ public static class WaybillExtensions
         emptyReturn.Origin!.SpecialCargoName = string.Empty;
         emptyReturn.Origin!.ReadyTimeResourceKey = string.Empty;
         emptyReturn.Origin!.TrackOrArea = string.Empty;
-        emptyReturn.Quantity = 0;
         emptyReturn.Destination = newDestination;
         //emptyReturn.Destination!.OperationDaysFlags = waybill.Origin!.OperationDaysFlags;
         emptyReturn.Destination!.CargoName = LanguageUtility.GetLocalizedString("Empty", emptyReturn.Destination.Language());
         emptyReturn.Destination!.SpecialCargoName = string.Empty;
         emptyReturn.Destination!.ReadyTimeResourceKey = string.Empty;
+        emptyReturn.Destination!.PackagingUnitResourceKey = string.Empty;
         emptyReturn.IsEmptyReturn = true;
         return emptyReturn;
     }
 
-    public static string DestinationQuantityUnit(this Waybill waybill) =>
+    public static string DestinationQuantity(this Waybill waybill) =>
         waybill is null || waybill.Destination is null ? string.Empty :
+        waybill.IsEmptyReturn ? string.Empty :
         waybill.QuantityUnitId == 3 && waybill.Quantity > 0 ? $"{waybill.Quantity} {waybill.Destination.PackagingUnit()}" :
-        waybill.Destination.QuantityUnit() ?? string.Empty;
+        $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}" ?? string.Empty;
 
     public static bool IsCrossBorder([NotNullWhen(true)] this Waybill? me) =>
         me is not null &&
@@ -77,11 +78,11 @@ public static class WaybillExtensions
 
     public static string SendingDays(this Waybill? me)
     {
-        if (me is null || !me.PrintPerOperatingDay || me.Origin is null) return string.Empty;
+        if (me is null  || me.Origin is null) return string.Empty;
         var culture = new CultureInfo(me.Origin.Language());
         return
-            me.IsEmptyReturn ? string.Format(Resources.Strings.SendDays, LanguageUtility.GetLocalizedString("WhenNeeded", me.Origin!.Language()).ToLowerInvariant()) :
-            string.Format(LanguageUtility.GetLocalizedString("SendDays", me.Origin!.Language()), me.OperatingDayFlag.OperationDays(culture).FullName);        
+            me.IsEmptyReturn ? string.Empty:
+            me.OperatingDayFlag.OperationDays(culture).ShortName;        
     }
 
     public static string LoadingReady(this Waybill? me) =>

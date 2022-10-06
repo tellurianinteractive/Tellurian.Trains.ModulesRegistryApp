@@ -13,14 +13,19 @@ SELECT
 	CAST (0 AS BIT) AS MatchReturn,
 	COALESCE(SCC.FromYear, SC.OpenedYear) AS FromYear,
 	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
-	'' AS TrackOrArea,
-	'' AS TrackOrAreaColor,
+	'' AS CustomerTrackOrArea,
+	'' AS CustomerTrackOrAreaColor,
+	'' AS CargoTrackOrArea,
+	'' AS CargoTrackOrAreaColor,
 	SC.Id AS CustomerId,
 	SC.CustomerName,
 	CD.IsSupply,
 	CD.IsInternational,
 	'' AS ReadyTime,
-	CU.FullName AS QuantityUnitName,
+	CASE
+		WHEN SCC.Quantity <=1 THEN CU.SingularResourceCode
+		ELSE CU.PluralResourceCode
+	END AS QuantityUnitResourceCode,
 	CASE
 		WHEN CPU.Id=3 AND SCC.Quantity <=1 THEN CPU.SingularResourceCode
 		ELSE CPU.PluralResourceCode

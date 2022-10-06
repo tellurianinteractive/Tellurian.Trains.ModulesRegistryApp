@@ -145,7 +145,7 @@ public sealed class LayoutService
                 .Include(lm => lm.LayoutStation)
                 .Include(lm => lm.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(lm => lm.LayoutParticipant).ThenInclude(p => p.MeetingParticipant).ThenInclude(mp => mp.Person)
-                .Where(lm => (layoutParticipantId == 0 || lm.LayoutParticipantId == layoutParticipantId))
+                .Where(lm => layoutParticipantId == 0 || lm.LayoutParticipantId == layoutParticipantId)
                 .ToListAsync();
         }
         return Array.Empty<LayoutModule>();

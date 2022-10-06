@@ -17,7 +17,7 @@
 }
 <AuthorizeView>
     <NotAuthorized>
-         <ContentView ContentName="AttendToMeeting" />
+        <ContentView ContentName="AttendToMeeting" />
     </NotAuthorized>
     <Authorized>
         @if (Meeting is null)
@@ -54,20 +54,20 @@
 
                 <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
                     <Inputs>
-                        <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
-                        <AppInputFill Width="10" />
                         <h3>@Localizer["Days"]</h3>
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
+                        <h3>@Localizer["Arrival"] @Participant.FirstParticipationDay()</h3>
+                        <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
                     </Inputs>
                 </EditTemplate>
                 <hr />
                 @if (Participant.Id > 0)
                 {
-                    <TableTemplate Items="@PersonsLayoutParticipation">
+                    <TableTemplate Items="@LayoutParticipation(Meeting.Layouts, Participant)">
                         <TableHeader>
                             <th width="15%">@Localizer["Layout"]</th>
                             <th>@Localizer["Details"]</th>
@@ -76,20 +76,16 @@
                         <RowTemplate Context="item">
                             <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
-                            @if(item.Layout?.IsRegistrationPermitted == true)
-                            {
-                                <td><AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" /></td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
+                            <td>
+                                @if (item.Layout?.IsRegistrationPermitted == true)
+                                {
+                                    <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
+                                }
+                            </td>
                         </RowTemplate>
                     </TableTemplate>
                 }
             }
-
-
         }
     </Authorized>
 </AuthorizeView>
@@ -121,7 +117,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync( MeetingId);
+            Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingId);
             if (Meeting is not null)
             {
                 IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
@@ -156,6 +152,7 @@
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId) ??
                 new MeetingParticipant { PersonId = personId, MeetingId = MeetingId };
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
+
         }
     }
 
@@ -165,7 +162,7 @@
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting, Participant);
             Participant = result.Entity;
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync( Meeting.Id);
+            Meeting = await MeetingService.FindByIdWithLayoutsAsync(Meeting.Id);
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
@@ -203,7 +200,7 @@
     static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
     {
         if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return Enumerable.Empty<LayoutParticipation>();
-        var personsLayoutParticipations = meetingLayouts.Select(ml => new LayoutParticipation(ml, participant));
+        var personsLayoutParticipations = meetingLayouts.Select(ml => new LayoutParticipation(ml, participant)).ToList();
         //if (participant?.Layouts is null || participant.Layouts.Count() == 0) return personsLayoutParticipations;
         foreach (var participantLayout in participant.LayoutParticipations)
         {

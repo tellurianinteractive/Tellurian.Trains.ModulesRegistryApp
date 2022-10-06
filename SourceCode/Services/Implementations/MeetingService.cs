@@ -29,7 +29,7 @@ public class MeetingService
     public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
     {
         using var dbContext = Factory.CreateDbContext();
-        var meetings = await dbContext.Meetings
+        var meetings = await dbContext.Meetings.AsNoTracking()
             .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
@@ -50,7 +50,7 @@ public class MeetingService
     public async Task<Meeting?> FindByIdAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Meetings
+        return await dbContext.Meetings.AsNoTracking()
              .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
              .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
              .Include(m => m.Layouts).ThenInclude(l => l.ContactPerson)
@@ -72,7 +72,7 @@ public class MeetingService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings
+            return await dbContext.Meetings.AsNoTracking()
                 .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
                 .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
         }
@@ -85,7 +85,7 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             var meetingId = await dbContext.Layouts.Where(l => l.Id == layoutId).Select(l => l.MeetingId).SingleOrDefaultAsync();
-            return await dbContext.MeetingParticipants
+            return await dbContext.MeetingParticipants.AsNoTracking()
                 .Include(mp => mp.Person).ThenInclude(p => p.Country)
                 .Include(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout)
                 .Where(m => m.MeetingId == meetingId)
@@ -196,7 +196,7 @@ public class MeetingService
     {
         var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
         if (principal.IsCountryAdministratorInCountry(countryId)) return true;
-        return await dbContext.GroupMembers
+        return await dbContext.GroupMembers.AsNoTracking()
             .AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator)
             .ConfigureAwait(false);
     }
@@ -208,7 +208,8 @@ public class MeetingService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.MeetingParticipants
+            return await dbContext.MeetingParticipants.AsNoTracking()
+                .Include(mp => mp.Meeting)
                 .Include(mp => mp.Person)
                 .Include(mp => mp.LayoutParticipations)
                 .SingleOrDefaultAsync(mp => mp.Id == participantId)
@@ -222,7 +223,8 @@ public class MeetingService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.MeetingParticipants
+            return await dbContext.MeetingParticipants.AsNoTracking()
+                .Include(mp => mp.Meeting)
                 .Include(mp => mp.Person)
                 .Include(mp => mp.LayoutParticipations)
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
@@ -237,10 +239,13 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             var isSelf = entity.PersonId == principal.PersonId();
-            var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting).ConfigureAwait(false);
+            var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting)
+                .ConfigureAwait(false);
             if (isOrganiser || isSelf)
             {
-                var existing = await dbContext.MeetingParticipants.SingleOrDefaultAsync(mp => mp.Id == entity.Id).ConfigureAwait(false);
+                var existing = await dbContext.MeetingParticipants
+                    .SingleOrDefaultAsync(mp => mp.Id == entity.Id)
+                    .ConfigureAwait(false);
                 if (existing is null)
                 {
                     entity.RegistrationTime = TimeProvider.Now;
@@ -251,7 +256,9 @@ public class MeetingService
                     dbContext.Entry(existing).CurrentValues.SetValues(entity);
                     if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
                 }
-                var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+                var result = await dbContext
+                    .SaveChangesAsync()
+                    .ConfigureAwait(false);
                 var id = existing?.Id ?? entity?.Id;
                 return result.SaveResult(await dbContext.MeetingParticipants
                     .Include(mp => mp.Person).ThenInclude(p => p.Country)

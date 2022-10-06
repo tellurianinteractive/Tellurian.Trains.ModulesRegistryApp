@@ -206,8 +206,8 @@ public partial class ModulesDbContext : DbContext
                 .HasForeignKey(d => d.PersonId);
 
             entity.HasMany(d => d.LayoutParticipations)
-                .WithOne()
-                .HasForeignKey(d => d.LayoutId);
+                .WithOne(d => d.MeetingParticipant)
+                .HasForeignKey(d => d.MeetingParticipantId);
         });
 
         modelBuilder.Entity<Module>(entity =>

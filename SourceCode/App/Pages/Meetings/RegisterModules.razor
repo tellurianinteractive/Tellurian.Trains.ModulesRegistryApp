@@ -19,7 +19,6 @@
 </div>
 @if (LayoutParticipant is null)
 {
-    <AppButton Label="Register" OnClickCallback="OnRegisterParticipation" />
 }
 else
 {
@@ -27,7 +26,7 @@ else
         @if (Layout is not null)
         {
             <h3>@Localizer["AvailableModules"]</h3>
-            <TableTemplate Items="Packages" Key="Key">
+            <TableTemplate Items="MyPackages" Key="Key">
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
                     <th>@Localizer["Owner"]</th>
@@ -46,7 +45,7 @@ else
 
             <h3>@Localizer["RegisteredModules"]</h3>
 
-            <TableTemplate Items="RegisteredModules">
+            <TableTemplate Items="MyRegisteredModules">
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
                     <th>@Localizer["Owner"]</th>
@@ -64,7 +63,7 @@ else
                     <td>
                         @if (MayCancel(item))
                         {
-                            <AppButton Label="Cancel" OnClickCallback="(() => OnCancel(item.Id))" />
+                            <AppButton Label="Remove" OnClickCallback="(() => OnCancel(item.Id))" IconName="@FontAwesome.Modules" />
                         }
                     </td>
                 </RowTemplate>
@@ -86,33 +85,37 @@ else
     MeetingParticipant? MeetingParticipant;
     LayoutParticipant? LayoutParticipant;
     ModuleOwnershipRef? OwnershipRef;
+
     IEnumerable<Module>? Modules = Array.Empty<Module>();
     IEnumerable<Module>? AvailableModules;
-    IEnumerable<LayoutModule> RegisteredModules = new List<LayoutModule>();
-    IEnumerable<ModulePackage>? Packages = Array.Empty<ModulePackage>();
+    IEnumerable<LayoutModule> AllRegisteredModules = new List<LayoutModule>();
+    IEnumerable<ModulePackage>? MyPackages = Array.Empty<ModulePackage>();
+    IEnumerable<LayoutModule>? MyRegisteredModules = Enumerable.Empty<LayoutModule>();
 
     bool MayCancel(LayoutModule lm) => Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+
         if (MeetingParticipantId > 0)
         {
             MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
-            if (MeetingParticipant is not null && LayoutId > 0)
+            if (MeetingParticipant is not null)
             {
-                Meeting = await MeetingService.FindByIdAsync(MeetingParticipant.MeetingId);
-                if (Meeting is not null)
+                Meeting = MeetingParticipant.Meeting;
+                if (LayoutId > 0)
                 {
-                    Layout = Meeting.Layouts.Single(l => l.Id == LayoutId);
+                    Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);
                     LayoutParticipant = await LayoutParticipantService.GetByIdAsync(Principal, MeetingParticipant.Id, LayoutId);
+                    if (LayoutParticipant is null && Layout is not null)
+                    {
+                        await RegisterParticipation(MeetingParticipant, Layout);
+                    }
                     if (LayoutParticipant is not null)
                     {
-                        if (LayoutParticipant is not null)
-                        {
-                            OwnershipRef = ModuleOwnershipRef.Person(LayoutParticipant.PersonId);
-                            await Update();
-                        }
+                        OwnershipRef = ModuleOwnershipRef.Person(LayoutParticipant.PersonId);
+                        await Update();
                     }
                 }
             }
@@ -128,21 +131,20 @@ else
         return (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
     }
 
-    async Task OnRegisterParticipation()
+    async Task RegisterParticipation(MeetingParticipant? meetingParticipant, Layout? layout)
     {
-        if (MeetingParticipant is not null && Layout is not null)
+        if (meetingParticipant is not null && layout is not null)
         {
-            var participant = new LayoutParticipant { LayoutId = Layout.Id, MeetingParticipantId = MeetingParticipant.Id, PersonId = MeetingParticipant.PersonId };
+            var participant = new LayoutParticipant { LayoutId = layout.Id, MeetingParticipantId = meetingParticipant.Id, PersonId = meetingParticipant.PersonId };
             var result = await LayoutParticipantService.SaveAsync(Principal, participant);
             LayoutParticipant = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Update();
         }
     }
 
     async Task OnRegisterPackage(int packageId)
     {
-        var package = Packages?.SingleOrDefault(p => p.Id == packageId);
+        var package = MyPackages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
@@ -166,14 +168,15 @@ else
         if (Layout is not null && LayoutParticipant is not null)
         {
             Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
-            RegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutParticipant.Id);
+            AllRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, 0);
+            MyRegisteredModules = AllRegisteredModules.Where(rm => rm.LayoutParticipant.Id == LayoutParticipant.Id).ToList();
             AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
-            Packages = AvailableModules.AsPackages();
+            MyPackages = AvailableModules.AsPackages();
         }
     }
 
     string Key(ModulePackage package) => package.Name;
-    IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !RegisteredModuleIds.Contains(m.Id));
-    IEnumerable<int> RegisteredModuleIds => RegisteredModules.Select(m => m.ModuleId);
+    IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
+    IEnumerable<int> AllRegisteredModuleIds => AllRegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Name())).ToList();
 }

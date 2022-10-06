@@ -137,6 +137,8 @@ internal static class WaybillMapper
                 ReadyTimeResourceKey = record.GetString("SenderReadyTime"),
                 TrackOrArea = record.GetString("SenderTrackOrArea"),
                 TrackOrAreaColor = record.GetString("SenderTrackOrAreaColor"),
+                CargoTrackOrArea = record.GetString("SenderCargoTrackOrArea"),
+                CargoTrackOrAreaColor = record.GetString("SenderCargoTrackOrAreaColor"),
                 FromYear = record.GetNullableInt("SenderFromYear", null),
                 UptoYear = record.GetNullableInt("SenderUptoYear", null)
             },
@@ -157,6 +159,8 @@ internal static class WaybillMapper
                 ReadyTimeResourceKey = record.GetString("ReceiverReadyTime"),
                 TrackOrArea = record.GetString("ReceiverTrackOrArea"),
                 TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor"),
+                CargoTrackOrArea = record.GetString("ReceiverCargoTrackOrArea"),
+                CargoTrackOrAreaColor = record.GetString("ReceiverCargoTrackOrAreaColor"),
                 FromYear = record.GetNullableInt("ReceiverFromYear", null),
                 UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
             },

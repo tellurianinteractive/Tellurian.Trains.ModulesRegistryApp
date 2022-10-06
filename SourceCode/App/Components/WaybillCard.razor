@@ -43,8 +43,8 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="destination">
-                            <div class="label">@Item.Destination.DualLanguageLabel("CargoUnit", "Cargo unit")</div>
-                            <div class="item">@Item.DestinationQuantityUnit()</div>
+                            <div class="label">@Item.Destination.DualLanguageLabel("Quantity")</div>
+                            <div class="item">@Item.DestinationQuantity()</div>
                         </td>
                     </tr>
                     <tr>
@@ -55,7 +55,7 @@
                                 @if (Item.Destination.TrackOrArea.HasValue())
                                 {
                                     <span>&commat;</span>
-                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Destination.TrackOrAreaBackColor(); color: @Item.Destination.TrackOrAreaForeColor()"> @Item.Destination.TrackOrArea </span>
+                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Destination.TrackOrAreaBackColor(); color: @Item.Destination.TrackOrAreaTextColor()"> @Item.Destination.TrackOrAreaDesignation() </span>
                                 }
                             </div>
                         </td>
@@ -104,7 +104,7 @@
                         </td>
                         <td>
                             <div class="label">@Item.Origin.DualLanguageLabel("Days")</div>
-                            <div class="smaller">@Item.Origin.OperationShortDays()</div>
+                            <div class="smaller">@Item.SendingDays()</div>
 
                         </td>
                         <td>
@@ -120,9 +120,8 @@
                                 @if (Item.Origin.TrackOrArea.HasValue())
                                 {
                                     <span>&commat;</span>
-                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaColor; color: @Item.Origin.TrackOrAreaColor.TextColor()">@Item.Origin.TrackOrArea</span>
+                                    <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaBackColor(); color: @Item.Origin.TrackOrAreaTextColor()">@Item.Origin.TrackOrAreaDesignation()</span>
                                 }
-                                <div>@Item.SendingDays()</div>
                             </div>
                         </td>
                     </tr>

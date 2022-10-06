@@ -2,7 +2,11 @@
 
 #### Version 1.7.6
 Release date 2022-10-07
-- **Bug fix** of waybill sending days language.
+- **Quantity** is now displayed on the waybill including the unit of quantity. 
+Quantity and quantity unit is set in the freight customers cargo flow. 
+For example, a waybill can be of *10 m<sup>3</sup>*, which means that several waybills may go with one wagon.
+- **Bug fix** of waybill sending days.
+- **Bug fix** of colorisation of waybill *track or area color*. All freight customer cargo flows are also cleaned up of duplicated *track or area color* settings.
 - **Component update** for typeahed search fields.
 
 #### Version 1.7.5

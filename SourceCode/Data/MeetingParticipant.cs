@@ -25,3 +25,4 @@ public class MeetingParticipant
     public virtual Meeting Meeting { get; set; }
     public virtual ICollection<LayoutParticipant> LayoutParticipations { get; set; }
 }
+

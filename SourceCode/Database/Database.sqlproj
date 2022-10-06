@@ -154,6 +154,7 @@
     <Build Include="dbo\Procedures\GetStationCustomerWaybills.sql" />
     <Build Include="dbo\Tables\MeetingPurchaseableItem.sql" />
     <Build Include="dbo\Tables\MeetingParticipantPurchasedItem.sql" />
+    <Build Include="dbo\Procedures\NullifyRedundantStationCustomerTrackOrArea.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

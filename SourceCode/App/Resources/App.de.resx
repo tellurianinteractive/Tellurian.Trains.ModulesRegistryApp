@@ -1263,4 +1263,13 @@
   <data name="Package" xml:space="preserve">
     <value>Box</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="ArrivalTime" xml:space="preserve">
+    <value>Ankunftszeit</value>
+  </data>
+  <data name="Arrival" xml:space="preserve">
+    <value>Ankunft</value>
+  </data>
 </root>
