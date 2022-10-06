@@ -11,7 +11,7 @@
 
 <PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" InitialSelectedId="CountryId" />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
 @if (Groups is null)
 {

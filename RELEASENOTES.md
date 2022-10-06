@@ -3,7 +3,8 @@
 #### Version 1.7.6
 Release date 2022-10-07
 - **Bug fix** of waybill sending days language.
-- 
+- **Component update** for typeahed search fields.
+
 #### Version 1.7.5
 Release date 2022-10-06
 ##### Waybill Improvements
