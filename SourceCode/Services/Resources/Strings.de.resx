@@ -316,7 +316,7 @@
     <value>Tonnen</value>
   </data>
   <data name="Cubicmeters" xml:space="preserve">
-    <value>Kubikkmeter</value>
+    <value>Kubikmeter</value>
   </data>
   <data name="Pieces" xml:space="preserve">
     <value>Stücke</value>
@@ -692,5 +692,11 @@
   </data>
   <data name="SendDays" xml:space="preserve">
     <value>{0} versenden.</value>
+  </data>
+  <data name="Cubicmeter" xml:space="preserve">
+    <value>Kubikmeter</value>
+  </data>
+  <data name="TrainsetWith" xml:space="preserve">
+    <value>Zugset mit </value>
   </data>
 </root>

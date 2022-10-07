@@ -1272,4 +1272,10 @@
   <data name="Arrival" xml:space="preserve">
     <value>Ankomst</value>
   </data>
+  <data name="MyAvailableModules" xml:space="preserve">
+    <value>Mina tillgängliga moduler</value>
+  </data>
+  <data name="OtherAvailableModules" xml:space="preserve">
+    <value>Andra tillgängliga moduler</value>
+  </data>
 </root>

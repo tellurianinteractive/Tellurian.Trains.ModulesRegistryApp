@@ -1,11 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModulesRegistry.Services.Tests;
 
@@ -13,16 +8,22 @@ namespace ModulesRegistry.Services.Tests;
 public class WaybillExtensionsTests
 {
     [TestMethod]
+    public void QuantityUnitIsQubicMeter()
+    {
+        var target = new Waybill(new(), new() { Languages = "en", QuantityUnitResourceKey = "Cubicmeter" })
+        {
+            Quantity = 1
+        };
+        Assert.AreEqual("1 Cubic meter", target.DestinationQuantity());
+    }
+
+    [TestMethod]
     public void QuantityUnitIsQubicMeters()
     {
-        var target = new Waybill()
+        var target = new Waybill(new (), new() { Languages="en", QuantityUnitResourceKey = "Cubicmeters" })
         {
-            Quantity = 10,
-            Destination = new()
-            {
-                QuantityUnitResourceKey = "Cubicmeters"
-            }
+            Quantity = 10
         };
-        Assert.AreEqual("10 Kubikmeter", target.DestinationQuantity());
+        Assert.AreEqual("10 Cubic meters", target.DestinationQuantity());
     }
 }

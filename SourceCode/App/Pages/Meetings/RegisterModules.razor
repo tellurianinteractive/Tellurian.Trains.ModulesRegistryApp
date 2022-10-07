@@ -25,8 +25,25 @@ else
     <div style="margin-top: 12pt">
         @if (Layout is not null)
         {
-            <h3>@Localizer["AvailableModules"]</h3>
-            <TableTemplate Items="MyPackages" Key="Key">
+            <h3>@Localizer["MyAvailableModules"]</h3>
+            <TableTemplate Items="MyPackages" Key="Key" HideNoRecordsToDisplay=true>
+                <TableHeader>
+                    <th>@Localizer["Package"]</th>
+                    <th>@Localizer["Owner"]</th>
+                    <th>@Localizer["Modules"]</th>
+                    <th>@Localizer["Actions"]</th>
+                </TableHeader>
+                <RowTemplate Context="item">
+                    <td>@item.Name</td>
+                    <td>@item.OwnerName</td>
+                    <td>@item.ToString()</td>
+                    <td>
+                        <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                    </td>
+                </RowTemplate>
+            </TableTemplate>
+            <h3>@Localizer["OtherAvailableModules"]</h3>
+            <TableTemplate Items="OtherPackages" Key="Key" HideNoRecordsToDisplay=true>
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
                     <th>@Localizer["Owner"]</th>
@@ -45,7 +62,7 @@ else
 
             <h3>@Localizer["RegisteredModules"]</h3>
 
-            <TableTemplate Items="MyRegisteredModules">
+            <TableTemplate Items="MyRegisteredModules" >
                 <TableHeader>
                     <th>@Localizer["Package"]</th>
                     <th>@Localizer["Owner"]</th>
@@ -90,6 +107,7 @@ else
     IEnumerable<Module>? AvailableModules;
     IEnumerable<LayoutModule> AllRegisteredModules = new List<LayoutModule>();
     IEnumerable<ModulePackage>? MyPackages = Array.Empty<ModulePackage>();
+    IEnumerable<ModulePackage>? OtherPackages = Array.Empty<ModulePackage>();
     IEnumerable<LayoutModule>? MyRegisteredModules = Enumerable.Empty<LayoutModule>();
 
     bool MayCancel(LayoutModule lm) => Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
@@ -103,7 +121,7 @@ else
             MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
             if (MeetingParticipant is not null)
             {
-                Meeting = MeetingParticipant.Meeting;
+                Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
                 if (LayoutId > 0)
                 {
                     Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);
@@ -145,6 +163,7 @@ else
     async Task OnRegisterPackage(int packageId)
     {
         var package = MyPackages?.SingleOrDefault(p => p.Id == packageId);
+        if (package is null) package = OtherPackages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
@@ -168,10 +187,12 @@ else
         if (Layout is not null && LayoutParticipant is not null)
         {
             Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
-            AllRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, 0);
+            AllRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutId);
             MyRegisteredModules = AllRegisteredModules.Where(rm => rm.LayoutParticipant.Id == LayoutParticipant.Id).ToList();
             AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
-            MyPackages = AvailableModules.AsPackages();
+            var packages = AvailableModules.AsPackages();
+            MyPackages = packages.Where(am => am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
+            OtherPackages = packages.Where(am => !am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
         }
     }
 

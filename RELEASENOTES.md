@@ -1,5 +1,18 @@
 ## Release Notes
 
+#### Version 1.7.7
+Release date 2022-10-08
+- **Login** now stays on the page you log in from and not redirects you to the start page.
+- **Meeting Registration** now have a list of participants that meeting administrators can see, that makes editing participants easier.
+- **Available Modules** for meeting participant is now divided in *My Modules* and *Other modules*.
+- **Origin** for *empty return* waybills is now without region colouring, because the waybill will only be used when the station is present at the meeting.
+- **Bug fix** of waybill quantity, quantity unit and package unit. It is now from the *receiver* and not the *sender* of cargo.
+- **Wagons vs Trainsets** on waybills is now changed if quantity unit is greater that one to *Trainset with X Wagons*. See also note below.
+> NOTE: Based on feedback from Benny Tjäder and Michael Bunka, there will be some future reworking on the definitions of:
+> - **Quantity**: for *wagons* and *trainsets* it will always be 1. An additional field for *number to send per day* will be added, 
+> that will control how many waybills to print for each of the waybills send days.
+> - **Trainset length** will then only apply to *Trainsets*, and be disabled for other *quantity units*.
+
 #### Version 1.7.6
 Release date 2022-10-07
 - **Quantity** is now displayed on the waybill including the unit of quantity. 

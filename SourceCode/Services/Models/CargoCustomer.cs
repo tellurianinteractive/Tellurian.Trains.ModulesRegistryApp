@@ -2,6 +2,7 @@
 
 public class CargoCustomer
 {
+    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public int StationId { get; set; }
     public string StationName { get; set; } = string.Empty;
@@ -23,9 +24,13 @@ public class CargoCustomer
     public string CargoTrackOrAreaColor { get; set; } = string.Empty;
     public int? FromYear { get; set; }
     public int? UptoYear { get; set; }
+    public bool IsOrigin { get; set; }
+
+    public override string ToString() => $"{Name} at {StationName} {OperationDaysFlags.OperationDays().ShortName}";
 
     public CargoCustomer Clone => new()
     {
+        Id = Id,
         Name = Name,
         StationId = StationId,
         StationName = StationName,

@@ -81,24 +81,6 @@ public class WaybillService
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId ?? 0));
-                        var last = waybills.Last();
-                        if (last is null) continue;
-                        if (last.HasEmptyReturn)
-                        {
-                            var empty = new Waybill
-                            {
-                                Destination = last.Origin,
-                                Epoch = last.Epoch,
-                                OperatorName = last.OperatorName,
-                                Origin = last.Destination,
-                                Quantity = 0,
-                                DefaultWagonClass = last.DefaultWagonClass,
-                            };
-                            var language = new CultureInfo(last.Origin?.Languages ?? "en");
-                            if (language is not null && empty.Destination is not null)
-                                empty.Destination.CargoName = resourceManager.GetString("Empty", language) ?? string.Empty;
-                            waybills.Add(empty);
-                        }
                     }
                 }
                 catch (Exception)
@@ -114,56 +96,10 @@ internal static class WaybillMapper
 {
     public static Waybill MapWaybill(this IDataRecord record, int stationId)
     {
-        string OriginLanguageColumnName = record.GetString("OriginLanguages", "EN").FirstItem("EN");
-        string DestinationLanguageColumnName = record.GetString("DestinationLanguages", "EN").FirstItem("EN");
-        return new()
+        return new(record.MapOriginCargoCustomer(), record.MapDestinationCargoCustomer())
         {
             Id = record.GetInt("Id"),
             OwnerStationId = stationId,
-            Origin = new()
-            {
-                Name = record.GetString("SenderName"),
-                StationId = record.GetInt("OriginStationId"),
-                StationName = record.GetString("OriginStationName"),
-                Languages = record.GetString("OriginLanguages", "en"),
-                DomainSuffix = record.GetString("OriginDomainSuffix"),
-                ForeColor = record.GetString("OriginForeColor"),
-                BackColor = record.GetString("OriginBackColor"),
-                CargoName = record.GetString(OriginLanguageColumnName),
-                PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
-                QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
-                IsModuleStation = record.GetBool("OriginIsModuleStation"),
-                OperationDaysFlags = record.GetByte("SendingDayFlag"),
-                ReadyTimeResourceKey = record.GetString("SenderReadyTime"),
-                TrackOrArea = record.GetString("SenderTrackOrArea"),
-                TrackOrAreaColor = record.GetString("SenderTrackOrAreaColor"),
-                CargoTrackOrArea = record.GetString("SenderCargoTrackOrArea"),
-                CargoTrackOrAreaColor = record.GetString("SenderCargoTrackOrAreaColor"),
-                FromYear = record.GetNullableInt("SenderFromYear", null),
-                UptoYear = record.GetNullableInt("SenderUptoYear", null)
-            },
-            Destination = new()
-            {
-                Name = record.GetString("ReceiverName"),
-                StationId = record.GetInt("DestinationStationId"),
-                StationName = record.GetString("DestinationStationName"),
-                Languages = record.GetString("DestinationLanguages", "en"),
-                DomainSuffix = record.GetString("DestinationDomainSuffix"),
-                ForeColor = record.GetString("DestinationForeColor"),
-                BackColor = record.GetString("DestinationBackColor"),
-                CargoName = record.GetString(DestinationLanguageColumnName),
-                PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
-                QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
-                IsModuleStation = record.GetBool("DestinationIsModuleStation"),
-                OperationDaysFlags = record.GetByte("ReceivingDayFlag"),
-                ReadyTimeResourceKey = record.GetString("ReceiverReadyTime"),
-                TrackOrArea = record.GetString("ReceiverTrackOrArea"),
-                TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor"),
-                CargoTrackOrArea = record.GetString("ReceiverCargoTrackOrArea"),
-                CargoTrackOrAreaColor = record.GetString("ReceiverCargoTrackOrAreaColor"),
-                FromYear = record.GetNullableInt("ReceiverFromYear", null),
-                UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
-            },
             Quantity = record.GetInt("Quantity"),
             OperatorName = string.Empty, // To be supported
             DefaultWagonClass = record.GetString("DefaultClasses"),
@@ -174,6 +110,55 @@ internal static class WaybillMapper
             //MatchReturn = record.GetBool("MatchReturn")
         };
     }
+
+    internal static CargoCustomer MapOriginCargoCustomer(this IDataRecord record) =>
+        new()
+        {
+            IsOrigin = true,
+            Name = record.GetString("SenderName"),
+            StationId = record.GetInt("OriginStationId"),
+            StationName = record.GetString("OriginStationName"),
+            Languages = record.GetString("OriginLanguages", "en"),
+            DomainSuffix = record.GetString("OriginDomainSuffix"),
+            ForeColor = record.GetString("OriginForeColor"),
+            BackColor = record.GetString("OriginBackColor"),
+            CargoName = record.GetString(record.GetString("OriginLanguages", "EN").FirstItem("EN")),
+            PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
+            QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
+            IsModuleStation = record.GetBool("OriginIsModuleStation"),
+            OperationDaysFlags = record.GetByte("SendingDayFlag"),
+            ReadyTimeResourceKey = record.GetString("SenderReadyTime"),
+            TrackOrArea = record.GetString("SenderTrackOrArea"),
+            TrackOrAreaColor = record.GetString("SenderTrackOrAreaColor"),
+            CargoTrackOrArea = record.GetString("SenderCargoTrackOrArea"),
+            CargoTrackOrAreaColor = record.GetString("SenderCargoTrackOrAreaColor"),
+            FromYear = record.GetNullableInt("SenderFromYear", null),
+            UptoYear = record.GetNullableInt("SenderUptoYear", null)
+        };
+
+    internal static CargoCustomer MapDestinationCargoCustomer(this IDataRecord record) =>
+        new()
+        {
+            Name = record.GetString("ReceiverName"),
+            StationId = record.GetInt("DestinationStationId"),
+            StationName = record.GetString("DestinationStationName"),
+            Languages = record.GetString("DestinationLanguages", "en"),
+            DomainSuffix = record.GetString("DestinationDomainSuffix"),
+            ForeColor = record.GetString("DestinationForeColor"),
+            BackColor = record.GetString("DestinationBackColor"),
+            CargoName = record.GetString(record.GetString("DestinationLanguages", "EN").FirstItem("EN")),
+            PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
+            QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
+            IsModuleStation = record.GetBool("DestinationIsModuleStation"),
+            OperationDaysFlags = record.GetByte("ReceivingDayFlag"),
+            ReadyTimeResourceKey = record.GetString("ReceiverReadyTime"),
+            TrackOrArea = record.GetString("ReceiverTrackOrArea"),
+            TrackOrAreaColor = record.GetString("ReceiverTrackOrAreaColor"),
+            CargoTrackOrArea = record.GetString("ReceiverCargoTrackOrArea"),
+            CargoTrackOrAreaColor = record.GetString("ReceiverCargoTrackOrAreaColor"),
+            FromYear = record.GetNullableInt("ReceiverFromYear", null),
+            UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
+        };
 }
 
 

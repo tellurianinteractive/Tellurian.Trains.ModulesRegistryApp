@@ -2,6 +2,7 @@
 @using System.Security.Claims;
 @inject IStringLocalizer<App> Localizer
 @inject DefaultUserService DefaultUserService
+@inject NavigationManager Navigator
 
 <AuthorizeView>
     <Authorized>
@@ -15,7 +16,7 @@
         &nbsp;&nbsp;
         <input type="password" @bind="Password" placeholder="@Localizer["Password"]" />
         <a class="ml-md-auto btn btn-primary"
-           href="/login?username=@encode(Username)&password=@encode(Password)"
+           href="/login?username=@encode(Username)&password=@encode(Password)&returnurl=@encode(Navigator.ToBaseRelativePath(Navigator.Uri))"
            target="_top">@Localizer["Login"]</a>
     </NotAuthorized>
 </AuthorizeView>

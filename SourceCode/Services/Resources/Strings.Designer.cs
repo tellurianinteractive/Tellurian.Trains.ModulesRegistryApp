@@ -385,6 +385,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cubic meter.
+        /// </summary>
+        internal static string Cubicmeter {
+            get {
+                return ResourceManager.GetString("Cubicmeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cubic meters.
         /// </summary>
         internal static string Cubicmeters {
@@ -1578,6 +1587,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Trainset {
             get {
                 return ResourceManager.GetString("Trainset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trainset with.
+        /// </summary>
+        internal static string TrainsetWith {
+            get {
+                return ResourceManager.GetString("TrainsetWith", resourceCulture);
             }
         }
         

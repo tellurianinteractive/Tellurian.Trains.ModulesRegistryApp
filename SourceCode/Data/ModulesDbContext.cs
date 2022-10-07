@@ -144,7 +144,7 @@ public partial class ModulesDbContext : DbContext
                 .HasForeignKey(e => e.PersonId);
 
             entity.HasOne(e => e.MeetingParticipant)
-                .WithMany()
+                .WithMany(e => e.LayoutParticipations)
                 .HasForeignKey(e => e.MeetingParticipantId);
 
             entity.HasOne(e => e.Layout)
@@ -191,6 +191,10 @@ public partial class ModulesDbContext : DbContext
             entity.HasOne(d => d.GroupDomain)
                 .WithMany()
                 .HasForeignKey(d => d.GroupDomainId);
+
+            entity.HasMany(d => d.Participants)
+                .WithOne(d => d.Meeting)
+                .HasForeignKey(d => d.MeetingId);
         });
 
         modelBuilder.Entity<MeetingParticipant>(entity =>

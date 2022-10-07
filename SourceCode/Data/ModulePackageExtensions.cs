@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Data.Extensions;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -35,7 +36,8 @@ public static class ModulePackageExtensions
                 }
             }
         }
-        return packages.Select((p, i) => new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value),  p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
+        return packages.Select((p, i) => 
+            new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value), OwnersPersonId(p.Value),  p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
 
         static ModulePackageType PackageType(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) => items.First().Type;
         static string PackageName(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
@@ -46,6 +48,9 @@ public static class ModulePackageExtensions
            };
         static string OwnerName(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
             string.Join(", ", items.First().Module.ModuleOwnerships.OwnerNames());
+
+        static int[] OwnersPersonId(IEnumerable<(Module Module, int Scale, ModulePackageType Type)> items) =>
+            items.First().Module.ModuleOwnerships.Where(mo => mo.PersonId > 0).Select(mo => mo.PersonId!.Value).ToArray();
 
     }
     public static string ModuleNames(this ModulePackage it) =>

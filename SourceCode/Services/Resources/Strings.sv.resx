@@ -693,4 +693,10 @@
   <data name="SendDays" xml:space="preserve">
     <value>Skicka {0}.</value>
   </data>
+  <data name="Cubicmeter" xml:space="preserve">
+    <value>Kubikmeter</value>
+  </data>
+  <data name="TrainsetWith" xml:space="preserve">
+    <value>Tågsätt med</value>
+  </data>
 </root>

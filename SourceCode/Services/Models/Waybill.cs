@@ -2,11 +2,16 @@
 
 public class Waybill
 {
+    public Waybill(CargoCustomer origin, CargoCustomer destination)
+    {
+        Origin = origin;
+        Destination = destination;
+    }
     public const int ItemsPerPage = 12;
     public int Id { get; set; } 
     public int OwnerStationId { get; set; }
-    public CargoCustomer? Origin { get; set; }
-    public CargoCustomer? Destination { get; set; }
+    public CargoCustomer Origin { get; set; }
+    public CargoCustomer Destination { get; set; }
     public byte OperatingDayFlag{ get; set; }
     public string OperatorName { get; set; } = string.Empty;
     public string Epoch { get; set; } = string.Empty;
@@ -22,12 +27,12 @@ public class Waybill
     public bool HideLoadingTimes { get; set; }
     public bool HideUnloadingTimes { get; set; }
 
-    public Waybill Clone => new ()
+    public override string ToString() => $"{Destination.CargoName} {Origin}-{Destination}";
+
+    public Waybill Clone => new (Origin.Clone, Destination.Clone)
     {
         Id = 0,
         OwnerStationId = OwnerStationId,
-        Origin = Origin!.Clone,
-        Destination = Destination!.Clone,
         OperatingDayFlag = OperatingDayFlag,
         OperatorName = OperatorName,
         Epoch = Epoch,
@@ -38,6 +43,9 @@ public class Waybill
         HasEmptyReturn = HasEmptyReturn,
         MatchReturn = MatchReturn,
         PrintCount = PrintCount,
-        PrintPerOperatingDay = PrintPerOperatingDay,        
+        PrintPerOperatingDay = PrintPerOperatingDay,   
+        IsEmptyReturn = IsEmptyReturn,
+        HideLoadingTimes = HideLoadingTimes,
+        HideUnloadingTimes = HideUnloadingTimes,
     };
 }

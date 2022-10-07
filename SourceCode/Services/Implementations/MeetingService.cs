@@ -52,11 +52,13 @@ public class MeetingService
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Meetings.AsNoTracking()
              .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
-             .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
              .Include(m => m.Layouts).ThenInclude(l => l.ContactPerson)
+             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
-             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
+             .Include(m => m.Participants).ThenInclude(p => p.Person)
+             .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard)
+            .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Meeting?> FindByIdWithLayoutsAsync(int id)
@@ -78,8 +80,21 @@ public class MeetingService
         }
         return null;
     }
+    public async Task<IEnumerable<MeetingParticipant>> MeetingParticipantsAsync(ClaimsPrincipal? principal, int meetingId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.MeetingParticipants
+                .Include(mp => mp.Person).ThenInclude(p => p.Country)
+                .Include(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout)
+                .Where(m => m.MeetingId == meetingId)
+                .ToReadOnlyListAsync();
+        }
+        return Array.Empty<MeetingParticipant>();
+    }
 
-    public async Task<IEnumerable<MeetingParticipant>> MeetingParticipantsAsync(ClaimsPrincipal? principal, int layoutId)
+    public async Task<IEnumerable<MeetingParticipant>> LayoutParticipantsAsync(ClaimsPrincipal? principal, int layoutId)
     {
         if (principal.IsAuthenticated())
         {
@@ -211,7 +226,7 @@ public class MeetingService
             return await dbContext.MeetingParticipants.AsNoTracking()
                 .Include(mp => mp.Meeting)
                 .Include(mp => mp.Person)
-                .Include(mp => mp.LayoutParticipations)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(l => l.PrimaryModuleStandard)
                 .SingleOrDefaultAsync(mp => mp.Id == participantId)
                 .ConfigureAwait(false);
         }
@@ -224,9 +239,9 @@ public class MeetingService
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants.AsNoTracking()
-                .Include(mp => mp.Meeting)
+                .Include(mp => mp.Meeting).ThenInclude(m => m.Layouts)
                 .Include(mp => mp.Person)
-                .Include(mp => mp.LayoutParticipations)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(l => l.PrimaryModuleStandard)
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
                 .ConfigureAwait(false);
         }

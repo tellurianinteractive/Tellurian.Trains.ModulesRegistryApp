@@ -1272,4 +1272,10 @@
   <data name="Arrival" xml:space="preserve">
     <value>Ankunft</value>
   </data>
+  <data name="MyAvailableModules" xml:space="preserve">
+    <value>Meine verfügbaren Module</value>
+  </data>
+  <data name="OtherAvailableModules" xml:space="preserve">
+    <value>Weitere verfügbare Module</value>
+  </data>
 </root>

@@ -31,6 +31,25 @@
                 <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" />
                 <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
             }
+            @if (IsMeetingOrganiser && Participant is null)
+            {
+                <TableTemplate Items="Meeting.Participants">
+                    <TableHeader>
+                        <th>@Localizer["Participant"]</th>
+                        <th>@Localizer["City"]</th>
+                        <th>@Localizer["Layouts"]</th>
+                        <th>@Localizer["Arrival"]</th>
+                        <th>@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.Person.Name()</td>
+                        <td>@item.Person.CityName</td>
+                        <td>@ParticipantLayoutNames(item)</td>
+                        <td>@item.FirstParticipationDay() @ArrivalTime(item.ArrivalTime)</td>
+                        <td><AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" /></td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
 
             @if (Participant?.Id > 0)
             {
@@ -74,7 +93,7 @@
                             <th width="100px">@Localizer["Actions"]</th>
                         </TableHeader>
                         <RowTemplate Context="item">
-                            <td>@item.Layout?.PrimaryModuleStandard.ShortName</td>
+                            <td>@item.Layout.Name()</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                             <td>
                                 @if (item.Layout?.IsRegistrationPermitted == true)
@@ -110,14 +129,13 @@
         IsMeetingOrganiser ||
         (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
-    string ParticipantLayouts(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Name()));
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         if (MeetingId > 0)
         {
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingId);
+            Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
                 IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
@@ -132,7 +150,6 @@
             }
         }
     }
-
 
     async Task OnSelectedCountry(int countryId)
     {
@@ -149,10 +166,17 @@
         if (MeetingId > 0 && personId > 0)
         {
             PersonId = personId;
-            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId) ??
-                new MeetingParticipant { PersonId = personId, MeetingId = MeetingId };
-            PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
+            if (Participant is null)
+            {
+                Participant = new MeetingParticipant { PersonId = personId, MeetingId = MeetingId };
+            }
+            else
+            {
 
+                Meeting = await MeetingService.FindByIdAsync(MeetingId);
+                PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
+            }
         }
     }
 
@@ -160,9 +184,10 @@
     {
         if (Meeting is not null && Participant is not null)
         {
+            var personId = Participant.PersonId;
             var result = await MeetingService.SaveAsync(Principal, Meeting, Participant);
-            Participant = result.Entity;
-            Meeting = await MeetingService.FindByIdWithLayoutsAsync(Meeting.Id);
+            Meeting = await MeetingService.FindByIdAsync(MeetingId);
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
@@ -184,7 +209,6 @@
         Participant.LayoutParticipations.Add(layoutParticipant);
         PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
     }
-    string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Name}";
 
 
     void OnCancelParticipateInLayout(int layoutId)
@@ -195,7 +219,6 @@
         PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
     }
 
-    string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Name}";
 
     static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
     {
@@ -210,6 +233,11 @@
         return personsLayoutParticipations;
     }
 
+    string ParticipantLayoutNames(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Name()));
+    string ArrivalTime(DateTime? time) => time.HasValue ? time.Value.ToString("t") : "--:--";
+
+    string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Name}";
+    string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Name}";
     string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
     string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
     string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";
