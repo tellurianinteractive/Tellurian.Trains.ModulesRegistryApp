@@ -11,11 +11,12 @@ namespace ModulesRegistry.Security;
 
 internal static class LoginLogoutHandler
 {
-    public static async Task<IActionResult> LoginAsync(this PageModel model, UserService userService, string? username, string? password, string? returnUrl)
+    public static async Task<IActionResult> LoginAsync(this PageModel model, UserService userService, string? username, string? password, string? returnUrl = null)
     {
-        var rootReturnUrl = model.Url.Content("~/");
-        returnUrl = rootReturnUrl + returnUrl;
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) return model.LocalRedirect(rootReturnUrl);
+        string rootUrl = model.Url.Content("~/");
+        if (returnUrl is null) returnUrl = rootUrl;
+        else if (!returnUrl.StartsWith(rootUrl)) { returnUrl = rootUrl + returnUrl; }
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) return model.LocalRedirect(rootUrl);
 
         await SignOut();
 
@@ -38,7 +39,7 @@ internal static class LoginLogoutHandler
             }
         }
 
-        return model.LocalRedirect(returnUrl ?? rootReturnUrl);
+        return model.LocalRedirect(returnUrl);
 
         async Task TrySignIn(User user, List<Claim> claims)
         {

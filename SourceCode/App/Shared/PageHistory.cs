@@ -35,6 +35,8 @@ public class PageHistory
         Navigator.NavigateTo(page.Url);
     }
 
+    public string CurrentUrl => History.Any() ? History.Last().Url : "";
+
     public bool IsShowningHelp
     {
         get => History.Any() && History.Last().ShowHelp == true;

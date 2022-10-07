@@ -8,7 +8,7 @@ Release date 2022-10-08
 - **Origin** for *empty return* waybills is now without region colouring, because the waybill will only be used when the station is present at the meeting.
 - **Bug fix** of waybill quantity, quantity unit and package unit. It is now from the *receiver* and not the *sender* of cargo.
 - **Wagons vs Trainsets** on waybills is now changed if quantity unit is greater that one to *Trainset with X Wagons*. See also note below.
-> NOTE: Based on feedback from Benny Tjäder and Michael Bunka, there will be some future reworking on the definitions of:
+- **Wagon Class** on waybills now displays the receiver's required class, and not the senders.> NOTE: Based on feedback from Benny Tjäder and Michael Bunka, there will be some future reworking on the definitions of:
 > - **Quantity**: for *wagons* and *trainsets* it will always be 1. An additional field for *number to send per day* will be added, 
 > that will control how many waybills to print for each of the waybills send days.
 > - **Trainset length** will then only apply to *Trainsets*, and be disabled for other *quantity units*.

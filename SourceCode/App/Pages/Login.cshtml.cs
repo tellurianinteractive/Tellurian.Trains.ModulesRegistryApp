@@ -11,6 +11,6 @@ public class LoginModel : PageModel
     private readonly UserService UserService;
     public string? ReturnUrl { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(string? username, string? password, string? returnUrl = null) =>
+    public async Task<IActionResult> OnGetAsync(string? username, string? password, string? returnUrl) =>
         await this.LoginAsync(UserService, username, password, returnUrl);
 }

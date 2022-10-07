@@ -122,6 +122,11 @@ public static class WaybillExtensions
 
     public static string OriginForeColor(this Waybill? me) =>
         me.OriginBackColor().TextColor();
+
+    public static string WagonClass(this Waybill? me) =>
+        me is  null ? string.Empty :
+        me.SpecialWagonClass.HasValue() ? me.SpecialWagonClass : 
+        me.DefaultWagonClass;
 }
 
 public static class CargoCustomerExtensions

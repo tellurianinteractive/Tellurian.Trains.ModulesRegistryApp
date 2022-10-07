@@ -1,8 +1,9 @@
 ﻿@using System.Web;
 @using System.Security.Claims;
 @inject IStringLocalizer<App> Localizer
-@inject DefaultUserService DefaultUserService
 @inject NavigationManager Navigator
+@inject PageHistory PageHistory
+@inject DefaultUserService DefaultUserService
 
 <AuthorizeView>
     <Authorized>
@@ -16,7 +17,7 @@
         &nbsp;&nbsp;
         <input type="password" @bind="Password" placeholder="@Localizer["Password"]" />
         <a class="ml-md-auto btn btn-primary"
-           href="/login?username=@encode(Username)&password=@encode(Password)&returnurl=@encode(Navigator.ToBaseRelativePath(Navigator.Uri))"
+           href="/login?username=@encode(Username)&password=@encode(Password)&returnUrl=@encode(ReturnUrl)"
            target="_top">@Localizer["Login"]</a>
     </NotAuthorized>
 </AuthorizeView>
@@ -32,6 +33,8 @@
     }
 
     private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
+
+    private string ReturnUrl => Navigator.ToBaseRelativePath(Navigator.Uri);
 
     private string UserLoginStatus(ClaimsPrincipal principal) =>
         $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()}{AdministratorStatus(principal).ToLowerInvariant()}";

@@ -699,4 +699,7 @@
   <data name="TrainsetWith" xml:space="preserve">
     <value>Tågsätt med</value>
   </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Kvantitet</value>
+  </data>
 </root>

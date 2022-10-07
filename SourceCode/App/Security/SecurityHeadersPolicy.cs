@@ -32,12 +32,12 @@ public static class SecurityHeadersPolicy
                 builder.AddStyleSrc().Self().UnsafeInline().From("https://cdn.jsdelivr.net").From("https://kit.fontawesome.com");
                 builder.AddBaseUri().Self();
                 builder.AddFrameAncestors().None();
-                builder.AddScriptSrc().Self().UnsafeInline(); //.WithHash256(""); //.UnsafeEval();
+                //builder.AddScriptSrc().Self().UnsafeInline(); //.WithHash256(""); //.UnsafeEval();
                 builder.AddUpgradeInsecureRequests();
                 })
             .AddPermissionsPolicy(builder =>
             {
-                builder.AddAccelerometer().None();
+                builder.AddAccelerometer().None(); 
                 builder.AddAutoplay().None();
                 builder.AddCamera().None();
                 builder.AddEncryptedMedia().None();

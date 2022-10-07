@@ -6,6 +6,7 @@ public class CargoCustomer
     public string Name { get; set; } = string.Empty;
     public int StationId { get; set; }
     public string StationName { get; set; } = string.Empty;
+    public bool IsModuleStation { get; set; }
     public string ForeColor { get; set; } = Region.DefaultOriginForeColor;
     public string BackColor { get; set; } = Region.DefaultOriginBackColor;
     public string Languages { get; set; } = string.Empty;
@@ -14,9 +15,8 @@ public class CargoCustomer
     public string SpecialCargoName { get; set; } = string.Empty;
     public string QuantityUnitResourceKey { get; set; } = string.Empty;
     public string PackagingUnitResourceKey { get; set; } = string.Empty;
-    public byte OperationDaysFlags { get; set; }
-    public bool IsModuleStation { get; set; }
     public string ReadyTimeResourceKey { get; set; } = string.Empty;
+    public byte OperationDaysFlags { get; set; }
     public bool DisplayReadyTime { get; set; } = true;
     public string TrackOrArea { get; set; } = string.Empty;
     public string TrackOrAreaColor { get; set; } = string.Empty;
@@ -59,7 +59,7 @@ public static class CargoCustomerExtensions
 {
     public static string TrackOrAreaBackColor(this CargoCustomer item) =>
         item == null ? string.Empty :
-        item.CargoTrackOrAreaColor.IsHexColor() && ! item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
+        item.CargoTrackOrAreaColor.IsHexColor() && !item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
         item.TrackOrAreaColor.IsHexColor() ? item.TrackOrAreaColor :
         "#808080";
 
