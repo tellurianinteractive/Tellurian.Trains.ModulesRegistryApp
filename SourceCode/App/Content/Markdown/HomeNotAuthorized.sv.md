@@ -1,4 +1,4 @@
-﻿*Modulträffar är sociala evenemang. Det här fotot är från Grimslövsträffen 2020 i Sverige.*
+﻿*Modulträffar är sociala evenemang. Det här fotot är från Grimslövsträffen 2022 i Sverige.*
 
 # **Modulregistret** är en webbplats för underhåll av data om modelljärnvägsmoduler i vilken skala som helst.
 Modulregistret kan användas runt om i Europa och finns på flera språk: engelska, tyska, danska, svenska och norska.

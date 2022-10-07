@@ -1,4 +1,4 @@
-﻿*Modultræf er sociale arrangementer. Dette billede er fra Grimslöv-træffet i 2020 i Sverige.*
+﻿*Modultræf er sociale arrangementer. Dette billede er fra Grimslöv-træffet i 2022 i Sverige.*
 
 #### Hjælpstekster
 De fleste formularer har hjælpetekster, der guider dig, hvordan du udfylder data. 

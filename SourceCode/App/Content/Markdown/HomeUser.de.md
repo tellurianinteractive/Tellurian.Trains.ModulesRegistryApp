@@ -1,4 +1,4 @@
-﻿*Modultreffen sind gesellschaftliche Veranstaltungen. Dieses Foto stammt vom Grimslöv-Treffen 2020 in Schweden.*
+﻿*Modultreffen sind gesellschaftliche Veranstaltungen. Dieses Foto stammt vom Grimslöv-Treffen 2022 in Schweden.*
 
 #### Hilfetexte
 Die meisten Formulare enthalten Hilfetexte, die Sie beim Ausfüllen von Daten unterstützen. 

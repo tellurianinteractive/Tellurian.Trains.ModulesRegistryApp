@@ -1,4 +1,4 @@
-﻿*Module meetings are social events. This photo is from the 2020 Grimslöv meeting in Sweden.*
+﻿*Module meetings are social events. This photo is from the 2022 Grimslöv meeting in Sweden.*
 
 #### Help texts 
 Most forms have help texts that guides you how to fill in data. 

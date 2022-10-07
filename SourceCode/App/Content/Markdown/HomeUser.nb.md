@@ -1,4 +1,4 @@
-﻿*Modultreffer er sosiale arrangementer. Dette bildet er fra Grimslöv-treffet i Sverige i 2020.*
+﻿*Modultreffer er sosiale arrangementer. Dette bildet er fra Grimslöv-treffet i Sverige i 2022.*
 
 #### Hjelpetekster
 De fleste skjemaer har hjelpetekster som veileder deg hvordan du fyller ut data. 
