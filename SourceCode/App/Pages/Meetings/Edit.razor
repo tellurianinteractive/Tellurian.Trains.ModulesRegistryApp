@@ -23,7 +23,7 @@
         <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
         <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
-        <AppInputCheck Width="4" Label="IsOrganiserInternal" @bind-Value="Meeting.IsOrganiserInternal" />
+        <AppInputCheck Width="4" Label="IsOrganisingGroupInternal" @bind-Value="Meeting.IsOrganiserInternal" />
 
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
         <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.DetailsMaxLength" />

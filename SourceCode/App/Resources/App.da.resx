@@ -1197,8 +1197,8 @@
   <data name="InPartnershipWith" xml:space="preserve">
     <value>I samarbejde med</value>
   </data>
-  <data name="IsOrganiserInternal" xml:space="preserve">
-    <value>Er internt for arrangøren?</value>
+  <data name="IsOrganisingGroupInternal" xml:space="preserve">
+    <value>Er intern for arrangørgruppen?</value>
   </data>
   <data name="ContactPerson" xml:space="preserve">
     <value>Kontaktperson</value>
