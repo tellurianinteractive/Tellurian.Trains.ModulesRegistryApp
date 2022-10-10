@@ -1,6 +1,7 @@
 ﻿.waybill {
     line-height: 14pt;
     font-weight: 600;
+    font-family: 'Bahnschrift','Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .emptyreturn {

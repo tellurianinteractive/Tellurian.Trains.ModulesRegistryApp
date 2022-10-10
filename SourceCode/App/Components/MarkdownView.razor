@@ -1,5 +1,6 @@
 ﻿@inject IStringLocalizer<App> Localizer
-@if (Markdown.HasValue())
+@inject HttpClient Http
+@if (Html.HasValue())
 {
     <div class="markdown">
         @if (Label.HasValue())
@@ -16,9 +17,32 @@
     [Parameter] public string? Markdown { get; set; }
     [Parameter] public string? BackgroundColor { get; set; }
     [Parameter] public string? Label { get; set; }
+    [Parameter] public string? Href { get; set; }
 
     string Padding => BackgroundColor.HasValue() ? "5pt" : "0px";
 
-    string Html => new TextContent(Markdown, "md", DateTime.Now).AsHtml;
+    string Html = string.Empty ;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Href?.Length > 7 && Html.HasNoValue())
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, Href);
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var markdown = await response.Content.ReadAsStringAsync();
+                if (markdown is not null)
+                {
+                    Html = Markdig.Markdown.ToHtml(markdown, Pipeline);
+                }
+            }
+        }
+        else
+        {
+            Html = new TextContent(Markdown, "md", DateTime.Now).AsHtml;
+        }
+    }
+
+    static MarkdownPipeline Pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 }

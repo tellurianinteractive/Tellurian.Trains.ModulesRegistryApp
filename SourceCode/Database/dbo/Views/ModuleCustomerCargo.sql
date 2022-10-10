@@ -34,7 +34,7 @@ SELECT
 	CPU.PrepositionResourceCode AS PackagingPrepositionResourceCode,
 	S.Id AS StationId,
 	S.FullName AS StationName,
-	NULL AS InternationalStationName,
+	'' AS InternationalStationName,
 	S.Signature AS StationSignature,
 	R.Id AS RegionId,
 	R.CountryId,

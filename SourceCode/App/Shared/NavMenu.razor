@@ -1,7 +1,13 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
 <div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" style="margin-left:10px" href="">@Localizer["AppName"] @AppService.AppVersion</a>
+
+    <a class="navbar-brand" style="margin-left:10px; margin-bottom:0px" href="">
+        @Localizer["AppName"] @AppService.AppVersion
+        <span style="display:block; font-size: 7pt">&copy; 2021-@DateTime.Now.Year Tellurian Interactive AB, @LanguageUtility.GetLocalizedString("Sweden")  </span>
+    </a>
+
+
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -12,6 +18,11 @@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="fa fa-home" aria-hidden="true" />@Localizer["Home"]
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="ReleaseNotes">
+                <span class="fa fa-info-circle" aria-hidden="true" />Release Notes
             </NavLink>
         </li>
         <li class="nav-item px-3">

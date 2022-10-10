@@ -17,6 +17,14 @@
 
 <ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" SelectedId="CountryId"/>
 
+@if (DeleteDialogOpen)
+{
+    <AppModalDialog Title="@DeleteTitle"
+                Text="@Localizer["ClickOKToDelete"]"
+                OnClose="@OnDeleteDialogClose">
+    </AppModalDialog>
+}
+
 @if (MayEdit)
 {
     <AppButton Href="ExternalStations/0/Edit" Label="Add" />
@@ -47,7 +55,7 @@
                 }
                 @if (Principal.IsAnyAdministrator())
                 {
-                    <AppButton Label="Delete" OnClickCallback="() => OnDelete(item.Id)" />
+                    <AppButton Label="Delete" OnClickCallback="() => OpenDeleteDialog(item.Id)" />
                 }
 
         </td>
@@ -65,6 +73,8 @@
     IEnumerable<ListboxItem>? RegionItems;
     Country? Country;
     Region? Region;
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,7 +99,7 @@
             ExternalStations = await ExternalStationService.GetAllInCountry(Principal, CountryId);
         }
     }
-
+ 
     void OnSelectedCountry(int countryId)
     {
         Navigator.NavigateTo($"ExternalStations/Country/{countryId}");
@@ -109,14 +119,27 @@
         Navigator.NavigateTo($"ExternalStations/Region{regionId}");
     }
 
-    async Task OnDelete(int id)
+    bool DeleteDialogOpen { get; set; }
+    int DeletedId;
+    string DeleteTitle => $"{Localizer["Delete"]} {ItemName(DeletedId)}?";
+
+    private void OpenDeleteDialog(int id)
     {
-        if (id > 0)
+        DeletedId = id;
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+
+    async Task OnDeleteDialogClose(bool accept)
+    {
+        if (accept && DeletedId > 0)
         {
-            var result = await ExternalStationService.DeleteAsync(Principal, id);
+            var result = await ExternalStationService.DeleteAsync(Principal, DeletedId);
             ExternalStations = await ExternalStationService.GetAllInRegion(Principal, RegionId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
+        DeleteDialogOpen = false;
+        StateHasChanged();
     }
 
     object? Owner => Country is not null ? Country : Region;
@@ -124,4 +147,5 @@
     bool MayEdit => ExternalStations is not null;
     bool HasData => ExternalStations is not null && ExternalStations.Count() > 0;
     bool CanSelectCountry => CountryItems is not null && CountryItems.Count() > 1;
+    string ItemName(int id) => id < 1 || ExternalStations is null ? string.Empty : ExternalStations.Single(es => es.Id == DeletedId).FullName;
 }

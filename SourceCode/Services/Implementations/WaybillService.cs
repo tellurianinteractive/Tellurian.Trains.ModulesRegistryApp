@@ -147,7 +147,7 @@ internal static class WaybillMapper
             Name = record.GetString("ReceiverName"),
             StationId = record.GetInt("DestinationStationId"),
             StationName = record.GetString("DestinationStationName"),
-            InternationalStationName = record.GetString("DstinationInternationalStationName"),
+            InternationalStationName = record.GetString("DestinationInternationalStationName"),
             Languages = record.GetString("DestinationLanguages", "en"),
             DomainSuffix = record.GetString("DestinationDomainSuffix"),
             ForeColor = record.GetString("DestinationForeColor"),
