@@ -4,7 +4,7 @@
 Release date 2022-10-10
 - **New Waybill Design** with most label texts replaced by icons. This saves some space and mayby is better for international meetings.
 - **Language** on waybills improved by adding *package unit prepositions* and adding missing translations.
-- **External stations** now can be given an international name if it differs from ist domestic name.
+- **External stations** now can be given an international name if it differs from its domestic name.
 - **External stations** can now be deleted by administrators.
 
 ### Release 1.7.7
