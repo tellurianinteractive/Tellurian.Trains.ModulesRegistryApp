@@ -79,7 +79,6 @@ Release date 2022-08-29
 - **Sender Email** now verified so that invitations and password reset mails is not likley to end up in your spam folder.
 - **Freigh Customer Waybills** has now the first step implemented: to be able to generate waybills for each freight customer.
 These waybills will be saved for that customer.
->NOTE: In fortcoming releases, you will be able to edit and add waybills manually, and to preview and print them.
 
 ### Release 1.6.20
 Release date 2022-08-25
