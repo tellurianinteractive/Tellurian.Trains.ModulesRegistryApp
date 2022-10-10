@@ -1,0 +1,219 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Item != null && Item.Origin is not null && Item.Destination is not null)
+{
+    <Pocket>
+        <div class="waybill" style="position: relative; height:90mm">
+            @if (Item.HasEmptyReturn)
+            {
+
+                <svg class="emptyreturn" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 24 24">
+                    <title>Empty return</title>
+                    <g id="Shuffle">
+                        <path d="M5.284,5.507a7.007,7.007,0,0,1,11.282,6.582h4.042A11.012,11.012,0,0,0,2.447,2.671L.839,1.062v6h6Z" />
+                        <path d="M18.213,18.479l1.609,1.609v-6h-6l1.556,1.555A7.007,7.007,0,0,1,4.1,9.061H.053a11.011,11.011,0,0,0,18.16,9.418Z" />
+                    </g>
+                </svg>
+            }
+            <div class="destination" style="height: 4cm">
+
+                <table width="100%" class="destination">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" class="box destination" style="color: @Item.Destination.ForeColor(); background-color: @Item.Destination.BackColor()">
+                                <div class="label">@Item.Destination.DualLanguageLabel("Destination")</div>
+                                <div class="name" style="font-size: @StationNameTextSize(Item.Destination.StationName, Item.IsCrossBorder())">
+                                    @if (Item.IsCrossBorder())
+                                    {
+                                        <span class="flag"><img src="@Item.Destination.FlagSrc()" /></span>
+                                    }
+                                    <span>@Item.Destination.StationName</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="customer">
+                                    <span>@Item.Destination.CustomerName()</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        @if (Item.Destination.TrackOrArea.HasValue())
+                        {
+                            <tr>
+                                <td colspan="2">
+                                    <div class="item">
+                                        <span class="icon"><i class="fas fa-warehouse"></i></span>
+                                        <span class="trackorarea" style="background-color: @Item.Destination.TrackOrAreaBackColor(); color: @Item.Destination.TrackOrAreaTextColor()">
+                                            @Item.Destination.TrackOrAreaDesignation()
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2">
+                                <div class="item">
+                                    <span class="icon">
+                                        @if (Item.IsEmptyReturn)
+                                        {
+                                            <i class="fas fa-sync-alt"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-dolly-flatbed"></i>
+                                        }
+                                    </span>
+                                    <span>@Item.Destination.CargoName()</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="item">
+                                    <span class="icon"><i class="fas fa-ruler"></i></span>
+                                    <span>@Item.DestinationQuantity()</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @if (Item.Destination.DisplayReadyTime && Item.Destination.ReadyTimeResourceKey.HasValue())
+                        {
+                            <tr>
+                                <td colspan="2">
+                                    <div class="instruction">
+                                        <span class="icon"><i class="fas fa-people-carry"></i></span>
+                                        <span>@Item.UnloadingReady()</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="box origin" style="color: @Item.Origin.ForeColor(); background-color: @Item.Origin.BackColor()">
+                            <div class="label">@Item.Origin.DualLanguageLabel( "Origin")</div>
+                            <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.IsCrossBorder())">
+                                @if (Item.IsCrossBorder())
+                                {
+                                    <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
+                                }
+                                <span>@Item.Origin.StationName</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div class="customer"> @Item.Origin.CustomerName() </div>
+                        </td>
+                    </tr>
+                    @if (Item.Origin.TrackOrArea.HasValue())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="item">
+                                    <span class="icon"><i class="fas fa-warehouse"></i></span>
+                                    <span class="trackorarea" style="background-color: @Item.Origin.TrackOrAreaBackColor(); color: @Item.Origin.TrackOrAreaTextColor()">
+                                        @Item.Origin.TrackOrAreaDesignation()
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                    @if (Item.IsCrossBorder() && Item.HasDifferentCargoNameTranslations())
+                    {
+                        <tr>
+                            <div class="item">
+                                <span class="icon">
+                                    @if (Item.IsEmptyReturn)
+                                    {
+                                        <i class="fas fa-sync-alt"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-dolly-flatbed"></i>
+                                    }
+                                </span>
+                                <span>@Item.Origin.CargoName()</span>
+                            </div>
+                        </tr>
+                    }
+                    @if (Item.IsCrossBorder() && Item.HasDifferentQuantityTranslations())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="item">
+                                    <span class="icon"><i class="fas fa-ruler"></i></span>
+                                    <span>@Item.OriginQuantity()</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                    @if (Item.Origin.DisplayReadyTime && Item.Origin.ReadyTimeResourceKey.HasValue())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="instruction">
+                                    <span class="icon"><i class="fas fa-people-carry"></i></span>
+                                    <span>@Item.LoadingReady()</span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (Item.OperatorName.HasValue())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="label">@Item.Origin.DualLanguageLabel("Carrier")</div>
+                                <div class="smaller">@Item.OperatorName</div>
+                            </td>
+                        </tr>
+                    }
+                    @if (Item.Origin.HasLimitedYearsInOperation())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="label">@Item.Origin.DualLanguageLabel("YearsInOperation", "Years in operation")</div>
+                                <div class="smaller">@Item.Origin.YearsInOperation()</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <table width="100%" style="position: absolute; top: 80mm">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="label">@Item.Origin.DualLanguageLabel("Class")</div>
+                            <div class="daysandclass">@Item.WagonClass()</div>
+                        </td>
+                        <td>
+                            <div class="label">@Item.Origin.DualLanguageLabel("Days")</div>
+                            <div class="daysandclass">@Item.SendingDays()</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+         
+    </Pocket>
+}
+
+@code {
+    [Parameter] public Waybill? Item { get; set; }
+
+    string StationNameTextSize(string? text, bool hasFlag) =>
+        string.IsNullOrWhiteSpace(text) ? Large :
+        hasFlag && text.Length < 13 ? Large :
+        text.Length < 17 ? Large : Small;
+
+    const string Large = "14pt";
+    const string Small = "12pt";
+
+}

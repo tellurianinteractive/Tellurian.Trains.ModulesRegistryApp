@@ -14,13 +14,13 @@ public sealed class CountryService
         return await dbContext.Countries.FindAsync(id);
     }
 
-    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, bool isAdministrator = false)
+    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, bool allSupportedCountries = false, bool allCountries = false)
     {
         if (principal is null) return Array.Empty<ListboxItem>();
         using var dbContext = Factory.CreateDbContext();
-        var countries = await dbContext.Countries.AsNoTracking().Where(c => c.IsFullySupported).ToListAsync().ConfigureAwait(false);
+        var countries = await dbContext.Countries.AsNoTracking().ToListAsync().ConfigureAwait(false);
         return countries.AsEnumerable()
-            .Where(c => isAdministrator || principal.IsAuthorisedInCountry(c.Id))
+            .Where(c => allCountries || (c.IsFullySupported && allSupportedCountries) || (principal.IsGlobalAdministrator() || principal.IsAuthorisedInCountry(c.Id)))
             .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
             .ToList();
     }

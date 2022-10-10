@@ -1,4 +1,5 @@
 ﻿using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Services.Models;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -70,18 +71,31 @@ public static class WaybillExtensions
 
     public static string DestinationQuantity(this Waybill waybill) =>
         waybill is null || waybill.Destination is null ? string.Empty :
-        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.WagonQuantity() :
-        waybill.Destination.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.WagonQuantity() :
+        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.DestinationWagonQuantity() :
+        waybill.Destination.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.DestinationWagonQuantity() :
         waybill.QuantityUnitId == 3 && waybill.Quantity > 0 ? $"{waybill.Quantity} {waybill.Destination.PackagingUnit()}" :
         $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}";
 
+    public static string OriginQuantity(this Waybill waybill) =>
+         waybill is null || waybill.Destination is null ? string.Empty :
+         waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.OriginWagonQuantity() :
+         waybill.Destination.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.OriginWagonQuantity() :
+         waybill.QuantityUnitId == 3 && waybill.Quantity > 0 ? $"{waybill.Quantity} {waybill.Destination.PackagingUnit(waybill.Origin.Language())}" :
+         $"{waybill.Quantity} {waybill.Destination.QuantityUnit(waybill.Origin.Language())}";
 
 
-    private static string WagonQuantity(this Waybill waybill) =>
+
+    private static string DestinationWagonQuantity(this Waybill waybill) =>
         waybill.Quantity > 1 ?
-            $"{LanguageUtility.GetLocalizedString("TrainsetWith")} {waybill.Quantity} {waybill.Destination.QuantityUnit()}" : // NOTE: Temporary fix until wagons and trainset are redefined.
+            $"{LanguageUtility.GetLocalizedString("TrainsetWith", waybill.Destination.Language())} {waybill.Quantity} {waybill.Destination.QuantityUnit()}" : // NOTE: Temporary fix until wagons and trainset are redefined.
             $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}";
-
+    private static string OriginWagonQuantity(this Waybill waybill)
+    {
+        var language = waybill.Origin.Language();
+        return waybill.Quantity > 1 ?
+             $"{LanguageUtility.GetLocalizedString("TrainsetWith", language)} {waybill.Quantity} {waybill.Destination.QuantityUnit(language)}" : // NOTE: Temporary fix until wagons and trainset are redefined.
+             $"{waybill.Quantity} {waybill.Destination.QuantityUnit(language)}";
+    }
 
     public static bool IsCrossBorder([NotNullWhen(true)] this Waybill? me) =>
         me is not null &&
@@ -89,8 +103,11 @@ public static class WaybillExtensions
         me.Destination is not null &&
         !me.Origin.DomainSuffix.Equals(me.Destination?.DomainSuffix, StringComparison.OrdinalIgnoreCase);
 
-    public static bool HasDifferentCargoTranslations(this Waybill? me) =>
+    public static bool HasDifferentCargoNameTranslations(this Waybill? me) =>
         me is not null && !me.Origin.CargoName().Equals(me.Destination.CargoName());
+
+    public static bool HasDifferentQuantityTranslations(this Waybill? me ) =>
+        me is not null && !me.Origin.QuantityUnit().Equals(me.Destination.QuantityUnit());
 
     public static string SendingDays(this Waybill? me)
     {
@@ -109,17 +126,22 @@ public static class WaybillExtensions
     me is null || me.HideUnloadingTimes ? string.Empty :
     me.Destination.UnloadingReady();
 
+
+    [Obsolete("Use Destination")]
     public static string DestinationBackColor(this Waybill? me) =>
-        me is not null && me.Destination is not null ? me.Destination.BackColor(me) :
+        me is not null && me.Destination is not null ? me.Destination.BackColor() :
         string.Empty;
 
+    [Obsolete("Use Destination")]
     public static string DestinationForeColor(this Waybill? me) =>
         me.DestinationBackColor().TextColor();
 
+    [Obsolete("Use Origin")]
     public static string OriginBackColor(this Waybill? me) =>
-        me is not null && me.Origin is not null ? me.Origin.BackColor(me) :
+        me is not null && me.Origin is not null ? me.Origin.BackColor() :
         string.Empty;
 
+    [Obsolete("Use Origin")]
     public static string OriginForeColor(this Waybill? me) =>
         me.OriginBackColor().TextColor();
 
@@ -134,7 +156,7 @@ public static class CargoCustomerExtensions
     public static string CargoName(this CargoCustomer? me) =>
          me is null ? string.Empty :
          me.PackagingUnitResourceKey.HasValue() && me.PackagingUnitResourceKey != "NotApplicable" ?
-             $"{me.CargoName.GetLocalizedString(me.Language())} {"In".GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
+             $"{me.CargoName.GetLocalizedString(me.Language())} {me.PackagingPrepositionResourceCode.GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
              me.CargoName.GetLocalizedString(me.Language());
 
     public static string CustomerName(this CargoCustomer? me) =>
@@ -176,41 +198,36 @@ public static class CargoCustomerExtensions
         return englishText;
     }
 
+    public static string ForeColor(this CargoCustomer? me) =>
+        me is null || me.IsUncolored() ? "#000000" : me.ForeColor;
 
-    public static string ForeColor(this CargoCustomer? me, Waybill? waybill) =>
-        me.IsUncolored(waybill) ? "#000000" : me.ForeColor;
+    public static string BackColor(this CargoCustomer? me) =>
+         me is null || me.IsUncolored() ? "#FFFFFF" : me.BackColor;
 
-    public static string BackColor(this CargoCustomer? me, Waybill? waybill) =>
-         me.IsUncolored(waybill) ? "#FFFFFF" : me.BackColor;
+    private static bool IsUncolored([NotNullWhen(false)] this CargoCustomer? me) =>
+        me is null || me.Waybill is null || me.IsInternal() ;
 
-    private static bool IsUncolored([NotNullWhen(false)] this CargoCustomer? me, [NotNullWhen(false)] Waybill? waybill) =>
-        me is null || waybill is null || me.IsInternal(waybill) ;
+    public static bool IsInternal(this CargoCustomer? me) =>
+        me is not null && me.IsModuleStation && (!me.IsOrigin || me.StationId == me.Waybill.OwnerStationId || me.Waybill.HasEmptyReturn);
+            //(me.IsOrigin && waybill.Origin.StationId == waybill.OwnerStationId && waybill.IsEmptyReturn));
 
-    public static bool IsInternal(this CargoCustomer? me, Waybill waybill)
-    {
-        //if (waybill.IsEmptyReturn == true) Debugger.Break();
-        return me is not null && waybill.Origin is not null && me.IsModuleStation && 
-            (me.StationId == waybill.OwnerStationId || (me.IsOrigin && waybill.Origin.StationId == waybill.OwnerStationId && waybill.IsEmptyReturn));
-    }
+    internal static string QuantityUnit(this CargoCustomer me, string? otherLanguage = null) =>
+        me.Waybill.QuantityShortUnit.HasValue() ? me.Waybill.QuantityShortUnit :
+        me.QuantityUnitResourceKey.GetLocalizedString(otherLanguage ?? me.Language());
 
-    internal static string QuantityUnit(this CargoCustomer me) =>
-        me.QuantityUnitResourceKey.GetLocalizedString(me.Language());
-
-    internal static string PackagingUnit(this CargoCustomer me) =>
-         me.PackagingUnitResourceKey.GetLocalizedString(me.Language());
+    internal static string PackagingUnit(this CargoCustomer me, string? otherLanguage = null) =>
+         me.PackagingUnitResourceKey.GetLocalizedString(otherLanguage ?? me.Language());
 
 
 
     internal static string LoadingReady(this CargoCustomer? me) =>
         me.HasReadyTime() ?
-        me.TrackOrArea.HasValue() ? $"{"LoadingReadyTime".GetLocalizedString(me.Languages)} {me.ReadyTime()} " :
-        $"{"Load".GetLocalizedString(me.Languages)} " :
+        $"{"LoadingReadyTime".GetLocalizedString(me.Languages)} {me.ReadyTime()} " :
         string.Empty;
 
     internal static string UnloadingReady(this CargoCustomer? me) =>
         me.HasReadyTime() ?
-        me.TrackOrArea.HasValue() ? $"{"UnloadingReadyTime".GetLocalizedString(me.Languages)} {me.ReadyTime()} " :
-        $"{"Unload".GetLocalizedString(me.Languages)} " :
+        $"{"UnloadingReadyTime".GetLocalizedString(me.Languages)} {me.ReadyTime()} " :
         string.Empty;
 
     private static string ReadyTime(this CargoCustomer me) =>
@@ -222,5 +239,20 @@ public static class CargoCustomerExtensions
     public static string TrackOrAreaColor(this CargoCustomer? me) =>
         me is null || me.TrackOrAreaColor.HasNoValue() || me.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
         me.TrackOrAreaColor;
+
+    public static string TrackOrAreaBackColor(this CargoCustomer item) =>
+    item == null ? string.Empty :
+    item.CargoTrackOrAreaColor.IsHexColor() && !item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
+    item.TrackOrAreaColor.IsHexColor() ? item.TrackOrAreaColor :
+    "#808080";
+
+    public static string TrackOrAreaTextColor(this CargoCustomer item) =>
+        item.TrackOrAreaBackColor().TextColor();
+
+    public static string TrackOrAreaDesignation(this CargoCustomer item) =>
+        item is null ? string.Empty :
+        item.CargoTrackOrArea.HasValue() ? item.CargoTrackOrArea :
+        item.TrackOrArea.HasValue() ? item.TrackOrArea :
+        string.Empty;
 
 }

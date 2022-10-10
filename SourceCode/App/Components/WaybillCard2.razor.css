@@ -1,0 +1,111 @@
+﻿.waybill {
+    line-height: 14pt;
+    font-weight: 600;
+}
+
+.emptyreturn {
+    stroke: black;
+    stroke-width: 0.3px;
+    fill: transparent;
+    opacity: 0.4;
+    position: absolute;
+    top: 26mm;
+    left: 3mm;
+    bottom: 0px;
+    right: 0px;
+    width: 45mm;
+}
+
+.trackorarea {
+    padding: 0px 5px 0px 5px;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+
+.label {
+    font-size: 9pt;
+    max-height: 9pt;
+    line-height: 11pt;
+    vertical-align: top;
+}
+
+.destination {
+    background-color: #FFFFE0;
+}
+.icon{
+    display: inline-block;
+    width: 3mm;
+    height: 3mm;
+}
+
+.box {
+    height: 8.5mm;
+    padding: 1px;
+}
+
+    .box.destination {
+        border: 2px solid red;
+    }
+
+    .box.origin {
+        border: 2px solid gray;
+    }
+
+.name { /* font-size is set dynamically in code */
+    font-weight: bold;
+    line-height: 17pt;
+    width: 44mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.customer {
+    font-weight: bold;
+    font-size: 13pt;
+    line-height:17pt;
+    width: 46mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item {
+    font-weight: bold;
+    font-size: 10pt;
+    min-height: 15pt;
+    max-width: 46mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.smaller {
+    font-weight: bold;
+    font-size: 8pt;
+    min-height: 11pt;
+}
+
+.flag {
+    vertical-align: text-bottom;
+    padding-right: 5px;
+}
+
+.daysandclass {
+    font-weight: bold;
+    font-size: 16pt;
+    min-height: 17pt;
+    padding: 1px;
+    line-height:18pt;
+    height: 18pt;
+}
+
+
+
+.instruction {
+    font-weight: bold;
+    font-size: 8pt;
+    line-height: 11pt;
+    min-height: 11pt;
+}

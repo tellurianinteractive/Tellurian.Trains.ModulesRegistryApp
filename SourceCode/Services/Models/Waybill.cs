@@ -19,6 +19,7 @@ public class Waybill
     public string? SpecialWagonClass { get; set; }
     public int Quantity { get; set; }
     public int QuantityUnitId { get; set; }
+    public string QuantityShortUnit { get; set; } = string.Empty;
     public bool HasEmptyReturn { get; set; }
     public bool MatchReturn { get; set; }
     public int PrintCount { get; set; } 
@@ -40,6 +41,7 @@ public class Waybill
         SpecialWagonClass = SpecialWagonClass,
         Quantity = Quantity,            
         QuantityUnitId = QuantityUnitId,
+        QuantityShortUnit=QuantityShortUnit,
         HasEmptyReturn = HasEmptyReturn,
         MatchReturn = MatchReturn,
         PrintCount = PrintCount,

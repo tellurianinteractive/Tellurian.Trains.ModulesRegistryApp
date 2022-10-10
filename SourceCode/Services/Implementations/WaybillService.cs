@@ -96,11 +96,12 @@ internal static class WaybillMapper
 {
     public static Waybill MapWaybill(this IDataRecord record, int stationId)
     {
-        return new(record.MapOriginCargoCustomer(), record.MapDestinationCargoCustomer())
+        var waybill = new Waybill(record.MapOriginCargoCustomer(), record.MapDestinationCargoCustomer())
         {
             Id = record.GetInt("Id"),
             OwnerStationId = stationId,
             Quantity = record.GetInt("Quantity"),
+            QuantityShortUnit = record.GetString("QuantityShortUnit"),
             OperatorName = string.Empty, // To be supported
             DefaultWagonClass = record.GetString("DefaultClasses"),
             SpecialWagonClass = record.GetString("SpecificWagonClass"),
@@ -109,6 +110,9 @@ internal static class WaybillMapper
             HasEmptyReturn = record.GetBool("HasEmptyReturn"),
             //MatchReturn = record.GetBool("MatchReturn")
         };
+        waybill.Origin.Waybill = waybill;
+        waybill.Destination.Waybill = waybill;  
+        return waybill;
     }
 
     internal static CargoCustomer MapOriginCargoCustomer(this IDataRecord record) =>
@@ -148,6 +152,7 @@ internal static class WaybillMapper
             BackColor = record.GetString("DestinationBackColor"),
             CargoName = record.GetString(record.GetString("DestinationLanguages", "EN").FirstItem("EN")),
             PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
+            PackagingPrepositionResourceCode = record.GetString("PackagingPrepositionResourceCode"),
             QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
             IsModuleStation = record.GetBool("DestinationIsModuleStation"),
             OperationDaysFlags = record.GetByte("ReceivingDayFlag"),

@@ -10,6 +10,7 @@ public class CargoPackagingUnit
     public string SingularResourceCode { get; set; }
     public string PluralResourceCode { get; set; }
     public int DisplayOrder { get; set; }
+    public string PrepositionResourceCode { get; set; }
 }
 
 #nullable enable
@@ -30,5 +31,7 @@ internal static class CargoPackagingUnitMapper
             entity.Property(e => e.PluralResourceCode)
                 .IsRequired()
                 .HasMaxLength(50);
+            entity.Property(e => e.PrepositionResourceCode)
+                .HasMaxLength(4);
         });
 }

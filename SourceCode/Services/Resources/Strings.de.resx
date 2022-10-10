@@ -697,9 +697,27 @@
     <value>Kubikmeter</value>
   </data>
   <data name="TrainsetWith" xml:space="preserve">
-    <value>Zugset mit </value>
+    <value>Zugset mit</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Menge</value>
+  </data>
+  <data name="Piece" xml:space="preserve">
+    <value>Stück</value>
+  </data>
+  <data name="Ton" xml:space="preserve">
+    <value>Tonne</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>auf</value>
+  </data>
+  <data name="Squaremeter" xml:space="preserve">
+    <value>Quadratmeter</value>
+  </data>
+  <data name="Squaremeters" xml:space="preserve">
+    <value>Quadratmeter</value>
+  </data>
+  <data name="France" xml:space="preserve">
+    <value>Frankreich</value>
   </data>
 </root>

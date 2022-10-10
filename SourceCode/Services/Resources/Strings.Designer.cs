@@ -664,6 +664,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to France.
+        /// </summary>
+        internal static string France {
+            get {
+                return ResourceManager.GetString("France", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Friday.
         /// </summary>
         internal static string Friday {
@@ -1078,6 +1087,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to on.
+        /// </summary>
+        internal static string On {
+            get {
+                return ResourceManager.GetString("On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On demand.
         /// </summary>
         internal static string OnDemand {
@@ -1218,6 +1236,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string PasswordsDontMatch {
             get {
                 return ResourceManager.GetString("PasswordsDontMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piece.
+        /// </summary>
+        internal static string Piece {
+            get {
+                return ResourceManager.GetString("Piece", resourceCulture);
             }
         }
         
@@ -1483,6 +1510,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Square meter.
+        /// </summary>
+        internal static string Squaremeter {
+            get {
+                return ResourceManager.GetString("Squaremeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Square meters.
+        /// </summary>
+        internal static string Squaremeters {
+            get {
+                return ResourceManager.GetString("Squaremeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Success {
@@ -1569,6 +1614,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string To {
             get {
                 return ResourceManager.GetString("To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ton.
+        /// </summary>
+        internal static string Ton {
+            get {
+                return ResourceManager.GetString("Ton", resourceCulture);
             }
         }
         

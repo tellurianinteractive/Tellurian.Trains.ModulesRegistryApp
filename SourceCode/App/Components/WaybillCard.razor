@@ -18,7 +18,7 @@
             <table width="100%">
                 <tbody>
                     <tr>
-                        <td colspan="3" class="box destination" style="color: @Item.DestinationForeColor(); background-color: @Item.DestinationBackColor()">
+                        <td colspan="3" class="box destination" style="color: @Item.Destination.ForeColor(); background-color: @Item.Destination.BackColor()">
                             <div class="label">@Item.Destination.DualLanguageLabel("Destination")</div>
                             <div class="name" style="font-size: @DestinationTextSize(Item.Destination.StationName, Item.IsCrossBorder())">
                                 @if (Item.IsCrossBorder())
@@ -62,7 +62,7 @@
                     </tr>
 
                     <tr>
-                        <td colspan="3" class="box origin" style="color: @Item.OriginForeColor(); background-color: @Item.OriginBackColor()">
+                        <td colspan="3" class="box origin" style="color: @Item.Origin.ForeColor(); background-color: @Item.Origin.BackColor()">
                             <div class="label">@Item.Origin.DualLanguageLabel( "Origin")</div>
                             <div class="name" style="font-size: @DestinationTextSize(Item.Origin.StationName, Item.IsCrossBorder())">
                                 @if (Item.IsCrossBorder())
@@ -88,7 +88,7 @@
                             </td>
                         </tr>
                     }
-                    @if (Item.IsCrossBorder() && Item.HasDifferentCargoTranslations())
+                    @if (Item.IsCrossBorder() && Item.HasDifferentCargoNameTranslations())
                     {
                         <tr>
                             <td colspan="3">

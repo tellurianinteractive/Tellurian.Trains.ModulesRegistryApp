@@ -1,5 +1,10 @@
 ## Release Notes
 
+#### Version 1.7.8
+Release date 2022-10-10
+- **New Waybill Design** with most label texts replaced by icons. This saves some space and mayby is better for international meetings.
+- **Missing Translations** added.
+- 
 #### Version 1.7.7
 Release date 2022-10-08
 - **Login** now stays on the page you log in from and not redirects you to the start page.

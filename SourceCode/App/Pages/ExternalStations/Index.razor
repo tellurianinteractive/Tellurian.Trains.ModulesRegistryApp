@@ -63,7 +63,7 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, true, true);
         RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
         if (CountryItems.Count() == 1) OnSelectedCountry(CountryItems.First().Id);
         if(Principal.CountryId() > 0) OnSelectedCountry(Principal.CountryId());

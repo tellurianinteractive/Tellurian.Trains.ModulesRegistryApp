@@ -1,5 +1,6 @@
 ﻿namespace ModulesRegistry.Services.Models;
 
+#nullable disable
 public class CargoCustomer
 {
     public int Id { get; set; }
@@ -15,6 +16,7 @@ public class CargoCustomer
     public string SpecialCargoName { get; set; } = string.Empty;
     public string QuantityUnitResourceKey { get; set; } = string.Empty;
     public string PackagingUnitResourceKey { get; set; } = string.Empty;
+    public string PackagingPrepositionResourceCode { get; set; } = "In";
     public string ReadyTimeResourceKey { get; set; } = string.Empty;
     public byte OperationDaysFlags { get; set; }
     public bool DisplayReadyTime { get; set; } = true;
@@ -25,6 +27,7 @@ public class CargoCustomer
     public int? FromYear { get; set; }
     public int? UptoYear { get; set; }
     public bool IsOrigin { get; set; }
+    public Waybill Waybill { get; internal set; }
 
     public override string ToString() => $"{Name} at {StationName} {OperationDaysFlags.OperationDays().ShortName}";
 
@@ -52,24 +55,6 @@ public class CargoCustomer
         CargoTrackOrAreaColor = CargoTrackOrAreaColor,
         FromYear = FromYear,
         UptoYear = UptoYear,
+        Waybill = Waybill,
     };
-}
-
-public static class CargoCustomerExtensions
-{
-    public static string TrackOrAreaBackColor(this CargoCustomer item) =>
-        item == null ? string.Empty :
-        item.CargoTrackOrAreaColor.IsHexColor() && !item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
-        item.TrackOrAreaColor.IsHexColor() ? item.TrackOrAreaColor :
-        "#808080";
-
-    public static string TrackOrAreaTextColor(this CargoCustomer item) =>
-        item.TrackOrAreaBackColor().TextColor();
-
-    public static string TrackOrAreaDesignation(this CargoCustomer item) =>
-        item is null ? string.Empty :
-        item.CargoTrackOrArea.HasValue() ? item.CargoTrackOrArea :
-        item.TrackOrArea.HasValue() ? item.TrackOrArea :
-        string.Empty;
-
 }
