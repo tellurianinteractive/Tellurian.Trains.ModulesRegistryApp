@@ -4,6 +4,9 @@
 ### Release 1.7.8
 Release date 2022-10-10
 - **New Waybill Design** with most label texts replaced by icons. This saves some space and mayby is better for international meetings.
+- **Waybill Print** nos also for individual cargo customers.
+- **Main Theme** added for module standard, to be able to create waybills only for modules of same theme. The default theme is *Europe*.
+- **Changed Waybill Generation**, where no waybills from your station's customers TO other module stations are created.
 - **Language** on waybills improved by adding *package unit prepositions* and adding missing translations.
 - **External stations** now can be given an international name if it differs from its domestic name.
 - **External stations** can now be deleted by administrators.

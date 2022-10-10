@@ -15,7 +15,6 @@ GO
 CREATE TRIGGER [DeleteStationCustomer] ON [StationCustomer] INSTEAD OF DELETE 
 AS
 BEGIN
-    DELETE FROM [StationCustomerWaybill] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomerCargo] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
 END
 

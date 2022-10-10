@@ -46,8 +46,9 @@ SELECT
 	OD.DisplayOrder AS OperatingDayDisplayOrder,
 	CAST (0 AS BIT) AS IsModuleStation,
 	CAST (0 AS BIT) AS IsShadowYard,
-	0 AS ScaleId 
-
+	0 AS ScaleId,
+	0 AS StandardId,
+	'EUROPE' AS MainTheme
 FROM 
 	[ExternalStation] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId

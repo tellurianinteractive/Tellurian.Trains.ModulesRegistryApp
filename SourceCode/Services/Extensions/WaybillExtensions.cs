@@ -10,7 +10,7 @@ public static class WaybillExtensions
     {
         var result = new List<Waybill>();
         // All waybills that prints double items prints first to place them evenly on a page.
-        foreach (var item in items.OrderByDescending(i => i.HasEmptyReturn))
+        foreach (var item in items.OrderByDescending(i => i.HasEmptyReturn).ThenBy(i => i.Destination.StationName))
         {
             item.OperatingDayFlag = item.WaybillSendingDaysFlags();
             for (var i = 0; i < item.PrintCount; i++)

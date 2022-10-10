@@ -33,7 +33,6 @@ AS
 BEGIN
     DELETE FROM [StationCustomerWaybill] WHERE [OtherStationCustomerCargoId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomerWaybill] WHERE [StationCustomerCargoId] IN (SELECT [Id] FROM DELETED)
-    DELETE FROM [StationCustomerCargo] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END
 
 GO

@@ -1,6 +1,8 @@
 ﻿@page "/reports/waybills/layout/{layoutId:int}"
 @page "/reports/waybills/layout/{layoutId:int}/station/{layoutStationId:int}"
 @page "/reports/waybills/station/{stationId:int}"
+@page "/reports/waybills/station/{stationId:int}/customer/{customerId:int}"
+
 @layout PrintLayout
 @inject IStringLocalizer<App> Localizer
 @inject ILanguageService LanguageService
@@ -31,6 +33,7 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int StationId { get; set; }
+    [Parameter] public int? CustomerId { get; set; }
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int? LayoutStationId { get; set; }
 
@@ -47,7 +50,7 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (StationId > 0)
             {
-                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, null, true, false);
+                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, CustomerId, true, true);
                 Waybills = items.AsPrintableWaybills();
             }
         }

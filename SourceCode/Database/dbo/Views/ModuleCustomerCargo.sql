@@ -46,11 +46,12 @@ SELECT
 	OD.DisplayOrder AS OperatingDayDisplayOrder,
 	CAST (1 AS BIT) AS IsModuleStation,
 	CAST (0 AS BIT) AS IsShadowYard,
-	STC.ScaleId
-
+	SS.ScaleId,
+	SS.StandardId,
+	COALESCE(SS.MainTheme, 'EUROPE') AS MainTheme
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
-	INNER JOIN [StationScale] STC ON STC.Id = S.Id 
+	INNER JOIN [StationStandard] SS ON SS.Id = S.Id 
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
 	INNER JOIN [StationCustomerCargo] AS SCC ON SCC.StationCustomerId = SC.Id
