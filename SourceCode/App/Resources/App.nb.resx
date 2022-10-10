@@ -1278,4 +1278,7 @@
   <data name="OtherAvailableModules" xml:space="preserve">
     <value>Andre tilgjengelige moduler</value>
   </data>
+  <data name="InternationalName" xml:space="preserve">
+    <value>Internasjonalt navn</value>
+  </data>
 </root>

@@ -1278,4 +1278,7 @@
   <data name="OtherAvailableModules" xml:space="preserve">
     <value>Andra tillgängliga moduler</value>
   </data>
+  <data name="InternationalName" xml:space="preserve">
+    <value>Internationellt namn</value>
+  </data>
 </root>

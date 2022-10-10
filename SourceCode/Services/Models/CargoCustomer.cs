@@ -7,6 +7,7 @@ public class CargoCustomer
     public string Name { get; set; } = string.Empty;
     public int StationId { get; set; }
     public string StationName { get; set; } = string.Empty;
+    public string InternationalStationName { get; set; } = string.Empty;
     public bool IsModuleStation { get; set; }
     public string ForeColor { get; set; } = Region.DefaultOriginForeColor;
     public string BackColor { get; set; } = Region.DefaultOriginBackColor;
@@ -37,6 +38,7 @@ public class CargoCustomer
         Name = Name,
         StationId = StationId,
         StationName = StationName,
+        InternationalStationName = InternationalStationName,
         ForeColor = ForeColor,
         BackColor = BackColor,
         Languages = Languages,

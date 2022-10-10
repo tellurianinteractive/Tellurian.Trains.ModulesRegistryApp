@@ -18,6 +18,11 @@ public class ExternalStationValidator : AbstractValidator<ExternalStation>
             .MustBeOrdinaryText(localizer)
             .MustBeCapitalizedCorrectly(localizer)
             .WithName(n => localizer[nameof(n.FullName)]);
+        RuleFor(m => m.InternationalName)
+            .MaximumLength(50)
+            .MustBeOrdinaryText(localizer)
+            .MustBeCapitalizedCorrectly(localizer)
+            .WithName(n => localizer[nameof(n.FullName)]);
         RuleFor(m => m.Signature)
             .NotEmpty()
             .MinimumLength(1)

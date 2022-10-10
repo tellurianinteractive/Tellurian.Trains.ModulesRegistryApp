@@ -14,6 +14,7 @@
     <Inputs>
         <AppInputSelect Width="3" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowPleaseSelect="true" IsDisabled="false" />
         <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
+        <AppInputText Width="3" Label="InternationalName" @bind-Value="Station.InternationalName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
         <AppInputNumber Width="2" @bind-Value="Station.OpenedYear" Label="OpenedYear" />
         <AppInputNumber Width="2" @bind-Value="Station.ClosedYear" Label="ClosedYear" />
@@ -22,8 +23,7 @@
         @if (Station?.Id > 0)
         {
             <AppButton Href="@CustomersHref" ObjectName="FreightCustomers" Label="Edit"/>
-@*            <a class="btn btn-secondary btn-sm" href="ExternalStations/@Station.Id/Customers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
-*@        }
+        }
     </Buttons>
 </EditTemplate>
 
@@ -56,6 +56,8 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    
 
     string CustomersHref => $"ExternalStations/{Station.Id}/StationCustomers";
 

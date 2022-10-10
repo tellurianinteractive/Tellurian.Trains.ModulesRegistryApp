@@ -19,6 +19,13 @@
     CONSTRAINT [FK_ExternalStationCustomerCargo_StationCustomer] FOREIGN KEY ([ExternalStationCustomerId]) REFERENCES [dbo].[ExternalStationCustomer] ([Id]) ON DELETE CASCADE
 );
 GO
+CREATE TRIGGER [DeleteExternalStationCustomerCargo] ON [ExternalStationCustomerCargo] INSTEAD OF DELETE 
+AS
+BEGIN
+    DELETE FROM [StationCustomerWaybill] WHERE [OtherExternalCustomerCargoId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [ExternalStationCustomerCargo] WHERE [ExternalStationCustomerId] IN (SELECT [Id] FROM DELETED)
+END
+GO
 CREATE NONCLUSTERED INDEX [IX_ExternalStationCustomerCargo_StationCustomerId]
     ON [dbo].[ExternalStationCustomerCargo] ([ExternalStationCustomerId] ASC)
     INCLUDE ([CargoId], [PackageUnitId], [DirectionId] ,[OperatingDayId], [QuantityUnitId])

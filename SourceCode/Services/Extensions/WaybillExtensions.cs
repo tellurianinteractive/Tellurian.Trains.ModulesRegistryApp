@@ -153,6 +153,11 @@ public static class WaybillExtensions
 
 public static class CargoCustomerExtensions
 {
+    public static string StationName(this CargoCustomer? me) =>
+        me is null ? string.Empty :
+        me.Waybill.IsCrossBorder() && me.InternationalStationName.HasValue() ? me.InternationalStationName :
+        me.StationName;
+
     public static string CargoName(this CargoCustomer? me) =>
          me is null ? string.Empty :
          me.PackagingUnitResourceKey.HasValue() && me.PackagingUnitResourceKey != "NotApplicable" ?

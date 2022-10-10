@@ -6,6 +6,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject NavigationManager Navigator
 
 @inject ExternalStationService ExternalStationService
@@ -39,11 +40,16 @@
             <td style="text-align: center">@item.OpenedYear</td>
             <td style="text-align: center">@item.ClosedYear</td>
             <td>
+                <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/StationCustomers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
                 @if (MayEdit)
                 {
                 <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                 }
-            <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/StationCustomers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+                @if (Principal.IsAnyAdministrator())
+                {
+                    <AppButton Label="Delete" OnClickCallback="() => OnDelete(item.Id)" />
+                }
+
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -101,6 +107,16 @@
     void OnSelectedRegion(int regionId)
     {
         Navigator.NavigateTo($"ExternalStations/Region{regionId}");
+    }
+
+    async Task OnDelete(int id)
+    {
+        if (id > 0)
+        {
+            var result = await ExternalStationService.DeleteAsync(Principal, id);
+            ExternalStations = await ExternalStationService.GetAllInRegion(Principal, RegionId);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
     }
 
     object? Owner => Country is not null ? Country : Region;
