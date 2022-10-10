@@ -1,4 +1,5 @@
 # Release Notes
+> Release notes are only published in English.
 
 ### Release 1.7.8
 Release date 2022-10-10
