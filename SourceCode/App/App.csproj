@@ -6,7 +6,7 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.7.8</Version>
+		<Version>1.7.9</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
 		<DisableCheckingDuplicateNuGetItems>true</DisableCheckingDuplicateNuGetItems>
@@ -30,21 +30,17 @@
 		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.1" />
 		<PackageReference Include="Markdig" Version="0.30.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" NoWarn="NU1605" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.9" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.10" NoWarn="NU1605" />
 		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
 		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.18.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.10" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.3" />
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.17.0" />
-		<PackageReference Include="NuGet.CommandLine" Version="6.3.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
@@ -55,6 +51,36 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\Articles\Documentation.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\Documentation.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\Documentation.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\Documentation.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\Documentation.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ModulesAndStations.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ModulesAndStations.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ModulesAndStations.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ModulesAndStations.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ModulesAndStations.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\AttendToMeeting.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -70,19 +96,19 @@
 		<None Update="Content\Markdown\AttendToMeeting.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\GetStarted.de.md">
+		<None Update="Content\Markdown\Articles\GetStarted.de.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\GetStarted.da.md">
+		<None Update="Content\Markdown\Articles\GetStarted.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\GetStarted.sv.md">
+		<None Update="Content\Markdown\Articles\GetStarted.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\GetStarted.nb.md">
+		<None Update="Content\Markdown\Articles\GetStarted.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\GetStarted.md">
+		<None Update="Content\Markdown\Articles\GetStarted.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Help\CountryStatistics.da.md">
@@ -166,19 +192,19 @@
 		<None Update="Content\Markdown\UserSettingsEdit.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.sv.md">
+		<None Update="Content\Markdown\Articles\FAQ.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.de.md">
+		<None Update="Content\Markdown\Articles\FAQ.de.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.da.md">
+		<None Update="Content\Markdown\Articles\FAQ.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.nb.md">
+		<None Update="Content\Markdown\Articles\FAQ.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Content\Markdown\FAQ.md">
+		<None Update="Content\Markdown\Articles\FAQ.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Help\Person.sv.md">

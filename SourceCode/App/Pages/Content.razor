@@ -1,0 +1,5 @@
+﻿@page "/Content/{contentName}"
+<ContentView ContentName="@ContentName" />
+@code {
+    [Parameter] public string? ContentName { get; set; }
+}

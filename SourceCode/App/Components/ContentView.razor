@@ -40,14 +40,14 @@
         }
         else if (ContentName is not null)
         {
-            Content = await ContentService.GetTextContent(ContentName, Language);
+            Content = await ContentService.GetTextContent(ContentPathName, Language);
         }
         else
         {
             Content = TextContent.Empty;
         }
     }
-
+    string ContentPathName => ContentName?.Replace('-', '/') ?? string.Empty;
     string Padding => BackgroundColor.HasValue() ? "5pt" : "0px";
     bool IsVisible => !IsHidden;
     bool IsEmpty => (string.IsNullOrWhiteSpace(ContentName) && string.IsNullOrWhiteSpace(Href)) || string.IsNullOrWhiteSpace(Content?.Text);
