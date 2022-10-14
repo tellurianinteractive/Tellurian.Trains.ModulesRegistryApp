@@ -14,7 +14,7 @@ Et godt eksempel er et *stationsmodul*, som har standard endeprofiler i de ydre 
 men ikke-standard interne modulsamlinger.
 
 #### Varianter af et modul
-Nogle gange kan et modul kombineres i flere varianter.
+Nogle gange kan et flersektionsmodul kombineres i flere varianter.
 Måske kan rækkefølgen af ​​de interne sektioner ændres, eller nogle sektioner kan udelades.
 
 Modulregistret understøtter modulvarianter. Du kan bruge det samme modulnavn til alle varianter,

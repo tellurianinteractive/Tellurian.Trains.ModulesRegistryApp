@@ -14,7 +14,7 @@ Ett bra exempel är en *stationsmodul*, som har standardändprifiler i de yttre 
 men icke-standardiserade inre modulskarvar.
 
 #### Varianter av en modul
-Ibland kan en modul kombineras i flera varianter.
+Ibland kan en flersektionsmodul kombineras i flera varianter.
 Kanske kan ordningen på de interna sektionerna ändras, eller så kan vissa sektioner utelämnas.
 
 Modulregistret stöder modulvarianter. Du kan använda samma modulnamn för alla varianter,

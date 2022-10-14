@@ -14,7 +14,7 @@ Ein gutes Beispiel ist ein *Stationsmodul*, das an den äußeren Enden Standard-
 aber nicht standardmäßige interne Modulverbindungen.
 
 #### Varianten eines Moduls
-Manchmal kann ein Modul in mehreren Varianten kombiniert werden.
+Manchmal kann ein mehrteiliges Modul in mehreren Varianten kombiniert werden.
 Vielleicht kann die Reihenfolge der internen Abschnitte geändert werden, oder einige Abschnitte können weggelassen werden.
 
 Das Modulregister unterstützt Modulvarianten. Sie können für alle Varianten denselben Modulnamen verwenden,

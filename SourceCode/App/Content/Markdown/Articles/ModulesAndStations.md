@@ -14,7 +14,7 @@ A good example is a *station module*, which has standard end profiles at the out
 but non-standard internal module joints.
 
 #### Variants of a module
-Sometimes a module can be combined in several variants.
+Sometimes a multi-section module can be combined in several variants.
 Perhaps the order of the internal sections can be changed, or some sections can be omitted.
 
 The module register supports module variants. You can use the same module name for all variants,

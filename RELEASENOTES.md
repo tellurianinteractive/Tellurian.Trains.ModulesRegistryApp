@@ -1,6 +1,7 @@
 # Release Notes
 > Release notes are only published in English.
 ### Release 1.7.9
+Release date 2022-10-14
 - **Security Update**: NuGet Elevation of Privilege Vulnerability.
 - **Documentation** page added, which is an overview with links to other documetation content.
 
