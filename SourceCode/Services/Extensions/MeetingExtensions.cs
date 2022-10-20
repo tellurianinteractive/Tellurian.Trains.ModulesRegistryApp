@@ -25,11 +25,11 @@ public static class MeetingExtensions
         it.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
 
     public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null &&
+        it is not null && !it.IsCancelled() &&
         it.Layouts.Any(l => l.IsOpenForRegistration(at));
 
     public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
-        it is null ||
+        it is null || 
         it.Layouts.Any() && it.Layouts.All(l => l.RegistrationClosingDate <= at);
 
     private static bool IsRegistrationAvailable(this Meeting it) =>
@@ -55,6 +55,7 @@ public static class MeetingExtensions
 
     public static string StatusResourceName(this Meeting? me, DateTime at) =>
         me is null ? string.Empty :
+        me.IsCancelled() ? "Canceled" :
         me.IsOpenForRegistration(at) ? "RegistrationOpen" :
         me.IsClosedForRegistration(at) ? "RegistrationClosed" :
         me.IsOrganiserInternal ? "Internal" :

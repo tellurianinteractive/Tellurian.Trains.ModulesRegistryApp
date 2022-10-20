@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyName>ModulesRegistry.Services</AssemblyName>
 		<RootNamespace>ModulesRegistry.Services</RootNamespace>
-		<Version>1.7.8</Version>
+		<Version>1.7.10</Version>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>

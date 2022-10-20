@@ -1,8 +1,10 @@
-﻿using Markdig;
+﻿using Azure.Core;
+using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Services.Extensions;
@@ -41,6 +43,63 @@ public static class StringExtensions
 
     public static bool IsPermittedFileExtension(this string? it) =>
         it is not null && DocumentService.PermittedFileExtenstions.Contains(it.ToLowerInvariant());
+
+    public static string LineWrapped(this string? text, int width) =>
+        text is null ? string.Empty :
+        text.Length <= width ? text : 
+        text.WordWrap(width).ReplaceLineEndings("<br/>");
+
+    private static string WordWrap(this string text, int width)
+    {
+        int pos, next;
+        StringBuilder sb = new StringBuilder();
+        // Parse each line of text
+        for (pos = 0; pos < text.Length; pos = next)
+        {
+            // Find end of line
+            int eol = text.IndexOf(Environment.NewLine, pos);
+            if (eol == -1)
+                next = eol = text.Length;
+            else
+                next = eol + Environment.NewLine.Length;
+
+            // Copy this line of text, breaking into smaller lines as needed
+            if (eol > pos)
+            {
+                do
+                {
+                    int len = eol - pos;
+                    if (len > width)
+                        len = BreakLine(text, pos, width);
+                    sb.Append(text, pos, len);
+                    sb.Append(Environment.NewLine);
+
+                    // Trim whitespace following break
+                    pos += len;
+                    while (pos < eol && Char.IsWhiteSpace(text[pos]))
+                        pos++;
+                } while (eol > pos);
+            }
+            else sb.Append(Environment.NewLine); // Empty line
+        }
+        return sb.ToString();
+    }
+
+    private static int BreakLine(this string text, int pos, int max)
+    {
+        // Find last whitespace in line
+        int i = max;
+        while (i >= 0 && !char.IsWhiteSpace(text[pos + i]))
+            i--;
+        // If no whitespace found, break at maximum length
+        if (i < 0)
+            return max;
+        // Find start of whitespace
+        while (i >= 0 && Char.IsWhiteSpace(text[pos + i]))
+            i--;
+        // Return length of text before whitespace
+        return i + 1;
+    }
 
 
 

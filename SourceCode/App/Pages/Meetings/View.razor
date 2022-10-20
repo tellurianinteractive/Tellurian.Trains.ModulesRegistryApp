@@ -13,22 +13,25 @@
 else
 {
     <h1><span class="@FontAwesome.Meeting" /> @Meeting.Name</h1>
-    @if ((MeetingStatus)Meeting.Status == MeetingStatus.Canceled)
+    @if (Meeting.IsCancelled())
     {
         <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
     }
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.Organiser())
-    @Item("Status", Meeting.Status.MeetingStatus())
+    @if (!Meeting.IsCancelled())
+    {
+        @Item("Status", Meeting.Status.MeetingStatus())
 
-    @Item("RegistrationOpens", $"{Meeting.RegistrationOpensDate():ddd d MMM yyyy}")
-    @Item("RegistrationCloses", $"{Meeting.RegistrationClosingDate():ddd d MMM yyyy}")
+        @Item("RegistrationOpens", $"{Meeting.RegistrationOpensDate():ddd d MMM yyyy}")
+        @Item("RegistrationCloses", $"{Meeting.RegistrationClosingDate():ddd d MMM yyyy}")
 
-    <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)" />
-    <MarkdownView Label="Details" Markdown="@Meeting.Details" />
-    <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
-    <MarkdownView Label="Food" Markdown="@Meeting.Food" />
+        <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)" />
+        <MarkdownView Label="Details" Markdown="@Meeting.Details" />
+        <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
+        <MarkdownView Label="Food" Markdown="@Meeting.Food" />
+    }
 
 }
 
@@ -46,8 +49,10 @@ else
         Meeting = await MeetingService.FindByIdAsync(Id);
     }
 
+
+
     string LayoutsHref(int id) => $"meetings/{id}/layouts/view";
 
-    MarkupString Item(string label, string text, string element = "div") => 
+    MarkupString Item(string label, string text, string element = "div") =>
         new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
 }

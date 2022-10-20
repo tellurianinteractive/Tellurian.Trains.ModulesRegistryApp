@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Services.Implementations;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace ModulesRegistry.Services.Implementations;
 
 public sealed class CargoService
 {
@@ -139,7 +141,7 @@ public sealed class CargoService
             if (subItemsToId.HasValue)
             {
                 if (subItemsToId.Value == 0) return await dbContext.NhmCodes
-                        .Where(c => c.LevelDigits <= 4)
+                        .Where(c => c.LevelDigits <= 5)
                         .OrderBy(c => c.Id)
                         .Select(c => ListboxItem(c))
                         .ToReadOnlyListAsync();
@@ -163,7 +165,9 @@ public sealed class CargoService
 
     }
 
-    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName()}");
+    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, Description(nhm));
+
+    private static string Description(NHM nhm) => $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName().Value.LineWrapped(200)}";
 
     #endregion
 }

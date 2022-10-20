@@ -1,9 +1,14 @@
 # Release Notes
 > Release notes are only published in English.
+
+### Release 1.7.10
+Release date 2022-10-20
+- **NHM-codes** added. Now, up to five significant digits can be selected.
 ### Release 1.7.9
 Release date 2022-10-14
 - **Security Update**: NuGet Elevation of Privilege Vulnerability.
 - **Documentation** page added, which is an overview with links to other documetation content.
+- -**Bug fix** of meeting not displayed as canceled.
 
 ### Release 1.7.8
 Release date 2022-10-10
