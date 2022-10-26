@@ -1,6 +1,8 @@
 # Release Notes
 > Release notes are only published in English.
-
+### Release 1.7.11
+Release date 2022-10-26
+- **Module Status** icon and hoover text improved. Now warns for incomplete or untested modules.
 ### Release 1.7.10
 Release date 2022-10-20
 - **NHM-codes** added. Now, up to five significant digits can be selected.

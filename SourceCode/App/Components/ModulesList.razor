@@ -43,7 +43,7 @@
             @if (MayEdit)
             {
                 <AppButton Label="Edit" Href="@ModuleEditHref(module.Id)" />
-                <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)"/>
+                <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)" />
                 <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
                 @if (module.Id > 0)
                 {
@@ -83,13 +83,21 @@
     }
     bool AnyHasFremoName;
     MarkupString Name(Module module) => new(
-        module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" : 
-        module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" : 
+        module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" :
+        module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" :
         module.FullName);
 
-    MarkupString Status(Module module) => new( $"<span title=\"{StatusTitle(module)}\" class=\"{StatusSymbol(module)}\"/>");
-    string StatusSymbol(Module module) => module.IsUnavailable ? "fa fa-times-circle" : "fa fa-check-circle";
-    string StatusTitle(Module module) => module.IsUnavailable ? Localizer["Unavailable"] : Localizer["Available"];
+    MarkupString Status(Module module) => new($"<span title=\"{StatusTitle(module)}\" class=\"{StatusSymbol(module)}\"/>");
+    string StatusTitle(Module module) => LanguageUtility.GetLocalizedString(module.Status().ToString());
+
+    string StatusSymbol(Module module) => module.Status() switch
+    {
+        ModuleStatus.Unavailable => "fa fa-times-circle",
+        ModuleStatus.Available => "fa fa-check-circle",
+        ModuleStatus.Incomplete => "fa fa-tools",
+        ModuleStatus.Untested => "fa fa-exclamation-triangle",
+        _ => "fa fa-question-circle"
+    };
 
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 

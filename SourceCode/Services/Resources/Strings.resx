@@ -720,4 +720,16 @@
   <data name="France" xml:space="preserve">
     <value>France</value>
   </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="Untested" xml:space="preserve">
+    <value>Untested</value>
+  </data>
+  <data name="Incomplete" xml:space="preserve">
+    <value>Not complete</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
 </root>

@@ -133,6 +133,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available.
+        /// </summary>
+        internal static string Available {
+            get {
+                return ResourceManager.GetString("Available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bale.
         /// </summary>
         internal static string Bale {
@@ -849,6 +858,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string In_the_morning {
             get {
                 return ResourceManager.GetString("In the morning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not complete.
+        /// </summary>
+        internal static string Incomplete {
+            get {
+                return ResourceManager.GetString("Incomplete", resourceCulture);
             }
         }
         
@@ -1681,6 +1699,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unavailable.
+        /// </summary>
+        internal static string Unavailable {
+            get {
+                return ResourceManager.GetString("Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Undefined.
         /// </summary>
         internal static string Undefined {
@@ -1749,6 +1776,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string UnloadingReadyTime {
             get {
                 return ResourceManager.GetString("UnloadingReadyTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untested.
+        /// </summary>
+        internal static string Untested {
+            get {
+                return ResourceManager.GetString("Untested", resourceCulture);
             }
         }
         

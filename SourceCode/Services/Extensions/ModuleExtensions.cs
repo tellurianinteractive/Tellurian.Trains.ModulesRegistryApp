@@ -24,5 +24,22 @@ static public class ModuleExtensions
     public static int[] OwningPersonsIds(this Module? it) =>
         it.IsPersonOwned() ? it.ModuleOwnerships.Where(mo => mo.PersonId > 0).Select(mo => mo.PersonId!.Value).ToArray() : Array.Empty<int>();
 
+    public static ModuleStatus Status(this Module? it) =>
+        it is null ? ModuleStatus.Unknown :
+        it.IsUnavailable ? ModuleStatus.Unavailable :
+        (ModuleFunctionalState)(it.FunctionalState) < ModuleFunctionalState.Tested ? ModuleStatus.Untested :
+        (ModuleLandscapeState)(it.LandscapeState) <= ModuleLandscapeState.None ? ModuleStatus.Incomplete :
+        ModuleStatus.Available;
 
+
+
+}
+
+public enum ModuleStatus
+{
+    Unknown = 0,
+    Unavailable = 1,
+    Untested = 2,
+    Incomplete = 3,
+    Available = 4,
 }
