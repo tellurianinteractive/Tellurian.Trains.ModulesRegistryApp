@@ -606,7 +606,7 @@
   <data name="Cargo" xml:space="preserve">
     <value>Ladung</value>
   </data>
-  <data name="NOTE: Add a module first in order to then add it as a station!" xml:space="preserve">
+  <data name="AddModuleFirst" xml:space="preserve">
     <value>HINWEIS: Fügen Sie zuerst ein Modul hinzu, um es dann als Station hinzuzufügen!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">

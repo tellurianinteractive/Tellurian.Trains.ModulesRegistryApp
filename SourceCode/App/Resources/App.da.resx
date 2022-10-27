@@ -606,7 +606,7 @@
   <data name="Cargo" xml:space="preserve">
     <value>Last</value>
   </data>
-  <data name="NOTE: Add a module first in order to then add it as a station!" xml:space="preserve">
+  <data name="AddModuleFirst" xml:space="preserve">
     <value>BEMÆRK: Tilføj først et modul for derefter at tilføje det som en station!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">

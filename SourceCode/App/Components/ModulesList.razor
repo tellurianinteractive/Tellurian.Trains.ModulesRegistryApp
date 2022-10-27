@@ -12,7 +12,7 @@
     </div>
 }
 
-<TableTemplate Items="Modules">
+<TableTemplate Items="Modules?.OrderBy(m => m.FullName).ThenBy(m => m.ConfigurationLabel)">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         @if (AnyHasFremoName)
@@ -26,14 +26,14 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
-        <td>@Name(module)</td>
+        <td>@module.Name()</td>
         @if (AnyHasFremoName)
         {
             <td>@module.FremoName()</td>
         }
         <td>@module.Standard.ShortName</td>
         <td align="center">@ModuleOwnership(module).OwnedShareAndPercentage()</td>
-        <td align="center">@Status(module)</td>
+        <td align="center">@module.StatusIcon()</td>
         <td>
             <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
             <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
@@ -82,23 +82,6 @@
         Modules = await ModuleService.GetAllAsync(Principal, OwnershipRef);
     }
     bool AnyHasFremoName;
-    MarkupString Name(Module module) => new(
-        module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" :
-        module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" :
-        module.FullName);
-
-    MarkupString Status(Module module) => new($"<span title=\"{StatusTitle(module)}\" class=\"{StatusSymbol(module)}\"/>");
-    string StatusTitle(Module module) => LanguageUtility.GetLocalizedString(module.Status().ToString());
-
-    string StatusSymbol(Module module) => module.Status() switch
-    {
-        ModuleStatus.Unavailable => "fa fa-times-circle",
-        ModuleStatus.Available => "fa fa-check-circle",
-        ModuleStatus.Incomplete => "fa fa-tools",
-        ModuleStatus.Untested => "fa fa-exclamation-triangle",
-        _ => "fa fa-question-circle"
-    };
-
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 
     string ModuleEditHref(int id) => OwnershipRef.Href("Modules", id, "Edit");

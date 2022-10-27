@@ -11,7 +11,7 @@
     else
     {
         <div class="col-md-8" style="background-color:lightgoldenrodyellow;padding:1px 0px 1px 0px; margin: 3px 0px 3px 0px">
-            <span class="fa fa-exclamation-circle" /> @Localizer["NOTE: Add a module first in order to then extend it by adding a station!"]
+            <span class="fa fa-exclamation-circle" /> @Localizer["AddModuleFirst"]
         </div>
     }
 }
@@ -19,15 +19,17 @@
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Signature"]</th>
-        <th style="text-align: center">@Localizer["IsTerminus"]</th>
-        <th style="text-align: center">@Localizer["IsShadowStation"]</th>
-        <th style="text-align: center">@Localizer["Documents"]</th>
+        <th align="center">@Localizer["Status"]</th>
+        <th align="center">@Localizer["IsTerminus"]</th>
+        <th align="center">@Localizer["IsShadowStation"]</th>
+        <th align="center">@Localizer["Documents"]</th>
         <th>@Localizer["Actions"]</th>
 
     </TableHeader>
     <RowTemplate Context="station">
         <td>@Name(station)</td>
         <td>@station.Signature</td>
+        <td align="center">@station.PrimaryModule.StatusIcon()</td>
         <td align="center">@station.IsTerminus.AsYesOrNo()</td>
         <td align="center">@station.IsShadow.AsYesOrNo()</td>
         <td align="center">

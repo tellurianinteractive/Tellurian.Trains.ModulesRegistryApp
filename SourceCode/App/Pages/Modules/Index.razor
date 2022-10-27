@@ -17,6 +17,7 @@
     <TableHeader>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Name"]</th>
+        <th align="center">@Localizer["Status"]</th>
         <th>@Localizer["IsPartOfStation"]</th>
         <th>@Localizer["Standard"]</th>
         <th>@Localizer["Owners"]</th>
@@ -28,6 +29,7 @@
     <RowTemplate Context="module">
         <td>1:@module.Scale.Denominator</td>
         <td>@module.FullName</td>
+        <td>@module.StatusIcon()</td>
         <td>@module.StationName()</td>
         <td>@module.Standard.ShortName</td>
         <td>@module.OwnerNames()</td>
@@ -79,11 +81,9 @@
         }
     }
 
-
     string EditHref(Module? module) =>
         module is null ? string.Empty :
         module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
         $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
 
-    
 }

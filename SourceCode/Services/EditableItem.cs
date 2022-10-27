@@ -2,7 +2,12 @@
 
 public struct EditableItem<T>
 {
-    public EditableItem(T item) => Item = item;
+    public EditableItem(T item)
+    {
+        Item = item;
+        IsEditing = false;
+    }
+
     public bool IsEditing { get; set; }
     public T Item { get; }
 }

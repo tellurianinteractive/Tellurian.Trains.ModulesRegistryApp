@@ -85,7 +85,7 @@ If you have experiences from writing web applications using HTML/CSS and JAVA,
 you will propably get up to speed with *Blazor* and C# in relative short term.
 
 #### Get started
->Please report back any problems with this instruction.
+>Please report back any problems with these instructions.
 1. Download latest version of the free [*Visual Studio Community Edition*](https://visualstudio.microsoft.com/downloads/).
 It normally comes bundled with *.NET SDK* and *Git*-tooling, or you can opt-in during installation. 
 2. During installation, you should select the workloads:
@@ -93,16 +93,18 @@ It normally comes bundled with *.NET SDK* and *Git*-tooling, or you can opt-in d
 - *Azure development*,
 - *.NET desktop development*,
 - *Data storage and processing*,
-- *.NET Core cross-platform development*.
 3. Install the following extensions from within Visual Studio:
 - *ResXManager*,
 - *Markdown Editor*, 
-4. Clone the *Module Registry App* repository from GitHub. You can do that from within Visual Studio.
+4. Fork the *Module Registry App* repository from GitHub. You can do that from within Visual Studio.
 5. Open the solution and verify that it compiles.
 6. You can now make modifications and pull-requests.
 
 #### Working with databases
->Please report back any problems with this instruction.
+It is possible to develop and test against the production database. 
+You will get read and write rights but initially no rights to modify the database schema.
+
+>Please report back any problems with the instructions below.
 
 In order to run the application locally, you also need to install *SQL Server*.
 1. Download [*SQL Server Developer Edition*](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) and run the installation.

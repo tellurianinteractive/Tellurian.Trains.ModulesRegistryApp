@@ -63,8 +63,11 @@ public class Startup
         services.AddAuthorizationPolicies();
         services.AddDbContextFactory<ModulesDbContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"))
+            options.UseSqlServer(Configuration.GetConnectionString("TimetablePlanningDatabase"),
+                options => 
+                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
                 .EnableSensitiveDataLogging(Environment.IsDevelopment());
+                
         });
 
         services.AddBlazoredToast();

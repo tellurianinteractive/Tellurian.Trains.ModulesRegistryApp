@@ -74,7 +74,7 @@ public class StationService
                 .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId)))
                 .Include(s => s.Modules).ThenInclude(m => m.ModuleOwnerships)
                 .Include(s => s.StationTracks)
-                .Include(m => m.Modules)
+                .Include(m => m.PrimaryModule)
                 .ToListAsync()
                 .ConfigureAwait(false);
             if (ownershipRef.IsPersonInGroup)
