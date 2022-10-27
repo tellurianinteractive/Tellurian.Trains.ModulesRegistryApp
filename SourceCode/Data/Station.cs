@@ -20,6 +20,7 @@ public partial class Station
     public bool IsTerminus { get; set; }
     public int? RegionId { get; set; }
     public int? PdfInstructionId { get; set; }
+    public int? PrimaryModuleId { get; set; }
 
     public virtual Document PdfInstruction { get; set; }
     public virtual Region Region { get; set; }

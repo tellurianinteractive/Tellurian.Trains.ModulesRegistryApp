@@ -1,7 +1,7 @@
 ﻿CREATE VIEW dbo.ListStation
 AS
-SELECT DISTINCT TOP (100) PERCENT dbo.Station.Id, dbo.Station.FullName, dbo.Person.CountryId
-FROM     dbo.Station INNER JOIN dbo.Module ON dbo.Module.StationId = dbo.Station.Id
+SELECT DISTINCT TOP (100) PERCENT dbo.Station.Id, dbo.Station.FullName + ' ' + COALESCE(dbo.Module.ConfigurationLabel, '') AS Description, dbo.Person.CountryId
+FROM     dbo.Station INNER JOIN dbo.Module ON dbo.Module.Id = dbo.Station.PrimaryModuleId
         INNER JOIN dbo.ModuleOwnership ON dbo.ModuleOwnership.ModuleId = dbo.Module.Id
         INNER JOIN dbo.Person ON dbo.ModuleOwnership.PersonId = dbo.Person.Id
 ORDER BY dbo.Station.FullName

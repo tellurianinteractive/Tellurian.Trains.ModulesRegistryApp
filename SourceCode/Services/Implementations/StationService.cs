@@ -124,9 +124,11 @@ public class StationService
 
         static async Task<(int Count, string Message, Station? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station entity, int moduleId)
         {
+            entity.PrimaryModuleId = moduleId;
             dbContext.Add(entity);
             var module = await dbContext.Modules.FindAsync(moduleId).ConfigureAwait(false);
             if (module is null) return principal.SaveNotAuthorised<Station>();
+
             entity.Modules.Add(module);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(entity);

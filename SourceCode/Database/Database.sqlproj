@@ -162,7 +162,4 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Database.refactorlog" />
-  </ItemGroup>
 </Project>
