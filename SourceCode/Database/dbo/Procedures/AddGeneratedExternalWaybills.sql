@@ -3,7 +3,29 @@
 AS
 -- The columns in this stored procedures must match table StationCustomerWaybill
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+
+	WITH UpdatedableWaybill (Id, OperatingDayId, RegionId) AS
+	(
+		SELECT 
+			SCW.Id, ME.OperatingDayId, OTHER.RegionId
+		FROM 
+			ModuleCustomerCargo AS ME INNER JOIN
+			ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
+			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
+		WHERE
+			SCW.Id IS NOT NULL
+	)
+	UPDATE StationCustomerWaybill 
+		SET 
+			OperatingDayId = UW.OperatingDayId,
+			OtherRegionId = UW.RegionId
+		FROM 
+			UpdatedableWaybill UW
+		WHERE
+			UW.Id = StationCustomerWaybill.Id
+
+
 	INSERT INTO StationCustomerWaybill
 	SELECT
 		ME.StationCustomerId AS [StationCustomerId],
@@ -24,6 +46,7 @@ BEGIN
 		ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
 		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherExternalCustomerCargoId
 	WHERE
+		ME.NHMCode > 0 AND
 		ME.StationCustomerId = @StationCustomerId
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply
@@ -32,4 +55,7 @@ BEGIN
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
 		AND (ME.UptoYear IS NULL OR OTHER.FromYear IS NULL OR ME.UptoYear >= OTHER.FromYear )
 		AND SCW.Id IS NULL
+
+	
+	
 END

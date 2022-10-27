@@ -48,7 +48,8 @@ SELECT
 	CAST (0 AS BIT) AS IsShadowYard,
 	0 AS ScaleId,
 	0 AS StandardId,
-	'EUROPE' AS MainTheme
+	'EUROPE' AS MainTheme,
+	CO.NHMCode
 FROM 
 	[ExternalStation] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId
@@ -58,3 +59,4 @@ FROM
 	INNER JOIN [CargoDirection] AS CD ON SCC.DirectionId = CD.Id
 	INNER JOIN [CargoUnit] AS CU ON CU.Id = SCC.QuantityUnitId
 	INNER JOIN [OperatingDay] AS OD ON OD.Id = SCC.OperatingDayId
+	INNER JOIN [Cargo] AS CO ON CO.Id = SCC.CargoId

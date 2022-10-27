@@ -23,7 +23,7 @@ CREATE TRIGGER [DeleteExternalStationCustomerCargo] ON [ExternalStationCustomerC
 AS
 BEGIN
     DELETE FROM [StationCustomerWaybill] WHERE [OtherExternalCustomerCargoId] IN (SELECT [Id] FROM DELETED)
-    DELETE FROM [ExternalStationCustomerCargo] WHERE [ExternalStationCustomerId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [ExternalStationCustomerCargo] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END
 GO
 CREATE NONCLUSTERED INDEX [IX_ExternalStationCustomerCargo_StationCustomerId]

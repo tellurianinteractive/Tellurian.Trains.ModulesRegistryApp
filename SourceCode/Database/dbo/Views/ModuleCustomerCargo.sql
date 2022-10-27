@@ -48,7 +48,8 @@ SELECT
 	CAST (0 AS BIT) AS IsShadowYard,
 	SS.ScaleId,
 	SS.StandardId,
-	COALESCE(SS.MainTheme, 'EUROPE') AS MainTheme
+	COALESCE(SS.MainTheme, 'EUROPE') AS MainTheme,
+	CO.NHMCode
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
 	INNER JOIN [StationStandard] SS ON SS.Id = S.Id 
@@ -60,3 +61,4 @@ FROM
 	INNER JOIN [CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId
 	INNER JOIN [CargoUnit] AS CU ON CU.Id = SCC.QuantityUnitId
 	INNER JOIN [OperatingDay] AS OD ON OD.Id = SCC.OperatingDayId
+	INNER JOIN [Cargo] AS CO ON CO.Id = SCC.CargoId

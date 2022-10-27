@@ -17,6 +17,7 @@ AS
 BEGIN
     DELETE FROM [StationCustomerWaybill] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomerCargo] WHERE [StationCustomerId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [StationCustomer] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END
 
 
