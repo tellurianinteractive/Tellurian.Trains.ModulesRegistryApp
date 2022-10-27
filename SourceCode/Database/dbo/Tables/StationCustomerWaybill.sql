@@ -15,7 +15,7 @@
     [PrintCount]                    INT DEFAULT ((1)) NOT NULL,
     [SequenceNumber]                INT DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_StationCustomerWaybill] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_StationCustomerWaybill_StationCustomerId] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id]) ON DELETE CASCADE ,
+    CONSTRAINT [FK_StationCustomerWaybill_StationCustomerId] FOREIGN KEY ([StationCustomerId]) REFERENCES [dbo].[StationCustomer] ([Id]),
     CONSTRAINT [FK_StationCustomerWaybill_StationCustomerCargoId] FOREIGN KEY ([StationCustomerCargoId]) REFERENCES [dbo].[StationCustomerCargo] ([Id]),
     CONSTRAINT [FK_StationCustomerWaybill_OtherCustomerCargoId] FOREIGN KEY ([OtherStationCustomerCargoId]) REFERENCES [dbo].[StationCustomerCargo] ([Id]),
     CONSTRAINT [FK_StationCustomerWaybill_ExternalCustomerCargoId] FOREIGN KEY ([OtherExternalCustomerCargoId]) REFERENCES [dbo].[ExternalStationCustomerCargo] ([Id]),
