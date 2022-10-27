@@ -501,6 +501,10 @@ public partial class ModulesDbContext : DbContext
             entity.HasOne(d => d.Region)
                 .WithMany(p => p.Stations)
                 .HasForeignKey(d => d.RegionId);
+
+            entity.HasOne(e => e.PrimaryModule)
+                .WithMany()
+                .HasForeignKey(e => e.PrimaryModuleId);
         });
 
         modelBuilder.Entity<StationCustomer>(entity =>

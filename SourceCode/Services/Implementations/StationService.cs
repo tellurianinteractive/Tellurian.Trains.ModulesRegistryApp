@@ -10,11 +10,12 @@ public class StationService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Stations.AsNoTracking()
+            var items = await dbContext.Stations.AsNoTracking()
                 .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId)))
-                .Select(s => new ListboxItem(s.Id, s.FullName))
+                .Select(s => new ListboxItem(s.Id, $"{s.FullName} {s.PrimaryModule.ConfigurationLabel} ".TrimEnd()))
                 .ToListAsync()
                 .ConfigureAwait(false);
+            return items.OrderBy(s => s.Description).ToList();
         }
         return Array.Empty<ListboxItem>();
     }

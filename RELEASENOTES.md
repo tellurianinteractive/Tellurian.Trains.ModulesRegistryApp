@@ -3,6 +3,8 @@
 ### Release 1.7.11
 Release date 2022-10-26
 - **Module Status** icon and title text improved. Now warns for incomplete or untested modules.
+- **Bug fix** of issue #162 to control which module that is the primary one for stations. Thanks to Benny Tjäder for reporting.
+- 
 ### Release 1.7.10
 Release date 2022-10-20
 - **NHM-codes** added. Now, up to five significant digits can be selected.

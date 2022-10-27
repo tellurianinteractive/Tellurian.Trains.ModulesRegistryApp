@@ -24,6 +24,7 @@ public partial class Station
 
     public virtual Document PdfInstruction { get; set; }
     public virtual Region Region { get; set; }
+    public virtual Module PrimaryModule { get; set; }
     public virtual ICollection<Module> Modules { get; set; }
     public virtual ICollection<StationCustomer> StationCustomers { get; set; }
     public virtual ICollection<StationTrack> StationTracks { get; set; }
