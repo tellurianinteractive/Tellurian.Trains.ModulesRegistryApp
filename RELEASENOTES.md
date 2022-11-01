@@ -17,13 +17,13 @@ Release date 2022-10-20
 ## Release 1.7.9
 Release date 2022-10-14
 - **Security Update**: NuGet Elevation of Privilege Vulnerability.
-- **Documentation** page added, which is an overview with links to other documetation content.
-- -**Bug fix** of meeting not displayed as canceled.
+- **Documentation** page added, which is an overview with links to other documentation content.
+- -**Bug fix** of meeting not displayed as cancelled.
 
 ## Release 1.7.8
 Release date 2022-10-10
-- **New Waybill Design** with most label texts replaced by icons. This saves some space and mayby is better for international meetings.
-- **Waybill Print** nos also for individual cargo customers.
+- **New Waybill Design** with most label texts replaced by icons. This saves some space and maybe is better for international meetings.
+- **Waybill Print** now also for individual cargo customers.
 - **Main Theme** added for module standard, to be able to create waybills only for modules of same theme. The default theme is *Europe*.
 - **Changed Waybill Generation**, where no waybills from your station's customers TO other module stations are created.
 - **Language** on waybills improved by adding *package unit prepositions* and adding missing translations.
@@ -37,8 +37,9 @@ Release date 2022-10-08
 - **Available Modules** for meeting participant is now divided in *My Modules* and *Other modules*.
 - **Origin** for *empty return* waybills is now without region colouring, because the waybill will only be used when the station is present at the meeting.
 - **Bug fix** of waybill quantity, quantity unit and package unit. It is now from the *receiver* and not the *sender* of cargo.
-- **Wagons vs Trainsets** on waybills is now changed if quantity unit is greater that one to *Trainset with X Wagons*.
-- **Wagon Class** on waybills now displays the receiver's required class, and not the senders.> NOTE: Based on feedback from Benny Tjäder and Michael Bunka, there will be some future reworking on the definitions of:
+- **Wagons vs. Trainsets** on waybills is now changed if quantity unit is greater that one to *Trainset with X Wagons*.
+- **Wagon Class** on waybills now displays the receiver's required class, and not the senders.
+- > NOTE: Based on feedback from Benny Tjäder and Michael Bunka, there will be some future reworking on the definitions of:
 
 ## Release 1.7.6
 Release date 2022-10-07
@@ -46,7 +47,7 @@ Release date 2022-10-07
 Quantity and quantity unit is set in the freight customers cargo flow. 
 For example, a waybill can be of *10 m<sup>3</sup>*, which means that several waybills may go with one wagon.
 - **Bug fix** of waybill sending days.
-- **Bug fix** of colorisation of waybill *track or area color*. All freight customer cargo flows are also cleaned up of duplicated *track or area color* settings.
+- **Bug fix** of colorization of waybill *track or area colour*. All freight customer cargo flows are also cleaned up of duplicated *track or area colour* settings.
 - **Component update** for typeahed search fields.
 
 ## Release 1.7.5
@@ -57,7 +58,7 @@ Release date 2022-10-06
 Options to set for each waybill in your freight customers list:
 - **Empty return** waybills can now be created. Just check *Has empty return* for the selected waybill.
 - **Number to print** can now be set for each waybill. Set to zero disables printing.
-- **Print per operating day** is now possible. The waybill will be printed accoring the union set of operating days given for 
+- **Print per operating day** is now possible. The waybill will be printed according the union set of operating days given for 
 the origin and destination freight customers cargo flow.
 
 > NOTE: Printing options adds up. Number to print x operating days x 2 for empty returns.
@@ -72,7 +73,7 @@ Release date 2022-10-03
 Release date 2022-10-01
 - **Group member** may give permission that group members may borrow his/her modules for module meetings.
 - **Module owners** now shows up in module registration page for a meeting layout.
-- **Bug fix** of deleting freigh customer cargo flow. Related waybills will now also be deleted.
+- **Bug fix** of deleting freight customer cargo flow. Related waybills will now also be deleted.
 
 ## Release 1.7.2
 Release date 2022-09-29
@@ -92,15 +93,14 @@ Many thanks to Fredrik Petterson, a Swedish FREMO-member, that suggested waybill
 In this release, this goal is partly implemented.
 - **Customer Waybill** can now be generated for your freight customers. These are saved for later. 
 The generation matches all your existing freights with freights at other module stations in the same scale, plus all external stations.
-In upcoming releses of the Module Registry, you will be able to edit waybills for return freights, printed count etc. and
-also create additional waybills.
-- **Waybill printing** is now possible. In this relase, you can print all waybills for your station.
+In upcoming releases of the Module Registry, you will be able to edit waybills for return freights, printed count etc. and also create additional waybills.
+- **Waybill printing** is now possible. In this release, you can print all waybills for your station.
 In upcoming releases, you will also be able to print each freight customer separately, and select what to print etc.
 
 ## Release 1.6.21
 Release date 2022-08-29
-- **Sender Email** now verified so that invitations and password reset mails is not likley to end up in your spam folder.
-- **Freigh Customer Waybills** has now the first step implemented: to be able to generate waybills for each freight customer.
+- **Sender Email** now verified so that invitations and password reset mails is not likely to end up in your spam folder.
+- **Freight Customer Waybills** has now the first step implemented: to be able to generate waybills for each freight customer.
 These waybills will be saved for that customer.
 
 ## Release 1.6.20
@@ -110,7 +110,7 @@ Release date 2022-08-25
 
 ## Release 1.6.19
 Release date 2022-08-22
-- **Meeting Registration** now displays message if you try yo register too early.
+- **Meeting Registration** now displays message if you try to register too early.
 - **Alerts** are now styled in a consequent way.
 
 ## Release 1.6.18
@@ -124,16 +124,16 @@ If all layouts in a module meeting are disabled for registration, the meeting wi
 Release date 2022-08-19
 - **Help texts** corrections and additions.
 - **Formatting** fixes in tables and other places.
-- **Contact Person** added for *layout*
-- Further preparations for the fortcoming waybill functionality.
+- **Contact Person** added for *layout*.
+- Further preparations for the forthcoming waybill functionality.
 
 ## Release 1.6.16
 Release date 2022-08-18
-- This release is a preparation phase for the fortcoming waybill functionality.
+- This release is a preparation phase for the forthcoming waybill functionality.
 
 ## Release 1.6.15
 Release date 2022-08-17
-- **Meeting** can now be flagged as *internal* for the organising group. 
+- **Meeting** can now be flagged as *internal* for the organizing group. 
 Only logged in group members will see this meeting and can register.
 - **Meeting Status** extended and show now if meeting is *open* or *closed* for registration.
 A meeting is closed for registration when all layouts are closed for registration.
@@ -146,15 +146,13 @@ Release date 2022-08-16
 - **Meeting** views are splitted over several pages: 1) meeting details, 2) layout details and 3) participants and registered modules.
 - **Meeting** *isFremo* checkbox replaced with selecting a *group domain*, for example FREMO if the meeting is a FREMO-meeting.
 - **Layout** can now be described in detail using *markdown*.
-- **Completed translations** of all help- and information texts, 
-except for *Terms of Use* that will continue to be in English only.
+- **Completed translations** of all help- and information texts, except for *Terms of Use* that will continue to be in English only.
 
 ## Release 1.6.13
 Release date 2022-08-15
-- **Meetings** can now be described with additional free texts for *details* and *accomodation* using *markdown*.
-NOTE that similar functionality will be added soon for individual *meeting layouts*.
-- **Operation Days** drop down now displays days in order, with the most common ones first, 
-and the rest by the first day (issue #148)
+- **Meetings** can now be described with additional free texts for *details* and *accommodation* using *markdown*.
+> NOTE that similar functionality will be added soon for individual *meeting layouts*.
+- **Operation Days** drop down menu now displays days in order, with the most common ones first, and the rest by the first day (issue #148).
 
 ## Release 1.6.12
 Release date 2022-08-09
@@ -166,7 +164,7 @@ Release date 2022-08-09
 Release date 2022-08-06
 - **End profile** is now the new term for previous *module gable*. 
 Thanks to Gino Damen, Klaus Weibezahn, and Dirk Witvrouwen.
-The change is made not only int the user interface, but in all code and in the database.
+The change is made not only in the user interface, but in all code and in the database.
 
 ## Release 1.6.10
 Release date 2022-08-04
@@ -198,7 +196,7 @@ These addresses will be reserved for the person when registering for a meeting l
 ## Release 1.6.6
 Release date 2022-06-07
 - **Representative station** for a *region*, which will be origin or destination of cargo for that region (issue #143).
-- **List boxes data** optimised by using database views instead of *Entity Framework* complex queries.
+- **List boxes data** optimized by using database views instead of *Entity Framework* complex queries.
 - **Server Timeout** increased from 3 to 10 minutes, so the request to *Reload* should happen more infrequently.
 - **Norwegian** now have the correct language code NB (and not NO), that will make the user interface to display in Norwegian bokmål.
 - **Language Select** is now possible to override your browser's request language settings. Append *?culture=XX* to the url, where XX is the two-letter ISO language code.
@@ -226,7 +224,7 @@ Release date 2022-04-27
 Release date 2022-04-26
 - **Statistics** per country of usage.
 - **Waybills** now also generated to/from station modules not present in a layout.
-- **Waybills** now print *quantity* of *packaging unit* when type of quantity is *pieces*.
+- **Waybills** now prints *quantity* of *packaging unit* when type of quantity is *pieces*.
 - **Wagon class** added in cargo customer overview.
 - **Tool-tip** for *module status* added.
 - **Missing translations** added.
@@ -242,10 +240,8 @@ Deletion also requests confirmation to avoid deletions by mistake. Issue #128.
 
 ## Release 1.6.1
 Release date 2022-02-28
-- **Optimised waybill printing** where printing for a specific station 
-only contains relevant waybills and no duplicates printed for other stations.
-- **Region colour** for shadow stations destination and origin removed, 
-because these are considered as a station in the layout.
+- **Optimized waybill printing** where printing for a specific station only contains relevant waybills and no duplicates printed for other stations.
+- **Region colour** for shadow stations destination and origin removed, because these are considered as a station in the layout.
 
 ## Release 1.6.0
 Release date 2022-02-27
@@ -280,12 +276,12 @@ Release date 2022-01-13
 ## Release 1.4.10
 Release date 2022-01-10
 
-**This release is starting point for implementing a improved module meeting registration.**
-**Therefore, meeting registration is temporary disabled until new functionality is implemented.**
+**This release is starting point for implementing an improved module meeting registration.**
+**Therefore, meeting registration is temporarily disabled until new functionality is implemented.**
 
 Other features in this release are:
-- **Tools** added to menu, with a page containing useful links to tools and documentation to improve quality of module meetings.
-- **Meeting info** now visible for anybody, also non registered visitors to the Module Registry.
+- **Tools** added to menu, with a page containing useful links to tools and documentation to improve the quality of module meetings.
+- **Meeting info** now visible for anyone, also non registered visitors to the Module Registry.
 
 ## Release 1.4.9
 Release date 2021-10-20
@@ -304,7 +300,7 @@ Release date 2021-10-05
 
 ## Release 1.4.7
 Release date 2021-09-27
-- **Immediately** added as *cargo ready time*. Thanks to Urban Johansson for the idéa.
+- **Immediately** added as *cargo ready time*. Thanks to Urban Johansson for the idea.
 - **Security headers** applied for improved security of the application.
 
 ## Release 1.4.6
@@ -323,7 +319,7 @@ Release date 2021-09-06
 ## Release 1.4.4
 Release date 2021-09-05
 - **End profile list** are now sorted by scale and end profile name.
-- **Cargo flow** help text and field labels updated to better describe meaning of fields.
+- **Cargo flow** help text and field labels updated to better describe the meaning of the fields.
 - **Cargo lists** now shows NMH-code and is sorted in NHM-code order. 
 Read more about [NHM-codes](https://uic.org/freight/freight-IT/article/nhm).
 - **Meeting dates** cannot be changed if any modules are registered or after seven days before first day of meeting. Help text is updated with this restriction.
@@ -332,7 +328,7 @@ Only *country administrators* will then be able to change dates.
 - **Bug fix** of group member administrator creating new persons in other countries to add to group.
 - **Bug fix** of issue #122 creating new persons to add to a group. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
 - **Bug fix** of issue #123 creating new meeting. Thanks to Jérômee Chavel and Lars Ljungberg for reporting this.
-- **Bug fix** of available modules for registration in meeting layout. Previously not all available modules was shown due to module visibility restrictions.
+- **Bug fix** of available modules for registration in meeting layout. Previously not all available modules were shown due to module visibility restrictions.
 - **Bug fix** of user rights to modify group member.
 
 ## Release 1.4.3
@@ -342,14 +338,14 @@ Release date 2021-09-04
 
 ## Release 1.4.2
 Release date 2021-09-03
-- **Meeting status** is colourised.
+- **Meeting status** is colorized.
 - **Meeting dates** cannot be changed more that 7 days, to permit minor date changes, but prevent reusing an old meeting as a new meeting.
 - **Waybill sending days** now displayed in language of origin station.
 - **Service release** with latest .NET security patches and bug fixes.
 
 ## Release 1.4.1
 Release date 2021-09-03
-- **Waybill improvements** where *days*, *loading and unloading instructions* has been added, and the visual appearence is better.
+- **Waybill improvements** where *days*, *loading and unloading instructions* has been added, and the visual appearance is better.
 
 ## Release 1.4.0
 Release date 2021-09-03
@@ -372,7 +368,7 @@ Release date 2021-08-18
 ## Release 1.2.19
 Release date 2021-08-11
 - **Bug fix** of access to listing group members modules and stations. Thanks to Stefan Kloppenburg for reporting this.
-- **Improved editing of cargo flow** by moving buttons up and adding new cargoflow at the top, and option to clone existing flow. Thanks to Stefan Kloppenburg for suggesting this.
+- **Improved editing of cargo flow** by moving buttons up and adding new cargo flow at the top, and option to clone existing flow. Thanks to Stefan Kloppenburg for suggesting this.
 
 ## Release 1.2.18
 Release date 2021-08-09
@@ -383,8 +379,8 @@ Release date 2021-08-09
 
 ## Release 1.2.17
 Release date 2021-08-03
-- **Number of trough track** for *modules* can now be zero (thanks to Jonas Hjelm).
-- **Max track speed** is raised to 350 km/h (thanks to Jonas Hjelm, a TGV enthustiast).
+- **Number of through track** for *modules* can now be zero (thanks to Jonas Hjelm).
+- **Max track speed** is raised to 350 km/h (thanks to Jonas Hjelm, a TGV enthusiast).
 - **Overhead wire** feature can now be set to *planned* (thanks to Jonas Hjelm).
 
 ## Release 1.2.16
@@ -395,7 +391,7 @@ Release date 2021-07-29
 Release date 2021-07-28
 - **Packaging unit** can now be specified for a freight customer's cargo flow.
 - **Module Registration Closing Date** added for *meeting layout*.
-- **Password comfirnation** improved with new messagge if comfirmation fails.
+- **Password confirmation** improved with new message if confirmation fails.
 
 ## Release 1.2.14
 Release date 2021-07-27
@@ -405,7 +401,7 @@ Release date 2021-07-27
 ## Release 1.2.13
 Release date 2021-07-17
 - **Available modules** for a meeting layout now displays all modules in each package.
-- **Intivation mail** now clarifies that the app is not suitable for small screens.
+- **Invitation mail** now clarifies that the app is not suitable for small screens.
 
 ## Release 1.2.12
 Release date 2021-07-12
@@ -433,10 +429,8 @@ There is a new optional *straight* length field. The *length* field is now read-
 
 ## Release 1.2.8
 Release date 2021-06-11
-- **Other Wagon Class** can now be specified for each station customer's *cargo flow* 
-if you want to override the default classes for the *cargo type*.
-- **Transfer Module Ownership** makes it possibible to transfer part or whole ownership of a module
-to another person. You can only transfer your own ownership and it cannot be undone.
+- **Other Wagon Class** can now be specified for each station customer's *cargo flow* if you want to override the default classes for the *cargo type*.
+- **Transfer Module Ownership** make it possible to transfer part or whole ownership of a module to another person. You can only transfer your own ownership and it cannot be undone.
 - **Bug fix** of resetting password for persons with more than one email address.
 
 ## Release 1.2.7
@@ -453,26 +447,26 @@ Release date 2021-05-17
 ## Release 1.2.5
 Release date 2021-05-15
 - **Is Stand-Alone** added for modules. 
-This shold be checked for modules that have legs enough to stand for themselves.
-The default is that modules is stand-alone.
+This should be checked for modules that have legs enough to stand for themselves.
+The default is that a module is stand-alone.
 - **Delete** of cargo customer now asks to confirm delete or cancel the action.
 
 ## Release 1.2.4
 Release date 2021-05-14
-- **Register group owned modules** to a meeting layout can now be made by any persion that is a data administrator of the group.
+- **Register group owned modules** to a meeting layout can now be made by any person that is a data administrator of the group.
 This fixes issue #93. Thanks to Fredrik Petterson for noticing this.
 
 ## Release 1.2.3
 Release date 2021-05-10
 - **Module names** must now be unique for each owner. Either *name* or *name* and *variant* must be unique for each owner. 
 A *name* without a *variant* is unique, so you can't have the same *name* with *variant*. All modules with same *name* must all have a *variant*.
-This also fix the error of registering some modules to a meeting's layout.
+This also fixes the error of registering some modules to a meeting's layout.
 Thanks to Fredrik Petterson for testing and reporting this.
 - **Bug fix** of issue #91 where cloning a module failed.
 - **Bug fix** of issue #90 error when displaying groups. Thanks to Benny Tjäder for reporting this.
-- **Bug fix** of issie #89 when removing module from meeting layout. Thanks to Benny Tjäder for reporting this.
-- **Bug fix** of listing *cargo* due to missing translations. It is now required to translate caro names into all supported languages.
-Thanks to Jens Ehlers for reportning this.
+- **Bug fix** of issue #89 when removing module from meeting layout. Thanks to Benny Tjäder for reporting this.
+- **Bug fix** of listing *cargo* due to missing translations. It is now required to translate cargo names into all supported languages.
+Thanks to Jens Ehlers for reporting this.
 
 ## Release 1.2.2
 Release date 2021-05-05
@@ -481,11 +475,11 @@ Release date 2021-05-05
 ## Release 1.2.1
 Release date 2021-05-05
 - **Registration of modules** for a *layout* is ready to use. 
-The *meeting organiser* can register any person's modules, and a normal *user* can register their own modules.
+The *meeting organizer* can register any person's modules, and a normal *user* can register its own modules.
 
 ## Release 1.2.0
 Release date 2021-05-03
-- **Registration of persons** to module meetings. The *meeting organiser* can register any person from any country, and a normal *user* can register themselves.
+- **Registration of persons** to module meetings. The *meeting organizer* can register any person from any country, and a normal *user* can register themselves.
 - **Registration of modules** for a *layout* is in **preview**. It does not yet save registered modules.
 - **Browning groups** is improved for users that can see groups in different countries.
 
@@ -523,7 +517,7 @@ Release date 2021-04-26
 ## Release 1.1.1
 Release date 2021-04-22
 - **Freight Customers** overview including supplied and consumed cargo types.
-- **Bug fixes** in external *freight customers*
+- **Bug fixes** in external *freight customers*.
 
 ## Release 1.1.0
 Release date 2021-04-21
@@ -535,7 +529,7 @@ Release date 2021-04-19
 - **Add group member** from other country, issue #52.
 - **Help texts** added for *person*, *group*, *cargo types* and *meeting*.
 - **Page headings** now contains a *back*-button and a *help*-button if a help text is available.
-Layout of heading is also inproved.
+Layout of heading is also improved.
 
 ## Release 1.0.5
 Release date 2021-04-17
@@ -546,7 +540,7 @@ Later, extended *data visibility* will be added for groups in the same domain.
 - **Delete** of a module is now possible if a number of conditions are met. They are checked on the *delete*-page.
 - **Help texts** improved and corrected.
 - **Module list** graphical improvements showing *variant* or *box label*.
-- **Api** for fecthing *cargo types* with translated names in supported langauges. You need a personal *API key* to test it.
+- **Api** for fetching *cargo types* with translated names in supported languages. You need a personal *API key* to test it.
 
 ## Release 1.0.4
 Release date 2021-04-15
@@ -564,7 +558,7 @@ Release date 2021-04-14
 Release date 2021-04-13
 - **Users** can now see more data: *groups* that you are member of and non-private *modules*, *stations* and *freight customers* in these groups.
 - **Visibility** for *modules* means that the module owner now can select if other users should see it. Thanks to Thomas Woditsch and others for this suggestion.
->NOTE that *visibility* is currently only implemented for *private* and *group members*, and *group members* is default.
+> NOTE that *visibility* is currently only implemented for *private* and *group members*, and *group members* is default.
 - **Theme** free text added for *layout*.
 - **Cargo units** *trailer* and *container* added. Thanks to Alexander Ehn for this suggestion.
 - **Loading/unloading** ready time can now be set to *not applicable*.
@@ -580,13 +574,13 @@ Release date 2021-04-12
 ## Version 1.0.0
 Release date 2021-04-11
 
-Module and station management are now feature complete, so its time to release the first version.
+Module and station management are now feature complete, so it's time to release the first version.
 - **Freight Customers** for *stations* can now be added and maintained.
 - **Cargo Flow** for each *freight customer* can now be added and maintained.
 
 ## Release 0.9.5
 Release date 2021-04-09
-- **Bug fix** of user registration. Users may now create password again. Thanks to Seth Olofsson for reporting this.
+- **Bug fix** of user registration. Users may now create a password again. Thanks to Seth Olofsson for reporting this.
 
 ## Release 0.9.4
 Release date 2021-04-07
@@ -640,15 +634,15 @@ Release date 2021-03-22
 ## Release 0.8.5
 Release date 2021-03-21
 - **Password reset** info added on start page.
-- **Adding stations** now are more strict. The must be a module first in order to extends it as a station.
+- **Adding stations** now are more strict. There must be a module first in order to extend it as a station.
 - **Countries** added: now persons in UK and NL can be added. No NL translation yet, though.
-- **Bug fix** of issie #11 misaligned field. Thanks to Alexander Ehn.
+- **Bug fix** of issue #11 misaligned field. Thanks to Alexander Ehn.
 - **Update** of system components.
 
 ## Release 0.8.4
 Release date 2021-03-20
 - **Bug fix** of issue #7 when saving new modules. Thanks to Johan Dahlgren.
-- **Bug fix** of langauge in user invitation mail. 
+- **Bug fix** of language in user invitation mail. 
 - **Type of Cargo** can now be managed in all supported languages.
 - **NHM-codes** levels 1 and 2 imported to classify *type of cargo*.
 
@@ -660,11 +654,11 @@ Release date 2021-03-16
 
 ## Release 0.8.2
 Release date 2021-03-11
-- **Password reset** attemps are limited to a few times, and after that nothing will happen.
+- **Password reset** attempts are limited to a few times, and after that nothing will happen.
 
 ## Release 0.8.1
 Release date 2021-03-10
-- **Area of Resposibility** for administrators on contact page to help users to find the right administrator. 
+- **Area of Responsibility** for administrators on contact page to help users to find the right administrator. 
 - **Group Membership** for groups that administrator also administer are now shown.
 - **About** page now contains links to find out more.
 - **Password reset** now available under *User settings*.
@@ -711,13 +705,12 @@ Any notes on type of catenary should be entered in new *Note* field.
 Release date 2021-03-04
 - *Terms of use* updated.
 - User now required to accept *terms of use* in order to use application.
-- Additional data about modules: *catenary description*, *number of sections*
-and *end plates* with *direction* and *end profiles*.
+- Additional data about modules: *catenary description*, *number of sections* and *end plates* with *direction* and *end profiles*.
 - Administration of *end profiles**.
 
 ## Release 0.5.1
 Release date 2021-02-28
-- Bug fix of *password policy* (thanks to Daniel Bergqvist)
+- Bug fix of *password policy* (thanks to Daniel Bergqvist).
 - Password policy translated and formatted for better readability.
 - Less content in *module standard* list so lines don't break.
 
@@ -725,7 +718,7 @@ Release date 2021-02-28
 Release date 2021-02-27
 - Administrators can now add and edit modules.
 - Edit group member now works.
-- List any person's modules now works
+- List any person's modules now works.
 - Additional improvements of style.
 
 ## Release 0.4.2
@@ -740,7 +733,7 @@ Release date 2021-02-26
 ## Release 0.4.1
 Release date 2021-02-25
 
-- Improved appearence of forms.
+- Improved appearance of forms.
 - Added *variant* and *box label* to *module*.
 - Some minor bug fixes.
 
@@ -766,7 +759,7 @@ Release date 2021-02-20
 - Improved module owner state.
 - Added user permissions filtering to *PersonService*.
 - Bug fix of password policy (thanks to Uwe Stegemann).
-- Correct app name for making broser shortcut (thanks to Uwe Stegemann).
+- Correct app name for making browser shortcut (thanks to Uwe Stegemann).
 
 ## Release 0.2.3
 Release date 2021-02-19
@@ -777,7 +770,7 @@ Release date 2021-02-19
 ## Release 0.2.2
 Release date 2021-02-19
 - Added translations to German and Norwegian.
-- Invitation now sent in receivers language.
+- Invitation now sent in receiver's language.
 - Added confirmation of sent invitation.
  
 ## Release 0.2.1
@@ -801,7 +794,7 @@ Release 2021-02-12
 ## Release 0.1.2
 Release 2021-02-08
 
-- Added some administrative functions only availavle for administrators.
+- Added some administrative functions only available for administrators.
 
 ## Release 0.1.1
 Release 2021-01-15
