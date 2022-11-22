@@ -8,7 +8,7 @@ namespace ModulesRegistry.Services.Tests;
 public class WaybillExtensionsTests
 {
     [TestMethod]
-    public void QuantityUnitIsQubicMeter()
+    public void QuantityUnitIsCubicMeter()
     {
         var target = new Waybill(new(), new() { Languages = "en", QuantityUnitResourceKey = "Cubicmeter" })
         {
@@ -18,7 +18,7 @@ public class WaybillExtensionsTests
     }
 
     [TestMethod]
-    public void QuantityUnitIsQubicMeters()
+    public void QuantityUnitIsCubicMeters()
     {
         var target = new Waybill(new (), new() { Languages="en", QuantityUnitResourceKey = "Cubicmeters" })
         {

@@ -2,6 +2,12 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+
+## Release 1.7.12
+Release date 2022-11-22
+- **Bug fix** of *document upload*. Files where truncated and couldn't be read when downloaded.
+Files that have this error need to be uploaded again.
+
 ## Release 1.7.11
 Release date 2022-10-26
 - **Module Status** icon and title text improved. Now warns for incomplete or untested modules.

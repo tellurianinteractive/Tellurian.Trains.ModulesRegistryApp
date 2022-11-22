@@ -27,6 +27,7 @@
     [Parameter] public int? MaxFileSizeKb { get; set; }
 
     int? DocumentId;
+    long MaxFileSize => (MaxFileSizeKb ?? 1024) * 1024;
 
     protected override void OnParametersSet()
     {
@@ -39,14 +40,14 @@
         if (IsFileSizeWithinLimits(e.File))
         {
             var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSizeKb ?? 512);
+            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
             DocumentId = result.Entity?.Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, $"Upload of {e.File.Name}");
 
         }
         else
         {
-            ToastService.ShowWarning(string.Format(LanguageUtility.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSizeKb));
+            ToastService.ShowWarning(string.Format(LanguageUtility.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize));
         }
     }
 
@@ -58,6 +59,6 @@
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
     string MaxSizeText => string.Format(LanguageUtility.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
 
-    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSizeKb * 1024;
+    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSize;
 
 }

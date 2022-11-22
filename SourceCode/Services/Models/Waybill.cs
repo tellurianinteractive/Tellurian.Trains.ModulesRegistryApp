@@ -5,7 +5,9 @@ public class Waybill
     public Waybill(CargoCustomer origin, CargoCustomer destination)
     {
         Origin = origin;
+        Origin.Waybill = this;
         Destination = destination;
+        Destination.Waybill = this;
     }
     public const int ItemsPerPage = 12;
     public int Id { get; set; } 

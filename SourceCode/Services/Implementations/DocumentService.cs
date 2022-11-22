@@ -9,6 +9,7 @@ public sealed class DocumentService
 
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     private readonly ITimeProvider TimeProvider;
+
     public DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
     {
         Factory = factory;
@@ -24,7 +25,7 @@ public sealed class DocumentService
     }
 
     /// <summary>
-    /// Seaches al objects that can refer to a document to find a suitable name.
+    /// Searches all objects that can refer to a document to find a suitable name.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -51,14 +52,15 @@ public sealed class DocumentService
     }
 
 
-    public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, int maxFileSizeKb)
+    public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize)
     {
         if (principal.IsAuthenticated())
         {
+            if (file.Size > maxFileSize) return (0, "UploadFileToLarge", null);
+
             using var dbContext = Factory.CreateDbContext();
             var fileSize = (int)file.Size;
-
-            using var stream = file.OpenReadStream(maxFileSizeKb * 1024);
+            using var stream = file.OpenReadStream(maxFileSize);
             var (Id, DocumentId, TypeName) = DocumentedObject(documentedObject, fileExtension);
             if (DocumentId.HasValue)
             {
@@ -79,11 +81,20 @@ public sealed class DocumentService
                     Content = new byte[file.Size],
                     LastModifiedTime = TimeProvider.Now
                 };
-                var bytes = await stream.ReadAsync(document.Content.AsMemory(0, fileSize));
+                var position = 0;
+                while (position < file.Size)
+                {
+                    position += await stream.ReadAsync(document.Content, position, fileSize - position);
+                }
                 dbContext.Documents.Add(document);
                 var count = await dbContext.SaveChangesAsync();
-                count += await UpdateDocumentReference(dbContext, document, documentedObject);
-                return count.SaveResult(document);
+                if (count > 0)
+                {
+                    count = await UpdateDocumentReference(dbContext, document, documentedObject);
+                    return count.SaveResult(document);
+
+                }
+                return (0, "UploadFailed", null);
             };
         }
         return principal.SaveNotAuthorised<Document>();
