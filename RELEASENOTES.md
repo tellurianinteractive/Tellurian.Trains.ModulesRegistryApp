@@ -3,10 +3,12 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+
 ## Release 1.7.12
 Release date 2022-11-22
 - **Bug fix** of *document upload*. Files where truncated and couldn't be read when downloaded.
 Files that have this error need to be uploaded again.
+- **Bug fix** to hide option to view layout modules when registration is not permitted.
 
 ## Release 1.7.11
 Release date 2022-10-26

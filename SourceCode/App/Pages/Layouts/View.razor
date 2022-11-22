@@ -25,7 +25,7 @@ else
             @if (item.ContactPersonId.HasValue) @Item("ContactPerson", item.ContactPerson.Name())
             @Item("OperationTheme", item.Theme)
             @Item("Period", OperatingPeriod(item))
-            @if (Principal.IsAuthenticated())
+            @if (Principal.IsAuthenticated() && item.IsRegistrationPermitted)
             {
                 <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
             }
