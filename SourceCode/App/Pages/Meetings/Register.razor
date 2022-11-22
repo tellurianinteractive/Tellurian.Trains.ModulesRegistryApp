@@ -33,7 +33,7 @@
             }
             @if (IsMeetingOrganiser && Participant is null)
             {
-                <TableTemplate Items="Meeting.Participants">
+                <TableTemplate Items="Meeting.Participants.OrderBy(p => p.Person.FirstName).ThenBy(p => p.Person.LastName)">
                     <TableHeader>
                         <th>@Localizer["Participant"]</th>
                         <th>@Localizer["City"]</th>
