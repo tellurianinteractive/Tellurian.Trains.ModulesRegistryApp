@@ -5,6 +5,7 @@ There is maximum one release per date, but this can be performed as one or sever
 
 ## Release 1.7.13
 Release date 2022-12-06
+- **Waybill quantity changed**, bearer quantity are now always 1. Bearers are wagons, containers, trailers and trainsets.
 - **Station delete** implemented.
 - **Added robots.txt** disallowing all user-agents.
 - **Techical updates** of application start-up.

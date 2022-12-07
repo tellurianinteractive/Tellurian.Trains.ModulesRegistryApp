@@ -4,7 +4,10 @@ SELECT
 	SCC.Id AS StationCustomerCargoId,
 	SCC.OperatingDayId,
 	SCC.CargoId,
-	SCC.Quantity,
+	CASE
+		WHEN CU.IsBearer <> 0 THEN 1
+		ELSE SCC.Quantity
+	END AS Quantity,
 	SCC.QuantityUnitId,
 	SCC.PackageUnitId,
 	SCC.SpecificWagonClass,
@@ -23,7 +26,7 @@ SELECT
 	CD.IsInternational,
 	'' AS ReadyTime,
 	CASE
-		WHEN SCC.Quantity <=1 THEN CU.SingularResourceCode
+		WHEN SCC.Quantity <=1 OR CU.IsBearer <> 0 THEN CU.SingularResourceCode
 		ELSE CU.PluralResourceCode
 	END AS QuantityUnitResourceCode,
 	CU.Designation AS QuantityShortUnit,

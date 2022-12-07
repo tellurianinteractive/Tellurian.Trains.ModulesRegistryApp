@@ -18,10 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsProduction())
 {
-    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
     builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 }
-
 
 builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
 builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("SendGrid"));

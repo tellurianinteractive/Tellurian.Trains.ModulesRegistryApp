@@ -22,8 +22,8 @@ else
 
             <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
             <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
-            <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
             <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
+            <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
             <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
             <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@cargo.ReadyTimeLabel()" ShowPleaseSelect="true" Items="ReadyTimeItems" />
 

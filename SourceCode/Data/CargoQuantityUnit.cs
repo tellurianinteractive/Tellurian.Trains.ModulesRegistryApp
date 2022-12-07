@@ -15,6 +15,7 @@ public partial class CargoQuantityUnit
     public string SingularResourceCode { get; set; }
     public string PluralResourceCode { get; set; }
     public int DisplayOrder { get; set; }
+    public bool IsBearer { get; set; }
 }
 
 #nullable enable

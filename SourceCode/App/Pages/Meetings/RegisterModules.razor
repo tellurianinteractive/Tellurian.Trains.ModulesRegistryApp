@@ -122,7 +122,7 @@ else
             if (MeetingParticipant is not null)
             {
                 Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
-                if (LayoutId > 0)
+                if (Meeting is not null && LayoutId > 0)
                 {
                     Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);
                     LayoutParticipant = await LayoutParticipantService.GetByIdAsync(Principal, MeetingParticipant.Id, LayoutId);
