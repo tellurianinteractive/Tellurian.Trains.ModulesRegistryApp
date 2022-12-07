@@ -39,6 +39,7 @@
             @if (MayEdit)
             {
                 <AppButton Label="Edit" Href="@StationEditHref(station.Id)" />
+                <AppButton Label="Delete" Href="@StationDeleteHref(station.Id)" />
             }
             <AppButton Label="FreightCustomers" Href="@CargoCustomersHref(station.Id)" IconName="Customer" />
         </td>
@@ -61,6 +62,7 @@
     }
 
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
+    string StationDeleteHref(int id) => $"Stations/{id}/Delete";
     string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
 
         MarkupString Name(Station station) => new(

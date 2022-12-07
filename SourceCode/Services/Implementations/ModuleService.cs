@@ -6,9 +6,11 @@ namespace ModulesRegistry.Services.Implementations;
 public sealed class ModuleService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ModuleService(IDbContextFactory<ModulesDbContext> factory)
+    private readonly ITimeProvider TimeProvider;
+    public ModuleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
     {
         Factory = factory;
+        TimeProvider = timeProvider;
     }
 
     public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, int? stationId)
@@ -312,8 +314,8 @@ public sealed class ModuleService
             if (entity is not null)
             {
                 if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
-                if (IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
-                if (IsSubmittedToUpcomingMeeting(dbContext, entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
+                if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
+                if (!principal.IsAnyAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
                 var documents = await dbContext.Documents.Where(d => entity.DocumentIds().Contains(d.Id)).ToListAsync();
                 foreach (var document in documents) dbContext.Remove(document);
                 foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);
@@ -331,7 +333,11 @@ public sealed class ModuleService
     public static bool IsNotFullOwner(Module existing, ModuleOwnershipRef ownershipRef) =>
         false == existing.ModuleOwnerships.Any(mo => mo.OwnedShare == 1 && (ownershipRef.IsPerson && mo.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId));
 
-    private static bool IsSubmittedToUpcomingMeeting(ModulesDbContext dbContext, Module module) => false; // TODO: Implement later when module registrations are in place.
+    public async Task<bool> IsSubmittedToUpcomingMeeting(Module module)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.LayoutModules.AnyAsync(lm => lm.ModuleId == module.Id && lm.LayoutParticipant.Layout.Meeting.EndDate > TimeProvider.Now);
+    }
 
     public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)
     {

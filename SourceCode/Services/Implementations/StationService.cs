@@ -3,7 +3,12 @@
 public class StationService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public StationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly ITimeProvider TimeProvider;
+    public StationService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+    {
+        Factory = factory;
+        TimeProvider = timeProvider;
+    }
 
     public async Task<IEnumerable<ListboxItem>> StationItemsAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
     {
@@ -161,6 +166,14 @@ public class StationService
         }
     }
 
+
+    public async Task<bool> IsSubmittedToUpcomingMeeting(Station? station)
+    {
+        if (station is null) return false;
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.LayoutStations.AnyAsync(ls => ls.StationId == station.Id && ls.LayoutParticipant.Layout.Meeting.EndDate > TimeProvider.Now);
+
+    }
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.MayDelete(principal.OwnerRef()))

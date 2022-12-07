@@ -12,13 +12,6 @@
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings--TimetablePlanningDatabase"
     },
-    "secrets1": {
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/TellurianTrains",
-      "type": "secrets.keyVault",
-      "connectionId": "VaultUri",
-      "dynamicId": null
-    },
     "appConfig1": {
       "ignored": "true",
       "type": "appConfig.azure"
@@ -30,6 +23,13 @@
     "apis1": {
       "ignored": "true",
       "type": "apis.azure"
+    },
+    "secrets1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/TellurianTrains",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri",
+      "dynamicId": null
     }
   }
 }

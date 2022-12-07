@@ -56,7 +56,7 @@ else
         {
             IsReferringStation = ModuleService.IsReferringStation(Module);
             IsFullOwner = !ModuleService.IsNotFullOwner(Module, ownershipRef);
-            IsRegisteredInUpcomingMeeting = false; // TODO: Call service when module registrations are implemented.
+            IsRegisteredInUpcomingMeeting = await ModuleService.IsSubmittedToUpcomingMeeting(Module);
         }
     }
 

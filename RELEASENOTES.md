@@ -3,6 +3,11 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.7.13
+Release date 2022-12-06
+- **Station delete** implemented.
+- **Added robots.txt** disallowing all user-agents.
+- **Techical updates** of application start-up.
 
 ## Release 1.7.12
 Release date 2022-11-22

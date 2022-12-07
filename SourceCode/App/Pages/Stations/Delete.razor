@@ -1,0 +1,63 @@
+﻿@page "/Stations/{id:int}/Delete"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject PageHistory PageHistory
+
+@inject StationService StationService
+
+<PageHeading ObjectName="Station" Owner="@Station" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" />
+
+<ul>
+    <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>
+</ul>
+@if (Station is null)
+{
+    <ActionMessage AlertType="stop" Label="NothingToDelete" />
+}
+else if (!IsRegisteredInUpcomingMeeting)
+{
+    <button class="btn btn-danger btn-sm" @onclick="OnDelete"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
+}
+else
+{
+    <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Station? Station;
+
+    bool IsRegisteredInUpcomingMeeting;
+
+    override protected async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    override protected async Task OnParametersSetAsync()
+    {
+        Station = await StationService.FindByIdAsync(Principal, Id);
+        if (Station is not null)
+        {
+            IsRegisteredInUpcomingMeeting = await StationService.IsSubmittedToUpcomingMeeting(Station);
+        }
+    }
+
+    async Task OnDelete()
+    {
+        if (Station is not null)
+        {
+            var result = await StationService.DeleteAsync(Principal, Station.Id);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(3000);
+            PageHistory.NavigateBack();
+        }
+    }
+}
