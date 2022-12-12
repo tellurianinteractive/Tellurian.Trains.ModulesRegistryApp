@@ -4,17 +4,17 @@
 > *Updated 2022-08-17 with more information about SQL Server projects*
 
 This article aim to describe technology choices, when developing software in modern .NET.
-At the time of writing 2022, all new .NET development should use .NET 6 or later.
+At the time of writing 2022, all new .NET development should use .NET 7 or later.
 
 Modern .NET is fully open source; the framework libraries, the runtime, and the compilers.
 You can build any type of applications on almost any platform. 
 .NET also runs in the web browser in web assembly and on many single board computers.
 This makes .NET a one stop shop where you can reuse a lot of your .NET skills for any type of application.
 
-.NET Framework 4.x.x is Windows only and considered legacy and should not be used for new applications.
+> .NET Framework 4.x.x is Windows only and considered legacy and should never be used for new applications.
 The last .NET Framework version is 4.8, and it will be maintained as long as Windows is supported.
 
-### Languages
+## Languages
 All languges on .NET uses the same runtime and the same type system, so you can usually combine libraries 
 written in any .NET program with each other. There are some rules to follow to make it work.
 - **C#** is the most common language used in .NET development. Is a C-family type of language and 
@@ -28,7 +28,7 @@ Regardless of .NET langauge you use, you will depend on the same .NET core libra
 So much of the knowledge is about getting the most out of the ready made software
 that Microsoft and other library writers has to offer.
 
-### Developmemt tools
+## Developmemt tools
 This section only covers free tools for developing .NET applications.
 - **Visual Studio Code** is now one of the most popular editor for writing software in almost any language.
 It is a cross-platform application that runs om *Windows*, *macOS* and *Linux*.
@@ -48,14 +48,14 @@ Firstly, you have similar access to the database as with *Sql Server Management 
 secondly, there is a special *Database* project type, which you can maintain your SQL code
 with version control and deploy updates and migrations to your existing database or create new ones.
 
-### User interfaces
+## User interfaces
 There are a lot of ways to create applications  with a user interface with .NET. 
 The main factor is the target platform you intend to build software for:
 - **Windows only**: You intend to develop an application that should only run on Windows machines.
 - **Web**: The application should be accessible in a web browser.
 - **Cross platform**: Your app should run on *ioS*, *Andriod*, *masOs* and/or *Windows*.
 
-##### Technologies:
+### Technologies
 - **Windows Forms** is a simple and fast way to create Windows only applications with simple forms.
 - **Windows Presentation Foundation** abbreviate **WPF** is a more advanced way to create 
 user interfaces on Windows only. 
@@ -75,7 +75,7 @@ using the native user interface of each of these platforms. MAUI is an evolution
 You can also embed *Blazor* components in a MAUI application, 
 or  write a MAUI applications only using HTML, CSS and C# with Blazor.
 
-### Data storage
+## Data storage
 There are several types of ways to store data and access it.
 The main types of databases are:
 - **Relation databases** that stores data in tables and usually accessed by the *SQL* query language.
@@ -90,7 +90,7 @@ in a single file or several files is definitley an option.
 With the built-in *JSON and XML serialization* technologies, writing and reading data to/from files on disk can be robust and geared for 
 changes in your data structures.
 
-##### Data access technologies
+### Data access technologies
 In order to access data in databases, a library for data access is required.
 - **ADO.NET** is the basic library for all database access in .NET. 
 It is quite low-level but also very performant, but you need to write a lot of boiler-plate code to use it.
@@ -103,7 +103,7 @@ It eliminates the need for most of the data-access code that developers usually 
 It supports a variety of databases and makes database brand more or less transparent.
 It also supports database scaffolding and versioning.
 
-### Data communication
+## Data communication
 You can use raw communication standards like TCP and UDP using *sockets*. 
 More often, you will use a framework that builds upon these standards.
 - **ASP.NET** is also a framework to build web API's based on the HTTP protocol.
@@ -113,7 +113,7 @@ gPRC is also cross-platform and compatible with services/clients written in any 
 on any other platform. .NET has a very efficient implementation and tooling to make
 developent of both gRPC client and server applications.
 
-### Cloud development
+## Cloud development
 Modern .NET is created with the cloud in mind. You can easily deploy apps to the cloud, and .NET has 
 support on several cloud platforms including *Microsoft Azure* and *Amazon Web Services (AWS)*.
 
@@ -123,7 +123,7 @@ It is also easy to scale up with moderate costs.
 The easiest  way to deploy to a cloud enviromnet is called *software as a service*, where 
 the management of the underlying infrastucture is managed by the cloud provider.
 
-### Code management
+## Code management
 It is strongly recommended to use an online *source control system* to manage your code and other assets 
 of your application. 
 
@@ -131,7 +131,7 @@ Support for **GitHub** is built-in in Visual Studio, which makes GitHub a recomm
 Besides code management, GitHub has a lot of other useful features to build and deploy your app, documentation,
 handling issues, project plans etc. GitHub is free to use for most hobbyist projects.
 
-### Learn more
+## Learn more
 - **[.NET](https://dotnet.microsoft.com/)**
 - [**Visual Studio** all versions](https://visualstudio.microsoft.com/)
 - **[IoT with .NET](https://dotnet.microsoft.com/en-us/apps/iot)**

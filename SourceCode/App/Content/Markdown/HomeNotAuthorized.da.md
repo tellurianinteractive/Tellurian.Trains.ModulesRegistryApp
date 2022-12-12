@@ -9,7 +9,7 @@ Du finder dem på [**Kontakt**](/Contact)-siden.
 Når du har en invitation, kan du registrere dig og logge ind.
 
 #### Glemt din adgangskode?
-Klik på [**Indstillinger**](/Users/Settings) for at nulstille det.
+For at nulstille din adgangskode skal du klikke på [**Brugerindstillinger**](/Brugere/Indstillinger) i menuen.
 
 #### Fungerer bedst på en stor skærm
 Modulregistret er ikke designet til at fungere godt på små telefonskærme.

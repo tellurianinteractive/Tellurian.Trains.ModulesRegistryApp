@@ -9,7 +9,7 @@ Du finner dem på [**Kontakt**](/Contact)-siden.
 Etter at du har fått en invitasjon, kan du registrere deg og logge på.
 
 #### Glemt passordet?
-Klikk på [**Innstillinger**](/Users/Settings) for å tilbakestille det.
+For å tilbakestille passordet ditt, klikk på [**Brukerinnstillinger**](/Brukere/Innstillinger) i menyen.
 
 #### Fungerer best på en stor skjerm
 Modulregisteret er ikke designet for å fungere bra på små telefonskjermbilder.

@@ -20,7 +20,7 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-#### Status October 2022
+#### Status December 2022
 All functions for managing modules are now in place, including:
 * Managing **your modules, stations and station freight customers**.
 * **Transfer of module ownership** - part or whole - to other person or group.
@@ -28,7 +28,7 @@ All functions for managing modules are now in place, including:
 * Administrators can **manage meetings, external stations, regions, cargo types, module standards and module end profiles**.
 * Users and meeting organisers can **register a participant** and add modules to a layout.
 * **Create waybills** for individual stations at a meeting. 
-* Domains **change group visibiliy** for groups within same domain. FREMO is domain.
+* Domains **change group visibiliy** for groups within same domain for better collaboration. FREMO is such a domain.
 * **User management** for administrators and regular users.
 * **Help texts** for most forms with recommendation how to enter data.
 * **Supported languages:**
@@ -39,21 +39,3 @@ All functions for managing modules are now in place, including:
 #### Forthcoming work
 You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
 You are welcome to contribute, there is a [guide](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md) describing different ways to to that.
-
-## Related Projects
-#### Timetable Planning App
-The *Timetable Planning App* takes meeting planning further.
-In the *Timetable Planning App*, you will be able finalize the planing by defining the streches 
-between the layout's stations and the modules on these stretches in the order they appear.
-From that you create timetabled lines, 
-plan the trains, plan the circulation of rolling stock, 
-make driver duties and can print the documentation needed for all participants.
-
-Currently, a lot of work is made on the [experimental version](https://github.com/fjallemark/TimetablePlanningApp) 
-where the database structure and the printed documentation is evaluated
-based on planning actual meetings and user's feedback from those meetings. 
-This version also can import XPLN-files.
-
-The [online version](https://github.com/tellurianinteractive/Tellurian.Trains.TimetablePlanningApp) is only a skeleton app and
-will not be further developed until the Module Registry has the required supporting features and the experimentat timetable planning app has
-all reports moved to web technology.

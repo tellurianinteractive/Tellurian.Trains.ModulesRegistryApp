@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5941055C-D2E9-4640-A78B-C5B349AE6F84}"
 	ProjectSection(SolutionItems) = preProject
 		CONTRIBUTING.md = CONTRIBUTING.md
+		global.json = global.json
 		NET-development.md = NET-development.md
 		README.md = README.md
 		RELEASENOTES.md = RELEASENOTES.md
@@ -107,8 +108,8 @@ Global
 		{00E89979-CC4B-4FDE-9677-27BE19105636} = {5941055C-D2E9-4640-A78B-C5B349AE6F84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = SingleSheet
-		RESX_NeutralResourcesLanguage = en-GB
 		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
+		RESX_NeutralResourcesLanguage = en-GB
+		RESX_ExcelExportMode = SingleSheet
 	EndGlobalSection
 EndGlobal

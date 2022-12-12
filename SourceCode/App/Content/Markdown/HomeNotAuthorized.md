@@ -12,7 +12,7 @@ After you have an invitation, you may register and log in.
 If you already have an account, please login.
 
 #### Forgot your password?
-Click on [**Settings**](/Users/Settings) to reset it.
+To reset your password, click on [**User settings**](/Users/Settings) in the menu.
 
 #### Works best on a large screen
 The Module Registry is not designed to work well on small phone screens.

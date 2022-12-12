@@ -38,8 +38,8 @@ internal static class LoginLogoutHandler
                 _ = await userService.UpdateFailedLoginAttempts(user.Id);
             }
         }
-
         return model.LocalRedirect(returnUrl);
+
 
         async Task TrySignIn(User user, List<Claim> claims)
         {

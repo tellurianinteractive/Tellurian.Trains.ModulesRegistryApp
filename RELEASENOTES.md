@@ -3,6 +3,10 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.0
+Release date 2022-12-12
+- **Upgrade to .NET 7**, which opens for some improvements in performance and features.
+
 ## Release 1.7.13
 Release date 2022-12-06
 - **Waybill quantity changed**, bearer quantity are now always 1. Bearers are wagons, containers, trailers and trainsets.
