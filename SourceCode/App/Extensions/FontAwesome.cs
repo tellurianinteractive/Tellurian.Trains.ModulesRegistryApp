@@ -8,6 +8,7 @@ public static class FontAwesome
     public const string Clone = "fa fa-clone";
     public const string Customer = "fa fa-industry";
     public const string Delete = "fa fa-trash-alt";
+    public const string Erase = "fa fa-eraser";
     public const string Edit = "fa fa-edit";
     public const string Group = "fa fa-users";
     public const string Invite = "fa fa-envelope";
@@ -46,6 +47,7 @@ public static class FontAwesome
             {nameof(Customer), Customer },
             {nameof(Delete), Delete },
             {nameof(Edit), Edit },
+            {nameof(Erase), Erase },
             {nameof(Group), Group },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },

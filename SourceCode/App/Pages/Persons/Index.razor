@@ -14,16 +14,79 @@
 
 <PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId  />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
 
 @if (CountryId > 0)
 {
-    <div class="col-12">
+    <div class="col-12" style="margin-top: 10px">
         <AppButton Href=@AddHref(CountryId) Label="Add" />
+        @if (HasFilter)
+        {
+            <AppButton Label="RemoveFiltering" OnClickCallback="RemoveFilter" IconName="@FontAwesome.Erase" />
+        }
     </div>
 }
 
-<TableTemplate Items="People" HideNoRecordsToDisplay="true">
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="@FilteredPeople" Virtualize="true" Pagination="PaginationState">
+        <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" Title="@Localizer["FirstName"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="FirstNameFilter" @bind:event="oninput" placeholder="@Localizer["FirstName"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.LastName)" Sortable="true" Title="@Localizer["LastName"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="LastNameFilter" @bind:event="oninput" placeholder="@Localizer["LastName"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.CityName)" Sortable="true" Title="@Localizer["City"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="CityNameFilter" @bind:event="oninput" placeholder="@Localizer["CityName"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <TemplateColumn Title="@Localizer["Status"]" Align="Align.Center">
+            @context.StatusIcon()
+        </TemplateColumn>
+        <TemplateColumn Title="@Localizer["LastActive"]" Context="person">
+            <UserStatusView User="person.User"></UserStatusView>
+        </TemplateColumn>
+        <TemplateColumn Title="@Localizer["Actions"]" Context="person">
+            @if (Principal.IsAuthorisedInCountry(person.CountryId))
+            {
+                <AppButton Href="@EditHref(person)" Label="Edit" />
+                <AppButton Href="@ModulesHref(person)" Label="Modules" />
+                <AppButton Href="@StationsHref(person)" Label="Stations" />
+                @if (person.MayBeInvited())
+                {
+                    <AppButton Href="@InviteHref(person)" Label="Invite" />
+                }
+                @if (person.User is null)
+                {
+                    <AppButton Href="@DeleteHref(person)" Label="Delete" />
+                }
+                else if (person.User.IsLockedOut())
+                {
+                    <AppButton Label="Reset" OnClickCallback="@(() => UnlockUser(person.User))" />
+                }
+                @if (Principal.IsGlobalAdministrator() && person.HasIdExcept(Principal.Id()))
+                {
+                    <AppButton Label="LoginAs" IsDisabled=true IconName="@FontAwesome.People" />
+                }
+            }
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+<Paginator Value="@PaginationState" >
+    
+</Paginator>
+
+@*<TableTemplate Items="People" HideNoRecordsToDisplay="true">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["City"]</th>
@@ -42,7 +105,7 @@
             {
                 <AppButton Href="@EditHref(person)" Label="Edit" />
                 <AppButton Href="@ModulesHref(person)" Label="Modules" />
-                <AppButton Href="@StationsHref(person)" Label="Stations"/>
+                <AppButton Href="@StationsHref(person)" Label="Stations" />
                 @if (person.MayBeInvited())
                 {
                     <AppButton Href="@InviteHref(person)" Label="Invite" />
@@ -63,15 +126,17 @@
         </td>
 
     </RowTemplate>
-</TableTemplate>
+</TableTemplate>*@
 
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+
     private ClaimsPrincipal? Principal;
-    private IEnumerable<Person>? People = Array.Empty<Person>();
+    private IEnumerable<Person> People = Array.Empty<Person>().AsQueryable();
     private IEnumerable<ListboxItem>? Countries;
+
 
     private void OnSelectedCountry(int id)
     {
@@ -105,7 +170,27 @@
         user = await UserService.UnlockUser(user);
     }
 
-    private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    string? FirstNameFilter;
+    string? LastNameFilter;
+    string? CityNameFilter;
+    IQueryable<Person> FilteredPeople =>
+        People.AsQueryable()
+                .Where(p =>
+                    p.FirstName.StartingWith(FirstNameFilter) &&
+                    p.LastName.StartingWith(LastNameFilter) &&
+                    p.CityName.StartingWith(CityNameFilter));
+
+    void RemoveFilter()
+    {
+        FirstNameFilter = default;
+        LastNameFilter = default;
+        CityNameFilter = default;
+        StateHasChanged();
+    }
+    bool HasFilter => FirstNameFilter.HasValue() || LastNameFilter.HasValue() || CityNameFilter.HasValue();
+
+    bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
     string AddHref(int countryId) => countryId > 0 ? $"persons/0/edit/{countryId}" : string.Empty;
     string EditHref(Person person) => $"persons/{person.Id}/edit";

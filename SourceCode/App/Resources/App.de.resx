@@ -1281,4 +1281,10 @@
   <data name="InternationalName" xml:space="preserve">
     <value>Internationaler Name</value>
   </data>
+  <data name="LastActive" xml:space="preserve">
+    <value>Letzte Aktivität</value>
+  </data>
+  <data name="RemoveFiltering" xml:space="preserve">
+    <value>Filter entfernen</value>
+  </data>
 </root>

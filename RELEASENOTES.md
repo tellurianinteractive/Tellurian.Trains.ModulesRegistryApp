@@ -6,6 +6,8 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.8.0
 Release date 2022-12-12
 - **Upgrade to .NET 7**, which opens for some improvements in performance and features.
+- **Module owners** table can now be sorted and searched.
+- **Cargo types** table can now be sorted and searched.
 
 ## Release 1.7.13
 Release date 2022-12-06

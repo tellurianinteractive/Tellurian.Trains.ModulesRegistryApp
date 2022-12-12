@@ -10,11 +10,41 @@
 @if (MayEdit)
 {
     <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="cargo/0/edit/"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+        <AppButton Label="Add" Href="@("cargo/0/edit/")" />
+        @if (HasFilter)
+        {
+            <AppButton Label="RemoveFiltering" IconName="@FontAwesome.Erase" OnClickCallback="RemoveFilter" />
+        }
     </div>
 }
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="@FilteredItems" Virtualize="true">
+        <PropertyColumn Property="@(c => c.NhmCodeOrEmpty())" Sortable="true" Title="@Localizer["NHMCode"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="NhmCodeFilter" @bind:event="oninput" placeholder="@Localizer["NHMCode"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(c => c.LocalizedName().Value)" Sortable="true" Title="@Localizer["Name"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(c => c.FromYear)" Title="@Localizer["FromYear"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.UptoYear)" Title="@Localizer["UptoYear"]" Align="Align.Center" />
+        <TemplateColumn Title="@Localizer["Actions"]" Context="cargo">
+            @if (MayEdit)
+            {
+                <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+            }
+        </TemplateColumn>
+    </QuickGrid>
+</div>
 
-<TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
+@*<TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
     <TableHeader>
         <th>@Localizer["NHMCode"]</th>
         <th>@Localizer["Name"]</th>
@@ -36,7 +66,7 @@
             }
         </td>
     </RowTemplate>
-</TableTemplate>
+</TableTemplate>*@
 
 
 @code {
@@ -45,10 +75,32 @@
     IEnumerable<Cargo>? Cargos;
     bool MayEdit;
 
+    IQueryable<Cargo> FilteredItems
+    {
+        get
+        {
+            if (Cargos is null) return Enumerable.Empty<Cargo>().AsQueryable();
+            return Cargos.AsQueryable()
+                .Where(c => (NhmCodeFilter.HasNoValue() || c.NhmCode.ToString().StartsWith(NhmCodeFilter)) &&
+                NameFilter.HasNoValue() || NameFilter.HasValue() && c.LocalizedName().Value.Contains(NameFilter, StringComparison.CurrentCultureIgnoreCase));
+
+        }
+    }
+
+    string? NhmCodeFilter;
+    string? NameFilter;
+    bool HasFilter => NhmCodeFilter.HasValue() || NameFilter.HasValue();
+    void RemoveFilter()
+    {
+        NhmCodeFilter = default;
+        NameFilter = default;
+        StateHasChanged();
+    }
+
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         MayEdit = Principal.IsAnyAdministrator();
-        Cargos = await CargoService.GetAll();
+        Cargos = (await CargoService.GetAll()).OrderBy(c => c.NhmCode);
     }
 }
