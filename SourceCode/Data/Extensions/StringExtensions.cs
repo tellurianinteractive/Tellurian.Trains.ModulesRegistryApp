@@ -5,6 +5,9 @@ namespace ModulesRegistry.Data.Extensions;
 
 public static class StringExtensions
 {
+    public static string[]? AsArray(this string? value) =>
+        value is null ? null : new string[] {value};
+
     public static bool HasValue([NotNullWhen(true)] this string? me) =>
         !string.IsNullOrWhiteSpace(me);
 

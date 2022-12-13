@@ -43,18 +43,19 @@ internal static class LoginLogoutHandler
 
         async Task TrySignIn(User user, List<Claim> claims)
         {
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = true,
-                RedirectUri = model.Request.Path
-            };
             if (claims.Any())
             {
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    RedirectUri = model.Request.Path
+                };
+
                 try
                 {
                     await model.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-                    _ = await userService.UpdateLastSignInTime(user.Id, DateTimeOffset.Now);
+                    _ = await userService.UpdateLastSignIn(user.Id, DateTimeOffset.Now);
                 }
                 catch
                 {
@@ -71,7 +72,7 @@ internal static class LoginLogoutHandler
         {
             try
             {
-                await model.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await LogoutAsync(model);
             }
             catch { }
         }

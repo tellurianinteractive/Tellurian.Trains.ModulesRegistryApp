@@ -10,8 +10,8 @@ else
         @if (MayEdit)
         {
             <div style="padding-right: 20pt">
-                <AppButton Label="Edit" Href="@FreightCustomerHref(Customer)" />
-                <AppButton Label="Waybills" Href="@FreightCustomerWaybillsHref(Customer)" />
+                <AppButton Label="ManageCargoFlow" Href="@FreightCustomerHref(Customer)" IconName="@FontAwesome.Manage"  />
+                <AppButton Label="ManageWaybills" Href="@FreightCustomerWaybillsHref(Customer)" IconName="@FontAwesome.Manage" />
             </div>
         }
         <div style="font-size:14pt; font-weight: bold">

@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -61,6 +62,11 @@ public partial class ModulesDbContext : DbContext
             optionsBuilder.UseSqlServer("Name=ConnectionStrings:TimetablePlanningDatabase",
                 options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
         }
+    }
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        // TODO: Add HasTrigger on all tables that have triggers.
+        configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -488,7 +494,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.Entity<Station>(entity =>
         {
-            entity.ToTable("Station");
+            entity.ToTable("Station", tb => tb.HasTrigger("DeleteStation"));
 
             entity.Property(e => e.FullName)
                 .IsRequired()
@@ -509,7 +515,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.Entity<StationCustomer>(entity =>
         {
-            entity.ToTable("StationCustomer");
+            entity.ToTable("StationCustomer", tb => tb.HasTrigger("DeleteStationCustomer"));
 
             entity.Property(e => e.Comment)
                 .HasMaxLength(50)
@@ -535,7 +541,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.Entity<StationCustomerCargo>(entity =>
           {
-              entity.ToTable("StationCustomerCargo");
+              entity.ToTable("StationCustomerCargo", tb => tb.HasTrigger("DeleteStationCustomerCargo"));
 
               entity.Property(e => e.QuantityUnitId).HasDefaultValueSql("((4))");
 

@@ -1287,4 +1287,13 @@
   <data name="RemoveFiltering" xml:space="preserve">
     <value>Rensa filtrering</value>
   </data>
+  <data name="UpdatingWaybills" xml:space="preserve">
+    <value>Uppdaterar fraktsedlar...</value>
+  </data>
+  <data name="ManageWaybills" xml:space="preserve">
+    <value>Hantera fraktsedlar</value>
+  </data>
+  <data name="ManageCargoFlow" xml:space="preserve">
+    <value>Hantera godsflöde</value>
+  </data>
 </root>

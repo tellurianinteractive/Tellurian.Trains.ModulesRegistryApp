@@ -15,47 +15,60 @@
 
 <PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
 
-<div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-    <AppButton Label="Generate" IconName="cog" OnClickCallback="GenerateWaybills" />
-    <AppButton Label="Add" Href="" IsDisabled=true />
-    <AppButton Label="Preview" Href="@PreviewHref" IconName="@FontAwesome.Print" />
-</div>
+@if (IsGeneratingWaybills)
+{
+    <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
+}
+else
+{
+  <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+        <AppButton Label="Update" OnClickCallback="GenerateWaybills" IconName="@FontAwesome.Sync"/>
+        <AppButton Label="Preview" Href="@PreviewHref" IconName="@FontAwesome.Print" />
+</div>  
+}
 
-@if (Waybills is null)
+
+@if (IsLoadingData)
 {
     <ActionMessage Label="LoadingData" AlertType="Wait" />
 }
-else if (Waybills.IsNullOrEmpty())
+else if (HasNoData)
 {
     <ActionMessage Label="NoRecordsToDisplay" />
 }
 else
 {
-    <TableTemplate Items="Waybills" EditColspan="6" MayEdit=true >
+    <TableTemplate Items="Waybills" EditColspan="8" MayEdit=true ShowRowTemplateWhenEditing=true >
         <TableHeader>
+            <th>@Localizer["Id"]</th>
             <th>@Localizer["Direction"]</th>
             <th>@Localizer["FreightCustomer"]</th>
             <th>@Localizer["Region"]</th>
             <th>@Localizer["Cargo"]</th>
             <th>@Localizer["Days"]</th>
+            <th>@Localizer["PrintPerOperatingDay"]</th>
+            <th>@Localizer["HasEmptyReturn"]</th>
             <th style="text-align: center">@Localizer["PrintCount"]</th>
         </TableHeader>
         <RowTemplate Context="item">
+            <td>@item.Id</td>
             <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
             <td>
                 @item.OtherStationCustomerCargo?.LongDescription()
                 @item.OtherExternalCustomerCargo?.LongDescription()
             </td>
-            <td style="@item.OtherRegion?.Style()">@item.OtherRegion?.LocalName</td>
+            <td style="@item.OtherRegion.Style()">@item.OtherRegion?.LocalName</td>
             <td>
                 @item.OtherStationCustomerCargo?.Cargo.LocalizedName()
                 @item.OtherExternalCustomerCargo?.Cargo.LocalizedName()
             </td>
             <td>@item.OperatingDay.ShortNameLocalized()</td>
+            <td align="center">@item.PrintPerOperatingDay.AsYesOrNo()</td>
+            <td align="center">@item.HasEmptyReturn.AsYesOrNo()</td>
             <td align="center">@item.PrintCount</td>
         </RowTemplate>
-        <RowEditTemplate Context="item">
-            <CustomerWaybillEdit Waybill="@item" OperatingDayItems="OperationDayItems" RegionItems="RegionItems"/>
+        <RowEditTemplate Context="item" >
+            <CustomerWaybillEdit Waybill="@item" OperatingDayItems="OperationDayItems" RegionItems="RegionItems" OnSaveCallBack="SaveAsync" />
         </RowEditTemplate>
     </TableTemplate>
 }
@@ -74,6 +87,10 @@ else
     IEnumerable<ListboxItem>? OperationDayItems;
     IEnumerable<ListboxItem>? RegionItems;
 
+    bool IsGeneratingWaybills;
+    bool IsLoadingData => Waybills is null && !IsGeneratingWaybills;
+    bool HasNoData => Waybills?.Count() == 0 && !IsGeneratingWaybills;
+
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
@@ -85,7 +102,6 @@ else
     {
         if (Id > 0 && StationId > 0)
         {
-
             Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
             Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
         }
@@ -93,10 +109,14 @@ else
 
     async Task GenerateWaybills()
     {
+        IsGeneratingWaybills = true;
+        StateHasChanged();
         var result = await WaybillService.AddGeneratedCustomerWaybills(Principal, Id);
         Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
+        IsGeneratingWaybills = false;
         StateHasChanged();
     }
+
 
     async Task SaveAsync(StationCustomerWaybill item)
     {

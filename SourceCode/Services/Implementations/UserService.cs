@@ -120,13 +120,14 @@ public sealed class UserService
         return (count == 1) ? user : null;
     }
 
-    public async Task<User?> UpdateLastSignInTime(int userId, DateTimeOffset time)
+    public async Task<User?> UpdateLastSignIn(int userId, DateTimeOffset time)
     {
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.FindAsync(userId);
         if (user is null) return null;
         user.LastSignInTime = time;
         user.PasswordResetAttempts = 0;
+        user.FailedLoginAttempts = 0;
         var count = await dbContext.SaveChangesAsync();
         return count == 0 ? null : user;
     }

@@ -12,9 +12,9 @@ BEGIN
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
 			ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
-			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
+			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherExternalCustomerCargoId
 		WHERE
-			SCW.Id IS NOT NULL
+			ME.NHMCode > 0 AND ME.StationCustomerId = @StationCustomerId AND SCW.Id IS NOT NULL
 	)
 	UPDATE StationCustomerWaybill 
 		SET 
@@ -23,8 +23,7 @@ BEGIN
 		FROM 
 			UpdatedableWaybill UW
 		WHERE
-			UW.Id = StationCustomerWaybill.Id
-
+			StationCustomerWaybill.Id = UW.Id
 
 	INSERT INTO StationCustomerWaybill
 	SELECT

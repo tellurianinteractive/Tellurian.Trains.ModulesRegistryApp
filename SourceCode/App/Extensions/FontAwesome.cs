@@ -13,6 +13,7 @@ public static class FontAwesome
     public const string Group = "fa fa-users";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
+    public const string Manage = "fa fa-tasks";
     public const string Meeting = "fa fa-calendar-alt";
     public const string Module = "fa fa-box";
     public const string Modules = "fa fa-box";
@@ -30,6 +31,7 @@ public static class FontAwesome
     public const string Station = "fa fa-school";
     public const string Stations = "fa fa-school";
     public const string Standard = "fa fa-pencil-ruler";
+    public const string Sync = "fa fa-sync";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
     public const string Upload = "fa fa-file-upload";
@@ -51,6 +53,7 @@ public static class FontAwesome
             {nameof(Group), Group },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
+            {nameof(Manage), Manage },
             {nameof(Meeting), Meeting },
             {nameof(Module), Module },
             {nameof(Modules), Modules },
@@ -68,6 +71,7 @@ public static class FontAwesome
             {nameof(Station), Station },
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },
+            {nameof(Sync), Sync },
             {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },
             {nameof(Upload), Upload },

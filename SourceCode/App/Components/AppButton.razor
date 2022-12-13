@@ -5,20 +5,20 @@
 {
     @if (OpenInNewTab)
     {
-        <button class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
+        <button class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
     }
     else
     {
-        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]</a>
+        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@LabelText</a>
     }
 }
 else if (IsSubmit)
 {
-    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
+    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
 }
 else
 {
-    <button class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" />&nbsp;@Localizer[LabelOrType]&nbsp;@ObjectNameLocalized</button>
+    <button class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
 }
 @code {
     [Parameter] public string Label { get; set; } = "Button";
@@ -46,7 +46,7 @@ else
     }
 
 
-    string ButtonClassType => Type.HasValue() ? Type.ToLowerInvariant() : Label?.ToLowerInvariant() switch
+    string ButtonClassType => Type.HasValue() ? Type.ToLowerInvariant() : Labels?.First().ToLowerInvariant() switch
     {
         "add" => "primary",
         "edit" => "primary",
@@ -57,13 +57,17 @@ else
         "remove" => "danger",
         "save" => "primary",
         "saveall" => "primary",
+        "update" => "primary",
+        "manage" => "primary",
         _ => "info"
     };
-
+    string LabelText => Labels is not null ? String.Join(' ', Labels.Select(l => Localizer[l])) : string.Empty;
+    string[]? Labels => Label.HasValue() ? Label.Split("-") : Type.HasValue() ? Type.AsArray() : "Button".AsArray();
     string LabelOrType => Label ?? Type ?? "Button";
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
     string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string? ObjectNameLocalized => string.IsNullOrWhiteSpace(ObjectName) ? null : Localizer[ObjectName].ToString();
+
 }

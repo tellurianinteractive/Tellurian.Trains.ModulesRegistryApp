@@ -43,6 +43,7 @@ SELECT
 	R.CountryId,
 	R.BackColor,
 	R.ForeColor,
+	R.IsCargoHub,
 	C.Languages,
 	C.DomainSuffix,
 	OD.Flag AS OperatingDayFlag,

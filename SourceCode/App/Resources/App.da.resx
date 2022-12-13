@@ -1287,4 +1287,13 @@
   <data name="RemoveFiltering" xml:space="preserve">
     <value>Fjern filtrering</value>
   </data>
+  <data name="UpdatingWaybills" xml:space="preserve">
+    <value>Opdaterer fragtbreve...</value>
+  </data>
+  <data name="ManageWaybills" xml:space="preserve">
+    <value>Administrer fragtbreve</value>
+  </data>
+  <data name="ManageCargoFlow" xml:space="preserve">
+    <value>Administrer vareflow</value>
+  </data>
 </root>

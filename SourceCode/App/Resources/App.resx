@@ -1287,4 +1287,13 @@
   <data name="RemoveFiltering" xml:space="preserve">
     <value>Remove filtering</value>
   </data>
+  <data name="UpdatingWaybills" xml:space="preserve">
+    <value>Updating waybills...</value>
+  </data>
+  <data name="ManageWaybills" xml:space="preserve">
+    <value>Manage waybills</value>
+  </data>
+  <data name="ManageCargoFlow" xml:space="preserve">
+    <value>Manage cargo flow</value>
+  </data>
 </root>

@@ -11,24 +11,14 @@ else
 {
     <EditTemplate Item="Waybill" OnValidSubmit="SaveAsync" TItem="StationCustomerWaybill">
         <Inputs>
-            <AppInputSelect Width="4" Label="CargoFlow" @bind-Value="Waybill.StationCustomerCargoId" Items="MyCargoItems" ShowPleaseSelect="true" IsDisabled="@Waybill.IsGenerated()" />
-            @if (Waybill.IsGenerated())
-            {
-                <AppDisplay Width="4" Label="SecondCustomer" Value="@Waybill.OtherStationCustomerCargo.LongDescription()" />
-            }
-            else
-            {
-                <AppInputSelectNullable Width="4" Label="Region" @bind-Value="Waybill.OtherRegionId" Items="RegionItems" />
-
-            }
             <AppInputSelect Width="2" Label="Days" @bind-Value="Waybill.OperatingDayId" Items="OperatingDayItems" ShowPleaseSelect=true />
             <AppInputNumber Width="2" Label="PrintCount" @bind-Value="Waybill.PrintCount" />
             <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Waybill.PrintPerOperatingDay" />
             <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Waybill.HasEmptyReturn" />
             @*<AppInputCheck Width="2" Label="IsExpressCargo" @bind-Value="Waybill.IsExpressCargo" />*@
             @*<AppInputCheck Width="2" Label="IsCoolingTransport" @bind-Value="Waybill.IsCoolingTransport" />*@
-            <AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="Waybill.HideLoadingTimes" />
-            <AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="Waybill.HideUnloadingTimes" />
+            @*<AppInputCheck Width="3" Label="HideLoadingTimes" @bind-Value="Waybill.HideLoadingTimes" />*@
+            @*<AppInputCheck Width="3" Label="HideUnloadingTimes" @bind-Value="Waybill.HideUnloadingTimes" />*@
         </Inputs>
     </EditTemplate>
 
@@ -41,6 +31,8 @@ else
     [Parameter] public IEnumerable<ListboxItem>? MyCargoItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? RegionItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
+    [Parameter] public EventCallback<StationCustomerWaybill> OnSaveCallBack { get; set; }
+
 
     ClaimsPrincipal? Principal;
 
@@ -49,14 +41,9 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
     }
 
-
     async Task SaveAsync()
     {
         if (Waybill is null) return;
-        var result = await WaybillService.SaveAsync(Principal, Waybill);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
-
+        await OnSaveCallBack.InvokeAsync(Waybill);
     }
-
 }

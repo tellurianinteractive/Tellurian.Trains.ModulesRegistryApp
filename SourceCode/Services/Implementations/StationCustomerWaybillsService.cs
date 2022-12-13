@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-
-namespace ModulesRegistry.Services.Implementations;
+﻿namespace ModulesRegistry.Services.Implementations;
 public class StationCustomerWaybillsService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
@@ -63,6 +61,7 @@ public class StationCustomerWaybillsService
             var existing = dbContext.StationCustomerWaybills.FirstOrDefault(x => x.Id == entity.Id);
             if (existing is null) return principal.SaveNotAuthorised<StationCustomerWaybill>();
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(existing);
 

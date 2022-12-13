@@ -28,25 +28,7 @@ else
             {
                 @foreach (var item in Items)
                 {
-                    @if (RowEditTemplate is not null && IsEditItem(item))
-                    {
-                        <tr @key="@ItemKey(item)">
-                            <td colspan="@EditColspan">
-                                @RowEditTemplate(item)
-                            </td>
-                            <td width="110px">
-                                @if (CanSave)
-                                {
-                                    <AppButton Label="Save" OnClickCallback="@(() => Save(item))"/>
-                                }
-                                else
-                                {
-                                    <AppButton Label="Cancel" OnClickCallback="Cancel" />
-                                }
-                            </td>
-                        </tr>
-                    }
-                    else
+                    @if (!IsEditItem(item) || ShowRowTemplateWhenEditing)
                     {
                         <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
                             @RowTemplate(item)
@@ -58,6 +40,19 @@ else
                             }
                         </tr>
                     }
+                    @if (RowEditTemplate is not null && IsEditItem(item))
+                    {
+                        <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
+                            <td colspan="@EditColspan">
+                                @RowEditTemplate(item)
+                            </td>
+                            <td width="110px">
+                                <AppButton Label="Cancel" OnClickCallback="Cancel" />
+                            
+                            </td>
+                        </tr>
+                    }
+
                 }
             }
         </tbody>
@@ -74,28 +69,22 @@ else
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
     [Parameter] public int EditColspan { get; set; } = 2;
     [Parameter] public bool MayEdit { get; set; } = true;
-    [Parameter] public EventCallback<TItem>? OnSave { get; set; }
+    [Parameter] public bool ShowRowTemplateWhenEditing { get; set; }
 
 
     bool IsReadOnly => !MayEdit;
-    bool CanSave => MayEdit && OnSave is not null;
+    bool CanSave => MayEdit;
     string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
+    string EditItemKey(TItem item) => ItemKey(item) + "E";
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
 
 
     string? EditedKey = null;
-    bool IsEditItem(TItem item) => EditedKey is not null && ItemKey(item) == EditedKey;
+    bool IsEditItem(TItem item) => EditItemKey(item) == EditedKey;
 
     void Edit(TItem item)
     {
-        EditedKey = ItemKey(item);
-    }
-
-    void Save(TItem item)
-    {
-        EditedKey = null;
-        //if (item is null || OnSave is null) return;
-        //await OnSave.InvokeAsync(item);
+        EditedKey = EditItemKey(item);
     }
 
     void Cancel()

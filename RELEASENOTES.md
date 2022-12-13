@@ -3,6 +3,13 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.1
+Release date 2022-12-13
+- **Waybill** editing improved and hopefully more descriptive names on buttons.
+- **Bug fix** of logic for updating waybills.
+- **Bug fix** for displaying region of *other* station in waybills edit page.
+- **Bug fix** of error when deleting station customers and station customer cargo, due to breaking changes in .NET 7.
+
 ## Release 1.8.0
 Release date 2022-12-12
 - **Upgrade to .NET 7**, which opens for some improvements in performance and features.

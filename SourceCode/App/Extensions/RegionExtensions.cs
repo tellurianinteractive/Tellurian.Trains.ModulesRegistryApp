@@ -6,5 +6,5 @@ public static class RegionExtensions
 {
     public static string Style(this Region? it) =>
         it is null ? string.Empty :
-        $"backcolor: {it.BackColor}; color: {it.ForeColor}";
+        $"background-color: {it.BackColor}; color: {it.ForeColor}; font-weight: bold";
 }

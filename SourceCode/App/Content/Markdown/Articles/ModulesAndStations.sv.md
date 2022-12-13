@@ -26,7 +26,7 @@ Driftsegenskaper är saker som påverkar tågstyrning och schemaläggning.
 Exempel på operativa funktioner är:
 - En *förgrening*, det vill säga en modul med en växel till minst ett sidospår eller en korsning.
 - En *hållplats*, där tågen kan stanna för passagerarbyte,
-- En *bangård*, även en *magainsbangård*.
+- En *bangård*, även en *magasinsbangård*.
 
 #### Stationsdokumentation
 Du bör tillhandahålla följande dokumentation för din station:
