@@ -29,7 +29,8 @@ public class StationCustomerWaybillsService
     {
         var result = 0;
         result += await AddGeneratedModuleCustomerWaybills(principal, stationCustomerId);
-        result += await AddGeneratedExternaalCustomerWaybills(principal, stationCustomerId);
+        result += await AddGeneratedExternalCustomerWaybills(principal, stationCustomerId);
+        result += await AddGeneratedShadowYardCustomerWaybills(principal, stationCustomerId);
         return result;
     }
 
@@ -43,12 +44,21 @@ public class StationCustomerWaybillsService
         return 0;
     }
 
-    public async Task<int> AddGeneratedExternaalCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
+    public async Task<int> AddGeneratedExternalCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedExternalWaybills] @StationCustomerId={stationCustomerId}");
+        }
+        return 0;
+    }
+    public async Task<int> AddGeneratedShadowYardCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
         }
         return 0;
     }

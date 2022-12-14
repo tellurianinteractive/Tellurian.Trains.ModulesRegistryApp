@@ -42,11 +42,21 @@
                         <th>@Localizer["Actions"]</th>
                     </TableHeader>
                     <RowTemplate Context="item">
-                        <td>@item.Person.Name()</td>
+                        <td style="@ParticipantStatusStyle(item)">@item.Person.Name()</td>
                         <td>@item.Person.CityName</td>
-                        <td>@ParticipantLayoutNames(item)</td>
-                        <td>@item.FirstParticipationDay() @ArrivalTime(item.ArrivalTime)</td>
-                        <td><AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" /></td>
+                        <td>@(item.CancellationTime.HasValue ? "" : ParticipantLayoutNames(item))</td>
+                        <td>@(item.CancellationTime.HasValue ? "" : $"{item.FirstParticipationDay()} {ArrivalTime(item.ArrivalTime)}")</td>
+                        <td>
+                            <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
+                            @if (item.CancellationTime.HasValue)
+                            {
+                                // TODO: Make it possible to cancel cancellation.
+                            }
+                            else
+                            {
+                                <AppButton Label="Unregister" OnClickCallback="() =>OnCancelledParticipation(item.PersonId)" IconName="@FontAwesome.Unregister"/>
+                            }
+                        </td>
                     </RowTemplate>
                 </TableTemplate>
             }
@@ -54,6 +64,10 @@
             @if (Participant?.Id > 0)
             {
                 <h4>@Localizer["Registered"]</h4>
+                @if (Participant.CancellationTime.HasValue)
+                {
+                    <p style="color: red; font-weight: bold">@Localizer["Canceled"] @Participant.CancellationTime.Value.ToString("g")</p>
+                }
                 <ul>
                     <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
                     <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
@@ -180,6 +194,18 @@
         }
     }
 
+    async Task OnCancelledParticipation(int personId)
+    {
+        if (MeetingId > 0 && personId > 0)
+        {
+            PersonId = personId;
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
+            if (Participant is null) return;
+            var result = await MeetingService.CancelMeetingParticipaction(Principal, Participant.Id);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
     async Task OnValidSubmit()
     {
         if (Meeting is not null && Participant is not null)
@@ -241,5 +267,7 @@
     string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
     string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
     string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";
+
+    string ParticipantStatusStyle(MeetingParticipant? it) => it is null ? string.Empty : it.CancellationTime.HasValue ? "color: red; text-decoration: line-through;" : string.Empty;
 
 }

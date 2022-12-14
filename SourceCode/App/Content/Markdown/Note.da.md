@@ -1,0 +1,2 @@
+﻿> **Har du problemer med at logge ind på Modulregistret?**
+> I nogle browsere ser det ud til, at du skal trykke på TAB-knappen *efter* at have indtastet din adgangskode, før du klikker på **Login**-knappen.

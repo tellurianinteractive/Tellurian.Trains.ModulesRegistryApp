@@ -1296,4 +1296,10 @@
   <data name="ManageCargoFlow" xml:space="preserve">
     <value>Administrer vareflyt</value>
   </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Kansellert</value>
+  </data>
+  <data name="Unregister" xml:space="preserve">
+    <value>Avregistrer</value>
+  </data>
 </root>

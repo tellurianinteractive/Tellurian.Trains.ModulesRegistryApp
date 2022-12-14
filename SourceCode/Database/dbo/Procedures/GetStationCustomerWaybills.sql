@@ -12,12 +12,19 @@ BEGIN
 			UNION
 			SELECT * FROM ExternalSupplierWaybill AS ESW 
 				WHERE ESW.DestinationStationId = @StationId AND (@StationCustomerId IS NULL OR ESW.DestinationStationCustomerId = @StationCustomerId)
+			UNION 
+			SELECT * FROM ShadowYardSupplierWaybill AS SYSW
+		        WHERE SYSW.DestinationStationId = @StationId AND (@StationCustomerId IS NULL OR SYSW.DestinationStationCustomerId = @StationCustomerId)
 			UNION
 			SELECT * FROM ModuleConsumerWaybill AS MCW
 				WHERE MCW.OriginStationId = @StationId AND (@StationCustomerId IS NULL OR MCW.OriginStationCustomerId = @StationCustomerId)
 			UNION
 			SELECT * FROM ExternalConsumerWaybill AS ECW
 				WHERE ECW.OriginStationId = @StationId AND (@StationCustomerId IS NULL OR ECW.OriginStationCustomerId = @StationCustomerId)
+			UNION
+			SELECT * FROM ShadowYardConsumerWaybill AS SYCW
+		        WHERE SYCW.OriginStationId = @StationId AND (@StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId)
+			
 		END
 	ELSE IF @Receiving <> 0 
 		BEGIN
@@ -26,6 +33,9 @@ BEGIN
 			UNION
 			SELECT * FROM ExternalSupplierWaybill AS ESW 
 				WHERE ESW.DestinationStationId = @StationId AND (@StationCustomerId IS NULL OR ESW.DestinationStationCustomerId = @StationCustomerId)
+			UNION 
+			SELECT * FROM ShadowYardSupplierWaybill AS SYSW
+		        WHERE SYSW.DestinationStationId = @StationId AND (@StationCustomerId IS NULL OR SYSW.DestinationStationCustomerId = @StationCustomerId)
 		END
 	ELSE IF @Sending <> 0
 		BEGIN
@@ -34,6 +44,9 @@ BEGIN
 			UNION
 			SELECT * FROM ExternalConsumerWaybill AS ECW
 				WHERE ECW.OriginStationId = @StationId AND (@StationCustomerId IS NULL OR ECW.OriginStationCustomerId = @StationCustomerId)
+			UNION 
+			SELECT * FROM ShadowYardConsumerWaybill AS SYCW
+		        WHERE SYCW.OriginStationId = @StationId AND (@StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId)
 		END
 	RETURN 0
 END

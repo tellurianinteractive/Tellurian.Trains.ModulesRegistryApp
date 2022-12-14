@@ -3,6 +3,12 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.2
+Release date 2022-12-14
+- **Waybills** can now be created for cargo types with NHM-code 0. These waybills will always be to or from a shadow station.
+- **Meeting participation** can now be canceled. 
+- **Top note** added for important messages.
+
 ## Release 1.8.1
 Release date 2022-12-13
 - **Waybill** editing improved and hopefully more descriptive names on buttons.

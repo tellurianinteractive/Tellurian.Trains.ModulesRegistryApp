@@ -1,10 +1,11 @@
 ﻿CREATE VIEW [dbo].[ExternalConsumerWaybill] AS
--- This view is waybills to consumers at external stations.
--- This view must match colums in same order as in views:
+-- These view must match colums in same order :
 -- ModuleSupplierWaybill
 -- ModuleConsumerWaybill
 -- ExternalSupplierWaybill
--- ExternalConsumerWaybill (this)
+-- ExternalConsumerWaybill
+-- ShadowYardSupplierWaybill
+-- ShadowYardConsumerWaybill
 SELECT
 	SCW.Id,
 	SCW.PrintCount,

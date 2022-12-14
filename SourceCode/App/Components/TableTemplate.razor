@@ -19,7 +19,7 @@ else
                 @TableHeader
                 @if (RowEditTemplate is not null)
                 {
-                    <th>@Localizer["Actions"]</th>
+                    <th >@Localizer["Actions"]</th>
                 }
             </tr>
         </thead>
@@ -46,7 +46,7 @@ else
                             <td colspan="@EditColspan">
                                 @RowEditTemplate(item)
                             </td>
-                            <td width="110px">
+                            <td  style="display: inline-block">
                                 <AppButton Label="Cancel" OnClickCallback="Cancel" />
                             
                             </td>

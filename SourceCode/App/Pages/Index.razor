@@ -6,6 +6,12 @@
 @using System.Security.Claims
 
 <h1>@Localizer["Welcome"]</h1>
+@if (!Principal.IsAuthenticated())
+{
+          <ContentView ContentName="Note"></ContentView>
+  
+}
+
 <img style="width: 100%; padding-bottom:10px" src="images/front1.png" />
 
 <AuthorizeView>
@@ -16,6 +22,7 @@
         @Localizer["AuthenticationInProgress"]
     </Authorizing>
     <NotAuthorized>
+
         @if (Principal?.Identity?.IsAuthenticated == true)
         {
             <ContentView ContentName="HomeNoUser"></ContentView>

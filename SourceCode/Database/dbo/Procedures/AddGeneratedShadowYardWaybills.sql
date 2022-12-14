@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AddGeneratedHubWaybills]
+﻿CREATE PROCEDURE [dbo].[AddGeneratedShadowYardWaybills]
 	@StationCustomerId INT
 AS
 -- The columns in this stored procedures must match table StationCustomerWaybill
@@ -8,14 +8,13 @@ BEGIN
 	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId) AS
 	(
 		SELECT 
-			SCW.Id, ME.OperatingDayId, OTHER.RegionId
+			SCW.Id, ME.OperatingDayId, ME.RegionId
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
-			ModuleCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
-			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND 
-			OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
+			ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
+			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId 
 		WHERE
-			ME.NHMCode = 0 AND  ME.StationCustomerId = @StationCustomerId AND SCW.Id IS NOT NULL
+			ME.StationCustomerId = @StationCustomerId AND SCW.Id IS NOT NULL
 	)
 	UPDATE StationCustomerWaybill 
 		SET 
@@ -27,12 +26,12 @@ BEGIN
 			StationCustomerWaybill.Id = UW.Id
 	
 	INSERT INTO StationCustomerWaybill
-	SELECT
+	SELECT DISTINCT
 		ME.StationCustomerId AS [StationCustomerId],
 		ME.StationCustomerCargoId AS [StationCustomerCargoId],
 		NULL AS [OtherStationCustomerCargoId],
 		NULL AS [OtherExternalCustomerCargoId],
-		OTHER.RegionId AS [OtherRegionId],
+		ME.RegionId AS [OtherRegionId],
 		ME.OperatingDayId AS OperatingDayId,
 		0 AS [IsManuallyCreated],
 		0 AS [HasEmptyReturn],
@@ -43,15 +42,13 @@ BEGIN
 		0 AS [SequenceNumber]
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN
-		ModuleCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
-		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId AND OTHER.StationCustomerCargoId = SCW.OtherStationCustomerCargoId
+		ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
+		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId 
 	WHERE
-		OTHER.IsCargoHub <> 0
-		AND ME.NHMCode = 0 
-		AND ME.StationCustomerId = @StationCustomerId
+		ME.StationCustomerId = @StationCustomerId
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
-		AND ME.IsSupply <> OTHER.IsSupply AND ME.IsSupply = 0
-		--AND ME.QuantityUnitId = OTHER.QuantityUnitId -- Is not used, because it causes too few matches.
+		AND ME.IsSupply <> OTHER.IsSupply
+		AND ME.QuantityUnitId = OTHER.QuantityUnitId
 		AND ME.StationId <> OTHER.StationId
 		AND ME.MainTheme = OTHER.MainTheme
 		AND (ME.ScaleId = OTHER.ScaleId OR ME.ScaleId = 0 OR OTHER.ScaleId = 0)

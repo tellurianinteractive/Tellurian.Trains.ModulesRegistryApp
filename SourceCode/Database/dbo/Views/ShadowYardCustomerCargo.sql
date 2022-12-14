@@ -1,8 +1,8 @@
 ﻿CREATE VIEW [dbo].[ShadowYardCustomerCargo] AS 
 SELECT
-	0 AS StationCustomerId,
-	0 AS StationCustomerCargoId,
-	8 AS OperatingDayId,
+	SCC.StationCustomerId AS StationCustomerId,
+	SCC.Id AS StationCustomerCargoId,
+	SCC.OperatingDayId AS OperatingDayId,
 	CO.Id AS CargoId,
 	CASE
 		WHEN CU.IsBearer <> 0 THEN 1
@@ -16,12 +16,12 @@ SELECT
 	SCC.MatchReturn,
 	COALESCE(SCC.FromYear, SC.OpenedYear) AS FromYear,
 	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
-	SC.TrackOrArea AS CustomerTrackOrArea,
-	SC.TrackOrAreaColor AS CustomerTrackOrAreaColor,
-	SCC.TrackOrArea AS CargoTrackOrArea,
-	SCC.TrackOrAreaColor AS CargoTrackOrAreaColor,
-	0 AS CustomerId,
-	'ShadowYard' AS CustomerName,
+	'' AS CustomerTrackOrArea,
+	'' AS CustomerTrackOrAreaColor,
+	'' AS CargoTrackOrArea,
+	'' AS CargoTrackOrAreaColor,
+	NULL AS CustomerId,
+	'' AS CustomerName,
 	CD.IsSupply,
 	CD.IsInternational,
 	CRT.ShortName AS ReadyTime,
@@ -35,7 +35,7 @@ SELECT
 		ELSE CPU.PluralResourceCode
 	END AS PackagingUnit,
 	CPU.PrepositionResourceCode AS PackagingPrepositionResourceCode,
-	0 AS StationId,
+	RES.Id AS StationId,
 	COALESCE(RES.FullName, R.LocalName) AS StationName,
 	'' AS InternationalStationName,
 	RES.Signature AS StationSignature,
@@ -67,5 +67,4 @@ FROM
 	INNER JOIN [OperatingDay] AS OD ON OD.Id = SCC.OperatingDayId
 	INNER JOIN [Cargo] AS CO ON CO.Id = SCC.CargoId
 	LEFT JOIN [ExternalStation] AS RES ON RES.Id = R.RepresentativeExternalStationId
-WHERE 
-	CO.NHMCode = 0
+

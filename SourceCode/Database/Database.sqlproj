@@ -155,8 +155,10 @@
     <Build Include="dbo\Tables\MeetingPurchaseableItem.sql" />
     <Build Include="dbo\Tables\MeetingParticipantPurchasedItem.sql" />
     <Build Include="dbo\Procedures\NullifyRedundantStationCustomerTrackOrArea.sql" />
-    <Build Include="dbo\Procedures\AddGeneratedHubWaybills.sql" />
+    <Build Include="dbo\Procedures\AddGeneratedShadowYardWaybills.sql" />
     <Build Include="dbo\Views\ShadowYardCustomerCargo.sql" />
+    <Build Include="dbo\Views\ShadowYardSupplierWaybill.sql" />
+    <Build Include="dbo\Views\ShadowYardConsumerWaybill.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

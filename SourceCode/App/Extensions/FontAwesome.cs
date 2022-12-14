@@ -34,6 +34,7 @@ public static class FontAwesome
     public const string Sync = "fa fa-sync";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
+    public const string Unregister = "fa fa-user-minus";
     public const string Upload = "fa fa-file-upload";
     public const string User = "fa fa-user";
     public const string Waybill = "fa fa-file-invoice";
@@ -74,6 +75,7 @@ public static class FontAwesome
             {nameof(Sync), Sync },
             {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },
+            {nameof(Unregister), Unregister },
             {nameof(Upload), Upload },
             {nameof(User), User },
             {nameof(Waybill), Waybill },

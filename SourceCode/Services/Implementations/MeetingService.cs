@@ -295,7 +295,7 @@ public class MeetingService
                 .ConfigureAwait(false);
             if (existing is null) return Resources.Strings.NotFound.DeleteResult();
             if (existing.LayoutParticipations.Sum(lp => lp.LayoutModules.Count) > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
-            dbContext.MeetingParticipants.Remove(existing);
+            existing.CancellationTime = TimeProvider.Now;
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();
         }
