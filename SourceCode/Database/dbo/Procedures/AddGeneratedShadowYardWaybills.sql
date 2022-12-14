@@ -8,13 +8,18 @@ BEGIN
 	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId) AS
 	(
 		SELECT 
-			SCW.Id, ME.OperatingDayId, ME.RegionId
+			SCW.Id, ME.OperatingDayId, OTHER.RegionId
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
-			ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
+			ShadowYardCustomerCargo AS OTHER ON ME.StationCustomerCargoId = OTHER.StationCustomerCargoId LEFT JOIN
 			StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId 
 		WHERE
-			ME.StationCustomerId = @StationCustomerId AND SCW.Id IS NOT NULL
+		ME.StationCustomerId = @StationCustomerId AND
+		OTHER.IsShadowYard <> 0 AND
+		ME.CountryId = OTHER.CountryId AND
+		SCW.OtherExternalCustomerCargoId IS NULL AND
+		SCW.OtherStationCustomerCargoId IS NULL AND
+		SCW.Id IS NOT NULL
 	)
 	UPDATE StationCustomerWaybill 
 		SET 

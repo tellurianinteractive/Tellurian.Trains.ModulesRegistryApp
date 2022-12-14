@@ -8,6 +8,7 @@ Release date 2022-12-14
 - **Waybills** can now be created for cargo types with NHM-code 0. These waybills will always be to or from a shadow station.
 - **Meeting participation** can now be canceled. 
 - **Top note** added for important messages.
+- **Modules** table can now be searched and sorted on selected columns.
 
 ## Release 1.8.1
 Release date 2022-12-13

@@ -12,8 +12,48 @@
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
+@if (IsFiltered)
+{
+    <AppButton Label="RemoveFiltering" OnClickCallback="RemoveFilter" IconName="@FontAwesome.Erase" />
+}
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="FilteredModules" Virtualize="true" Pagination="PaginationState">
+        <PropertyColumn Title="@Localizer["Scale"]" Property="p => p.Scale.Display()" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="ScaleFilter" @bind:event="oninput" placeholder="@Localizer["Scale"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Title="@Localizer["Name"]" Property="p => p.FullName" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="FullNameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <TemplateColumn Context="module" Title="@Localizer["Status"]" Align="Align.Center">
+            <span>@module.StatusIcon()</span>
+        </TemplateColumn>
+        <PropertyColumn Title="@Localizer["IsPartOfStation"]" Property="p => p.StationName()" Sortable="true"></PropertyColumn>
+        <PropertyColumn Title="@Localizer["Standard"]" Property="p => p.Standard.ShortName" Sortable="true"></PropertyColumn>
+        <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="OwnerNameFilter" @bind:event="oninput" placeholder="@Localizer["Owners"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        @if (Principal.IsAnyAdministrator())
+        {
+            <TemplateColumn Context="module" Title="@Localizer["Actions"]">
+                <AppButton Label="Edit" Href="@EditHref(module)" IsDisabled="(!MayEdit(module))" />
+            </TemplateColumn>
+        }
+    </QuickGrid>
+</div>
 
-<TableTemplate Items="Modules">
+@*<TableTemplate Items="Modules">
     <TableHeader>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Name"]</th>
@@ -38,7 +78,7 @@
             <td><AppButton Label="Edit" Href="@EditHref(module)" IsDisabled="(!MayEdit(module))" /></td>
         }
     </RowTemplate>
-</TableTemplate>
+</TableTemplate>*@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -72,13 +112,33 @@
     {
         if (CountryId < 1)
         {
-            CountryId= Principal.CountryId();
+            CountryId = Principal.CountryId();
             Navigator.NavigateTo($"/Modules/Country/{CountryId}");
         }
         else
         {
             Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId);
         }
+    }
+
+    string? ScaleFilter;
+    string? FullNameFilter;
+    string? OwnerNameFilter;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    IQueryable<Module> FilteredModules =>
+        Modules is null ? Enumerable.Empty<Module>().AsQueryable() :
+        Modules.AsQueryable()
+            .Where(m =>
+                (ScaleFilter.HasNoValue() || m.Scale.Display().Contains(ScaleFilter, StringComparison.CurrentCultureIgnoreCase)) &&
+                (FullNameFilter.HasNoValue() || m.FullName.StartingWith(FullNameFilter)) &&
+                (OwnerNameFilter.HasNoValue() || m.OwnerNames().Contains(OwnerNameFilter, StringComparison.CurrentCultureIgnoreCase))
+            );
+    bool IsFiltered => ScaleFilter.HasValue() || FullNameFilter.HasValue() || OwnerNameFilter.HasValue();
+    void RemoveFilter()
+    {
+        ScaleFilter = default;
+        FullNameFilter = default;
+        OwnerNameFilter = default;
     }
 
     string EditHref(Module? module) =>
