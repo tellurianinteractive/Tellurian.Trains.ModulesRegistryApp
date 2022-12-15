@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.8.3
 Release date 2022-12-15
 - **Bug fixes** of displaying the espected waybills.
+- **Component updates** to .NET 7.0.1 that fixes some Microsoft bugs.
 
 ## Release 1.8.2
 Release date 2022-12-14

@@ -43,7 +43,8 @@ public static class StationCustomerCargoExtensions
     public static string CargoType(this StationCustomerCargo? it) =>
         it is null ? string.Empty :
         it.SpecialCargoName.HasValue() ? it.SpecialCargoName :
-        it.Cargo.Localized();
+        it.Cargo.Localized() ??
+        Resources.Strings.None;
 
     public static string CargoType(this StationCustomerCargo? it, IEnumerable<ListboxItem>? cargoTypeItems) =>
          it is null ? string.Empty :
