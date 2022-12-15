@@ -57,7 +57,8 @@ internal static class ExternalStationCustomerCargoMapper
     public static void MapExternalStationCustomerCargo(this ModelBuilder builder) =>
         builder.Entity<ExternalStationCustomerCargo>(entity =>
         {
-            entity.ToTable("ExternalStationCustomerCargo");
+            entity.ToTable("ExternalStationCustomerCargo",
+                tb => tb.HasTrigger("DeleteExternalStationCustomerCargo"));
 
             entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
 

@@ -35,15 +35,15 @@ SELECT
 		ELSE CPU.PluralResourceCode
 	END AS PackagingUnit,
 	CPU.PrepositionResourceCode AS PackagingPrepositionResourceCode,
-	RES.Id AS StationId,
-	COALESCE(RES.FullName, R.LocalName) AS StationName,
+	ES.Id AS StationId,
+	COALESCE(ES.FullName, R.LocalName) AS StationName,
 	'' AS InternationalStationName,
-	RES.Signature AS StationSignature,
-	R.Id AS RegionId,
-	R.CountryId,
-	R.BackColor,
-	R.ForeColor,
-	R.IsCargoHub,
+	ES.Signature AS StationSignature,
+	COALESCE(R.Id, ESR.Id) AS RegionId,
+	COALESCE(R.CountryId, ESR.CountryId) AS CountryId,
+	COALESCE(R.BackColor,ESR.BackColor) AS BackColor,
+	COALESCE(R.ForeColor,ESR.ForeColor) AS ForeColor,
+	COALESCE(R.IsCargoHub, ESR.IsCargoHub) AS IsCargoHub,
 	C.Languages,
 	C.DomainSuffix,
 	OD.Flag AS OperatingDayFlag,
@@ -66,5 +66,6 @@ FROM
 	INNER JOIN [CargoUnit] AS CU ON CU.Id = SCC.QuantityUnitId
 	INNER JOIN [OperatingDay] AS OD ON OD.Id = SCC.OperatingDayId
 	INNER JOIN [Cargo] AS CO ON CO.Id = SCC.CargoId
-	LEFT JOIN [ExternalStation] AS RES ON RES.Id = R.RepresentativeExternalStationId
+	LEFT JOIN [ExternalStation] AS ES ON ES.Id = R.RepresentativeExternalStationId 
+	LEFT JOIN [Region] AS ESR ON ESR.Id = ES.RegionId
 

@@ -8,6 +8,7 @@
 -- ShadowYardConsumerWaybill
 
 SELECT
+	'ShadowYardSupplier' AS [Source],
     SCW.Id,
     SCW.PrintCount,
     SCW.PrintPerOperatingDay,

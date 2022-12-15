@@ -89,102 +89,14 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapGroupDomain();
         modelBuilder.MapGroupMember();
         modelBuilder.MapLayout();
+        modelBuilder.MapLayoutLine();
+        modelBuilder.MapLayoutModule();
+        modelBuilder.MapLayoutParticipant();
+        modelBuilder.MapLayoutStation();
 
-        modelBuilder.Entity<LayoutLine>(entity =>
-        {
-            entity.ToTable("LayoutLine");
+       
 
-            entity.HasOne(e => e.FromLayoutStation)
-                .WithMany(e => e.StartingLines)
-                .HasForeignKey(e => e.FromLayoutStationId);
-
-            entity.HasOne(e => e.FromStationExit)
-                .WithMany()
-                .HasForeignKey(e => e.FromStationExitId);
-
-            entity.HasOne(e => e.ToLayoutStation)
-                .WithMany(e => e.EndingLines)
-                .HasForeignKey(e => e.ToLayoutStationId);
-
-            entity.HasOne(e => e.ToStationExit)
-              .WithMany()
-              .HasForeignKey(e => e.ToStationExitId);
-
-        });
-
-        modelBuilder.Entity<LayoutModule>(entity =>
-        {
-            entity.Property(e => e.Note)
-                 .HasMaxLength(50);
-
-            entity.ToTable("LayoutModule");
-
-            entity.HasOne(e => e.LayoutParticipant)
-                 .WithMany(e => e.LayoutModules)
-                 .HasForeignKey(e => e.LayoutParticipantId);
-
-            entity.HasOne(e => e.Module)
-                  .WithMany()
-                  .HasForeignKey(e => e.ModuleId);
-
-            entity.HasOne(e => e.LayoutLine)
-               .WithMany(e => e.Lines)
-               .HasForeignKey(e => e.LayoutLineId);
-
-            entity.HasOne(e => e.LayoutStation)
-                .WithMany(e => e.LayoutModules)
-                .HasForeignKey(e => e.LayoutStationId);
-
-            entity.HasOne(e => e.LayoutParticipant)
-                .WithMany(e => e.LayoutModules)
-                .HasForeignKey(e => e.LayoutParticipantId);
-
-        });
-
-        modelBuilder.Entity<LayoutParticipant>(entity =>
-        {
-            entity.ToTable("LayoutParticipant");
-
-            entity.HasOne(e => e.Person)
-                .WithMany()
-                .HasForeignKey(e => e.PersonId);
-
-            entity.HasOne(e => e.MeetingParticipant)
-                .WithMany(e => e.LayoutParticipations)
-                .HasForeignKey(e => e.MeetingParticipantId);
-
-            entity.HasOne(e => e.Layout)
-                .WithMany(e => e.LayoutParticipants)
-                .HasForeignKey(e => e.LayoutId);
-
-        });
-
-        modelBuilder.Entity<LayoutStation>(entity =>
-        {
-            entity.ToTable("LayoutStation");
-
-            entity.Property(e => e.OtherName)
-                 .HasMaxLength(50);
-
-            entity.Property(e => e.OtherSignature)
-                  .HasMaxLength(5);
-
-            entity.HasOne(e => e.LayoutParticipant)
-                 .WithMany(e => e.LayoutStations)
-                 .HasForeignKey(e => e.LayoutParticipantId);
-
-            entity.HasMany(e => e.Regions)
-                .WithMany(e => e.LayoutStations);
-
-            entity.HasOne(e => e.Station)
-                 .WithOne()
-                 .HasForeignKey<LayoutStation>(e => e.StationId);
-
-            entity.HasOne(e => e.OtherCountry)
-                .WithOne()
-                .HasForeignKey<LayoutStation>(e => e.OtherCountryId);
-
-        });
+       
 
         modelBuilder.Entity<Meeting>(entity =>
         {
@@ -539,51 +451,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.MapStationCustomerWaybill();
 
-        modelBuilder.Entity<StationCustomerCargo>(entity =>
-          {
-              entity.ToTable("StationCustomerCargo", tb => tb.HasTrigger("DeleteStationCustomerCargo"));
-
-              entity.Property(e => e.QuantityUnitId).HasDefaultValueSql("((4))");
-
-              entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
-
-              entity.Property(e => e.TrackOrArea).HasMaxLength(10);
-
-              entity.Property(e => e.TrackOrAreaColor)
-                  .HasMaxLength(10)
-                  .IsFixedLength(true);
-
-              entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
-
-              entity.HasOne(e => e.Cargo)
-                  .WithMany()
-                  .HasForeignKey(d => d.CargoId)
-                  .OnDelete(DeleteBehavior.ClientSetNull);
-
-              entity.HasOne(d => d.Direction)
-                  .WithMany()
-                  .HasForeignKey(d => d.DirectionId)
-                  .OnDelete(DeleteBehavior.ClientSetNull);
-
-              entity.HasOne(d => d.OperatingDay)
-                  .WithMany()
-                  .HasForeignKey(d => d.OperatingDayId);
-
-              entity.HasOne(d => d.ReadyTime)
-                  .WithMany()
-                  .HasForeignKey(d => d.ReadyTimeId)
-                  .OnDelete(DeleteBehavior.ClientSetNull);
-
-              entity.HasOne(d => d.StationCustomer)
-                  .WithMany(p => p.Cargos)
-                  .HasForeignKey(d => d.StationCustomerId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-              entity.HasOne(e => e.QuantityUnit)
-                  .WithMany()
-                  .HasForeignKey(d => d.QuantityUnitId)
-                  .OnDelete(DeleteBehavior.ClientSetNull);
-          });
+        modelBuilder.MapStationCustomerCargo();
 
         modelBuilder.Entity<StationTrack>(entity =>
         {

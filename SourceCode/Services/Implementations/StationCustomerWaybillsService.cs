@@ -13,12 +13,12 @@ public class StationCustomerWaybillsService
                 .Where(x => x.StationCustomerId == stationCustomerId)
                 .Include(w => w.StationCustomer)
                 .Include(w => w.StationCustomerCargo).ThenInclude(c => c.Direction)
+                .Include(w => w.StationCustomerCargo).ThenInclude(c => c.Cargo)
                 .Include(w => w.OperatingDay)
-                .Include(w => w.OtherStationCustomerCargo).ThenInclude(c => c.Cargo)
                 .Include(w => w.OtherStationCustomerCargo).ThenInclude(c => c.StationCustomer).ThenInclude(c => c.Station)
-                .Include(w => w.OtherExternalCustomerCargo).ThenInclude(c => c.Cargo)
                 .Include(w => w.OtherExternalCustomerCargo).ThenInclude(c => c.ExternalStationCustomer).ThenInclude(c => c.ExternalStation)
                 .Include(w => w.OtherRegion).ThenInclude(r => r.Country)
+                .Include(w =>w.OtherRegion).ThenInclude(r => r.RepresentativeExternalStation)
                 .ToReadOnlyListAsync();
 
         }

@@ -155,3 +155,7 @@ blockquote {
     .markdown li {
         line-height: 1.4;
     }
+.quickgrid {
+    --col-gap: 0.5rem;
+}
+.quickgrid  button {font-weight: bold}

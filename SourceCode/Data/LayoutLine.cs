@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public class LayoutLine
@@ -20,4 +22,31 @@ public class LayoutLine
     public virtual LayoutStation ToLayoutStation { get; set; }
     public virtual ModuleExit ToStationExit { get; set; }
     public virtual ICollection<LayoutModule> Lines { get; set; }
+}
+
+internal static class LayoutLineMapping
+{
+    public static void MapLayoutLine(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<LayoutLine>(entity =>
+        {
+            entity.ToTable("LayoutLine");
+
+            entity.HasOne(e => e.FromLayoutStation)
+                .WithMany(e => e.StartingLines)
+                .HasForeignKey(e => e.FromLayoutStationId);
+
+            entity.HasOne(e => e.FromStationExit)
+                .WithMany()
+                .HasForeignKey(e => e.FromStationExitId);
+
+            entity.HasOne(e => e.ToLayoutStation)
+                .WithMany(e => e.EndingLines)
+                .HasForeignKey(e => e.ToLayoutStationId);
+
+            entity.HasOne(e => e.ToStationExit)
+              .WithMany()
+              .HasForeignKey(e => e.ToStationExitId);
+
+        });
+
 }

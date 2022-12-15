@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public class LayoutModule
@@ -21,4 +23,37 @@ public class LayoutModule
     public virtual Module Module { get; set; }
     public virtual LayoutLine LayoutLine { get; set; }
     public virtual LayoutStation LayoutStation { get; set; }
+}
+
+internal static class LayoutModuleMapping
+{
+    public static void MapLayoutModule(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<LayoutModule>(entity =>
+        {
+            entity.Property(e => e.Note)
+                 .HasMaxLength(50);
+
+            entity.ToTable("LayoutModule");
+
+            entity.HasOne(e => e.LayoutParticipant)
+                 .WithMany(e => e.LayoutModules)
+                 .HasForeignKey(e => e.LayoutParticipantId);
+
+            entity.HasOne(e => e.Module)
+                  .WithMany()
+                  .HasForeignKey(e => e.ModuleId);
+
+            entity.HasOne(e => e.LayoutLine)
+               .WithMany(e => e.Lines)
+               .HasForeignKey(e => e.LayoutLineId);
+
+            entity.HasOne(e => e.LayoutStation)
+                .WithMany(e => e.LayoutModules)
+                .HasForeignKey(e => e.LayoutStationId);
+
+            entity.HasOne(e => e.LayoutParticipant)
+                .WithMany(e => e.LayoutModules)
+                .HasForeignKey(e => e.LayoutParticipantId);
+
+        });
 }

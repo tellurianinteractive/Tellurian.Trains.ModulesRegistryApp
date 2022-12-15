@@ -45,7 +45,8 @@ public static class LayoutMapping
             entity.Property(e => e.Details)
                 .HasMaxLength(50);
 
-            entity.ToTable("Layout");
+            entity.ToTable("Layout",
+                tb => tb.HasTrigger("DeleteLayout"));
 
             entity.HasOne(d => d.Meeting)
                 .WithMany(p => p.Layouts)

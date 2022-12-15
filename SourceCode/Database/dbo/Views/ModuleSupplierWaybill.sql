@@ -7,6 +7,7 @@
 -- ShadowYardSupplierWaybill
 -- ShadowYardConsumerWaybill
 SELECT
+	'ModuleSupplier' AS [Source],
 	SCW.Id,
 	SCW.PrintCount,
 	SCW.PrintPerOperatingDay,
@@ -75,5 +76,6 @@ FROM
 	Cargo AS C ON C.Id = SENDER.CargoId
 WHERE
 	SENDER.IsModuleStation <> 0 AND RECEIVER.IsModuleStation <> 0 AND
+	((SENDER.CountryId = RECEIVER.CountryId) OR (SENDER.IsInternational <> 0 AND RECEIVER.IsInternational <> 0)) AND
 	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
 	(C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear )

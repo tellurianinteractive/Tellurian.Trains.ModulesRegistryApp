@@ -21,10 +21,10 @@
 }
 else
 {
-  <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-        <AppButton Label="Update" OnClickCallback="GenerateWaybills" IconName="@FontAwesome.Sync"/>
+    <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
+        <AppButton Label="Update" OnClickCallback="GenerateWaybills" IconName="@FontAwesome.Sync" />
         <AppButton Label="Preview" Href="@PreviewHref" IconName="@FontAwesome.Print" />
-</div>  
+    </div>
 }
 
 
@@ -38,12 +38,12 @@ else if (HasNoData)
 }
 else
 {
-    <TableTemplate Items="Waybills" EditColspan="9" MayEdit=true ShowRowTemplateWhenEditing=true >
+    <TableTemplate Items="Waybills" EditColspan="9" MayEdit=true ShowRowTemplateWhenEditing=true>
         <TableHeader>
             <th>@Localizer["Id"]</th>
             <th>@Localizer["Direction"]</th>
+            <th>@Localizer["Station"]</th>
             <th>@Localizer["FreightCustomer"]</th>
-            <th>@Localizer["Region"]</th>
             <th>@Localizer["Cargo"]</th>
             <th>@Localizer["Days"]</th>
             <th>@Localizer["PrintPerOperatingDay"]</th>
@@ -53,21 +53,21 @@ else
         <RowTemplate Context="item">
             <td>@item.Id</td>
             <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
-            <td>
-                @item.OtherStationCustomerCargo?.LongDescription()
-                @item.OtherExternalCustomerCargo?.LongDescription()
+            <td style="@item.OtherRegion.Style()">
+                @item.OtherStationName()
             </td>
-            <td style="@item.OtherRegion.Style()">@item.OtherRegion?.LocalName</td>
             <td>
-                @item.OtherStationCustomerCargo?.Cargo.LocalizedName()
-                @item.OtherExternalCustomerCargo?.Cargo.LocalizedName()
+                @item.OtherCustomerName()
+            </td>
+            <td>
+                @item.CargoName()
             </td>
             <td>@item.OperatingDay.ShortNameLocalized()</td>
             <td align="center">@item.PrintPerOperatingDay.AsYesOrNo()</td>
             <td align="center">@item.HasEmptyReturn.AsYesOrNo()</td>
             <td align="center">@item.PrintCount</td>
         </RowTemplate>
-        <RowEditTemplate Context="item" >
+        <RowEditTemplate Context="item">
             <CustomerWaybillEdit Waybill="@item" OperatingDayItems="OperationDayItems" RegionItems="RegionItems" OnSaveCallBack="SaveAsync" />
         </RowEditTemplate>
     </TableTemplate>
