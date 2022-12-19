@@ -159,6 +159,13 @@
     <Build Include="dbo\Views\ShadowYardCustomerCargo.sql" />
     <Build Include="dbo\Views\ShadowYardSupplierWaybill.sql" />
     <Build Include="dbo\Views\ShadowYardConsumerWaybill.sql" />
+    <Build Include="dbo\Views\BorrowableGroupModule.sql" />
+    <Build Include="dbo\Views\RegisteredModules.sql" />
+    <Build Include="dbo\Procedures\GetRegisteredModules.sql" />
+    <Build Include="dbo\Procedures\GetBorrowableModules.sql" />
+    <Build Include="dbo\Views\LayoutParticipantsAvailableModule.sql" />
+    <Build Include="dbo\Procedures\GetAvailableModules.sql" />
+    <Build Include="dbo\Procedures\GetLayoutParticipantEmail.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -65,34 +65,36 @@ public sealed class LayoutService
         {
             using var dbContext = Factory.CreateDbContext();
 
-            var groupsId = await dbContext.GroupMembers.AsNoTracking()
-                .Where(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator || gm.MayBorrowGroupsModules) && gm.PersonId == participant.PersonId)
+            var participantsGroups = await dbContext.Groups
+                .Include(g => g.GroupMembers)
+                .Where(g => g.GroupMembers.Any(gm => gm.PersonId == participant.PersonId))
+                .ToReadOnlyListAsync();
+
+            var groupsParticipantCanBorrowModulesIn = await dbContext.GroupMembers.AsNoTracking()
+                .Where(gm => gm.MayBorrowGroupsModules && gm.PersonId == participant.PersonId)
                 .Select(gm => gm.GroupId)
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            var modules = await dbContext.Modules
+           var personsIdYouCanBorrowModulesFrom = participantsGroups
+                .Where(g => g.GroupMembers.Any(gm => gm.MemberMayBorrowMyModules))
+                .SelectMany(g => g.GroupMembers.Select(gm => gm.PersonId));
+
+            var myModulesAndModulesInMyGroups = await dbContext.Modules
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(m => m.Standard)
                 .Where(m => m.ScaleId == layout.PrimaryModuleStandard.ScaleId)
                 .ToReadOnlyListAsync();
-        
+       
 
-            var principalsGroups = await dbContext.Groups
-                .Include(g => g.GroupMembers)
-                .Where(g => g.GroupMembers.Any(gm => gm.PersonId == participant.PersonId))
-                .ToReadOnlyListAsync();
 
-            var personsIdYouCanBorrowModulesFrom = principalsGroups
-                .Where(g => g.GroupMembers.Any(gm => gm.MemberMayBorrowMyModules))
-                .SelectMany(g => g.GroupMembers.Select(gm => gm.PersonId));
-
-            if (modules is not null)
+ 
+            if (myModulesAndModulesInMyGroups is not null)
             {
-                return modules
+                return myModulesAndModulesInMyGroups
                    .Where(m => m.ModuleOwnerships.Any(
-                        mo => mo.PersonId == participant.PersonId || personsIdYouCanBorrowModulesFrom.Any(id => id == mo.PersonId) || groupsId.Any(id => id == mo.GroupId)));
+                        mo => mo.PersonId == participant.PersonId || personsIdYouCanBorrowModulesFrom.Any(id => id == mo.PersonId) || groupsParticipantCanBorrowModulesIn.Any(id => id == mo.GroupId)));
             }
         }
         return Array.Empty<Module>();
