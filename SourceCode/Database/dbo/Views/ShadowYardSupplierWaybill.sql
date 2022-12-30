@@ -8,7 +8,7 @@
 -- ShadowYardConsumerWaybill
 
 SELECT
-	'ShadowYardSupplier' AS [Source],
+    'ShadowYardSupplier' AS [Source],
     SCW.Id,
     SCW.PrintCount,
     SCW.PrintPerOperatingDay,
@@ -72,13 +72,12 @@ SELECT
     C.SV
 FROM
     StationCustomerWaybill AS SCW INNER JOIN
-    ShadowYardCustomerCargo AS SENDER ON SENDER.StationCustomerId = SCW.StationCustomerId INNER JOIN
+    ShadowYardCustomerCargo AS SENDER ON SENDER.StationCustomerCargoId = SCW.StationCustomerCargoId INNER JOIN
     ConsumerCustomerCargo AS RECEIVER ON RECEIVER.StationCustomerCargoId = SCW.StationCustomerCargoId	INNER JOIN
-    Cargo AS C ON C.Id = RECEIVER.CargoId
+    Cargo AS C ON C.Id = RECEIVER.CargoId 
 WHERE
     SENDER.StationId <> RECEIVER.StationId AND
     SCW.OtherExternalCustomerCargoId IS NULL AND
     SCW.OtherStationCustomerCargoId IS NULL AND
-    SENDER.StationCustomerCargoId <> RECEIVER.StationCustomerCargoId AND
     (C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
     (C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear ) 

@@ -73,7 +73,8 @@ FROM
 	StationCustomerWaybill AS SCW INNER JOIN
 	ConsumerCustomerCargo RECEIVER ON SCW.StationCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN
 	SupplierCustomerCargo SENDER ON SCW.OtherExternalCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
-	Cargo AS C ON C.Id = SENDER.CargoId
+	Cargo AS C ON C.Id = SENDER.CargoId AND
+	SENDER.CargoId = RECEIVER.CargoId
 WHERE
 	SENDER.IsModuleStation = 0 AND RECEIVER.IsModuleStation <> 0 AND
 	((SENDER.CountryId = RECEIVER.CountryId) OR (SENDER.IsInternational <> 0 AND RECEIVER.IsInternational <> 0)) AND
