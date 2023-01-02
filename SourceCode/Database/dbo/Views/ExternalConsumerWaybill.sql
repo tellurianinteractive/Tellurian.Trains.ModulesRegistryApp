@@ -71,8 +71,8 @@ SELECT
 	C.SV
 FROM
 	StationCustomerWaybill AS SCW INNER JOIN
-	SupplierCustomerCargo SENDER ON SCW.StationCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
 	ConsumerCustomerCargo RECEIVER ON SCW.OtherExternalCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN
+	SupplierCustomerCargo SENDER ON SCW.StationCustomerCargoId = SENDER.StationCustomerCargoId INNER JOIN
 	Cargo AS C ON C.Id = SENDER.CargoId AND
 	SENDER.CargoId = RECEIVER.CargoId
 WHERE

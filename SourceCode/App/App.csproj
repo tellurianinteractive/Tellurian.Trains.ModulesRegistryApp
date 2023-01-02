@@ -5,7 +5,7 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.8.3</Version>
+		<Version>1.8.4</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
 		<DisableCheckingDuplicateNuGetItems>true</DisableCheckingDuplicateNuGetItems>
@@ -33,7 +33,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.1" NoWarn="NU1605" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="0.1.0-alpha.22351.1" />
 		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.2.0" />
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.19.1" />
+		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.19.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

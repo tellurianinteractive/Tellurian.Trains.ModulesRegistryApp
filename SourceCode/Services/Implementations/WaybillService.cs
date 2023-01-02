@@ -51,6 +51,76 @@ public class WaybillService
 
     }
 
+
+    public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills2(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
+    {
+        List<Waybill> waybills = new List<Waybill>(200);
+        if (principal.IsAuthenticated())
+        {
+            var dbContext = Factory.CreateDbContext();
+            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+            if (connection is not null)
+            {
+                var sql = getSql(stationId, stationCustomerId, receiving, sending);
+                if (sql.HasNoValue()) return waybills;
+                var command = new SqlCommand(sql, connection)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = 120
+                };
+                try
+                {
+                    connection.Open();
+                    var reader = await command.ExecuteReaderAsync();
+                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
+                    while (await reader.ReadAsync())
+                    {
+                        waybills.Add(reader.MapWaybill(stationId));
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+            }
+        }
+        return waybills;
+
+        static string getSql(int stationId, int? stationCustomerId, bool receiving, bool sending) =>
+            receiving && sending ? sqlSupplier(stationId, stationCustomerId) + " UNION " + sqlConsumer(stationId, stationCustomerId) :
+            receiving ? sqlSupplier(stationId, stationCustomerId) :
+            sending ? sqlConsumer(stationId, stationCustomerId) :
+            string.Empty;
+
+        static string sqlSupplier(int stationId, int? stationCustomerId) =>
+            $"""
+            SELECT * FROM ModuleSupplierWaybill AS MSW
+                WHERE MSW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "MSW.DestinationStationCustomerId")}
+            UNION
+            SELECT * FROM ExternalSupplierWaybill AS ESW
+            	WHERE ESW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "ESW.DestinationStationCustomerId")}
+            UNION
+            SELECT * FROM ShadowYardSupplierWaybill AS SYSW 
+                WHERE SYSW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "SYSW.DestinationStationCustomerId")}
+            """;
+        
+        static string sqlConsumer(int stationId, int? stationCustomerId) =>
+            $"""
+            SELECT * FROM ModuleConsumerWaybill AS MCW
+                WHERE MCW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "MCW.OriginStationCustomerId ")}
+            UNION
+            SELECT * FROM ExternalConsumerWaybill AS ECW
+            	WHERE ECW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "ECW.OriginStationCustomerId ")}
+            UNION
+            SELECT * FROM ShadowYardConsumerWaybill AS SYCW 
+                WHERE SYCW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "SYCW.OriginStationCustomerId ")}
+            """;
+
+        static string StationCustomerCriteria(int? stationCustomerId, string columnName) =>
+            stationCustomerId.HasValue ? $"AND {columnName} = {stationCustomerId.Value}" :
+            string.Empty;
+    }
     public async Task<IEnumerable<Waybill>?> GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false)
     {
         List<Waybill> waybills = new List<Waybill>(200);
@@ -166,6 +236,13 @@ internal static class WaybillMapper
             FromYear = record.GetNullableInt("ReceiverFromYear", null),
             UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
         };
+}
+
+internal static class SqlHelpers
+{
+    public static string OrNull(this int? value) => 
+        value.HasValue ? value.Value.ToString() :
+        "NULL";
 }
 
 

@@ -50,7 +50,7 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (StationId > 0)
             {
-                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId, CustomerId, true, true);
+                var items = await WaybillService.GetStationCustomerWaybills2(Principal, StationId, CustomerId, true, true);
                 Waybills = items.AsPrintableWaybills();
             }
         }

@@ -3,9 +3,14 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.4
+Release date 2023-01-02
+- **Bug fix** of waybill preview. Some waybills were duplicated, other were irrelevant.
+- **Bug fix** of waybill preview error, caused by database failure. 
+
 ## Release 1.8.3
 Release date 2022-12-15
-- **Bug fixes** of displaying the espected waybills.
+- **Bug fixes** of displaying the expected waybills.
 - **Component updates** to .NET 7.0.1 that fixes some Microsoft bugs.
 
 ## Release 1.8.2
