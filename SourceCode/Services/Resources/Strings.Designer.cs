@@ -259,6 +259,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 30&apos; Bulk container.
+        /// </summary>
+        internal static string BulkContainer30 {
+            get {
+                return ResourceManager.GetString("BulkContainer30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30&apos; Bulk containers.
+        /// </summary>
+        internal static string BulkContainers30 {
+            get {
+                return ResourceManager.GetString("BulkContainers30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bundle.
         /// </summary>
         internal static string Bundle {
@@ -1600,6 +1618,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 30&apos; Tank container.
+        /// </summary>
+        internal static string TankContainer30 {
+            get {
+                return ResourceManager.GetString("TankContainer30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30&apos; Tank containers.
+        /// </summary>
+        internal static string TankContainers30 {
+            get {
+                return ResourceManager.GetString("TankContainers30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tested.
         /// </summary>
         internal static string Tested {
@@ -1650,6 +1686,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Tonnes {
             get {
                 return ResourceManager.GetString("Tonnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trailer.
+        /// </summary>
+        internal static string Trailer {
+            get {
+                return ResourceManager.GetString("Trailer", resourceCulture);
             }
         }
         

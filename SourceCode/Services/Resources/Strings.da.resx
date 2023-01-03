@@ -732,4 +732,19 @@
   <data name="Available" xml:space="preserve">
     <value>Disponibel</value>
   </data>
+  <data name="Trailer" xml:space="preserve">
+    <value>Trailer</value>
+  </data>
+  <data name="BulkContainer30" xml:space="preserve">
+    <value>30' Bulkcontainer</value>
+  </data>
+  <data name="TankContainer30" xml:space="preserve">
+    <value>30' Tankcontainer</value>
+  </data>
+  <data name="TankContainers30" xml:space="preserve">
+    <value>30' Tankcontainere</value>
+  </data>
+  <data name="BulkContainers30" xml:space="preserve">
+    <value>30' Bulkcontainere</value>
+  </data>
 </root>
