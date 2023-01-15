@@ -10,11 +10,11 @@ public static class ToastServiceExtensions
     {
         if (string.IsNullOrWhiteSpace(message)) message = string.Empty;
         if (count > 0)
-            me.ShowSuccess(localizer[message], localizer["Success"].ToString());
+            me.ShowSuccess(localizer[message]);
         else if (count < 0)
-            me.ShowInfo(localizer[message], localizer["Info"].ToString());
+            me.ShowInfo(localizer[message]);
         else
-            me.ShowError(localizer[message], localizer["Fault"].ToString());
+            me.ShowError(localizer[message]);
     }
 
     public static void ShowNotFound<T>(this IToastService me, IStringLocalizer localizer) =>

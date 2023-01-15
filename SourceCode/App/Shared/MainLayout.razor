@@ -1,9 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
 @inject IStringLocalizer<App> Localizer
 @using System.Web;
 
 <BlazoredToasts RemoveToastsOnNavigation="true"
-                Timeout="3"
+                Timeout="2"
                 IconType="IconType.FontAwesome"
                 InfoIcon="fa fa-info-circle"
                 SuccessIcon="fa fa-check-circle"
