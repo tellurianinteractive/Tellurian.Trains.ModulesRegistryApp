@@ -747,4 +747,7 @@
   <data name="BulkContainers30" xml:space="preserve">
     <value>30' Bulkcontainers</value>
   </data>
+  <data name="Preliminary" xml:space="preserve">
+    <value>Preliminärt</value>
+  </data>
 </root>

@@ -3,7 +3,8 @@
 public enum MeetingStatus
 {
     Unknown = 0,
-    Planned = 1,
+    Preliminary = 1,
+    Planned = 2,
     UnderApproval = 3,
     Approved = 5,
     Canceled = 9

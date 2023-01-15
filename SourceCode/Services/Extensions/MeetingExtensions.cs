@@ -53,7 +53,12 @@ public static class MeetingExtensions
         me.GroupDomainId.HasValue ? $"{me.OrganiserGroup.FullName}/{me.GroupDomain?.Name}" :
         $"{me.OrganiserGroup.FullName}";
 
-    public static string StatusResourceName(this Meeting? me, DateTime at) =>
+
+    public static string Status(this Meeting? it, DateTime at) =>
+        it is null ? string.Empty :
+        Resources.Strings.ResourceManager.GetString(it.StatusResourceName(at)) ?? string.Empty;
+
+    internal static string StatusResourceName(this Meeting? me, DateTime at) =>
         me is null ? string.Empty :
         me.IsCancelled() ? "Canceled" :
         me.IsOpenForRegistration(at) ? "RegistrationOpen" :
@@ -62,9 +67,9 @@ public static class MeetingExtensions
         me.IsRegistrationAvailable() || me.IsNotYetOpenForRegistration(at) ? ((MeetingStatus)me.Status).ToString() :
         ((MeetingStatus)me.Status).ToString();
 
-    public static string Status(this Meeting? it, DateTime at) =>
-        it is null ? string.Empty :
-        Resources.Strings.ResourceManager.GetString(it.StatusResourceName(at)) ?? string.Empty;
+    public static string MeetingStatusCssClass(this Meeting meeting, DateTime at) => 
+        $"meeting {meeting.StatusResourceName(at).ToLowerInvariant()}";
+
 
 }
 

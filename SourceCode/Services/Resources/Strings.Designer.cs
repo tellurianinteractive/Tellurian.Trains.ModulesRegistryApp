@@ -1321,6 +1321,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preliminary.
+        /// </summary>
+        internal static string Preliminary {
+            get {
+                return ResourceManager.GetString("Preliminary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparing.
         /// </summary>
         internal static string Preparing {

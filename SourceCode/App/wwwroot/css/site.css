@@ -112,6 +112,9 @@ h4 {
         color: red;
         font-weight: bold;
     }
+    meeting.preliminary {
+        font-style: italic;
+    }
 
 blockquote {
     padding-left: 10px;

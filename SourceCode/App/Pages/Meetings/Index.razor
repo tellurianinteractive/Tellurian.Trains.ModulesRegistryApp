@@ -35,7 +35,7 @@
         <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
-        <td class="@MeetingStatusCssClass(item.meeting)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td>
+        <td class="@item.meeting.MeetingStatusCssClass(TimeProvider.LocalTime)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td>
         <td>
             <AppButton Label="View" Href="@MeetingHref(item.meeting.Id, "view")"/>
             @if (item.MayEdit)
@@ -63,8 +63,6 @@
 
     bool MayDelete(Meeting meeting) =>
         Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
-
-    string MeetingStatusCssClass(Meeting meeting) => $"meeting {meeting.StatusResourceName(TimeProvider.LocalTime).ToLowerInvariant()}";
 
     string MeetingHref(int id, string? function) =>
         string.IsNullOrWhiteSpace(function) ? $"meetings/{id}" : $"meetings/{id}/{function}";
