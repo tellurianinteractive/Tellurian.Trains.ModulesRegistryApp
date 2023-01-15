@@ -42,7 +42,7 @@
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
             }
-            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
+            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime, Principal))
             {
                 <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
             }
@@ -67,9 +67,14 @@
     string MeetingHref(int id, string? function) =>
         string.IsNullOrWhiteSpace(function) ? $"meetings/{id}" : $"meetings/{id}/{function}";
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
         Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
     }
 }

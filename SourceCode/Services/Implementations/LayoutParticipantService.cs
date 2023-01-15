@@ -13,12 +13,13 @@
             if (principal.IsAuthenticated())
             {
                 var dbContect = Factory.CreateDbContext();
+
                 return await dbContect.LayoutParticipants.AsNoTracking()
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module)
                     .Include(x => x.Person)
                     .Include(x => x.LayoutStations).ThenInclude(ls => ls.Station)
-                    .Where(x => x.LayoutId == layoutId)
+                    .Where(x => x.LayoutId == layoutId && x.MeetingParticipant.CancellationTime == null)
                     .ToListAsync().ConfigureAwait(false);
             }
             return Array.Empty<LayoutParticipant>();

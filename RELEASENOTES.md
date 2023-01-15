@@ -6,6 +6,8 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.8.6
 Release date 2023-01-15
 - **Preliminary** added for meeting status.
+- **Bug fix** to not show cancelled meeting participants as participating.
+- **Bug fix** of meeting orgainisers and administrators not able to register anc cancel particpation after registration closing date. 
 - **Component update** to latest versions available.
 - **New style** for toast messages.
 

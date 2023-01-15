@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;
 public static class MeetingExtensions
@@ -24,9 +25,17 @@ public static class MeetingExtensions
         it is not null &&
         it.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
 
-    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null && !it.IsCancelled() &&
-        it.Layouts.Any(l => l.IsOpenForRegistration(at));
+    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at, ClaimsPrincipal? principal = null)
+    {
+        
+        return principal is not null && it.IsRegistrationAvailable() && (
+            principal.IsGlobalAdministrator() ||
+            principal.IsCountryAdministratorInCountry(it?.OrganiserGroup?.CountryId) ||
+            principal.IsAnyGroupAdministrator(it?.OrganiserGroup)
+        ) ||
+        (   it is not null && !it.IsCancelled() &&
+            it.Layouts.Any(l => l.IsOpenForRegistration(at)));
+    }
 
     public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
         it is null || 
@@ -37,7 +46,7 @@ public static class MeetingExtensions
 
     public static bool MayRegister(this Meeting? it, DateTime at, ClaimsPrincipal? principal) =>
        principal is not null && principal.IsAnyAdministrator() ||
-        (principal.IsAuthenticated() && it.IsOpenForRegistration(at));
+        (principal.IsAuthenticated() && it.IsOpenForRegistration(at, principal));
 
     private static bool IsOpenForRegistration(this Layout it, DateTime at) =>
         it.IsRegistrationPermitted &&
