@@ -20,7 +20,8 @@
         <th>@Localizer["Name"]</th>
         <th align="center">@Localizer["IsGroupAdministrator"]</th>
         <th align="center">@Localizer["IsDataAdministrator"]</th>
-        <th align="center">@Localizer["MayBorrowGroupModules"]</th>
+        <th align="center">@Localizer["MayBorrowGroupsModules"]</th>
+        <th align="center">@Localizer["MemberMayBorrowMyModules"]</th>
         <th align="center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
 
@@ -30,6 +31,7 @@
         <td align="center">@member.IsGroupAdministrator.AsYesOrNo()</td>
         <td align="center">@member.IsDataAdministrator.AsYesOrNo()</td>
         <td align="center">@member.MayBorrowGroupsModules.AsYesOrNo()</td>
+        <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
         <td align="center">@member.Person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
             <AppButton Label="Modules" Href="@ModulesHref(member)" IconName="Modules" />
