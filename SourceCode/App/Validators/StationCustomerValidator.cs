@@ -25,7 +25,7 @@ public class StationCustomerValidator : AbstractValidator<StationCustomer>
             .MustBeValidYear(localizer)
             .WithName(n => localizer[nameof(n.ClosedYear)]);
         RuleFor(m => m.TrackOrArea)
-            .MaximumLength(10)
+            .MaximumLength(20)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.TrackOrArea)]);
         RuleFor(m => m.TrackOrAreaColor)

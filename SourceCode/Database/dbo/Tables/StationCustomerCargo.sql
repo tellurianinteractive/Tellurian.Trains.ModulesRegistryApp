@@ -3,7 +3,7 @@
     [CargoId]            INT           NOT NULL,
     [PackageUnitId]      INT           CONSTRAINT [DF_StationCustomerCargo_PackageUnitId] DEFAULT((0)) NOT NULL,
     [StationCustomerId]  INT           NOT NULL,
-    [TrackOrArea]        NVARCHAR (10) NULL,
+    [TrackOrArea]        NVARCHAR (20) NULL,
     [TrackOrAreaColor]   NCHAR (7)     NULL,
     [SpecificWagonClass] NVARCHAR(10)  NULL,
     [SpecialCargoName]   NVARCHAR (20) NULL,

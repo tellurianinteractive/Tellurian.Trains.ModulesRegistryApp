@@ -21,7 +21,8 @@ public sealed class CargoService
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.Cargos.ToReadOnlyListAsync();
+            var items = await dbContext.Cargos
+                .ToReadOnlyListAsync();
             if (includeDefaultClasses)
             {
                 return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})"))
@@ -141,7 +142,7 @@ public sealed class CargoService
             if (subItemsToId.HasValue)
             {
                 if (subItemsToId.Value == 0) return await dbContext.NhmCodes
-                        .Where(c => c.LevelDigits <= 5)
+                        .Where(c => c.LevelDigits <= 4)
                         .OrderBy(c => c.Id)
                         .Select(c => ListboxItem(c))
                         .ToReadOnlyListAsync();

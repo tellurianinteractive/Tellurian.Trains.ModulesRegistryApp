@@ -4,7 +4,7 @@
     [LayoutId]         INT          NULL,
     [CustomerName]     VARCHAR (50) NOT NULL,
     [Comment]          VARCHAR (50) NULL,
-    [TrackOrArea]      NCHAR (10)   NULL,
+    [TrackOrArea]      NVARCHAR(20)   NULL,
     [TrackOrAreaColor] NCHAR (7)    NULL,
     [OpenedYear]       SMALLINT     NULL,
     [ClosedYear]       SMALLINT     NULL,
