@@ -21,6 +21,7 @@ public class LayoutParticipant
 
     public virtual ICollection<LayoutModule> LayoutModules { get; set; }
     public virtual ICollection<LayoutStation> LayoutStations { get; set; }
+    public override string ToString() => $"{Person?.FullName()}";
 
 }
 

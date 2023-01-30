@@ -32,8 +32,8 @@ public class Layout
     public virtual Person ContactPerson { get; set; }
     public virtual ModuleStandard PrimaryModuleStandard { get; set; }
     public virtual OperatingDay StartWeekday { get; set; }
-
     public virtual ICollection<LayoutParticipant> LayoutParticipants { get; set; }
+    public override string ToString() => $"{Meeting?.Name} {PrimaryModuleStandard?.ShortName}";
 
 }
 

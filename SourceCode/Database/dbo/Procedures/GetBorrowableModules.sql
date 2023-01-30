@@ -3,6 +3,6 @@
 	@PersonId INT
 AS
 	SELECT *
-	FROM [BorrowableGroupModule] AS BM
-	WHERE BM.PersonId = @PersonId AND BM.LayoutId <> @LayoutId
+	FROM [BorrowableGroupModule] AS BGM 
+	WHERE BGM.BorrowerPersonId = @PersonId AND BGM.ModuleId NOT IN (SELECT ModuleId FROM RegisteredModules WHERE LayoutId = @LayoutId) 
 RETURN 0

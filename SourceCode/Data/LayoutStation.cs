@@ -27,6 +27,7 @@ public class LayoutStation
     public virtual ICollection<Region> Regions { get; set; }
     public virtual ICollection<LayoutLine> StartingLines { get; set; }
     public virtual ICollection<LayoutLine> EndingLines { get; set; }
+    public override string ToString() => $"{Station?.FullName}";
 }
 
 internal static class LayoutStationMapping

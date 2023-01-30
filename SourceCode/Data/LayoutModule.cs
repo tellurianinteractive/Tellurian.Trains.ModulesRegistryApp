@@ -23,6 +23,7 @@ public class LayoutModule
     public virtual Module Module { get; set; }
     public virtual LayoutLine LayoutLine { get; set; }
     public virtual LayoutStation LayoutStation { get; set; }
+    public override string ToString() => $"{Module?.FullName}";
 }
 
 internal static class LayoutModuleMapping

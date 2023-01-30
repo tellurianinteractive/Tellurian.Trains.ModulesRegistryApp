@@ -23,6 +23,7 @@ public partial class Group
     public virtual GroupDomain GroupDomain { get; set; }
     public virtual ICollection<GroupMember> GroupMembers { get; set; }
     public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
+    public override string ToString() => FullName;
 }
 
 #nullable enable

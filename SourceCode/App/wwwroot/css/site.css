@@ -112,7 +112,7 @@ h4 {
         color: red;
         font-weight: bold;
     }
-    meeting.preliminary {
+    .meeting.preliminary {
         font-style: italic;
     }
 

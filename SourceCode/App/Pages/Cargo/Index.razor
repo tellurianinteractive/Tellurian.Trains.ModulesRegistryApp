@@ -5,7 +5,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject CargoService CargoService
 
-<PageHeading ObjectName="CargoTypes" IconClass="@FontAwesome.Cargo" PageAction="PageAction.List" HelpContext="CargoTypes" ShowHelpInitially="true" />
+<PageHeading ObjectName="CargoTypes" IconClass="@FontAwesome.Cargo" PageAction="PageAction.List" HelpContext="CargoTypes" ShowHelpInitially="false" />
 
 @if (MayEdit)
 {
@@ -18,7 +18,7 @@
     </div>
 }
 <div class="grid" tabindex="-1">
-    <QuickGrid Items="@FilteredItems" Virtualize="true">
+    <QuickGrid Items="@FilteredItems" Virtualize="true" Pagination="PaginationState">
         <PropertyColumn Property="@(c => c.NhmCodeOrEmpty())" Sortable="true" Title="@Localizer["NHMCode"]">
             <ColumnOptions>
                 <div class="search-box">
@@ -43,6 +43,9 @@
         </TemplateColumn>
     </QuickGrid>
 </div>
+<Paginator Value="@PaginationState">
+
+</Paginator>
 
 @*<TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
     <TableHeader>
@@ -87,6 +90,7 @@
         }
     }
 
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
     string? NhmCodeFilter;
     string? NameFilter;
     bool HasFilter => NhmCodeFilter.HasValue() || NameFilter.HasValue();
