@@ -48,7 +48,12 @@ else
         {
             IsLoading = true;
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            if (StationId > 0)
+            if (LayoutId > 0)
+            {
+                var items = await WaybillService.GetLayoutWaybills(Principal, LayoutId, StationId);
+                Waybills = items.AsPrintableWaybills();
+            }
+            else if (StationId > 0)
             {
                 var items = await WaybillService.GetStationCustomerWaybills2(Principal, StationId, CustomerId, true, true);
                 Waybills = items.AsPrintableWaybills();

@@ -121,7 +121,7 @@ public class WaybillService
             stationCustomerId.HasValue ? $"AND {columnName} = {stationCustomerId.Value}" :
             string.Empty;
     }
-    public async Task<IEnumerable<Waybill>?> GetWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId, bool matchShadowYards = false)
+    public async Task<IEnumerable<Waybill>> GetLayoutWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId)
     {
         List<Waybill> waybills = new List<Waybill>(200);
         if (principal.IsAuthenticated())
@@ -130,7 +130,7 @@ public class WaybillService
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
-                var command = new SqlCommand("GetWaybills", connection)
+                var command = new SqlCommand("GetLayoutWaybills", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -139,10 +139,7 @@ public class WaybillService
                 if (stationId.HasValue)
                 {
                     command.Parameters.AddWithValue("@StationId", stationId);
-                    command.Parameters.AddWithValue("@Receiving", true);
-                    command.Parameters.AddWithValue("@Sending", matchShadowYards);
                 }
-                command.Parameters.AddWithValue("@MatchShadowYard", matchShadowYards);
                 try
                 {
                     connection.Open();

@@ -2,6 +2,7 @@
 SELECT -- Internal station customer cargo
 	LP.LayoutId,
 	SCC.Id,
+	SCC.StationCustomerId,
 	SCC.OperatingDayId,
 	S.[Id] AS StationId,
 	COALESCE(LS.OtherName, S.FullName) AS StationName,
@@ -41,84 +42,8 @@ FROM
 	[CargoDirection] AS CD ON SCC.DirectionId = CD.Id INNER JOIN 
 	[CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId INNER JOIN 
 	[LayoutStation] AS LS ON LS.StationId = S.Id INNER JOIN 
-	[LayoutParticipant] LP ON LS.LayoutParticipantId = LP.Id
-UNION SELECT -- Supply from shadow stations
-	LP.LayoutId,
-	0 AS Id,
-	8 AS OperatingDayId,
-	LS.StationId,
-	COALESCE(LS.OtherName, S.FullName) AS StationName,
-	COALESCE(LS.OtherSignature, S.Signature) AS StationSignature,
-	C.Id AS GargoId,
-	CAST (1 AS BIT) AS IsSupply,
-	CAST (1 AS BIT) AS IsInternational,
-	CAST (1 AS BIT) AS IsInternal,
-	CAST (1 AS BIT) AS IsShadowYard,
-	'' AS DefaultClasses,
-	COALESCE(LS.OtherCountryId, R.CountryId) AS CountryId,
-	'#FFFFFF' AS BackColor,
-	'#000000' AS ForeColor,
-	'ImportAgent' AS CustomerName,
-	NULL AS FromYear,
-	NULL AS UptoYear,
-	10 AS Quantity,
-	4 AS QuantityUnitId,
-	0 AS PackageUnitId,
-	NULL AS SpecificWagonClass,
-	NULL AS SpecialCargoName,
-	NULL AS ReadyTime,
-	CAST (0 AS BIT) AS ReadyTimeIsSpecifiedInLayout,
-	NULL AS TrackOrArea,
-	'#FFFFFF' AS TrackOrAreaColor,
-	CAST (0 AS BIT) AS EmptyReturn,
-	CAST (0 AS BIT) AS MatchReturn
-FROM 
-	LayoutParticipant LP INNER JOIN 
-	LayoutStation LS ON LS.LayoutParticipantId = LP.Id INNER JOIN
-	Station S ON S.Id = LS.StationId INNER JOIN 
-	LayoutStationRegion LSR ON LSR.LayoutStationId = LS.Id INNER JOIN
-	Region R ON R.Id = LSR.RegionId INNER JOIN 
-	Cargo AS C ON C.Id > 0
+	[LayoutParticipant] LP ON LS.LayoutParticipantId = LP.Id INNER JOIN
+	[MeetingParticipant] MP ON LP.MeetingParticipantId = MP.Id
 WHERE
-	S.IsShadow <> 0
-
-UNION SELECT -- Supply to shadow stations
-	LP.LayoutId,
-	0 AS Id,
-	8 AS OperatingDayId,
-	LS.StationId,
-	COALESCE(LS.OtherName, S.FullName) AS StationName,
-	COALESCE(LS.OtherSignature, S.Signature) AS StationSignature,
-	C.Id AS GargoId,
-	CAST (0 AS BIT) AS IsSupply,
-	CAST (1 AS BIT) AS IsInternational,
-	CAST (1 AS BIT) AS IsInternal,
-	CAST (1 AS BIT) AS IsShadowYard,
-	'' AS DefaultClasses,
-	COALESCE(LS.OtherCountryId, R.CountryId) AS CountryId,
-	'#FFFFFF' AS BackColor,
-	'#000000' AS ForeColor,
-	'ExportAgent' AS CustomerName,
-	NULL AS FromYear,
-	NULL AS UptoYear,
-	10 AS Quantity,
-	4 AS QuantityUnitId,
-	0 AS PackageUnitId,
-	NULL AS SpecificWagonClass,
-	NULL AS SpecialCargoName,
-	NULL AS ReadyTime,
-	CAST (0 AS BIT) AS ReadyTimeIsSpecifiedInLayout,
-	NULL AS TrackOrArea,
-	'#FFFFFF' AS TrackOrAreaColor,
-	CAST (0 AS BIT) AS EmptyReturn,
-	CAST (0 AS BIT) AS MatchReturn
-FROM 
-	[LayoutParticipant] LP INNER JOIN 
-	[LayoutStation] LS ON LS.LayoutParticipantId = LP.Id INNER JOIN
-	[Station] S ON S.Id = LS.StationId INNER JOIN 
-	[LayoutStationRegion] LSR ON LSR.LayoutStationId = LS.Id INNER JOIN
-	[Region] R ON R.Id = LSR.RegionId INNER JOIN 
-	[Cargo] AS C ON C.Id > 0
-WHERE
-	S.IsShadow <> 0
+	MP.CancellationTime IS NULL
 

@@ -28,7 +28,7 @@ public static class MeetingExtensions
     public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at, ClaimsPrincipal? principal = null)
     {
         
-        return principal is not null && it.IsRegistrationAvailable() && (
+        return principal is not null && it is not null && it.IsRegistrationAvailable() && (
             principal.IsGlobalAdministrator() ||
             principal.IsCountryAdministratorInCountry(it?.OrganiserGroup?.CountryId) ||
             principal.IsAnyGroupAdministrator(it?.OrganiserGroup)
@@ -38,7 +38,7 @@ public static class MeetingExtensions
     }
 
     public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
-        it is null || 
+        it is not null && it.IsRegistrationAvailable() &&
         it.Layouts.Any() && it.Layouts.All(l => l.RegistrationClosingDate <= at);
 
     private static bool IsRegistrationAvailable(this Meeting it) =>
