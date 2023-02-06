@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.8.8
 Release date 2023-02-06
 - **Improved meeeting registration** of modules to a layout. Some bugs fixed and improved page design.
+- **Waybill design** adjustments.
 
 ## Release 1.8.7
 Release date 2023-02-02

@@ -65,7 +65,7 @@
 .customer {
     font-weight: bold;
     font-size: 13pt;
-    line-height:17pt;
+    line-height:15pt;
     width: 46mm;
     white-space: nowrap;
     overflow: hidden;
@@ -75,7 +75,7 @@
 .item {
     font-weight: bold;
     font-size: 10pt;
-    min-height: 15pt;
+    min-height: 12pt;
     max-width: 46mm;
     white-space: nowrap;
     overflow: hidden;
@@ -95,11 +95,11 @@
 
 .daysandclass {
     font-weight: bold;
-    font-size: 16pt;
-    min-height: 17pt;
+    font-size: 14pt;
+    min-height: 15pt;
     padding: 1px;
-    line-height:18pt;
-    height: 18pt;
+    line-height:16pt;
+    height: 16pt;
 }
 
 

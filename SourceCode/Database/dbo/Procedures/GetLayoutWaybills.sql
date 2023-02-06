@@ -73,7 +73,10 @@ BEGIN
 		C.NB,
 		C.PL,
 		C.SV,
-		1 AS PrintCount,
+		CASE
+			WHEN CU.IsBearer <> 0 THEN CCC.Quantity
+			ELSE 1
+		END AS PrintCount,
 		CAST (0 AS BIT) AS PrintPerOperatingDay,
 		CAST (0 AS BIT) AS HasEmptyReturn
 	FROM
