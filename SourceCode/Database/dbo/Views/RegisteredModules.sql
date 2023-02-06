@@ -12,8 +12,11 @@ SELECT
 	M.ConfigurationLabel,
 	M.FremoNumber,
 	MO.OwnedShare,
-	GM.Id AS GroupMemberId,
-	GM.GroupId AS GroupId,
+	MO.PersonId AS OwnerPersonId,
+	MOP.FirstName AS OwnerFirstName,
+	MOP.LastName AS OwnerLastName,
+	MO.GroupId AS OwnerGroupId,
+	GOP.FullName AS OwnerGroupName,
 	P.Id AS PersonId,
 	P.FirstName,
 	P.MiddleName,
@@ -28,12 +31,14 @@ SELECT
 	LP.MeetingParticipantId,
 	MP.RegistrationTime
 FROM 
-	Module AS M INNER JOIN
-	ModuleOwnership AS MO ON MO.ModuleId = M.Id INNER JOIN
-	GroupMember AS GM ON GM.PersonId = MO.PersonId INNER JOIN
-	LayoutModule LM ON LM.ModuleId = M.Id INNER JOIN
-	LayoutParticipant AS LP ON LP.Id = LM.LayoutParticipantId INNER JOIN
-	MeetingParticipant AS MP ON MP.Id = LP.MeetingParticipantId INNER JOIN
-	Person AS P ON P.Id = MP.PersonId
+	Person AS P INNER JOIN
+	MeetingParticipant AS MP ON MP.PersonId = P.Id INNER JOIN
+	LayoutParticipant AS LP ON LP.MeetingParticipantId = MP.Id INNER JOIN
+	LayoutModule LM ON LM.LayoutParticipantId = LP.Id INNER JOIN
+	Module AS M ON LM.ModuleId = M.Id INNER JOIN
+	ModuleOwnership AS MO ON MO.ModuleId = M.Id LEFT JOIN
+	Person AS MOP ON MOP.Id = MO.PersonId LEFT JOIN
+	[Group] AS GOP ON GOP.Id = MO.GroupId
 WHERE
-	MP.CancellationTime IS NULL
+	MP.CancellationTime IS NULL AND
+	MO.OwnedShare > 0

@@ -3,6 +3,10 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.8
+Release date 2023-02-06
+- **Improved meeeting registration** of modules to a layout. Some bugs fixed and improved page design.
+
 ## Release 1.8.7
 Release date 2023-02-02
 - **Track of Area** field for cargo load/unload location extended to 20 characters.

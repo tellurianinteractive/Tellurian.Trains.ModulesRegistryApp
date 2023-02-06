@@ -3,7 +3,9 @@
 	@StationId INT = NULL
 AS
 BEGIN
+	SET NOCOUNT ON;
 	SELECT
+		CCC.Id,
 		CCS.StationId AS OriginStationId,
 		CCS.StationCustomerId AS OriginStationCustomerId,
 		CCS.StationName AS OriginStationName,
@@ -26,7 +28,7 @@ BEGIN
 		CAST(0 AS BIT) OriginInExternal,
 		CCC.StationId AS DestinationStationId,
 		CCC.StationCustomerId AS DestinationStationCustomerId,
-		CCC.StationName AS DesinationStationName,
+		CCC.StationName AS DestinationStationName,
 		NULL AS DestinationInternationalStationName,
 		CCC.CustomerName AS ReceiverName,
 		CCC.TrackOrArea AS ReceiverTrackOrArea,
@@ -45,7 +47,10 @@ BEGIN
 		C.DefaultClasses,
 		CCC.SpecificWagonClass,
 		CCC.QuantityUnitId,
-		CCC.Quantity,
+		CASE
+			WHEN CU.IsBearer <> 0 THEN 1
+			ELSE CCC.Quantity
+		END AS Quantity,
 		CASE
 			WHEN CCC.Quantity = 1 THEN CU.SingularResourceCode
 			ELSE CU.PluralResourceCode
@@ -67,7 +72,10 @@ BEGIN
 		C.NL,
 		C.NB,
 		C.PL,
-		C.SV
+		C.SV,
+		1 AS PrintCount,
+		CAST (0 AS BIT) AS PrintPerOperatingDay,
+		CAST (0 AS BIT) AS HasEmptyReturn
 	FROM
 		LayoutCustomerCargo AS CCS INNER JOIN
 		LayoutCustomerCargo AS CCC ON CCC.CargoId = CCS.CargoId INNER JOIN

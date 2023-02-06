@@ -25,66 +25,79 @@ else
     <div style="margin-top: 12pt">
         @if (Layout is not null)
         {
+            <div style="background-color: lightgoldenrodyellow">
+                <h3>@Localizer["RegisteredModules"]</h3>
+
+                <TableTemplate Items="ParticipantsRegisteredModules">
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["Module"]</th>
+                        <th>@Localizer["RegistrationTime"]</th>
+                        @*                    <th>@Localizer["Position"] </th>
+                *@                    <th>@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
+                        <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
+                        <td>@item.Module.FullName</td>
+                        <td>@item.RegisteredTime.ToString("g")</td>
+                        @*                    <td>@item.LayoutPosition()</td>
+                *@                    <td>
+                            @if (MayCancel(item))
+                            {
+                                <AppButton Label="Remove" OnClickCallback="(() => OnCancel(item.Id))" IconName="@FontAwesome.Modules" />
+                            }
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            </div>
             <h3>@Localizer["MyAvailableModules"]</h3>
-            <TableTemplate Items="MyPackages" Key="Key" HideNoRecordsToDisplay=true>
-                <TableHeader>
-                    <th>@Localizer["Package"]</th>
-                    <th>@Localizer["Owner"]</th>
-                    <th>@Localizer["Modules"]</th>
-                    <th>@Localizer["Actions"]</th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.Name</td>
-                    <td>@item.OwnerName</td>
-                    <td>@item.ToString()</td>
-                    <td>
-                        <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
-                    </td>
-                </RowTemplate>
-            </TableTemplate>
-            <h3>@Localizer["OtherAvailableModules"]</h3>
-            <TableTemplate Items="OtherPackages" Key="Key" HideNoRecordsToDisplay=true>
-                <TableHeader>
-                    <th>@Localizer["Package"]</th>
-                    <th>@Localizer["Owner"]</th>
-                    <th>@Localizer["Modules"]</th>
-                    <th>@Localizer["Actions"]</th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.Name</td>
-                    <td>@item.OwnerName</td>
-                    <td>@item.ToString()</td>
-                    <td>
-                        <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
-                    </td>
-                </RowTemplate>
-            </TableTemplate>
+            @if (AvailablePackages?.Any() == false)
+            {
+                <ActionMessage Label="NoModulesAvailable" AlertType="Info" />
+            }
+            else
+            {
+                <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true>
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["Modules"]</th>
+                        <th>@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.Name</td>
+                        <td>@item.OwnerName</td>
+                        <td>@item.ToString()</td>
+                        <td>
+                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
+            @if (BorrowablePackages?.Any() == true)
+            {
+                <h3>@Localizer["OtherAvailableModules"]</h3>
+                <TableTemplate Items="BorrowablePackages" Key="Key" HideNoRecordsToDisplay=true>
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["Modules"]</th>
+                        <th>@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.Name</td>
+                        <td>@item.OwnerName</td>
+                        <td>@item.ToString()</td>
+                        <td>
+                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
 
-            <h3>@Localizer["RegisteredModules"]</h3>
 
-            <TableTemplate Items="MyRegisteredModules" >
-                <TableHeader>
-                    <th>@Localizer["Package"]</th>
-                    <th>@Localizer["Owner"]</th>
-                    <th>@Localizer["Module"]</th>
-                    <th>@Localizer["RegistrationTime"]</th>
-                    <th>@Localizer["Position"] </th>
-                    <th>@Localizer["Actions"]</th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@(item.Module.PackageLabel ?? item.Module.FullName)</td>
-                    <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
-                    <td>@item.Module.FullName</td>
-                    <td>@item.RegisteredTime.ToString("g")</td>
-                    <td>@item.LayoutPosition()</td>
-                    <td>
-                        @if (MayCancel(item))
-                        {
-                            <AppButton Label="Remove" OnClickCallback="(() => OnCancel(item.Id))" IconName="@FontAwesome.Modules" />
-                        }
-                    </td>
-                </RowTemplate>
-            </TableTemplate>
         }
     </div>
 }
@@ -103,14 +116,14 @@ else
     LayoutParticipant? LayoutParticipant;
     ModuleOwnershipRef? OwnershipRef;
 
-    IEnumerable<Module>? Modules = Array.Empty<Module>();
-    IEnumerable<Module>? AvailableModules;
-    IEnumerable<LayoutModule> AllRegisteredModules = new List<LayoutModule>();
-    IEnumerable<ModulePackage>? MyPackages = Array.Empty<ModulePackage>();
-    IEnumerable<ModulePackage>? OtherPackages = Array.Empty<ModulePackage>();
-    IEnumerable<LayoutModule>? MyRegisteredModules = Enumerable.Empty<LayoutModule>();
+    IEnumerable<LayoutModule> ParticipantsRegisteredModules = Enumerable.Empty<LayoutModule>();
+    IEnumerable<AvailableModule> ParticipantsAvailableModules = Enumerable.Empty<AvailableModule>();
+    IEnumerable<AvailableModule> ParticipantsBorrowableModules = Enumerable.Empty<AvailableModule>();
 
-    bool MayCancel(LayoutModule lm) => Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
+    IEnumerable<ModulePackage>? AvailablePackages = Array.Empty<ModulePackage>();
+    IEnumerable<ModulePackage>? BorrowablePackages = Array.Empty<ModulePackage>();
+
+    bool MayCancel(LayoutModule lm) => Principal.IsAnyAdministrator() || Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
 
     protected override async Task OnParametersSetAsync()
     {
@@ -140,15 +153,6 @@ else
         }
     }
 
-    async Task<IEnumerable<Module>> AllModules(ModuleOwnershipRef ownershipRef)
-    {
-        if (LayoutParticipant is not null && Layout is not null)
-        {
-            return await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
-        }
-        return (await ModuleService.GetAllAsync(Principal, ownershipRef)).Concat(await ModuleService.GetAllGroupOwnedForDataAdministrator(Principal, ownershipRef));
-    }
-
     async Task RegisterParticipation(MeetingParticipant? meetingParticipant, Layout? layout)
     {
         if (meetingParticipant is not null && layout is not null)
@@ -162,8 +166,8 @@ else
 
     async Task OnRegisterPackage(int packageId)
     {
-        var package = MyPackages?.SingleOrDefault(p => p.Id == packageId);
-        if (package is null) package = OtherPackages?.SingleOrDefault(p => p.Id == packageId);
+        var package = AvailablePackages?.SingleOrDefault(p => p.Id == packageId);
+        if (package is null) package = BorrowablePackages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
@@ -184,20 +188,24 @@ else
 
     async Task Update()
     {
-        if (Layout is not null && LayoutParticipant is not null)
+        if (LayoutId > 0 && MeetingParticipant is not null)
         {
-            Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
-            AllRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutId);
-            MyRegisteredModules = AllRegisteredModules.Where(rm => rm.LayoutParticipant.Id == LayoutParticipant.Id).ToList();
-            AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
-            var packages = AvailableModules.AsPackages();
-            MyPackages = packages.Where(am => am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
-            OtherPackages = packages.Where(am => !am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
+            ParticipantsRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutId, MeetingParticipant.PersonId);
+            ParticipantsAvailableModules = await LayoutService.GetsAvailableModules(Principal, LayoutId, MeetingParticipant.PersonId);
+            ParticipantsBorrowableModules = await LayoutService.GetBorrowableModules(Principal, LayoutId, MeetingParticipant.PersonId);
+            AvailablePackages = ParticipantsAvailableModules.AsModulePackages();
+            BorrowablePackages = ParticipantsBorrowableModules.AsModulePackages();
+            //Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
+            //MyRegisteredModules = ParticipantsRegisteredModules.Where(rm => rm.LayoutParticipant.Id == LayoutParticipant.Id).ToList();
+            //AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
+            //var packages = AvailableModules.AsPackages();
+            //MyPackages = packages.Where(am => am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
+            //OtherPackages = packages.Where(am => !am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
         }
     }
 
     string Key(ModulePackage package) => package.Name;
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
-    IEnumerable<int> AllRegisteredModuleIds => AllRegisteredModules.Select(m => m.ModuleId);
+    IEnumerable<int> AllRegisteredModuleIds => ParticipantsRegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Name())).ToList();
 }

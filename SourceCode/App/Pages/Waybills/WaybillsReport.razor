@@ -32,7 +32,7 @@ else
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int StationId { get; set; }
+    [Parameter] public int? StationId { get; set; }
     [Parameter] public int? CustomerId { get; set; }
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int? LayoutStationId { get; set; }
@@ -55,7 +55,7 @@ else
             }
             else if (StationId > 0)
             {
-                var items = await WaybillService.GetStationCustomerWaybills2(Principal, StationId, CustomerId, true, true);
+                var items = await WaybillService.GetStationCustomerWaybills2(Principal, StationId.Value, CustomerId, true, true);
                 Waybills = items.AsPrintableWaybills();
             }
         }

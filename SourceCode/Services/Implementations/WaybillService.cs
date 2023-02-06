@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Resources;
 
@@ -7,11 +8,13 @@ namespace ModulesRegistry.Services.Implementations;
 public class WaybillService
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public WaybillService(IDbContextFactory<ModulesDbContext> factory)
+    private readonly ILogger<WaybillService> Logger;
+
+    public WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger<WaybillService> logger)
     {
         Factory = factory;
+        Logger = logger;
     }
-
 
     public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
     {
@@ -41,8 +44,9 @@ public class WaybillService
                         waybills.Add(reader.MapWaybill(stationId));
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Logger.LogCritical(ex, ex.Message);
                     throw;
                 }
             }
@@ -78,8 +82,9 @@ public class WaybillService
                         waybills.Add(reader.MapWaybill(stationId));
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Logger.LogCritical(ex, ex.Message);
                     throw;
                 }
 
@@ -104,7 +109,7 @@ public class WaybillService
             SELECT * FROM ShadowYardSupplierWaybill AS SYSW 
                 WHERE SYSW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "SYSW.DestinationStationCustomerId")}
             """;
-        
+
         static string sqlConsumer(int stationId, int? stationCustomerId) =>
             $"""
             SELECT * FROM ModuleConsumerWaybill AS MCW
@@ -150,8 +155,9 @@ public class WaybillService
                         waybills.Add(reader.MapWaybill(stationId ?? 0));
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Logger.LogCritical(ex, ex.Message);
                     return waybills;
                 }
             }
@@ -178,7 +184,7 @@ internal static class WaybillMapper
             //MatchReturn = record.GetBool("MatchReturn")
         };
         waybill.Origin.Waybill = waybill;
-        waybill.Destination.Waybill = waybill;  
+        waybill.Destination.Waybill = waybill;
         return waybill;
     }
 
@@ -237,7 +243,7 @@ internal static class WaybillMapper
 
 internal static class SqlHelpers
 {
-    public static string OrNull(this int? value) => 
+    public static string OrNull(this int? value) =>
         value.HasValue ? value.Value.ToString() :
         "NULL";
 }

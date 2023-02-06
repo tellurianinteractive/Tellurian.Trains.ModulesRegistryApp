@@ -102,20 +102,20 @@
                 {
                     <TableTemplate Items="@LayoutParticipation(Meeting.Layouts, Participant)">
                         <TableHeader>
+                            <th width="100px">@Localizer["Actions"]</th>
                             <th width="15%">@Localizer["Layout"]</th>
                             <th>@Localizer["Details"]</th>
-                            <th width="100px">@Localizer["Actions"]</th>
                         </TableHeader>
                         <RowTemplate Context="item">
-                            <td>@item.Layout.Name()</td>
-                            <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                             <td>
                                 @if (item.Layout?.IsRegistrationPermitted == true)
                                 {
                                     <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                                 }
                             </td>
-                        </RowTemplate>
+                            <td>@item.Layout.Name()</td>
+                            <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
+                       </RowTemplate>
                     </TableTemplate>
                 }
             }
@@ -202,6 +202,7 @@
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             if (Participant is null) return;
             var result = await MeetingService.CancelMeetingParticipaction(Principal, Participant.Id);
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
@@ -211,6 +212,7 @@
         if (Meeting is not null && Participant is not null)
         {
             var personId = Participant.PersonId;
+            Participant.CancellationTime = null;
             var result = await MeetingService.SaveAsync(Principal, Meeting, Participant);
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
@@ -222,6 +224,7 @@
     async Task OnCancel(int particpantId)
     {
         var result = await MeetingService.CancelMeetingParticipaction(Principal, particpantId);
+        Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 

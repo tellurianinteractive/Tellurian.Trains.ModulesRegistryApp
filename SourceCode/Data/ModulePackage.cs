@@ -5,7 +5,7 @@
 /// </summary>
 public class ModulePackage
 {
-    public ModulePackage(int id, ModulePackageType type, string name, string ownerName, int[] ownerPersonId, IEnumerable<Module> modules)
+    public ModulePackage(int id, ModulePackageType type, string name, string ownerName, int[] ownerPersonId, IEnumerable<AvailableModule> modules)
     {
         Id = id;
         Name = name;
@@ -18,7 +18,7 @@ public class ModulePackage
     public string Name { get; }
     public string OwnerName { get; }
     public int[] OwnerPersonId { get; }
-    public IEnumerable<Module> Modules { get; }
+    public IEnumerable<AvailableModule> Modules { get; }
     public ModulePackageType PackageType { get; }
     public int ScaleId { get; init; }
     public int LayoutId { get; set; }
