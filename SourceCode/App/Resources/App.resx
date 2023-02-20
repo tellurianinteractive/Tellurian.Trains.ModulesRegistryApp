@@ -1302,4 +1302,7 @@
   <data name="Unregister" xml:space="preserve">
     <value>Unregister</value>
   </data>
+  <data name="NoModulesAvailable" xml:space="preserve">
+    <value>No modules available</value>
+  </data>
 </root>

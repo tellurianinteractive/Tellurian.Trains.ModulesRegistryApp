@@ -18,6 +18,7 @@ public static class StationCustomerWaybillExtensions
     public static string OtherStationName(this StationCustomerWaybill? it) =>
         it is null ? string.Empty :
         it.OtherStationCustomerCargo?.StationCustomer?.Station.FullName ?? 
+        it.OtherExternalCustomerCargo?.ExternalStationCustomer?.ExternalStation.FullName ??
         it.OtherRegion.RepresentativeExternalStation.FullName;
 
     public static string OtherRegionName(this StationCustomerWaybill? it) =>

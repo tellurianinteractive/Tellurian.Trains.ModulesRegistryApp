@@ -72,8 +72,11 @@ public class WaybillService
                     CommandType = CommandType.Text,
                     CommandTimeout = 120
                 };
+                command.Parameters.AddWithValue("@StationId", stationId);
+                command.Parameters.AddWithNullableValue("@StationCustomerId", stationCustomerId);
+
                 try
-                {
+                { 
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
@@ -101,25 +104,25 @@ public class WaybillService
         static string sqlSupplier(int stationId, int? stationCustomerId) =>
             $"""
             SELECT * FROM ModuleSupplierWaybill AS MSW
-                WHERE MSW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "MSW.DestinationStationCustomerId")}
+                WHERE MSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR MSW.DestinationStationCustomerId = @StationCustomerId )
             UNION
             SELECT * FROM ExternalSupplierWaybill AS ESW
-            	WHERE ESW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "ESW.DestinationStationCustomerId")}
+            	WHERE ESW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR ESW.DestinationStationCustomerId = @StationCustomerId )
             UNION
             SELECT * FROM ShadowYardSupplierWaybill AS SYSW 
-                WHERE SYSW.DestinationStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "SYSW.DestinationStationCustomerId")}
+                WHERE SYSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR SYSW.DestinationStationCustomerId = @StationCustomerId )
             """;
 
         static string sqlConsumer(int stationId, int? stationCustomerId) =>
             $"""
             SELECT * FROM ModuleConsumerWaybill AS MCW
-                WHERE MCW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "MCW.OriginStationCustomerId ")}
+                WHERE MCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR MCW.OriginStationCustomerId = @StationCustomerId )
             UNION
             SELECT * FROM ExternalConsumerWaybill AS ECW
-            	WHERE ECW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "ECW.OriginStationCustomerId ")}
+            	WHERE ECW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR ECW.OriginStationCustomerId = @StationCustomerId )
             UNION
             SELECT * FROM ShadowYardConsumerWaybill AS SYCW 
-                WHERE SYCW.OriginStationId = {stationId} {StationCustomerCriteria(stationCustomerId, "SYCW.OriginStationCustomerId ")}
+                WHERE SYCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId )
             """;
 
         static string StationCustomerCriteria(int? stationCustomerId, string columnName) =>

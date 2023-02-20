@@ -25,14 +25,16 @@ Ett lok som hoppar iväg är inte kul att köra.
 - Lokets toppfart bör vara "säker". Justera värdet CV 5 för detta.
 
 #### Förberedelse av lokmaskineri
-- Använd hjul som uppfyller kraven: [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bör betraktas som ett minimikrav,
-men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) krävs ofta.
-- Rengör hjulen och kontaktblecken för optimal strömupptagning.
-- Om ditt lok har slirskydd, kontrollera att de är okej. Lok med hjul avsedda för slirskydd kommer inte att fungera bra utan dessa.
-– Testa dina lok före träffen genom att köra dem på en bana, inte bara i en provbädd.
-– Om ditt lok går sönder träffen mötet finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
+* Använd hjul som uppfyller kraven: 
+* Rengör hjulen och kontaktblecken för optimal strömupptagning.
+* Om ditt lok har slirskydd, kontrollera att de är okej. 
+Lok med hjul avsedda för slirskydd kommer inte att fungera bra utan dessa.
+* Testa dina lok före träffen genom att köra dem på en bana, inte bara i en provbädd.
+* Om ditt lok går sönder träffen mötet finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
 
 För H0-lok:
+- Hjul [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bör betraktas som ett minimikrav,
+men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) krävs ofta.
 - Använd FREMO-godkända kopplingar - [*Fleischmann 6511*](https://www.habohobby.se/sv/modelljarnvag/h0-skala/utbyteskoppel-kulisser/flm-standardkoppel-1st.html) 
 eller [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detalj).
 - Justera hjulens back-to-back mått till 14,5 mm ± 0,1 mm.

@@ -1302,4 +1302,7 @@
   <data name="Unregister" xml:space="preserve">
     <value>Afregistrer</value>
   </data>
+  <data name="NoModulesAvailable" xml:space="preserve">
+    <value>Ingen tilgængelige moduler</value>
+  </data>
 </root>

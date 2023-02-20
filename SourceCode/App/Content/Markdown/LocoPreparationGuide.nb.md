@@ -1,4 +1,4 @@
-﻿## Forbered lokoteket for modultreffer
+﻿## Forbered lokomotivet for modultreffer
 Her er noen retningslinjer for å forberede lokene dine før du setter dem på sporet
 på modultreff.
 
@@ -22,15 +22,16 @@ Hvis du har ferdighetene eller har noen som kan hjelpe deg, gjør følgende for 
   - CV 4 kontrollerer retardasjon og du bør bruke en liten verdi slik at lokomotivet kan stoppes på en kort strekning.
 - Toppfart på lokomotivet skal være "sikkert". Juster verdi CV 5 for dette.
 
-#### Klargjøring av lokomaskiner
-- Bruk hjul som oppfyller kravene, [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betraktes som et minimumskrav,
-men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) er ofte nødvendig.
+#### Klargjøring av lokomotivet
+- Bruk hjul som oppfyller kravene.
 - Rengjør hjulene og kontaktbladene for optimalt strømforbruk.
 - Hvis lokomotivet ditt har sklibeskyttelsesgummieringer, sjekk at de er i orden. Locos med gummiringer for sklisikring vil ikke gå bra uten disse ringene.
 - Test lokoene dine før møtet ved å kjøre dem på en bane, ikke bare i en prøveseng.
 - Hvis lokoet ditt svikter under møtet, er det forhåpentligvis noen som kan skaffe et reservelok. Så ta med noen ekstra lok.
  
 For H0-lokomotiver:
+- Hjul [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betraktes som et minimumskrav,
+men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) er ofte nødvendig
 - Bruk FREMO-godkjente koblinger - *Fleischmann 6511* eller [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detalj).
 - Juster hjulenes back-to-back til 14,5 mm ± 0,1 mm.
 

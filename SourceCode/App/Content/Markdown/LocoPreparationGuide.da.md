@@ -18,15 +18,16 @@ Hvis du har evnerne eller har nogen, der kan hjælpe dig, så gør følgende for
   - CV 4 styrer retardation, og du bør bruge en lille værdi, så lokomotivet kan stoppes på en kort strækning.
 - Lokomotivets tophastighed skal være "sikker". Juster værdi CV 5 for dette.
 
-#### Klargøring af lokomaskiner
-- Brug hjul, der opfylder kravene, [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betragtes som et minimumskrav,
-men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) er ofte påkrævet.
+#### Klargøring af maskinen
+- Brug hjul, der opfylder kravene.
 - Rengør hjulene og kraftkontaktbladene for optimalt strømforbrug.
 - Hvis dit lokomotiv har gummiringe forskridsikre, så tjek at de er i orden. Hjul til gummiringe vil ikke køre godt uden disse ringe.
 - Test dine lokomotiver før mødet ved at køre dem på en bane, ikke kun i en testleje.
 - Hvis dit loko svigter under mødet, er der forhåbentlig nogen, der kan stille et reservelok til rådighed. Så tag nogle ekstra lokomotiver med.
  
 For H0-lokomotiver:
+- Hjul [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betragtes som et minimumskrav,
+men [RP 25](https://www.nmra.org/sites/default/files/standards/sandrp/pdf/RP-25%202009.07.pdf) er ofte påkrævet.
 - Brug FREMO-godkendte koblinger - *Fleischmann 6511* eller [*Weinert 8641*](https://weinert-modellbau.de/shop/weinert-modellbau-h0/bauteile-h0/grosspackung-kupplungen-zum-einsetzen-in-die-pufferbohle-detalje).
 - Juster hjulet back-to-back til at være 14,5 mm ± 0,1 mm.
 
