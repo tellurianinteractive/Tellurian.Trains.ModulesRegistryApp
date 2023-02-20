@@ -5,7 +5,7 @@ There is maximum one release per date, but this can be performed as one or sever
 
 ## Release 1.8.9
 Release date 2023-02-20
-- **Waybill edit** now display correct station names. Thanks to Alexander Ehn for reporting this,
+- **Waybill edit** now display correct station names. Thanks to Alexander Ehn for reporting this.
 - **Loco Preparation Guide** has minor edits and format corrections.
 - **Translations** added.
 
@@ -17,7 +17,7 @@ Release date 2023-02-06
 ## Release 1.8.7
 Release date 2023-02-02
 - **Track of Area** field for cargo load/unload location extended to 20 characters.
-- **Cargo list** page is now paged.
+- **Cargo list** page is now paged and can be searched.
 - **Bug fix** of meeting status *closed for registration* shown for meeting that does not allow registrations.
 - **Bug fix** of translations for group member rights.
 
