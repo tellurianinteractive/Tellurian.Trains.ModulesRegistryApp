@@ -53,7 +53,7 @@ public class MeetingService
         return await dbContext.Meetings.AsNoTracking()
              .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
              .Include(m => m.Layouts).ThenInclude(l => l.ContactPerson)
-             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
+             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
              .Include(m => m.Participants).ThenInclude(p => p.Person)

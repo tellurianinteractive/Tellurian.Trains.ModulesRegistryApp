@@ -8,7 +8,14 @@
 
 @if (Meeting is null)
 {
-    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+    @if (IsLoaded)
+    {
+        <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+    }
+    else
+    {
+        <ActionMessage Label="LoadingRecords" AlertType="info" />
+    }
 }
 else
 {
@@ -42,11 +49,14 @@ else
 
     ClaimsPrincipal? Principal;
     Meeting? Meeting;
+    bool IsLoaded;
 
     protected override async Task OnParametersSetAsync()
     {
+        IsLoaded = false;
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Meeting = await MeetingService.FindByIdAsync(Id);
+        IsLoaded = true;
     }
 
 

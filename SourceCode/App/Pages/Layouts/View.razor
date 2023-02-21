@@ -8,23 +8,30 @@
 
 <PageHeading Label="Layouts" Owner="@Meeting" IconClass="Layout" />
 
-@if (Meeting is null || Meeting.Layouts.Count() == 0)
+@if (Meeting is null)
+{
+    <ActionMessage Label="LoadingRecords" AlertType="info" />
+}
+else if (Meeting.Layouts.Count() == 0)
 {
     <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+
 }
 else
 {
     @foreach (var item in Meeting.Layouts)
     {
         <div style="padding-top: 10pt; padding-bottom: 6px;">
-            @Item("Layout", item.PrimaryModuleStandard.ShortName, "h3")
-            @Item("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
-            @Item("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
-            @Item("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
-            @Item("Organiser", item.OrganisingGroup.FullName)
-            @if (item.ContactPersonId.HasValue) @Item("ContactPerson", item.ContactPerson.Name())
-            @Item("OperationTheme", item.Theme)
-            @Item("Period", OperatingPeriod(item))
+            @Display("Layout", LayoutDescription(item), "h3")
+            @Display("Scale", $"{item.PrimaryModuleStandard.Scale.ShortName} (1:{item.PrimaryModuleStandard.Scale.Denominator})")
+            @Display("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
+            @Display("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
+            @Display("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
+            @Display("OperationTheme", item.Theme)
+            @Display("Period", OperatingPeriod(item))
+            @Display("PrimaryModuleStandard", item.PrimaryModuleStandard.ShortName)
+            @Display("Organiser", item.OrganisingGroup.FullName)
+            @if (item.ContactPersonId.HasValue) @Display("ContactPerson", item.ContactPerson.Name())
             @if (Principal.IsAuthenticated() && item.IsRegistrationPermitted)
             {
                 <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@LayoutModulesLink(item.Id)" />
@@ -44,12 +51,16 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
+        Meeting = null;
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Meeting = await MeetingService.FindByIdAsync(Id);
     }
 
-    MarkupString Item(string label, string text, string element = "div") => new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
+    MarkupString Display(string label, string text, string element = "div") => new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;
     string LayoutModulesLink(int id) => $"layouts/{id}/modules";
+    string LayoutDescription(Layout layout) =>
+        layout.Theme.HasNoValue() ? $"{layout.PrimaryModuleStandard.ShortName}" :
+        $"{layout.Theme}";
 
 }
