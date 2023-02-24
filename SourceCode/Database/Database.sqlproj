@@ -177,6 +177,8 @@
     <Build Include="dbo\Tables\TimetableStretch.sql" />
     <Build Include="dbo\Tables\TimetableStretchLayoutTrackStretch.sql" />
     <Build Include="dbo\Tables\LayoutVehicleProvider.sql" />
+    <Build Include="dbo\Tables\LayoutRoutePattern.sql" />
+    <Build Include="dbo\Tables\LayoutRoutePatternLayoutStation.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
