@@ -4,6 +4,7 @@
     [OrganisingGroupId]              INT            NOT NULL,
     [ContactPersonId]                INT            NULL,
     [PrimaryModuleStandardId]        INT            NOT NULL,
+    [PrimaryOperationCountryId]      INT            NULL,
     [Theme]                          NVARCHAR (100) NULL,
     [Details]                        NVARCHAR (MAX) NULL,
     [FirstYear]                      SMALLINT       NULL,
@@ -14,20 +15,27 @@
     [RegistrationClosingDate]        SMALLDATETIME  NOT NULL,
     [RegistrationOpeningDate]        SMALLDATETIME  NOT NULL,
     [ModuleRegistrationClosingDate]  SMALLDATETIME  NULL,
-    [IsRegistrationPermitted]        BIT            NOT NULL DEFAULT 1,
+    [IsRegistrationPermitted]        BIT            NOT NULL DEFAULT 0,
+    [FontFamily]                     NVARCHAR(50)   NULL, 
+    [GeneralInstructionsMarkdown]    NVARCHAR(2000) NULL,
+
     CONSTRAINT [PK_Layout] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Layout_OrganisingGroup] FOREIGN KEY ([OrganisingGroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Layout_ResponsiblePerson] FOREIGN KEY ([ContactPersonId]) REFERENCES [dbo].[Person] ([Id]),
     CONSTRAINT [FK_Layout_Meeting] FOREIGN KEY ([MeetingId]) REFERENCES [dbo].[Meeting] ([Id]),
     CONSTRAINT [FK_Layout_ModuleStandard] FOREIGN KEY ([PrimaryModuleStandardId]) REFERENCES [dbo].[ModuleStandard] ([Id]),
-    CONSTRAINT [FK_Layout_OperatingDay] FOREIGN KEY ([StartWeekdayId]) REFERENCES [dbo].[OperatingDay] ([Id])
+    CONSTRAINT [FK_Layout_OperatingDay] FOREIGN KEY ([StartWeekdayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
+    CONSTRAINT [FK_Layout_PrimaryOperationCountry] FOREIGN KEY ([PrimaryOperationCountryId]) REFERENCES [dbo].[Country] ([Id])
 );
 GO
 CREATE TRIGGER [DeleteLayout] ON [Layout] INSTEAD OF DELETE 
 AS
 BEGIN
-    DELETE FROM [LayoutLine] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
+    DELETE FROM [TimetableStretch] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
     DELETE FROM [LayoutParticipant] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
+    DELETE FROM [Schedule] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
+    DELETE FROM [Train] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
+    DELETE FROM [LayoutVehicle] WHERE [LayoutId] IN (SELECT Id FROM DELETED)
     DELETE FROM [Layout] WHERE Id IN (SELECT Id FROM DELETED)
 END
 

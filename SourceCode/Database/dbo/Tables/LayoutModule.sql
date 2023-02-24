@@ -10,7 +10,7 @@
 	[LayoutLinePosition]   TINYINT CONSTRAINT [DF_LayoutModule_LinePosition] DEFAULT ((0)) NOT NULL,
 	[BringAnyway]          BIT CONSTRAINT [DF_LayoutModule_BringAnyway] DEFAULT ((0)) NOT NULL,
 	[Note]                 NVARCHAR(50) NULL,
-	CONSTRAINT [FK_LayoutModule_LayoutParticipant] FOREIGN KEY ([LayoutParticipantId]) REFERENCES [dbo].[LayoutParticipant] ([Id]),
+	CONSTRAINT [FK_LayoutModule_LayoutParticipant] FOREIGN KEY ([LayoutParticipantId]) REFERENCES [dbo].[LayoutParticipant] ([Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_LayoutModule_Module] FOREIGN KEY ([ModuleId]) REFERENCES [dbo].[Module] ([Id]) ,
 	CONSTRAINT [FK_LayoutModule_LayoutStation] FOREIGN KEY ([LayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id])
 )

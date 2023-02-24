@@ -112,7 +112,6 @@
     <Build Include="dbo\Tables\LayoutModule.sql" />
     <Build Include="dbo\Tables\LayoutStation.sql" />
     <Build Include="dbo\Tables\LayoutStationRegion.sql" />
-    <Build Include="dbo\Tables\LayoutLine.sql" />
     <Build Include="dbo\Listboxes\ListBasicDay.sql" />
     <Build Include="dbo\Listboxes\ListCargoDirection.sql" />
     <Build Include="dbo\Listboxes\ListCargoReadyTime.sql" />
@@ -164,6 +163,20 @@
     <Build Include="dbo\Procedures\GetAvailableModules.sql" />
     <Build Include="dbo\Procedures\GetLayoutParticipantEmail.sql" />
     <Build Include="dbo\Procedures\GetLayoutWaybills.sql" />
+    <Build Include="dbo\Tables\LayoutTrackStretch.sql" />
+    <Build Include="dbo\Tables\Train.sql" />
+    <Build Include="dbo\Tables\TrainCategory.sql" />
+    <Build Include="dbo\Tables\TrainStationCall.sql" />
+    <Build Include="dbo\Tables\Schedule.sql" />
+    <Build Include="dbo\Tables\ScheduleTrainPart.sql" />
+    <Build Include="dbo\Tables\LayoutVehicle.sql" />
+    <Build Include="dbo\Tables\LayoutVehicleSchedule.sql" />
+    <Build Include="dbo\Tables\DriverDuty.sql" />
+    <Build Include="dbo\Tables\DriverDutyScheduleLocoPart.sql" />
+    <Build Include="dbo\Tables\ModuleOnLayoutTrackStretch.sql" />
+    <Build Include="dbo\Tables\TimetableStretch.sql" />
+    <Build Include="dbo\Tables\TimetableStretchLayoutTrackStretch.sql" />
+    <Build Include="dbo\Tables\LayoutVehicleProvider.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
