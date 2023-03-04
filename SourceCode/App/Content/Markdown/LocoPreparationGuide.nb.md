@@ -1,4 +1,4 @@
-﻿## Forbered lokomotivet for modultreffer
+﻿## Forbered lokomotivet ditt for modultreffer
 Her er noen retningslinjer for å forberede lokene dine før du setter dem på sporet
 på modultreff.
 
@@ -23,11 +23,11 @@ Hvis du har ferdighetene eller har noen som kan hjelpe deg, gjør følgende for 
 - Toppfart på lokomotivet skal være "sikkert". Juster verdi CV 5 for dette.
 
 #### Klargjøring av lokomotivet
-- Bruk hjul som oppfyller kravene.
+- Bruk hjul som oppfyller kravene, se nedenfor.
 - Rengjør hjulene og kontaktbladene for optimalt strømforbruk.
-- Hvis lokomotivet ditt har sklibeskyttelsesgummieringer, sjekk at de er i orden. Locos med gummiringer for sklisikring vil ikke gå bra uten disse ringene.
-- Test lokoene dine før møtet ved å kjøre dem på en bane, ikke bare i en prøveseng.
-- Hvis lokoet ditt svikter under møtet, er det forhåpentligvis noen som kan skaffe et reservelok. Så ta med noen ekstra lok.
+- Hvis lokomotivet ditt har sklibeskyttelsesgummieringer, sjekk at de er i orden. Lokomotiv med gummiringer for sklisikring vil ikke gå bra uten disse ringene.
+- Test lokomotivene dine før møtet ved å kjøre dem på en bane, ikke bare i en prøveseng.
+- Hvis lokomotivet ditt svikter under møtet, er det forhåpentligvis noen som kan skaffe et reservelok. Så ta med noen ekstra lok.
  
 For H0-lokomotiver:
 - Hjul [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bør betraktes som et minimumskrav,
@@ -40,20 +40,20 @@ Det anbefales at loket og styrevognen i den andre enden har synkroniserte lys so
 Dette betyr at de må ha samme DCC-adresse og samme frontlys- og bakgrunnslysfunksjoner. Disse innstillingene endres i dekoderinnstillingene.
 
 #### Forberedelse av FRED
-FRED-kørehåndtak er den eneste som skal brukes på FREMO-treff.
-- Sørg for at din FRED er merket med operatør, klasse og inventarnummer, eksempel **DB MZ 1456**. Dette hjelper folk til å finne den rette FRED.
-- Det anbefales også å sette viktige lokofunksjoner på FRED-klistremerket. Minst lys-funksjoner, horn og motor bør dokumenteres.
-- Merk at funksjoner over F8 noen ganger ikke fungerer på FREMO-møter, på grunn av begrensninger i den digitale sentralen som brukes. Så gjør alle viktige funksjoner tilgjengelige på F1-F8.
-- Selv om du ikke har en FRED på lokomotivene dine, forbered et FRED-klistremerke.
+FRED-kørehåndtak er den eneste som skal brukes på FREMO-treff
+* Sørg for at din FRED er merket med operatør, klasse og inventarnummer, eksempel **DB MZ 1456**. Dette hjelper folk til å finne den rette FRED.
+* Det anbefales også å sette viktige lokofunksjoner på FRED-klistremerket. Minst lys-funksjoner, horn og motor bør dokumenteres.
+* Merk at funksjoner over F8 noen ganger ikke fungerer på FREMO-møter, på grunn av begrensninger i den digitale sentralen som brukes. Så gjør alle viktige funksjoner tilgjengelige på F1-F8.
+* Selv om du ikke har en FRED på lokomotivene dine, forbered et FRED-klistremerke.
 
 #### Utarbeidelse av Loco-kort
 – Alle lok som kjører rutetog skal vanligvis ha lokokort.
 - Et lokokort må ha en gjennomsiktig innpakket kredittkortstørrelse, hvor omløpskort vil bli satt.
-- Lokomotivkort kan du f.eks. produsere med [lokomotiv- og vognkort-appen](https://wagoncardapp.azurewebsites.net/).### På møtet
+- Lokomotivkort kan du f.eks. produsere med [lokomotiv- og vognkort-appen](https://wagoncardapp.azurewebsites.net/).
 
 #### På treffet
 Du **kan ikke** bare sette et loko med en ikke-reservert adresse på banen.
-Ved modulmøter skal lokoadresser koordineres. Det er to hovedmåter å gjøre dette på:
+Ved modultreff skal lokoadresser koordineres. Det er to hovedmåter å gjøre dette på:
 - **Bruk reserverte FREMO-lokoadresser:** du har fått et sett med lokoadresser av FREMO, eller du må låne en reservert adresse fra en som har, eller
-- **Bruk adressereservasjon per møte:** Reserver din eksisterende loko-adresse på forhånd eller på stedet før du setter den på banen.
-Hvis adressen din allerede er okkupert av noen andre, må du reservere en annen adresse som er gratis, og endre lokoadressen til den.
+- **Bruk adressereservasjon per treff:** Reserver din eksisterende loko-adresse på forhånd eller på stedet før du setter den på banen.
+Hvis adressen din allerede er okkupert av noen andre, må du reservere en annen adresse som er fri, og endre lokoadressen til den.

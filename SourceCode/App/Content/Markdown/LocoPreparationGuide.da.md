@@ -46,15 +46,6 @@ FRED-kørehåndtag er det eneste, der skal bruges til FREMO-træf.
 Alle lokomotiver, der kører rutetog, skal normalt have et lokokort.
 Et lokokort skal have et gennemsigtigt indskudt kreditkortstørrelse, hvor lokomotivet vil blive sat.
 
-### Til mødet
-Man **kan** ikke bare sætte et lokomotiv med en ikke-reserveret adresse på banen.
-Ved modulmøder skal lokoadresser koordineres. Der er to hovedmåder at gøre dette på:
-- **Brug reserverede FREMO-lokoadresser:** du har fået et sæt lokoadresser af FREMO, eller du skal låne en reserveret adresse fra en, der har, eller
-- **Brug adressereservation pr. møde:** Reserver din eksisterende loko-adresse på forhånd eller på stedet, før du sætter den på banen.
-Hvis din adresse allerede er optaget af en anden, skal du reservere en anden adresse, der er gratis, og ændre dit lokos adresse til den.skridsikre gummiringe, så tjek at de er i orden. Locos med hjul til skridsikring gummiringe vil ikke køre godt uden disse ringe.
-- Test dine lokomotiver før mødet ved at køre dem på en bane, ikke kun i en testleje.
-- Hvis dit loko svigter under mødet, er der forhåbentlig nogen, der kan stille et reservelok til rådighed. Så tag nogle ekstra lokomotiver med.
-
 #### Klargøring af push-pull passagertog
 Det anbefales, at lokomotivet og styrevognen i den anden ende har synkroniseret lys, der skifter med togenes retning.
 Det betyder, at de skal have samme DCC-adresse og samme forlygte- og baggrundslysfunktioner. Disse indstillinger ændres i dekoderindstillingerne.
