@@ -3,6 +3,11 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.10
+Release date 2023-03-06
+- **Layout name** improved. Thanks to Erling Kjeldsen for noting this.
+- **Loco Preparation Guide** corrections of typo errors and refinded translations.
+
 ## Release 1.8.9
 Release date 2023-02-20
 - **Waybill edit** now display correct station names. Thanks to Alexander Ehn for reporting this.
