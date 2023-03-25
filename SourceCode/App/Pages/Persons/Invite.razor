@@ -62,7 +62,7 @@ else
             if (invited is null) return;
             var message = await ContentService.GetTextContent("Invitation", invited.PreferredLanguage());
             Invitation = new UserInvitation(invited, inviter, Localizer["InvitationToModuleRegistry"].ToString(), message, Navigator.BaseUri) { PersonalMessage = PersonalMessage };
-            DisplayedMessage = Invitation.GetMessageHtml();
+            DisplayedMessage = Invitation.MessageHtml;
         }
     }
 
@@ -71,7 +71,7 @@ else
         if (Invitation is not null)
         {
             Invitation = Invitation with { PersonalMessage = PersonalMessage };
-            DisplayedMessage = Invitation.GetMessageHtml();
+            DisplayedMessage = Invitation.MessageHtml;
             StateHasChanged();
         }
     }
@@ -85,7 +85,7 @@ else
             Invitation.Recipient.RegistrationTime = TimeProvider.Now;
             _ = await UserService.UpdateAsync(Invitation.Recipient);
 
-            var message = Invitation.AsMailMessage();
+            var message = Invitation.MailMessage;
             if (message is not null)
             {
                 count = await MailSender.SendMailMessageAsync(message);

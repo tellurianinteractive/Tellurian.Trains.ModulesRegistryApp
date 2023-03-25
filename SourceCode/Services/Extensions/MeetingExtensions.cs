@@ -1,80 +1,88 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;
+
+public static class LayoutExtensions
+{
+    public static string RegistrationOpensDate(this Layout layout) => layout.RegistrationOpeningDate.ToShortDateString();
+    public static string RegistrationClosesDate(this Layout layout) => layout.RegistrationClosingDate.ToShortDateString();
+    public static string RegistrationOfModulesClosesDate(this Layout layout) => (layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate).ToShortDateString();
+    internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
+        layout.IsRegistrationPermitted &&
+        layout.RegistrationOpeningDate <= at &&
+        layout.RegistrationClosingDate >= at;
+
+    internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
+        layout.IsRegistrationPermitted &&
+        layout.RegistrationOpeningDate > at;
+
+}
 public static class MeetingExtensions
 {
-    public static int DaysCount(this Meeting it) =>
-         (it.EndDate - it.StartDate).Days + 1;
+    public static int DaysCount(this Meeting meeting) =>
+         (meeting.EndDate - meeting.StartDate).Days + 1;
 
-    public static string Day(this Meeting it, int day) =>
-        it.StartDate.AddDays(day - 1).DayOfWeek.ToString();
+    public static string Day(this Meeting meeting, int day) =>
+        meeting.StartDate.AddDays(day - 1).DayOfWeek.ToString();
 
-    public static bool IsCancelled(this Meeting? it) =>
-        it is null || it.Status == (int)MeetingStatus.Canceled;
+    public static bool IsCancelled(this Meeting? meeting) =>
+        meeting is null || meeting.Status == (int)MeetingStatus.Canceled;
 
-    public static DateTime? RegistrationOpensDate(this Meeting? it) =>
-        it is null || !it.IsRegistrationAvailable() ? null :
-        it.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);
+    public static DateTime? RegistrationOpensDate(this Meeting? meeting) =>
+        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);
 
-    public static DateTime? RegistrationClosingDate(this Meeting? it) =>
-        it is null || !it.IsRegistrationAvailable() ? null :
-        it.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.RegistrationClosingDate);
+    public static DateTime? RegistrationClosingDate(this Meeting? meeting) =>
+        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.RegistrationClosingDate);
 
-    public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at) =>
-        it is not null &&
-        it.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
+    public static DateTime? RegistrationOfModulesClosingDate(this Meeting? meeting) =>
+        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.ModuleRegistrationClosingDate ?? l.RegistrationClosingDate);
 
-    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? it, DateTime at, ClaimsPrincipal? principal = null)
-    {
-        
-        return principal is not null && it is not null && it.IsRegistrationAvailable() && (
-            principal.IsGlobalAdministrator() ||
-            principal.IsCountryAdministratorInCountry(it?.OrganiserGroup?.CountryId) ||
-            principal.IsAnyGroupAdministrator(it?.OrganiserGroup)
+    public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
+        meeting is not null &&
+        meeting.Layouts.Any(l => l.IsNotYetOpenForRegistration(at));
+
+    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at, ClaimsPrincipal? principal = null)
+    {       
+        return principal is not null && meeting is not null && meeting.IsAnyLayoutRegistrationPermitted() && 
+        (
+            principal.IsMeetingOrganiserOrAdministrator(meeting) 
         ) ||
-        (   it is not null && !it.IsCancelled() &&
-            it.Layouts.Any(l => l.IsOpenForRegistration(at)));
+        (   meeting is not null && !meeting.IsCancelled() &&
+            meeting.Layouts.Any(l => l.IsOpenForRegistration(at)));
     }
 
-    public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? it, DateTime at) =>
-        it is not null && it.IsRegistrationAvailable() &&
-        it.Layouts.Any() && it.Layouts.All(l => l.RegistrationClosingDate <= at);
+    public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? meeting, DateTime at) =>
+        meeting is not null && meeting.IsAnyLayoutRegistrationPermitted() &&
+        meeting.Layouts.Any() && meeting.Layouts.All(l => l.RegistrationClosingDate <= at);
 
-    private static bool IsRegistrationAvailable(this Meeting it) =>
-        it.Layouts.Any(l => l.IsRegistrationPermitted);
+    private static bool IsAnyLayoutRegistrationPermitted(this Meeting meeting) =>
+        meeting.Layouts.Any(l => l.IsRegistrationPermitted);
 
-    public static bool MayRegister(this Meeting? it, DateTime at, ClaimsPrincipal? principal) =>
+    public static bool MayRegister(this Meeting? meeting, DateTime at, ClaimsPrincipal? principal) =>
        principal is not null && principal.IsAnyAdministrator() ||
-        (principal.IsAuthenticated() && it.IsOpenForRegistration(at, principal));
-
-    private static bool IsOpenForRegistration(this Layout it, DateTime at) =>
-        it.IsRegistrationPermitted &&
-        it.RegistrationOpeningDate <= at &&
-        it.RegistrationClosingDate.AddDays(1) > at;
-
-    private static bool IsNotYetOpenForRegistration(this Layout it, DateTime at) =>
-        it.IsRegistrationPermitted &&
-        it.RegistrationOpeningDate > at;
-
-    public static string Organiser(this Meeting? me) =>
-        me is null ? string.Empty :
-        me.GroupDomainId.HasValue ? $"{me.OrganiserGroup.FullName}/{me.GroupDomain?.Name}" :
-        $"{me.OrganiserGroup.FullName}";
+        (principal.IsAuthenticated() && meeting.IsOpenForRegistration(at, principal));
 
 
-    public static string Status(this Meeting? it, DateTime at) =>
-        it is null ? string.Empty :
-        Resources.Strings.ResourceManager.GetString(it.StatusResourceName(at)) ?? string.Empty;
+    public static string Organiser(this Meeting? meeting) =>
+        meeting is null ? string.Empty :
+        meeting.GroupDomainId.HasValue ? $"{meeting.OrganiserGroup.FullName}/{meeting.GroupDomain?.Name}" :
+        $"{meeting.OrganiserGroup.FullName}";
 
-    internal static string StatusResourceName(this Meeting? me, DateTime at) =>
-        me is null ? string.Empty :
-        me.IsCancelled() ? "Canceled" :
-        me.IsOpenForRegistration(at) ? "RegistrationOpen" :
-        me.IsClosedForRegistration(at) ? "RegistrationClosed" :
-        me.IsOrganiserInternal ? "Internal" :
-        me.IsRegistrationAvailable() || me.IsNotYetOpenForRegistration(at) ? ((MeetingStatus)me.Status).ToString() :
-        ((MeetingStatus)me.Status).ToString();
+
+    public static string Status(this Meeting? meeting, DateTime at) =>
+        meeting is null ? string.Empty :
+        Resources.Strings.ResourceManager.GetString(meeting.StatusResourceName(at)) ?? string.Empty;
+
+    internal static string StatusResourceName(this Meeting? meeting, DateTime at) =>
+        meeting is null ? string.Empty :
+        meeting.IsCancelled() ? "Canceled" :
+        meeting.IsOpenForRegistration(at) ? "RegistrationOpen" :
+        meeting.IsClosedForRegistration(at) ? "RegistrationClosed" :
+        meeting.IsOrganiserInternal ? "Internal" :
+        ((MeetingStatus)meeting.Status).ToString();
 
     public static string MeetingStatusCssClass(this Meeting meeting, DateTime at) => 
         $"meeting {meeting.StatusResourceName(at).ToLowerInvariant()}";

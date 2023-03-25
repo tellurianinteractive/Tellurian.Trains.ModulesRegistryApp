@@ -1,149 +1,59 @@
 ﻿using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Mail;
-using System.Text;
 
 namespace ModulesRegistry.Services.Extensions;
-
 public static class UserExtensions
 {
     public const int MaxFailedLoginAttempts = 3;
-    public static string? PreferredLanguage(this User me) =>
-        me.Person is null || me.Person.Country is null ? null :
-        me.Person.Country.Languages.Items()[0];
+    public static string? PreferredLanguage(this User user) =>
+        user.Person is null || user.Person.Country is null ? null :
+        user.Person.Country.Languages.Items()[0];
 
-    public static string ConfirmationLink(this User? me, string baseUri) =>
-        me is null || me.Person is null ? string.Empty :
-            $"{baseUri}users/confirm?email={me.PrimaryEmail()}&objectid={me.ObjectId}";
+    public static string ConfirmationLink(this User? user, string baseUri) =>
+        user is null || user.Person is null ? string.Empty :
+            $"{baseUri}users/confirm?email={user.PrimaryEmail()}&objectid={user.ObjectId}";
 
-    public static string ConfirmationLinkTag(this User? me, string baseUri) =>
-        me is null ? string.Empty :
-        $"<p><a href=\"{me.ConfirmationLink(baseUri)}\">{LanguageUtility.GetLocalizedString("CreatePassword", me.PreferredLanguage())}</a></p>";
+    public static string ConfirmationLinkTag(this User? user, string baseUri) =>
+        user is null ? string.Empty :
+        $"<p><a href=\"{user.ConfirmationLink(baseUri)}\">{LanguageUtility.GetLocalizedString("CreatePassword", user.PreferredLanguage())}</a></p>";
 
-    public static string PrimaryEmail(this User? me) =>
-        me is null ? string.Empty :
-        me.EmailAddress.HasValue() ? me.EmailAddress :
-        me.Person.PrimaryEmail();
+    public static string PrimaryEmail(this User? user) =>
+        user is null ? string.Empty :
+        user.EmailAddress.HasValue() ? user.EmailAddress :
+        user.Person.PrimaryEmail();
 
-    public static string PrimaryEmail(this Person? me) =>
-        me is null || string.IsNullOrWhiteSpace(me.EmailAddresses) ? string.Empty :
-        me.EmailAddresses.Items()[0];
+    public static bool HasEmail([NotNullWhen(true)] this User? user) =>
+        !string.IsNullOrWhiteSpace(user.PrimaryEmail());
 
-    public static bool HasEmail([NotNullWhen(true)] this User? me) =>
-        !string.IsNullOrWhiteSpace(me.PrimaryEmail());
+    public static bool HasPassword([NotNullWhen(true)] this User? user) =>
+        user is not null && user.HashedPassword.HasValue();
 
-    public static bool HasEmail([NotNullWhen(true)] this Person? me) =>
-        !string.IsNullOrWhiteSpace(me.PrimaryEmail());
+    public static bool IsNeverLoggedIn(this Person? person) =>
+        person is null || person.User is null || person.User.LastSignInTime is null;
+    public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? user) =>
+        user is null || user.LastSignInTime is null;
 
-    public static bool HasPassword([NotNullWhen(true)] this User? me) =>
-        me is not null && me.HashedPassword.HasValue();
+    public static bool IsPasswordReset([NotNullWhen(true)] this User? user) =>
+        user is not null && user.PasswordResetAttempts > 0 && user.IsPasswordResetPermitted();
 
-    public static string Name(this Person? me) =>
-        me is not null ? $"{me.FirstName} {me.MiddleName} {me.LastName}" : string.Empty;
+    public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? user) =>
+        user is not null && user.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
 
-    public static bool IsNeverLoggedIn(this Person? me) =>
-        me is null || me.User is null || me.User.LastSignInTime is null;
-    public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? me) =>
-        me is null || me.LastSignInTime is null;
+    public static bool IsLockedOut([NotNullWhen(true)] this User? user) =>
+        user is null || user.PasswordResetAttempts > PasswordResetRequest.MaxRequests || user.FailedLoginAttempts > MaxFailedLoginAttempts;
 
-    public static bool IsPasswordReset([NotNullWhen(true)] this User? me) =>
-        me is not null && me.PasswordResetAttempts > 0 && me.IsPasswordResetPermitted();
-
-    public static bool IsInvited([NotNullWhen(true)] this Person? me) =>
-        me is not null && me.User is not null && me.User.LastSignInTime is null;
-
-    public static bool MayBeInvited([NotNullWhen(true)] this Person? me) =>
-        me is not null && me.IsNeverLoggedIn() && me.HasEmail();
-
-    public static bool IsPasswordResetPermitted([NotNullWhen(true)] this User? me) =>
-        me is not null && me.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
-
-    public static bool IsLockedOut([NotNullWhen(true)] this User? me) =>
-        me is null || me.PasswordResetAttempts > PasswordResetRequest.MaxRequests || me.FailedLoginAttempts > MaxFailedLoginAttempts;
-
-    public static string GetMessageHtml(this UserInvitation me)
+    public async static Task<User?> UnlockUser(this UserService userService, User? user)
     {
-        if (!me.IsValid) return string.Empty;
-        var preferredLanguage = me.Recipient.PreferredLanguage();
-        var text = new StringBuilder(1000);
-        text.AppendHelloPhrase(me);
-        if (me.HasPersonalMessage) text.Append($"<p>{me.PersonalMessage}</p>");
-        text.AppendLine(me.Message.AsHtml);
-        text.AppendLine(me.Recipient.ConfirmationLinkTag(me.BaseUri));
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
-        text.Append($"<p>{me.Inviter.FirstName} {me.Inviter.LastName}</p>");
-        return text.ToString();
-    }
-
-    public static MailMessage? AsMailMessage(this UserMessage me)
-    {
-        if (!me.IsValid) return null;
-        var body = me.MessageHtml;
-        if (body.HasNoValue()) return null;
-        var message = new MailMessage();
-        message.To.Add(new MailAddress(me.Recipient.EmailAddress, $"{me.Recipient.Person.FirstName} {me.Recipient.Person.LastName}"));
-        message.Subject = me.Subject;
-        message.Body = body;
-        message.IsBodyHtml = true;
-        return message;
-    }
-
-    public static string GetMessageHtml(this PasswordResetRequest me)
-    {
-        if (!me.IsValid) return string.Empty;
-        var preferredLanguage = me.Recipient.PreferredLanguage();
-        var text = new StringBuilder(1000);
-        text.AppendHelloPhrase(me);
-        text.AppendLine(me.Message.AsHtml);
-        text.AppendLine(me.Recipient.ConfirmationLinkTag(me.BaseUri));
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("AppName", preferredLanguage)}</p>");
-        return text.ToString();
-    }
-
-    private static void AppendHelloPhrase(this StringBuilder me, UserMessage message)
-    {
-        me.Append("<h1>");
-        me.Append(LanguageUtility.GetLocalizedString("Hello", message.Recipient.PreferredLanguage()));
-        me.Append(' ');
-        me.Append(message.Recipient.Person.FirstName);
-        me.AppendLine("</h1>");
-    }
-
-    public async static Task<User?> UnlockUser(this UserService service, User? user)
-    {
-        if(user is not null && (user.PasswordResetAttempts > User.MaxPasswordResetAttempts || user.FailedLoginAttempts > User.MaxFailedLoginAttempts))
+        if (user is not null && (user.PasswordResetAttempts > User.MaxPasswordResetAttempts || user.FailedLoginAttempts > User.MaxFailedLoginAttempts))
         {
             user.PasswordResetAttempts = 0;
             user.FailedLoginAttempts = 0;
-            return await service.UpdateAsync(user) ?? user;
+            return await userService.UpdateAsync(user) ?? user;
         }
         return user;
     }
 
-    public static bool HasIdExcept(this Person? me, int? id) => id.HasValue && me is not null && me.UserId.HasValue && me.UserId.Value != id;
 }
 
-public abstract record UserMessage(User Recipient, string Subject, TextContent Message)
-{
-    public bool IsValid => Recipient.Person is not null && !IsInvalid;
-    public virtual string MessageHtml => string.Empty;
-    protected virtual bool IsInvalid => false;
-}
-
-public record UserInvitation(User Recipient, Person Inviter, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
-{
-    public string? PersonalMessage { get; init; }
-    public bool HasPersonalMessage => !string.IsNullOrWhiteSpace(PersonalMessage);
-    public override string MessageHtml => this.GetMessageHtml();
-
-}
-
-public record PasswordResetRequest(User Recipient, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
-{
-    public override string MessageHtml => this.GetMessageHtml();
-    protected override bool IsInvalid => Recipient.PasswordResetAttempts > MaxRequests;
-    public const int MaxRequests = 3;
-}
 
 

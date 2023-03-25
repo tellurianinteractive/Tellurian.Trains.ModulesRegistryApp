@@ -1,4 +1,4 @@
-﻿namespace ModulesRegistry.Services;
+﻿namespace ModulesRegistry.Services.Models;
 
 public class LanguageLabel
 {

@@ -3,11 +3,11 @@
 namespace ModulesRegistry.Services.Extensions;
 public static class LocoAddressExtensions
 {
-    public static bool TryParseLocoAdresses(this string? values, out int[] addresses)
+    public static bool TryParseLocoAdresses(this string? text, out int[] addresses)
     {
         addresses = Array.Empty<int>();
-        if (string.IsNullOrWhiteSpace(values)) return true;
-        var itemGroups = values.Split(',');
+        if (string.IsNullOrWhiteSpace(text)) return true;
+        var itemGroups = text.Split(',');
         if (itemGroups.Length == 0) return true;
         var result = new List<int>();
         foreach (var group in itemGroups)

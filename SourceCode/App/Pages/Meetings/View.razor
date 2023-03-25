@@ -31,10 +31,31 @@ else
     {
         @Item("Status", Meeting.Status.MeetingStatus())
 
-        @Item("RegistrationOpens", $"{Meeting.RegistrationOpensDate():ddd d MMM yyyy}")
-        @Item("RegistrationCloses", $"{Meeting.RegistrationClosingDate():ddd d MMM yyyy}")
+        @if (Meeting.Layouts.Any())
+        {
+            <TableTemplate Items="@Meeting.Layouts">
+                <TableHeader>
+                    <th>@Localizer["Layout"]</th>
+                    <th>@Localizer["RegistrationOpens"]</th>
+                    <th>@Localizer["ModuleRegistrationCloses"]</th>
+                    <th>@Localizer["RegistrationCloses"]</th>
+                    <th>@Localizer["More"]</th>
+                </TableHeader>
+                <RowTemplate Context="item">
+                    <td>@item.Name()</td>
+                    <td>@item.RegistrationOpensDate()</td>
+                    <td>@item.RegistrationOfModulesClosesDate()</td>
+                    <td>@item.RegistrationClosesDate()</td>
+                    <td>
+                        <AppButton Label="Details" IconName="Layout" Href="@LayoutsHref(Id)" />
 
-        <AppButton Label="Layouts" IconName="Layout" Href="@LayoutsHref(Id)" />
+                    </td>
+
+                </RowTemplate>
+            </TableTemplate>
+        }
+  
+
         <MarkdownView Label="Details" Markdown="@Meeting.Details" />
         <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
         <MarkdownView Label="Food" Markdown="@Meeting.Food" />

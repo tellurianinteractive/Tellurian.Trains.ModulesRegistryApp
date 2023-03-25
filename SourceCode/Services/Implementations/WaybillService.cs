@@ -124,10 +124,6 @@ public class WaybillService
             SELECT * FROM ShadowYardConsumerWaybill AS SYCW 
                 WHERE SYCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId )
             """;
-
-        static string StationCustomerCriteria(int? stationCustomerId, string columnName) =>
-            stationCustomerId.HasValue ? $"AND {columnName} = {stationCustomerId.Value}" :
-            string.Empty;
     }
     public async Task<IEnumerable<Waybill>> GetLayoutWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId)
     {

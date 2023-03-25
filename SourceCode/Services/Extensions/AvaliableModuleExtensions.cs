@@ -1,15 +1,14 @@
 ﻿using System.Data;
 using System.Diagnostics;
-using System.Linq;
 
 namespace ModulesRegistry.Services.Extensions;
 public static class AvaliableModuleExtensions
 {
-    public static IEnumerable<ModulePackage> AsModulePackages(this IEnumerable<AvailableModule> modules)
+    public static IEnumerable<ModulePackage> AsModulePackages(this IEnumerable<AvailableModule> availableModules)
     {
-        if (modules is null) return Array.Empty<ModulePackage>();
-        var packages = new Dictionary<string, List<(AvailableModule Module, int ScaleId, ModulePackageType type)>>(modules.Count());
-        var scales = modules.GroupBy(m => m.ScaleId);
+        if (availableModules is null) return Array.Empty<ModulePackage>();
+        var packages = new Dictionary<string, List<(AvailableModule Module, int ScaleId, ModulePackageType type)>>(availableModules.Count());
+        var scales = availableModules.GroupBy(m => m.ScaleId);
         foreach (var scale in scales)
         {
             foreach (var module in scale.OrderBy(m => m.FullName))

@@ -1305,4 +1305,7 @@
   <data name="NoModulesAvailable" xml:space="preserve">
     <value>Keine Module verfügbar</value>
   </data>
+  <data name="More" xml:space="preserve">
+    <value>Mehr...</value>
+  </data>
 </root>

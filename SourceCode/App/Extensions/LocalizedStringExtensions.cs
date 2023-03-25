@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
-using ModulesRegistry.Services;
 using ModulesRegistry.Shared;
 using System.Globalization;
 using System.Text;
@@ -10,41 +9,62 @@ namespace ModulesRegistry.Extensions;
 
 public static class LocalizedStringExtensions
 {
-    public static string AddOrEdit(this IStringLocalizer me, string? objectName, bool isAdd) =>
-        $"{me.AddOrEdit(isAdd)} {me.ObjectName(objectName, true)}";
+    public static string AddOrEdit(this IStringLocalizer localizer, string? objectName, bool isAdd) =>
+        $"{localizer.AddOrEdit(isAdd)} {localizer.ObjectName(objectName, true)}";
 
+    private static string AddOrEdit(this IStringLocalizer localizer, bool isAdd) =>
+        isAdd ? localizer["Add"].Value : localizer["Edit"].Value;
 
-    private static string AddOrEdit(this IStringLocalizer me, bool isAdd) =>
-        isAdd ? me["Add"].Value : me["Edit"].Value;
-
-
-    public static string ActionText(this IStringLocalizer me, string? label, string? objectName, PageAction action) =>
-        label.HasValue() ? $"{me.ActionName(action)} {me.ObjectName(label, !action.IsEmpty())}" :
-        $"{me.ActionName(action)} {me.ObjectName(objectName, !action.IsEmpty())}";
+    public static string ActionText(this IStringLocalizer localizer, string? label, string? objectName, PageAction action) =>
+        label.HasValue() ? $"{localizer.ActionName(action)} {localizer.ObjectName(label, !action.IsEmpty())}" :
+        $"{localizer.ActionName(action)} {localizer.ObjectName(objectName, !action.IsEmpty())}";
 
     private static string ActionName(this IStringLocalizer me, PageAction action) =>
         action.IsEmpty() ? string.Empty :
         me[action.ToString()].Value;
 
-    public static string HeadingText(this IStringLocalizer me, string? label, string? objectName, object? owner, PageAction action)
+    public static string HeadingText(this IStringLocalizer localizer, string? label, string? objectName, object? owner, PageAction action)
     {
         var text = new StringBuilder(100);
-        text.Append(me.ActionText(label, objectName, action));
+        text.Append(localizer.ActionText(label, objectName, action));
         if (owner is not null)
         {
             text.Append(' ');
             //text.Append(me["For"].Value.ToLowerInvariant());
             //text.Append(' ');
-            text.Append(me.Name(owner));
+            text.Append(localizer.Name(owner));
         }
         return text.ToString();
-
     }
+    
+    public static string Select(this IStringLocalizer localizer, string objectName) =>
+        $"{localizer["Select"]} {localizer[objectName].Value.ToLowerInvariant()}";
 
-    private static bool IsEmpty(this PageAction me) => me == PageAction.List || me == PageAction.Unknown || me == PageAction.Error;
+    public static string ShowAll(this IStringLocalizer localizer, string objectName) =>
+        $"{localizer["ShowAll"]} {localizer[objectName].ToString().ToLowerInvariant()}";
+    public static string ShowAllInAll(this IStringLocalizer localizer, string objectName, string inObjectName) =>
+        $"{localizer["ShowAll"]} {localizer[objectName].ToString().ToLowerInvariant()} {localizer["InAll"]} {localizer[inObjectName].ToString().ToLowerInvariant()}";
 
-    private static string ObjectName(this IStringLocalizer me, string? objectName, bool toLower) =>
-        string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? me[objectName].ToString().ToLowerInvariant() : me[objectName].ToString();
+    public static string SearchObject(this IStringLocalizer localizer, string objectName, int minimumTypedCharactersCount = 1) =>
+        $"{localizer["Search"]} {localizer[objectName].Value.ToLowerInvariant()}. {string.Format(localizer["TypeMinimumCharachers"].Value, minimumTypedCharactersCount)}.";
+
+    public static string EditObject(this IStringLocalizer localizer, string objectName) =>
+       $"{localizer["Edit"]} {localizer[objectName].Value.ToLowerInvariant()}";
+
+    public static string EditOrViewObject(this IStringLocalizer localizer, string objectName, bool isEdit) =>
+         isEdit ? localizer.EditObject(objectName) : $"{localizer[objectName].Value}";
+
+
+    public static string NotFound<T>(this IStringLocalizer localizer) => $"{localizer[typeof(T).Name]} {localizer["NotFound"].Value.ToLowerInvariant()}";
+
+    public static string Saved<T>(this IStringLocalizer localizer) => $"{localizer[typeof(T).Name]} {localizer["Saved"].Value.ToLowerInvariant()}";
+
+    public static string Value(this IStringLocalizer localizer, string key) => localizer[key].Value;    
+    
+    private static bool IsEmpty(this PageAction pageAction) => pageAction == PageAction.List || pageAction == PageAction.Unknown || pageAction == PageAction.Error;
+
+    private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
+        string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToLowerInvariant() : localizer[objectName].ToString();
 
     private static string Name(this IStringLocalizer me, object? owner) =>
         owner switch
@@ -61,34 +81,11 @@ public static class LocalizedStringExtensions
             _ => string.Empty
         };
 
-   private static string ObjectNameToLower(this LocalizedString me) =>
+   private static string ObjectNameToLower(this LocalizedString localizer) =>
         CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
         {
-            "de" => me.Value,
-            _ => me.Value.ToLowerInvariant()
+            "de" => localizer.Value,
+            _ => localizer.Value.ToLowerInvariant()
         };    
-    
-    public static string Select(this IStringLocalizer me, string objectName) =>
-        $"{me["Select"]} {me[objectName].Value.ToLowerInvariant()}";
 
-    public static string ShowAll(this IStringLocalizer me, string objectName) =>
-        $"{me["ShowAll"]} {me[objectName].ToString().ToLowerInvariant()}";
-    public static string ShowAllInAll(this IStringLocalizer me, string objectName, string inObjectName) =>
-        $"{me["ShowAll"]} {me[objectName].ToString().ToLowerInvariant()} {me["InAll"]} {me[inObjectName].ToString().ToLowerInvariant()}";
-
-    public static string SearchObject(this IStringLocalizer me, string objectName, int minimumTypedCharactersCount = 1) =>
-        $"{me["Search"]} {me[objectName].Value.ToLowerInvariant()}. {string.Format(me["TypeMinimumCharachers"].Value, minimumTypedCharactersCount)}.";
-
-    public static string EditObject(this IStringLocalizer me, string objectName) =>
-       $"{me["Edit"]} {me[objectName].Value.ToLowerInvariant()}";
-
-    public static string EditOrViewObject(this IStringLocalizer me, string objectName, bool isEdit) =>
-         isEdit ? me.EditObject(objectName) : $"{me[objectName].Value}";
-
-
-    public static string NotFound<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["NotFound"].Value.ToLowerInvariant()}";
-
-    public static string Saved<T>(this IStringLocalizer me) => $"{me[typeof(T).Name]} {me["Saved"].Value.ToLowerInvariant()}";
-
-    public static string Value(this IStringLocalizer me, string key) => me[key].Value;
 }

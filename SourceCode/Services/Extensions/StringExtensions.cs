@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Services.Extensions;
 
-public static class StringExtensions
+public static partial class StringExtensions
 {
     internal static string Localized(this string? text) =>
         string.IsNullOrWhiteSpace(text) ? string.Empty :
@@ -37,9 +37,11 @@ public static class StringExtensions
     internal static string? ValueOrNull(this string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value;
 
+    [GeneratedRegex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]
+    private static partial Regex EmailRegex();
 
     public static bool IsEmailAddress([NotNullWhen(true)] this string? me) =>
-        me.HasValue() && Regex.IsMatch(me, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+        me.HasValue() && EmailRegex().IsMatch(me);
 
     public static bool IsPermittedFileExtension(this string? it) =>
         it is not null && DocumentService.PermittedFileExtenstions.Contains(it.ToLowerInvariant());

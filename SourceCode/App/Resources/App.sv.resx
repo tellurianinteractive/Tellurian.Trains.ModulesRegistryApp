@@ -1305,4 +1305,7 @@
   <data name="NoModulesAvailable" xml:space="preserve">
     <value>Inga moduler tillgängliga</value>
   </data>
+  <data name="More" xml:space="preserve">
+    <value>Mera...</value>
+  </data>
 </root>
