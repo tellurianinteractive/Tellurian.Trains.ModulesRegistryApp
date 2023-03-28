@@ -5,7 +5,7 @@
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
-		<Version>1.8.11</Version>
+		<Version>1.8.12</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<Platforms>AnyCPU;x64</Platforms>
 		<DisableCheckingDuplicateNuGetItems>true</DisableCheckingDuplicateNuGetItems>

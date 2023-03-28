@@ -14,9 +14,6 @@
     CONSTRAINT [FK_Region_RepresentativeExternalStationId] FOREIGN KEY ([RepresentativeExternalStationId]) REFERENCES [dbo].[ExternalStation] ([Id]),
 );
 
-
-
-
 GO
 CREATE NONCLUSTERED INDEX [IX_Region_CountryId]
     ON [dbo].[Region]([CountryId] ASC);

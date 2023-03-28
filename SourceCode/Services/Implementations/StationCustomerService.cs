@@ -72,16 +72,6 @@ public class StationCustomerService
         return Array.Empty<StationCustomerWaybill>();
     }
 
-
-    public async Task<int> GenerateWaybillsAsync(ClaimsPrincipal? principal, int stationCustomerId)
-    {
-        // NOTE: For performance reason, the business logic is implemented in the stored procedure that gets called.
-        using var dbContext = Factory.CreateDbContext();
-
-        return await Task.FromResult(0);
-
-    }
-
     public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)
     {
         if (principal.IsAuthenticated())

@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [dbo].[NHM] (
     [Id]          INT             NOT NULL,
+    [MaxId]       INT             NOT NULL DEFAULT(0),
     [Code]        NCHAR (8)       NOT NULL,
     [LevelDigits] TINYINT         NOT NULL,
     [DA]          NVARCHAR (2000) NOT NULL,
@@ -10,9 +11,6 @@
     [SV]          NVARCHAR (2000) NOT NULL,
     CONSTRAINT [PK_NHM] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
 
 GO
 

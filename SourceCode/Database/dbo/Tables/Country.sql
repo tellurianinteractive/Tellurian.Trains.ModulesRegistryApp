@@ -8,9 +8,6 @@
     CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
-
-
-
 GO
 
 

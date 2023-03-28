@@ -1306,6 +1306,15 @@
     <value>Ingen tilgængelige moduler</value>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Mere..</value>
+    <value>Mere...</value>
+  </data>
+  <data name="PrimaryOperatingCountry" xml:space="preserve">
+    <value>Primært driftsland</value>
+  </data>
+  <data name="FirstYearInOperation" xml:space="preserve">
+    <value>Første år i drift</value>
+  </data>
+  <data name="FinalYearInOperating" xml:space="preserve">
+    <value>Sidste år i drift</value>
   </data>
 </root>

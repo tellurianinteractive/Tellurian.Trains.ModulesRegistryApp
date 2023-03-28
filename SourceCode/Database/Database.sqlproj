@@ -112,26 +112,12 @@
     <Build Include="dbo\Tables\LayoutModule.sql" />
     <Build Include="dbo\Tables\LayoutStation.sql" />
     <Build Include="dbo\Tables\LayoutStationRegion.sql" />
-    <Build Include="dbo\Listboxes\ListBasicDay.sql" />
-    <Build Include="dbo\Listboxes\ListCargoDirection.sql" />
-    <Build Include="dbo\Listboxes\ListCargoReadyTime.sql" />
-    <Build Include="dbo\Listboxes\ListCargoUnit.sql" />
-    <Build Include="dbo\Listboxes\ListCountry.sql" />
-    <Build Include="dbo\Listboxes\ListExternalStation.sql" />
-    <Build Include="dbo\Listboxes\ListExternalStationCustomer.sql" />
-    <Build Include="dbo\Listboxes\ListOperatingDay.sql" />
-    <Build Include="dbo\Listboxes\ListRegion.sql" />
-    <Build Include="dbo\Listboxes\ListStation.sql" />
-    <Build Include="dbo\Listboxes\ListStationCustomer.sql" />
-    <Build Include="dbo\Listboxes\ListUntimedCargoReadyTime.sql" />
     <Build Include="dbo\Tables\LayoutParticipant.sql" />
     <Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
     <Build Include="dbo\Views\CountryStatistics.sql" />
     <Build Include="dbo\Tables\StationCustomerWaybill.sql" />
     <Build Include="dbo\Tables\LayoutStationTrack.sql" />
-    <Build Include="dbo\Listboxes\RegionRepresentialExternStationListbox.sql" />
     <Build Include="dbo\Tables\CargoPackagingUnit.sql" />
-    <Build Include="dbo\Listboxes\ListCargoPackagingUnit.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoPackagingUnit.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
     <Build Include="dbo\Views\ModuleCustomerCargo.sql" />
@@ -185,5 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Database.refactorlog" />
   </ItemGroup>
 </Project>

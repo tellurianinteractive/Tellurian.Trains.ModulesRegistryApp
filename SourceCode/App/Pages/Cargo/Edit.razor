@@ -11,7 +11,7 @@
 
 <EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
     <Inputs>
-        <AppInputSelect Width="12" Label="NHMCode" Items="NextLevelNhmCodeItems" @bind-Value="Cargo.NhmCode" ShowPleaseSelect="true" />
+        <AppInputSelect Width="12" Label="NHMCode" Items="NextLevelNhmCodeItems" @bind-Value="Cargo.NhmCode" ShowPleaseSelect="true" ItemHeight="60" />
 
         <AppInputText Width="4" Label="DefaultClasses" @bind-Value="Cargo.DefaultClasses" />
         <AppInputNumber Width="2" Label="FromYear" @bind-Value="Cargo.FromYear" />

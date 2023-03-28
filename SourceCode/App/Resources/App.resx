@@ -1308,4 +1308,13 @@
   <data name="More" xml:space="preserve">
     <value>More...</value>
   </data>
+  <data name="PrimaryOperatingCountry" xml:space="preserve">
+    <value>Primary operating country</value>
+  </data>
+  <data name="FirstYearInOperation" xml:space="preserve">
+    <value>First year in operation</value>
+  </data>
+  <data name="FinalYearInOperating" xml:space="preserve">
+    <value>Final year in operation</value>
+  </data>
 </root>

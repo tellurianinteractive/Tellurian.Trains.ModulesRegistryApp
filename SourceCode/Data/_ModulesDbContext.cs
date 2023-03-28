@@ -65,7 +65,6 @@ public partial class ModulesDbContext : DbContext
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        // TODO: Add HasTrigger on all tables that have triggers.
         configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
     }
 
@@ -100,7 +99,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.Entity<Meeting>(entity =>
         {
-            entity.ToTable("Meeting");
+            entity.ToTable("Meeting", tb => tb.HasTrigger("DeleteMeeting"));
 
             entity.HasOne(d => d.OrganiserGroup)
                 .WithMany()
@@ -117,7 +116,7 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.Entity<MeetingParticipant>(entity =>
         {
-            entity.ToTable("MeetingParticipant");
+            entity.ToTable("MeetingParticipant", tb => tb.HasTrigger("DeleteMeetingParticipant"));
 
             entity.HasOne(d => d.Meeting)
                 .WithMany(d => d.Participants)
@@ -314,6 +313,10 @@ public partial class ModulesDbContext : DbContext
             entity.Property(e => e.Signature)
                 .IsRequired()
                 .HasMaxLength(6);
+
+            entity.HasOne(c => c.PrimaryOperatingCountry)
+                .WithMany()
+                .HasForeignKey(e => e.PrimaryOperatingCountryId);
         });
 
         modelBuilder.Entity<Person>(entity =>

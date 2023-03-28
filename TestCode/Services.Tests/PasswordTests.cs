@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Models;
 
 namespace ModulesRegistry.Services.Tests;
 

@@ -13,8 +13,7 @@ public class BlankTriggerAddingConvention : IModelFinalizingConvention
         foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
         {
             var table = StoreObjectIdentifier.Create(entityType, StoreObjectType.Table);
-            if (table != null
-                && entityType.GetDeclaredTriggers().All(t => t.GetDatabaseName(table.Value) == null))
+            if (table != null && entityType.GetDeclaredTriggers().All(t => t.GetDatabaseName(table.Value) == null))
             {
                 entityType.Builder.HasTrigger(table.Value.Name + "_Trigger");
             }

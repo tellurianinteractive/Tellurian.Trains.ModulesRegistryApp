@@ -15,9 +15,6 @@
     CONSTRAINT [FK_StationTrack_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]) ON DELETE CASCADE
 );
 
-
-
-
 GO
 CREATE NONCLUSTERED INDEX [IX_StationTrack_StationId]
     ON [dbo].[StationTrack]([StationId] ASC);

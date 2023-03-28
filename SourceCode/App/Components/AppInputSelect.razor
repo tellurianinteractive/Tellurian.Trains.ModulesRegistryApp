@@ -9,7 +9,7 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]</label>
     }
-    <select disabled=@IsDisabled class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+    <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
         @if (ShowPleaseSelect)
         {
             <option value="0">@PleaseSelectText</option>
@@ -34,6 +34,7 @@
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool ShowPleaseSelect { get; set; }
     [Parameter] public Action<int>? OnSelected { get; set; }
+    [Parameter] public int ItemHeight { get; set; }
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
@@ -57,5 +58,5 @@
     }
 
     string? Selected(ListboxItem item) => item.Id == CurrentValue ? "selected" : null;
-    
+    string? Style => ItemHeight > 0 ? $"height: {ItemHeight}px; white-space: pre-wrap;" : null;
 }

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
 
-public static class ValidatorsExtensions
+public static partial class ValidatorsExtensions
 {
     public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, bool allWordsWithInitialCapitals = true) =>
         builder.Must(value => value.IsNameCapitalizedCorrectly(allWordsWithInitialCapitals)).WithMessage(Message(localizer, allWordsWithInitialCapitals));
@@ -30,7 +30,7 @@ public static class ValidatorsExtensions
                     if (char.IsLower(n[i]))
                         return false;
                 }
-                else if ((n[i - 1] == ' '))
+                else if (n[i - 1] == ' ')
                 {
                     var rest = n[i..];
                     if (IsAnyLowerCaseWord(rest)) continue;
@@ -50,13 +50,12 @@ public static class ValidatorsExtensions
         foreach (var w in LowerCaseWords)
         {
             if (w.Length > word.Length) continue;
-            if (MemoryExtensions.StartsWith(word, w, StringComparison.OrdinalIgnoreCase)) return true;
+            if (word.StartsWith(w, StringComparison.OrdinalIgnoreCase)) return true;
         }
         return false;
     }
 
     private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "von" };
-
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
@@ -73,7 +72,7 @@ public static class ValidatorsExtensions
     private static bool IsValidEmailAddress(this string? email)
     {
         if (email == null) return false;
-        return Regex.IsMatch(email, @"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+        return EmailRegex().IsMatch(email);
     }
     private static bool IsText(this string? text)
     {
@@ -88,8 +87,6 @@ public static class ValidatorsExtensions
         return true;
     }
 
-    private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
-        c >= firstCodePoint && c <= lastCodePoint;
     private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'".Contains(c);
     private static bool IsDigit(this char c) => c >= 0x0030 && c <= 0x0039;
     private static bool IsLatinChar(this char c) =>
@@ -98,6 +95,8 @@ public static class ValidatorsExtensions
         c.IsInRange(0x00C0, 0x00FF) ||
         c.IsInRange(0x0100, 0x0148) ||
         c.IsInRange(0x014A, 0x017F);
+    private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
+        c >= firstCodePoint && c <= lastCodePoint;
 
     public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, bool orZero = false) =>
         builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
@@ -109,14 +108,14 @@ public static class ValidatorsExtensions
 
     public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinYear, MaxYear)}");
-    private static bool IsValidYear(this short? year) => year is null || (year >= MinYear && year <= MaxYear);
+    private static bool IsValidYear(this short? year) => year is null || year >= MinYear && year <= MaxYear;
     private static int MinYear => 1900;
     private static int MaxYear => DateTimeOffset.Now.Year;
 
     public static IRuleBuilderOptions<T, short?> MustBeValidHour<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinHour, MaxHour)}");
 
-    private static bool IsValidHour(this short? hour) => hour is null || (hour >= MinHour && hour <= MaxHour);
+    private static bool IsValidHour(this short? hour) => hour is null || hour >= MinHour && hour <= MaxHour;
     const short MinHour = 0;
     const short MaxHour = 23;
 
@@ -125,4 +124,7 @@ public static class ValidatorsExtensions
 
     private static bool IsHexColorOrNull(this string? value) =>
         value is null || value.IsHexColor();
+    
+    [GeneratedRegex("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
+    private static partial Regex EmailRegex();
 }

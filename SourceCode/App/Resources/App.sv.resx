@@ -1308,4 +1308,13 @@
   <data name="More" xml:space="preserve">
     <value>Mera...</value>
   </data>
+  <data name="PrimaryOperatingCountry" xml:space="preserve">
+    <value>Primärt verksamhetsland</value>
+  </data>
+  <data name="FirstYearInOperation" xml:space="preserve">
+    <value>Första året i drift</value>
+  </data>
+  <data name="FinalYearInOperating" xml:space="preserve">
+    <value>Sista året i drift</value>
+  </data>
 </root>
