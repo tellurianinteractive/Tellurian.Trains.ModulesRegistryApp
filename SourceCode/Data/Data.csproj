@@ -4,11 +4,6 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyName>ModulesRegistry.Data</AssemblyName>
 		<RootNamespace>ModulesRegistry.Data</RootNamespace>
-		<Version>1.8.11</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

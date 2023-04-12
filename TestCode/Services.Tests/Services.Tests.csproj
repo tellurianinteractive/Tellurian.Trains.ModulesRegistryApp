@@ -2,14 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
-		<IsPackable>false</IsPackable>
 		<AssemblyName>ModulesRegistry.Services.Tests</AssemblyName>
 		<RootNamespace>ModulesRegistry.Services.Tests</RootNamespace>
-		<Version>1.8.0</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Platforms>AnyCPU;x64</Platforms>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>

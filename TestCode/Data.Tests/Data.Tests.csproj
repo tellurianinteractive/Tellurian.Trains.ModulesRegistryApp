@@ -4,12 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyName>ModulesRegistry.Data.Tests</AssemblyName>
 		<RootNamespace>ModulesRegistry.Data.Tests</RootNamespace>
-		<Version>1.8.0</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
