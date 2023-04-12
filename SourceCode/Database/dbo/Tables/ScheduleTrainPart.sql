@@ -7,13 +7,13 @@
     [FromDepartureId] INT NOT NULL,
     [ToArrivalId] INT NOT NULL,
     [PositionInTrain] TINYINT NOT NULL DEFAULT 1,
-    [ShowAssignNote] BIT NOT NULL DEFAULT 1, /* Use loco, couple wagon, load cargo etc */
-    [ShowDetachNote] BIT NOT NULL DEFAULT 1,
+    [ShowConnectNote] BIT NOT NULL DEFAULT 1, /* Use loco, couple wagon, load cargo etc */
+    [ShowDisconnectNote] BIT NOT NULL DEFAULT 1,
     
     /* Only Loco Schedule */
     [IsUnmanned] BIT NOT NULL DEFAULT 0, /* When a loco is unmanned on a train part, it cannot be assigned to a driver duty. */
-    [GetAtParking] BIT NOT NULL DEFAULT 0,
-    [PutAtParking] BIT NOT NULL DEFAULT 0,
+    [GetAtStagingArea] BIT NOT NULL DEFAULT 0,
+    [PutAtStagingArea] BIT NOT NULL DEFAULT 0,
     [ReverseLoco] BIT NOT NULL DEFAULT 0,
     [TurnLoco] BIT NOT NULL DEFAULT 0,
 
@@ -34,6 +34,12 @@
     CONSTRAINT [FK_CargoScheduleTrainPart_TransferOriginLayoutStation] FOREIGN KEY ([TransferOriginLayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id]),
     CONSTRAINT [FK_CargoScheduleTrainPart_TransferDestinationLayoutStation] FOREIGN KEY ([TransferDestinationLayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id]),
 );
+GO
+CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_FromDepartureId]
+    ON [dbo].[ScheduleTrainPart]([FromDepartureId] ASC);
+GO
+CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_ToArrivalId]
+    ON [dbo].[ScheduleTrainPart]([ToArrivalId] ASC);
 
 GO
     CREATE TRIGGER [DeleteScheduleTrainPart] ON [ScheduleTrainPart] INSTEAD OF DELETE

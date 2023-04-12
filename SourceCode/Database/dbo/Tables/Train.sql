@@ -9,6 +9,7 @@
     [LayoutRoutePatternId] INT NULL,
     [MaxSpeed] SMALLINT NOT NULL DEFAULT 100,
     [InstructionMarkdown] VARCHAR(1000) NULL,
+    [Image] VARBINARY(MAX) NULL, 
     CONSTRAINT [PK_Train] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Train_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]),
     CONSTRAINT [FK_Train_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),
@@ -16,7 +17,11 @@
     CONSTRAINT [FK_Train_TrainCategory] FOREIGN KEY ([TrainCategoryId]) REFERENCES [dbo].[TrainCategory] ([Id]),
     CONSTRAINT [FK_Train_LayoutRoutePattern] FOREIGN KEY ([LayoutRoutePatternId]) REFERENCES [dbo].[LayoutRoutePattern] ([Id]),
 );
-    GO
+GO
+CREATE NONCLUSTERED INDEX [IX_Train_LayoutId]
+    ON [dbo].[Train]([LayoutId] ASC);
+
+GO
     CREATE TRIGGER [DeleteTrain] ON [Train] INSTEAD OF DELETE 
     AS
     BEGIN
