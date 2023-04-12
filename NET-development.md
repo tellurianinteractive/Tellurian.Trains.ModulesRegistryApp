@@ -1,10 +1,8 @@
 # .NET Development
-*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, August 2022*
-
-> *Updated 2022-08-17 with more information about SQL Server projects*
+*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, April 2023*
 
 This article aim to describe technology choices, when developing software in modern .NET.
-At the time of writing 2022, all new .NET development should use .NET 7 or later.
+At the time of writing 2023, all new .NET development should use .NET 7 or later.
 
 Modern .NET is fully open source; the framework libraries, the runtime, and the compilers.
 You can build any type of applications on almost any platform. 
@@ -18,7 +16,7 @@ The last .NET Framework version is 4.8, and it will be maintained as long as Win
 All languges on .NET uses the same runtime and the same type system, so you can usually combine libraries 
 written in any .NET program with each other. There are some rules to follow to make it work.
 - **C#** is the most common language used in .NET development. Is a C-family type of language and 
-shares most of its properties with the Java language.
+shares most of its properties with the Java programming language.
 - **F#** is a functional first language with a pragmatic approach. F# has a much more succint syntax, 
 which means that F# programs are significantly smaller that correponding C# programs.
 - **VB.NET** is the modern variant of the BASIC programming language. 
@@ -49,26 +47,30 @@ secondly, there is a special *Database* project type, which you can maintain you
 with version control and deploy updates and migrations to your existing database or create new ones.
 
 ## User interfaces
-There are a lot of ways to create applications  with a user interface with .NET. 
+There are a lot of ways to create applications with a user interface with .NET. 
 The main factor is the target platform you intend to build software for:
 - **Windows only**: You intend to develop an application that should only run on Windows machines.
 - **Web**: The application should be accessible in a web browser.
-- **Cross platform**: Your app should run on *ioS*, *Andriod*, *masOs* and/or *Windows*.
+- **Cross platform**: Your app should run on *ioS*, *Andriod*, *macOs*, *Windows* and/or *Linux*.
 
-### Technologies
+### User Interface Technologies
 - **Windows Forms** is a simple and fast way to create Windows only applications with simple forms.
 - **Windows Presentation Foundation** abbreviate **WPF** is a more advanced way to create 
 user interfaces on Windows only. 
 - **ASP.NET** is a framework for creating web applications.
 ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
 Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
-- **Blazor** is a special web framework flavour of ASP.NET. 
+- **Blazor** is a special web framework of ASP.NET. 
 You write components with a mix of HTML, CSS and C#. You can interop with JavaScript, and there are
 many ready made components avaliable.
-The components written in Blazor can be rendered in several environments: a) 
-on a web server that updates the web user interface via websockets, b) running the component on web assembly in the browser, and c) in a cross platform MAUI application.
-Blazor components can also be embedded in any other web application using any framework.
-This makes Blazor components the most highly resuable user interface components in .NET.
+The components written in Blazor can be rendered in several environments: 
+  - on a web server that updates the web user interface via websockets, 
+  - on a web server that sends plain html to the brower (new in .NET 8),
+  - embedded in any webapplication using any front-end framework,
+  - running the component on web assembly in the browser, and
+  - in a cross platform MAUI application.
+
+  This makes Blazor components the most highly resuable user interface components in .NET.
 - **Multiplatform Application User Interface** abbreviated **MAUI** is the newest technologi
 aimed to make it easier to create apps that runs natively on  *ioS*, *Android*, *macOs* and *Windows*
 using the native user interface of each of these platforms. MAUI is an evolution of *Xmamarin Forms*.
@@ -82,11 +84,12 @@ The main types of databases are:
 Examples of databases are *Microsoft SQL Server*, *Postgress*, *My SQL* and *SQL Lite*.
 - **Document databases** that stores whole structures of objects as one piece as a hierachical structure.
 Examples of databases are *Mongo DB*, and *Azure Cosmos DB*.
-- **Cloud storage** are of course databases but also other options as *blob storage* or *key/value storage*.
+- **Cloud storage** are of course all the above types of databases but also other options as *blob storage* or *key/value storage*.
 
 Databases adds complexity to your application. 
 If the demand for data storage and querying is limited, simply storing the application data on disk 
-in a single file or several files is definitley an option. 
+in a single file or several files is definitley an option.
+
 With the built-in *JSON and XML serialization* technologies, writing and reading data to/from files on disk can be robust and geared for 
 changes in your data structures.
 
@@ -109,9 +112,10 @@ More often, you will use a framework that builds upon these standards.
 - **ASP.NET** is also a framework to build web API's based on the HTTP protocol.
 ASP.NET support almost any feature you want to use and is also highly customiseable.
 - **gPRC** is a modern, high-performance, lightweight *remote procedure call* (RPC) framework.
-gPRC is also cross-platform and compatible with services/clients written in any other langaue
-on any other platform. .NET has a very efficient implementation and tooling to make
-developent of both gRPC client and server applications.
+gPRC is also cross-platform and compatible with services/clients written in any other language
+on any other platform. 
+   .NET has a very efficient implementation and tooling to make developent of both gRPC client and server applications,
+   .NET gRPC also have a feature that makes gRPC APIs accessible as web API, so you don't have to implement both.
 
 ## Cloud development
 Modern .NET is created with the cloud in mind. You can easily deploy apps to the cloud, and .NET has 
@@ -123,6 +127,13 @@ It is also easy to scale up with moderate costs.
 The easiest  way to deploy to a cloud enviromnet is called *software as a service*, where 
 the management of the underlying infrastucture is managed by the cloud provider.
 
+## IoT Development
+You can build IoT apps with C# and .NET that run on Raspberry Pi, HummingBoard, BeagleBoard, Pine A64, and more.
+There are three common approaches:
+- *.NET IoT Libraries* is suitable for computers that can run .NET, i.e. a computer with an operating system like Raspberry PI.
+- *.NET nanoFramework* is a free and open-source platform that enables you to write C# applications for constrained embedded devices.
+- *Meadow* by Wilderness Labs gives you .NET on embedded devices for industrial IoT and build production-grade solutions using .NET.
+
 ## Code management
 It is strongly recommended to use an online *source control system* to manage your code and other assets 
 of your application. 
@@ -133,8 +144,8 @@ handling issues, project plans etc. GitHub is free to use for most hobbyist proj
 
 ## Learn more
 - **[.NET](https://dotnet.microsoft.com/)**
-- [**Visual Studio** all versions](https://visualstudio.microsoft.com/)
 - **[IoT with .NET](https://dotnet.microsoft.com/en-us/apps/iot)**
+- **[Visual Studio all versions](https://visualstudio.microsoft.com/)**
 - **[Entity Framework](https://docs.microsoft.com/en-us/ef/)**
 - **[Dapper](https://dapper-tutorial.net/dapper)**
 - **[gPRC on .NET](https://docs.microsoft.com/en-us/aspnet/core/grpc/)**
