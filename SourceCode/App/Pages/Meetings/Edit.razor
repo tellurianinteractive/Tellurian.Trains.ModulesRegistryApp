@@ -1,4 +1,5 @@
 ﻿@page "/Meetings/{id:int}/Edit"
+@page "/Meetings/Create/{OrganiserGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -15,7 +16,7 @@
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
     <Inputs>
         <AppInputText Width="4" Label="Name" @bind-Value="Meeting.Name" />
-        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="true" />
+        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
         <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" />
         <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
 
@@ -38,6 +39,8 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
+    [Parameter] public int OrganiserGroupId { get; set; }
+
     ClaimsPrincipal? Principal;
     Meeting Meeting = new Meeting();
     IEnumerable<ListboxItem>? OrganiserItems;
@@ -48,15 +51,17 @@
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? new Meeting() : new Meeting();
+        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? CreateMeeting : CreateMeeting;
         if (Meeting is not null)
         {
-            OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
+            OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId, OrganiserGroupId);
             MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
             GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
         }
     }
+
+    Meeting CreateMeeting => OrganiserGroupId > 0 ? new Meeting { OrganiserGroupId = OrganiserGroupId } : new Meeting();
 
     async Task OnValidSubmit()
     {
@@ -78,6 +83,8 @@
         !Principal.IsCountryAdministrator() &&
         (meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
           RegisteredModulesCount > 0);
+
+    bool MaySelectOrganiserGroup => OrganiserGroupId == 0;
 
     string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
 }

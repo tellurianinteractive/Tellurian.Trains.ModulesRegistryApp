@@ -7,12 +7,13 @@
 
 @inject GroupService GroupService
 @inject CountryService CountryService
+@inject MeetingService MeetingService
 
 <PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
 @if (IsGroupAdministrator && Group.Id > 0)
 {
-    <a class="btn btn-sm btn-secondary" href="groups/@Group.Id/members/add"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
+    <AppButton Label="Add" Href="@MemberAddHref(Group.Id)" ></AppButton>
 }
 
 <TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.FullName())">
@@ -83,5 +84,6 @@
     string ModulesHref(GroupMember member) => $"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}";
     string StationsHref(GroupMember member) => $"Persons/{member.PersonId}/Stations/InGroup/{member.GroupId}";
     string MemberEditHref(GroupMember member) => $"Groups/{member.GroupId}/Members/{member.Id}/edit";
+    string MemberAddHref(int groupId) => $"groups/{groupId}/members/add";
     string InviteHref(GroupMember member) => $"Persons/{member.PersonId}/Invite";
 }

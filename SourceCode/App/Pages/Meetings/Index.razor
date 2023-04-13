@@ -10,11 +10,9 @@
 
 <PageHeading ObjectName="Meetings" IconClass="@FontAwesome.Meeting" PageAction="PageAction.List" />
 
-@if (Principal.IsAuthenticated())
+@if (Principal.IsCountryOrGlobalAdministrator())
 {
-    <div class="col-12">
-        <a class="btn btn-secondary btn-sm" href="Meetings/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
-    </div>
+    <AppButton Label="Add" Href="Meetings/0/edit"></AppButton>
 }
 
 <TableTemplate Items="Meetings">
@@ -42,7 +40,7 @@
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
             }
-            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime, Principal))
+            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
             {
                 <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
             }
@@ -58,11 +56,12 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
 
     bool MayDelete(Meeting meeting) =>
-        Principal.IsAnyAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
+        Principal.IsCountryOrGlobalAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
 
     string MeetingHref(int id, string? function) =>
         string.IsNullOrWhiteSpace(function) ? $"meetings/{id}" : $"meetings/{id}/{function}";

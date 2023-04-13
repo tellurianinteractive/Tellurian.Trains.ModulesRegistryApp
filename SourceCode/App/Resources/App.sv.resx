@@ -1174,7 +1174,7 @@
     <value>av</value>
   </data>
   <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>Beskriv INTE vad som gäller för individuella banor nedan!</value>
+    <value>Beskriv INTE vad som gäller för individuella banor nedan! Lägg till banor. </value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Förhandsvisning</value>
@@ -1316,5 +1316,8 @@
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Sista året i drift</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>Ny träff</value>
   </data>
 </root>

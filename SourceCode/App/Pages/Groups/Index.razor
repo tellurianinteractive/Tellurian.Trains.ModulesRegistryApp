@@ -15,7 +15,7 @@
 
 @if (Groups is null)
 {
-    @if (IsLoading)@Localizer["GettingData"];
+    @if (IsLoading) @Localizer["GettingData"]
 }
 else
 {
@@ -44,14 +44,16 @@ else
                     <td>@item.value.GroupDomain?.Name</td>
                     <td>@Localizer[item.value.Category]</td>
                     <td style="white-space: nowrap !important;">
+                        <AppButton Label="Members" Href="@MembersHref(item.value.Id)" IconName="@FontAwesome.User"></AppButton>
+                        <AppButton Label="Modules" Href="@ModulesHref(item.value.Id)" IconName="@FontAwesome.Modules"></AppButton>
+                        <AppButton Label="Stations" Href="@StationsHref(item.value.Id)" IconName="@FontAwesome.Stations"></AppButton>
+                        @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
                         @if (item.mayEdit)
                         {
-                            <a class="btn btn-sm btn-primary" href="groups/@item.value.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
+                            <AppButton Label="Edit" Href="@EditHref(item.value.Id)"></AppButton>
+                            <AppButton Label="NewMeeting" Href="@CreateMeetingHref(item.value.Id)" IconName="@FontAwesome.Meeting"></AppButton>
                         }
-                        <a class="btn btn-sm btn-secondary" href="groups/@item.value.Id/members"><span class="@FontAwesome.User" /> @Localizer["Members"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/modules"><span class="@FontAwesome.Modules" />@Localizer["Modules"]</a>
-                        <a class="btn btn-sm btn-info" href="groups/@item.value.Id/stations"><span class="@FontAwesome.Station" />@Localizer["Stations"]</a>
-                        @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
+
                     </td>
                 </tr>
             }
@@ -82,21 +84,21 @@ else
         }
     }
 
-    void OnSelectedCountry(int id)
+    void OnSelectedCountry(int countryId)
     {
-        if (id > 0)
+        if (countryId > 0)
         {
-            Navigator.NavigateTo($"/Groups/Index/{id}");
+            Navigator.NavigateTo($"/Groups/Index/{countryId}");
         }
     }
 
-    async Task GetGroups(int id)
+    async Task GetGroups(int countryId)
     {
-        if (id > 0)
+        if (countryId > 0)
         {
             IsLoading = true;
             StateHasChanged();
-            Groups = await GroupService.GetAllAsync(Principal, id);
+            Groups = await GroupService.GetAllAsync(Principal, countryId);
             IsLoading = false;
         }
     }
@@ -104,5 +106,10 @@ else
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
     string CityName(Group? group) => group is null ? string.Empty : group.CountryId == CountryId ? group.CityName : $"{group.CityName} ({group.Country.DomainSuffix.ToUpperInvariant()})";
+    string EditHref(int groupId) => $"groups/{groupId}/edit";
+    string MembersHref(int groupId) => $"groups/{groupId}/members";
+    string ModulesHref(int groupId) => $"groups/{groupId}/modules";
+    string StationsHref(int groupId) => $"groups/{groupId}/stations";
+    string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
 
 }

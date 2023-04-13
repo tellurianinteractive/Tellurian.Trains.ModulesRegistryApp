@@ -45,14 +45,13 @@ public static class ClaimsPrincipalExtensions
 
     #region Administrator scope
 
-    public static bool IsAnyAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) =>
+    public static bool IsCountryOrGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) =>
         principal is not null && (principal.IsGlobalAdministrator() || principal.IsCountryAdministrator());
 
     public static bool IsAnyGroupAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, Group? group) =>
         principal is not null && group is not null &&
-        (   principal.IsCountryAdministratorInCountry(group.CountryId) ||
-            (group.GroupMembers?.Any(gm => gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator)) == true)
-        );
+        (group.GroupMembers?.Any(gm => gm.PersonId == principal.PersonId() && (gm.IsDataAdministrator || gm.IsGroupAdministrator)) == true);
+
     public static bool IsCountryAdministratorInCountry([NotNullWhen(true)] this ClaimsPrincipal? principal, int? countryId) =>
         principal.IsGlobalAdministrator() || (principal.IsCountryAdministrator() && countryId.HasValue && countryId.Value == principal.CountryId());
 
@@ -114,7 +113,11 @@ public static class ClaimsPrincipalExtensions
          principal?.IsReadOnly() == false && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == principal.PersonId()) && (principal.IsAuthorisedInCountry(principal.CountryId()) || principal.IsGlobalAdministrator()));
 
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting) =>
-        principal is not null && principal.IsAnyAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+        principal is not null && principal.IsCountryOrGlobalAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+
+    public static bool MayRemove([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting, LayoutModule? module) =>
+        principal is not null && meeting is not null && module is not null &&
+        (principal.IsCountryOrGlobalAdministrator() || principal.IsAnyGroupAdministrator(meeting.OrganiserGroup) || module.IsNotInUse());
 
     #endregion
 
@@ -135,7 +138,7 @@ public static class ClaimsPrincipalExtensions
 
     public static int MinimumObjectVisibility(this ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool isMemberInGroupsInSameDomain) =>
         principal is null ? (int)ObjectVisibility.Public :
-        principal.IsAnyAdministrator() || ownerRef.PersonId == principal.PersonId() ? (int)ObjectVisibility.Private :
+        principal.IsCountryOrGlobalAdministrator() || ownerRef.PersonId == principal.PersonId() ? (int)ObjectVisibility.Private :
         ownerRef.IsPersonInGroup ? (int)ObjectVisibility.GroupMembers :
         ownerRef.IsPerson && isMemberInGroupsInSameDomain ? (int)ObjectVisibility.DomainMembers :
         ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.Private;

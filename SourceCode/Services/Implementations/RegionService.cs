@@ -55,7 +55,7 @@ public class RegionService
 
     public async Task<(int Count, string Message, Region? Entity)> SaveAsync(ClaimsPrincipal? principal, Region entity)
     {
-        if (principal.IsAnyAdministrator())
+        if (principal.IsCountryOrGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Regions.FindAsync(entity.Id);

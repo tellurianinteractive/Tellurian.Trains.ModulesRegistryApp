@@ -88,7 +88,7 @@ public sealed class ExternalStationService
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsAnyAdministrator())
+        if (principal.IsCountryOrGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ExternalStations

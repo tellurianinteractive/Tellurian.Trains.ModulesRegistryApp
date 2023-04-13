@@ -44,9 +44,9 @@ else
                         <td>@item.RegisteredTime.ToString("g")</td>
                         @*                    <td>@item.LayoutPosition()</td>
                 *@                    <td>
-                            @if (MayCancel(item))
+                            @if (MayRemove(item))
                             {
-                                <AppButton Label="Remove" OnClickCallback="(() => OnCancel(item.Id))" IconName="@FontAwesome.Modules" />
+                                <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
                             }
                         </td>
                     </RowTemplate>
@@ -96,8 +96,6 @@ else
                     </RowTemplate>
                 </TableTemplate>
             }
-
-
         }
     </div>
 }
@@ -123,7 +121,7 @@ else
     IEnumerable<ModulePackage>? AvailablePackages = Array.Empty<ModulePackage>();
     IEnumerable<ModulePackage>? BorrowablePackages = Array.Empty<ModulePackage>();
 
-    bool MayCancel(LayoutModule lm) => Principal.IsAnyAdministrator() || Principal.IsAnyGroupAdministrator(Meeting?.OrganiserGroup) || (lm.IsNotInUse() && Layout.RegistrationIsOpen(TimeProvider.Now));
+    bool MayRemove(LayoutModule lm) => Principal.MayRemove(Meeting, lm);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -176,7 +174,7 @@ else
         }
     }
 
-    async Task OnCancel(int layoutModuleId)
+    async Task OnRemove(int layoutModuleId)
     {
         if (Layout is not null && LayoutParticipant is not null)
         {
@@ -195,12 +193,6 @@ else
             ParticipantsBorrowableModules = await LayoutService.GetBorrowableModules(Principal, LayoutId, MeetingParticipant.PersonId);
             AvailablePackages = ParticipantsAvailableModules.AsModulePackages();
             BorrowablePackages = ParticipantsBorrowableModules.AsModulePackages();
-            //Modules = await LayoutService.GetAvailableModules(Principal, LayoutParticipant, Layout);
-            //MyRegisteredModules = ParticipantsRegisteredModules.Where(rm => rm.LayoutParticipant.Id == LayoutParticipant.Id).ToList();
-            //AvailableModules = Available(Modules, Layout.PrimaryModuleStandard.ScaleId);
-            //var packages = AvailableModules.AsPackages();
-            //MyPackages = packages.Where(am => am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
-            //OtherPackages = packages.Where(am => !am.OwnerPersonId.Contains(LayoutParticipant.PersonId)).ToList();
         }
     }
 

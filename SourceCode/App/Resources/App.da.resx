@@ -1174,7 +1174,7 @@
     <value>av</value>
   </data>
   <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>Beskriv IKKE hvad der gælder for individuelle sporlayouts nedenfor!</value>
+    <value>Beskriv IKKE hvad der gælder for individuelle sporlayouts nedenfor! Tilføj en sporlayout.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Forhåndsvisning</value>
@@ -1316,5 +1316,8 @@
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Sidste år i drift</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>Ny træf</value>
   </data>
 </root>

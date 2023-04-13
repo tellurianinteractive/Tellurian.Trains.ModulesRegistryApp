@@ -32,7 +32,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 
             <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
             <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
-            @if (Principal.IsAnyAdministrator() && User is not null)
+            @if (Principal.IsCountryOrGlobalAdministrator() && User is not null)
             {
                 <AppInputCheck Width="3" Label="IsGlobalAdministrator" @bind-Value="User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
                 <AppInputCheck Width="3" Label="IsCountryAdministrator" @bind-Value="User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />

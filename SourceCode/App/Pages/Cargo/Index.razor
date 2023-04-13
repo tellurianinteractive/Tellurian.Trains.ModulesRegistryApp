@@ -104,7 +104,7 @@
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        MayEdit = Principal.IsAnyAdministrator();
+        MayEdit = Principal.IsCountryOrGlobalAdministrator();
         Cargos = (await CargoService.GetAll()).OrderBy(c => c.NhmCode);
     }
 }

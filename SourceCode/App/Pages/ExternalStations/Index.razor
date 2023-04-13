@@ -53,7 +53,7 @@
                 {
                 <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
                 }
-                @if (Principal.IsAnyAdministrator())
+                @if (Principal.IsCountryOrGlobalAdministrator())
                 {
                     <AppButton Label="Delete" OnClickCallback="() => OpenDeleteDialog(item.Id)" />
                 }

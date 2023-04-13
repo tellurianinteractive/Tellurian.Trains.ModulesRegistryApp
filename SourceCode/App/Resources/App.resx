@@ -1174,7 +1174,7 @@
     <value>of</value>
   </data>
   <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>DO NOT describe what applies to individual track layouts below!</value>
+    <value>DO NOT describe what applies to individual layouts below! Add a layout </value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
@@ -1316,5 +1316,8 @@
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Final year in operation</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>New meeting</value>
   </data>
 </root>

@@ -1174,7 +1174,7 @@
     <value>von</value>
   </data>
   <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>Beschreiben Sie NICHT, was unten für einzelne Streckenlayouts gilt!</value>
+    <value>Beschreiben Sie NICHT, was unten für einzelne Streckenlayouts gilt! Streckenlayouts hinzufügen.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Vorschau</value>
@@ -1316,5 +1316,8 @@
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Letztes Jahr in Betrieb</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>Neues Treffen</value>
   </data>
 </root>

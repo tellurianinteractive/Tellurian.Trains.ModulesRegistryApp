@@ -20,14 +20,14 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-#### Status December 2022
+#### Status April 2023
 All functions for managing modules are now in place, including:
 * Managing **your modules, stations and station freight customers**.
 * **Transfer of module ownership** - part or whole - to other person or group.
 * **Manage groups and group members**, including group member's modules, stations and station freight customers.
 * Administrators can **manage meetings, external stations, regions, cargo types, module standards and module end profiles**.
 * Users and meeting organisers can **register a participant** and add modules to a layout.
-* **Create waybills** for individual stations at a meeting. 
+* **Create waybills** for individual stations and waybills for internal freights between modules registered for a meeting layout. 
 * Domains **change group visibiliy** for groups within same domain for better collaboration. FREMO is such a domain.
 * **User management** for administrators and regular users.
 * **Help texts** for most forms with recommendation how to enter data.

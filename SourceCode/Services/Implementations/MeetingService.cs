@@ -37,7 +37,7 @@ public class MeetingService
             .Include(m => m.Layouts)
             .ToReadOnlyListAsync();
 
-        return meetings.Where(m => principal.IsAnyAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
+        return meetings.Where(m => principal.IsCountryOrGlobalAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
             .Select(m =>
             (
                 principal.IsGlobalAdministrator() ||
@@ -184,7 +184,7 @@ public class MeetingService
 
     public async Task<(int Count, string? Message)> DeleteAllAsync(ClaimsPrincipal? principal, Meeting meeting)
     {
-        if (principal is not null && principal.IsAnyAdministrator())
+        if (principal is not null && principal.IsCountryOrGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Meetings
@@ -300,6 +300,23 @@ public class MeetingService
             return result.DeleteResult();
         }
         return principal.DeleteNotAuthorized<MeetingParticipant>();
+    }
+
+    public async Task<(int Count, string Message, MeetingParticipant? Entity)> ReRegisterMeetingParticipaction(ClaimsPrincipal? principal, int meetingParicipantId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.MeetingParticipants
+                .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.LayoutModules)
+                .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)
+                .ConfigureAwait(false);
+            if (existing is null) return Resources.Strings.NotFound.SaveResult<MeetingParticipant>();
+            existing.CancellationTime = null;
+            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            return result.SaveResult(existing);
+        }
+        return principal.SaveNotAuthorised<MeetingParticipant>();
     }
     #endregion
 }

@@ -50,11 +50,11 @@
                             <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
                             @if (item.CancellationTime.HasValue)
                             {
-                                // TODO: Make it possible to cancel cancellation.
+                                <AppButton Label="Register" OnClickCallback="() =>OnReRegister(item.PersonId)" IconName="@FontAwesome.Register" />
                             }
                             else
                             {
-                                <AppButton Label="Unregister" OnClickCallback="() =>OnCancelledParticipation(item.PersonId)" IconName="@FontAwesome.Unregister"/>
+                                <AppButton Label="Unregister" OnClickCallback="() =>OnCancelledParticipation(item.PersonId)" IconName="@FontAwesome.Unregister" />
                             }
                         </td>
                     </RowTemplate>
@@ -76,7 +76,7 @@
             }
             else if (Meeting.Id > 0 && PersonId > 0)
             {
-                if (IsMeetingOrganiser || Principal.IsAnyAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
+                if (IsMeetingOrganiser || Principal.IsCountryOrGlobalAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
                 {
                     <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
                 }
@@ -115,7 +115,7 @@
                             </td>
                             <td>@item.Layout.Name()</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
-                       </RowTemplate>
+                        </RowTemplate>
                     </TableTemplate>
                 }
             }
@@ -139,7 +139,7 @@
     IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
     bool IsMeetingOrganiser;
     bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
-        Principal.IsAnyAdministrator() ||
+        Principal.IsCountryOrGlobalAdministrator() ||
         IsMeetingOrganiser ||
         (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
@@ -201,11 +201,10 @@
             PersonId = personId;
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             if (Participant is null) return;
-            var result = await MeetingService.CancelMeetingParticipaction(Principal, Participant.Id);
-            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await OnCancel(Participant.Id);
         }
     }
+
 
     async Task OnValidSubmit()
     {
@@ -227,6 +226,17 @@
         Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
+
+    async Task OnReRegister(int particpantId)
+    {
+        if (MeetingId > 0 && particpantId > 0)
+        {
+            var result = await MeetingService.ReRegisterMeetingParticipaction(Principal, particpantId);
+            Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+    }
+
 
     void OnParticipateInLayout(int layoutId)
     {

@@ -3,6 +3,11 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.12
+Release date 2023-04-13
+- **Meeting Participant** that was cancelled can now be re-registered.
+- **Group Administrators** can now create a meeting with their group as organiser.
+
 ## Release 1.8.11
 Release date 2023-03-25
 - **Meeting information** improved.

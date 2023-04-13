@@ -315,7 +315,7 @@ public sealed class ModuleService
             {
                 if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
                 if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
-                if (!principal.IsAnyAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
+                if (!principal.IsCountryOrGlobalAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
                 var documents = await dbContext.Documents.Where(d => entity.DocumentIds().Contains(d.Id)).ToListAsync();
                 foreach (var document in documents) dbContext.Remove(document);
                 foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);
