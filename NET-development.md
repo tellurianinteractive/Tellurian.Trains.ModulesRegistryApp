@@ -27,6 +27,7 @@ So much of the knowledge is about getting the most out of the ready made softwar
 that Microsoft and other library writers has to offer.
 
 ## Developmemt tools
+Microsoft is known for its good development tools.
 This section only covers free tools for developing .NET applications.
 - **Visual Studio Code** is now one of the most popular editor for writing software in almost any language.
 It is a cross-platform application that runs om *Windows*, *macOS* and *Linux*.
@@ -41,7 +42,7 @@ SQL Server also has a cloud version but no free tier, the smallest SQL Server cl
 cost around €5 per month.
 - **SQL Server Management Studio** is a free Windows application for SQL Server database creation and management.
 It works with both local databases and cloud databases. It will be installed with the *SQL Server Developer Edition*.
-- **Visual Studio** has great support for building and maintaing databases in *Microsoft SQL Server*. 
+- **Visual Studio s** has great support for building and maintaing databases in *Microsoft SQL Server*. 
 Firstly, you have similar access to the database as with *Sql Server Management Studio*, and 
 secondly, there is a special *Database* project type, which you can maintain your SQL code
 with version control and deploy updates and migrations to your existing database or create new ones.
@@ -70,12 +71,13 @@ The components written in Blazor can be rendered in several environments:
   - running the component on web assembly in the browser, and
   - in a cross platform MAUI application.
 
+  With the forthcoming .NET 8, you will also be able to mix rendering modes in the same application.
   This makes Blazor components the most highly resuable user interface components in .NET.
 - **Multiplatform Application User Interface** abbreviated **MAUI** is the newest technologi
 aimed to make it easier to create apps that runs natively on  *ioS*, *Android*, *macOs* and *Windows*
 using the native user interface of each of these platforms. MAUI is an evolution of *Xmamarin Forms*.
 You can also embed *Blazor* components in a MAUI application, 
-or  write a MAUI applications only using HTML, CSS and C# with Blazor.
+or  write a MAUI applications only using Blazor components.
 
 ## Data storage
 There are several types of ways to store data and access it.
@@ -85,6 +87,7 @@ Examples of databases are *Microsoft SQL Server*, *Postgress*, *My SQL* and *SQL
 - **Document databases** that stores whole structures of objects as one piece as a hierachical structure.
 Examples of databases are *Mongo DB*, and *Azure Cosmos DB*.
 - **Cloud storage** are of course all the above types of databases but also other options as *blob storage* or *key/value storage*.
+- **Embedded databases**, an example is *SQL Lite* compiled to *webassembly* so you can run it as a local storage in your Blazor web application.
 
 Databases adds complexity to your application. 
 If the demand for data storage and querying is limited, simply storing the application data on disk 
@@ -126,6 +129,9 @@ It is also easy to scale up with moderate costs.
 
 The easiest  way to deploy to a cloud enviromnet is called *software as a service*, where 
 the management of the underlying infrastucture is managed by the cloud provider.
+
+## Performance
+
 
 ## IoT Development
 You can build IoT apps with C# and .NET that run on Raspberry Pi, HummingBoard, BeagleBoard, Pine A64, and more.
