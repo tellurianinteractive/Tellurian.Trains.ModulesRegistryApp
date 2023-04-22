@@ -1,5 +1,5 @@
 # .NET Development
-*By [Stefan Fj‰llemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, April 2023*
+*By [Stefan Fj√§llemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, April 2023*
 
 This article aim to describe technology choices, when developing software in modern .NET.
 At the time of writing 2023, all new .NET development should use .NET 7 or later.
@@ -22,9 +22,12 @@ which means that F# programs are significantly smaller that correponding C# prog
 - **VB.NET** is the modern variant of the BASIC programming language. 
 It has almost the same features as C# and a simple and easy to understand syntax.
 
+## Libraries
 Regardless of .NET langauge you use, you will depend on the same .NET core library code.
 So much of the knowledge is about getting the most out of the ready made software
-that Microsoft and other library writers has to offer.
+that Microsoft and other library writers has to offer:
+- The [.NET Base Class Library (BCL)](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/edit/master/NET-development.md) has a lot of build in functionality for almost anything you want to write code for.
+- The package manager [NuGet](https://www.nuget.org/) is the the way you can reuse code components written by others or yourself.
 
 ## Developmemt tools
 Microsoft is known for its good development tools.
@@ -39,7 +42,7 @@ Visual Studio is a Windows only application, but there is also a separate versio
 - **SQL Server** has a free *developer edition* that is a full featured version with some limitations. 
 There is also a free *express edition* ideal for smaller applications. 
 SQL Server also has a cloud version but no free tier, the smallest SQL Server cloud database
-cost around Ä5 per month.
+cost around ‚Ç¨5 per month.
 - **SQL Server Management Studio** is a free Windows application for SQL Server database creation and management.
 It works with both local databases and cloud databases. It will be installed with the *SQL Server Developer Edition*.
 - **Visual Studio s** has great support for building and maintaing databases in *Microsoft SQL Server*. 
