@@ -134,6 +134,17 @@ The easiest  way to deploy to a cloud enviromnet is called *software as a servic
 the management of the underlying infrastucture is managed by the cloud provider.
 
 ## Performance
+.NET applications can be very performant, also compared with other technologies.
+.NET gives you a lot of performance improvements in the box after each release.
+
+You must ask yourself: How performance critical is my application?
+Writing your code easy to understand is preferred.
+Optimisations should only be applied at bottlenecks
+and *only when the result can be measured*.
+
+To measure the performance of your code and the effect on code
+changes you make, use [BenchMark .NET](https://github.com/dotnet/BenchmarkDotNet).
+
 
 
 ## IoT Development
