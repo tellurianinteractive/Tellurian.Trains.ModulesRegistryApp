@@ -4,12 +4,19 @@
 This article aim to describe technology choices, when developing software in modern .NET.
 At the time of writing 2023, all new .NET development should use .NET 7 or later.
 
-Modern .NET is fully open source; the framework libraries, the runtime, and the compilers.
+## Modern .NET
+Modern .NET is free and fully open source; the framework libraries, the runtime, and the compilers.
 You can build any type of applications on almost any platform. 
 .NET also runs in the web browser in web assembly and on many single board computers.
 This makes .NET a one stop shop where you can reuse a lot of your .NET skills for any type of application.
 
-> .NET Framework 4.x.x is Windows only and considered legacy and should never be used for new applications.
+> ### Misconceptions About .NET
+> When you search on Internet comparing .NET with other platforms and technologies,
+it seems that much of the writing about .NET is outdated or simply wrong.
+This [YouTube video by Nick Chapsas](https://youtube.com/watch?v=AFNujHJfMtU) gives some examples.
+
+> ### .NET Framework
+> Modern .NET is *not* the same as .NET Framework, which is Windows only and considered legacy and should never be used for new applications.
 The last .NET Framework version is 4.8, and it will be maintained as long as Windows is supported.
 
 ## Languages
@@ -21,6 +28,9 @@ shares most of its properties with the Java programming language.
 which means that F# programs are significantly smaller that correponding C# programs.
 - **VB.NET** is the modern variant of the BASIC programming language. 
 It has almost the same features as C# and a simple and easy to understand syntax.
+
+There are also other languages that runs on .NET, 
+for example [Phyton](https://ironpython.net/) and [COBOL](https://portal.microfocus.com/s/article/KM000009164?language=en_US).
 
 ## Libraries
 Regardless of .NET langauge you use, you will depend on the same .NET core library code.
@@ -45,10 +55,13 @@ SQL Server also has a cloud version but no free tier, the smallest SQL Server cl
 cost around €5 per month.
 - **SQL Server Management Studio** is a free Windows application for SQL Server database creation and management.
 It works with both local databases and cloud databases. It will be installed with the *SQL Server Developer Edition*.
-- **Visual Studio s** has great support for building and maintaing databases in *Microsoft SQL Server*. 
+- **Visual Studio** has great support for building and maintaing databases in *Microsoft SQL Server*. 
 Firstly, you have similar access to the database as with *Sql Server Management Studio*, and 
 secondly, there is a special *Database* project type, which you can maintain your SQL code
 with version control and deploy updates and migrations to your existing database or create new ones.
+- **Entity Framework Core** also have great support for database definitions and incremental database upgrades.
+It supports the most common databases.
+
 
 ## User interfaces
 There are a lot of ways to create applications with a user interface with .NET. 
@@ -123,6 +136,14 @@ on any other platform.
    .NET has a very efficient implementation and tooling to make developent of both gRPC client and server applications,
    .NET gRPC also have a feature that makes gRPC APIs accessible as web API, so you don't have to implement both.
 
+## Interoperatbility
+.NET is known for interoperability:
+- Call functions in Dynamic Link Libraries (DLL) compiled in a non .NET language.
+- C++ interop to wrap a native C++ class and enable code authored in C# or another .NET language to access it.
+- Exposing COM-components to .NET so .NET code can call it (Windows only).
+- Support for *dynamic objects* for interoperatbility with languages such as IronPython and IronRuby.
+- Blazor interoperability in the browser with JavaScript and libraries in any language compiled to Web Assembly.
+
 ## Cloud development
 Modern .NET is created with the cloud in mind. You can easily deploy apps to the cloud, and .NET has 
 support on several cloud platforms including *Microsoft Azure* and *Amazon Web Services (AWS)*.
@@ -135,7 +156,9 @@ the management of the underlying infrastucture is managed by the cloud provider.
 
 ## Performance
 .NET applications can be very performant, also compared with other technologies.
-.NET gives you a lot of performance improvements in the box after each release.
+An example of independent performance tests are available at [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r21)
+
+Performance is in focus, and .NET have a lot of performance improvements with every release.
 
 You must ask yourself: How performance critical is my application?
 Writing your code easy to understand is preferred.
