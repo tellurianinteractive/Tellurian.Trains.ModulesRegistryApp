@@ -78,8 +78,9 @@ user interfaces on Windows only.
 ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
 Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
 - **Blazor** is a special web framework of ASP.NET. 
-You write components with a mix of HTML, CSS and C#. You can interop with JavaScript, and there are
-many ready made components avaliable.
+You write components with a mix of HTML, CSS and C#. 
+You can interop with JavaScript and any code that can compile to Web Assembly (C, Rust and others).
+There are many ready made components avaliable.
 The components written in Blazor can be rendered in several environments: 
   - on a web server that updates the web user interface via websockets, 
   - on a web server that sends plain html to the brower (new in .NET 8),
@@ -148,11 +149,15 @@ on any other platform.
 Modern .NET is created with the cloud in mind. You can easily deploy apps to the cloud, and .NET has 
 support on several cloud platforms including *Microsoft Azure* and *Amazon Web Services (AWS)*.
 
+
 You often get some level of free cloud computing, which usually is enough for applications with limited usage.
 It is also easy to scale up with moderate costs.
 
 The easiest  way to deploy to a cloud enviromnet is called *software as a service*, where 
 the management of the underlying infrastucture is managed by the cloud provider.
+
+.NET also has excellent support for deploy to containers and 
+to deploy containers to orchestration services such as Kubernetes.
 
 ## Performance
 .NET applications can be very performant, also compared with other technologies.
