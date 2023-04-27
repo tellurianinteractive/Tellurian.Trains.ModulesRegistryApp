@@ -2,7 +2,8 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
-
+## Release 1.8.13
+- **Menu** link to *fastclock* now includes user's given name if logged in.
 ## Release 1.8.12
 Release date 2023-04-13
 - **Meeting Participant** that was cancelled can now be re-registered.

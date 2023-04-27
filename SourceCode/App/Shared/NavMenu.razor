@@ -107,7 +107,7 @@
             </a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link" href="https://fastclock.azurewebsites.net/" target="_blank">
+            <a class="nav-link" href="@FastclockHref" target="_blank">
                 <span class="fa fa-clock" aria-hidden="true" />@Localizer["FastClock"]
             </a>
         </li>
@@ -125,12 +125,23 @@
 </div>
 
 @code {
+
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+    }
+    private string FastclockHref =>
+        Principal is null ? "https://fastclock.azurewebsites.net/" :
+        $"https://fastclock.azurewebsites.net/user/{Principal.GivenName()}";
 }
