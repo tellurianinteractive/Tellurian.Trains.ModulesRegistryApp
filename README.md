@@ -37,5 +37,5 @@ All functions for managing modules are now in place, including:
   * Waybills for **cross border freights are bi-language**, with sender and receiver information in respective language.
 
 #### Forthcoming work
-You can now see the planned work under [Projects](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/projects/2). 
+You can now see the planned work under [Projects](https://github.com/orgs/tellurianinteractive/projects/2/views/1). 
 You are welcome to contribute, there is a [guide](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md) describing different ways to to that.
