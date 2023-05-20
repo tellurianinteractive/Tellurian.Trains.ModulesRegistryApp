@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using System;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -84,7 +85,7 @@ public sealed class DocumentService
                 var position = 0;
                 while (position < file.Size)
                 {
-                    position += await stream.ReadAsync(document.Content, position, fileSize - position);
+                    position += await stream.ReadAsync(document.Content.AsMemory(position, fileSize - position));
                 }
                 dbContext.Documents.Add(document);
                 var count = await dbContext.SaveChangesAsync();
@@ -109,7 +110,6 @@ public sealed class DocumentService
     }
 
 
-    // TODO: Refactor to switch expression?
     private static async Task<int> UpdateDocumentReference(ModulesDbContext dbContext, Document document, object? documentedObject)
     {
         var (Id, _, TypeName) = DocumentedObject(documentedObject, document.FileExtension);
