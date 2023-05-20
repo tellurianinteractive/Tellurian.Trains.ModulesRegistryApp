@@ -70,10 +70,10 @@ If you want to contribute to the development of the application, there are two m
 
 ##### Recommended Skills
 To contribute, you need some experience in the following fields:
-* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the latest version of .NET, from nov 2021 it is .NET 6.0.
+* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the latest version of .NET, from nov 2022 it is .NET 7.0.
 * Using [**Blazor**](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) as web user interface framework. We do <u>not</u> use JavaScript based frameworks like Angular, React or Vue. Front-end is written in **C#**, **HTML** and **CSS**.
 * Back-end is written in **C#**. 
-* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer. Note that *mogrations* is not used.
+* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer. Note that the *migrations* feature is not used.
 * Using [**Sql Server**](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for local development and tests, and [**Azure SQL Database**](https://azure.microsoft.com/en-us/products/azure-sql/database/) as production database. The database structure and some logic are coded in **SQL** and is also checked in as [source code in GitHub](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Database/dbo).
 * Using [**Visual Studio**](https://visualstudio.microsoft.com/) as development environment.
 Visual Studio has excellent support for coding and publishing apps written in C#, HTML/CSS, and built in database design- and deployment tools. 

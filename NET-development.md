@@ -36,7 +36,7 @@ for example [Phyton](https://ironpython.net/) and [COBOL](https://portal.microfo
 Regardless of .NET langauge you use, you will depend on the same .NET core library code.
 So much of the knowledge is about getting the most out of the ready made software
 that Microsoft and other library writers has to offer:
-- The [.NET Base Class Library (BCL)](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/edit/master/NET-development.md) has a lot of build in functionality for almost anything you want to write code for.
+- The [.NET Base Class Library (BCL)](https://learn.microsoft.com/en-us/dotnet/standard/class-library-overview) has a lot of build in functionality for almost anything you want to write code for.
 - The package manager [NuGet](https://www.nuget.org/) is the the way you can reuse code components written by others or yourself.
 
 ## Developmemt tools
