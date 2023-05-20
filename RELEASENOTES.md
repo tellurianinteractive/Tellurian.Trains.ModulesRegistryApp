@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.8.14
+- **Bug fix** of unhandled error submitting modules to a meeting layout.
+- **Bug fix** of not all borrowable modules shows up as available.
 ## Release 1.8.13
 - **Menu** link to *fastclock* now includes user's given name if logged in.
 ## Release 1.8.12

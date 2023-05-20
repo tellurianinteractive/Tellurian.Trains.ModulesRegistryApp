@@ -196,7 +196,7 @@ public sealed class LayoutService
                         var moduleStation = await dbContext.Stations.AsNoTracking().SingleOrDefaultAsync(s => s.PrimaryModuleId == layoutModule.ModuleId);
                         if (moduleStation is not null)
                         {
-                            var existingLayoutStation = await dbContext.LayoutStations.AsNoTracking().SingleOrDefaultAsync(ls => ls.StationId == moduleStation.Id);
+                            var existingLayoutStation = await dbContext.LayoutStations.AsNoTracking().FirstOrDefaultAsync(ls => ls.StationId == moduleStation.Id);
                             if (existingLayoutStation is null)
                             {
                                 var layoutStation = new LayoutStation { StationId = module.StationId.Value, LayoutParticipantId = layoutParticipantId };
