@@ -40,7 +40,7 @@
             {
                 <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
             }
-            @if (item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
+            @if (Principal.IsCountryAdministratorInCountry(item.meeting.OrganiserGroup.CountryId) || item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime))
             {
                 <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
             }

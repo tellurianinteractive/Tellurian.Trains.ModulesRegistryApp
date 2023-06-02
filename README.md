@@ -20,7 +20,7 @@ for maintaning data about *model railway modules* with the following qualities:
 - Support any language that is required by the module railwayers community.
 - Available as a cloud application.
 
-#### Status April 2023
+#### Status June 2023
 All functions for managing modules are now in place, including:
 * Managing **your modules, stations and station freight customers**.
 * **Transfer of module ownership** - part or whole - to other person or group.

@@ -110,7 +110,7 @@ public static class ClaimsPrincipalExtensions
         principal?.IsReadOnly() == false && (principal.IsAuthorisedInCountry(principal.CountryId()));
 
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
-         principal?.IsReadOnly() == false && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == principal.PersonId()) && (principal.IsAuthorisedInCountry(principal.CountryId()) || principal.IsGlobalAdministrator()));
+         principal?.IsReadOnly() == false && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == principal.PersonId()) || (principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator()));
 
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting) =>
         principal is not null && principal.IsCountryOrGlobalAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;

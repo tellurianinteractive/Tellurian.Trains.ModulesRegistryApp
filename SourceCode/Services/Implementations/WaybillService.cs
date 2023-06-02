@@ -65,7 +65,7 @@ public class WaybillService
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
-                var sql = getSql(stationId, stationCustomerId, receiving, sending);
+                var sql = getSql(receiving, sending);
                 if (sql.HasNoValue()) return waybills;
                 var command = new SqlCommand(sql, connection)
                 {
@@ -95,13 +95,13 @@ public class WaybillService
         }
         return waybills;
 
-        static string getSql(int stationId, int? stationCustomerId, bool receiving, bool sending) =>
-            receiving && sending ? sqlSupplier(stationId, stationCustomerId) + " UNION " + sqlConsumer(stationId, stationCustomerId) :
-            receiving ? sqlSupplier(stationId, stationCustomerId) :
-            sending ? sqlConsumer(stationId, stationCustomerId) :
+        static string getSql(bool receiving, bool sending) =>
+            receiving && sending ? sqlSupplier() + " UNION " + sqlConsumer() :
+            receiving ? sqlSupplier() :
+            sending ? sqlConsumer() :
             string.Empty;
 
-        static string sqlSupplier(int stationId, int? stationCustomerId) =>
+        static string sqlSupplier() =>
             $"""
             SELECT * FROM ModuleSupplierWaybill AS MSW
                 WHERE MSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR MSW.DestinationStationCustomerId = @StationCustomerId )
@@ -113,7 +113,7 @@ public class WaybillService
                 WHERE SYSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR SYSW.DestinationStationCustomerId = @StationCustomerId )
             """;
 
-        static string sqlConsumer(int stationId, int? stationCustomerId) =>
+        static string sqlConsumer() =>
             $"""
             SELECT * FROM ModuleConsumerWaybill AS MCW
                 WHERE MCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR MCW.OriginStationCustomerId = @StationCustomerId )

@@ -193,13 +193,14 @@ public sealed class LayoutService
                     var layoutModule = new LayoutModule { ModuleId = module.ModuleId, LayoutParticipantId = participant.Id, RegisteredTime = TimeProvider.Now };
                     if (module.StationId.HasValue)
                     {
-                        var moduleStation = await dbContext.Stations.AsNoTracking().SingleOrDefaultAsync(s => s.PrimaryModuleId == layoutModule.ModuleId);
+                        var moduleStation = await dbContext.Stations.AsNoTracking().SingleOrDefaultAsync(s => s.Id == module.StationId);
                         if (moduleStation is not null)
                         {
-                            var existingLayoutStation = await dbContext.LayoutStations.AsNoTracking().FirstOrDefaultAsync(ls => ls.StationId == moduleStation.Id);
+                            var existingLayoutStation = await dbContext.LayoutStations.SingleOrDefaultAsync(ls => ls.StationId == moduleStation.Id && ls.LayoutParticipant.Id == layoutParticipantId);
                             if (existingLayoutStation is null)
                             {
                                 var layoutStation = new LayoutStation { StationId = module.StationId.Value, LayoutParticipantId = layoutParticipantId };
+                                dbContext.LayoutStations.Add(layoutStation);
                                 layoutModule.LayoutStation = layoutStation;
                             }
                         }
