@@ -142,6 +142,6 @@
         Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
     }
     private string FastclockHref =>
-        Principal is null ? "https://fastclock.azurewebsites.net/" :
+        Principal is null || !Principal.IsAuthenticated() ? "https://fastclock.azurewebsites.net/" :
         $"https://fastclock.azurewebsites.net/user/{Principal.GivenName()}";
 }
