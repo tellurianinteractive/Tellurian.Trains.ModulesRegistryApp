@@ -4,7 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.8.16
 Release date 2023-06-03
-- **Bux fix** of fast clock menu link when user is noy logged in.
+- **Bux fix** of fast clock menu link when user is not logged in.
 ## Release 1.8.15
 Release date 2023-06-02
 - **Bug fix** of not registering *layout stations* correctly.
