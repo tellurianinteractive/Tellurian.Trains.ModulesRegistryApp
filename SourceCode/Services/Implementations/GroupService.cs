@@ -15,7 +15,7 @@ public sealed class GroupService
         using var dbContext = Factory.CreateDbContext();
         var id = principal.IsCountryOrGlobalAdministrator() ? 0 : countryId ?? principal.CountryId();
         return await dbContext.Groups
-            .Where(g =>  (g.CountryId == id || id == 0) && onlyGroupId > 0 && g.Id == onlyGroupId.Value)
+            .Where(g =>  (g.CountryId == id || id == 0) && (!onlyGroupId.HasValue || onlyGroupId==0 || onlyGroupId > 0 && g.Id == onlyGroupId.Value))
             .OrderBy(g => g.FullName)
             .Select(g => new ListboxItem(g.Id, g.FullName))
             .ToReadOnlyListAsync();
