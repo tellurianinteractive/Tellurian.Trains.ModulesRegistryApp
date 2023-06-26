@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public class Meeting
@@ -33,7 +35,22 @@ public class Meeting
 
 public static class MeetingExtensions
 {
+    internal static void MapMeeting(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<Meeting>(entity =>
+        {
+            entity.ToTable("Meeting", tb => tb.HasTrigger("DeleteMeeting"));
 
-    
+            entity.HasOne(d => d.OrganiserGroup)
+                .WithMany()
+                .HasForeignKey(d => d.OrganiserGroupId);
+
+            entity.HasOne(d => d.GroupDomain)
+                .WithMany()
+                .HasForeignKey(d => d.GroupDomainId);
+
+            entity.HasMany(d => d.Participants)
+                .WithOne(d => d.Meeting)
+                .HasForeignKey(d => d.MeetingId);
+        });
 }
 

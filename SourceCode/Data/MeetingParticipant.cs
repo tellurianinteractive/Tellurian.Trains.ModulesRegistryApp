@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public class MeetingParticipant
@@ -24,5 +26,26 @@ public class MeetingParticipant
     public virtual Person Person { get; set; }
     public virtual Meeting Meeting { get; set; }
     public virtual ICollection<LayoutParticipant> LayoutParticipations { get; set; }
+}
+
+public static class MeetingParticipantMapping
+{
+    public static void MapMeetingParticipant(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<MeetingParticipant>(entity =>
+        {
+            entity.ToTable("MeetingParticipant", tb => tb.HasTrigger("DeleteMeetingParticipant"));
+
+            entity.HasOne(d => d.Meeting)
+                .WithMany(d => d.Participants)
+                .HasForeignKey(d => d.MeetingId);
+
+            entity.HasOne(d => d.Person)
+                .WithMany()
+                .HasForeignKey(d => d.PersonId);
+
+            entity.HasMany(d => d.LayoutParticipations)
+                .WithOne(d => d.MeetingParticipant)
+                .HasForeignKey(d => d.MeetingParticipantId);
+        });
 }
 

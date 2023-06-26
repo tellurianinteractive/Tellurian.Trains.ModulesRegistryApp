@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[DriverDuty]
 (
     [Id] INT NOT NULL IDENTITY (1, 1),
-    [LayoutId] INT NOT NULL,
+    [TimetableId] INT NOT NULL,
     [OperatorId] INT NULL,
     [Number] SMALLINT NOT NULL,
     [OperatingDayId] INT NOT NULL,
@@ -14,7 +14,7 @@
     [InstructionsMarkdown] NVARCHAR(1000) NULL,
 
     CONSTRAINT [PK_DriverDuty] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_DriverDuty_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]),
+    CONSTRAINT [FK_DriverDuty_Timetable] FOREIGN KEY ([TimetableId]) REFERENCES [dbo].[Timetable] ([Id]),
     CONSTRAINT [FK_DriverDuty_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),
     CONSTRAINT [FK_DriverDuty_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
 

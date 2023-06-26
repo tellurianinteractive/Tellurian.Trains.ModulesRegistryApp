@@ -17,8 +17,8 @@
     CREATE TRIGGER [DeleteTrainStationCall] ON [TrainStationCall] INSTEAD OF DELETE
     AS
     BEGIN
-        DELETE FROM [ScheduleTrainPart] WHERE FromDepartureId IN (SELECT Id FROM DELETED)
-        DELETE FROM [ScheduleTrainPart] WHERE ToArrivalId IN (SELECT Id FROM DELETED)
+        DELETE FROM [TimetableScheduleTrainPart] WHERE FromDepartureId IN (SELECT Id FROM DELETED)
+        DELETE FROM [TimetableScheduleTrainPart] WHERE ToArrivalId IN (SELECT Id FROM DELETED)
         DELETE FROM [TrainStationCall] WHERE Id IN (SELECT Id FROM DELETED)
     END
    

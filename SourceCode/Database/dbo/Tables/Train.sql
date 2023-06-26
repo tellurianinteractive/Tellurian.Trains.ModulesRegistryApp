@@ -1,25 +1,26 @@
 ﻿CREATE TABLE [dbo].[Train]
 (
     [Id] INT NOT NULL IDENTITY (1, 1),
-    [LayoutId] INT NOT NULL,
+    [TimetableId] INT NOT NULL,
     [OperatorId] INT NULL,
     [Number] SMALLINT NOT NULL,
     [OperatingDayId] INT NOT NULL,
     [TrainCategoryId] INT NOT NULL,
-    [LayoutRoutePatternId] INT NULL,
+    [TimetableRoutePatternId] INT NULL,
     [MaxSpeed] SMALLINT NOT NULL DEFAULT 100,
     [InstructionMarkdown] VARCHAR(1000) NULL,
     [Image] VARBINARY(MAX) NULL, 
+    [Color] VARCHAR(8) NULL,
     CONSTRAINT [PK_Train] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Train_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id]),
+    CONSTRAINT [FK_Train_Timetable] FOREIGN KEY ([TimetableId]) REFERENCES [dbo].[Timetable] ([Id]),
     CONSTRAINT [FK_Train_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),
     CONSTRAINT [FK_Train_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
     CONSTRAINT [FK_Train_TrainCategory] FOREIGN KEY ([TrainCategoryId]) REFERENCES [dbo].[TrainCategory] ([Id]),
-    CONSTRAINT [FK_Train_LayoutRoutePattern] FOREIGN KEY ([LayoutRoutePatternId]) REFERENCES [dbo].[LayoutRoutePattern] ([Id]),
+    CONSTRAINT [FK_Train_TimetableRoutePattern] FOREIGN KEY ([TimetableRoutePatternId]) REFERENCES [dbo].[TimetableRoutePattern] ([Id]),
 );
 GO
-CREATE NONCLUSTERED INDEX [IX_Train_LayoutId]
-    ON [dbo].[Train]([LayoutId] ASC);
+CREATE NONCLUSTERED INDEX [IX_Train_TimetableId]
+    ON [dbo].[Train]([TimetableId] ASC);
 
 GO
     CREATE TRIGGER [DeleteTrain] ON [Train] INSTEAD OF DELETE 

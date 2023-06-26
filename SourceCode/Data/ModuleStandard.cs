@@ -1,5 +1,8 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+
 namespace ModulesRegistry.Data;
 
 public partial class ModuleStandard
@@ -18,4 +21,39 @@ public partial class ModuleStandard
     public string MainTheme { get; set; } = "EUROPE";
 
     public virtual Scale Scale { get; set; }
+}
+
+public static class ModuleStandardMapping
+{
+    internal static void MapModuleStandard(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<ModuleStandard>(entity =>
+        {
+            entity.ToTable("ModuleStandard");
+
+            entity.Property(e => e.AcceptedNorm)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.Couplings)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.Electricity)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.PreferredTheme)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.ShortName)
+                .HasMaxLength(10);
+
+            entity.Property(e => e.TrackSystem)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.Wheelset)
+                .HasMaxLength(50);
+
+            entity.HasOne(d => d.Scale)
+                .WithMany(p => p.ModuleStandards)
+                .HasForeignKey(d => d.ScaleId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
 }

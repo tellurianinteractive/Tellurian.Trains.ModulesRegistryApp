@@ -24,6 +24,19 @@ public class LayoutLine
     public virtual ICollection<LayoutModule> Lines { get; set; }
 }
 
+# nullable enable
+public static class LayoutLineExtensions
+{
+    public static string StretchName(this LayoutLine? me) =>
+        me is null ? string.Empty :
+        $"{me.FromLayoutStation.NameInLayout()} - {me.ToLayoutStation.NameInLayout()}";
+
+    public static string StretchShortName(this LayoutLine? me) =>
+         me is null || me.FromLayoutStation is null || me.ToLayoutStation is null ? string.Empty :
+         $"{me.FromLayoutStation.SignatireInLayout()} - {me.ToLayoutStation.SignatireInLayout()}";
+
+}
+
 internal static class LayoutLineMapping
 {
     public static void MapLayoutLine(this ModelBuilder modelBuilder) =>

@@ -1,4 +1,5 @@
-﻿using Rationals;
+﻿using Microsoft.EntityFrameworkCore;
+using Rationals;
 
 #nullable disable
 
@@ -71,6 +72,35 @@ public static class ModuleOwnershipExtensions
         me.PersonId > 0 ? GroupOwnershipType.Personal :
         me.GroupId > 0 ? GroupOwnershipType.Group :
         GroupOwnershipType.Unknown;
+}
 
+public static class ModuleOwnershipMapping
+{
+    internal static void MapModuleOwnership(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<ModuleOwnership>(entity =>
+        {
+            entity.ToTable("ModuleOwnership");
 
+            entity.Property(e => e.GroupId)
+                .HasComment("Owning organisation (if null, a Person must own it)");
+
+            entity.Property(e => e.OwnedShare)
+                .HasDefaultValueSql("((1))")
+                .HasComment("The ownerships share as 1/this value.");
+
+            entity.Property(e => e.PersonId)
+                .HasComment("Owning person (if null, an Organisation must own it)");
+
+            entity.HasOne(d => d.Group)
+                .WithMany(p => p.ModuleOwnerships)
+                .HasForeignKey(d => d.GroupId);
+
+            entity.HasOne(d => d.Module)
+                .WithMany(p => p.ModuleOwnerships)
+                .HasForeignKey(d => d.ModuleId);
+
+            entity.HasOne(d => d.Person)
+                .WithMany(p => p.ModuleOwnerships)
+                .HasForeignKey(d => d.PersonId);
+        });
 }

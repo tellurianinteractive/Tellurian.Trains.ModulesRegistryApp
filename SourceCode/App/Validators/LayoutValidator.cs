@@ -37,11 +37,5 @@ public class LayoutValidator : AbstractValidator<Layout>
         RuleFor(m => m.LastYear)
             .MustBeValidYear(localizer)
             .WithName(n => localizer[nameof(n.LastYear)]);
-        RuleFor(m => m.StartHour)
-            .MustBeValidHour(localizer)
-            .WithName(n => localizer[nameof(n.StartHour)]);
-        RuleFor(m => m.EndHour)
-            .MustBeValidHour(localizer)
-            .WithName(n => localizer[nameof(n.EndHour)]);
     }
 }

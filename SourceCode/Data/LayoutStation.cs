@@ -10,8 +10,6 @@ public class LayoutStation
     {
         LayoutModules = new HashSet<LayoutModule>();
         Regions = new HashSet<Region>();
-        StartingLines = new HashSet<LayoutLine>();
-        EndingLines = new HashSet<LayoutLine>();
     }
     public int Id { get; set; }
     public int LayoutParticipantId { get; set; }
@@ -28,6 +26,23 @@ public class LayoutStation
     public virtual ICollection<LayoutLine> StartingLines { get; set; }
     public virtual ICollection<LayoutLine> EndingLines { get; set; }
     public override string ToString() => $"{Station?.FullName}";
+}
+
+# nullable enable
+public static class LayoutStationExtensions
+{
+    public static string NameInLayout(this LayoutStation? me) =>
+        me is null ? string.Empty :
+        me.OtherName ?? me.Station?.FullName ?? $"Name missing for {me.Id}";
+
+    public static string SignatireInLayout(this LayoutStation? me) =>
+         me is null ? string.Empty :
+         me.OtherSignature ?? me.Station?.Signature ?? $"Signature missing for {me.Id}";
+
+    public static string CountryEnglishName(this LayoutStation? me) =>
+        me is null ? string.Empty :
+        me.OtherCountry?.EnglishName ?? me.Station?.Region?.Country?.EnglishName ?? string.Empty;
+
 }
 
 internal static class LayoutStationMapping

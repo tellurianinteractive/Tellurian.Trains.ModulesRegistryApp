@@ -17,3 +17,9 @@ public partial class Scale
     public virtual ICollection<ModuleStandard> ModuleStandards { get; set; }
     public virtual ICollection<Module> Modules { get; set; }
 }
+
+# nullable enable
+public static class ScaleExtensions
+{
+    public static string Display(this Scale? me) => me is null ? string.Empty : $"{me.ShortName} 1:{me.Denominator}";
+}

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<AssemblyName>ModulesRegistry.Model</AssemblyName>
+		<RootNamespace>ModulesRegistry.Model</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+
+	</PropertyGroup>
+
+</Project>

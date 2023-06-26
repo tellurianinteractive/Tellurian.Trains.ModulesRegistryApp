@@ -1,5 +1,9 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
+using System.Diagnostics.CodeAnalysis;
+
 namespace ModulesRegistry.Data;
 
 public partial class Module
@@ -59,4 +63,152 @@ public partial class Module
     public virtual ICollection<ModuleExit> ModuleExits { get; set; }
     public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
 }
+
+# nullable enable
+public static class ModuleExtensions
+{
+    public static Module Clone(this Module me) =>
+        new()
+        {
+            Angle = me.Angle,
+            FullName = me.CloneFullName(),
+            FunctionalState = me.FunctionalState,
+            HasIntegratedLocoNet = me.HasIntegratedLocoNet,
+            HasNarrowGauge = me.HasNarrowGauge,
+            HasNormalGauge = me.HasNormalGauge,
+            Is2R = me.Is2R,
+            Is3R = me.Is3R,
+            IsDuckunder = me.IsDuckunder,
+            IsStandAlone = me.IsStandAlone,
+            IsTurntable = me.IsTurntable,
+            IsUnavailable = me.IsUnavailable,
+            LandscapeState = me.LandscapeState,
+            Length = me.Length,
+            ModuleExits = me.ModuleExits.Select(it => new ModuleExit
+            {
+                Direction = it.Direction,
+                EndProfileId = it.EndProfileId,
+                Label = it.Label
+            }).ToArray(),
+            ModuleOwnerships = me.ModuleOwnerships.Select(it => new ModuleOwnership
+            {
+                PersonId = it.PersonId,
+                GroupId = it.GroupId,
+                OwnedShare = it.OwnedShare
+            }).ToArray(),
+            Note = me.Note,
+            NumberOfSections = me.NumberOfSections,
+            NumberOfThroughTracks = me.NumberOfThroughTracks,
+            ObjectVisibilityId = me.ObjectVisibilityId,
+            OverheadLineFeature = me.OverheadLineFeature,
+            PackageLabel = me.PackageLabel,
+            Radius = me.Radius,
+            RepresentsFromYear = me.RepresentsFromYear,
+            RepresentsUptoYear = me.RepresentsUptoYear,
+            ScaleId = me.ScaleId,
+            SignalFeature = me.SignalFeature,
+            SpeedLimit = me.SpeedLimit,
+            StandardId = me.StandardId,
+            Straight = me.Straight,
+            Theme = me.Theme,
+        };
+
+    static string CloneFullName(this Module module)
+    {
+        var random = new Random();
+        var appended = $"-{random.Next(1, 1000)}";
+        var totalLength = module.FullName.Length + appended.Length;
+        if (totalLength <= 50) return $"{module.FullName}{appended}";
+        return $"{module.FullName[..(50 - appended.Length)]}{appended}";
+    }
+
+    public static bool IsPartOfStation([NotNullWhen(true)] this Module me) => me.StationId.HasValue;
+
+    public static IEnumerable<int> DocumentIds(this Module me)
+    {
+        if (me.PdfDocumentationId.HasValue) yield return me.PdfDocumentationId.Value;
+        if (me.DwgDrawingId.HasValue) yield return me.DwgDrawingId.Value;
+        if (me.SkpDrawingId.HasValue) yield return me.SkpDrawingId.Value;
+    }
+
+    public static double CalculateLength(this Module me)
+    {
+        double? curveLength = me.Angle.HasValue && me.Radius.HasValue ? Math.Round(Math.PI * me.Angle.Value * me.Radius.Value / 180.0, 0) : null;
+        if (curveLength.HasValue && me.Straight.HasValue) return curveLength.Value + me.Straight.Value;
+        if (curveLength.HasValue) return curveLength.Value;
+        if (me.Straight.HasValue) return me.Straight.Value;
+        return 0.0;
+    }
+
+}
+
+public static class ModuleExtensionsForFremoName
+{
+    public static string? FremoName(this Module me)
+    {
+        if (me.FremoNumber.HasValue && me.ModuleOwnerships?.Count > 0)
+        {
+            if (me.ModuleOwnerships.First().Person?.FremoOwnerSignature is not null)
+            {
+                return $"{me.ModuleOwnerships.First().Person.FremoOwnerSignature}{me.FremoNumber.Value}";
+            }
+            else if (me.ModuleOwnerships.First().Group is not null)
+            {
+                return $"{me.ModuleOwnerships.First().Group.ShortName}{me.FremoNumber.Value}";
+            }
+        }
+        return null;
+    }
+
+    public static bool HasAnyFremoName(this IEnumerable<Module>? modules) =>
+        modules?.Any(m => m.FremoNumber.HasValue && m.ModuleOwnerships.Any(mo => (mo.Person?.FremoOwnerSignature.HasValue() == true) || (mo.Group?.ShortName.HasValue() == true))) == true;
+}
+
+public static class ModuleMapping
+{
+    internal static void MapModule(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<Module>(entity =>
+        {
+            entity.ToTable("Module");
+
+            entity.Property(e => e.ConfigurationLabel).HasMaxLength(10);
+
+            entity.Property(e => e.FullName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Note).HasMaxLength(255);
+
+            entity.Property(e => e.NumberOfThroughTracks).HasDefaultValueSql("((1))");
+
+            entity.Property(e => e.PackageLabel).HasMaxLength(10);
+
+            entity.Property(e => e.Theme).HasMaxLength(50);
+
+            entity.HasOne(d => d.DwgDrawing)
+                .WithMany()
+                .HasForeignKey(d => d.DwgDrawingId);
+
+            entity.HasOne(d => d.SkpDrawing)
+                .WithMany()
+                .HasForeignKey(d => d.SkpDrawingId);
+
+            entity.HasOne(d => d.PdfDocumentation)
+                .WithMany()
+                .HasForeignKey(d => d.PdfDocumentationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Scale)
+                .WithMany(p => p.Modules)
+                .HasForeignKey(d => d.ScaleId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Station)
+                  .WithMany(p => p.Modules)
+                  .HasForeignKey(d => d.StationId)
+                  .OnDelete(DeleteBehavior.SetNull);
+        });
+}
+
+
 

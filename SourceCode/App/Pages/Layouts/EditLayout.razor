@@ -31,9 +31,6 @@
             <h4>@Localizer["GameSettings"]</h4>
             <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
             <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
-            <AppInputSelectNullable Width="3" @bind-Value="Layout.StartWeekdayId" Label="StartWeekday" Items="OperatingDayItems" ShowNoneOption="true" />
-            <AppInputNumber Width="2" @bind-Value="Layout.StartHour" Label="StartHour" />
-            <AppInputNumber Width="2" @bind-Value="Layout.EndHour" Label="EndHour" />
             <AppInputMarkdown @bind-Value="Layout.Details" Label="Note" MaxNumberOfCharacters="@LayoutValidator.MaxNoteLength" />
         </Inputs>
         <Buttons>

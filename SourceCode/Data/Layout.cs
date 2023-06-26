@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data;
 
@@ -19,21 +20,31 @@ public class Layout
     public DateTime RegistrationOpeningDate { get; set; }
     public DateTime RegistrationClosingDate { get; set; }
     public DateTime? ModuleRegistrationClosingDate { get; set; }
-    public int? StartWeekdayId { get; set; }
     public string Theme { get; set; }
     public string Details { get; set; }
     public short? FirstYear { get; set; }
     public short? LastYear { get; set; }
-    public short? StartHour { get; set; }
-    public short? EndHour { get; set; }
 
     public virtual Meeting Meeting { get; set; }
     public virtual Group OrganisingGroup { get; set; }
     public virtual Person ContactPerson { get; set; }
     public virtual ModuleStandard PrimaryModuleStandard { get; set; }
-    public virtual OperatingDay StartWeekday { get; set; }
     public virtual ICollection<LayoutParticipant> LayoutParticipants { get; set; }
     public override string ToString() => $"{Meeting?.Name} {PrimaryModuleStandard?.ShortName}";
+
+}
+
+# nullable enable
+public static class LayoutExtensions
+{
+    public static string Name(this Layout? me) =>
+        me is null || me.PrimaryModuleStandard is null ? string.Empty :
+        me.PrimaryModuleStandard.ShortName;
+
+    public static bool RegistrationIsOpen([NotNullWhen(true)] this Layout? me, DateTimeOffset atTime) =>
+        me is not null && atTime >= me.RegistrationOpeningDate && atTime < me.RegistrationClosingDate.AddDays(1);
+
+    public static DateTime ModuleRegistrationClosingDate(this Layout layout) => layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate;
 
 }
 
