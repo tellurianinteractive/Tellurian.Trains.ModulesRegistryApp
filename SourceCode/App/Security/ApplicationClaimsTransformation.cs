@@ -11,11 +11,13 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory;
     private readonly ContentService ContentService;
+    private readonly AppService AppService;
 
-    public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, ContentService contentService)
+    public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, ContentService contentService, AppService appService)
     {
         Factory = factory;
         ContentService = contentService;
+        AppService = appService;
     }
 
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
@@ -63,6 +65,7 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
         if (person is not null)
         {
             AddPersonalClaims(person, result);
+            AppService.LastCountryId = person.CountryId;
             var groupDomainIds = db.GroupDomains.Where(gd => gd.Groups.Any(g => g.GroupMembers.Any(gm => gm.PersonId == person.Id))).Select(g => g.Id).Distinct();
             if (groupDomainIds is not null)
             {
@@ -92,6 +95,7 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
             }
         }
     }
+
     private static Claim Claim(string type, object value) =>
         new(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
     private static Claim Claim(string type, string value) =>

@@ -11,7 +11,7 @@ public class RegionService
         {
             var countryId = principal.CountryId(maybeCountryId);
             using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.Regions.AsNoTracking()
+            var items = await dbContext.Regions
                 .Where(r => countryId == 0 || r.CountryId == countryId)
                 .Include(r => r.Country).ToReadOnlyListAsync();
             return items.Select(r => new ListboxItem(r.Id, Description(r, maybeCountryId > 0)))

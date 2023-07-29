@@ -90,7 +90,11 @@
 
 .flag {
     vertical-align: text-bottom;
-    padding-right: 5px;
+    padding-right: 2px;
+}
+
+.flagimage {
+    width: 2mm;
 }
 
 .daysandclass {

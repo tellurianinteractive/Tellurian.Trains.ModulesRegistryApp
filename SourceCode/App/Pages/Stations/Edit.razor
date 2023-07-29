@@ -62,7 +62,7 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
         ModulesItems = await ModuleService.ModuleItems(Principal, OwnershipRef, Id);
-        RegionItems = await RegionService.ListboxItemsAsync(Principal);
+        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
         Station = new Station();
     }
 

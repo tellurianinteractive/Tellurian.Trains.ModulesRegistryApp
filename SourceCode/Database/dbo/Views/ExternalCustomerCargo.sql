@@ -4,10 +4,8 @@ SELECT
 	SCC.Id AS StationCustomerCargoId,
 	SCC.OperatingDayId,
 	SCC.CargoId,
-	CASE
-		WHEN CU.IsBearer <> 0 THEN 1
-		ELSE SCC.Quantity
-	END AS Quantity,
+	CU.IsBearer AS QuantityIsBearer,
+	SCC.Quantity,
 	SCC.QuantityUnitId,
 	SCC.PackageUnitId,
 	SCC.SpecificWagonClass,

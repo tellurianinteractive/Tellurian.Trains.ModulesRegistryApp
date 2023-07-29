@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ModulesRegistry;
 using ModulesRegistry.Data;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
@@ -11,7 +12,7 @@ using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
 using System.Resources;
 
-[assembly: NeutralResourcesLanguage(LanguageUtility.DefaultLanguage)]
+//[assembly: NeutralResourcesLanguage(LanguageUtility.DefaultLanguage)]
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ if (builder.Environment.IsProduction())
 
 builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
 builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("SendGrid"));
+builder.Services.AddScoped<AppService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 if (builder.Environment.IsDevelopment())
 {

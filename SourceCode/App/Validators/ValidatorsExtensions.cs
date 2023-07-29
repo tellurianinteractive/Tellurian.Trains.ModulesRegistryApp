@@ -28,7 +28,10 @@ public static partial class ValidatorsExtensions
                 if (i == 0)
                 {
                     if (char.IsLower(n[i]))
+                    {
+                        if (IsAnyLowerCaseWord(n)) continue;
                         return false;
+                    }
                 }
                 else if (n[i - 1] == ' ')
                 {
@@ -55,7 +58,7 @@ public static partial class ValidatorsExtensions
         return false;
     }
 
-    private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "von" };
+    private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von" };
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");

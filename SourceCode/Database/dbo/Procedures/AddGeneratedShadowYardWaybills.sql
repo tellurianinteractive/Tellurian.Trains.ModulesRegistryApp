@@ -50,11 +50,12 @@ BEGIN
 		ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
 		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId 
 	WHERE
+		ME.NHMCode = 0 AND
 		ME.StationCustomerId = @StationCustomerId
-		AND ME.StationCustomerId <> OTHER.StationCustomerId
-		AND ME.IsSupply <> OTHER.IsSupply
-		AND ME.QuantityUnitId = OTHER.QuantityUnitId
 		AND ME.StationId <> OTHER.StationId
+		--AND ME.StationCustomerId <> OTHER.StationCustomerId
+		AND ME.IsSupply <> OTHER.IsSupply
+		-- AND ME.QuantityUnitId = OTHER.QuantityUnitId
 		AND ME.MainTheme = OTHER.MainTheme
 		AND (ME.ScaleId = OTHER.ScaleId OR ME.ScaleId = 0 OR OTHER.ScaleId = 0)
 		AND (ME.CountryId = OTHER.CountryId) 

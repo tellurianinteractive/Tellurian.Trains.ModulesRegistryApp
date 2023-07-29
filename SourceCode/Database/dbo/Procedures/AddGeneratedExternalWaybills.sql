@@ -5,10 +5,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	WITH UpdatedableWaybill (Id, OperatingDayId, RegionId) AS
+	WITH UpdatedableWaybill (Id, OperatingDayId, RegionId, PrintCount) AS
 	(
 		SELECT 
-			SCW.Id, ME.OperatingDayId, OTHER.RegionId
+			SCW.Id, ME.OperatingDayId, OTHER.RegionId, CASE WHEN ME.QuantityIsBearer <> 0 THEN ME.Quantity ELSE 1 END
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
 			ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
@@ -19,7 +19,8 @@ BEGIN
 	UPDATE StationCustomerWaybill 
 		SET 
 			OperatingDayId = UW.OperatingDayId,
-			OtherRegionId = UW.RegionId
+			OtherRegionId = UW.RegionId,
+			PrintCount = UW.PrintCount
 		FROM 
 			UpdatedableWaybill UW
 		WHERE
@@ -38,7 +39,7 @@ BEGIN
 		0 AS [HideLoadingTimes],
 		0 AS [HideUnloadingTimes],
 		0 AS [PrintPerOperatingDay],
-		1 AS [PrintCount],
+		CASE WHEN ME.QuantityIsBearer <> 0 THEN ME.Quantity ELSE 1 END AS [PrintCount],
 		0 AS [SequenceNumber]
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN
@@ -50,7 +51,7 @@ BEGIN
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply
 		--AND ME.QuantityUnitId = OTHER.QuantityUnitId
-		AND (ME.CountryId = OTHER.CountryId OR ME.IsInternational <> 0 AND OTHER.IsInternational <>0) 
+		AND (ME.CountryId = OTHER.CountryId OR ME.IsInternational <> 0 ) 
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
 		AND (ME.UptoYear IS NULL OR OTHER.FromYear IS NULL OR ME.UptoYear >= OTHER.FromYear )
 		AND SCW.Id IS NULL

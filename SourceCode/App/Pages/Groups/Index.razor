@@ -1,11 +1,12 @@
 ﻿@page "/Groups/Index"
 @page "/Groups/Index/{countryId:int}"
+@page "/Groups/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject NavigationManager Navigator
-
+@inject AppService AppService
 @inject GroupService GroupService
 @inject CountryService CountryService
 
@@ -76,10 +77,12 @@ else
         if (CountryId == 0)
         {
             CountryId = Principal.CountryId();
+            AppService.LastCountryId = CountryId;
             OnSelectedCountry(CountryId);
         }
         else
         {
+            AppService.LastCountryId = CountryId;
             await GetGroups(CountryId);
         }
     }
@@ -88,7 +91,8 @@ else
     {
         if (countryId > 0)
         {
-            Navigator.NavigateTo($"/Groups/Index/{countryId}");
+            AppService.LastCountryId = countryId;
+            Navigator.NavigateTo(IndexHref);
         }
     }
 
@@ -111,5 +115,6 @@ else
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
+    string IndexHref => $"Groups/Country/{AppService.LastCountryId}";
 
 }

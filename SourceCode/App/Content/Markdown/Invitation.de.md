@@ -1,6 +1,6 @@
 ﻿#### Sie werden zur Modulregistrierung eingeladen
 
-Das Modulregister ist eine Webb-Anwendung zur Verwaltung von Daten über Modelleisenbahnmodule.
+Das Modulregister ist eine Webb-Applicaton zur Verwaltung von Daten über Modelleisenbahnmodule.
 Sie können Ihre eigenen Module verwalten und anderen helfen, indem Sie Module für Mitglieder in derselben Gruppe wie Sie verwalten.
 
 Sie sind eingeladen, Benutzer zu werden.

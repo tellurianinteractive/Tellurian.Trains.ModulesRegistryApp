@@ -50,6 +50,7 @@ SELECT DISTINCT
     RECEIVER.IsModuleStation AS DestinationIsModuleStation,
     RECEIVER.SpecialCargoName,
     RECEIVER.SpecificWagonClass,
+	RECEIVER.QuantityIsBearer,
     RECEIVER.QuantityUnitId,
     RECEIVER.Quantity,
     RECEIVER.QuantityUnitResourceCode AS QuanityUnitResourceName,

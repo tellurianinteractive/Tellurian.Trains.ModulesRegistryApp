@@ -11,6 +11,7 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 @inject UserService UserService
+@inject AppService AppService
 
 <PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
@@ -82,52 +83,9 @@
         </TemplateColumn>
     </QuickGrid>
 </div>
-<Paginator Value="@PaginationState" >
-    
+<Paginator Value="@PaginationState">
+
 </Paginator>
-
-@*<TableTemplate Items="People" HideNoRecordsToDisplay="true">
-    <TableHeader>
-        <th>@Localizer["Name"]</th>
-        <th>@Localizer["City"]</th>
-        <th colspan="2" align="center">@Localizer["Status"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="person">
-        <td>@person.Name()</td>
-        <td>@person.CityName</td>
-        <td align="center"><span>@person.StatusIcon()</span></td>
-        <td>
-            <UserStatusView User="person.User"></UserStatusView>
-        </td>
-        <td style="white-space: nowrap !important;">
-            @if (Principal.IsAuthorisedInCountry(person.CountryId))
-            {
-                <AppButton Href="@EditHref(person)" Label="Edit" />
-                <AppButton Href="@ModulesHref(person)" Label="Modules" />
-                <AppButton Href="@StationsHref(person)" Label="Stations" />
-                @if (person.MayBeInvited())
-                {
-                    <AppButton Href="@InviteHref(person)" Label="Invite" />
-                }
-                @if (person.User is null)
-                {
-                    <AppButton Href="@DeleteHref(person)" Label="Delete" />
-                }
-                else if (person.User.IsLockedOut())
-                {
-                    <AppButton Label="Reset" OnClickCallback="@(() => UnlockUser(person.User))" />
-                }
-                @if (Principal.IsGlobalAdministrator() && person.HasIdExcept(Principal.Id()))
-                {
-                    <AppButton Label="LoginAs" IsDisabled=true IconName="@FontAwesome.People" />
-                }
-            }
-        </td>
-
-    </RowTemplate>
-</TableTemplate>*@
-
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -137,11 +95,11 @@
     private IEnumerable<Person> People = Array.Empty<Person>().AsQueryable();
     private IEnumerable<ListboxItem>? Countries;
 
-
     private void OnSelectedCountry(int id)
     {
         if (id > 0)
         {
+            AppService.LastCountryId = id;
             Navigator.NavigateTo($"/Persons/Country/{id}");
         }
     }
@@ -161,7 +119,8 @@
         }
         else
         {
-            People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
+            AppService.LastCountryId = CountryId;
+            People = await PersonService.GetAllInCountryAsync(Principal, AppService.LastCountryId);
         }
     }
 

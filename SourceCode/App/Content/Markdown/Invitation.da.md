@@ -1,6 +1,6 @@
 ﻿#### Du er inviteret til modulregistret
 
-Modulregistret er en webbapplikation til vedligeholdelse af data om modelbanemoduler.
+Modulregistret er en webbapplikation til vedligeholdelse af data om modeljernbane moduler.
 Du kan vedligeholde dine egne moduler og hjælpe andre ved at vedligeholde moduler for medlemmer i samme gruppe som dig.
 
 Du er inviteret til at blive bruger.

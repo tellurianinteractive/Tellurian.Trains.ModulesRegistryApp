@@ -29,6 +29,7 @@ public class Waybill
     public bool IsEmptyReturn { get; set; }
     public bool HideLoadingTimes { get; set; }
     public bool HideUnloadingTimes { get; set; }
+    public bool IsLayoutInternal { get; set; }
 
     public override string ToString() => $"{Destination.CargoName} {Origin}-{Destination}";
 

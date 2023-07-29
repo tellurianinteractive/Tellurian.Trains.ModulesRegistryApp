@@ -23,9 +23,9 @@
                             <td colspan="2" class="box destination" style="color: @Item.Destination.ForeColor(); background-color: @Item.Destination.BackColor()">
                                 <div class="label">@Item.Destination.DualLanguageLabel("Destination")</div>
                                 <div class="name" style="font-size: @StationNameTextSize(Item.Destination.StationName, Item.IsCrossBorder())">
-                                    @if (Item.IsCrossBorder())
+                                    @if (Item.ShowFlag())
                                     {
-                                        <span class="flag"><img src="@Item.Destination.FlagSrc()" /></span>
+                                        <span class="flag"><img  src="@Item.Destination.FlagSrc()" /></span>
                                     }
                                     <span>@Item.Destination.StationName()</span>
                                 </div>
@@ -98,7 +98,7 @@
                         <td colspan="2" class="box origin" style="color: @Item.Origin.ForeColor(); background-color: @Item.Origin.BackColor()">
                             <div class="label">@Item.Origin.DualLanguageLabel( "Origin")</div>
                             <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.IsCrossBorder())">
-                                @if (Item.IsCrossBorder())
+                                @if (Item.ShowFlag())
                                 {
                                     <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
                                 }

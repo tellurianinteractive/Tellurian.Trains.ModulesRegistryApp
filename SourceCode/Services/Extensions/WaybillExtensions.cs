@@ -103,6 +103,9 @@ public static class WaybillExtensions
         me.Destination is not null &&
         !me.Origin.DomainSuffix.Equals(me.Destination?.DomainSuffix, StringComparison.OrdinalIgnoreCase);
 
+    public static bool ShowFlag([NotNullWhen(true)] this Waybill? me) =>
+        me.IsCrossBorder() && !me.IsLayoutInternal;
+
     public static bool HasDifferentCargoNameTranslations(this Waybill? me) =>
         me is not null && !me.Origin.CargoName().Equals(me.Destination.CargoName());
 

@@ -1,11 +1,12 @@
 ﻿@page "/Regions/Index"
 @page "/Regions/{countryId:int}/Index"
+@page "/Regions/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject NavigationManager Navigator
-
+@inject AppService AppService
 @inject RegionService RegionService
 @inject CountryService CountryService
 
@@ -58,7 +59,8 @@
     {
         if (id > 0)
         {
-            Navigator.NavigateTo($"/Regions/{id}/Index");
+            AppService.LastCountryId = id;
+            Navigator.NavigateTo(IndexHref);
         }
     }
 
@@ -73,15 +75,18 @@
     {
         if (CountryId < 1)
         {
-            var id = Principal.CountryId();
-            Navigator.NavigateTo($"/Regions/{id}/Index");
+            //var id = Principal.CountryId();
+            //AppService.LastCountryId = id;
+            Navigator.NavigateTo(IndexHref);
         }
         else
         {
-            Regions = await RegionService.AllAsync(Principal, CountryId);
+            AppService.LastCountryId = CountryId;
+            Regions = await RegionService.AllAsync(Principal, AppService.LastCountryId);
         }
     }
 
     string EditHref(int id) => $"regions/{id}/edit";
+    string IndexHref => $"Regions/Country/{AppService.LastCountryId}";
 
 }

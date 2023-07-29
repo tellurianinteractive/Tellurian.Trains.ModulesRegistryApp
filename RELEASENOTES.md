@@ -2,9 +2,19 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+
+## Release 1.8.17
+Release date 2023-07-29
+- **Last country used** is now remembered (almost, it can be futher improved).
+- **Waybill flag** now removed from layout internal waybills.
+- **Bug fix** of waybill generation to/from shadow yard.
+- **Bug fix** of persons name validation.
+
 ## Release 1.8.16
-Release date 2023-06-03
+Release date 2023-07-27
+- **Station region** can now be selected for all countries with regions defined. Thanks to Louis Michielsen for the suggestion.
 - **Bux fix** of fast clock menu link when user is not logged in.
+
 ## Release 1.8.15
 Release date 2023-06-02
 - **Bug fix** of not registering *layout stations* correctly.

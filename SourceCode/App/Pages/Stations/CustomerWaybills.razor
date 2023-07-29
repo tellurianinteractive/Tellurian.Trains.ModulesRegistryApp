@@ -15,11 +15,7 @@
 
 <PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
 
-@if (IsGeneratingWaybills)
-{
-    <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
-}
-else
+@if (!IsGeneratingWaybills)
 {
     <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
         <AppButton Label="Update" OnClickCallback="GenerateWaybills" IconName="@FontAwesome.Sync" />
@@ -27,8 +23,12 @@ else
     </div>
 }
 
+@if (IsGeneratingWaybills)
+{
+    <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
 
-@if (IsLoadingData)
+}
+else if (IsLoadingData)
 {
     <ActionMessage Label="LoadingData" AlertType="Wait" />
 }

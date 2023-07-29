@@ -46,11 +46,9 @@ BEGIN
 		CCC.SpecialCargoName,
 		C.DefaultClasses,
 		CCC.SpecificWagonClass,
+		CU.IsBearer AS QuantityIsBearer,
 		CCC.QuantityUnitId,
-		CASE
-			WHEN CU.IsBearer <> 0 THEN 1
-			ELSE CCC.Quantity
-		END AS Quantity,
+		CCC.Quantity,
 		CASE
 			WHEN CCC.Quantity = 1 THEN CU.SingularResourceCode
 			ELSE CU.PluralResourceCode

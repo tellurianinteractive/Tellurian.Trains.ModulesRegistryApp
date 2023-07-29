@@ -76,7 +76,7 @@ public class WaybillService
                 command.Parameters.AddWithNullableValue("@StationCustomerId", stationCustomerId);
 
                 try
-                { 
+                {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
@@ -151,7 +151,11 @@ public class WaybillService
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
-                        waybills.Add(reader.MapWaybill(stationId ?? 0));
+                        var printCount = reader.GetInt("PrintCount");
+                        for (int p = 0; p < printCount; p++)
+                        {
+                            waybills.Add(reader.MapWaybill(stationId ?? 0, true));
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -166,13 +170,13 @@ public class WaybillService
 }
 internal static class WaybillMapper
 {
-    public static Waybill MapWaybill(this IDataRecord record, int stationId)
+    public static Waybill MapWaybill(this IDataRecord record, int stationId, bool isLayoutInternal = false)
     {
         var waybill = new Waybill(record.MapOriginCargoCustomer(), record.MapDestinationCargoCustomer())
         {
             Id = record.GetInt("Id"),
             OwnerStationId = stationId,
-            Quantity = record.GetInt("Quantity"),
+            Quantity = GetQuantity(record),
             QuantityShortUnit = record.GetString("QuantityShortUnit"),
             OperatorName = string.Empty, // To be supported
             DefaultWagonClass = record.GetString("DefaultClasses"),
@@ -184,7 +188,18 @@ internal static class WaybillMapper
         };
         waybill.Origin.Waybill = waybill;
         waybill.Destination.Waybill = waybill;
+        waybill.Origin.DisplayReadyTime = waybill.Origin.ReadyTimeResourceKey.HasValueExcept("n/a");
+        waybill.Destination.DisplayReadyTime = waybill.Destination.ReadyTimeResourceKey.HasValueExcept("n/a");
+        waybill.IsLayoutInternal = isLayoutInternal;
+
         return waybill;
+
+        // Fix until the measning of 'quantity' has a clearer definition. 
+        static int GetQuantity(IDataRecord record)
+        {
+            if (record.GetBool("QuantityIsBearer")) return 1;
+            return record.GetInt("Quantity");
+        }
     }
 
     internal static CargoCustomer MapOriginCargoCustomer(this IDataRecord record) =>

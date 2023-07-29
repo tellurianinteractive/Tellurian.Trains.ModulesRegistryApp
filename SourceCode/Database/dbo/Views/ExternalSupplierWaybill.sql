@@ -49,6 +49,7 @@ SELECT
 	RECEIVER.IsModuleStation AS DestinationIsModuleStation,
 	RECEIVER.SpecialCargoName,
 	RECEIVER.SpecificWagonClass,
+	RECEIVER.QuantityIsBearer,
 	RECEIVER.QuantityUnitId,
 	RECEIVER.Quantity,
 	RECEIVER.QuantityUnitResourceCode AS QuanityUnitResourceName,
@@ -77,6 +78,6 @@ FROM
 	SENDER.CargoId = RECEIVER.CargoId
 WHERE
 	SENDER.IsModuleStation = 0 AND RECEIVER.IsModuleStation <> 0 AND
-	((SENDER.CountryId = RECEIVER.CountryId) OR (SENDER.IsInternational <> 0 AND RECEIVER.IsInternational <> 0)) AND
+	((SENDER.CountryId = RECEIVER.CountryId) OR (RECEIVER.IsInternational <> 0)) AND
 	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
 	(C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear )

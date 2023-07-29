@@ -18,7 +18,7 @@ public sealed class CountryService
     {
         if (principal is null) return Array.Empty<ListboxItem>();
         using var dbContext = Factory.CreateDbContext();
-        var countries = await dbContext.Countries.AsNoTracking().ToListAsync().ConfigureAwait(false);
+        var countries = await dbContext.Countries.ToReadOnlyListAsync();
         return countries.AsEnumerable()
             .Where(c => allCountries || (c.IsFullySupported && allSupportedCountries) || (principal.IsGlobalAdministrator() || principal.IsAuthorisedInCountry(c.Id)))
             .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
@@ -28,7 +28,8 @@ public sealed class CountryService
     public async Task<IEnumerable<CountryStatistics>> GetCountryStatisticsAsync()
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.CountriesStatistics.ToListAsync();
-
+        return await dbContext.CountriesStatistics
+            .Where(cs => cs.ModulesCount > 0)
+            .ToReadOnlyListAsync();
     }
 }
