@@ -1320,4 +1320,7 @@
   <data name="NewMeeting" xml:space="preserve">
     <value>Ny treff</value>
   </data>
+  <data name="NotAcceptedTermsOfUse" xml:space="preserve">
+    <value>Har ikke akseptert bruksvilkår</value>
+  </data>
 </root>

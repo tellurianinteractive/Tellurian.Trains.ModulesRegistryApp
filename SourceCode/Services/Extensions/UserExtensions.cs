@@ -33,6 +33,9 @@ public static class UserExtensions
     public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? user) =>
         user is null || user.LastSignInTime is null;
 
+    public static bool HasNotAcceptedTermsOfUse([NotNullWhen(true)] this User? user) =>
+        user is not null && user.LastSignInTime.HasValue && !user.LastTermsOfUseAcceptTime.HasValue;
+
     public static bool IsPasswordReset([NotNullWhen(true)] this User? user) =>
         user is not null && user.PasswordResetAttempts > 0 && user.IsPasswordResetPermitted();
 

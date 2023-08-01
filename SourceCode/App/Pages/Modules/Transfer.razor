@@ -8,6 +8,8 @@
 
 @inject ModuleService ModuleService
 @inject PersonService PersonService
+@inject GroupService GroupService
+@inject CountryService CountryService
 
 @if (Module is null)
 {
@@ -31,18 +33,20 @@ else
             <td>@item.OwnedShareAndPercentage()</td>
             <td>
                 @if (OwnershipRef?.IsOwner(item) == true)
-                    {
+                {
                     <AppButton Label="Transfer" OnClickCallback="(() => TransferOwnership(item))" />
-                    }
+                }
             </td>
         </RowTemplate>
     </TableTemplate>
 
     @if (NewOwnership is not null)
     {
+        <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=PersonsCountryId />
+
         <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
             <Inputs>
-                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons"  @bind-Value="NewOwnership.PersonId"  />
+                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" />
                 <AppInputSelect Width="2" Label="TransferredShare" Items="TransferSharesItems(OwnershipToTransfer)" @bind-Value="SelectedTransferShare" />
             </Inputs>
         </EditTemplate>
@@ -61,25 +65,45 @@ else
     Module? Module;
     ModuleOwnership? OwnershipToTransfer;
     ModuleOwnership? NewOwnership;
+    IEnumerable<ListboxItem> Countries = Array.Empty<ListboxItem>();
     IEnumerable<ListboxItem> Persons = Array.Empty<ListboxItem>();
+    int PersonsCountryId;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         OwnershipRef = GetOwnershipRef;
         Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef);
-        Persons = await PersonService.ListboxItemsAsync(Principal, Principal.CountryId());
+        PersonsCountryId = await GetCurrentOwnerCountryId();
+        Persons = await PersonService.ListboxItemsAsync(Principal, PersonsCountryId);
+        Countries = await CountryService.ListboxItemsAsync(Principal, true, true);
+    }
+
+    async Task<int> GetCurrentOwnerCountryId()
+    {
+        var countryId = Principal.CountryId();
+        if (OwningGroupId > 0)
+        {
+            var group = await GroupService.FindByIdAsync(Principal, OwningGroupId);
+            if (group is not null) return group.CountryId;
+        }
+        else if (OwningPersonId > 0)
+        {
+            var person = await PersonService.FindByIdAsync(Principal, OwningPersonId);
+            if (person is not null) return person.CountryId;
+        }
+        return countryId;
     }
 
     ModuleOwnershipRef GetOwnershipRef =>
-        OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
+    OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
         OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) :
         Principal.OwnerRef();
 
     void TransferOwnership(ModuleOwnership ownership)
     {
         OwnershipToTransfer = ownership;
-        NewOwnership = new ModuleOwnership { ModuleId = ownership.ModuleId};
+        NewOwnership = new ModuleOwnership { ModuleId = ownership.ModuleId };
     }
 
     async Task OnValidSubmit()
@@ -93,10 +117,16 @@ else
         }
     }
 
+    async Task OnSelectedCountry(int countryId)
+    {
+        PersonsCountryId = countryId;
+        Countries = await CountryService.ListboxItemsAsync(Principal, true, true);
+    }
+
     IEnumerable<ListboxItem> TransferSharesItems(ModuleOwnership? ownership) =>
         ownership is null ? Array.Empty<ListboxItem>() :
-        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, $"1/{ts.Index} ({ts.Percentage*100:F0}%)"));
+        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, $"1/{ts.Index} ({ts.Percentage * 100:F0}%)"));
 
     int SelectedTransferShare;
-    static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0/3.0), (4, 0.25), (5, 0.20) };
+    static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0 / 3.0), (4, 0.25), (5, 0.20) };
 }

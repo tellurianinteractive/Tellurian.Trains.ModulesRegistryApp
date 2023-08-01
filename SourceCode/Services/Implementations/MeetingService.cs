@@ -17,6 +17,7 @@ public class MeetingService
         return await dbContext.Meetings.AsNoTracking()
             .Where(m => m.EndDate > TimeProvider.Now && !m.IsOrganiserInternal && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
             .Include(m => m.GroupDomain)
+            .OrderBy(m => m.StartDate)
             .Select(m =>
                 new Data.Api.Meeting(m.Id, m.Name, m.CityName, m.OrganiserGroup.Country.EnglishName.AsLocalized(), m.OrganiserGroup.FullName, m.StartDate, m.EndDate, m.GroupDomain.Name, ((MeetingStatus)m.Status).ToString().AsLocalized())
                 {

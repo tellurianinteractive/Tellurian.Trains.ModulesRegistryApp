@@ -12,7 +12,8 @@ public partial class StationCustomerCargo
             StationCustomerId = customerId,
             DirectionId = 1,
             QuantityUnitId = 4,
-            ReadyTimeId = 1,
+            Quantity = 1,
+            ReadyTimeId = 0,
             OperatingDayId = OperatingDay.Daily,
             TrackOrAreaColor = "#FFFFFF"
         };

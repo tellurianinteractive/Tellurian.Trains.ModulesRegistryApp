@@ -24,7 +24,10 @@
         <td>@item.Scale.Display()</td>
         <td>@item.Designation</td>
         <td>
-            <AppButton Label="Edit" Href="@EndProfileEditLink(item.Id)" IsDisabled="MayNotEdit" />
+            @if (Principal.IsCountryOrGlobalAdministrator())
+            {
+                <AppButton Label="Edit" Href="@EndProfileEditLink(item.Id)" IsDisabled="MayNotEdit" />
+            }
         </td>
     </RowTemplate>
 </TableTemplate>

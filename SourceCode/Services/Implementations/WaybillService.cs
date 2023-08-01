@@ -46,7 +46,7 @@ public class WaybillService
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, ex.Message);
+                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
                     throw;
                 }
             }
@@ -87,7 +87,7 @@ public class WaybillService
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, ex.Message);
+                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
                     throw;
                 }
 
@@ -151,16 +151,12 @@ public class WaybillService
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
-                        var printCount = reader.GetInt("PrintCount");
-                        for (int p = 0; p < printCount; p++)
-                        {
-                            waybills.Add(reader.MapWaybill(stationId ?? 0, true));
-                        }
+                        waybills.Add(reader.MapWaybill(stationId ?? 0, true));
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, ex.Message);
+                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
                     return waybills;
                 }
             }

@@ -55,7 +55,7 @@ else
             }
             else if (StationId > 0)
             {
-                var items = await WaybillService.GetStationCustomerWaybills2(Principal, StationId.Value, CustomerId, true, true);
+                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId.Value, CustomerId, true, true);
                 Waybills = items.AsPrintableWaybills();
             }
         }
