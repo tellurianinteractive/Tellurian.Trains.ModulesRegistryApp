@@ -1323,4 +1323,7 @@
   <data name="NotAcceptedTermsOfUse" xml:space="preserve">
     <value>Har ikke accepteret brugsbetingelser</value>
   </data>
+  <data name="PasswordCreated" xml:space="preserve">
+    <value>Adgangskode oprettet</value>
+  </data>
 </root>

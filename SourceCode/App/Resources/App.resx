@@ -1323,4 +1323,7 @@
   <data name="NotAcceptedTermsOfUse" xml:space="preserve">
     <value>Has not accepted terms of use</value>
   </data>
+  <data name="PasswordCreated" xml:space="preserve">
+    <value>Password created</value>
+  </data>
 </root>

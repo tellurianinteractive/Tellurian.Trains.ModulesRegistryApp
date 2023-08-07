@@ -17,7 +17,8 @@ This [YouTube video by Nick Chapsas](https://youtube.com/watch?v=AFNujHJfMtU) gi
 
 > ### .NET Framework
 > Modern .NET is *not* the same as .NET Framework, which is Windows only and considered legacy and should never be used for new applications.
-The last .NET Framework version is 4.8, and it will be maintained as long as Windows is supported.
+The last Windows only .NET Framework version is 4.8, and it will be maintained as long as Windows is supported,
+but all innovation and new releases will be the modern cross-platform .NET.
 
 ## Languages
 All languges on .NET uses the same runtime and the same type system, so you can usually combine libraries 
@@ -74,10 +75,7 @@ The main factor is the target platform you intend to build software for:
 - **Windows Forms** is a simple and fast way to create Windows only applications with simple forms.
 - **Windows Presentation Foundation** abbreviate **WPF** is a more advanced way to create 
 user interfaces on Windows only. 
-- **ASP.NET** is a framework for creating web applications.
-ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
-Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
-- **Blazor** is a special web framework of ASP.NET. 
+- **Blazor** is a web framework based on ASP.NET. 
 You write components with a mix of HTML, CSS and C#. 
 You can interop with JavaScript and any code that can compile to Web Assembly (C, Rust and others).
 There are many ready made components avaliable.
@@ -95,6 +93,9 @@ aimed to make it easier to create apps that runs natively on  *ioS*, *Android*, 
 using the native user interface of each of these platforms. MAUI is an evolution of *Xmamarin Forms*.
 You can also embed *Blazor* components in a MAUI application, 
 or  write a MAUI applications only using Blazor components.
+- **ASP.NET** is a framework for creating web applications.
+ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
+Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
 
 ## Data storage
 There are several types of ways to store data and access it.
@@ -149,7 +150,6 @@ on any other platform.
 Modern .NET is created with the cloud in mind. You can easily deploy apps to the cloud, and .NET has 
 support on several cloud platforms including *Microsoft Azure* and *Amazon Web Services (AWS)*.
 
-
 You often get some level of free cloud computing, which usually is enough for applications with limited usage.
 It is also easy to scale up with moderate costs.
 
@@ -164,6 +164,9 @@ to deploy containers to orchestration services such as Kubernetes.
 An example of independent performance tests are available at [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r21)
 
 Performance is in focus, and .NET have a lot of performance improvements with every release.
+
+It is also possible to compile .NET to native code before deployment.
+This gives smaller executables and faster startup.
 
 You must ask yourself: How performance critical is my application?
 Writing your code easy to understand is preferred.

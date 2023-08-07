@@ -3,11 +3,15 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.19
+Release date 2023-08-07
+- **User status** now also shows if user has created password but not logged in.
+
 ## Release 1.8.18
 Release date 2023-08-01
 - **Meetings API**: data now sorted after meeting start date.
 - **Waybill preview** now faster.
-- **Owner transfer** of modules can now be made to any person registered in the Module registry.
+- **Owner transfer** of modules can now be made to any person registered in the Module registry, also person in another country.
 - **User status** now also shows if user has not accepted *Terms of Use*.
 
 ## Release 1.8.17
