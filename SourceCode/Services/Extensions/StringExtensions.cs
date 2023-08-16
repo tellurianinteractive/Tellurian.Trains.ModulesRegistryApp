@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Markdig;
+﻿using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;

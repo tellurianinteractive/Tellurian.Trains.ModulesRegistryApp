@@ -32,6 +32,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<LayoutModule> LayoutModules { get; set; }
     public virtual DbSet<LayoutParticipant> LayoutParticipants { get; set; }
     public virtual DbSet<LayoutStation> LayoutStations { get; set; }
+    public virtual DbSet<LayoutVehicle> LayoutVehicles { get; set; }
     public virtual DbSet<ListboxItem> ListboxItems { get; set; }
     public virtual DbSet<Meeting> Meetings { get; set; }
     public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }

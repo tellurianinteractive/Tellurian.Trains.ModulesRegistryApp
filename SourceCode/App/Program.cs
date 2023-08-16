@@ -10,7 +10,6 @@ using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
-using System.Resources;
 
 //[assembly: NeutralResourcesLanguage(LanguageUtility.DefaultLanguage)]
 

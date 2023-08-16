@@ -72,7 +72,7 @@
     <Build Include="dbo\Tables\OperatingDay.sql" />
     <Build Include="dbo\Tables\StationCustomerCargo.sql" />
     <Build Include="dbo\Tables\Property.sql" />
-    <Build Include="dbo\Tables\Operator.sql" />
+    <Build Include="dbo\Tables\VehicleOperator.sql" />
     <Build Include="dbo\Tables\OperatingBasicDay.sql" />
     <Build Include="dbo\Tables\StationTrack.sql" />
     <Build Include="dbo\Tables\User.sql" />
@@ -166,14 +166,13 @@
     <Build Include="dbo\Tables\TimetableRoutePatternLayoutStation.sql" />
     <Build Include="dbo\Tables\Timetable.sql" />
     <Build Include="dbo\Tables\TimetableStation.sql" />
+    <Build Include="dbo\Tables\LayoutVehiclesImported.sql" />
+    <Build Include="dbo\Views\LayoutVehicles.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Database.refactorlog" />
   </ItemGroup>
 </Project>

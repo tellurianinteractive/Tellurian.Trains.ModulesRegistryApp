@@ -10,15 +10,17 @@ internal sealed class ApiUserAuthenticationMiddelware
     {
         if (httpContext.Request.Path.StartsWithSegments("/api"))
         {
+            Data.User? user = null;
             if (httpContext.Request.Query.TryGetValue("apiKey", out var apiKey))
             {
-                var user = await userService.FindByApiKeyAsync(apiKey);
+                user = await userService.FindByApiKeyAsync(apiKey);
                 if (user is not null && user.IsApiAccessPermitted)
                 {
                     await Next(httpContext);
                 }
             }
-            httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            if (user is null)
+                httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
         }
         else
         {

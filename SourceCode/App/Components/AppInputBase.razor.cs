@@ -1,5 +1,4 @@
-﻿using Azure.Messaging.EventGrid.SystemEvents;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
 
 namespace ModulesRegistry.Components;

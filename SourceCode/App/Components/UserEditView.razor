@@ -22,7 +22,7 @@ else
             <AppInputText Width="6" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
             <AppInputText Width="6" Label="CityName" @bind-Value="@Person.CityName" />
             <AppInputSelect Width="4" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
-            <AppDisplay Width="6" Label="ApiKey" Value="@ApiKey" BackColor="#e9ecef" />
+            <AppDisplay Width="6" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
 
         </Inputs>
     </EditTemplate>
@@ -36,8 +36,7 @@ else
     User? User;
     Person? Person;
     IEnumerable<ListboxItem> CountryItems = Enumerable.Empty<ListboxItem>();
-
-    string ApiKey => User?.IsApiAccessPermitted == true ? User?.ObjectId.ToString() ?? "-" : "-";
+    string? ApiKey;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,7 +50,10 @@ else
         if (Principal.IsAuthenticated())
         {
             User = await UserService.FindByIdAsync(Id);
-            if (User is not null) Person = User.Person;
+            if (User is not null)
+            {
+                Person = User.Person;
+            }
         }
     }
 

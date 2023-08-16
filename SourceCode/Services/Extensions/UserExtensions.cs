@@ -22,6 +22,10 @@ public static class UserExtensions
         user.EmailAddress.HasValue() ? user.EmailAddress :
         user.Person.PrimaryEmail();
 
+    public static string ApiKey(this User? user) =>
+        user?.IsApiAccessPermitted == true ? user.ObjectId.ToString() :
+        string.Empty;
+
     public static bool HasEmail([NotNullWhen(true)] this User? user) =>
         !string.IsNullOrWhiteSpace(user.PrimaryEmail());
 

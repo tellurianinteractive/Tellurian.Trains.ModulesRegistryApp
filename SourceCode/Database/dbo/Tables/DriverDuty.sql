@@ -15,7 +15,7 @@
 
     CONSTRAINT [PK_DriverDuty] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_DriverDuty_Timetable] FOREIGN KEY ([TimetableId]) REFERENCES [dbo].[Timetable] ([Id]),
-    CONSTRAINT [FK_DriverDuty_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[Operator] ([Id]),
+    CONSTRAINT [FK_DriverDuty_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[VehicleOperator] ([Id]),
     CONSTRAINT [FK_DriverDuty_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
 
 )

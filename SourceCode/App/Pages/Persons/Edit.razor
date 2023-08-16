@@ -38,9 +38,16 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 <AppInputCheck Width="3" Label="IsCountryAdministrator" @bind-Value="User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
                 <AppInputCheck Width="3" Label="IsApiAccessPermitted" @bind-Value="User.IsApiAccessPermitted" />
                 <AppInputCheck Width="3" Label="MayUploadSkpDrawing" @bind-Value="User.MayUploadSkpDrawing" />
-                <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
                 <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="User.PasswordResetAttempts" IsDisabled=true />
                 <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="User.FailedLoginAttempts" IsDisabled=true />
+                @if (User.IsApiAccessPermitted)
+                {
+                    <AppDisplay Width="6" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
+                }
+                @if (User.AdministratorAreaOfResposibility.HasValue())
+                {
+                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
+                }
             }
         </Inputs>
     </EditTemplate>
@@ -69,13 +76,18 @@ else
     private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
     private ClaimsPrincipal? Principal;
+    private string? ApiKey;
 
     protected async override Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CountriesItems = await CountryService.ListboxItemsAsync(Principal, IsGroupAdministrator);
         Person = await GetOrCreatePersonAsync();
-        if (Person.UserId > 0) User = await UserService.FindByIdAsync(Person.UserId.Value);
+        if (Person.UserId > 0)
+        {
+            User = await UserService.FindByIdAsync(Person.UserId.Value);
+            ApiKey = User.ApiKey();
+        }
         if (GroupId > 0) Group = await GroupService.FindByIdAsync(Principal, GroupId);
     }
 
