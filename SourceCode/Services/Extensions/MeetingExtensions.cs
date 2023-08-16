@@ -10,45 +10,48 @@ public static class MeetingExtensions
          (meeting.EndDate - meeting.StartDate).Days + 1;
 
     public static bool IsCancelled([NotNullWhen(true)] this Meeting? meeting) =>
-        meeting is not null && meeting.Status == (int)MeetingStatus.Canceled;
+        meeting is not null &&
+        meeting.Status == (int)MeetingStatus.Canceled;
 
     private static bool IsNotCancelled([NotNullWhen(true)] this Meeting? meeting) =>
         !meeting.IsCancelled();
 
+    public static bool IsNotPermittingRegistrations([NotNullWhen(true)] this Meeting? meeting) =>
+        meeting is null || 
+        meeting.IsCancelled() || 
+        meeting.Layouts.Count == 0 || 
+        meeting.Layouts.All(l => !l.IsRegistrationPermitted);
+
     public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
         meeting is not null &&
         meeting.IsNotCancelled() &&
-        meeting.IsAnyLayoutRegistrationPermitted() &&
-        meeting.Layouts.Any(l => l.IsOpenForRegistration(at));
+        meeting.Layouts.Any(l => l.IsRegistrationPermitted && l.IsOpenForRegistration(at));
 
     private static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? meeting, DateTime at) =>
         meeting is not null && 
-        meeting.IsAnyLayoutRegistrationPermitted() &&
-        meeting.Layouts.Any() && meeting.Layouts.All(l => l.RegistrationClosingDate <= at);
+        meeting.Layouts.Any() && 
+        meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
 
     public static bool MayDelete(this Meeting? meeting, ClaimsPrincipal principal) =>
         meeting is not null &&
-        principal.IsCountryOrGlobalAdministrator() && 
+        principal.IsCountryOrGlobalAdministrator() &&
         meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
 
     public static DateTime? RegistrationOpensDate(this Meeting? meeting) =>
-        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting is null || meeting.IsNotPermittingRegistrations() ? null :
         meeting.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);
 
     public static DateTime? RegistrationClosingDate(this Meeting? meeting) =>
-        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting is null || meeting.IsNotPermittingRegistrations() ? null :
         meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.RegistrationClosingDate);
 
     public static DateTime? RegistrationOfModulesClosingDate(this Meeting? meeting) =>
-        meeting is null || !meeting.IsAnyLayoutRegistrationPermitted() ? null :
+        meeting is null || meeting.IsNotPermittingRegistrations() ? null :
         meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.ModuleRegistrationClosingDate ?? l.RegistrationClosingDate);
 
     public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
         meeting is not null &&
         meeting.Layouts.All(l => l.IsNotYetOpenForRegistration(at));
-
-    private static bool IsAnyLayoutRegistrationPermitted(this Meeting meeting) =>
-        meeting.Layouts.Any(l => l.IsRegistrationPermitted);
 
     public static string Organiser(this Meeting? meeting) =>
         meeting is null ? string.Empty :

@@ -1,9 +1,14 @@
-﻿namespace ModulesRegistry.Services.Extensions;
+﻿using Microsoft.Extensions.Localization;
+
+namespace ModulesRegistry.Services.Extensions;
 
 public static class StationCustomerCargoExtensions
 {
+    private const string Unspecified = "-";
     public static string CargoDirection(this StationCustomerCargo? cargo, IEnumerable<ListboxItem>? cargoDirectionItems) =>
-        cargo is not null && cargoDirectionItems is not null ? cargoDirectionItems.SingleOrDefault(i => i.Id == cargo.DirectionId)?.Description ?? string.Empty : string.Empty;
+        cargo is not null &&
+        cargoDirectionItems is not null ?
+        cargoDirectionItems.SingleOrDefault(i => i.Id == cargo.DirectionId)?.Description ?? string.Empty : string.Empty;
 
     public static string CargoType(this StationCustomerCargo? cargo) =>
         cargo is null ? string.Empty :
@@ -28,18 +33,22 @@ public static class StationCustomerCargoExtensions
         cargo.DirectionId == 2 || cargo.DirectionId == 4;
 
     public static string ReadyTime(this StationCustomerCargo? cargo, IEnumerable<ListboxItem>? readyTimeItems) =>
-        cargo is not null && readyTimeItems is not null ? readyTimeItems.SingleOrDefault(i => i.Id == cargo.ReadyTimeId)?.Description ?? string.Empty : string.Empty;
+        cargo is null || readyTimeItems is null ? string.Empty :
+        cargo.IsReadyTimeUnspecified() ? Unspecified :
+        readyTimeItems.SingleOrDefault(i => i.Id == cargo.ReadyTimeId)?.Description ?? Unspecified;
 
     public static string? ReadyTimeLabel(this StationCustomerCargo cargo) =>
-         cargo is null ? null :
-         cargo.IsUnloading() ? "UnloadingReady" :
-         "LoadingReady";
+        cargo is null ? null :
+        cargo.IsUnloading() ? "UnloadingReady" :
+        cargo.IsLoading() ? "LoadingReady" :
+        null;
 
     public static string PackagingUnit(this StationCustomerCargo cargo, IEnumerable<ListboxItem>? packagingUnitItems) =>
         cargo is null || packagingUnitItems is null ? string.Empty :
-        packagingUnitItems.SingleOrDefault(i => i.Id == cargo.PackageUnitId)?.Description ?? string.Empty;
+        cargo.IsPackageUnitUnspecified() ? Unspecified :
+        packagingUnitItems.SingleOrDefault(i => i.Id == cargo.PackageUnitId)?.Description ?? Unspecified;
 
     public static string QuantityUnit(this StationCustomerCargo? cargo, IEnumerable<ListboxItem>? quantityUnitItems) =>
-        cargo is not null && quantityUnitItems is not null ? quantityUnitItems.SingleOrDefault(i => i.Id == cargo.QuantityUnitId)?.Description ?? string.Empty : string.Empty;
+        cargo is not null && quantityUnitItems is not null ? quantityUnitItems.SingleOrDefault(i => i.Id == cargo.QuantityUnitId)?.Description ?? Unspecified : string.Empty;
 
 }

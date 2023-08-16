@@ -11,11 +11,17 @@ public class MeetingService
         TimeProvider = timeProvider;
     }
 
-    public async Task<IEnumerable<Data.Api.Meeting>> GetMeetingsAsync(int? countryId)
+    public async Task<IEnumerable<Data.Api.Meeting>> GetMeetingsAsync(int? countryId, string? countries = null)
     {
         using var dbContext = Factory.CreateDbContext();
+        var countryIds = new List<int>();
+        if (countryId.HasValue) countryIds.Add(countryId.Value);
+        if (countries is not null)
+        {
+            countryIds.AddRange(await dbContext.Countries.Where(c => countries.Contains(c.DomainSuffix)).Select(c => c.Id).ToListAsync().ConfigureAwait(false));
+        }
         return await dbContext.Meetings.AsNoTracking()
-            .Where(m => m.EndDate > TimeProvider.Now && !m.IsOrganiserInternal && (!countryId.HasValue || m.OrganiserGroup.CountryId == countryId))
+            .Where(m => m.EndDate > TimeProvider.Now && !m.IsOrganiserInternal && (countryIds.Count==0 || countryIds.Contains( m.OrganiserGroup.CountryId)))
             .Include(m => m.GroupDomain)
             .OrderBy(m => m.StartDate)
             .Select(m =>

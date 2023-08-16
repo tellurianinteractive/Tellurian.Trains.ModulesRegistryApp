@@ -8,7 +8,7 @@ public sealed class CargoService
     public async Task<IEnumerable<Data.Api.CargoType>> CargoTypesAsync()
     {
         using var dbContext = Factory.CreateDbContext();
-        var result = await dbContext.Cargos.ToReadOnlyListAsync();
+        var result = await dbContext.Cargos.OrderBy(c => c.NhmCode).ThenBy(c => c.EN).ToReadOnlyListAsync();
         if (result is null) return Array.Empty<Data.Api.CargoType>();
         return result
             .Select(c => new Data.Api.CargoType(c.Id, c.NhmCode, c.DefaultClasses) { Translations = c.LocalizedNames().Select(ln => new Data.Api.Translation(ln.Language, ln.Value)) }).ToList();

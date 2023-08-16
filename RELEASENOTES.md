@@ -6,9 +6,13 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.8.19
 Release date 2023-08-16
 - **Layout Vehicles** can now be retrieved in the web API.
+- **Meetings API** can now be filtered on one or several countries.
 - **User status** in adminstrator mode now also shows if user has created password but not yet logged in.
 - **User's API-key** now is displayed in the administrators edit form for *persons*.
 - **Bug fix** in API-key validation.
+- **Bug fix** of issue #182 administrators can no logner register participants when no layout permits it.
+- **Fix** of issue #180 replacing text with '-' when no package unit is specified.
+- **Fix** of issue #181 replacing text with '-' when no loading/unloading ready time is specified.1.8.19
 
 ## Release 1.8.18
 Release date 2023-08-01

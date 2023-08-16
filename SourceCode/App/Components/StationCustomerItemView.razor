@@ -68,6 +68,7 @@ else
 
     string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is null ?
         string.Empty :
+        it.IsReadyTimeUnspecified() ? "-" :
         it.IsLoading() ? $"{Localizer["LoadingReady"]} {it.ReadyTime(ReadyTimeItems).ToLowerInvariant()}" :
         it.IsUnloading() ? $"{Localizer["UnloadingReady"]} {it.ReadyTime(ReadyTimeItems).ToLowerInvariant()}" :
         string.Empty;

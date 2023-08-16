@@ -71,6 +71,12 @@ public static class StationCustomerCargoExtensions
            FromYear = me.FromYear,
            UptoYear = me.UptoYear,
        };
+
+    public static bool IsPackageUnitUnspecified(this StationCustomerCargo me) =>
+        me.PackageUnitId == 0;
+
+    public static bool IsReadyTimeUnspecified(this StationCustomerCargo me) =>
+        me.ReadyTimeId == 0;
 }
 
 public static class StationCustomerCargoMapping
