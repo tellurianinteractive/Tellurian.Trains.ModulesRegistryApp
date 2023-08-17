@@ -1,6 +1,4 @@
-﻿*Module meetings are social events. This photo is from the 2022 Grimslöv meeting in Sweden.*
-
-#### Help texts 
+﻿#### Help texts 
 Most forms have help texts that guides you how to fill in data. 
 Just click the *questionmark* in the upper left corner of the page.
 

@@ -1,6 +1,4 @@
-﻿*Module meetings are social events. This photo is from the 2022 Grimslöv meeting in Sweden.*
-
-# The **Modules Registry** is a site for maintaining data about model railway modules in any scale.
+﻿# The **Modules Registry** is a site for maintaining data about model railway modules in any scale.
 The Module Registry can be used around Europe and is available in several languages: English, German, Danish, Swedish and Norwegian.
 
 #### New user?

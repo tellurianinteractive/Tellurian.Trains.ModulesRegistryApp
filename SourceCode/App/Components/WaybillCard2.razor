@@ -22,7 +22,7 @@
                         <tr>
                             <td colspan="2" class="box destination" style="color: @Item.Destination.ForeColor(); background-color: @Item.Destination.BackColor()">
                                 <div class="label">@Item.Destination.DualLanguageLabel("Destination")</div>
-                                <div class="name" style="font-size: @StationNameTextSize(Item.Destination.StationName, Item.IsCrossBorder())">
+                                <div class="name" style="font-size: @StationNameTextSize(Item.Destination.StationName, Item.ShowFlag())">
                                     @if (Item.ShowFlag())
                                     {
                                         <span class="flag"><img  src="@Item.Destination.FlagSrc()" /></span>
@@ -97,7 +97,7 @@
                     <tr>
                         <td colspan="2" class="box origin" style="color: @Item.Origin.ForeColor(); background-color: @Item.Origin.BackColor()">
                             <div class="label">@Item.Origin.DualLanguageLabel( "Origin")</div>
-                            <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.IsCrossBorder())">
+                            <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.ShowFlag())">
                                 @if (Item.ShowFlag())
                                 {
                                     <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
@@ -210,8 +210,9 @@
 
     string StationNameTextSize(string? text, bool hasFlag) =>
         string.IsNullOrWhiteSpace(text) ? Large :
-        hasFlag && text.Length < 13 ? Large :
-        text.Length < 17 ? Large : Small;
+        hasFlag && text.Length < 15 ? Large : 
+        hasFlag ? Small :
+        text.Length < 18 ? Large : Small;
 
     const string Large = "14pt";
     const string Small = "12pt";

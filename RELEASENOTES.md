@@ -3,6 +3,15 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 
+## Release 1.8.20
+Release date 2023-08-17
+- **Layouts** can now have a short name.
+- **Layout waybills** for cross-border freights now have flags.
+- **Waybill** format improvenments with dynamic font size for origins and destinations.
+- **Bug fix** of external customer name not showed in station waybill list.
+- **Bug fix** of file upload that occasionally failed saving complete document.
+- **New front image** from the Milevsko-meeting 2023.
+
 ## Release 1.8.19
 Release date 2023-08-16
 - **Layout Vehicles** can now be retrieved in the web API.

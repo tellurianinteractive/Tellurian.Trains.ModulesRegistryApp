@@ -199,5 +199,5 @@ else
     string Key(ModulePackage package) => package.Name;
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> AllRegisteredModuleIds => ParticipantsRegisteredModules.Select(m => m.ModuleId);
-    IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Name())).ToList();
+    IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Description())).ToList();
 }

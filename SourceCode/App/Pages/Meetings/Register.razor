@@ -120,7 +120,7 @@ else
                                         <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                                     }
                                 </td>
-                                <td>@item.Layout.Name()</td>
+                                <td>@item.Layout.Description()</td>
                                 <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                             </RowTemplate>
                         </TableTemplate>
@@ -280,11 +280,11 @@ else
         return personsLayoutParticipations;
     }
 
-    string ParticipantLayoutNames(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Name()));
+    string ParticipantLayoutNames(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Description()));
     string ArrivalTime(DateTime? time) => time.HasValue ? time.Value.ToString("t") : "--:--";
 
-    string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Name}";
-    string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Name}";
+    string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Description}";
+    string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Description}";
     string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
     string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
     string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";

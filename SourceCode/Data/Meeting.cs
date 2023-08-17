@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data;
 
@@ -34,6 +35,61 @@ public class Meeting
 #nullable enable
 
 public static class MeetingExtensions
+{
+    public static string Day(this Meeting meeting, int day) =>
+    meeting.StartDate.AddDays(day - 1).DayOfWeek.ToString();
+
+    public static int DaysCount(this Meeting meeting) =>
+         (meeting.EndDate - meeting.StartDate).Days + 1;
+
+    public static string Organiser(this Meeting? meeting) =>
+        meeting is null ? string.Empty :
+        meeting.GroupDomainId.HasValue ? $"{meeting.OrganiserGroup.FullName}/{meeting.GroupDomain?.Name}" :
+        $"{meeting.OrganiserGroup.FullName}";
+
+
+    public static DateTime? RegistrationOpensDate(this Meeting? meeting) =>
+     meeting is null || meeting.IsNotPermittingRegistrations() ? null :
+     meeting.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);
+
+    public static DateTime? RegistrationClosingDate(this Meeting? meeting) =>
+        meeting is null || meeting.IsNotPermittingRegistrations() ? null :
+        meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.RegistrationClosingDate);
+
+    public static DateTime? RegistrationOfModulesClosingDate(this Meeting? meeting) =>
+        meeting is null || meeting.IsNotPermittingRegistrations() ? null :
+        meeting.Layouts.Where(l => l.IsRegistrationPermitted).Max(l => l.ModuleRegistrationClosingDate ?? l.RegistrationClosingDate);
+
+    public static bool IsNotYetOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
+        meeting is not null &&
+        meeting.Layouts.All(l => l.IsNotYetOpenForRegistration(at));
+
+
+    public static bool IsCancelled([NotNullWhen(true)] this Meeting? meeting) =>
+        meeting is not null &&
+        meeting.Status == (int)MeetingStatus.Canceled;
+
+    private static bool IsNotCancelled([NotNullWhen(true)] this Meeting? meeting) =>
+        !meeting.IsCancelled();
+
+    public static bool IsNotPermittingRegistrations([NotNullWhen(true)] this Meeting? meeting) =>
+        meeting is null ||
+        meeting.IsCancelled() ||
+        meeting.Layouts.Count == 0 ||
+        meeting.Layouts.All(l => !l.IsRegistrationPermitted);
+
+    public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
+        meeting is not null &&
+        meeting.IsNotCancelled() &&
+        meeting.Layouts.Any(l => l.IsRegistrationPermitted && l.IsOpenForRegistration(at));
+
+    public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? meeting, DateTime at) =>
+        meeting is not null &&
+        meeting.Layouts.Any() &&
+        meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
+}
+
+public static class MeetingMapping
 {
     internal static void MapMeeting(this ModelBuilder modelBuilder) =>
         modelBuilder.Entity<Meeting>(entity =>

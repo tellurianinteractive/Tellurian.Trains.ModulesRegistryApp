@@ -10,6 +10,7 @@ public static class StationCustomerWaybillExtensions
     public static string OtherCustomerName(this StationCustomerWaybill? waybill) =>
         waybill is null ? string.Empty :
         waybill.OtherStationCustomerCargo?.StationCustomer?.CustomerName ??
+        waybill.OtherExternalCustomerCargo?.ExternalStationCustomer?.CustomerName ??
         Resources.Strings.NotApplicable;
 
     public static string OtherStationName(this StationCustomerWaybill? waybill) =>

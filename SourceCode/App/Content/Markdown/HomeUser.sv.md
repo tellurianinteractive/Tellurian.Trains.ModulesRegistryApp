@@ -1,6 +1,4 @@
-﻿*Modulträffar är sociala evenemang. Det här fotot är från Grimslövsträffen 2022 i Sverige.*
-
-#### Hjälptexter
+﻿#### Hjälptexter
 De flesta formulär har hjälptexter som hjälper dig att fylla i data. 
 Klicka bara på *frågetecken* i sidans övre vänstra hörn.
 

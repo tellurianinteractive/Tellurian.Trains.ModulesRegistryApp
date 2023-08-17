@@ -55,16 +55,18 @@
 
 .name { /* font-size is set dynamically in code */
     font-weight: bold;
-    line-height: 17pt;
+    line-height: 15pt;
     width: 44mm;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    vertical-align: central;
+    padding-top: 2px;
 }
 
 .customer {
     font-weight: bold;
-    font-size: 13pt;
+    font-size: 12pt;
     line-height:15pt;
     width: 46mm;
     white-space: nowrap;
@@ -89,7 +91,7 @@
 }
 
 .flag {
-    vertical-align: text-bottom;
+    vertical-align:central;
     padding-right: 2px;
 }
 

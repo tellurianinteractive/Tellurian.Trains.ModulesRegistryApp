@@ -48,6 +48,8 @@ public partial class StationCustomerCargo
 
 }
 
+#nullable enable
+
 public static class StationCustomerCargoExtensions
 {
     public static StationCustomerCargo Clone(this StationCustomerCargo me) =>
@@ -77,6 +79,10 @@ public static class StationCustomerCargoExtensions
 
     public static bool IsReadyTimeUnspecified(this StationCustomerCargo me) =>
         me.ReadyTimeId == 0;
+
+    public static bool IsImportOrExport(this StationCustomerCargo? me) =>
+        me is not null && (me.DirectionId == 3 || me.DirectionId == 4);
+
 }
 
 public static class StationCustomerCargoMapping

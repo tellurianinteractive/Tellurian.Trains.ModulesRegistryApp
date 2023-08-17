@@ -102,7 +102,7 @@ public static class WaybillExtensions
         !me.Origin.DomainSuffix.Equals(me.Destination?.DomainSuffix, StringComparison.OrdinalIgnoreCase);
 
     public static bool ShowFlag([NotNullWhen(true)] this Waybill? me) =>
-        me.IsCrossBorder() && !me.IsLayoutInternal;
+        me.IsCrossBorder();
 
     public static bool HasDifferentCargoNameTranslations(this Waybill? me) =>
         me is not null && !me.Origin.CargoName().Equals(me.Destination.CargoName());
@@ -127,25 +127,6 @@ public static class WaybillExtensions
     me is null || me.HideUnloadingTimes ? string.Empty :
     me.Destination.UnloadingReady();
 
-
-    [Obsolete("Use Destination")]
-    public static string DestinationBackColor(this Waybill? me) =>
-        me is not null && me.Destination is not null ? me.Destination.BackColor() :
-        string.Empty;
-
-    [Obsolete("Use Destination")]
-    public static string DestinationForeColor(this Waybill? me) =>
-        me.DestinationBackColor().TextColor();
-
-    [Obsolete("Use Origin")]
-    public static string OriginBackColor(this Waybill? me) =>
-        me is not null && me.Origin is not null ? me.Origin.BackColor() :
-        string.Empty;
-
-    [Obsolete("Use Origin")]
-    public static string OriginForeColor(this Waybill? me) =>
-        me.OriginBackColor().TextColor();
-
     public static string WagonClass(this Waybill? me) =>
         me is  null ? string.Empty :
         me.SpecialWagonClass.HasValue() ? me.SpecialWagonClass : 
@@ -161,7 +142,7 @@ public static class CargoCustomerExtensions
 
     public static string CargoName(this CargoCustomer? me) =>
          me is null ? string.Empty :
-         me.PackagingUnitResourceKey.HasValue() && me.PackagingUnitResourceKey != "NotApplicable" ?
+         me.PackagingUnitResourceKey.HasValueExcept("NotApplicable") ?
              $"{me.CargoName.GetLocalizedString(me.Language())} {me.PackagingPrepositionResourceCode.GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
              me.CargoName.GetLocalizedString(me.Language());
 

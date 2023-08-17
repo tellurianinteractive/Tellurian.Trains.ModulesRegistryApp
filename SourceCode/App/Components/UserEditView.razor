@@ -36,8 +36,7 @@ else
     User? User;
     Person? Person;
     IEnumerable<ListboxItem> CountryItems = Enumerable.Empty<ListboxItem>();
-    string? ApiKey;
-
+   
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();

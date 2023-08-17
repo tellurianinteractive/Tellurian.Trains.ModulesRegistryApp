@@ -1,6 +1,4 @@
-﻿*Modultræf er sociale arrangementer. Dette billede er fra Grimslöv-træffet i 2022 i Sverige.*
-
-# **Moduleregistret** er et sted til vedligeholdelse af data om model jernbanemoduler i enhver skala.
+﻿# **Moduleregistret** er et sted til vedligeholdelse af data om model jernbanemoduler i enhver skala.
 Modulregistret kan bruges overalt i Europa og findes på flere sprog: engelsk, tysk, dansk, svensk og norsk.
 
 #### Ny bruger?

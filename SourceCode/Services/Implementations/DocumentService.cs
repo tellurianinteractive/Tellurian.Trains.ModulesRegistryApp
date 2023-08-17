@@ -57,45 +57,43 @@ public sealed class DocumentService
         if (principal.IsAuthenticated())
         {
             if (file.Size > maxFileSize) return (0, "UploadFileToLarge", null);
-
             using var dbContext = Factory.CreateDbContext();
             var fileSize = (int)file.Size;
-            using var stream = file.OpenReadStream(maxFileSize);
+            using var stream = file.OpenReadStream(file.Size);
+            Document? document = null;
             var (Id, DocumentId, TypeName) = DocumentedObject(documentedObject, fileExtension);
             if (DocumentId.HasValue)
             {
-                var existing = await dbContext.Documents.FindAsync(DocumentId);
-                if (existing is null) return principal.NothingToUpdate<Document>();
-                existing.Content = new byte[fileSize];
-                var bytes = await stream.ReadAsync(existing.Content.AsMemory(0, fileSize));
-                existing.LastModifiedTime = TimeProvider.Now;
-                var count = await dbContext.SaveChangesAsync();
-                return count.SaveResult(existing);
+                document = await dbContext.Documents.FindAsync(DocumentId);
             }
-            else
+            document ??= CreateNewDocument(fileExtension);
+            document.Content = await GetContent(stream, fileSize);
+            document.LastModifiedTime = TimeProvider.Now;
+            if (document.Id == 0) dbContext.Documents.Add(document);
+            var count = await dbContext.SaveChangesAsync();
+            if (count > 0)
             {
-                var document = new Document
-                {
-                    FileExtension = fileExtension,
-                    ContentType = ContentType(fileExtension),
-                    Content = new byte[file.Size],
-                    LastModifiedTime = TimeProvider.Now
-                };
-                var position = 0;
-                while (position < file.Size)
-                {
-                    position += await stream.ReadAsync(document.Content.AsMemory(position, fileSize - position));
-                }
-                dbContext.Documents.Add(document);
-                var count = await dbContext.SaveChangesAsync();
-                if (count > 0)
-                {
-                    count = await UpdateDocumentReference(dbContext, document, documentedObject);
-                    return count.SaveResult(document);
+                count = await UpdateDocumentReference(dbContext, document, documentedObject);
+                if (count > 0) return count.SaveResult(document);
+            }
+            return (0, "UploadFailed", null);
 
-                }
-                return (0, "UploadFailed", null);
-            };
+            static Document CreateNewDocument(string? fileExtension) =>
+                new()
+                {
+                    Id = 0,
+                    FileExtension = fileExtension,
+                    ContentType = ContentType(fileExtension)
+                };
+
+            static async Task<byte[]> GetContent(Stream stream, int size)
+            {
+                byte[] buffer = new byte[size];
+                await stream.ReadExactlyAsync(buffer, 0, size);
+                return buffer;
+            }
+
+
         }
         return principal.SaveNotAuthorised<Document>();
 
@@ -118,34 +116,37 @@ public sealed class DocumentService
             if (existing is not null)
             {
                 existing.DwgDrawingId = document.Id;
+                return 1;
             }
         }
-        else if (TypeName == "Module" && document.FileExtension == "skp")
+        if (TypeName == "Module" && document.FileExtension == "skp")
         {
             var existing = await dbContext.Modules.FindAsync(Id);
             if (existing is not null)
             {
                 existing.SkpDrawingId = document.Id;
+                return 1;
             }
         }
-        else if (TypeName == "Module" && document.FileExtension == "pdf")
+        if (TypeName == "Module" && document.FileExtension == "pdf")
         {
             var existing = await dbContext.Modules.FindAsync(Id);
             if (existing is not null)
             {
                 existing.PdfDocumentationId = document.Id;
+                return 1;
             }
-
         }
-        else if (TypeName == "Station" && document.FileExtension == "pdf")
+        if (TypeName == "Station" && document.FileExtension == "pdf")
         {
             var existing = await dbContext.Stations.FindAsync(Id);
             if (existing is not null)
             {
                 existing.PdfInstructionId = document.Id;
+                return 1;
             }
         }
-        return await dbContext.SaveChangesAsync();
+        return 0;
     }
 
     /// <summary>
@@ -164,9 +165,14 @@ public sealed class DocumentService
                 "skp" => (module.Id, module.SkpDrawingId, nameof(Module)),
                 _ => (0, null, string.Empty)
             },
-            Station station => (station.Id, station.PdfInstructionId, nameof(Station)),
+            Station station => fileExtension switch
+            {
+                "pdf" => (station.PrimaryModuleId!.Value, station.PdfInstructionId, nameof(Station)),
+                _ => (0, null, string.Empty)
+            },
             _ => (0, null, string.Empty)
         };
+
 
 
 

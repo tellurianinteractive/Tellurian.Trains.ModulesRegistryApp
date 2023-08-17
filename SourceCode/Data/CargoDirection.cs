@@ -19,6 +19,7 @@ public partial class CargoDirection
 
 #nullable enable
 
+
 internal static class CargoDirectionMapper
 {
     public static void MapCargoDirection(this ModelBuilder builder) =>

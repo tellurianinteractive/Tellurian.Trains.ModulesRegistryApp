@@ -1,9 +1,9 @@
-﻿#nullable disable
-
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
+
+#nullable disable
 
 public class Layout
 {
@@ -20,6 +20,7 @@ public class Layout
     public DateTime RegistrationOpeningDate { get; set; }
     public DateTime RegistrationClosingDate { get; set; }
     public DateTime? ModuleRegistrationClosingDate { get; set; }
+    public string ShortName { get; set; }
     public string Theme { get; set; }
     public string Details { get; set; }
     public short? FirstYear { get; set; }
@@ -31,21 +32,30 @@ public class Layout
     public virtual ModuleStandard PrimaryModuleStandard { get; set; }
     public virtual ICollection<LayoutParticipant> LayoutParticipants { get; set; }
     public override string ToString() => $"{Meeting?.Name} {PrimaryModuleStandard?.ShortName}";
-
 }
 
 # nullable enable
+
 public static class LayoutExtensions
 {
-    public static string Name(this Layout? me) =>
-        me is null || me.PrimaryModuleStandard is null ? string.Empty :
-        me.PrimaryModuleStandard.ShortName;
-
-    public static bool RegistrationIsOpen([NotNullWhen(true)] this Layout? me, DateTimeOffset atTime) =>
-        me is not null && atTime >= me.RegistrationOpeningDate && atTime < me.RegistrationClosingDate.AddDays(1);
-
+    public static string RegistrationOpensDate(this Layout layout) => layout.RegistrationOpeningDate.ToShortDateString();
+    public static string RegistrationClosesDate(this Layout layout) => layout.RegistrationClosingDate.ToShortDateString();
+    public static string RegistrationOfModulesClosesDate(this Layout layout) => (layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate).ToShortDateString();
     public static DateTime ModuleRegistrationClosingDate(this Layout layout) => layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate;
 
+    public static string Description(this Layout? me) =>
+       me is null || me.PrimaryModuleStandard is null ? string.Empty :
+       me.ShortName.HasValue() ?me.ShortName :
+       me.PrimaryModuleStandard.ShortName;
+
+     internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
+        layout.IsRegistrationPermitted &&
+        layout.RegistrationOpeningDate <= at &&
+        layout.RegistrationClosingDate.AddDays(1) >= at;
+
+    internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
+        layout.IsRegistrationPermitted &&
+        layout.RegistrationOpeningDate > at;
 }
 
 public static class LayoutMapping

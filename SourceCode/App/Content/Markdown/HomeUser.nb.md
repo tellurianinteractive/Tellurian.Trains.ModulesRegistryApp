@@ -1,6 +1,4 @@
-﻿*Modultreffer er sosiale arrangementer. Dette bildet er fra Grimslöv-treffet i Sverige i 2022.*
-
-#### Hjelpetekster
+﻿#### Hjelpetekster
 De fleste skjemaer har hjelpetekster som veileder deg hvordan du fyller ut data. 
 Bare klikk på *spørsmålstegnet* øverst til venstre på siden.
 

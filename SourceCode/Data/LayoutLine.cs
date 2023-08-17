@@ -1,8 +1,9 @@
-﻿#nullable disable
-
+﻿
 using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
+
+#nullable disable
 
 public class LayoutLine
 {
@@ -25,6 +26,7 @@ public class LayoutLine
 }
 
 # nullable enable
+
 public static class LayoutLineExtensions
 {
     public static string StretchName(this LayoutLine? me) =>

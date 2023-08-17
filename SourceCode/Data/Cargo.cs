@@ -41,8 +41,6 @@ public static class CargoExtentions
     public static string NhmCodeOrEmpty(this Cargo? me) =>
         me is null || me.NhmCode == 0 ? string.Empty :
         $"{me.NhmCode:0000 0000}";
-
-
 }
 
 internal static class CargoMapper
