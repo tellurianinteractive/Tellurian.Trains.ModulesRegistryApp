@@ -19,9 +19,13 @@ else
             <AppInputText Width="4" Label="MiddleName" @bind-Value="@Person.MiddleName" IsDisabled=true />
             <AppInputText Width="4" Label="LastName" @bind-Value="@Person.LastName" IsDisabled=true />
 
-            <AppInputText Width="6" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
-            <AppInputText Width="6" Label="CityName" @bind-Value="@Person.CityName" />
-            <AppInputSelect Width="4" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
+            <AppInputText Width="4" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
+            <AppInputText Width="3" Label="CityName" @bind-Value="@Person.CityName" />
+            <AppInputSelect Width="3" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
+            <AppInputFill Width="2"/>
+            <AppInputText Width="2" Label="FremoOwnerSignature" @bind-Value="@Person.FremoOwnerSignature" />
+            <AppInputNumber Width="2" Label="FremoMemberNumber" @bind-Value="@Person.FremoMemberNumber" />
+            <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
             <AppDisplay Width="6" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
 
         </Inputs>

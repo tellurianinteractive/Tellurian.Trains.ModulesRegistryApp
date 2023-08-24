@@ -1326,4 +1326,34 @@
   <data name="PasswordCreated" xml:space="preserve">
     <value>Adgangskode oprettet</value>
   </data>
+  <data name="FremoMemberNumber" xml:space="preserve">
+    <value>FREMO medlemsnummer</value>
+  </data>
+  <data name="Throttles" xml:space="preserve">
+    <value>Kørekontroller</value>
+  </data>
+  <data name="MyThrottles" xml:space="preserve">
+    <value>Mine kørekontroller</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-adresse</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventarnummer</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Valideret</value>
+  </data>
+  <data name="Throttle" xml:space="preserve">
+    <value>Kørekontrol</value>
+  </data>
+  <data name="MustBeAMacAddress" xml:space="preserve">
+    <value>Skal være en MAC-adresse</value>
+  </data>
+  <data name="MustBeADccAddress" xml:space="preserve">
+    <value>Skal være en DCC-adresse 1-9999</value>
+  </data>
+  <data name="MayVerifyWiFreds" xml:space="preserve">
+    <value>Kan verificere wiFREDs</value>
+  </data>
 </root>

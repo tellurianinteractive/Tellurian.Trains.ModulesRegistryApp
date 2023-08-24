@@ -6,16 +6,18 @@
     [LastSignInTime]                   DATETIMEOFFSET (7) NULL,
     [LastEmailConfirmationTime]        DATETIMEOFFSET (7) NULL,
     [LastTermsOfUseAcceptTime]         DATETIMEOFFSET (7) NULL,
-    [IsGlobalAdministrator]            BIT                CONSTRAINT [DF_User_IsGlobalAdministrator] DEFAULT ((0)) NOT NULL,
-    [IsCountryAdministrator]           BIT                CONSTRAINT [DF_User_IsCountryAdministrator] DEFAULT ((0)) NOT NULL,
     [HashedPassword]                   NVARCHAR (255)     NULL,
-    [IsReadOnly]                       BIT                CONSTRAINT [DF_User_IsReadOnly] DEFAULT ((0)) NOT NULL,
-    [IsDemo]                           BIT                CONSTRAINT [DF_User_IsDemo] DEFAULT ((0)) NOT NULL,
-    [IsApiAccessPermitted]             BIT                CONSTRAINT [DF_User_IsApiAccessPermitted] DEFAULT ((0)) NOT NULL,
     [AdministratorAreaOfResposibility] NVARCHAR (50)      NULL,
-    [PasswordResetAttempts]            INT                CONSTRAINT [DF_User_PasswordResetAttempts] DEFAULT ((0)) NOT NULL,
-    [FailedLoginAttempts]              INT                CONSTRAINT [DF_User_FailedLoginAttempts] DEFAULT ((0)) NOT NULL,
-    [MayUploadSkpDrawing]              BIT                CONSTRAINT [DF_User_MayUploadSkpDrawing] DEFAULT ((0)) NOT NULL, 
+    [IsGlobalAdministrator]            BIT                DEFAULT ((0)) NOT NULL,
+    [IsCountryAdministrator]           BIT                DEFAULT ((0)) NOT NULL,
+    [IsReadOnly]                       BIT                DEFAULT ((0)) NOT NULL,
+    [IsDemo]                           BIT                DEFAULT ((0)) NOT NULL,
+    [IsApiAccessPermitted]             BIT                DEFAULT ((0)) NOT NULL,
+    [PasswordResetAttempts]            INT                DEFAULT ((0)) NOT NULL,
+    [FailedLoginAttempts]              INT                DEFAULT ((0)) NOT NULL,
+    [MayUploadSkpDrawing]              BIT                DEFAULT ((0)) NOT NULL, 
+    [MayManageWiFreds]                 BIT                DEFAULT ((0)) NOT NULL,     
+    
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

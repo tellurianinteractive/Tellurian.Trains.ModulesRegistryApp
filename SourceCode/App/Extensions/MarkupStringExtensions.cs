@@ -21,6 +21,8 @@ public static class MarkupStringExtensions
 
     private static string PersonStatusIconName(this Person? person) =>
         person is null ? string.Empty :
+        person.User?.IsGlobalAdministrator == true ? "user-shield" :
+        person.User?.IsCountryAdministrator == true ? "user-gear" :
         person.PrimaryEmail().HasNoValue() ? "user-times" :
         person.IsInvited() && person.IsNeverLoggedIn() ? "envelope" :
         person.UserId.HasValue ? "user-check" :

@@ -22,6 +22,7 @@ public static class AppClaimTypes
     public const string Demo = nameof(Demo);
     public const string DomainId = nameof(DomainId);
     public const string MayUploadSkpDrawing = nameof(MayUploadSkpDrawing);
+    public const string MayManageWiFreds = nameof(MayManageWiFreds);
 }
 
 public static class ClaimsPrincipalExtensions
@@ -37,6 +38,7 @@ public static class ClaimsPrincipalExtensions
     public static bool IsDemo(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.Demo);
     public static bool IsReadOnly(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.ReadOnly);
     public static bool MayUploadSkpDrawing(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayUploadSkpDrawing);
+    public static bool MayManageWiFreds(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayManageWiFreds);
 
     public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
     public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.ObjectId);

@@ -21,6 +21,7 @@
 }
 else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 {
+                <UserStatusView User="Person.User"/>
     <EditTemplate Item="@Person" OnValidSubmit="OnValidSumbit">
         <Inputs>
             <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
@@ -28,31 +29,34 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
             <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
             <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
             <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
-            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
-
+            <AppInputFill Width="2" />
             <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
+            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
+            <AppInputNumber Width="2" Label="FremoMemberNumber" @bind-Value="Person.FremoMemberNumber" />
+            <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
             <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
-            @if (Principal.IsCountryOrGlobalAdministrator() && User is not null)
+            @if (Principal.IsCountryOrGlobalAdministrator() && Person.User is not null)
             {
-                <AppInputCheck Width="3" Label="IsGlobalAdministrator" @bind-Value="User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
-                <AppInputCheck Width="3" Label="IsCountryAdministrator" @bind-Value="User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
-                <AppInputCheck Width="3" Label="IsApiAccessPermitted" @bind-Value="User.IsApiAccessPermitted" />
-                <AppInputCheck Width="3" Label="MayUploadSkpDrawing" @bind-Value="User.MayUploadSkpDrawing" />
-                <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="User.PasswordResetAttempts" IsDisabled=true />
-                <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="User.FailedLoginAttempts" IsDisabled=true />
-                @if (User.IsApiAccessPermitted)
+                <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
+                <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
+                <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Person.User.IsApiAccessPermitted" />
+                <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Person.User.MayUploadSkpDrawing" />
+                <AppInputCheck Width="2" Label="MayVerifyWiFreds " @bind-Value="Person.User.MayManageWiFreds" />
+                <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="Person.User.PasswordResetAttempts" IsDisabled=true />
+                <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="Person.User.FailedLoginAttempts" IsDisabled=true />
+                @if (Person.User.IsApiAccessPermitted)
                 {
-                    <AppDisplay Width="6" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
+                    <AppDisplay Width="6" Label="ApiKey" Value="@Person.User.ApiKey()" BackColor="#e9ecef" />
                 }
-                @if (User.AdministratorAreaOfResposibility.HasValue())
+                @if (Person.User.AdministratorAreaOfResposibility.HasValue())
                 {
-                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
+                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Person.User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
                 }
             }
         </Inputs>
     </EditTemplate>
 
-    @if (User is not null && User.IsLockedOut())
+    @if (Person.User is not null && Person.User.IsLockedOut())
     {
         <br />
         <h3>@Localizer["UserIsLockedOut"]</h3>
@@ -72,7 +76,6 @@ else
     [Parameter] public int GroupId { get; set; }
 
     private Person? Person;
-    private User? User;
     private Group? Group;
     private IEnumerable<ListboxItem>? CountriesItems;
     private ClaimsPrincipal? Principal;
@@ -83,10 +86,9 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CountriesItems = await CountryService.ListboxItemsAsync(Principal, IsGroupAdministrator);
         Person = await GetOrCreatePersonAsync();
-        if (Person.UserId > 0)
+        if (Person.User is not null)
         {
-            User = await UserService.FindByIdAsync(Person.UserId.Value);
-            ApiKey = User.ApiKey();
+            ApiKey = Person.User.ApiKey();
         }
         if (GroupId > 0) Group = await GroupService.FindByIdAsync(Principal, GroupId);
     }
@@ -95,7 +97,6 @@ else
     {
         if (Principal is null || Person is null) return;
         var result = await PersonService.SaveAsync(Principal, Person, IsGroupAdministrator);
-        if (User is not null) User = await UserService.UpdateAsync(User);
         if (result.Count < 1)
         {
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
@@ -116,7 +117,8 @@ else
 
     async Task UnlockUser()
     {
-        User = await UserService.UnlockUser(User);
+        if (Person is null) return;
+        Person.User = await UserService.UnlockUser(Person.User);
     }
 
     private bool IsGroupAdministrator => Group is not null && Group.GroupMembers.Any(gm => gm.PersonId == Principal.PersonId() && gm.IsGroupAdministrator);
@@ -129,6 +131,6 @@ else
     private string AfterSaveHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"/Persons/Country/{CountryId}";
     private bool IsNotGroupMember => GroupId > 0 && (Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId));
     private bool IsNotGlobalAdministrator => !Principal.IsGlobalAdministrator();
-    private bool IsSelfAsGlobalAdministrator => Principal.IsGlobalAdministrator() && Principal.UserId() == User?.Id;
-    private bool IsNotAdministrator => User is null || !(User.IsCountryAdministrator || User.IsGlobalAdministrator);
+    private bool IsSelfAsGlobalAdministrator => Principal.IsGlobalAdministrator() && Principal.UserId() == Person?.User?.Id;
+    private bool IsNotAdministrator => Person?.User is null || !(Person.User.IsCountryAdministrator || Person.User.IsGlobalAdministrator);
 }

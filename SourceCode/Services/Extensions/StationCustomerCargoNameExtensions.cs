@@ -14,12 +14,12 @@ public static class StationCustomerCargoNameExtensions
         cargo is not null && operatingDayItems is not null ? operatingDayItems.SingleOrDefault(i => i.Id == cargo.OperatingDayId)?.Description ?? string.Empty :
         string.Empty;
 
-    public static string StationName(this StationCustomerCargo? cargo) =>
-        cargo is null ? string.Empty :
-        cargo.StationCustomer.Station?.FullName ?? string.Empty;
+    public static string StationName(this StationCustomerCargo? it) =>
+        it is null ? string.Empty :
+        it.StationCustomer.Station?.FullName ?? string.Empty;
  
-    public static string WagonClasses(this StationCustomerCargo cargo) =>
-       cargo is null || cargo.Cargo is null ? string.Empty :
-       cargo.SpecificWagonClass.HasValue() ? cargo.SpecificWagonClass :
-       cargo.Cargo.DefaultClasses;
+    public static string WagonClasses(this StationCustomerCargo? it) =>
+       it is null || it.Cargo is null ? string.Empty :
+       it.SpecificWagonClass.HasValue() ? it.SpecificWagonClass :
+       it.Cargo.DefaultClasses ?? string.Empty;
 }

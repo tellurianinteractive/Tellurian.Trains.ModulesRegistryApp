@@ -1,0 +1,89 @@
+﻿@page "/Throttles"
+@page "/Throttles/My"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+@inject WiFredThrottleService ThrottleService
+
+<PageHeading ObjectName="Throttles" IconClass="@FontAwesome.Tools" PageAction="PageAction.List" HelpContext="Throttles" ShowHelpInitially="false" />
+
+
+<div class="col-12">
+    <AppButton Label="Add" Href="@EditHref(0)" />
+    @if (HasFilter)
+    {
+        <AppButton Label="RemoveFiltering" IconName="@FontAwesome.Erase" OnClickCallback="RemoveFilter" />
+    }
+</div>
+
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="@FilteredItems" Virtualize="true" Pagination="PaginationState">
+        <PropertyColumn Property="@(c => c.MacAddress)" Sortable="true" Title="@Localizer["MacAddress"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="MacFilter" @bind:event="oninput" placeholder="@Localizer["MacAddress"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(c => c.Name)" Sortable="true" Title="@Localizer["Name"]"/>
+        <PropertyColumn Property="@(c => c.InventoryNumber())" Title="@Localizer["InventoryNumber"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]" >
+           <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(c => c.ValidationDateTime)" Title="@Localizer["Validated"]" Align="Align.Center" />
+        <TemplateColumn Title="@Localizer["Actions"]" Context="throttle">
+            <AppButton Label="Edit" Href="@EditHref(throttle.Id)" />
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+<Paginator Value="@PaginationState">
+
+</Paginator>
+
+
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<WiFredThrottle>? Throttles;
+
+    IQueryable<WiFredThrottle> FilteredItems
+    {
+        get
+        {
+            if (Throttles is null) return Enumerable.Empty<WiFredThrottle>().AsQueryable();
+            return Throttles.AsQueryable()
+                .Where(c => (
+                    MacFilter.HasNoValue() || c.MacAddress.StartsWith(MacFilter)) &&
+                    NameFilter.HasNoValue() || 
+                        c.OwningPerson.FirstName.StartsWith(NameFilter, StringComparison.CurrentCultureIgnoreCase) || 
+                        c.OwningPerson.LastName.StartsWith(NameFilter, StringComparison.CurrentCultureIgnoreCase));
+        }
+    }
+
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    string? MacFilter;
+    string? NameFilter;
+    bool HasFilter => MacFilter.HasValue() || NameFilter.HasValue();
+    void RemoveFilter()
+    {
+        MacFilter = default;
+        NameFilter = default;
+        StateHasChanged();
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
+    }
+    bool OnlyMyThrottles => Navigator.Uri.EndsWith("My");
+    string EditHref(int id) => $"Throttles/{id}/Edit";
+}

@@ -20,7 +20,7 @@ else
         </TableHeader>
         <RowTemplate Context="contact">
             <th>@LanguageUtility.GetLocalizedString(contact.Person.Country.EnglishName, null)</th>
-            <th>@contact.Person.FullName()</th>
+            <th>@contact.Person.Name()</th>
             <td>@contact.IsGlobalAdministrator.AsYesOrNo()</td>
             <td>@contact.AdministratorAreaOfResposibility</td>
             <td>@GroupMemberships(contact.Person)</td>

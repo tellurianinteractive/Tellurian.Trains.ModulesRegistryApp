@@ -55,6 +55,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<StationCustomerWaybill> StationCustomerWaybills { get; set; }
     public virtual DbSet<StationTrack> StationTracks { get; set; }
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<WiFredThrottle> WiFredThrottles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -100,6 +101,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapModuleExit();
         modelBuilder.MapModuleOwnership();
         modelBuilder.MapModuleStandard();
+        modelBuilder.MapWiFredThrottle();
 
 
 

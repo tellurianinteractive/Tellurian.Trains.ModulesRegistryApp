@@ -168,11 +168,18 @@
     <Build Include="dbo\Tables\TimetableStation.sql" />
     <Build Include="dbo\Tables\LayoutVehiclesImported.sql" />
     <Build Include="dbo\Views\LayoutVehicles.sql" />
+    <Build Include="dbo\Tables\WiFredThrottle.sql" />
+    <Build Include="dbo\Tables\Vehicle.sql" />
+    <Build Include="dbo\Tables\VehicleFeature.sql" />
+    <Build Include="dbo\Tables\VehicleInteroperability.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Database.refactorlog" />
   </ItemGroup>
 </Project>

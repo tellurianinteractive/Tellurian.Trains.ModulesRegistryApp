@@ -36,7 +36,7 @@ public static class ModuleOwnershipExtensions
     public static string OwnerName(this ModuleOwnership? me) =>
         me is null ? string.Empty :
         me.Group is not null ? me.Group.FullName :
-        me.Person is not null ? me.Person.FullName() :
+        me.Person is not null ? me.Person.Name() :
         me.GroupId is not null ? $"Group {me.GroupId}" :
         me.PersonId is not null ? $"Person {me.PersonId}" :
         "?";

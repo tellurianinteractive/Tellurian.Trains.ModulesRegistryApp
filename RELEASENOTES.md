@@ -2,7 +2,14 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
-
+## Release 1.8.22
+Release date 2023-08-24
+- **wiFred** registration pre-released for test for selected users.
+- **FREMO** module owner prefix and member number kan now also be edited by users in *User Settings*.
+- **Status icon** in module owner list now indicate kind of administrator.
+## Release 1.8.21
+Release date 2023-08-20
+- **Bug fix** of user login email not updated when person email changed.
 ## Release 1.8.20
 Release date 2023-08-17
 - **Layouts** can now have a short name.

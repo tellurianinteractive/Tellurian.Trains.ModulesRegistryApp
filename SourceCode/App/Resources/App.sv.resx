@@ -1326,4 +1326,34 @@
   <data name="PasswordCreated" xml:space="preserve">
     <value>Lösenord skapat</value>
   </data>
+  <data name="FremoMemberNumber" xml:space="preserve">
+    <value>FREMO medlemsnummer</value>
+  </data>
+  <data name="Throttles" xml:space="preserve">
+    <value>Körkontroller</value>
+  </data>
+  <data name="MyThrottles" xml:space="preserve">
+    <value>Mina körkontroller</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-adress</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventarienummer</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validerad</value>
+  </data>
+  <data name="Throttle" xml:space="preserve">
+    <value>Körkontroll</value>
+  </data>
+  <data name="MustBeAMacAddress" xml:space="preserve">
+    <value>Måste vara en MAC-adress</value>
+  </data>
+  <data name="MustBeADccAddress" xml:space="preserve">
+    <value>Måste vara en DCC-adress 1-9999</value>
+  </data>
+  <data name="MayVerifyWiFreds" xml:space="preserve">
+    <value>Kan verifiera wiFREDs</value>
+  </data>
 </root>

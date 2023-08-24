@@ -23,4 +23,5 @@ public partial class User
     public int PasswordResetAttempts { get; set; }
     public int FailedLoginAttempts { get; set; }
     public bool MayUploadSkpDrawing { get; set; }
+    public bool MayManageWiFreds { get; set; }
 }

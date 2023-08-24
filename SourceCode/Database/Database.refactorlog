@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="75311f94-c5ec-475d-86a7-326982831bf7" ChangeDateTime="08/22/2023 05:26:25">
+    <Property Name="ElementName" Value="[dbo].[VehicleOperator].[OnlyLayoutId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[VehicleOperator]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OnlyInLayoutId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="611039ac-e3bd-4ba1-98b4-ef36897af75e" ChangeDateTime="08/23/2023 07:25:54">
+    <Property Name="ElementName" Value="[dbo].[WiFredThrottle].[Number]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[WiFredThrottle]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InventoryNumber" />
+  </Operation>
+</Operations>

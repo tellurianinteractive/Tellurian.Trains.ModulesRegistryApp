@@ -17,6 +17,11 @@ public static class StringExtensions
     public static bool HasNoValue([NotNullWhen(false)] this string? value) =>
         string.IsNullOrWhiteSpace(value);
 
-    public static string FirstItem(this string? value, string defaultValue = "") =>
-        value is null || value.Length == 0 ? defaultValue : value.Split(',')[0] ?? defaultValue;
+    public static string FirstItem(this string? value, string defaultValue = "", char delimiter = ',') =>
+        value is null || value.Length == 0 ? defaultValue : value.Split(delimiter)[0] ?? defaultValue;
+
+    public static string[] Items(this string? value, char separator = ';') =>
+     string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
+     value.Trim().Split(separator);
+
 }

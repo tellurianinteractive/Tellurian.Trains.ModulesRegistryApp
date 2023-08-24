@@ -251,7 +251,7 @@ public sealed class LayoutService
             }
             Data.Resources.Strings.NotAuthorised.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<LayoutModule>();
+        return principal.NotAuthorized<LayoutModule>();
     }
 
 }

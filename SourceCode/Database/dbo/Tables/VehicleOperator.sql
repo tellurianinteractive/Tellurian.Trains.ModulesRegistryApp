@@ -10,13 +10,14 @@
     [IsFreightOperator]         BIT            DEFAULT ((0)) NOT NULL,
     [IsConstructionOperator]    BIT            DEFAULT ((0)) NOT NULL,
     [IsVeteranOperator]         BIT            DEFAULT ((0)) NOT NULL,
-    [IsAuthority]               BIT            DEFAULT ((0)) NOT NULL,
-    [IsPrivate]                 BIT            DEFAULT ((0)) NOT NULL,
-    [IsFictive]                 BIT            DEFAULT ((0)) NOT NULL, 
+    [OnlyInLayoutId]            INT            NULL,
+
     CONSTRAINT [PK_Operator] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Operator_PrimaryOperatingCountry] FOREIGN KEY ([PrimaryOperatingCountryId]) REFERENCES [dbo].[Country] ([Id]),
+    CONSTRAINT [FK_Operator_OnlyInLayout] FOREIGN KEY ([OnlyInLayoutId]) REFERENCES [dbo].[Layout] ([Id]),
+    CONSTRAINT [UX_VehicleOperator] UNIQUE ([Signature], [FirstYearInOperation], [OnlyInLayoutId])
+
 );
 
 GO
 
-CREATE UNIQUE INDEX [IX_VehicleOperator_Unique] ON [dbo].[VehicleOperator] ([Signature], [PrimaryOperatingCountryId])

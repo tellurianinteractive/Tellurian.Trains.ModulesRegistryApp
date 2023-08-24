@@ -24,13 +24,17 @@ static public class DbContextExtensions
     public static (int Count, string Message) DeleteResult(this int count) =>
         (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
 
+    public static (int Count, string Message) UpdateResult(this int count) =>
+         (count, count > 0 ? Strings.UpdatedSuccessfully : Strings.UpdateFailed);
+
+
     public static (int Count, string Message) DeleteResult(this string message) =>
         (0, message);
 
     public static (int Count, string Message) CloneResult(this int count) =>
         (count, count > 0 ? Strings.ClonedSuccessfully : Strings.CloningFailed);
 
-    public static (int Count, string Message) DeleteNotAuthorized<T>(this ClaimsPrincipal? _) =>
+    public static (int Count, string Message) NotAuthorized<T>(this ClaimsPrincipal? _) =>
         (0, Strings.NotAuthorized);
 
     public static (int Count, string Message) NotFoundResult<T>(this ClaimsPrincipal? _) =>

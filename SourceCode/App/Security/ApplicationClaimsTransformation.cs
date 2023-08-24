@@ -53,6 +53,7 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
                 Claim(AppClaimTypes.UserId, user.Id)
             };
         AddAdministratorClaims(user, result);
+        
         if (user.LastTermsOfUseAcceptTime is not null)
         {
             var lastTermsOfUseChanged = await ContentService.GetLastModifiedTimeOfTextContent("TermsOfUse").ConfigureAwait(false);
@@ -61,6 +62,7 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
                 result.Add(Claim(AppClaimTypes.LastTermsOfUseAcceptTime, true));
             }
         }
+
         var person = await db.People.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user.Id).ConfigureAwait(false);
         if (person is not null)
         {
@@ -80,7 +82,9 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
             if (user.IsCountryAdministrator) result.Add(Claim(AppClaimTypes.CountryAdministrator, true));
             if (user.IsReadOnly) result.Add(Claim(AppClaimTypes.ReadOnly, true));
             if (user.IsDemo) result.Add(Claim(AppClaimTypes.Demo, true));
+            // Special claims
             if (user.MayUploadSkpDrawing) result.Add(Claim(AppClaimTypes.MayUploadSkpDrawing, true));
+            if (user.MayManageWiFreds) result.Add(Claim(AppClaimTypes.MayManageWiFreds, true));
         }
 
         static void AddPersonalClaims(Person? person, List<Claim> result)
@@ -97,7 +101,7 @@ public class ApplicationClaimsTransformation : IClaimsTransformation
     }
 
     private static Claim Claim(string type, object value) =>
-        new(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), null, nameof(ModulesRegistry));
+        new(type, value.ToString() ?? throw new ArgumentNullException(nameof(value)), type, nameof(ModulesRegistry));
     private static Claim Claim(string type, string value) =>
         new(type, value, null, nameof(ModulesRegistry));
 }

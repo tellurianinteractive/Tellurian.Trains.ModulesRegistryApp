@@ -121,7 +121,7 @@ public sealed class CargoService
     }
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal is null) return principal.DeleteNotAuthorized<Cargo>();
+        if (principal is null) return principal.NotAuthorized<Cargo>();
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         if (existing is null) return principal.NotFound();

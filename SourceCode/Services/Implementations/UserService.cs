@@ -21,13 +21,13 @@ public sealed class UserService
         return await dbContext.Users.Where(u => u.EmailAddress == emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
     }
 
-    public async Task<User?> SetEmailAsync(int id, string? emailAddress)
+    public async Task<User?> SetEmailAsync(int userId, string? emailAddress)
     {
         if (!emailAddress.IsEmailAddress()) return null;
         using var dbContext = Factory.CreateDbContext();
-        var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+        var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user is null) return null;
-        user.EmailAddress = emailAddress;
+        user.EmailAddress = emailAddress.FirstItem(delimiter: ';');
         await dbContext.SaveChangesAsync();
         return await FindByObjectIdAsync(dbContext, user.ObjectId.ToString().ToUpperInvariant());
     }

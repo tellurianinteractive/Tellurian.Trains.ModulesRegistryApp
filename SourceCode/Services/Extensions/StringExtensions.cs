@@ -18,9 +18,6 @@ public static partial class StringExtensions
         me is null ? null : me.Length < max ? me : me[0..max];
 
 
-    public static string[] Items(this string? value, char separator = ';') =>
-         string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
-         value.Trim().Split(separator);
 
     public static string HtmlFromMarkdown(this string? markdown)
     {

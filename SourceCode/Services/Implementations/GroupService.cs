@@ -204,7 +204,7 @@ public sealed class GroupService
             var count = await dbContext.SaveChangesAsync();
             return count.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<Group>();
+        return principal.NotAuthorized<Group>();
     }
 
     public async Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember)
@@ -232,6 +232,6 @@ public sealed class GroupService
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<GroupMember>();
+        return principal.NotAuthorized<GroupMember>();
     }
 }

@@ -1,0 +1,69 @@
+﻿@page "/Throttles/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject NavigationManager Navigator
+@inject WiFredThrottleService ThrottleService
+@inject PersonService PersonService
+
+<PageHeading ObjectName="Throttle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Throttle" />
+
+@if (Throttle is null)
+{
+
+}
+else
+{
+    <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputSelect Width="3" Label="Owner" Items="Owners" ShowPleaseSelect=ShowPleaseSelect @bind-Value=Throttle.OwningPersonId/>
+            <AppInputText Width="3" Label="MacAddress" Placeholder="0A:2B:45:6D:89" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked()/>
+            <AppInputText Width="3" Label="Name"  @bind-Value="Throttle.Name" />
+            <AppInputNumber Width="2" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
+            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress1 />
+            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress2 />
+            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress3 />
+            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress4 />
+        </Inputs>
+    </EditTemplate>
+}
+
+@code {
+        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+        [Parameter] public int Id { get; set; }
+
+    private ClaimsPrincipal? Principal;
+    private WiFredThrottle? Throttle;
+    private IEnumerable<ListboxItem>? Owners;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Throttle = Id > 0 ? await ThrottleService.FindById(Principal, Id) : new WiFredThrottle();
+        if (Id == 0 || Principal.MayManageWiFreds())
+        {
+            var ownerPersonIdOrZero = Principal.MayManageWiFreds() ? 0 : Principal.PersonId();
+            Owners = await PersonService.ListboxItemsAsync(Principal, ownerPersonIdOrZero);
+        }
+        else if (Throttle is not null)
+        {
+            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameCityAndCountry())};
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        if (Principal is null || Throttle is null) return;
+        var result = await ThrottleService.SaveAsync(Principal, Throttle);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+    }
+
+    bool ShowPleaseSelect => Owners is not null && Owners.Count() > 0;
+}

@@ -74,6 +74,6 @@ public sealed class ModuleStandardService
             var count = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return count.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<ModuleStandard>();
+        return principal.NotAuthorized<ModuleStandard>();
     }
 }

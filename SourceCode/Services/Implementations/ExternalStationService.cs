@@ -100,7 +100,7 @@ public sealed class ExternalStationService
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<ExternalStation>();
+        return principal.NotAuthorized<ExternalStation>();
 
     }
 

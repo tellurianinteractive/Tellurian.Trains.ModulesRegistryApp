@@ -32,6 +32,7 @@ public static class FontAwesome
     public const string Stations = "fa fa-school";
     public const string Standard = "fa fa-pencil-ruler";
     public const string Sync = "fa fa-sync";
+    public const string Train = "fa fa-train-subway";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
     public const string Unregister = "fa fa-user-minus";
@@ -40,6 +41,7 @@ public static class FontAwesome
     public const string Waybill = "fa fa-file-invoice";
     public const string Waybills = "fa fa-file-invoice";
     public const string View = "fa fa-eye";
+    public const string Wifi = "fa fa-wifi";
 
     public readonly static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
         {
@@ -73,6 +75,7 @@ public static class FontAwesome
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },
             {nameof(Sync), Sync },
+            {nameof(Train), Train },
             {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },
             {nameof(Unregister), Unregister },
@@ -81,6 +84,7 @@ public static class FontAwesome
             {nameof(Waybill), Waybill },
             {nameof(Waybills), Waybills },
             {nameof(View), View },
+            {nameof(Wifi), Wifi },
        };
 
 

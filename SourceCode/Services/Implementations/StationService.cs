@@ -180,11 +180,11 @@ public class StationService
         {
             var entity = await FindByIdAsync(principal, id).ConfigureAwait(false);
             using var dbContext = Factory.CreateDbContext();
-            if (entity is null) return principal.DeleteNotAuthorized<Station>();
+            if (entity is null) return principal.NotAuthorized<Station>();
             dbContext.Stations.Remove(entity);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<Station>();
+        return principal.NotAuthorized<Station>();
     }
 }

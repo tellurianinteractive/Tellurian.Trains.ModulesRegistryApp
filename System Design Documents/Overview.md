@@ -8,6 +8,9 @@ that want to learn about the principles for how
 the system is designed.
 
 ### Development Environment
+The application is developed with [Visual Studio](https://visualstudio.microsoft.com/).
+The source code can be edited in other tools, but Visual Studio is the simplest way to build, test and deploy the application.
+
 The requires skills, and what you need to develop the application is described in 
 [contribution guidelines](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md).
 
@@ -19,7 +22,7 @@ and uses a *Microsoft Azure SQL* database.
 *Azure SignalR* is used for server-client communication.
 
 To access the runtime environment, you need an *Azure* account and
-also the rights to administer the application's features in *Azure Portal*.
+also apply for rights to administer the application's features in *Azure Portal*.
 
 ### Projects 
 Each project in the solution performs a specific task:
@@ -79,7 +82,8 @@ column name must also be changed. This cannot be made simultaneously.
 
 Sometimes publishing of the database fails, and the error must be investigated. 
 Sometimes a change must be made with *SQL Management Studio*, and in this case, the change must also be
-updated in the local CREATE statements. Always test that publishing the dataabse works after these steps.
+updated in the local CREATE statements. 
+Always test that publishing the database works after these steps.
 
 
 

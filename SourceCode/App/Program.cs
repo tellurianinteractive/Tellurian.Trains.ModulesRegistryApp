@@ -28,7 +28,7 @@ builder.Services.AddScoped<AppService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 if (builder.Environment.IsDevelopment())
 {
-    var s = new DefaultUserService
+    var s = new DefaultUser
     {
         Username = builder.Configuration.GetValue<string>("TestUsername"),
         Password = builder.Configuration.GetValue<string>("TestPassword")
@@ -37,7 +37,7 @@ if (builder.Environment.IsDevelopment())
 }
 else
 {
-    builder.Services.AddSingleton(new DefaultUserService());
+    builder.Services.AddSingleton(new DefaultUser());
 }
 builder.Services.AddRazorPages();
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -101,6 +101,7 @@ builder.Services.AddScoped<StationCustomerWaybillsService>();
 builder.Services.AddScoped<ScaleService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WaybillService>();
+builder.Services.AddScoped<WiFredThrottleService>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 

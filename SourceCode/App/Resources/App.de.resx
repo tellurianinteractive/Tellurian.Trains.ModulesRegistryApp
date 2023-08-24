@@ -1326,4 +1326,34 @@
   <data name="PasswordCreated" xml:space="preserve">
     <value>Passwort erstellt</value>
   </data>
+  <data name="FremoMemberNumber" xml:space="preserve">
+    <value>FREMO-Mitgliedsnummer</value>
+  </data>
+  <data name="Throttles" xml:space="preserve">
+    <value>Fahrkontrollen</value>
+  </data>
+  <data name="MyThrottles" xml:space="preserve">
+    <value>Meine Fahrkontrollen</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-Adresse</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventar nummer</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Bestätigt</value>
+  </data>
+  <data name="Throttle" xml:space="preserve">
+    <value>Fahrkontroll</value>
+  </data>
+  <data name="MustBeAMacAddress" xml:space="preserve">
+    <value>Muss eine MAC-Adresse sein</value>
+  </data>
+  <data name="MustBeADccAddress" xml:space="preserve">
+    <value>Muss eine DCC-Adresse 1-9999 sein</value>
+  </data>
+  <data name="MayVerifyWiFreds" xml:space="preserve">
+    <value>Kann wiFREDs überprüfen</value>
+  </data>
 </root>

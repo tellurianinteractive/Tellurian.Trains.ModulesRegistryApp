@@ -89,9 +89,24 @@ public static partial class ValidatorsExtensions
         }
         return true;
     }
+    private static bool IsMacAddress(this string? text)
+    {
+        if (string.IsNullOrEmpty (text)) return false;
+        if (text.Length != 14) return false;
+        foreach(var c in text)
+        {
+            if (c.IsHexDigit()) continue;
+            if (c == ':') continue;
+            return false;
+        }
+        return true;
+    }
+
+    private static bool IsDccAddress(this short? value) => value.HasValue && value.Value >= 1 && value.Value <= 9999;
 
     private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'".Contains(c);
-    private static bool IsDigit(this char c) => c >= 0x0030 && c <= 0x0039;
+    private static bool IsDigit(this char c) =>  c.IsInRange(0x0030, 0x0039);
+    private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0040, 0x0045) || c.IsInRange(0x0060, 0x065);
     private static bool IsLatinChar(this char c) =>
         c.IsInRange(0x0061, 0x007A) ||
         c.IsInRange(0x0041, 0x005A) ||
@@ -100,6 +115,7 @@ public static partial class ValidatorsExtensions
         c.IsInRange(0x014A, 0x017F);
     private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
         c >= firstCodePoint && c <= lastCodePoint;
+
 
     public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, bool orZero = false) =>
         builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
@@ -125,6 +141,10 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
          builder.Must(value => value.IsHexColorOrNull()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAColor"].Value, MinHour, MaxHour)}");
 
+    public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
+        builder.Must(value => value.IsMacAddress()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAMacAddress"].Value}");
+    public static IRuleBuilderOptions<T, short?> MustBeDccAddressOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
+        builder.Must(value => value is null || value.IsDccAddress()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeADccAddress"].Value}");
     private static bool IsHexColorOrNull(this string? value) =>
         value is null || value.IsHexColor();
     

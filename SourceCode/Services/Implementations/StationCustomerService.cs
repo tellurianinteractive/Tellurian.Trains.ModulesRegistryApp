@@ -21,13 +21,14 @@ public class StationCustomerService
         return Array.Empty<StationCustomer>();
     }
 
-    public async Task<IEnumerable<StationCustomerCargo>> GetGetCustomerCargoAsync(ClaimsPrincipal? principal, int cargoId, int countryId = 0)
+    // SELECT * FROM ModuleCustomerCargo WHERE CountryId = 1 AND CargoId = 4 AND MainTheme = 'EUROPE' ORDER BY StationName
+    public async Task<IEnumerable<StationCustomerCargo>> GetGetCustomerCargoAsync(ClaimsPrincipal? principal, int cargoId, string mainTheme = "EUROPE", int countryId = 0 )
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.StationCustomerCargos
-                .Where(scc => scc.CargoId == cargoId && (countryId == 0 || scc.StationCustomer.Station.Region.CountryId == countryId))
+                .Where(scc => scc.CargoId == cargoId && scc.StationCustomer.Station.PrimaryModule.Standard.MainTheme == mainTheme && (countryId == 0 || scc.StationCustomer.Station.Region.CountryId == countryId))
                 .Include(c => c.Cargo)
                 .Include(scc => scc.Direction)
                 .Include(scc => scc.QuantityUnit)

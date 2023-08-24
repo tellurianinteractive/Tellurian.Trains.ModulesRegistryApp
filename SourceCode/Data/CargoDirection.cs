@@ -2,7 +2,6 @@
 
 namespace ModulesRegistry.Data;
 
-#nullable disable
 public partial class CargoDirection
 {
 
@@ -11,13 +10,11 @@ public partial class CargoDirection
     }
 
     public int Id { get; set; }
-    public string FullName { get; set; }
-    public string ShortName { get; set; }
+    public required string FullName { get; set; }
+    public required string ShortName { get; set; }
     public bool IsSupply { get; set; }
 
 }
-
-#nullable enable
 
 
 internal static class CargoDirectionMapper
@@ -26,15 +23,5 @@ internal static class CargoDirectionMapper
         builder.Entity<CargoDirection>(entity =>
         {
             entity.ToTable("CargoDirection");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(10);
-
-            entity.Property(e => e.ShortName)
-                .IsRequired()
-                .HasMaxLength(4);
         });
 }

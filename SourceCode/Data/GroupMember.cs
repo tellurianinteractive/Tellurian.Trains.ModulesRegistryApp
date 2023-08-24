@@ -15,7 +15,7 @@ public partial class GroupMember
 
     public virtual Group Group { get; set; }
     public virtual Person Person { get; set; }
-    public override string ToString() => $"{Person?.FullName()} in {Group?.ShortName}";
+    public override string ToString() => $"{Person?.Name()} in {Group?.ShortName}";
 
 }
 

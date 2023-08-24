@@ -16,7 +16,7 @@
     <AppButton Label="Add" Href="@MemberAddHref(Group.Id)" ></AppButton>
 }
 
-<TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.FullName())">
+<TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.Name())">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th align="center">@Localizer["IsGroupAdministrator"]</th>

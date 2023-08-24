@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Data;
+using ModulesRegistry.Services.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -20,7 +21,24 @@ public sealed class PersonService
                 .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.GroupId == excludeGroupId && gm.PersonId == p.Id)))
                 .ToListAsync();
             return items
-                .Select(p => new ListboxItem(p.Id, countryId == 0 ? $"{p.Name()}, {p.CityName}, {p.Country.EnglishName.AsLocalized()}" : $"{p.Name()}, {p.CityName}"))
+                .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))
+                .OrderBy(li => li.Description)
+                .ToList();
+        }
+        return Array.Empty<ListboxItem>();
+    }
+
+    public async  Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int personId = 0)
+    {
+        if (principal.IsGlobalAdministrator() || principal.MayManageWiFreds())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var items = await dbContext.People.AsNoTracking()
+                .Include(p => p.Country)
+                .Where(p => personId == 0 || p.Id == personId)
+                .ToReadOnlyListAsync();
+            return items
+                .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))
                 .OrderBy(li => li.Description)
                 .ToList();
         }
@@ -54,7 +72,7 @@ public sealed class PersonService
         if (principal.MayRead(id))
         {
             using var dbContext = Factory.CreateDbContext();
-            var person = await dbContext.People.FindAsync(id);
+            var person = await dbContext.People.Include(p => p.User).Include(p => p.Country).SingleOrDefaultAsync(p => p.Id == id);
             if (person is null) return null;
             if (principal.MayRead(person.Id))
             {
@@ -82,12 +100,20 @@ public sealed class PersonService
         {
             using var dbContext = Factory.CreateDbContext();
             dbContext.People.Attach(entity);
+            if (entity.User is not null) dbContext.Users.Attach(entity.User);
+            if (entity.EmailAddresses.HasValue() && entity.User is not null)
+            {
+                entity.User!.EmailAddress = entity.EmailAddresses.FirstItem(delimiter: ';');
+            }
             dbContext.Entry(entity).State = entity.Id.GetState();
+            if (entity.User is not null)  dbContext.Entry(entity.User).State = entity.User.Id.GetState();
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(entity);
         }
         return principal.SaveNotAuthorised<Person>();
     }
+
+    
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
@@ -112,6 +138,6 @@ public sealed class PersonService
                 return count.DeleteResult();
             }
         }
-        return principal.DeleteNotAuthorized<Person>();
+        return principal.NotAuthorized<Person>();
     }
 }

@@ -20,9 +20,9 @@ else if (LayoutParticipants.Count() == 0)
 }
 else
 {
-    @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.FullName()))
+    @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
     {
-        <h3>@participant.Person.FullName(), @participant.Person.CityName</h3>
+        <h3>@participant.Person.Name(), @participant.Person.CityName</h3>
         @if (participant.LayoutModules.Any())
         {
 

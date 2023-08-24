@@ -69,7 +69,7 @@ public static class LocalizedStringExtensions
     private static string Name(this IStringLocalizer me, object? owner) =>
         owner switch
         {
-            Person p => p.FullName(),
+            Person p => p.Name(),
             Group g => g.FullName,
             Station s => s.FullName,
             ExternalStation es => es.FullName,

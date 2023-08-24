@@ -32,8 +32,6 @@ public static class UserExtensions
     public static bool HasPassword([NotNullWhen(true)] this User? user) =>
         user is not null && user.HashedPassword.HasValue();
 
-    public static bool IsNeverLoggedIn(this Person? person) =>
-        person is null || person.User is null || person.User.LastSignInTime is null;
     public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? user) =>
         user is null || user.LastSignInTime is null;
 

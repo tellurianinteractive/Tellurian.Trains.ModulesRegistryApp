@@ -750,4 +750,10 @@
   <data name="Preliminary" xml:space="preserve">
     <value>Vorläufig</value>
   </data>
+  <data name="UpdatedSuccessfully" xml:space="preserve">
+    <value>Geupdated</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Update fehlgeschlagen</value>
+  </data>
 </root>

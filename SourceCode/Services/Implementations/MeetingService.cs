@@ -186,7 +186,7 @@ public class MeetingService
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<Layout>();
+        return principal.NotAuthorized<Layout>();
     }
 
     public async Task<(int Count, string? Message)> DeleteAllAsync(ClaimsPrincipal? principal, Meeting meeting)
@@ -202,7 +202,7 @@ public class MeetingService
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<Meeting>();
+        return principal.NotAuthorized<Meeting>();
     }
 
     public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting entity)
@@ -306,7 +306,7 @@ public class MeetingService
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();
         }
-        return principal.DeleteNotAuthorized<MeetingParticipant>();
+        return principal.NotAuthorized<MeetingParticipant>();
     }
 
     public async Task<(int Count, string Message, MeetingParticipant? Entity)> ReRegisterMeetingParticipaction(ClaimsPrincipal? principal, int meetingParicipantId)
