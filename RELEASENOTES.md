@@ -7,6 +7,8 @@ Release date 2023-08-25
 - **Countries added**: Austria, Czech Republic, Slovakia and Hungary. 
 It is now possible to add persons in these countries. NOTE: There is no translations for these countries.
 - **wiFRED** registration improvements. NOTE: Currently only for test by selected users.
+- **wiFRED Help** section added. Will be translated when text is final.
+- **wiFRED owners** can only be persons with a FREMO member number.
 ## Release 1.8.22
 Release date 2023-08-24
 - **wiFred** registration pre-released for test by selected users.
