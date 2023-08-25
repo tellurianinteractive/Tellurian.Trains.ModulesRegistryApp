@@ -104,6 +104,7 @@ else
         else
         {
             Person = result.Entity;
+            if (Person is not null) CountryId = Person.CountryId;
             if (IsNotGroupMember)
             {
                 var addresult = await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = Person!.Id });

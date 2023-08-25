@@ -21,10 +21,12 @@ public static class MarkupStringExtensions
 
     private static string PersonStatusIconName(this Person? person) =>
         person is null ? string.Empty :
+        person.User?.IsLockedOut() == true ? "user-lock" :
         person.User?.IsGlobalAdministrator == true ? "user-shield" :
-        person.User?.IsCountryAdministrator == true ? "user-gear" :
+        person.User?.IsCountryAdministrator == true ? "user-cog" :
         person.PrimaryEmail().HasNoValue() ? "user-times" :
         person.IsInvited() && person.IsNeverLoggedIn() ? "envelope" :
+        person.UserId.HasValue && person.User?.LastTermsOfUseAcceptTime is null ? "user-clock" :
         person.UserId.HasValue ? "user-check" :
         "user-slash";
 }
