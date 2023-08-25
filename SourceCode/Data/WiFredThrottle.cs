@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
+using System.Globalization;
+using System.Text;
 
 namespace ModulesRegistry.Data;
 
@@ -39,6 +41,17 @@ public static class WiFredThrottleExtensions
         it.OwningPerson is null ? string.Empty :
         it.OwningPerson.Country is null ? $"{it.OwningPerson.Name()} {it.OwningPerson.CityName}" :
         string.Empty;
+
+    public static string DccAddresses(this WiFredThrottle it)
+    {
+        var result = new List<short>(4);
+        if (it.LocoAddress1.HasValue) result.Add(it.LocoAddress1.Value);
+        if (it.LocoAddress2.HasValue) result.Add(it.LocoAddress2.Value);
+        if (it.LocoAddress3.HasValue) result.Add(it.LocoAddress3.Value);
+        if (it.LocoAddress4.HasValue) result.Add(it.LocoAddress4.Value);
+        return string.Join(", ", result);
+    }
+
 
 
     /// <summary>

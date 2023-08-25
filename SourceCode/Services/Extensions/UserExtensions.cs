@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Services.Implementations;
+﻿using Microsoft.Extensions.Localization;
+using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;

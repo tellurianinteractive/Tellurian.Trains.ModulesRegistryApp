@@ -124,6 +124,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Austria.
+        /// </summary>
+        internal static string Austria {
+            get {
+                return ResourceManager.GetString("Austria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autumn.
         /// </summary>
         internal static string Autumn {
@@ -426,6 +435,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Cubicmeters {
             get {
                 return ResourceManager.GetString("Cubicmeters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Czech Republic.
+        /// </summary>
+        internal static string CzechRepublic {
+            get {
+                return ResourceManager.GetString("CzechRepublic", resourceCulture);
             }
         }
         
@@ -813,6 +831,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string HighCubeReeferContainers40 {
             get {
                 return ResourceManager.GetString("HighCubeReeferContainers40", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hungary.
+        /// </summary>
+        internal static string Hungary {
+            get {
+                return ResourceManager.GetString("Hungary", resourceCulture);
             }
         }
         
@@ -1321,6 +1348,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Poland.
+        /// </summary>
+        internal static string Poland {
+            get {
+                return ResourceManager.GetString("Poland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preliminary.
         /// </summary>
         internal static string Preliminary {
@@ -1533,6 +1569,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Shipper {
             get {
                 return ResourceManager.GetString("Shipper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slovakia.
+        /// </summary>
+        internal static string Slovakia {
+            get {
+                return ResourceManager.GetString("Slovakia", resourceCulture);
             }
         }
         

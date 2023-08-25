@@ -7,6 +7,7 @@
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
 @inject PersonService PersonService
+@inject CountryService CountryService
 
 <PageHeading ObjectName="Throttle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Throttle" />
 
@@ -16,27 +17,32 @@
 }
 else
 {
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId  />
+
     <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
         <Inputs>
-            <AppInputSelect Width="3" Label="Owner" Items="Owners" ShowPleaseSelect=ShowPleaseSelect @bind-Value=Throttle.OwningPersonId/>
-            <AppInputText Width="3" Label="MacAddress" Placeholder="0A:2B:45:6D:89" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked()/>
-            <AppInputText Width="3" Label="Name"  @bind-Value="Throttle.Name" />
-            <AppInputNumber Width="2" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
-            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress1 />
-            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress2 />
-            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress3 />
-            <AppInputNumber Width="2" Label="LocoAddress" @bind-Value=Throttle.LocoAddress4 />
+            <AppInputSelect Width="4" Label="Owner" Items="Owners" ShowPleaseSelect=ShowPleaseSelect @bind-Value=Throttle.OwningPersonId />
+            <AppInputText Width="3" Label="MacAddress" Placeholder="0A:2B:45:6D:89" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked() />
+            <AppInputText Width="3" Label="Name" @bind-Value="Throttle.Name" />
+            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
+            <AppInputFill Width="1" />
+            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress1 />
+            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress2 />
+            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress3 />
+            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress4 />
         </Inputs>
     </EditTemplate>
 }
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int Id { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
 
     private ClaimsPrincipal? Principal;
     private WiFredThrottle? Throttle;
     private IEnumerable<ListboxItem>? Owners;
+    private IEnumerable<ListboxItem>? Countries;
+    private int CountryId;
 
 
     protected async override Task OnInitializedAsync()
@@ -47,14 +53,19 @@ else
     protected async override Task OnParametersSetAsync()
     {
         Throttle = Id > 0 ? await ThrottleService.FindById(Principal, Id) : new WiFredThrottle();
-        if (Id == 0 || Principal.MayManageWiFreds())
+        if (IsSelectCountryVisible)
         {
-            var ownerPersonIdOrZero = Principal.MayManageWiFreds() ? 0 : Principal.PersonId();
-            Owners = await PersonService.ListboxItemsAsync(Principal, ownerPersonIdOrZero);
+            Countries = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
+            CountryId = Principal.CountryId();
+            await OnSelectedCountry(CountryId);
         }
         else if (Throttle is not null)
         {
-            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameCityAndCountry())};
+            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameCityAndCountry()) };
+        }
+        else
+        {
+            Owners = await PersonService.ListboxItemsAsync(Principal, personId: Principal.PersonId());
         }
     }
 
@@ -65,5 +76,12 @@ else
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
+    private async Task OnSelectedCountry(int id)
+    {
+        CountryId = id;
+        Owners = await PersonService.ListboxItemsAsync(Principal, countryId: id);
+    }
+
     bool ShowPleaseSelect => Owners is not null && Owners.Count() > 0;
+    bool IsSelectCountryVisible => Id == 0 && Principal.MayManageWiFreds();
 }

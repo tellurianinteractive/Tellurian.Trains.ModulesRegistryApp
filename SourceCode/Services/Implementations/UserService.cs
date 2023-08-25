@@ -11,7 +11,7 @@ public sealed class UserService
     public async Task<User?> FindByIdAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Users.Where(u => u.Id == id).Include(u => u.Person).SingleOrDefaultAsync();
+        return await dbContext.Users.Where(u => u.Id == id).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
     }
 
     public async Task<User?> FindByEmailAsync(string? emailAddress)

@@ -15,18 +15,16 @@ else
     <ContentView ContentName="UserSettingsEdit" />
     <EditTemplate Item="Person" OnValidSubmit="OnValidSubmit">
         <Inputs>
-            <AppInputText Width="4" Label="FirstName" @bind-Value="@Person.FirstName" IsDisabled=true />
-            <AppInputText Width="4" Label="MiddleName" @bind-Value="@Person.MiddleName" IsDisabled=true />
-            <AppInputText Width="4" Label="LastName" @bind-Value="@Person.LastName" IsDisabled=true />
+            <AppInputText Width="2" Label="FirstName" @bind-Value="@Person.FirstName" IsDisabled=true />
+            <AppInputText Width="2" Label="MiddleName" @bind-Value="@Person.MiddleName" IsDisabled=true />
+            <AppInputText Width="2" Label="LastName" @bind-Value="@Person.LastName" IsDisabled=true />
 
-            <AppInputText Width="4" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
-            <AppInputText Width="3" Label="CityName" @bind-Value="@Person.CityName" />
-            <AppInputSelect Width="3" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
-            <AppInputFill Width="2"/>
-            <AppInputText Width="2" Label="FremoOwnerSignature" @bind-Value="@Person.FremoOwnerSignature" />
-            <AppInputNumber Width="2" Label="FremoMemberNumber" @bind-Value="@Person.FremoMemberNumber" />
+            <AppInputText Width="2" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
+            <AppInputText Width="2" Label="CityName" @bind-Value="@Person.CityName" />
+            <AppInputSelect Width="2" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
+            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="@Person.FremoOwnerSignature" IsDisabled=true/>
             <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
-            <AppDisplay Width="6" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
+            <AppDisplay Width="4" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
 
         </Inputs>
     </EditTemplate>

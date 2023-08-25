@@ -1356,4 +1356,10 @@
   <data name="MayVerifyWiFreds" xml:space="preserve">
     <value>Kan verifisere wiFREDs</value>
   </data>
+  <data name="DccAddress" xml:space="preserve">
+    <value>DCC-adresse</value>
+  </data>
+  <data name="WiFredThrottles" xml:space="preserve">
+    <value>wiFRED kjørekontroller</value>
+  </data>
 </root>

@@ -65,9 +65,9 @@ public static class PersonExtensions
 
     public static string FremoNumber(this Person? person) =>
         person is null || !person.FremoMemberNumber.HasValue ? string.Empty :
-        person.Country is null ? $"{person.FremoMemberNumber:00000000}" :
-        person.FremoMemberNumber < 9999 ? $"{person.Country.PhoneNumber:0000}{person.FremoMemberNumber:0000}" :
-        $"{person.FremoMemberNumber:00000000}";
+        person.Country is null ? $"{person.FremoMemberNumber:0000000}" :
+        person.FremoMemberNumber < 9999 ? $"{person.Country.PhoneNumber:000}{person.FremoMemberNumber:0000}" :
+        $"{person.FremoMemberNumber:0000000}";
 
 }
 

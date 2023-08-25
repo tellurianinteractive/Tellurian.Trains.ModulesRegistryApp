@@ -2,9 +2,14 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.8.23
+Release date 2023-08-25
+- **Countries added**: Austria, Czech Republic, Slovakia and Hungary. 
+It is now possible to add persons in these countries. NOTE: There is no translations for these countries.
+- **wiFRED** registration improvements. NOTE: Currently only for test by selected users.
 ## Release 1.8.22
 Release date 2023-08-24
-- **wiFred** registration pre-released for test for selected users.
+- **wiFred** registration pre-released for test by selected users.
 - **FREMO** module owner prefix and member number kan now also be edited by users in *User Settings*.
 - **Status icon** in module owner list now indicate kind of administrator.
 ## Release 1.8.21

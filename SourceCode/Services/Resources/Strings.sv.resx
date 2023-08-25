@@ -756,4 +756,19 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Uppdateringen misslyckades</value>
   </data>
+  <data name="Poland" xml:space="preserve">
+    <value>Polen</value>
+  </data>
+  <data name="CzechRepublic" xml:space="preserve">
+    <value>Tjeckien</value>
+  </data>
+  <data name="Slovakia" xml:space="preserve">
+    <value>Slovakien</value>
+  </data>
+  <data name="Hungary" xml:space="preserve">
+    <value>Ungern</value>
+  </data>
+  <data name="Austria" xml:space="preserve">
+    <value>Österrike</value>
+  </data>
 </root>

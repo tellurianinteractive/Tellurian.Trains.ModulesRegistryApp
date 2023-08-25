@@ -55,6 +55,9 @@ public static class LanguageUtility
                  { Language.Polish, new CultureInfo("pl-PL") },
                  { Language.Italian, new CultureInfo("it-IT") },
                  { Language.French, new CultureInfo("fr-FR") },
+                 { Language.Czech, new CultureInfo("cs-CZ") },
+                 { Language.Slovak, new CultureInfo("sk-SK") },
+                 { Language.Hungarian, new CultureInfo("hu-HU") },
         };
 
     public static CultureInfo FullySupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
@@ -131,5 +134,8 @@ public enum Language
     Polish,
     Dutch,
     Italian,
-    French
+    French,
+    Hungarian,
+    Czech,
+    Slovak,
 }

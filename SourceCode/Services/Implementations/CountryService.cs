@@ -22,6 +22,7 @@ public sealed class CountryService
         return countries.AsEnumerable()
             .Where(c => allCountries || (c.IsFullySupported && allSupportedCountries) || (principal.IsGlobalAdministrator() || principal.IsAuthorisedInCountry(c.Id)))
             .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
+            .OrderBy(l => l.Description)
             .ToList();
     }
 
