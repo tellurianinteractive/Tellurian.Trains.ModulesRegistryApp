@@ -9,7 +9,7 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="Throttle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Throttle" />
+<PageHeading ObjectName="Throttle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=true />
 
 @if (Throttle is null)
 {
@@ -17,7 +17,7 @@
 }
 else
 {
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId  />
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
 
     <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
         <Inputs>
@@ -52,7 +52,7 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
-        Throttle = Id > 0 ? await ThrottleService.FindById(Principal, Id) : new WiFredThrottle();
+        Throttle = Id > 0 ? await ThrottleService.FindById(Principal, Id) : new WiFredThrottle() { OwningPersonId = Principal.PersonId() };
         if (IsSelectCountryVisible)
         {
             Countries = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
@@ -65,7 +65,7 @@ else
         }
         else
         {
-            Owners = await PersonService.ListboxItemsAsync(Principal, personId: Principal.PersonId());
+            Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, personId: Principal.PersonId());
         }
     }
 
@@ -79,9 +79,9 @@ else
     private async Task OnSelectedCountry(int id)
     {
         CountryId = id;
-        Owners = await PersonService.ListboxItemsAsync(Principal, countryId: id);
+        Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, countryId: id);
     }
 
     bool ShowPleaseSelect => Owners is not null && Owners.Count() > 0;
-    bool IsSelectCountryVisible => Id == 0 && Principal.MayManageWiFreds();
+    bool IsSelectCountryVisible => Principal.MayManageWiFreds();
 }

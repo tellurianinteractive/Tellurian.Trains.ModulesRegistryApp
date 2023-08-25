@@ -28,14 +28,14 @@ public sealed class PersonService
         return Array.Empty<ListboxItem>();
     }
 
-    public async  Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int personId = 0)
+    public async Task<IEnumerable<ListboxItem>> FremoMembersListboxItemsAsync(ClaimsPrincipal? principal, int countryId = 0, int personId = 0)
     {
         if (principal.IsGlobalAdministrator() || principal.MayManageWiFreds())
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.People.AsNoTracking()
                 .Include(p => p.Country)
-                .Where(p => personId == 0 || p.Id == personId)
+                .Where(p => p.FremoMemberNumber.HasValue && (personId == 0 || p.Id == personId) && (countryId == 0 || p.CountryId == countryId))
                 .ToReadOnlyListAsync();
             return items
                 .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))
@@ -44,7 +44,6 @@ public sealed class PersonService
         }
         return Array.Empty<ListboxItem>();
     }
-
     public async Task<IEnumerable<Person>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId)
     {
         if (principal.IsAuthorisedInCountry(countryId))

@@ -41,7 +41,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Person.User.IsApiAccessPermitted" />
                 <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Person.User.MayUploadSkpDrawing" />
-                <AppInputCheck Width="2" Label="MayVerifyWiFreds " @bind-Value="Person.User.MayManageWiFreds" />
+                <AppInputCheck Width="2" Label="MayVerifyWiFreds" @bind-Value="Person.User.MayManageWiFreds" />
                 <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="Person.User.PasswordResetAttempts" IsDisabled=true />
                 <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="Person.User.FailedLoginAttempts" IsDisabled=true />
                 @if (Person.User.IsApiAccessPermitted)

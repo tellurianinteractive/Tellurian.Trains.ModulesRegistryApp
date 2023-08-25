@@ -1,5 +1,5 @@
 # UIC Standard for Loco- and Wagon Numbering
-
+Simplified to only concern Europe and model train operation.
 ## Overview
 |Type of rolling stock|Type of vehicle and interoperability|Country|Class|Serial number|Checkdigit|                                                      
 |---------------------|:----------------------------------:|:-----:|:---:|:-----------:|:--------:|
@@ -15,7 +15,6 @@ hauled passenger vehicles, tractive rolling stock and special vehicles.
 ## Interoperability Codes
 
 ### Goods Wagons
-Simplified to only concern Europe and model train operation.
 
 ||*second digit*|0|1|2|3|4|5|6|7|8|9|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -47,48 +46,4 @@ Simplified to only concern Europe and model train operation.
 - 61 Passenger cars with air-condition and for internationa use that complies to TSI/RIC/COTIF/PPW.
 - 81 Wagons with bogies for international use after special agreement only
 - 82 Wagons with bogies for domestic use only.
-
-### Vehicle Keeper Marking (VKM)
-A Vehicle Keeper Marking (VKM) is an alphanumeric code, consisting of 2 to 5 letters. 
-A VKM is inscribed on each rail vehicle, near the vehicle number. 
-The VKM denominates the Vehicle Keeper as registered in the Rolling Stock Register.
-A VKM is unique in all countries covered by this standard.
-
-#### Format of the Vehicle Keeper Marking
-The VKM is representation of the full name or abbreviation of the vehicle keeper, if possible in a recognisable manner. 
-All 26 letters of the Latina alphabet may be used. 
-The letters in the VKM are written in capitals. 
-
-Letters that do not stand for first letters of words in the keeper's name may be written in lower case. 
-For checking uniqueness, the written name will be ignored.
-
-Letters may contain diacritical signs. 
-Diacritical signs used by these letters are ignored for checking uniqueness.
-
-For vehicles of keepers that reside in a country that does not use the Latin alphabet, 
-a translation of the VKM in its own alphabet may be applied behind the VKM separated from it by a slash-sign (‘/’). 
-This translated VKM is disregarded for data-processing purposes.
-
-#### Provisions about allocation of Vehicle Keeper Markings
-A vehicle keeper can be issued more than one VKM, in case:
-— the vehicle keeper has a formal name in more than one language;
-— a vehicle keeper has good cause to distinguish between separate vehicle fleets within his organisation.
-A single VKM can be issued for a group of companies:
-— that belong to single corporate structure that has appointed and mandated one organisation within this structure to handle all issues on behalf of all others;
-— that has mandated a separate, single legal entity for handling all issues on their behalf, in which event the legal entity is the keeper.
-
-#### Register of Vehicle Keeper Markings and procedure for allocation
-The register of VKM is public and updated on a real time basis.
-An application for a VKM is filed with the applicant's competent national authority and forwarded to the central body. 
-- A VKM can be used only after publication by the central body.
-- The holder of a VKM must inform the competent national authority when he ends the use of a VKM, 
-and the competent national authority will forward the information to the central body. 
-- A VKM will then be revoked once the keeper has proved that the marking has been changed on all vehicles concerned. It will not be reissued for 10 years, unless it is reissued to the original holder or at his request to another holder.
-- A VKM can be transferred to another holder, which is the legal successor to the original holder. 
-- A VKM stays valid when the holder changes his name to a name that does not bear resemblance to the VKM.
-
-The first list of VKM will be drafted using existing railway company abbreviations.
-The VKM will be applied to all new build wagons after entry into force of the relevant TSIs. 
-Existing wagons will have to be brought in compliance with the VKM marking by 31 December 2013. 
-In case of inconsistency between the VKM marked on the vehicle and the data registered in the NVR, the NVR registration supersedes.
 

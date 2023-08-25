@@ -14,20 +14,27 @@ public class WiThrottleValidator : AbstractValidator<WiFredThrottle>
             .WithName(throttle => localizer["Owner"]);
         RuleFor(throttle => throttle.InventoryNumber)
             .NotEmpty()
-            .GreaterThanOrEqualTo(1);
+            .GreaterThanOrEqualTo(1)
+            .WithName(throttle => localizer[nameof(throttle.InventoryNumber)]);
         RuleFor(throttle => throttle.Name)
             .NotEmpty()
-            .MustBeOrdinaryText(localizer);
+            .MustBeOrdinaryText(localizer)
+            .WithName(throttle => localizer[nameof(throttle.Name)]);
         RuleFor(throttle => throttle.MacAddress)
             .NotEmpty()
-            .MustBeMacAddress(localizer);
+            .MustBeMacAddress(localizer)
+            .WithName(throttle => localizer[nameof(throttle.MacAddress)]);
         RuleFor(throttle => throttle.LocoAddress1)
-            .MustBeDccAddressOrEmpty(localizer);
+            .MustBeDccAddressOrEmpty(localizer)
+            .WithName(throttle => localizer["DccAddress"]);
         RuleFor(throttle => throttle.LocoAddress2)
-            .MustBeDccAddressOrEmpty(localizer); 
+            .MustBeDccAddressOrEmpty(localizer)
+            .WithName(throttle => localizer["DccAddress"]);
         RuleFor(throttle => throttle.LocoAddress3)
-            .MustBeDccAddressOrEmpty(localizer); 
+            .MustBeDccAddressOrEmpty(localizer)
+            .WithName(throttle => localizer["DccAddress"]);
         RuleFor(throttle => throttle.LocoAddress4)
-            .MustBeDccAddressOrEmpty(localizer); 
+            .MustBeDccAddressOrEmpty(localizer)
+            .WithName(throttle => localizer["DccAddress"]);
     }
 }

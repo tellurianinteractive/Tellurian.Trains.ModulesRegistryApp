@@ -11,6 +11,7 @@ public class WiFredThrottleService
     private IDbContextFactory<ModulesDbContext> Factory { get; }
     public ITimeProvider TimeProvider { get; }
 
+    
     public async Task<WiFredThrottle?> FindById(ClaimsPrincipal? principal, int id)
     {
         if (principal.IsAuthenticated())
