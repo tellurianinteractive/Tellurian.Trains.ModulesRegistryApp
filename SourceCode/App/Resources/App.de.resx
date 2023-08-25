@@ -232,7 +232,7 @@
     <value>Mitglieder</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Hinzufügen</value>
+    <value>Neuer</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
     <value>Ist Datenadministrator?</value>
@@ -1360,6 +1360,21 @@
     <value>DCC-Adresse</value>
   </data>
   <data name="WiFredThrottles" xml:space="preserve">
+    <value>wiFRED Handreglern</value>
+  </data>
+  <data name="DccAddress1" xml:space="preserve">
+    <value>DCC-Adresse 1</value>
+  </data>
+  <data name="DccAddress2" xml:space="preserve">
+    <value>DCC-Adresse 2</value>
+  </data>
+  <data name="DccAddress3" xml:space="preserve">
+    <value>DCC-Adresse 3</value>
+  </data>
+  <data name="DccAddress4" xml:space="preserve">
+    <value>DCC-Adresse 4</value>
+  </data>
+  <data name="WiFredThrottle" xml:space="preserve">
     <value>wiFRED Handregler</value>
   </data>
 </root>

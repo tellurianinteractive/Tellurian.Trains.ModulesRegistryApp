@@ -64,7 +64,7 @@ public static class LocalizedStringExtensions
     private static bool IsEmpty(this PageAction pageAction) => pageAction == PageAction.List || pageAction == PageAction.Unknown || pageAction == PageAction.Error;
 
     private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
-        string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToLowerInvariant() : localizer[objectName].ToString();
+        string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToFirstLowerInvariant() : localizer[objectName].ToString();
 
     private static string Name(this IStringLocalizer me, object? owner) =>
         owner switch

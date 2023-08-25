@@ -9,7 +9,7 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="Throttle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=true />
+<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=true />
 
 @if (Throttle is null)
 {
@@ -26,10 +26,10 @@ else
             <AppInputText Width="3" Label="Name" @bind-Value="Throttle.Name" />
             <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
             <AppInputFill Width="1" />
-            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress1 />
-            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress2 />
-            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress3 />
-            <AppInputNumber Width="1" Label="DccAddress" @bind-Value=Throttle.LocoAddress4 />
+            <AppInputNumber Width="2" Label="DccAddress1" @bind-Value=Throttle.LocoAddress1 />
+            <AppInputNumber Width="2" Label="DccAddress2" @bind-Value=Throttle.LocoAddress2 />
+            <AppInputNumber Width="2" Label="DccAddress3" @bind-Value=Throttle.LocoAddress3 />
+            <AppInputNumber Width="2" Label="DccAddress4" @bind-Value=Throttle.LocoAddress4 />
         </Inputs>
     </EditTemplate>
 }

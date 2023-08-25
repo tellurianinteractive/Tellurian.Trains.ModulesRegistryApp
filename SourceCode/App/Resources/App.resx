@@ -1362,4 +1362,19 @@
   <data name="WiFredThrottles" xml:space="preserve">
     <value>wiFRED throttles</value>
   </data>
+  <data name="DccAddress1" xml:space="preserve">
+    <value>DCC-address 1</value>
+  </data>
+  <data name="DccAddress2" xml:space="preserve">
+    <value>DCC-address 2</value>
+  </data>
+  <data name="DccAddress3" xml:space="preserve">
+    <value>DCC-address 3</value>
+  </data>
+  <data name="DccAddress4" xml:space="preserve">
+    <value>DCC-address 4</value>
+  </data>
+  <data name="WiFredThrottle" xml:space="preserve">
+    <value>wiFRED throttle</value>
+  </data>
 </root>

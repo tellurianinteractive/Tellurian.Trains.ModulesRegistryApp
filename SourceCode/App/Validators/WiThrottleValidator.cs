@@ -26,15 +26,15 @@ public class WiThrottleValidator : AbstractValidator<WiFredThrottle>
             .WithName(throttle => localizer[nameof(throttle.MacAddress)]);
         RuleFor(throttle => throttle.LocoAddress1)
             .MustBeDccAddressOrEmpty(localizer)
-            .WithName(throttle => localizer["DccAddress"]);
+            .WithName(throttle => localizer["DccAddress1"]);
         RuleFor(throttle => throttle.LocoAddress2)
             .MustBeDccAddressOrEmpty(localizer)
-            .WithName(throttle => localizer["DccAddress"]);
+            .WithName(throttle => localizer["DccAddress2"]);
         RuleFor(throttle => throttle.LocoAddress3)
             .MustBeDccAddressOrEmpty(localizer)
-            .WithName(throttle => localizer["DccAddress"]);
+            .WithName(throttle => localizer["DccAddress3"]);
         RuleFor(throttle => throttle.LocoAddress4)
             .MustBeDccAddressOrEmpty(localizer)
-            .WithName(throttle => localizer["DccAddress"]);
+            .WithName(throttle => localizer["DccAddress4"]);
     }
 }
