@@ -1377,4 +1377,7 @@
   <data name="WiFredThrottle" xml:space="preserve">
     <value>wiFRED körhandtag</value>
   </data>
+  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
+    <value>Mötesarrangören tar inte emot anmälningar här.</value>
+  </data>
 </root>

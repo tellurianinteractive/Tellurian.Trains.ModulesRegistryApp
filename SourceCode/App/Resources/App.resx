@@ -1377,4 +1377,7 @@
   <data name="WiFredThrottle" xml:space="preserve">
     <value>wiFRED throttle</value>
   </data>
+  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
+    <value>Meeting organiser do not accept registrations here.</value>
+  </data>
 </root>
