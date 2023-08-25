@@ -92,7 +92,7 @@ public static partial class ValidatorsExtensions
     private static bool IsMacAddress(this string? text)
     {
         if (string.IsNullOrEmpty (text)) return false;
-        if (text.Length != 14) return false;
+        if (text.Length != 17) return false;
         foreach(var c in text)
         {
             if (c.IsHexDigit()) continue;

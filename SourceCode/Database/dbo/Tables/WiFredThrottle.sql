@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[WiFredThrottle]
 (
     [Id] INT IDENTITY (1, 1) NOT NULL,
-    [MacAddress] VARCHAR(14) NOT NULL,
+    [MacAddress] CHAR(17) NOT NULL,
     [Name] NVARCHAR(50) NOT NULL,
     [Configuration] VARCHAR(MAX) NULL,
     [RegistrationDateTime] DATETIMEOFFSET NOT NULL,

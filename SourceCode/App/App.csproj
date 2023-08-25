@@ -52,6 +52,9 @@
 		<None Update="Content\Markdown\FrontImage.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Content\Markdown\Help\WiFredThrottles.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Note.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

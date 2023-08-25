@@ -1330,7 +1330,7 @@
     <value>FREMO medlemsnummer</value>
   </data>
   <data name="Throttles" xml:space="preserve">
-    <value>Körkontroller</value>
+    <value>Körhandtag</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
     <value>Mina körkontroller</value>
@@ -1345,7 +1345,7 @@
     <value>Validerad</value>
   </data>
   <data name="Throttle" xml:space="preserve">
-    <value>Körkontroll</value>
+    <value>Körhandtag</value>
   </data>
   <data name="MustBeAMacAddress" xml:space="preserve">
     <value>Måste vara en MAC-adress</value>
@@ -1360,6 +1360,6 @@
     <value>DCC-adress</value>
   </data>
   <data name="WiFredThrottles" xml:space="preserve">
-    <value>wiFRED körkontroller</value>
+    <value>wiFRED körhandtag</value>
   </data>
 </root>

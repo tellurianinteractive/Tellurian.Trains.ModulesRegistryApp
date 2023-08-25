@@ -1330,7 +1330,7 @@
     <value>FREMO medlemsnummer</value>
   </data>
   <data name="Throttles" xml:space="preserve">
-    <value>Kørekontroller</value>
+    <value>Kørehåndtag</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
     <value>Mine kørekontroller</value>
@@ -1345,7 +1345,7 @@
     <value>Valideret</value>
   </data>
   <data name="Throttle" xml:space="preserve">
-    <value>Kørekontrol</value>
+    <value>Kørehåndtag</value>
   </data>
   <data name="MustBeAMacAddress" xml:space="preserve">
     <value>Skal være en MAC-adresse</value>
@@ -1360,6 +1360,6 @@
     <value>DCC-adresse</value>
   </data>
   <data name="WiFredThrottles" xml:space="preserve">
-    <value>wiFRED kørekontroller</value>
+    <value>wiFRED kørehåndtag</value>
   </data>
 </root>

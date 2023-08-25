@@ -22,7 +22,7 @@ else
     <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
         <Inputs>
             <AppInputSelect Width="4" Label="Owner" Items="Owners" ShowPleaseSelect=ShowPleaseSelect @bind-Value=Throttle.OwningPersonId />
-            <AppInputText Width="3" Label="MacAddress" Placeholder="0A:2B:45:6D:89" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked() />
+            <AppInputText Width="3" Label="MacAddress" Placeholder="0A:2B:3F:45:6D:89" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked() />
             <AppInputText Width="3" Label="Name" @bind-Value="Throttle.Name" />
             <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
             <AppInputFill Width="1" />
