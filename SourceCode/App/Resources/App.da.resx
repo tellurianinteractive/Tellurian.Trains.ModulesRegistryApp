@@ -1333,7 +1333,7 @@
     <value>Kørehåndtag</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
-    <value>Mine kørekontroller</value>
+    <value>Mine kørehåndtag</value>
   </data>
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-adresse</value>
@@ -1342,7 +1342,7 @@
     <value>Inventarnummer</value>
   </data>
   <data name="Validated" xml:space="preserve">
-    <value>Valideret</value>
+    <value>Bekræftet</value>
   </data>
   <data name="Throttle" xml:space="preserve">
     <value>Kørehåndtag</value>
@@ -1379,5 +1379,17 @@
   </data>
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Mødearrangør tager ikke imod tilmeldinger her.</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Stregkode-ID</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkendt</value>
   </data>
 </root>

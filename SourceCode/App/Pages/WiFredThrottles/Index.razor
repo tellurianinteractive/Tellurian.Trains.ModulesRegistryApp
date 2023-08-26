@@ -4,6 +4,8 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
 
@@ -27,19 +29,26 @@
                 </div>
             </ColumnOptions>
         </PropertyColumn>
-        <PropertyColumn Property="@(c => c.Name)" Sortable="true" Title="@Localizer["Name"]"/>
-        <PropertyColumn Property="@(c => c.InventoryNumber())" Title="@Localizer["InventoryNumber"]" Align="Align.Center" />
-        <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]" >
-           <ColumnOptions>
+        <PropertyColumn Property="@(c => c.Name)" Sortable="true" Title="@Localizer["Name"]" />
+        <PropertyColumn Property="@(c => c.BarcodeId())" Title="@Localizer["BarcodeId"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]">
+            <ColumnOptions>
                 <div class="search-box">
                     <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
-        <PropertyColumn Property="@(c => c.DccAddresses())"  Title="@Localizer["DccAddress"]" />
-        <PropertyColumn Property="@(c => c.ValidationDateTime)" Title="@Localizer["Validated"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.DccAddresses())" Title="@Localizer["DccAddress"]" />
+        <PropertyColumn Property="@(c => c.ValidationDateTime.DateAndTime() )" Title="@Localizer["Validated"]" Align="Align.Center" />
         <TemplateColumn Title="@Localizer["Actions"]" Context="throttle">
-            <AppButton Label="Edit" Href="@EditHref(throttle.Id)" />
+            @if (MayEditThrottle(throttle))
+            {
+                <AppButton Label="Edit" Href="@EditHref(throttle.Id)" />
+            }
+            @if (MayValidateThrottle(throttle))
+            {
+                <AppButton Label="Validate" OnClickCallback="@( async () => await OnVerify(throttle.Id))" />
+            }
         </TemplateColumn>
     </QuickGrid>
 </div>
@@ -63,8 +72,8 @@
             return Throttles.AsQueryable()
                 .Where(c => (
                     MacFilter.HasNoValue() || c.MacAddress.StartsWith(MacFilter)) &&
-                    NameFilter.HasNoValue() || 
-                        c.OwningPerson.FirstName.StartsWith(NameFilter!, StringComparison.CurrentCultureIgnoreCase) || 
+                    NameFilter.HasNoValue() ||
+                        c.OwningPerson.FirstName.StartsWith(NameFilter!, StringComparison.CurrentCultureIgnoreCase) ||
                         c.OwningPerson.LastName.StartsWith(NameFilter!, StringComparison.CurrentCultureIgnoreCase));
         }
     }
@@ -85,6 +94,17 @@
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
     }
+
+    private async Task OnVerify(int throttleId)
+    {
+        var result = await ThrottleService.SetVerified(Principal, throttleId);
+        Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+
+    }
     bool OnlyMyThrottles => Navigator.Uri.EndsWith("My");
+    bool MayEditThrottle(WiFredThrottle throttle) => throttle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
+    bool MayValidateThrottle(WiFredThrottle throttle) => !throttle.ValidationDateTime.HasValue && Principal.MayManageWiFreds();
+
     string EditHref(int id) => $"Throttles/{id}/Edit";
 }

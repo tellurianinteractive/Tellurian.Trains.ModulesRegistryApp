@@ -16,9 +16,10 @@ public class WiFredThrottleService
     {
         if (principal.IsAuthenticated())
         {
+            bool mayManageWifreds = principal.MayManageWiFreds();
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.WiFredThrottles.AsNoTracking()
-                .Where(w => w.Id == id)
+                .Where(w => w.Id == id && (mayManageWifreds || w.OwningPersonId == principal.PersonId()))
                 .Include(w => w.OwningPerson).ThenInclude(p => p.Country)
                 .SingleOrDefaultAsync()
                 .ConfigureAwait(false);
@@ -62,6 +63,7 @@ public class WiFredThrottleService
         {
             using var dbContext = Factory.CreateDbContext();
             entity.SetDccAddressOrNull();
+            entity.SetMacAddressUppercase();
 
             var existing = await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.Id == entity.Id).ConfigureAwait(false);
             if (existing is null)
@@ -99,6 +101,7 @@ public class WiFredThrottleService
             using var dbContext = Factory.CreateDbContext();
             var existing = await FindById(principal, throttleId);
             if (existing is null) return principal.NotFound();
+            dbContext.WiFredThrottles.Attach(existing);
             existing.ValidationDateTime = TimeProvider.Now;
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.UpdateResult();

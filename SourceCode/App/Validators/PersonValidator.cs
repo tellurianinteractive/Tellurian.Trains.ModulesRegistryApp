@@ -56,5 +56,10 @@ public class PersonValidator : AbstractValidator<Person>
             .MaximumLength(200)
             .MustBeLocoAdresses(localizer)
             .WithName(n => localizer[nameof(n.FremoReservedAdresses)]);
+
+        RuleFor(person => person.FremoMemberNumber)
+            .InclusiveBetween(1, 9999)
+            .WithName(n => localizer["FremoNumber"]);
+
     }
 }

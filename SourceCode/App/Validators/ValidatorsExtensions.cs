@@ -106,7 +106,7 @@ public static partial class ValidatorsExtensions
 
     private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'".Contains(c);
     private static bool IsDigit(this char c) =>  c.IsInRange(0x0030, 0x0039);
-    private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0040, 0x0045) || c.IsInRange(0x0060, 0x065);
+    private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0041, 0x0046) || c.IsInRange(0x0061, 0x066);
     private static bool IsLatinChar(this char c) =>
         c.IsInRange(0x0061, 0x007A) ||
         c.IsInRange(0x0041, 0x005A) ||

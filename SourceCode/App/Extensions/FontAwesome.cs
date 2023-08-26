@@ -40,6 +40,7 @@ public static class FontAwesome
     public const string User = "fa fa-user";
     public const string Waybill = "fa fa-file-invoice";
     public const string Waybills = "fa fa-file-invoice";
+    public const string Verify = "fa fa-check-square";
     public const string View = "fa fa-eye";
     public const string Wifi = "fa fa-wifi";
 
@@ -83,6 +84,7 @@ public static class FontAwesome
             {nameof(User), User },
             {nameof(Waybill), Waybill },
             {nameof(Waybills), Waybills },
+            {nameof(Verify), Verify },
             {nameof(View), View },
             {nameof(Wifi), Wifi },
        };

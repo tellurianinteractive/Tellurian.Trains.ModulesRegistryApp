@@ -232,7 +232,7 @@
     <value>Mitglieder</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Neuer</value>
+    <value>Neu</value>
   </data>
   <data name="IsDataAdministrator" xml:space="preserve">
     <value>Ist Datenadministrator?</value>
@@ -655,7 +655,7 @@
     <value>Treffen</value>
   </data>
   <data name="Owners" xml:space="preserve">
-    <value>Besitzer</value>
+    <value>Eigentümer </value>
   </data>
   <data name="Meetings" xml:space="preserve">
     <value>Treffen</value>
@@ -964,7 +964,7 @@
     <value>Eigentum übertragen</value>
   </data>
   <data name="Owner" xml:space="preserve">
-    <value>Besitzer</value>
+    <value>Eigentümer</value>
   </data>
   <data name="NewOwner" xml:space="preserve">
     <value>Neue Bezitser</value>
@@ -1330,10 +1330,10 @@
     <value>FREMO-Mitgliedsnummer</value>
   </data>
   <data name="Throttles" xml:space="preserve">
-    <value>Handreglern</value>
+    <value>Handregler</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
-    <value>Meine Fahrkontrollen</value>
+    <value>Meine Handregler</value>
   </data>
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-Adresse</value>
@@ -1342,7 +1342,7 @@
     <value>Inventar nummer</value>
   </data>
   <data name="Validated" xml:space="preserve">
-    <value>Bestätigt</value>
+    <value>Überprüft</value>
   </data>
   <data name="Throttle" xml:space="preserve">
     <value>Handregler</value>
@@ -1360,7 +1360,7 @@
     <value>DCC-Adresse</value>
   </data>
   <data name="WiFredThrottles" xml:space="preserve">
-    <value>wiFRED Handreglern</value>
+    <value>wiFRED Handregler</value>
   </data>
   <data name="DccAddress1" xml:space="preserve">
     <value>DCC-Adresse 1</value>
@@ -1379,5 +1379,17 @@
   </data>
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Der Organisator des Meetings akzeptiert hier keine Anmeldungen.</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Überprüfen</value>
+  </data>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Barcode-ID</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Überprüfen</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Genehmigt</value>
   </data>
 </root>

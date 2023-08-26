@@ -9,11 +9,14 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=true />
+<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=ShowHelpInitially/>
 
 @if (Throttle is null)
 {
-
+    if (NotFound)
+    {
+        <ActionMessage Label="NoRecordsToDisplay" AlertType="Warning" />
+    }
 }
 else
 {
@@ -43,6 +46,7 @@ else
     private IEnumerable<ListboxItem>? Owners;
     private IEnumerable<ListboxItem>? Countries;
     private int CountryId;
+    private bool NotFound;
 
 
     protected async override Task OnInitializedAsync()
@@ -63,9 +67,13 @@ else
         {
             Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameCityAndCountry()) };
         }
-        else
+        else if (Id == 0)
         {
             Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, personId: Principal.PersonId());
+        }
+        else
+        {
+            NotFound = true;
         }
     }
 
@@ -73,6 +81,7 @@ else
     {
         if (Principal is null || Throttle is null) return;
         var result = await ThrottleService.SaveAsync(Principal, Throttle);
+        if (result.Count == 1) Throttle = result.Entity;
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
@@ -84,4 +93,5 @@ else
 
     bool ShowPleaseSelect => Owners is not null && Owners.Count() > 0;
     bool IsSelectCountryVisible => Principal.MayManageWiFreds();
+    bool ShowHelpInitially => !NotFound;
 }

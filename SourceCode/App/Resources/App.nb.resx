@@ -1333,7 +1333,7 @@
     <value>Håndkontroller</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
-    <value>Mine kjørekontroller</value>
+    <value>Mine håndkontroller</value>
   </data>
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-adresse</value>
@@ -1342,7 +1342,7 @@
     <value>Inventarnummer</value>
   </data>
   <data name="Validated" xml:space="preserve">
-    <value>Validert</value>
+    <value>Bekreftet</value>
   </data>
   <data name="Throttle" xml:space="preserve">
     <value>Håndkontroll</value>
@@ -1379,5 +1379,17 @@
   </data>
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Møtearrangør tar ikke imot påmeldinger her.</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Bekreft</value>
+  </data>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Strekkode-ID</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Bekreft</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkjent</value>
   </data>
 </root>

@@ -32,7 +32,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
             <AppInputFill Width="2" />
             <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
             <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
-            <AppInputNumber Width="2" Label="FremoMemberNumber" @bind-Value="Person.FremoMemberNumber" />
+            <AppInputNumber Width="2" Label="FremoNumber" @bind-Value="Person.FremoMemberNumber" />
             <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
             <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
             @if (Principal.IsCountryOrGlobalAdministrator() && Person.User is not null)

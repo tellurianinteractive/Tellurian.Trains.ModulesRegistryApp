@@ -13,10 +13,13 @@ As a test user you use the application and report back with:
 * suggestions for new features. You can start a [discussion](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/discussions) and write a description of what you want.
 
 ## As Translator
-If you want the application in yet another language, you can make a translation.
+You can improve a translationns in an already supported language, 
+or if you want the application in yet another language, you can make a new complete translation.
 
-
-#### Adding the new language to the app
+### Improving the translation to an already supported language
+Follow the instructions below. The only thing you don't need to do is adding new files.
+Change files of the existing langauge and create a pull request.
+### Adding the new language to the app
 There are two main ways to add your translation to the app:
 - Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it. 
 You need to now the [basics of GitHub](https://lab.github.com/githubtraining/introduction-to-github).

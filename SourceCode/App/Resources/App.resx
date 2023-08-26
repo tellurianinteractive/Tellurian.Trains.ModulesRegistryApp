@@ -1380,4 +1380,16 @@
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Meeting organiser do not accept registrations here.</value>
   </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Barcode-ID</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Validate</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
 </root>

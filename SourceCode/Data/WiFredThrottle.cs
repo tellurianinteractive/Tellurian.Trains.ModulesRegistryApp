@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using System.Globalization;
+using System.Security.Claims;
 using System.Text;
 
 namespace ModulesRegistry.Data;
@@ -31,11 +32,14 @@ public class WiFredThrottle
 
 public static class WiFredThrottleExtensions
 {
+    public static bool MayRegisterWiFred(this Person? person) =>
+        person is not null && person.FremoMemberNumber.HasValue;
+
     public static bool IsMacAddressLocked(this WiFredThrottle it) => 
         it.ValidationDateTime.HasValue;
 
-    public static string InventoryNumber(this WiFredThrottle it) =>
-        $"{it.OwningPerson.FremoNumber()}-{it.InventoryNumber}";
+    public static string BarcodeId(this WiFredThrottle it) =>
+        $"{it.OwningPerson.FremoNumber():0000000}{it.InventoryNumber:0000}";
         
     public static string OwnerDescription(this WiFredThrottle it) =>
         it.OwningPerson is null ? string.Empty :
@@ -52,18 +56,23 @@ public static class WiFredThrottleExtensions
         return string.Join(", ", result);
     }
 
+    public static void SetMacAddressUppercase(this WiFredThrottle it)
+    {
+        it.MacAddress = it.MacAddress.ToUpperInvariant();
+    }
+
 
 
     /// <summary>
     /// Sets loco adresses to valid DCC-addresses; otherwise null;
     /// </summary>
-    /// <param name="throttle"></param>
-    public static void SetDccAddressOrNull(this WiFredThrottle throttle)
+    /// <param name="it"></param>
+    public static void SetDccAddressOrNull(this WiFredThrottle it)
     {
-        throttle.LocoAddress1 = throttle.LocoAddress1.DccAddressOrNull();
-        throttle.LocoAddress2 = throttle.LocoAddress2.DccAddressOrNull();
-        throttle.LocoAddress3 = throttle.LocoAddress3.DccAddressOrNull();
-        throttle.LocoAddress4 = throttle.LocoAddress4.DccAddressOrNull();
+        it.LocoAddress1 = it.LocoAddress1.DccAddressOrNull();
+        it.LocoAddress2 = it.LocoAddress2.DccAddressOrNull();
+        it.LocoAddress3 = it.LocoAddress3.DccAddressOrNull();
+        it.LocoAddress4 = it.LocoAddress4.DccAddressOrNull();
     }
 }
 

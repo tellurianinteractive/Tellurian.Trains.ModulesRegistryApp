@@ -1333,7 +1333,7 @@
     <value>Körhandtag</value>
   </data>
   <data name="MyThrottles" xml:space="preserve">
-    <value>Mina körkontroller</value>
+    <value>Mina körhandtag</value>
   </data>
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-adress</value>
@@ -1342,7 +1342,7 @@
     <value>Inventarienummer</value>
   </data>
   <data name="Validated" xml:space="preserve">
-    <value>Validerad</value>
+    <value>Bekräftad</value>
   </data>
   <data name="Throttle" xml:space="preserve">
     <value>Körhandtag</value>
@@ -1379,5 +1379,17 @@
   </data>
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Mötesarrangören tar inte emot anmälningar här.</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verifiera</value>
+  </data>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Streckkod-ID</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkänt</value>
   </data>
 </root>
