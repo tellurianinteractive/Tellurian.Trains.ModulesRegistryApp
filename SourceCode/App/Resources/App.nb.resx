@@ -1392,4 +1392,7 @@
   <data name="Approved" xml:space="preserve">
     <value>Godkjent</value>
   </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Slettet</value>
+  </data>
 </root>

@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.8.25
+Release date 2023-08-28
+- **wiFRED** list can now be created for printing. Includes QR-code with wiFRED data.
+- **wiFRED** can now be deleted.
 ## Release 1.8.24
 Release date 2023-08-26
 - **WiFred validation** now available for wiFRED administrators.

@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<Platform>AnyCPU</Platform>
-		<Version>1.8.24</Version>
+		<Version>1.8.25</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 	</PropertyGroup>
 

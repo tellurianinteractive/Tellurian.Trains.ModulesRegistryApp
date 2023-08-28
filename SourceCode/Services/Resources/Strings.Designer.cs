@@ -592,6 +592,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicated.
+        /// </summary>
+        internal static string Duplicated {
+            get {
+                return ResourceManager.GetString("Duplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eastwards.
         /// </summary>
         internal static string Eastwards {
@@ -624,6 +633,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Epoch {
             get {
                 return ResourceManager.GetString("Epoch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
@@ -943,6 +961,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inventory number.
+        /// </summary>
+        internal static string InventoryNumber {
+            get {
+                return ResourceManager.GetString("InventoryNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Italy.
         /// </summary>
         internal static string Italy {
@@ -984,6 +1011,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string LoadingReadyTime {
             get {
                 return ResourceManager.GetString("LoadingReadyTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAC-address.
+        /// </summary>
+        internal static string MacAddress {
+            get {
+                return ResourceManager.GetString("MacAddress", resourceCulture);
             }
         }
         

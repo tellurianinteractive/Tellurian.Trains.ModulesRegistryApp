@@ -655,7 +655,7 @@
     <value>Treffen</value>
   </data>
   <data name="Owners" xml:space="preserve">
-    <value>Eigentümer </value>
+    <value>Eigentümer</value>
   </data>
   <data name="Meetings" xml:space="preserve">
     <value>Treffen</value>
@@ -1391,5 +1391,8 @@
   </data>
   <data name="Approved" xml:space="preserve">
     <value>Genehmigt</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Gelöscht</value>
   </data>
 </root>

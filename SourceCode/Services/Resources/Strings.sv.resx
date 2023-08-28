@@ -771,4 +771,16 @@
   <data name="Austria" xml:space="preserve">
     <value>Österrike</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="Duplicated" xml:space="preserve">
+    <value>Dubletterad</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventarienummer</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-adress</value>
+  </data>
 </root>

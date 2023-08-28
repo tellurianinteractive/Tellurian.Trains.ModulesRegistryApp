@@ -1,5 +1,5 @@
 ﻿@page "/Throttles"
-@page "/Throttles/My"
+@page "/Throttles/{personId:int}"
 
 @attribute [Authorize(Policy = "User")]
 
@@ -13,6 +13,10 @@
 
 
 <div class="col-12">
+    @if (OnlyMyThrottles && Throttles?.Any() == true)
+    {
+        <AppButton Label="Preview" Href="@PreviewHref(0)" />
+    }
     <AppButton Label="Add" Href="@EditHref(0)" />
     @if (HasFilter)
     {
@@ -31,15 +35,22 @@
         </PropertyColumn>
         <PropertyColumn Property="@(c => c.Name)" Sortable="true" Title="@Localizer["Name"]" />
         <PropertyColumn Property="@(c => c.BarcodeId())" Title="@Localizer["BarcodeId"]" Align="Align.Center" />
-        <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
+        @if (!OnlyMyThrottles)
+        {
+            <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+        }
         <PropertyColumn Property="@(c => c.DccAddresses())" Title="@Localizer["DccAddress"]" />
         <PropertyColumn Property="@(c => c.ValidationDateTime.DateAndTime() )" Title="@Localizer["Validated"]" Align="Align.Center" />
+        @if (!OnlyMyThrottles)
+        {
+            <PropertyColumn Property="@(c => c.DeletedDateTime.DateAndTime() )" Title="@Localizer["Deleted"]" Align="Align.Center" />
+        }
         <TemplateColumn Title="@Localizer["Actions"]" Context="throttle">
             @if (MayEditThrottle(throttle))
             {
@@ -48,6 +59,14 @@
             @if (MayValidateThrottle(throttle))
             {
                 <AppButton Label="Validate" OnClickCallback="@( async () => await OnVerify(throttle.Id))" />
+            }
+            @if (DeleteConfirm(throttle))
+            {
+                <AppButton Label="ConfirmDelete" OnClickCallback="@( async () => await ConfirmDelete(throttle.Id))" />
+            }
+            else if (MayDelete(throttle))
+            {
+                <AppButton Label="Delete" OnClickCallback="@(() => OnDelete(throttle.Id))" />
             }
         </TemplateColumn>
     </QuickGrid>
@@ -61,6 +80,7 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int PersonId { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<WiFredThrottle>? Throttles;
 
@@ -82,6 +102,8 @@
     string? MacFilter;
     string? NameFilter;
     bool HasFilter => MacFilter.HasValue() || NameFilter.HasValue();
+    int DeleteId = 0;
+
     void RemoveFilter()
     {
         MacFilter = default;
@@ -92,19 +114,50 @@
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetThrottles();
+
     }
 
     private async Task OnVerify(int throttleId)
     {
         var result = await ThrottleService.SetVerified(Principal, throttleId);
-        Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
+        await GetThrottles();
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
 
     }
-    bool OnlyMyThrottles => Navigator.Uri.EndsWith("My");
+
+    private void OnDelete(int throttleId)
+    {
+        DeleteId = throttleId;
+    }
+
+    private async Task ConfirmDelete(int throttleId)
+    {
+        if (DeleteId == throttleId)
+        {
+            var result = await ThrottleService.DeleteAsync(Principal, throttleId);
+            await GetThrottles();
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+        DeleteId = 0;
+    }
+
+    private async Task GetThrottles()
+    {
+        Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
+    }
+
+
+    bool OnlyMyThrottles => PersonId > 0;
     bool MayEditThrottle(WiFredThrottle throttle) => throttle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
     bool MayValidateThrottle(WiFredThrottle throttle) => !throttle.ValidationDateTime.HasValue && Principal.MayManageWiFreds();
+    bool MayDelete(WiFredThrottle thottle) => thottle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
+    bool DeleteConfirm(WiFredThrottle throttle) => DeleteId == throttle.Id;
 
     string EditHref(int id) => $"Throttles/{id}/Edit";
+    string PreviewHref(int id) => $"Throttles/My/Preview";
 }

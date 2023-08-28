@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
-using System.Globalization;
-using System.Security.Claims;
-using System.Text;
 
 namespace ModulesRegistry.Data;
 
@@ -11,12 +8,13 @@ public class WiFredThrottle
 {
     public int Id { get; set; }
     public string MacAddress { get; set; }
-    public int InventoryNumber { get; set; }
+    public short InventoryNumber { get; set; }
     public string Name { get; set; }
     public string Configuration { get; set; }
     public DateTimeOffset RegistrationDateTime { get; set; }
     public DateTimeOffset? ValidationDateTime { get; set; }
     public DateTimeOffset? UpdatedDateTime { get; set; }
+    public DateTimeOffset? DeletedDateTime { get; set; }
 
     public short? LocoAddress1 { get; set; }
     public short? LocoAddress2 { get; set; }
@@ -29,22 +27,17 @@ public class WiFredThrottle
 
 #nullable enable
 
-
 public static class WiFredThrottleExtensions
 {
     public static bool MayRegisterWiFred(this Person? person) =>
         person is not null && person.FremoMemberNumber.HasValue;
 
-    public static bool IsMacAddressLocked(this WiFredThrottle it) => 
+    public static bool IsMacAddressLocked(this WiFredThrottle it) =>
         it.ValidationDateTime.HasValue;
 
     public static string BarcodeId(this WiFredThrottle it) =>
         $"{it.OwningPerson.FremoNumber():0000000}{it.InventoryNumber:0000}";
-        
-    public static string OwnerDescription(this WiFredThrottle it) =>
-        it.OwningPerson is null ? string.Empty :
-        it.OwningPerson.Country is null ? $"{it.OwningPerson.Name()} {it.OwningPerson.CityName}" :
-        string.Empty;
+
 
     public static string DccAddresses(this WiFredThrottle it)
     {
@@ -61,7 +54,13 @@ public static class WiFredThrottleExtensions
         it.MacAddress = it.MacAddress.ToUpperInvariant();
     }
 
-
+    public static string QrCodeImage(this WiFredThrottle it) =>
+        it.QRCode(QrCodeData);
+    private static object QrCodeData(this WiFredThrottle it) =>
+        new WiFredThrottleQRCodeData(it.BarcodeId(), it.OwningPerson.Name(), it.Name, it.InventoryNumber);
+        
+    private record WiFredThrottleQRCodeData(string Id, string Owner, string Name, short Number);
+    
 
     /// <summary>
     /// Sets loco adresses to valid DCC-addresses; otherwise null;
@@ -79,7 +78,7 @@ public static class WiFredThrottleExtensions
 public static class WiFredThrottleMapper
 {
     public static void MapWiFredThrottle(this ModelBuilder builder) =>
-        builder.Entity<WiFredThrottle> (entity =>
+        builder.Entity<WiFredThrottle>(entity =>
         {
             entity.ToTable("WiFredThrottle");
             entity.HasOne(p => p.OwningPerson)

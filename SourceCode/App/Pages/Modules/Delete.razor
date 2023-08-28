@@ -22,7 +22,7 @@
 }
 else if (IsFullOwner && !IsReferringStation && !IsRegisteredInUpcomingMeeting)
 {
-    <button class="btn btn-danger btn-sm" @onclick="OnDelete"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
+    <AppButton Label="ConfirmDelete" IconName="@FontAwesome.Delete" OnClickCallback="OnDelete" />
 }
 else
 {

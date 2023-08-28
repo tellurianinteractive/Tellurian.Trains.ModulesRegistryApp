@@ -8,6 +8,7 @@ public static class FontAwesome
     public const string Clone = "fa fa-clone";
     public const string Customer = "fa fa-industry";
     public const string Delete = "fa fa-trash-alt";
+    public const string ConfirmDelete = "fa fa-trash-alt";
     public const string Erase = "fa fa-eraser";
     public const string Edit = "fa fa-edit";
     public const string Group = "fa fa-users";
@@ -20,6 +21,7 @@ public static class FontAwesome
     public const string Note = "fa fa-exclamation";
     public const string Ok = "fa fa-check-circle";
     public const string People = "fa fa-user-friends";
+    public const string Preview = "fa fa-print";
     public const string Print = "fa fa-print";
     public const string Question = "fa fa-question-circle";
     public const string Region = "fa fa-shield-alt";
@@ -52,6 +54,7 @@ public static class FontAwesome
             {nameof(Clone), Clone },
             {nameof(Customer), Customer },
             {nameof(Delete), Delete },
+            {nameof(ConfirmDelete), ConfirmDelete },
             {nameof(Edit), Edit },
             {nameof(Erase), Erase },
             {nameof(Group), Group },
@@ -65,6 +68,7 @@ public static class FontAwesome
             {nameof(Ok), Ok },
             {nameof(People), People },
             {nameof(Print), Print },
+            {nameof(Preview), Preview },
             {nameof(Question), Question },
             {nameof(Region), Region },
             {nameof(Register), Register },

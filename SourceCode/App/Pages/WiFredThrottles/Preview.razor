@@ -1,0 +1,55 @@
+﻿@page "/Throttles/My/Preview"
+@layout PrintLayout
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject WiFredThrottleService ThrottleService
+@if (Throttles is null)
+{
+
+}
+else if (Throttles.Any())
+{
+    <div style="width: 100%; font-size: 24pt; font-weight: bold; display:flex; flex-direction:row; justify-content: space-between; align-items:baseline; border-bottom: 2px solid black">
+        <div style="font-size:36pt">
+            wiFRED
+        </div>
+        <div >
+            @Throttles.First().OwningPerson.Name() - @Throttles.First().OwningPerson.FremoNumber()
+        </div>
+    </div>
+    <table width="100%">
+        <tbody>
+            @foreach (var throttle in Throttles.OrderBy(t => t.InventoryNumber))
+            {
+                <tr style="border-bottom: 1px solid black">
+                    <td width="10%">
+                        <span style="font-size:24pt">@throttle.InventoryNumber</span>
+                    </td>
+                    <td>
+                        <span style="font-size:16pt">@throttle.Name</span><br/>
+                        <span style="font-size:16pt">@throttle.MacAddress</span>
+                    </td>
+                    <td>
+                        <span style="font-size:16pt">@throttle.DccAddresses()</span>
+                    </td>
+                    <td align="right" width="10%">
+                        <img style="height: 22mm" src="@throttle.QrCodeImage()" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<WiFredThrottle>? Throttles;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Throttles = await ThrottleService.GetOwnersThrottles(Principal, Principal.PersonId());
+    }
+}

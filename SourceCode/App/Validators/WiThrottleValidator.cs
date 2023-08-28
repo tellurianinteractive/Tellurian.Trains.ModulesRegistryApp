@@ -12,7 +12,7 @@ public class WiThrottleValidator : AbstractValidator<WiFredThrottle>
         RuleFor(throttle => throttle.OwningPersonId)
             .MustBeSelected(localizer)
             .WithName(throttle => localizer["Owner"]);
-        RuleFor(throttle => throttle.InventoryNumber)
+        RuleFor(throttle => (int)throttle.InventoryNumber)
             .NotEmpty()
             .GreaterThanOrEqualTo(1)
             .WithName(throttle => localizer[nameof(throttle.InventoryNumber)]);
