@@ -2,6 +2,13 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.0
+Release date 2023-08-30 - Milestone: Fully support for wiFRED management.
+- **Language** of app can now be selected by clicking flags.
+- **wiFREDs** can now be entered by FREMO members and be printed with QR-codes for marking your wiFRED. 
+- **wiFRED** re-registration of deleted wiFRED now supported.
+- **Module assistant** is a person that can be selected to get access to a modules maintenace without
+being in a group or be a part owner of the station.
 ## Release 1.8.25
 Release date 2023-08-28
 - **wiFRED** list can now be created for printing. Includes QR-code with wiFRED data.

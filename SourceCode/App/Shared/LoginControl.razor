@@ -38,8 +38,8 @@
     private string ReturnUrl => Navigator.ToBaseRelativePath(Navigator.Uri);
 
     private string UserLoginStatus(ClaimsPrincipal principal) =>
-        $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()}{AdministratorStatus(principal).ToLowerInvariant()}";
+        $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()} {AdministratorStatus(principal)}";
 
     private string AdministratorStatus(ClaimsPrincipal principal) =>
-       principal.IsGlobalAdministrator() ? ", " + Localizer["GlobalAdministrator"].Value : principal.IsCountryAdministrator() ? ", " + Localizer["CountryAdministrator"].Value : string.Empty;
+       principal.IsGlobalAdministrator() ? ", " + Localizer.LocalizedCasing("GlobalAdministrator") : principal.IsCountryAdministrator() ? ", " + Localizer.LocalizedCasing("CountryAdministrator") : string.Empty;
 }

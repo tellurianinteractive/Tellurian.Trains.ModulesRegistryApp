@@ -19,6 +19,5 @@ public static class CultureInfoExtensions
     public static CultureInfo AsCultureInfo(this string? twoLetterISOLanguageName) =>
         LanguageUtility.FullySupportedOrDefaultCulture(twoLetterISOLanguageName);
 
-   
 
 }

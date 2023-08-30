@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
-using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;
 

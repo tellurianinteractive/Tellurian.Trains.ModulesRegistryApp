@@ -14,7 +14,7 @@ else if (Throttles.Any())
         <div style="font-size:36pt">
             wiFRED
         </div>
-        <div >
+        <div>
             @Throttles.First().OwningPerson.Name() - @Throttles.First().OwningPerson.FremoNumber()
         </div>
     </div>
@@ -27,14 +27,17 @@ else if (Throttles.Any())
                         <span style="font-size:24pt">@throttle.InventoryNumber</span>
                     </td>
                     <td>
-                        <span style="font-size:16pt">@throttle.Name</span><br/>
+                        <span style="font-size:16pt">@throttle.Name</span><br />
                         <span style="font-size:16pt">@throttle.MacAddress</span>
                     </td>
                     <td>
                         <span style="font-size:16pt">@throttle.DccAddresses()</span>
                     </td>
-                    <td align="right" width="10%">
-                        <img style="height: 22mm" src="@throttle.QrCodeImage()" />
+                    <td width="160px" align="right">
+                        <div style="display: flex; ">
+                            <div style="line-height: 11pt; padding-top:2mm"><span style="font-size: 8pt;">@throttle.OwningPerson.Name()</span><br /><span style="font-weight: bold">@throttle.InventoryNumber</span></div>
+                            <div><img style="height: 20mm" src="@throttle.QrCodeImage()" /></div>
+                        </div>
                     </td>
                 </tr>
             }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Models;
 using System.Security.Claims;

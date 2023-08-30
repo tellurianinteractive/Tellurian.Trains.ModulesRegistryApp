@@ -34,9 +34,10 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
             <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
             <AppInputNumber Width="2" Label="FremoNumber" @bind-Value="Person.FremoMemberNumber" />
             <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
-            <AppInputText Width="12" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
+            <AppInputText Width="6" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
             @if (Principal.IsCountryOrGlobalAdministrator() && Person.User is not null)
             {
+                <AppInputText Width="6" Label="Resposibility+" @bind-Value="Person.User.AdministratorAreaOfResposibility" Placeholder="LocoAddressExample" />
                 <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Person.User.IsApiAccessPermitted" />

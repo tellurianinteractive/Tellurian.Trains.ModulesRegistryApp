@@ -46,10 +46,10 @@ public static class LanguageUtility
     private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
          new Dictionary<Language, CultureInfo>() {
                  { Language.English, new CultureInfo("en-GB") },
-                 { Language.Swedish, new CultureInfo("sv-SE") },
-                 { Language.Danish, new CultureInfo("da-DK") },
-                 { Language.Norwegian, new CultureInfo("nb-NO") },
                  { Language.German, new CultureInfo("de-DE") },
+                 { Language.Danish, new CultureInfo("da-DK") },
+                 { Language.Swedish, new CultureInfo("sv-SE") },
+                 { Language.Norwegian, new CultureInfo("nb-NO") },
                  // Not fully supported below:
                  { Language.Dutch, new CultureInfo("nl-NL") },
                  { Language.Polish, new CultureInfo("pl-PL") },
@@ -59,6 +59,17 @@ public static class LanguageUtility
                  { Language.Slovak, new CultureInfo("sk-SK") },
                  { Language.Hungarian, new CultureInfo("hu-HU") },
         };
+
+
+    public static string CountrySuffix(this CultureInfo culture) => culture.TwoLetterISOLanguageName switch
+    {
+        "en" => "uk",
+        "sv" => "se",
+        "da" => "dk",
+        "nb" => "no",
+        "de" => "de",
+        _ => ""
+    };
 
     public static CultureInfo FullySupportedOrDefaultCulture(this string? twoLetterISOLanguageName) =>
         FullySupportedCultures.SingleOrDefault(sc => sc.TwoLetterISOLanguageName.Equals(twoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase)) ?? DefaultCulture;

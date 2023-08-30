@@ -1395,4 +1395,10 @@
   <data name="Deleted" xml:space="preserve">
     <value>Raderat</value>
   </data>
+  <data name="_CASING" xml:space="preserve">
+    <value>_LOWER</value>
+  </data>
+  <data name="AssistantOnly" xml:space="preserve">
+    <value>Endast assistent</value>
+  </data>
 </root>

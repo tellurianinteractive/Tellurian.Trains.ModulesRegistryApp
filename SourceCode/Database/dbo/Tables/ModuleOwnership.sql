@@ -10,16 +10,6 @@
     CONSTRAINT [FK_ModuleOwnership_Person] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
 );
 
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Owning person (if null, an Organisation must own it)', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'ModuleOwnership', @level2type = N'COLUMN', @level2name = N'PersonId';
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Owning organisation (if null, a Person must own it)', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'ModuleOwnership', @level2type = N'COLUMN', @level2name = N'GroupId';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'The ownerships share as 1/this value.', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'ModuleOwnership', @level2type = N'COLUMN', @level2name = N'OwnedShare';
-
 
 GO
 CREATE NONCLUSTERED INDEX [IX_ModuleOwnership_PersonId]

@@ -1,4 +1,4 @@
-﻿using ModulesRegistry.Services.Extensions;
+﻿using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Security;
 

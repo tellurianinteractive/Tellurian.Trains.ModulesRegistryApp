@@ -4,34 +4,19 @@ The concept are developed by the FREMO members Heiko Rosemann and Detlef Born.
 
 There is a need for simple handling assignment of wiFRED to DCC-address at meetings.
 It is also desirable to prepare as much as possible before the meeting.
-The purpose of this document is to describe the motivation for the solution and describe requirements and suggested implementation.
+The purpose of this document is to describe how the handling of wiFREDs is implemented.
 
-## Use Cases by suggested priority
-- **Manage wiFREDs** in a register that contains the data necessary to identify the individual wiFREDs
-and their owners.
-- **Register** user's vehicle (including locos) contribution to the layout, by assigning the contribution to a vehicle schedule.
-- **Assigning** of wiFRED to a single DCC-address at the meeting by primarily using QR-codes of wiFRED and barcode of loco. 
+## Main features
+- **wiFRED registration** for all FREMO-members, including printing a list of wiFREDs with QR-codes.
+- **wiFRED administration** including verification of the entered MAC-address. 
+This can be only be carried out by users with wiFRED-administration permission.
+- **wiFRED deletion** is handled in two ways:
+  - Before the wiFRED is verified, the entry is deleted.
+  - After the wiFRED is verified, it is marked as deleted, but remains in the database and can be re-registerd
+    by any FREMO-member.
 
-## Implementation
-
-### Features implemented in the Module Registry
-- **Management of wiFREDs**. Users must have an account in the Module Registry to manage their wiFREDS.
-- **Administrator management** of wiFREDS including **verifying** wiFRED data and **locking of MAC adress**. 
-A special right for this have to be granted by a global administrator.
-Only permitted for members of the meeting or layout organiser group.
-- **Registration of user's vehicles**. Users must have an account in the Module Registry to manage their vehicles.
-
-### Features implemented in the Module Meeting App?
-The Module Meeting App does not have user authentication. 
-And this is not necessary. 
-The only identity needed is reading the QR-code of the wiFRED, and this will be saved in local storage in the app.
-- **Reading QR code of wiFRED**. This identify which wiFRED to attach a DCC-address to.
-- **Reading QR code of loco card**.
-- **Updating** database with loco address assignments to wiFREDs. Reading order of QR-codes of wiFRED and DCC-addres should not matter.
-
-### Features implemented in local running application
-- **Reading wiFRED-loco assignments** in order to update local wiThrottle servers and wiThrottles.
-- **Scanning QR-codes** to assign wiFREDs to DCC-addresses.
+> NOTE: To be regarded as a FREMO member in the Module Registry, the person must have the member number reistered.
+This can only be made by country administrators.
 
 ## Data required
 

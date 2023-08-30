@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UICWagonNumbering.md = UICWagonNumbering.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Api", "SourceCode\Data.Api\Data.Api.csproj", "{6397D024-FED8-4979-B4C7-B5676D5200BF}"
@@ -35,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System design documents", "
 		System Design Documents\Overview.md = System Design Documents\Overview.md
 		System Design Documents\WiFredThrottles.md = System Design Documents\WiFredThrottles.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "TestCode\Data.Tests\Data.Tests.csproj", "{14B9D422-7E9A-4DFC-9B23-A6E916177590}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,14 +68,6 @@ Global
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|x64.ActiveCfg = Release|x64
 		{6AD8E781-90D7-4F82-99AA-5930C7217971}.Release|x64.Build.0 = Release|x64
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|x64.ActiveCfg = Debug|x64
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Debug|x64.Build.0 = Debug|x64
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Release|x64.ActiveCfg = Release|x64
-		{D3EB7E0E-B4EC-4EDD-8955-521AF4EAADFD}.Release|x64.Build.0 = Release|x64
 		{45A1B422-6765-4169-9083-580C89E1E59B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45A1B422-6765-4169-9083-580C89E1E59B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45A1B422-6765-4169-9083-580C89E1E59B}.Debug|x64.ActiveCfg = Debug|x64
@@ -104,6 +96,14 @@ Global
 		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.ActiveCfg = Release|Any CPU
 		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.Build.0 = Release|Any CPU
 		{4A4992F4-A2FE-42AC-A2A8-8218900C5966}.Release|x64.Deploy.0 = Release|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Debug|x64.Build.0 = Debug|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Release|x64.ActiveCfg = Release|Any CPU
+		{14B9D422-7E9A-4DFC-9B23-A6E916177590}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

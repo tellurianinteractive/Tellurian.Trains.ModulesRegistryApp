@@ -66,12 +66,12 @@ public static class WiFredThrottleExtensions
     /// Sets loco adresses to valid DCC-addresses; otherwise null;
     /// </summary>
     /// <param name="it"></param>
-    public static void SetDccAddressOrNull(this WiFredThrottle it)
+    public static void SetDccAddressOrNull(this WiFredThrottle it, WiFredThrottle? other = null)
     {
-        it.LocoAddress1 = it.LocoAddress1.DccAddressOrNull();
-        it.LocoAddress2 = it.LocoAddress2.DccAddressOrNull();
-        it.LocoAddress3 = it.LocoAddress3.DccAddressOrNull();
-        it.LocoAddress4 = it.LocoAddress4.DccAddressOrNull();
+        it.LocoAddress1 = other?.LocoAddress1.DccAddressOrNull() ?? it.LocoAddress1.DccAddressOrNull();
+        it.LocoAddress2 = other?.LocoAddress2.DccAddressOrNull() ?? it.LocoAddress2.DccAddressOrNull();
+        it.LocoAddress3 = other?.LocoAddress3.DccAddressOrNull() ?? it.LocoAddress3.DccAddressOrNull();
+        it.LocoAddress4 = other?.LocoAddress4.DccAddressOrNull() ?? it.LocoAddress4.DccAddressOrNull();
     }
 }
 

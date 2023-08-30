@@ -71,11 +71,19 @@ public class WiFredThrottleService
             entity.SetMacAddressUppercase();
             entity.UpdatedDateTime = TimeProvider.Now;
 
-            var existing = await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.Id == entity.Id).ConfigureAwait(false);
+            var existing = await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.Id == entity.Id || w.MacAddress == entity.MacAddress).ConfigureAwait(false);
             if (existing is null)
             {
                 entity.RegistrationDateTime = TimeProvider.Now;
                 dbContext.WiFredThrottles.Add(entity);
+            }
+            else if(entity.Id == 0 && existing.DeletedDateTime.HasValue) // re-registration
+            {
+                existing.OwningPersonId = entity.OwningPersonId;
+                existing.RegistrationDateTime = TimeProvider.Now;
+                existing.UpdatedDateTime = TimeProvider.Now;
+                existing.DeletedDateTime = null;
+                existing.SetDccAddressOrNull(entity);
             }
             else
             {
@@ -89,7 +97,7 @@ public class WiFredThrottleService
                 var result = await dbContext
                     .SaveChangesAsync()
                     .ConfigureAwait(false);
-                return result.SaveResult(entity);
+                return result.SaveResult(existing ?? entity);
 
             }
             catch (Exception ex)

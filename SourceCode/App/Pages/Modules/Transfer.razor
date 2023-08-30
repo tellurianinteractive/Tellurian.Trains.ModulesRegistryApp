@@ -7,6 +7,7 @@
 @inject IToastService ToastService
 
 @inject ModuleService ModuleService
+@inject ModuleOwnershipService ModuleOwnershipService
 @inject PersonService PersonService
 @inject GroupService GroupService
 @inject CountryService CountryService
@@ -30,11 +31,16 @@ else
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.OwnerName()</td>
-            <td>@item.OwnedShareAndPercentage()</td>
+            <td>@item.OwnedShareAndPercentage(Localizer)</td>
             <td>
                 @if (OwnershipRef?.IsOwner(item) == true)
                 {
                     <AppButton Label="Transfer" OnClickCallback="(() => TransferOwnership(item))" />
+                }
+                @if (item.IsAssistantOnly())
+                {
+                    <AppButton Label="Remove" OnClickCallback="(() => RemoveAssistant(item))" />
+
                 }
             </td>
         </RowTemplate>
@@ -46,7 +52,7 @@ else
 
         <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
             <Inputs>
-                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" />
+                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" ShowNoneOption=true />
                 <AppInputSelect Width="2" Label="TransferredShare" Items="TransferSharesItems(OwnershipToTransfer)" @bind-Value="SelectedTransferShare" />
             </Inputs>
         </EditTemplate>
@@ -73,10 +79,15 @@ else
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         OwnershipRef = GetOwnershipRef;
-        Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef);
         PersonsCountryId = await GetCurrentOwnerCountryId();
         Persons = await PersonService.ListboxItemsAsync(Principal, PersonsCountryId);
         Countries = await CountryService.ListboxItemsAsync(Principal, true, true);
+        await GetModule();
+    }
+
+    private async Task GetModule()
+    {
+        Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef!);
     }
 
     async Task<int> GetCurrentOwnerCountryId()
@@ -108,13 +119,30 @@ else
 
     async Task OnValidSubmit()
     {
-        if (OwnershipToTransfer is not null && NewOwnership is not null && OwnershipRef is not null && SelectedTransferShare > 0)
+        if (NewOwnership is null) return;
+        NewOwnership.OwnedShare = TransferShares.Single(ts => ts.Index == SelectedTransferShare).Percentage;
+        if (NewOwnership.IsAssistantOnly())
         {
-            NewOwnership.OwnedShare = TransferShares.Single(ts => ts.Index == SelectedTransferShare).Percentage;
-            var result = await ModuleService.TransferOwnershipAsync(Principal, OwnershipToTransfer, NewOwnership, OwnershipRef);
+            var result = await ModuleOwnershipService.AddAssistantAsync(Principal, NewOwnership);
             if (result.Entity is not null) Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
+        else if (OwnershipToTransfer.HasPersonOrGroupOwner() && NewOwnership.HasPersonOrGroupOwner() && OwnershipRef is not null && SelectedTransferShare >= 0)
+        {
+            var result = await ModuleOwnershipService.TransferOwnershipAsync(Principal, OwnershipToTransfer, NewOwnership);
+            if (result.Entity is not null) Module = result.Entity;
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        }
+        else
+        {
+            ToastService.ShowError(Localizer["Error"]);
+        }
+    }
+
+    async Task RemoveAssistant(ModuleOwnership ownership)
+    {
+        var result = await ModuleOwnershipService.RemoveAssistantAsync(Principal, ownership);
+        await GetModule();
     }
 
     async Task OnSelectedCountry(int countryId)
@@ -125,8 +153,8 @@ else
 
     IEnumerable<ListboxItem> TransferSharesItems(ModuleOwnership? ownership) =>
         ownership is null ? Array.Empty<ListboxItem>() :
-        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, $"1/{ts.Index} ({ts.Percentage * 100:F0}%)"));
+        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, ts.Percentage > 0 ? $"1/{ts.Index} ({ts.Percentage * 100:F0}%)" : Localizer["AssistantOnly"].Value));
 
     int SelectedTransferShare;
-    static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0 / 3.0), (4, 0.25), (5, 0.20) };
+    static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0 / 3.0), (4, 0.25), (5, 0.20), (6, 0) };
 }

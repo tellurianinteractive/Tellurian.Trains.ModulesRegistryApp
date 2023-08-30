@@ -1,0 +1,25 @@
+﻿@inject NavigationManager Navigator
+
+<div class="languageselector">
+    @foreach (var language in LanguageUtility.FullySupportedCultures)
+    {
+        <img style="padding: 2px" src="@Flag(language)" @onclick="@(()=>OnClick(language))" />
+    }
+</div>
+@code {
+    string Url(System.Globalization.CultureInfo language) => $"{UriWithoutQueryString(Navigator.Uri)}?culture={language.TwoLetterISOLanguageName}";
+    string Flag(System.Globalization.CultureInfo language) => $"/images/flags/{language.CountrySuffix()}.png";
+
+    private void OnClick(System.Globalization.CultureInfo language)
+    {
+        Navigator.NavigateTo(Url(language), true);
+    }
+
+    private string UriWithoutQueryString(string uri)
+    {
+        var q = uri.IndexOf('?');
+        return q > 1 ? uri.Substring(0, q - 1) : uri;
+    }
+
+        
+}

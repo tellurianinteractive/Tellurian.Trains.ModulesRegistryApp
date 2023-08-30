@@ -66,6 +66,9 @@ public static class LocalizedStringExtensions
     private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
         string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToFirstLowerInvariant() : localizer[objectName].ToString();
 
+    public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) => 
+        localizer["_CASING"] == "_LOWER" ? localizer[resourceName].Value.ToLowerInvariant() : localizer[resourceName].Value;
+
     private static string Name(this IStringLocalizer me, object? owner) =>
         owner switch
         {

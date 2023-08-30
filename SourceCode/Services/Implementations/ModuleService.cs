@@ -1,4 +1,6 @@
-﻿using ModulesRegistry.Data.Resources;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
+using ModulesRegistry.Data.Resources;
 using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -364,52 +366,62 @@ public sealed class ModuleService
             using var dbContext = Factory.CreateDbContext();
             using var transaction = dbContext.Database.BeginTransaction();
 
-            var existingOrigin = dbContext.ModuleOwnerships.SingleOrDefault(mo =>
-                mo.ModuleId == origin.ModuleId &&
-                (origin.PersonId.HasValue && mo.PersonId == origin.PersonId || origin.GroupId.HasValue && mo.GroupId == origin.GroupId));
 
-            if (existingOrigin is null) return Strings.NotAuthorised.SaveResult<Module>();
 
             var existingDestination = dbContext.ModuleOwnerships.SingleOrDefault(mo =>
                 mo.ModuleId == destination.ModuleId &&
                 (destination.PersonId.HasValue && mo.PersonId == destination.PersonId || destination.GroupId.HasValue && mo.GroupId == destination.GroupId));
 
-
-            var transferredShare = Rational.Approximate(destination.OwnedShare, 0.001);
-            var originShare = existingOrigin.SubtractShare(transferredShare);
-
-            if (originShare.Ok)
+            if (destination.OwnedShare == 0)
             {
-                if (originShare.Percentage < 0.01)
+                if (existingDestination is null)
                 {
-                    dbContext.ModuleOwnerships.Remove(existingOrigin);
-                }
-                else
-                {
-                    existingOrigin.OwnedShare = originShare.Percentage;
+                    dbContext.ModuleOwnerships.Add(destination);
                 }
             }
             else
             {
-                transaction.Rollback();
-                return Strings.NotAuthorised.SaveResult<Module>(); // Wrong owner share
-            }
+                var existingOrigin = dbContext.ModuleOwnerships.SingleOrDefault(mo =>
+                     mo.ModuleId == origin.ModuleId &&
+                     (origin.PersonId.HasValue && mo.PersonId == origin.PersonId || origin.GroupId.HasValue && mo.GroupId == origin.GroupId));
 
-            if (existingDestination is null)
-            {
-                dbContext.ModuleOwnerships.Add(destination);
-            }
-            else
-            {
-                var destinationShare = existingDestination.AddShare(transferredShare);
-                if (destinationShare.Ok)
+                if (existingOrigin is null) return Strings.NotAuthorised.SaveResult<Module>();
+                var transferredShare = destination.OwnedShare == 0 ? Rational.Zero : Rational.Approximate(destination.OwnedShare, 0.001);
+                var originShare = existingOrigin.SubtractShare(transferredShare);
+
+                if (originShare.Ok)
                 {
-                    existingDestination.OwnedShare = destinationShare.Percentage;
+                    if (originShare.Percentage < 0.01)
+                    {
+                        dbContext.ModuleOwnerships.Remove(existingOrigin);
+                    }
+                    else
+                    {
+                        existingOrigin.OwnedShare = originShare.Percentage;
+                    }
                 }
                 else
                 {
                     transaction.Rollback();
                     return Strings.NotAuthorised.SaveResult<Module>(); // Wrong owner share
+                }
+
+                if (existingDestination is null)
+                {
+                    dbContext.ModuleOwnerships.Add(destination);
+                }
+                else
+                {
+                    var destinationShare = existingDestination.AddShare(transferredShare);
+                    if (destinationShare.Ok)
+                    {
+                        existingDestination.OwnedShare = destinationShare.Percentage;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return Strings.NotAuthorised.SaveResult<Module>(); // Wrong owner share
+                    }
                 }
             }
             var result = await dbContext.SaveChangesAsync();
@@ -418,6 +430,59 @@ public sealed class ModuleService
             return result.SaveResult(module);
         }
         return principal.SaveNotAuthorised<Module>();
+    }
+
+    public async Task<(int Count, string Message, Module? Entity)> AddAssistant(ClaimsPrincipal? principal, ModuleOwnership ownership)
+    {
+        if (principal.IsAuthenticated() && ownership.IsAssistantOnly())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var existing = dbContext.ModuleOwnerships.AsNoTracking().SingleOrDefault(mo =>
+                mo.ModuleId == ownership.ModuleId &&
+                (ownership.PersonId.HasValue && mo.PersonId == ownership.PersonId || ownership.GroupId.HasValue && mo.GroupId == ownership.GroupId));
+            if (existing is not null) return principal.SaveNotAuthorised<Module>();
+
+            var result = await SaveAssistant(dbContext, ownership);
+            //ownership.OwnedShare = 0.0;
+            //dbContext.ModuleOwnerships.Add(ownership);
+            //var result = await dbContext.SaveChangesAsync();
+            var module = await FindByIdAsync(principal, ownership.ModuleId);
+            return result.SaveResult(module);
+        }
+        return principal.SaveNotAuthorised<Module>();
+    }
+
+    private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
+    {
+        var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+        if (connection is null) throw new ArgumentException(nameof(connection));
+
+        var sql = "INSERT INTO ModuleOwnership (PersonId, GroupId, ModuleId, OwnedShare) VALUES (@PersonId, @GroupId, @ModuleId, @OwnedShare)";
+        var command = connection.CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = System.Data.CommandType.Text;
+        command.Parameters.AddWithValue("@PersonId", ownership.PersonId.AsValueOrDBNull());
+        command.Parameters.AddWithValue("@GroupId", ownership.GroupId.AsValueOrDBNull());
+        command.Parameters.AddWithValue("@ModuleId", ownership.ModuleId);
+        command.Parameters.AddWithValue("@OwnedShare", 0);
+        connection.Open();
+        var result = await command.ExecuteNonQueryAsync(  );
+        connection.Close();
+        return result;
+    }
+
+    public async Task<(int Count, string Message)> RemoveAssistant(ClaimsPrincipal? principal, ModuleOwnership ownership)
+    {
+        if (principal.IsAuthenticated() && ownership.IsAssistantOnly())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.ModuleOwnerships.SingleOrDefaultAsync(mo => mo.Id == ownership.Id);
+            if (existing is null) return principal.NotFound();
+            dbContext.ModuleOwnerships.Remove(existing);
+            var result = await dbContext.SaveChangesAsync();
+            return result.DeleteResult();
+        }
+        return principal.NotAuthorized<ModuleOwnership>();
     }
 #pragma warning restore IDE0042 // Deconstruct variable declaration
 }

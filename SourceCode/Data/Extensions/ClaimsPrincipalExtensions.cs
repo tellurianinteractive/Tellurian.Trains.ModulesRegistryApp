@@ -1,7 +1,7 @@
-﻿using ModulesRegistry.Services.Implementations;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 
-namespace ModulesRegistry.Services.Extensions;
+namespace ModulesRegistry.Data.Extensions;
 
 public static class AppPolicyNames
 {
@@ -81,20 +81,7 @@ public static class ClaimsPrincipalExtensions
     #endregion
 
     #region Data modification rights
-    public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef, GroupService groupService)
-    {
-        if (principal is null) return false;
-        if (ownershipRef.IsPerson || ownershipRef.IsPersonInGroup)
-        {
-            if (ownershipRef.PersonId == principal.PersonId()) return true;
-            return await groupService.IsDataAdministratorInSameGroupAsMember(principal, ownershipRef.PersonId).ConfigureAwait(false);
-        }
-        else if (ownershipRef.IsGroup)
-        {
-            return await groupService.IsGroupDataAdministratorAsync(principal, ownershipRef.GroupId).ConfigureAwait(false);
-        }
-        return false;
-    }
+
 
     public static bool MayRead([NotNullWhen(true)] this ClaimsPrincipal? principal) =>
         principal.MayRead(principal.PersonId());

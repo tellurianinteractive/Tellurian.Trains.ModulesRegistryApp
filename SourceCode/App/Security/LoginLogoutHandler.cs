@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;

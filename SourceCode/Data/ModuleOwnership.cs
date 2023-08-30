@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Rationals;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
@@ -28,8 +30,39 @@ public enum GroupOwnershipType
     Combined = 3,
 }
 
+public static class ModuleOwnershipTransferExtensions
+{
+    public static ModuleOwnership[] TransferTo(this ModuleOwnership original, ModuleOwnership newOwnership)
+    {
+        if(newOwnership.ModuleId> 0 && newOwnership.ModuleId != original.ModuleId) return Array.Empty<ModuleOwnership>();   
+        if (newOwnership.ModuleId == 0) newOwnership.ModuleId = original.ModuleId;
+        if (newOwnership.PersonId.HasValue && newOwnership.PersonId == original.PersonId) return new[] { original };
+        if (newOwnership.GroupId.HasValue && newOwnership.GroupId == original.GroupId) return new[] { original };
+        var remaningOwnerShare = RemainingOwnerShare(original, newOwnership.OwnedShare());
+        if (remaningOwnerShare <= original.OwnedShare())
+        {
+            original.OwnedShare = (double)remaningOwnerShare;
+            return new[] { original, newOwnership };
+        }
+        return new[] { original };
+
+        static Rational RemainingOwnerShare(ModuleOwnership original, Rational part) =>
+            part == Rational.One ? Rational.Zero :
+            part < Rational.One && part > Rational.Zero && part <= original.OwnedShare() ? original.OwnedShare() - part :
+            Rational.One;
+    }
+}
+
 public static class ModuleOwnershipExtensions
 {
+    public static ModuleOwnershipRef AsModuleOwnershipRef(this ModuleOwnership ownership) =>
+        ModuleOwnershipRef.PersonAndOrGroup(ownership.PersonId ?? 0, ownership.GroupId ?? 0);
+    public static bool HasPersonOrGroupOwner([NotNullWhen(true)] this ModuleOwnership? ownership) =>
+        ownership is not null && (ownership.PersonId.HasValue || ownership.GroupId.HasValue);
+
+    public static bool IsAssistantOnly([NotNullWhen(true)] this ModuleOwnership? ownership) =>
+        ownership is not null && ownership.OwnedShare == 0;
+
     public static string OwnerNames(this IEnumerable<ModuleOwnership> us) =>
         string.Join(", ", us.First().Module.ModuleOwnerships.Select(mo => mo.OwnerName()));
 
@@ -41,8 +74,9 @@ public static class ModuleOwnershipExtensions
         me.PersonId is not null ? $"Person {me.PersonId}" :
         "?";
 
-    public static string OwnedShareAndPercentage(this ModuleOwnership? me) =>
+    public static string OwnedShareAndPercentage(this ModuleOwnership? me, IStringLocalizer localizer) =>
         me is null ? string.Empty :
+        me.OwnedShare==0 ? localizer["AssistantOnly"].Value :
         $"{me.OwnedShare()} ({me.OwnedPercent() * 100:F1}%)";
 
     public static double OwnedPercent(this ModuleOwnership? me) =>
@@ -50,7 +84,7 @@ public static class ModuleOwnershipExtensions
         me.OwnedShare;
 
     public static Rational OwnedShare(this ModuleOwnership? me) =>
-        me is null ? Rational.Zero :
+        me is null || me.OwnedShare == 0 ? Rational.Zero :
         Rational.Approximate(me.OwnedShare, 0.01);
 
     public static (bool Ok, double Percentage) AddShare(this ModuleOwnership me, Rational share)
@@ -80,16 +114,6 @@ public static class ModuleOwnershipMapping
         modelBuilder.Entity<ModuleOwnership>(entity =>
         {
             entity.ToTable("ModuleOwnership");
-
-            entity.Property(e => e.GroupId)
-                .HasComment("Owning organisation (if null, a Person must own it)");
-
-            entity.Property(e => e.OwnedShare)
-                .HasDefaultValueSql("((1))")
-                .HasComment("The ownerships share as 1/this value.");
-
-            entity.Property(e => e.PersonId)
-                .HasComment("Owning person (if null, an Organisation must own it)");
 
             entity.HasOne(d => d.Group)
                 .WithMany(p => p.ModuleOwnerships)
