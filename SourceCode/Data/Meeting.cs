@@ -78,6 +78,9 @@ public static class MeetingExtensions
         meeting.Layouts.Count == 0 ||
         meeting.Layouts.All(l => !l.IsRegistrationPermitted);
 
+    public static bool PermitsRegistrations([NotNullWhen(true)] this Meeting? meeting) =>
+        meeting is not null && !meeting.IsCancelled() && meeting.Layouts.Any(l => l.IsRegistrationPermitted);
+
     public static bool IsOpenForRegistration([NotNullWhen(true)] this Meeting? meeting, DateTime at) =>
         meeting is not null &&
         meeting.IsNotCancelled() &&
