@@ -33,9 +33,9 @@ public static class MeetingExtensions
             _ => (MeetingStatus)meeting.Status switch
             {
                 MeetingStatus.Preliminary => "fa fa-question-circle",
-                MeetingStatus.Planned => "fa fa-calendar-check",
-                MeetingStatus.UnderApproval => "fa fa-gavel",
-                MeetingStatus.Approved  => meeting.GroupDomainId>0 ? "fa fa-check-double" : "fa fa-check-circle",
+                MeetingStatus.Planned => meeting.GroupDomainId.HasValue ? "fa fa-calendar-check" : "fa fa-check-double",
+                MeetingStatus.UnderApproval => "fa fa-flag",
+                MeetingStatus.Approved  => meeting.GroupDomainId.HasValue ? "fa fa-check-double" : "fa fa-check-circle",
 
                 _ => string.Empty,
             }
@@ -46,7 +46,7 @@ public static class MeetingExtensions
         {
             MeetingStatus.Canceled => "red",
             MeetingStatus.Approved => "green",
-            MeetingStatus.Planned => meeting.GroupDomainId == 0 ? "green" : "blue",
+            MeetingStatus.Planned => meeting.GroupDomainId.HasValue ? "blue" : "green",
             MeetingStatus.Preliminary => "orange",
             _ => "blue"
 
