@@ -5,6 +5,7 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.9.1
 Release date 2023-08-31
 - **Icons** for meeting status with explaning tootip.
+- **Ownership** status also added for stations.
 - **Bug fix** of module ownership transfer and assignment of assistant maintainer.
 ## Release 1.9.0
 Release date 2023-08-30 - Milestone: Fully support for wiFRED management.

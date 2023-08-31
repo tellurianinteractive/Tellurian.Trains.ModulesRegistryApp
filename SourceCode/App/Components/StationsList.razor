@@ -19,6 +19,7 @@
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["Signature"]</th>
+        <th style="text-align: center">@Localizer["OwnedPercent"]</th>
         <th align="center">@Localizer["Status"]</th>
         <th align="center">@Localizer["IsTerminus"]</th>
         <th align="center">@Localizer["IsShadowStation"]</th>
@@ -29,6 +30,7 @@
     <RowTemplate Context="station">
         <td>@Name(station)</td>
         <td>@station.Signature</td>
+        <td align="center">@station.PrimaryModule.ModuleOwnership(OwnershipRef).OwnedShareAndPercentage(Localizer)</td>
         <td align="center">@station.PrimaryModule.StatusIcon()</td>
         <td align="center">@station.IsTerminus.AsYesOrNo()</td>
         <td align="center">@station.IsShadow.AsYesOrNo()</td>

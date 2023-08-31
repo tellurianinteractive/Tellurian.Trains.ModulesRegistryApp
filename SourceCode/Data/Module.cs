@@ -112,6 +112,8 @@ public static class ModuleExtensions
             Straight = me.Straight,
             Theme = me.Theme,
         };
+    public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) => 
+        module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);
 
     static string CloneFullName(this Module module)
     {
