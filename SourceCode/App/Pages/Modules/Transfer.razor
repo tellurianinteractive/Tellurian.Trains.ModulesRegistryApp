@@ -15,7 +15,7 @@
 @if (Module is null)
 {
     <PageHeading Label="TransferOwnership" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
-    <ActionMessage Label="ModuleNotFound" AlertType="´Warning" />
+    <ActionMessage Label="ModuleOwnershipsNotFound" AlertType="´Warning" />
 }
 else
 {
@@ -33,7 +33,7 @@ else
             <td>@item.OwnerName()</td>
             <td>@item.OwnedShareAndPercentage(Localizer)</td>
             <td>
-                @if (OwnershipRef?.IsOwner(item) == true)
+                @if (item.IsOwningPerson(OwningPersonId))
                 {
                     <AppButton Label="Transfer" OnClickCallback="(() => TransferOwnership(item))" />
                 }
@@ -133,10 +133,7 @@ else
             if (result.Entity is not null) Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
-        else
-        {
-            ToastService.ShowError(Localizer["Error"]);
-        }
+         StateHasChanged();
     }
 
     async Task RemoveAssistant(ModuleOwnership ownership)
@@ -148,7 +145,7 @@ else
     async Task OnSelectedCountry(int countryId)
     {
         PersonsCountryId = countryId;
-        Countries = await CountryService.ListboxItemsAsync(Principal, true, true);
+        Persons = await PersonService.ListboxItemsAsync(Principal, PersonsCountryId);
     }
 
     IEnumerable<ListboxItem> TransferSharesItems(ModuleOwnership? ownership) =>

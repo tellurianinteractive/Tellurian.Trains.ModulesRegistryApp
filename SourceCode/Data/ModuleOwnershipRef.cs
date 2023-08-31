@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ModulesRegistry.Data;
 
-public class ModuleOwnershipRef
+public class ModuleOwnershipRef : IEquatable<ModuleOwnershipRef>
 {
     private ModuleOwnershipRef() { }
     public static ModuleOwnershipRef Person(int personId) => new() { _PersonId = personId };
@@ -37,6 +37,12 @@ public class ModuleOwnershipRef
         _Principal = principal
     };
 
+    public override bool Equals(object? obj) => obj is ModuleOwnershipRef other && Equals(other);
+    public bool Equals(ModuleOwnershipRef? other) => other is not null && other.PersonId == PersonId && other.GroupId == GroupId;
+    public override int GetHashCode() => PersonId.GetHashCode() ^ GroupId.GetHashCode();
+    public static bool operator ==(ModuleOwnershipRef left, ModuleOwnershipRef right) => left.Equals(right);
+    public static bool operator !=(ModuleOwnershipRef left, ModuleOwnershipRef right) => !left.Equals(right);
+
 
     public int PersonId => _PersonId > 0 ? _PersonId : _GroupId == 0 && _Principal is not null ? _Principal.PersonId() : 0;
     public int GroupId => _GroupId;
@@ -47,6 +53,7 @@ public class ModuleOwnershipRef
 
 
     public bool IsOwner(ModuleOwnership ownership) =>
+        ownership.OwnedShare > 0 &&
         IsGroup ? ownership.GroupId == GroupId :
         IsPerson && ownership.PersonId == PersonId;
 

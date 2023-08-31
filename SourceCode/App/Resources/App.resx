@@ -1401,4 +1401,10 @@
   <data name="AssistantOnly" xml:space="preserve">
     <value>Assistant only</value>
   </data>
+  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
+    <value>No module ownerships found</value>
+  </data>
+  <data name="ModulesNotFound" xml:space="preserve">
+    <value>No modules found</value>
+  </data>
 </root>

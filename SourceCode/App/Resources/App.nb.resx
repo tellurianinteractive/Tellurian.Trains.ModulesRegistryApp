@@ -1401,4 +1401,10 @@
   <data name="AssistantOnly" xml:space="preserve">
     <value>Bare assistent</value>
   </data>
+  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
+    <value>Ingen moduleierskap funnet</value>
+  </data>
+  <data name="ModulesNotFound" xml:space="preserve">
+    <value>Ingen moduler funnet</value>
+  </data>
 </root>

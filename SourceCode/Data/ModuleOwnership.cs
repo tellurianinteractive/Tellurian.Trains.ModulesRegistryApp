@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Rationals;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
@@ -30,31 +31,42 @@ public enum GroupOwnershipType
     Combined = 3,
 }
 
+public record ModuleOwnershipTransfer(ModuleOwnershipRef OldOwnerRef, ModuleOwnershipRef NewOwnerRef, double TransferredPercent)
+{
+    public ModuleOwnershipTransfer(int oldOwnerPersonId, int newOwnerPersonId, double transferredPercent) :
+        this(ModuleOwnershipRef.Person(oldOwnerPersonId), ModuleOwnershipRef.Person(newOwnerPersonId), transferredPercent)
+    { }
+    public bool IsZero => TransferredPercent == 0;
+}
+
 public static class ModuleOwnershipTransferExtensions
 {
-    public static ModuleOwnership[] TransferTo(this ModuleOwnership original, ModuleOwnership newOwnership)
+    public static (ModuleOwnership From, ModuleOwnership To) Transfer(this ModuleOwnership original, ModuleOwnershipTransfer transfer)
     {
-        if(newOwnership.ModuleId> 0 && newOwnership.ModuleId != original.ModuleId) return Array.Empty<ModuleOwnership>();   
-        if (newOwnership.ModuleId == 0) newOwnership.ModuleId = original.ModuleId;
-        if (newOwnership.PersonId.HasValue && newOwnership.PersonId == original.PersonId) return new[] { original };
-        if (newOwnership.GroupId.HasValue && newOwnership.GroupId == original.GroupId) return new[] { original };
-        var remaningOwnerShare = RemainingOwnerShare(original, newOwnership.OwnedShare());
-        if (remaningOwnerShare <= original.OwnedShare())
-        {
-            original.OwnedShare = (double)remaningOwnerShare;
-            return new[] { original, newOwnership };
-        }
-        return new[] { original };
 
-        static Rational RemainingOwnerShare(ModuleOwnership original, Rational part) =>
-            part == Rational.One ? Rational.Zero :
-            part < Rational.One && part > Rational.Zero && part <= original.OwnedShare() ? original.OwnedShare() - part :
-            Rational.One;
+        if (original.AsModuleOwnershipRef() == transfer.NewOwnerRef)
+        {
+            original.OwnedShare = Math.Min(1, original.OwnedShare + transfer.TransferredPercent);
+            return (original, original.WithNewOwner(transfer.NewOwnerRef));
+        }
+        var newOwnership = original.WithNewOwner(transfer.NewOwnerRef);
+        newOwnership.OwnedShare = Math.Min(original.OwnedShare, transfer.TransferredPercent);
+        original.OwnedShare = Math.Max(0, original.OwnedShare - transfer.TransferredPercent);
+        return (original, newOwnership );
     }
 }
 
-public static class ModuleOwnershipExtensions
+public static class ModuleOwnershipExtensionsk
 {
+    public static bool IsOwningPerson(this ModuleOwnership ownership,int personId) => ownership.OwnedShare > 0 && ownership.PersonId == personId;
+    public static ModuleOwnership WithNewOwner(this ModuleOwnership original, ModuleOwnershipRef newOwnerRef) =>
+        new()
+        {
+            ModuleId = original.ModuleId,
+            PersonId = newOwnerRef.PersonId > 0 ? newOwnerRef.PersonId : null,
+            GroupId = newOwnerRef.GroupId > 0 ? newOwnerRef.GroupId: null,
+            OwnedShare = 0
+        };
     public static ModuleOwnershipRef AsModuleOwnershipRef(this ModuleOwnership ownership) =>
         ModuleOwnershipRef.PersonAndOrGroup(ownership.PersonId ?? 0, ownership.GroupId ?? 0);
     public static bool HasPersonOrGroupOwner([NotNullWhen(true)] this ModuleOwnership? ownership) =>
@@ -76,7 +88,7 @@ public static class ModuleOwnershipExtensions
 
     public static string OwnedShareAndPercentage(this ModuleOwnership? me, IStringLocalizer localizer) =>
         me is null ? string.Empty :
-        me.OwnedShare==0 ? localizer["AssistantOnly"].Value :
+        me.OwnedShare == 0 ? localizer["AssistantOnly"].Value :
         $"{me.OwnedShare()} ({me.OwnedPercent() * 100:F1}%)";
 
     public static double OwnedPercent(this ModuleOwnership? me) =>

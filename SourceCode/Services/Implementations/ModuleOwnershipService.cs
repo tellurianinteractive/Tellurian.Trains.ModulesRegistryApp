@@ -15,23 +15,35 @@ public class ModuleOwnershipService
         var share = newOwnership.OwnedShare();
         if (principal.IsAuthenticated() && share > Rational.Zero)
         {
-            var transfer = origin.TransferTo(newOwnership);
-            if (transfer.Length < 2) return principal.NothingToUpdate<Module>();
+            var transfer = new ModuleOwnershipTransfer(origin.AsModuleOwnershipRef(), newOwnership.AsModuleOwnershipRef(), newOwnership.OwnedShare);
+            if (transfer.IsZero) return principal.NothingToUpdate<Module>();
 
+            var (From, To) = origin.Transfer(transfer);
             using var dbContext = Factory.CreateDbContext();
 
-            if (transfer[0].OwnedShare < 0.01)
+            if (From.OwnedShare < 0.01)
             {
-                dbContext.ModuleOwnerships.Remove(origin);
+                dbContext.ModuleOwnerships.Entry(origin).State = EntityState.Deleted;
             }
             else
             {
-                dbContext.ModuleOwnerships.Entry(origin).CurrentValues.SetValues(transfer[0]);
+                dbContext.ModuleOwnerships.Entry(origin).CurrentValues.SetValues(From);
                 dbContext.ModuleOwnerships.Entry(origin).State = EntityState.Modified;
             };
-            dbContext.ModuleOwnerships.Add(transfer[1]);
+            var existingNewOwnership = await dbContext.ModuleOwnerships
+                 .SingleOrDefaultAsync(mo => mo.ModuleId == To.ModuleId && (To.PersonId.HasValue && mo.PersonId == To.PersonId.Value || To.GroupId.HasValue && mo.GroupId == To.GroupId.Value));
+            if (existingNewOwnership is null)
+            {
+                if (To.OwnedShare > 0) dbContext.ModuleOwnerships.Add(To);
+            }
+            else
+            {
+                existingNewOwnership.OwnedShare += To.OwnedShare;
+                dbContext.ModuleOwnerships.Entry(existingNewOwnership).State = EntityState.Modified;
+            }
             var result = await dbContext.SaveChangesAsync();
-            var module = await GetModule(dbContext, origin.ModuleId);
+
+            var module = await GetModule(origin.ModuleId);
             return result.SaveResult(module);
         }
         return principal.SaveNotAuthorised<Module>();
@@ -47,20 +59,22 @@ public class ModuleOwnershipService
             if (existing is not null) return principal.SaveNotAuthorised<Module>();
 
             var result = await SaveAssistant(dbContext, ownership);
-            var module = await GetModule(dbContext, ownership.ModuleId);
+            var module = await GetModule(ownership.ModuleId);
             return result.SaveResult(module);
         }
         return principal.SaveNotAuthorised<Module>();
     }
 
-    private static async Task<Module?> GetModule(ModulesDbContext dbContext, int moduleId) =>
-        await dbContext.Modules
+    private async Task<Module?> GetModule(int moduleId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Modules
            .AsNoTracking()
            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
            .SingleOrDefaultAsync(m => m.Id == moduleId)
            .ConfigureAwait(false);
-
+    }
 
     private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
     {

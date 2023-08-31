@@ -4,68 +4,94 @@ using Rationals;
 namespace ModulesRegistry.Data.Tests;
 
 [TestClass]
-public class ModuleOwnershipTests
+public class ModuleOwnershipTestsKD
 {
     [TestMethod]
     public void FullTransferOfOwnership()
     {
-        var full = Rational.One;
-        var newOwnership = new ModuleOwnership() { PersonId = 20, OwnedShare = (double)full};
-        var result = OriginalFullOwnership.TransferTo(newOwnership);
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual(0, result[0].OwnedShare);
-        Assert.AreEqual(1, result[1].OwnedShare);
-        Assert.AreEqual(20, result[1].PersonId);
-        Assert.AreEqual(11, result[0].ModuleId);
-        Assert.AreEqual(11, result[1].ModuleId);
+        var original = OriginalFullOwnership;
+        var transfer = new ModuleOwnershipTransfer(original.PersonId!.Value, 20, 1);
+        var result = OriginalFullOwnership.Transfer(transfer);
+        AssertModuleId(result);
+        Assert.AreEqual(0, result.From.OwnedShare);
+        Assert.AreEqual(1, result.To.OwnedShare);
+        Assert.AreEqual(20, result.To.PersonId);
     }
 
     [TestMethod]
     public void Only25PercentTransferOfOwnership()
     {
-        var part = new Rational(1, 4);
-        var newOwnership = new ModuleOwnership() { PersonId = 20, OwnedShare=(double)part };
-        var result = OriginalFullOwnership.TransferTo(newOwnership);
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual(0.75, result[0].OwnedShare, 0.001);
-        Assert.AreEqual(0.25, result[1].OwnedShare, 0.001);
-        Assert.AreEqual(20, result[1].PersonId);
+        var original = OriginalFullOwnership;
+        var transfer = new ModuleOwnershipTransfer(original.PersonId!.Value, 20, .25);
+        var result = original.Transfer(transfer);
+        AssertModuleId(result);
+        Assert.AreEqual(.75, result.From.OwnedShare);
+        Assert.AreEqual(.25, result.To.OwnedShare);
+        Assert.AreEqual(20, result.To.PersonId);
     }
 
-    [TestMethod] 
+    [TestMethod]
     public void AddAssistantOnly()
     {
-        var none = Rational.Zero;
-        var newOwnership = new ModuleOwnership() { PersonId = 20, OwnedShare = (double)none };
-        var result = OriginalFullOwnership.TransferTo(newOwnership);
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual(1, result[0].OwnedShare);
-        Assert.AreEqual(0, result[1].OwnedShare);
-        Assert.AreEqual(20, result[1].PersonId);
-        Assert.IsTrue(result[1].IsAssistantOnly());
+        var original = OriginalFullOwnership;
+        var transfer = new ModuleOwnershipTransfer(original.PersonId!.Value, 20, 0);
+        var result = original.Transfer(transfer);
+        AssertModuleId(result);
+        Assert.AreEqual(1, result.From.OwnedShare);
+        Assert.AreEqual(0, result.To.OwnedShare);
+        Assert.AreEqual(20, result.To.PersonId);
+        Assert.IsTrue(result.To.IsAssistantOnly());
     }
 
     [TestMethod]
     public void TransferFractioneShare()
     {
-        var partialOwnership = new ModuleOwnership() { PersonId = 9, ModuleId = 55, OwnedShare = 0.25 };
-        var result = partialOwnership.TransferTo(new ModuleOwnership() { PersonId = 10, OwnedShare=0.25});
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual(0, result.First().OwnedShare);
-        Assert.AreEqual(0.25, result.Last().OwnedShare);
+        var original = new ModuleOwnership() { PersonId = 9, ModuleId = 55, OwnedShare = 0.25 };
+        var transfer = new ModuleOwnershipTransfer(original.PersonId!.Value, 20, 0.25);
+        var result = original.Transfer(transfer);
+        AssertModuleId(result); 
+        Assert.AreEqual(0, result.From.OwnedShare);
+        Assert.AreEqual(.25, result.To.OwnedShare);
+        Assert.AreEqual(20, result.To.PersonId);
     }
 
     [TestMethod]
     public void TransferToLargeShare()
     {
-        var partialOwnership = new ModuleOwnership() { PersonId = 9, ModuleId = 55, OwnedShare = 0.25 };
-        var result = partialOwnership.TransferTo(new ModuleOwnership() { PersonId = 10, OwnedShare = 0.50 });
-        Assert.AreEqual(1, result.Length);
+        var original = new ModuleOwnership() { PersonId = 9, ModuleId = 55, OwnedShare = 0.25 };
+        var transfer = new ModuleOwnershipTransfer(original.PersonId!.Value, 20, .50);
+        var result = original.Transfer(transfer);
+        AssertModuleId(result);
+        Assert.AreEqual(0, result.From.OwnedShare);
+        Assert.AreEqual(.25, result.To.OwnedShare);
+        Assert.AreEqual(20, result.To.PersonId);
+    }
+
+    [TestMethod]
+    public void GiveOwnershipPartBackToOneOwner()
+    {
+        var original = new ModuleOwnership() { PersonId = 9, ModuleId = 55, OwnedShare = 0.25 };
+        var transfer = new ModuleOwnershipTransfer(20, original.PersonId!.Value, .50);
+        var result = original.Transfer(transfer);
+        AssertModuleId(result);
+        Assert.AreEqual(0.75, result.From.OwnedShare);
+        Assert.AreEqual(0, result.To.OwnedShare);
+        Assert.AreEqual(original.PersonId, result.From.PersonId);
+        Assert.AreEqual(transfer.NewOwnerRef.PersonId, result.To.PersonId);
+
+    }
+
+    private static void AssertModuleId((ModuleOwnership from, ModuleOwnership to) transfer)
+    {
+        Assert.IsFalse(transfer.from.ModuleId == 0);
+        Assert.IsTrue(transfer.to.ModuleId == transfer.from.ModuleId);
+
     }
 
     private static ModuleOwnership OriginalFullOwnership =>
         new()
         {
+            Id = 999,
             PersonId = 10,
             ModuleId = 11,
             OwnedShare = 1,

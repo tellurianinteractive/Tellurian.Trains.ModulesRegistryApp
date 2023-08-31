@@ -3,7 +3,7 @@
     [PersonId]              INT NULL,
     [GroupId]               INT NULL,
     [ModuleId]              INT NOT NULL,
-    [OwnedShare]            FLOAT (53) DEFAULT ((1)) NOT NULL
+    [OwnedShare]            FLOAT (53) DEFAULT ((0)) NOT NULL
     CONSTRAINT [PK_ModuleOwnership] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_ModuleOwnership_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_ModuleOwnership_Module] FOREIGN KEY ([ModuleId]) REFERENCES [dbo].[Module] ([Id]) ON DELETE CASCADE,
