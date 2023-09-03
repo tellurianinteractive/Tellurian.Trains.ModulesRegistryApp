@@ -30,7 +30,9 @@ public sealed class PersonService
 
     public async Task<IEnumerable<ListboxItem>> FremoMembersListboxItemsAsync(ClaimsPrincipal? principal, int countryId = 0, int personId = 0)
     {
-        if (principal.IsGlobalAdministrator() || principal.MayManageWiFreds())
+        personId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? personId : principal.PersonId();
+        countryId = personId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? countryId : principal.CountryId();
+        if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.People.AsNoTracking()
