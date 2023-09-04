@@ -31,13 +31,13 @@ public sealed class PersonService
     public async Task<IEnumerable<ListboxItem>> FremoMembersListboxItemsAsync(ClaimsPrincipal? principal, int countryId = 0, int personId = 0)
     {
         personId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? personId : principal.PersonId();
-        countryId = personId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? countryId : principal.CountryId();
+        countryId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? countryId : principal.CountryId();
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.People.AsNoTracking()
                 .Include(p => p.Country)
-                .Where(p => p.FremoMemberNumber.HasValue && (personId == 0 || p.Id == personId) && (countryId == 0 || p.CountryId == countryId))
+                .Where(p => (personId == 0 || p.Id == personId) && (countryId == 0 || p.CountryId == countryId))
                 .ToReadOnlyListAsync();
             return items
                 .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))

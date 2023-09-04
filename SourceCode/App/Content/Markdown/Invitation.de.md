@@ -1,12 +1,12 @@
-﻿#### Sie werden zur Modulregistrierung eingeladen
+﻿#### Du wurdest zur APP "Modulregistrierung" eingeladen
 
-Das Modulregister ist eine Webb-Applicaton zur Verwaltung von Daten über Modelleisenbahnmodule.
-Sie können Ihre eigenen Module verwalten und anderen helfen, indem Sie Module für Mitglieder in derselben Gruppe wie Sie verwalten.
+Das Modulregistrierung ist eine Web-Applikaton zur Verwaltung von Daten Deiner Modelleisenbahnmodule und Zubehör.
+Du kannst hier Deine eigenen Module und Dein Zubehör verwalten. Du kannst auch anderen Mitgliedern derselben Gruppe dabei helfen.
 
-Sie sind eingeladen, Benutzer zu werden.
-Um die Registrierung Ihres Benutzerkontos abzuschließen, können Sie in dieser Nachricht auf den Link Kennwort erstellen klicken.
-Sie werden zu einer Seite weitergeleitet, auf der Sie Ihr Passwort erstellen.
-Dann sind Sie bereit zu gehen.
+Für Dich wurde ein Benutzerkonto angelegt.
+Um die Registrierung Deines Benutzerkontos abzuschließen, kannst Du in dieser Mail auf den Link Kennwort erstellen klicken.
+Dann wirst Du auf eine Seite weitergeleitet um ein Passwort zu erstellen.
+Mit dieser E-Mailadresse und dem Kennwort kannst Du dich an der Web-Applikation anmelden.
 
 #### HINWEIS
-Die Modulregistrierung ist nicht für kleine Bildschirme ausgelegt. Sie benötigen einen Computer oder einen größeren Tablet-Bildschirm.
+Die Modulregistrierung ist nicht für kleine Bildschirme ausgelegt. Du benötigst einen Computer oder einen größeren Tablet-Bildschirm.

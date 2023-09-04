@@ -3,8 +3,9 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.9.2
-Release date 2023-09-03
+Release date 2023-09-04
 - **Bug fix** of empty listbox for wiFRED owner. Thanks to Louis Michielsen for reporting this.
+- **Invitation mail** German translation improved. Thanks to Detlef Born.
 ## Release 1.9.1
 Release date 2023-08-31
 - **Icons** for meeting status with explaning tootip.
