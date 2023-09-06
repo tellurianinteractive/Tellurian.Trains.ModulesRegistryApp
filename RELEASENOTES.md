@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.3
+Release date 2023-09-08
+- **Bug fix** of issue #187 deleting modules registered to a meeting. Thanks to Seth Olofsson for reporting. 
 ## Release 1.9.2
 Release date 2023-09-04
 - **Bug fix** of empty listbox for wiFRED owner. Thanks to Louis Michielsen for reporting this.

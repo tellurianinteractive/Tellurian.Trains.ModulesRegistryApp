@@ -6,8 +6,6 @@
 	[LayoutStationId]      INT NULL,
 	[RegisteredTime]       DATETIMEOFFSET(7) CONSTRAINT [DF_LayoutModule_RegisteredTime] DEFAULT ((SYSDATETIMEOFFSET())) NOT NULL,
 	[RegistrationStatus]   INT NOT NULL,
-	[LayoutLineId]         INT NULL,
-	[LayoutLinePosition]   TINYINT CONSTRAINT [DF_LayoutModule_LinePosition] DEFAULT ((0)) NOT NULL,
 	[BringAnyway]          BIT CONSTRAINT [DF_LayoutModule_BringAnyway] DEFAULT ((0)) NOT NULL,
 	[Note]                 NVARCHAR(50) NULL,
 	CONSTRAINT [FK_LayoutModule_LayoutParticipant] FOREIGN KEY ([LayoutParticipantId]) REFERENCES [dbo].[LayoutParticipant] ([Id]) ON DELETE CASCADE,

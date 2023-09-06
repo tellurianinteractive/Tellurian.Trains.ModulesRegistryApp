@@ -238,18 +238,14 @@ public sealed class LayoutService
             if (existing is null) return (-1, Resources.Strings.NoModification);
 
             var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
-            var layoutStationIsNotUsedInLayout = existing.LayoutStation is null || await dbContext.LayoutStations.Where(ls => ls.Id == existing.LayoutStationId).AnyAsync(ls => !ls.StartingLines.Any() && !ls.EndingLines.Any());
-            if (layoutStationIsNotUsedInLayout)
+            
+            if (!stationIsReferredFromOtherLayoutModule && existing.LayoutStation is not null)
             {
-                if (!stationIsReferredFromOtherLayoutModule && existing.LayoutStation is not null)
-                {
-                    dbContext.LayoutStations.Remove(existing.LayoutStation);
-                }
-                dbContext.LayoutModules.Remove(existing);
-                var result = await dbContext.SaveChangesAsync();
-                return result.DeleteResult();
+                dbContext.LayoutStations.Remove(existing.LayoutStation);
             }
-            Data.Resources.Strings.NotAuthorised.DeleteResult();
+            dbContext.LayoutModules.Remove(existing);
+            var result = await dbContext.SaveChangesAsync();
+            return result.DeleteResult();
         }
         return principal.NotAuthorized<LayoutModule>();
     }

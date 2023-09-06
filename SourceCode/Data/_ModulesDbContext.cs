@@ -28,7 +28,6 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<GroupDomain> GroupDomains { get; set; }
     public virtual DbSet<GroupMember> GroupMembers { get; set; }
     public virtual DbSet<Layout> Layouts { get; set; }
-    public virtual DbSet<LayoutLine> LayoutLines { get; set; }
     public virtual DbSet<LayoutModule> LayoutModules { get; set; }
     public virtual DbSet<LayoutParticipant> LayoutParticipants { get; set; }
     public virtual DbSet<LayoutStation> LayoutStations { get; set; }
@@ -90,7 +89,6 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapGroupDomain();
         modelBuilder.MapGroupMember();
         modelBuilder.MapLayout();
-        modelBuilder.MapLayoutLine();
         modelBuilder.MapLayoutModule();
         modelBuilder.MapLayoutParticipant();
         modelBuilder.MapLayoutStation();

@@ -106,7 +106,7 @@ public static class ClaimsPrincipalExtensions
 
     public static bool MayRemove([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting, LayoutModule? module) =>
         principal is not null && meeting is not null && module is not null &&
-        (principal.IsCountryOrGlobalAdministrator() || principal.IsAnyGroupAdministrator(meeting.OrganiserGroup) || module.IsNotInUse());
+        (principal.IsCountryOrGlobalAdministrator() || principal.IsAnyGroupAdministrator(meeting.OrganiserGroup));
 
     #endregion
 

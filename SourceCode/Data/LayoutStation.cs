@@ -23,8 +23,6 @@ public class LayoutStation
     public virtual Country OtherCountry { get; set; }
     public virtual ICollection<LayoutModule> LayoutModules { get; set; }
     public virtual ICollection<Region> Regions { get; set; }
-    public virtual ICollection<LayoutLine> StartingLines { get; set; }
-    public virtual ICollection<LayoutLine> EndingLines { get; set; }
     public override string ToString() => $"{Station?.FullName}";
 }
 
