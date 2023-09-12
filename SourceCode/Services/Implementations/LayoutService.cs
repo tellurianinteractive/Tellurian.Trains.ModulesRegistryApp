@@ -41,6 +41,17 @@ public sealed class LayoutService
         return Array.Empty<LayoutStation>();
     }
 
+    public async Task<LayoutStation?> GetLayoutStationAsync(ClaimsPrincipal? principal, int? stationId)
+    {
+        if (principal.IsAuthenticated() && stationId.HasValue)
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.LayoutStations.AsNoTracking().FirstOrDefaultAsync(ls => ls.StationId == stationId);
+        }
+        return null;
+
+    }
+
     public async Task<IEnumerable<LayoutVehicle>> GetLayoutVehicles(int layoutId, bool onlyTractionUnits = false)
     {
         using var dbContext = Factory.CreateDbContext();

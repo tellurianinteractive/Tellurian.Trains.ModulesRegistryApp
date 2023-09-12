@@ -1,5 +1,5 @@
 ﻿@page "/reports/waybills/layout/{layoutId:int}"
-@page "/reports/waybills/layout/{layoutId:int}/station/{layoutStationId:int}"
+@page "/reports/waybills/layout/{layoutId:int}/station/{stationId:int}"
 @page "/reports/waybills/station/{stationId:int}"
 @page "/reports/waybills/station/{stationId:int}/customer/{customerId:int}"
 
@@ -7,7 +7,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject ILanguageService LanguageService
 @inject WaybillService WaybillService
-
+@inject LayoutService LayoutService
 @if (Waybills is null)
 {
     <ActionMessage Label="CreatingReport" AlertType="Spinning" />
@@ -50,6 +50,8 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (LayoutId > 0)
             {
+                //var station = await LayoutService.GetLayoutStationAsync(Principal, StationId);
+                //if (station is null) return;
                 var items = await WaybillService.GetLayoutWaybills(Principal, LayoutId, StationId);
                 Waybills = items.AsPrintableWaybills();
             }

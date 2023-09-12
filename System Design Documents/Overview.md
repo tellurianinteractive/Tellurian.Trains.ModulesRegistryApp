@@ -1,4 +1,4 @@
-# System Design
+# System Design Overview
 
 > WORK IN PROGRESS
 
@@ -7,14 +7,14 @@ It is intended as an introduction to a developer.
 that want to learn about the principles for how 
 the system is designed.
 
-### Development Environment
+## Development Environment
 The application is developed with [Visual Studio](https://visualstudio.microsoft.com/).
 The source code can be edited in other tools, but Visual Studio is the simplest way to build, test and deploy the application.
 
 The requires skills, and what you need to develop the application is described in 
 [contribution guidelines](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md).
 
-### Runtime Environment
+## Runtime Environment
 The web application is developed using *.NET* and *Blazor* server-side rendering of the user interface.
 It is a cloud application running as an *Microsoft Azure App Service*, 
 and uses a *Microsoft Azure SQL* database.
@@ -24,7 +24,7 @@ and uses a *Microsoft Azure SQL* database.
 To access the runtime environment, you need an *Azure* account and
 also apply for rights to administer the application's features in *Azure Portal*.
 
-### Projects 
+## Projects 
 Each project in the solution performs a specific task:
 - **App** contains code all user interaction.
 - **Data** contains code for the domain model, some business logic, and the mapping with the database.
@@ -33,7 +33,7 @@ Each project in the solution performs a specific task:
 
 Other projects in the solution is for test or experimental purposes. 
 
-### User Interface
+## User Interface
 The user interfaces is build with *Razor Components* and located in the *App* project:
 - The **Pages** folder are the *page* components that are *routeable*.
 Pages are organised in subfolders to make it easier to see what pages are related.
@@ -55,7 +55,7 @@ that are intended to retrive such content in the current language.
 Resource files (.RESX) is primarily located in the *App* and *Services* project.
 Markdown files (.MD) is only located in the *App* project.
 
-### Database Design
+## Database Design
 To work with the database, good knowledge of SQL and database administration is a must.
 It is also important with knowledge of how to use *Microsoft SQL Management Studio* and
 the features of the *database* project type in Visual Studio.

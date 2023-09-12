@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System design documents", "
 	ProjectSection(SolutionItems) = preProject
 		System Design Documents\Creations of waybills.md = System Design Documents\Creations of waybills.md
 		System Design Documents\Overview.md = System Design Documents\Overview.md
+		Security.md = Security.md
 		System Design Documents\WiFredThrottles.md = System Design Documents\WiFredThrottles.md
 	EndProjectSection
 EndProject
@@ -112,8 +113,8 @@ Global
 		{00E89979-CC4B-4FDE-9677-27BE19105636} = {5941055C-D2E9-4640-A78B-C5B349AE6F84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
-		RESX_NeutralResourcesLanguage = en-GB
 		RESX_ExcelExportMode = SingleSheet
+		RESX_NeutralResourcesLanguage = en-GB
+		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
 	EndGlobalSection
 EndGlobal
