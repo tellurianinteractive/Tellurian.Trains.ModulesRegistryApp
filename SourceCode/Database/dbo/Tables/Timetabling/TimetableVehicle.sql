@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[TimetableVehicle]
 (
-    /* A vehicle is considered part of a session when associated with a timetable, or is placed at a layout station; otherwise the vehicle is optional */
     [Id] INT NOT NULL IDENTITY (1, 1),
     [TimetableId] INT NOT NULL,
     [OperatorId] INT NULL,

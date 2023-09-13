@@ -2,6 +2,8 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.4
+- **Region** must now be selected for station, except when the station is a shadow yard.
 ## Release 1.9.3
 Release date 2023-09-12
 - **Bug fix** of issue #187 deleting modules registered to a meeting. Thanks to Seth Olofsson for reporting. 

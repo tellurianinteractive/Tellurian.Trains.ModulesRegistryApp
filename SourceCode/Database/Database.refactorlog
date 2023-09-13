@@ -14,4 +14,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="InventoryNumber" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="16df07fb-7936-452b-8808-719f0d87e190" ChangeDateTime="09/13/2023 12:12:46">
+    <Property Name="ElementName" Value="[dbo].[TimetableStation].[StationId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TimetableStation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LayoutStationId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="68244d2a-92c6-4378-a17d-9ff5503d7976" ChangeDateTime="09/13/2023 12:13:20">
+    <Property Name="ElementName" Value="[dbo].[TimetableStation].[LayoutStationId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TimetableStation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StationId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="32da100a-e911-499b-bffd-73e8d728a9ef" ChangeDateTime="09/13/2023 12:16:45">
+    <Property Name="ElementName" Value="[dbo].[Vehicle].[KeeperOperatorId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Vehicle]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KeeperOperator" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9ea39d39-ed96-4012-aa9e-cf41e1b0536d" ChangeDateTime="09/13/2023 12:17:26">
+    <Property Name="ElementName" Value="[dbo].[Vehicle].[KeeperOperator]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Vehicle]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KeeperOperatorSignature" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1a3d4961-6f18-4eb7-b47a-84905709eddf" ChangeDateTime="09/13/2023 12:19:13">
+    <Property Name="ElementName" Value="[dbo].[Vehicle].[KeeperOperatorSignature]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Vehicle]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KeeperSignature" />
+  </Operation>
 </Operations>

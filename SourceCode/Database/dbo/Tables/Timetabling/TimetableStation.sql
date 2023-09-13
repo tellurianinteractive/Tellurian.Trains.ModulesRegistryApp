@@ -15,7 +15,8 @@
 	[StationInstructions]			NVARCHAR(2000) NULL,
 	[ShuntingInstructions]			NVARCHAR(2000) NULL,
 
-	CONSTRAINT [PK_TimetableStation] PRIMARY KEY CLUSTERED ([Id] ASC),      
+	[StationId] INT NULL, 
+    CONSTRAINT [PK_TimetableStation] PRIMARY KEY CLUSTERED ([Id] ASC),      
 	CONSTRAINT [FK_TimetableStation_Timetable] FOREIGN KEY ([TimetableId]) REFERENCES [dbo].[Timetable] ([Id]),
 	CONSTRAINT [FK_TimetableStation_PartOfOtherTimetableStation] FOREIGN KEY ([PartOfOtherTimetableStationId]) REFERENCES [dbo].[TimetableStation] ([Id]),
 

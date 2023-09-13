@@ -22,5 +22,8 @@ public class StationValidator : AbstractValidator<Station>
             .MustBeOrdinaryText(localizer)
             .MustBeCapitalizedCorrectly(localizer)
             .WithName(n => localizer[nameof(n.Signature)]);
+        RuleFor(m => m)
+            .IsRegionRequired(localizer)
+            .WithName(s => nameof(s.Region));
     }
 }

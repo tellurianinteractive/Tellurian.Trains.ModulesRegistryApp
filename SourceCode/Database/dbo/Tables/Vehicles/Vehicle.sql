@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Vehicle]
 (
     [Id] INT IDENTITY (1, 1) NOT NULL,
-    [KeeperOperatorId] INT NOT NULL, 
+    [KeeperSignature] VARCHAR(10) NOT NULL, 
     [Class] VARCHAR(10) NOT NULL,
     [Number] VARCHAR(10) NOT NULL,
     [InteroperabilityId] INT NOT NULL,
@@ -24,7 +24,6 @@
     [HasRemoteCouplings] BIT NOT NULL DEFAULT((0)),
 
     CONSTRAINT [PK_Vehicle] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Vehicle_KeeperOperator] FOREIGN KEY ([KeeperOperatorId]) REFERENCES [dbo].[VehicleOperator] ([Id]),
     CONSTRAINT [FK_Vehicle_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
     CONSTRAINT [FK_Vehicle_CouplingFeature] FOREIGN KEY ([CouplingFeatureId]) REFERENCES [dbo].[VehicleFeature] ([Id]),
     CONSTRAINT [FK_Vehicle_WheelsFeature] FOREIGN KEY ([WheelsFeatureId]) REFERENCES [dbo].[VehicleFeature] ([Id]),
