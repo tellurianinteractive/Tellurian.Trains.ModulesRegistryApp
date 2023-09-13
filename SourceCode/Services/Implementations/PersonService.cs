@@ -53,6 +53,7 @@ public sealed class PersonService
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People
                 .Where(p => p.CountryId == countryId)
+                .Include(P => P.Country)
                 .Include(p => p.User)
                 .OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
                 .ToListAsync();

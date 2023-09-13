@@ -54,6 +54,9 @@
         <TemplateColumn Title="@Localizer["Status"]" Align="Align.Center">
             @context.StatusIcon()
         </TemplateColumn>
+        <TemplateColumn Title="@Localizer["FremoNumber"]">
+            @context.FremoNumber()
+        </TemplateColumn>
         <TemplateColumn Title="@Localizer["LastActive"]" Context="person">
             <UserStatusView User="person.User"></UserStatusView>
         </TemplateColumn>

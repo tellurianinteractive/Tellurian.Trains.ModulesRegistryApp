@@ -58,7 +58,7 @@ public class PersonValidator : AbstractValidator<Person>
             .WithName(n => localizer[nameof(n.FremoReservedAdresses)]);
 
         RuleFor(person => person.FremoMemberNumber)
-            .InclusiveBetween(1, 9999)
+            .InclusiveBetween(1, 9999999)
             .WithName(n => localizer["FremoNumber"]);
 
     }
