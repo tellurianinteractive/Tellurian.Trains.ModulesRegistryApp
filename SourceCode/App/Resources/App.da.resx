@@ -466,7 +466,7 @@
     <value>Link til eksternt indhold</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Læs og accepter.</value>
+    <value>Læs venligst og rul til bunden for at acceptere. Dette er nødvendigt for at bruge denne applikation.</value>
   </data>
   <data name="EndPlates" xml:space="preserve">
     <value>Endeplader</value>
@@ -1406,5 +1406,8 @@
   </data>
   <data name="ModulesNotFound" xml:space="preserve">
     <value>Ingen moduler fundet</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepter</value>
   </data>
 </root>

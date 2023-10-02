@@ -29,6 +29,7 @@ public static class FontAwesome
     public const string Save = "fa fa-save";
     public const string SaveAll = "fa fa-save";
     public const string Settings = "fa fa-user-cog";
+    public const string Signature = "fa fa-file-signature";
     public const string Show = "fa fa-info";
     public const string Station = "fa fa-school";
     public const string Stations = "fa fa-school";
@@ -76,6 +77,7 @@ public static class FontAwesome
             {nameof(SaveAll), SaveAll },
             {nameof(Settings), Settings },
             {nameof(Show), Show },
+            {nameof(Signature), Signature },
             {nameof(Station), Station },
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },

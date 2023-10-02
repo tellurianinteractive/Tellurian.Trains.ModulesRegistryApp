@@ -71,10 +71,15 @@ public sealed class DocumentService
             document.LastModifiedTime = TimeProvider.Now;
             if (document.Id == 0) dbContext.Documents.Add(document);
             var count = await dbContext.SaveChangesAsync();
+
             if (count > 0)
             {
                 count = await UpdateDocumentReference(dbContext, document, documentedObject);
-                if (count > 0) return count.SaveResult(document);
+                if (count > 0)
+                {
+
+                    return count.SaveResult(document);
+                }
             }
             return (0, "UploadFailed", null);
 
@@ -116,7 +121,6 @@ public sealed class DocumentService
             if (existing is not null)
             {
                 existing.DwgDrawingId = document.Id;
-                return 1;
             }
         }
         if (TypeName == "Module" && document.FileExtension == "skp")
@@ -125,7 +129,6 @@ public sealed class DocumentService
             if (existing is not null)
             {
                 existing.SkpDrawingId = document.Id;
-                return 1;
             }
         }
         if (TypeName == "Module" && document.FileExtension == "pdf")
@@ -134,7 +137,6 @@ public sealed class DocumentService
             if (existing is not null)
             {
                 existing.PdfDocumentationId = document.Id;
-                return 1;
             }
         }
         if (TypeName == "Station" && document.FileExtension == "pdf")
@@ -143,10 +145,9 @@ public sealed class DocumentService
             if (existing is not null)
             {
                 existing.PdfInstructionId = document.Id;
-                return 1;
             }
         }
-        return 0;
+        return await dbContext.SaveChangesAsync();
     }
 
     /// <summary>

@@ -1,17 +1,19 @@
 ﻿### 1. Preamble
-In order to use this site - the *module registy web application* - you must accept the following terms of use.
+In order to use this site - the *module registy web application* - you must accept the following terms of use,
+also each time the terms are changed.
 This is required to conform to GDPR.
 
 #### 1.1 What is GDPR?
 The *General Data Protection Regulation* (GDPR) is a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA). The GDPR's primary aim is to give individuals control over their personal data and to simplify the regulatory environment for international business by unifying the regulation within the EU. Read more about [GDPR on Wikipedia](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 #### 1.2 Scope
-The descriptions in this document concerns *The Module Registry* web application, hereinafter referred to as *the application*.
+The descriptions in this document concerns *The Module Registry* web application and API's, 
+hereinafter referred to as *the application*.
 
 #### 1.3 Definitions
-- **Person** is an individual that is registered as owner of *modules*.
+- **Person** is an individual that is registered as *owner of modules, throttles, rolling stock*, and/or *participant in a meeting*. 
 - **User** is a *person* that has established a personal user account in the application.
-- **Group** is a set of *persons* that have a reason to manage *modules* collectively.
+- **Group** is a set of *persons* that have a reason to *manage modules collectively* and/or *arrange meetings*.
 
 ### 2. Security
 
@@ -28,7 +30,7 @@ You must accept cookies from this site to be able to login.
 
 #### 2.3. Data Handling
 Data in *the application* is stored in an *Azure SQL Database* in *Microsoft Azure* on servers located within Europe.
-The database is only direct accessable by the system administrator.
+The database is only direct accessible by the system administrator.
 
 #### 2.4 Transparency
 All application code for *the application* is *open source*. 
@@ -38,22 +40,25 @@ The frameworks that the code is built on are used are also *open source*; *.NET*
 ### 3. Personal Data
 
 #### 3.1 Collected Data
-You must agree to that the following *mandatory* personal data is collected for module and meeting management:
+Data is connected for the purposes mentioned under 1.3.
+You must agree to that the following *mandatory* personal data is collected  :
 - First- and last name.
 - City and country of residence.
 
 Non-mandatory data that may be collected:
 - Middle name or initials. 
-- Email adresses.
-- Group membership (for collectively administer modules)
-- What modules you own completely or partially.
-- Your participations in module meetings.
+- Email adresses (required for *users*)
+- Group membership including permissions in a group.
+- What modules you own completely, partially or is engaged as assistant only.
+- Your participations in module meetings and the modules you eventually register.
 
 Additional data for registered users able to login:
 - Registration time.
 - Last login time.
 - Last time email was confirmed.
 - Last time terms of use was accepted.
+- Number of failed login attempts.
+- Number of failed password reset attempts.
 
 #### 3.2 Handling personal data
 In *the application* personal data is not available publicly.
@@ -67,7 +72,7 @@ This means that the visibility of personal data, including owned modules are ver
 - A *group administrator* can add/remove members in the group and maintain all modules owned by persons that are member of the group.
 - A *country administrator* can maintain groups in the country and maintain all modules owned by persons that are member of these groups.
 - A *global administrator* can maintain groups in all countries and all modules.
-- A *meeting organizer* can maintain all submitted modules, which is needed to make corrections.
+- A *meeting organizer* can maintain all registrations of persons and modules.
 
 #### 3.3 User Consent
 A *user* with *administrator rights* may register other *persons* as owner of *modules*. 

@@ -466,7 +466,7 @@
     <value>Link zu externen Inhalten</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Bitte lesen und akzeptieren.</value>
+    <value>Bitte lesen Sie es und scrollen Sie nach unten, um es zu akzeptieren. Dies ist für die Nutzung dieser Anwendung erforderlich.</value>
   </data>
   <data name="EndPlates" xml:space="preserve">
     <value>Endplatten</value>
@@ -1406,5 +1406,8 @@
   </data>
   <data name="ModulesNotFound" xml:space="preserve">
     <value>Keine Module gefunden</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Akzeptieren</value>
   </data>
 </root>

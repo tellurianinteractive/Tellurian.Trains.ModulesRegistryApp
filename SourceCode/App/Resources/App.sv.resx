@@ -466,7 +466,7 @@
     <value>Link zu externen Inhalten</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Vänligen läs och acceptera.</value>
+    <value>Vänligen läs och scrolla till botten för att acceptera. Detta krävs för att använda denna applikation.</value>
   </data>
   <data name="EndPlates" xml:space="preserve">
     <value>Ändstycken</value>
@@ -1406,5 +1406,8 @@
   </data>
   <data name="ModulesNotFound" xml:space="preserve">
     <value>Inga moduler hittades</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Godkänn</value>
   </data>
 </root>

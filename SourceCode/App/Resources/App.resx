@@ -469,7 +469,7 @@
     <value>This content was modified {0:d} {0:t}</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Please read and accept.</value>
+    <value>Please read and scroll to bottom to accept. This is required to use this application.</value>
   </data>
   <data name="EndPlates" xml:space="preserve">
     <value>End plates</value>
@@ -1406,5 +1406,8 @@
   </data>
   <data name="ModulesNotFound" xml:space="preserve">
     <value>No modules found</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
   </data>
 </root>

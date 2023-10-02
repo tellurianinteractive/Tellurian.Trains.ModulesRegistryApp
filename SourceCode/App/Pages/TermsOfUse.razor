@@ -5,23 +5,19 @@
 
 @inject UserService UserService
 
-<h1><span class="fa fa-file-signature"/>@Localizer["TermsOfUse"]</h1>
+<h1><span class="fa fa-file-signature" />@Localizer["TermsOfUse"]</h1>
 <AuthorizeView>
     <Authorized>
         @if (!Principal.IsLatestTermsOfUseAccepted())
         {
-        <div class="alert alert-warning">
-            @Localizer["PleaseReadAndAccept"]
-        </div>
+            <ActionMessage AlertType="warning" Label="PleaseReadAndAccept" />
         }
     </Authorized>
 </AuthorizeView>
 <ContentView ContentName="TermsOfUse" ShowModificationTime="true" />
 <AuthorizeView>
     <Authorized>
-        <div class="col-12">
-            <button class="btn btn-primary" @onclick="OnAccept">@Localizer["Accept"]</button>
-        </div>
+        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" />
     </Authorized>
 </AuthorizeView>
 

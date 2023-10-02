@@ -2,9 +2,16 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.5
+Release date 2023-10-01
+- **Terms of Use** updated. They hasn't been changed since the application was released and therefore needed to be updated to stay in sync with the actual use.
+The changes are primarily regarding what data that is collected for persons and users plus a few other minor things to make it clearer.
+**Note** than you must agree to the updated terms of use before you can continue to use the application.
+- **Bug fix** of issue #188 file upload for module/station documentation not working.
 ## Release 1.9.4
+Release date 2023-09-18
 - **Region** must now be selected for station, except when the station is a shadow yard.
-- **FREMO member number** now displayed in moduleqoner list (available only for administrators).
+- **FREMO member number** now displayed in moduleowner list (available only for administrators).
 - **FREMO member number** can now be entered with short four-digit or long seven-digit format. The four-digit format appends country number automatically.
 ## Release 1.9.3
 Release date 2023-09-12
