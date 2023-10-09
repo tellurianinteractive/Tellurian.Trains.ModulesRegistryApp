@@ -9,6 +9,7 @@ Release date 2023-10-09
 - **Waybills** now prints the owner(s) of the station as owner(s) of the waybill (issue #183).
 - **Bug fix** of user status now showing all possible statuses.
 - **Bug fix** of page history.
+- **Bug fix** of language selector.
 - **Fix** of permitted characters and capitalisation in station customer name. 
 - **Fix** of language selection in waybills for unsupported languages for cargo names.
 - **Time-out** improvements of user interface.
