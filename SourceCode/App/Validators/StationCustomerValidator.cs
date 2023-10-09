@@ -12,7 +12,7 @@ public class StationCustomerValidator : AbstractValidator<StationCustomer>
             .NotEmpty()
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer["Name"]);
         RuleFor(m => m.Comment)
             .MaximumLength(50)

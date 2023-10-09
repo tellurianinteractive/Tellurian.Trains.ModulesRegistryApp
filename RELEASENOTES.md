@@ -9,6 +9,8 @@ Release date 2023-10-09
 - **Waybills** now prints the owner(s) of the station as owner(s) of the waybill (issue #183).
 - **Bug fix** of user status now showing all possible statuses.
 - **Bug fix** of page history.
+- **Fix** of permitted characters and capitalisation in station customer name. 
+- **Time-out** improvements of user interface.
 - **Delete**-button moved for *meetings* and *persons* (affects administrators).
 ## Release 1.9.5
 Release date 2023-10-01

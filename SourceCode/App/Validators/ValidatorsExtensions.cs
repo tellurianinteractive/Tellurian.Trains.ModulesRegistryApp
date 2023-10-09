@@ -3,8 +3,6 @@ using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
@@ -113,7 +111,7 @@ public static partial class ValidatorsExtensions
 
     private static bool IsDccAddress(this short? value) => value.HasValue && value.Value >= 1 && value.Value <= 9999;
 
-    private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'".Contains(c);
+    private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'\"".Contains(c);
     private static bool IsDigit(this char c) =>  c.IsInRange(0x0030, 0x0039);
     private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0041, 0x0046) || c.IsInRange(0x0061, 0x066);
     private static bool IsLatinChar(this char c) =>
