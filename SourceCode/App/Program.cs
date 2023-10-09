@@ -50,7 +50,7 @@ builder.Services.AddServerSideBlazor()
     .AddCircuitOptions(options =>
     {
         options.DetailedErrors = true;
-        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(10);
+        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(20);
     });
 if (builder.Environment.IsProduction())
     builder.Services.AddSignalR(options =>

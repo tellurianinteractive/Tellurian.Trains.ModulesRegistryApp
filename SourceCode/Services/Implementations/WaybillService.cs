@@ -249,7 +249,7 @@ internal static class WaybillMapper
             DomainSuffix = record.GetString("OriginDomainSuffix"),
             ForeColor = record.GetString("OriginForeColor"),
             BackColor = record.GetString("OriginBackColor"),
-            CargoName = record.GetString(record.GetString("OriginLanguages", "EN").FirstItem("EN")),
+            CargoName = record.GetString(record.GetCargoColumnName("OriginLanguages")),
             PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
             QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
             IsModuleStation = record.GetBool("OriginIsModuleStation"),
@@ -274,7 +274,7 @@ internal static class WaybillMapper
             DomainSuffix = record.GetString("DestinationDomainSuffix"),
             ForeColor = record.GetString("DestinationForeColor"),
             BackColor = record.GetString("DestinationBackColor"),
-            CargoName = record.GetString(record.GetString("DestinationLanguages", "EN").FirstItem("EN")),
+            CargoName = record.GetString(record.GetCargoColumnName("DestinationLanguages")),
             PackagingUnitResourceKey = record.GetString("PackagingUnitResourceName"),
             PackagingPrepositionResourceCode = record.GetString("PackagingPrepositionResourceCode"),
             QuantityUnitResourceKey = record.GetString("QuanityUnitResourceName"),
@@ -288,6 +288,12 @@ internal static class WaybillMapper
             FromYear = record.GetNullableInt("ReceiverFromYear", null),
             UptoYear = record.GetNullableInt("ReceiverUptoYear", null)
         };
+    private static string GetCargoColumnName(this IDataRecord record, string columnName)
+    {
+        var language = record.GetString(columnName, "EN").FirstItem("EN");
+        if (LanguageUtility.CargoSupportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase))) return language;
+        return "EN";
+    }
 }
 
 internal static class SqlHelpers

@@ -94,7 +94,6 @@ BEGIN
 		C.NHMCode > 0 AND
 		CCS.IsSupply <> 0 AND CCC.IsSupply = 0 AND
 		CCS.StationId <> CCC.StationId AND 
-		CCS.IsInternal <> 0 AND CCC.IsInternal <>0 AND
 		CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId AND
 		(@StationId IS NULL OR CCC.StationId = @StationId)
 	ORDER BY
