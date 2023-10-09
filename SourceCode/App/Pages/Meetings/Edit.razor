@@ -13,7 +13,7 @@
 
 <PageHeading Owner="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" />
 
-<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit">
+<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="Meeting.MayDelete(Principal)">
     <Inputs>
         <AppInputText Width="4" Label="Name" @bind-Value="Meeting.Name" />
         <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
@@ -87,4 +87,6 @@
     bool MaySelectOrganiserGroup => OrganiserGroupId == 0;
 
     string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
+    string MeetingHref(int meetingId, string? function) => function.HasNoValue() ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";
+
 }

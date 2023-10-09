@@ -783,4 +783,10 @@
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-Adresse</value>
   </data>
+  <data name="Owners" xml:space="preserve">
+    <value>Eigentümer</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Eigentümer</value>
+  </data>
 </root>

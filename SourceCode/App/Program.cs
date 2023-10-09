@@ -53,8 +53,13 @@ builder.Services.AddServerSideBlazor()
         options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(10);
     });
 if (builder.Environment.IsProduction())
-    builder.Services.AddSignalR()
-        .AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
+    builder.Services.AddSignalR(options =>
+    {
+        options.KeepAliveInterval = TimeSpan.FromMinutes(1);
+        options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+        options.HandshakeTimeout = TimeSpan.FromMinutes(1);
+    }
+    ).AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContextAccessor>();
 builder.Services.AddHttpClient();

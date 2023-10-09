@@ -69,6 +69,6 @@ else
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
     string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
-    string? ObjectNameLocalized => string.IsNullOrWhiteSpace(ObjectName) ? null : Localizer[ObjectName].ToString();
+    string ObjectNameLocalized => ObjectName.HasNoValue() ? string.Empty : Localizer[ObjectName].ToString();
 
 }

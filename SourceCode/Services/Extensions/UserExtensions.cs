@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using ModulesRegistry.Services.Implementations;
+﻿using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;
@@ -49,7 +48,7 @@ public static class UserExtensions
         user is not null && user.PasswordResetAttempts <= PasswordResetRequest.MaxRequests;
 
     public static bool IsLockedOut([NotNullWhen(true)] this User? user) =>
-        user is null || user.PasswordResetAttempts > PasswordResetRequest.MaxRequests || user.FailedLoginAttempts > MaxFailedLoginAttempts;
+        user is not null && (user.PasswordResetAttempts > PasswordResetRequest.MaxRequests || user.FailedLoginAttempts > MaxFailedLoginAttempts);
 
     public async static Task<User?> UnlockUser(this UserService userService, User? user)
     {

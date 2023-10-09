@@ -30,6 +30,7 @@ public class Waybill
     public bool HideLoadingTimes { get; set; }
     public bool HideUnloadingTimes { get; set; }
     public bool IsLayoutInternal { get; set; }
+    public string OwnerNames { get; set; }=string.Empty;
 
     public override string ToString() => $"{Destination.CargoName} {Origin}-{Destination}";
 
@@ -52,5 +53,6 @@ public class Waybill
         IsEmptyReturn = IsEmptyReturn,
         HideLoadingTimes = HideLoadingTimes,
         HideUnloadingTimes = HideUnloadingTimes,
+        OwnerNames = OwnerNames,
     };
 }

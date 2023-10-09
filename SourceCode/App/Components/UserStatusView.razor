@@ -2,31 +2,30 @@
 
 @if (User is null)
 {
-    
+
 }
 else
 {
-    if (User.HasCreatedPassword())
+    if (User.IsLockedOut())
     {
-        <span>@Localizer["PasswordCreated"]: @User.LastEmailConfirmationTime.DateOnly()</span>
-    }    
+        <span style="color: red">@Localizer["UserIsLockedOut"]</span>
+    }
     else if (User.IsNeverLoggedIn())
     {
         <span>@Localizer["Invited"]: @User.RegistrationTime.DateOnly()</span>
     }
-
+    else if (User.HasCreatedPassword())
+    {
+        <span>@Localizer["PasswordCreated"]: @User.LastEmailConfirmationTime.DateOnly()</span>
+    }
     else if (User.HasNotAcceptedTermsOfUse())
     {
         <span style="color: red">@Localizer["NotAcceptedTermsOfUse"]</span>
-        
-    }
-    else if (User.IsLockedOut())
-    {
-        <span style="color: red">@Localizer["UserIsLockedOut"]</span>
+
     }
     else if (User.LastSignInTime.HasValue)
     {
-         <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.DateOnly()</span>       
+        <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.DateOnly()</span>
     }
 }
 @code {

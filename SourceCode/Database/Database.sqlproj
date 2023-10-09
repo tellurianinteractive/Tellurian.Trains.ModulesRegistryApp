@@ -178,6 +178,7 @@
     <Build Include="dbo\Tables\Groups\GroupDomain.sql" />
     <Build Include="dbo\Tables\Groups\GroupMember.sql" />
     <Build Include="dbo\Tables\Stations\Region.sql" />
+    <Build Include="dbo\Views\ModuleOwnerNames.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

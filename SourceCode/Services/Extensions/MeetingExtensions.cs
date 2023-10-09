@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Runtime.CompilerServices;
 
 namespace ModulesRegistry.Services.Extensions;
 public static class MeetingExtensions
 {
-    public static bool MayDelete(this Meeting? meeting, ClaimsPrincipal principal) =>
-        meeting is not null &&
-        principal.IsCountryOrGlobalAdministrator() &&
-        meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
-
-    public static string Status(this Meeting? meeting, DateTime at) =>
+   public static string Status(this Meeting? meeting, DateTime at) =>
         meeting is null ? string.Empty :
         Resources.Strings.ResourceManager.GetString(meeting.StatusResourceName(at)) ?? string.Empty;
 

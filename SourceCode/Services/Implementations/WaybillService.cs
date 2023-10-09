@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using ModulesRegistry.Services.Models;
 using System.Data;
 using System.Resources;
 
@@ -16,9 +17,41 @@ public class WaybillService
         Logger = logger;
     }
 
+    public async Task<string> GetStationOwnerNames(ClaimsPrincipal? principal, int stationId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            var dbContext = Factory.CreateDbContext();
+            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+            if (connection is not null)
+            {
+                var command = new SqlCommand("SELECT [Names] FROM ModuleOwnerNames WHERE StationId = @StationId", connection)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = 120
+                };
+                command.Parameters.AddWithValue("@StationId", stationId);
+                try
+                {
+                    connection.Open();
+                    var result = await command.ExecuteScalarAsync();
+                    if (result is string names) return names;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
+                    throw;
+                }
+            }
+
+        }
+        return string.Empty;
+    }
+
     public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
     {
         List<Waybill> waybills = new List<Waybill>(200);
+        var ownerNames = await GetStationOwnerNames(principal, stationId);
         if (principal.IsAuthenticated())
         {
             var dbContext = Factory.CreateDbContext();
@@ -42,11 +75,12 @@ public class WaybillService
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId));
+                        waybills.Last().OwnerNames = ownerNames;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
+                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
                     throw;
                 }
             }
@@ -149,6 +183,7 @@ public class WaybillService
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
                     var resourceManager = new ResourceManager(typeof(Resources.Strings));
+
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId ?? 0, true));
@@ -187,6 +222,10 @@ internal static class WaybillMapper
         waybill.Origin.DisplayReadyTime = waybill.Origin.ReadyTimeResourceKey.HasValueExcept("n/a");
         waybill.Destination.DisplayReadyTime = waybill.Destination.ReadyTimeResourceKey.HasValueExcept("n/a");
         waybill.IsLayoutInternal = isLayoutInternal;
+        if (isLayoutInternal)
+        {
+            waybill.OwnerNames = record.GetString("OwnerNames");
+        }
 
         return waybill;
 

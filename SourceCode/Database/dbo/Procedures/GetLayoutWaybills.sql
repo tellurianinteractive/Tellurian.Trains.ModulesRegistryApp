@@ -76,7 +76,8 @@ BEGIN
 			ELSE 1
 		END AS PrintCount,
 		CAST (0 AS BIT) AS PrintPerOperatingDay,
-		CAST (0 AS BIT) AS HasEmptyReturn
+		CAST (0 AS BIT) AS HasEmptyReturn,
+		MON.Names AS OwnerNames
 	FROM
 		LayoutCustomerCargo AS CCS INNER JOIN
 		LayoutCustomerCargo AS CCC ON CCC.CargoId = CCS.CargoId INNER JOIN
@@ -86,7 +87,8 @@ BEGIN
 		Country AS SC ON SC.Id = CCS.CountryId INNER JOIN
 		Country AS CC ON CC.Id = CCC.CountryId INNER JOIN
 		CargoUnit AS CU ON CU.Id = CCC.QuantityUnitId INNER JOIN
-		CargoPackagingUnit AS CPU ON CPU.Id = CCC.PackageUnitId
+		CargoPackagingUnit AS CPU ON CPU.Id = CCC.PackageUnitId INNER JOIN
+		ModuleOwnerNames AS MON ON MON.StationId = CCC.StationId
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
 		C.NHMCode > 0 AND

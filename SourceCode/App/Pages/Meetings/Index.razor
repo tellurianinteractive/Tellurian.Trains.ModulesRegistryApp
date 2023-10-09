@@ -45,10 +45,6 @@
             {
                 <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
             }
-            @if (MayDelete(item.meeting))
-            {
-                <AppButton Label="Delete" Href="@MeetingHref(item.meeting.Id, "delete")" />
-            }
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -61,11 +57,9 @@
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
 
-    bool MayDelete(Meeting meeting) =>
-        Principal.IsCountryOrGlobalAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count()) == 0;
 
     string MeetingHref(int id, string? function) =>
-        string.IsNullOrWhiteSpace(function) ? $"meetings/{id}" : $"meetings/{id}/{function}";
+        function.HasNoValue() ? $"meetings/{id}" : $"meetings/{id}/{function}";
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,8 +71,4 @@
     {
         Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
     }
-
-     
-
-
-}
+ }

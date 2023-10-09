@@ -186,7 +186,7 @@
                     }
                 </tbody>
             </table>
-            <table width="100%" style="position: absolute; top: 80mm">
+            <table width="100%" style="position: absolute; top: 76mm">
                 <tbody>
                     <tr>
                         <td>
@@ -196,6 +196,11 @@
                         <td>
                             <div class="label">@Item.Origin.DualLanguageLabel("Days")</div>
                             <div class="daysandclass">@Item.SendingDays()</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="line-height:8pt; font-size: 7pt; border-top: solid 1px">
+                            @Item.Destination.DualLanguageLabel("Owner"):<br/> @Item.OwnerNames
                         </td>
                     </tr>
                 </tbody>
@@ -217,4 +222,8 @@
     const string Large = "14pt";
     const string Small = "12pt";
 
+    string OwnerNamesTextSize(string? text) =>
+        text is null || text.Length < 20 ? "7pt" : "6pt";
+
+    string QwnerNamesText(Waybill it) => $"{it.Destination.DualLanguageLabel("Owners")} {it.OwnerNames}";
 }

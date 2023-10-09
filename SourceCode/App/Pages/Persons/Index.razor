@@ -13,7 +13,7 @@
 @inject UserService UserService
 @inject AppService AppService
 
-<PageHeading ObjectName="ModuleOwners" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
+<PageHeading ObjectName="Persons" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
 
@@ -70,17 +70,9 @@
                 {
                     <AppButton Href="@InviteHref(person)" Label="Invite" />
                 }
-                @if (person.User is null)
+                @if (person.User.IsLockedOut())
                 {
-                    <AppButton Href="@DeleteHref(person)" Label="Delete" />
-                }
-                else if (person.User.IsLockedOut())
-                {
-                    <AppButton Label="Reset" OnClickCallback="@(() => UnlockUser(person.User))" />
-                }
-                @if (Principal.IsGlobalAdministrator() && person.HasIdExcept(Principal.Id()))
-                {
-                    <AppButton Label="LoginAs" IsDisabled=true IconName="@FontAwesome.People" />
+                    <AppButton Label="Unlock" OnClickCallback="@(() => UnlockUser(person.User))" />
                 }
             }
         </TemplateColumn>

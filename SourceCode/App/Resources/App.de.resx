@@ -1410,4 +1410,13 @@
   <data name="Accept" xml:space="preserve">
     <value>Akzeptieren</value>
   </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Entsperren</value>
+  </data>
+  <data name="ExternalLinks" xml:space="preserve">
+    <value>Externe Links</value>
+  </data>
 </root>

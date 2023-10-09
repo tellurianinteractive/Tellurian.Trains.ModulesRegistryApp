@@ -21,8 +21,8 @@
 }
 else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 {
-                <UserStatusView User="Person.User"/>
-    <EditTemplate Item="@Person" OnValidSubmit="OnValidSumbit">
+    <UserStatusView User="Person.User" />
+    <EditTemplate Item="@Person" OnValidSubmit="OnValidSumbit" DeleteHref="@DeleteHref(Person)" MayDelete="MayDelete(Person)">
         <Inputs>
             <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
             <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
@@ -55,7 +55,9 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 }
             }
         </Inputs>
+
     </EditTemplate>
+
 
     @if (Person.User is not null && Person.User.IsLockedOut())
     {
@@ -114,7 +116,6 @@ else
             await Task.Delay(3000);
             Navigator.NavigateTo(AfterSaveHref);
         }
-
     }
 
     async Task UnlockUser()
@@ -135,4 +136,7 @@ else
     private bool IsNotGlobalAdministrator => !Principal.IsGlobalAdministrator();
     private bool IsSelfAsGlobalAdministrator => Principal.IsGlobalAdministrator() && Principal.UserId() == Person?.User?.Id;
     private bool IsNotAdministrator => Person?.User is null || !(Person.User.IsCountryAdministrator || Person.User.IsGlobalAdministrator);
+    string DeleteHref(Person person) => $"persons/{person.Id}/delete";
+    bool MayDelete(Person person) => Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(person.CountryId);
+
 }

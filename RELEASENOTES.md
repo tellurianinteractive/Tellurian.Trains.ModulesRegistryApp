@@ -2,6 +2,14 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.6
+Release date 2023-10-09
+- **Menu items** now organised in groups.
+- **Module owners** menu item now changed to **Persons** to better reflect that a person can use the application in more ways (issue #185).
+- **Waybills** now prints the owner(s) of the station as owner(s) of the waybill (issue #183).
+- **Bug fix** of user status now showing all possible statuses.
+- **Bug fix** of page history.
+- **Delete**-button moved for *meetings* and *persons* (affects administrators).
 ## Release 1.9.5
 Release date 2023-10-01
 - **Terms of Use** updated. They hasn't been changed since the application was released and therefore needed to be updated to stay in sync with the actual use.

@@ -1,7 +1,9 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 
 namespace ModulesRegistry.Data;
 
@@ -90,6 +92,10 @@ public static class MeetingExtensions
         meeting is not null &&
         meeting.Layouts.Any() &&
         meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
+
+    public static bool MayDelete(this Meeting meeting, ClaimsPrincipal? principal) =>
+        principal.IsCountryOrGlobalAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+
 }
 
 public static class MeetingMapping

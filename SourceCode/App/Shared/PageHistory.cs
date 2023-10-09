@@ -14,29 +14,23 @@ public class PageHistory
         Navigator = navigationManager;
         History = new(MaxHistorySize)
         {
-            new VisitedPage(Navigator.Uri)
+            new VisitedPage(Navigator.BaseUri)
         };
         Navigator.LocationChanged += OnLocationChanged;
     }
 
-    public void NavigateTo(string url)
-    {
-        Navigator.NavigateTo(url);
-    }
+    public bool CanNavigateBack => History.Count > 1;
 
-    public bool CanNavigateBack => History.Count >= 2;
+    public bool IsCurrentAlsoLast => History.Any() && Navigator.Uri.Equals(History.Last().Url, StringComparison.OrdinalIgnoreCase);
 
     public void NavigateBack()
     {
+        //if ( IsCurrentAlsoLast)return;
         if (!CanNavigateBack) return;
         var page = History[^2];
         if (page == null) return;
-        History.RemoveRange(History.Count - 2, 2);
         Navigator.NavigateTo(page.Url);
     }
-
-    public string CurrentUrl => History.Any() ? History.Last().Url : "";
-
     public bool IsShowningHelp
     {
         get => History.Any() && History.Last().ShowHelp == true;
@@ -49,12 +43,14 @@ public class PageHistory
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         EnsureSize();
+
+        if (IsCurrentAlsoLast) return; 
         History.Add(new VisitedPage(e.Location));
     }
 
     private void EnsureSize()
     {
-        if (History.Count < MaxHistorySize) return;
+        if (History.Count <= MaxHistorySize) return;
         History.RemoveRange(0, History.Count - MaxHistorySize);
     }
 

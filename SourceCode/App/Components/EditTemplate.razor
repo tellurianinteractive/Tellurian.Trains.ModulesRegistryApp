@@ -18,16 +18,27 @@ else
                 <AppButton Label="@SaveLabel" IsSubmit="true" />
             }
             @Buttons
+            @if (MayDelete)
+            {
+                @if (OnDeleteCallback.HasDelegate)
+                {
+                    <AppButton Label="Delete" IsSubmit="false" OnClickCallback="OnDeleteCallback" />
+                }
+                else if (DeleteHref.HasValue())
+                {
+                    <AppButton Label="Delete" IsSubmit="false" Href="@DeleteHref" />
+                }
+            }
         </div>
         @SubInputs
         @if (SubInputs is not null)
         {
-            <div class="col-12">
-                @if (ShowSaveButton)
-                {
+            @if (ShowSaveButton)
+            {
+                <div class="col-12">
                     <AppButton Label="@SaveLabel" IsSubmit="true" />
-                }
-           </div>
+                </div>
+            }
         }
     </EditForm>
 }
@@ -39,6 +50,10 @@ else
     [Parameter] public RenderFragment? SubInputs { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
     [Parameter] public bool ShowSaveButton { get; set; } = true;
+    [Parameter] public EventCallback OnDeleteCallback { get; set; }
+    [Parameter] public string? DeleteHref { get; set; }
+    [Parameter] public bool MayDelete { get; set; }
+
 
     string SaveLabel => SubInputs is null ? "Save" : "SaveAll";
 }

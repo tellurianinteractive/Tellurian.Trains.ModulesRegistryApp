@@ -38,6 +38,7 @@ public static class FontAwesome
     public const string Train = "fa fa-train-subway";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
+    public const string Unlock = "fa fa-lock-open";
     public const string Unregister = "fa fa-user-minus";
     public const string Upload = "fa fa-file-upload";
     public const string User = "fa fa-user";
@@ -85,6 +86,7 @@ public static class FontAwesome
             {nameof(Train), Train },
             {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },
+            {nameof(Unlock), Unlock },
             {nameof(Unregister), Unregister },
             {nameof(Upload), Upload },
             {nameof(User), User },
