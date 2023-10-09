@@ -55,8 +55,8 @@ builder.Services.AddServerSideBlazor()
 if (builder.Environment.IsProduction())
     builder.Services.AddSignalR(options =>
     {
-        options.KeepAliveInterval = TimeSpan.FromMinutes(1);
-        options.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+        options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+        options.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
         options.HandshakeTimeout = TimeSpan.FromMinutes(1);
     }
     ).AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
