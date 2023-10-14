@@ -119,7 +119,10 @@ public static partial class ValidatorsExtensions
         c.IsInRange(0x0041, 0x005A) ||
         c.IsInRange(0x00C0, 0x00FF) ||
         c.IsInRange(0x0100, 0x0148) ||
-        c.IsInRange(0x014A, 0x017F);
+        c.IsInRange(0x014A, 0x017F) ||
+        c.IsInRange(0x0100, 0x0148) ||
+        c.IsInRange(0x014A, 0x01BF) ||
+        c.IsInRange(0x1E00, 0x1E9B);
     private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
         c >= firstCodePoint && c <= lastCodePoint;
 

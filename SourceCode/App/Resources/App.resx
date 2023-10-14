@@ -1422,4 +1422,7 @@
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Empty wagon orders</value>
   </data>
+  <data name="IsHarbour" xml:space="preserve">
+    <value>Is harbour?</value>
+  </data>
 </root>

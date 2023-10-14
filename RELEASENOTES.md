@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.8
+Release date 2023-10-17
+- **Stations** can now be labelled as *harbour*. This will be used later to extend waybill matching.
+- **Bug fix** extends what is considerdd as valid characterns in text input fields.
 ## Release 1.9.7
 Release date 2023-10-14
 - **Meeting** page improved: direct links to external meeting web pages, flags indicating country for meeting.
