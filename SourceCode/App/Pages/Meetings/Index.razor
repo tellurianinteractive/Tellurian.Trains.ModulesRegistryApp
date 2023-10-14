@@ -17,34 +17,26 @@
 
 <TableTemplate Items="Meetings">
     <TableHeader>
+        <th>@Localizer["Country"]</th>
         <th>@Localizer["Meeting"]</th>
+        <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Venue"]</th>
         <th>@Localizer["City"]</th>
-        <th>@Localizer["Country"]</th>
-        <th style ="text-align: center">@Localizer["StartDate"]</th>
+        <th style="text-align: center">@Localizer["StartDate"]</th>
         <th style="text-align: center">@Localizer["EndDate"]</th>
-        <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
-        <td>@item.meeting.Name</td>
+        <td><img src="@item.meeting.OrganiserGroup.Country.FlagSrc()" /></td>
+        <td><a target="@MeetingLinkTarget(item.meeting)" href="@MeetingHref(item.meeting, "view")">@item.meeting.Name</a></td>
+        <td align="center">@item.meeting.DisplayedStatus(TimeProvider.LocalTime)</td>
         <td>@item.meeting.VenueName</td>
         <td>@item.meeting.CityName</td>
-        <td>@item.meeting.OrganiserGroup.Country.EnglishName.AsLocalized()</td>
         <td align="center">@item.meeting.StartDate.ToString("d")</td>
         <td align="center">@item.meeting.EndDate.ToString("d")</td>
-@*         <td class="@item.meeting.StatusCssClass(TimeProvider.LocalTime)" align="center">@Localizer[item.meeting.Status(TimeProvider.LocalTime)]</td> *@  
-      <td align="center">@item.meeting.DisplayedStatus(TimeProvider.LocalTime)</td>
         <td>
-            <AppButton Label="View" Href="@MeetingHref(item.meeting.Id, "view")"/>
-            @if (item.MayEdit)
-            {
-                <AppButton Label="Edit" Href="@MeetingHref(item.meeting.Id, "edit")" />
-            }
-            @if (item.meeting.PermitsRegistrations() && (Principal.IsCountryAdministratorInCountry(item.meeting.OrganiserGroup.CountryId) || item.meeting.IsOpenForRegistration(TimeProvider.Now.DateTime)))
-            {
-                <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting.Id, "register")"/>
-            }
+            <AppButton Label="Edit" Href="@MeetingHref(item.meeting, "edit")" IsHidden="@(!item.MayEdit)" />
+            <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting, "register")" IsHidden="@(!item.meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
         </td>
     </RowTemplate>
 </TableTemplate>
@@ -58,17 +50,20 @@
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
 
 
-    string MeetingHref(int id, string? function) =>
-        function.HasNoValue() ? $"meetings/{id}" : $"meetings/{id}/{function}";
+    string MeetingHref(Meeting meeting, string? function) =>
+        meeting.ExternalLink.HasValue() && function=="view" ? meeting.ExternalLink :
+        function.HasNoValue() ? $"meetings/{meeting.Id}" : $"meetings/{meeting.Id}/{function}";
+
+    string MeetingLinkTarget(Meeting meeting) => meeting.ExternalLink.HasValue() ? "_blank" : "_self";
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        
+
     }
 
     protected override async Task OnParametersSetAsync()
     {
         Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
-    }
- }
+    }   
+}

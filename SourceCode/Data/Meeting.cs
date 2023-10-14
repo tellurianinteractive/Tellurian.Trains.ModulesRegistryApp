@@ -28,6 +28,7 @@ public class Meeting
     public string Details { get; set; }
     public string Accomodation { get; set; }
     public string Food { get; set; }
+    public string ExternalLink { get; set; }
     public virtual Group OrganiserGroup { get; set; }
     public virtual GroupDomain GroupDomain { get; set; }
     public virtual ICollection<Layout> Layouts { get; set; }
@@ -48,7 +49,6 @@ public static class MeetingExtensions
         meeting is null ? string.Empty :
         meeting.GroupDomainId.HasValue ? $"{meeting.OrganiserGroup.FullName}/{meeting.GroupDomain?.Name}" :
         $"{meeting.OrganiserGroup.FullName}";
-
 
     public static DateTime? RegistrationOpensDate(this Meeting? meeting) =>
      meeting is null || meeting.IsNotPermittingRegistrations() ? null :
@@ -95,6 +95,12 @@ public static class MeetingExtensions
 
     public static bool MayDelete(this Meeting meeting, ClaimsPrincipal? principal) =>
         principal.IsCountryOrGlobalAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+
+    public static bool MayRegister(this Meeting meeting, ClaimsPrincipal? principal, DateTime at) =>
+        meeting.PermitsRegistrations() &&
+            (principal.IsGlobalAdministrator() ||
+            principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId) ||
+            meeting.IsOpenForRegistration(at));
 
 }
 

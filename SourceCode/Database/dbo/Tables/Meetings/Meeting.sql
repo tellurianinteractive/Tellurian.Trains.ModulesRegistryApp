@@ -12,6 +12,7 @@
     [Accomodation]         NVARCHAR(MAX) NULL, 
     [Food]                 NVARCHAR(MAX) NULL,
     [IsOrganiserInternal]  BIT NOT NULL DEFAULT 0  ,
+    [ExternalLink] VARCHAR(MAX) NULL, 
     CONSTRAINT [PK_Meeting] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Meeting_Group] FOREIGN KEY ([OrganiserGroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Meeting_GroupDomain] FOREIGN KEY ([GroupDomainId]) REFERENCES [dbo].[GroupDomain] ([Id])

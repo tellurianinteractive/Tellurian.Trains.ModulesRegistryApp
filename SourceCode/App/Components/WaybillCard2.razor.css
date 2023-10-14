@@ -96,7 +96,7 @@
 }
 
 .flagimage {
-    width: 2mm;
+    border: 1px solid lightgray;
 }
 
 .daysandclass {

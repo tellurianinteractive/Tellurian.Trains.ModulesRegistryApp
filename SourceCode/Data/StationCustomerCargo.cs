@@ -83,6 +83,14 @@ public static class StationCustomerCargoExtensions
     public static bool IsImportOrExport(this StationCustomerCargo? me) =>
         me is not null && (me.DirectionId == 3 || me.DirectionId == 4);
 
+    public static bool IsValid(this StationCustomerCargo? me) =>
+        me is not null &&
+        me.StationCustomerId > 0 &&
+        me.CargoId > 0 &&
+        me.DirectionId > 0 &&
+        me.QuantityUnitId > 0 &&
+        me.OperatingDayId > 0;
+
 }
 
 public static class StationCustomerCargoMapping

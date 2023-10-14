@@ -26,6 +26,13 @@ public partial class Country
 
 #nullable enable
 
+public static class CountryExtensions
+{
+    public static string FlagSrc(this Country country) =>
+        country is null ? string.Empty :
+        $"images/flags/{country.DomainSuffix}.png";
+}
+
 internal static class CountryMapper
 {
     public static void MapCountry(this ModelBuilder builder) =>

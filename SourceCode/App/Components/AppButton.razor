@@ -1,25 +1,28 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @inject IJSRuntime JSRuntime
 
+<span style="margin-left: 4px; display: @Display">
 @if (Href.HasValue())
 {
     @if (OpenInNewTab)
     {
-        <button class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
+        <button type="button "class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
     }
     else
     {
-        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" />&nbsp;@LabelText</a>
+        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText</span></a>
     }
 }
 else if (IsSubmit)
 {
-    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
+    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
 }
 else
 {
-    <button class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" />&nbsp;@LabelText&nbsp;@ObjectNameLocalized</button>
-}
+    <button type="button" class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+    }
+</span>
+
 @code {
     [Parameter] public string Label { get; set; } = "Button";
     [Parameter] public string? ObjectName { get; set; }
@@ -31,6 +34,7 @@ else
     [Parameter] public bool IsSubmit { get; set; }
     [Parameter] public int OnClickParameter { get; set; }
     [Parameter] public bool OpenInNewTab { get; set; }
+    [Parameter] public bool IsHidden { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -70,5 +74,6 @@ else
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
     string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string ObjectNameLocalized => ObjectName.HasNoValue() ? string.Empty : Localizer[ObjectName].ToString();
+    string Display => IsHidden ? "none" : "inline-block";
 
 }

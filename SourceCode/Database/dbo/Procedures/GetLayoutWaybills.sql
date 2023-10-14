@@ -88,10 +88,15 @@ BEGIN
 		Country AS CC ON CC.Id = CCC.CountryId INNER JOIN
 		CargoUnit AS CU ON CU.Id = CCC.QuantityUnitId INNER JOIN
 		CargoPackagingUnit AS CPU ON CPU.Id = CCC.PackageUnitId INNER JOIN
-		ModuleOwnerNames AS MON ON MON.StationId = CCC.StationId
+		ModuleOwnerNames AS MON ON MON.StationId = CCC.StationId INNER JOIN
+		Layout AS L ON L.ID = CCC.LayoutId
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
-		C.NHMCode > 0 AND
+		--C.NHMCode > 0 AND
+		(CCS.FromYear IS NULL OR CCS.FromYear <= L.LastYear) AND
+		(CCS.UptoYear IS NULL OR CCS.UptoYear >= L.FirstYear) AND
+		(CCC.FromYear IS NULL OR CCC.FromYear <= L.LastYear) AND
+		(CCC.UptoYear IS NULL OR CCC.UptoYear >= L.FirstYear) AND
 		CCS.IsSupply <> 0 AND CCC.IsSupply = 0 AND
 		CCS.StationId <> CCC.StationId AND 
 		CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId AND

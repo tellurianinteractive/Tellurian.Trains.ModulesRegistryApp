@@ -38,11 +38,8 @@
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
         </td>
         <td>
-            @if (MayEdit)
-            {
-                <AppButton Label="Edit" Href="@StationEditHref(station.Id)" />
-                <AppButton Label="Delete" Href="@StationDeleteHref(station.Id)" />
-            }
+            <AppButton Label="Edit" Href="@StationEditHref(station.Id)" IsHidden="@(!MayEdit)" />
+            <AppButton Label="Delete" Href="@StationDeleteHref(station.Id)" IsHidden="@(!MayEdit)" />
             <AppButton Label="FreightCustomers" Href="@CargoCustomersHref(station.Id)" IconName="Customer" />
         </td>
     </RowTemplate>
@@ -67,9 +64,9 @@
     string StationDeleteHref(int id) => $"Stations/{id}/Delete";
     string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
 
-        MarkupString Name(Station station) => new(
-        station.HasConfigurationLabel() ? $"{station.FullName} <span class=\"fa fa-ruler\" /> {station.ConfigurationLabel()}" : 
-        station.HasPackageLabel() ? $"{station.FullName} <span class=\"fa fa-truck-loading\" /> {station.PackageLabel()}" : 
-        station.FullName);
+    MarkupString Name(Station station) => new(
+    station.HasConfigurationLabel() ? $"{station.FullName} <span class=\"fa fa-ruler\" /> {station.ConfigurationLabel()}" :
+    station.HasPackageLabel() ? $"{station.FullName} <span class=\"fa fa-truck-loading\" /> {station.PackageLabel()}" :
+    station.FullName);
 
 }

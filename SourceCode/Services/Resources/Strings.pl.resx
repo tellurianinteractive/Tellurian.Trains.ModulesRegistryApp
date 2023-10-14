@@ -117,175 +117,175 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Monday" xml:space="preserve">
-    <value>Hétfő</value>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>Hé</value>
-  </data>
-  <data name="Thursday" xml:space="preserve">
-    <value>Csütörtök</value>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>Csüt</value>
-  </data>
-  <data name="Wednesday" xml:space="preserve">
-    <value>Szerda</value>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>Sze</value>
-  </data>
-  <data name="Tuesday" xml:space="preserve">
-    <value>Kedd</value>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>K</value>
-  </data>
-  <data name="Friday" xml:space="preserve">
-    <value>Péntek</value>
-  </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>Pé</value>
-  </data>
-  <data name="Saturday" xml:space="preserve">
-    <value>Szombat</value>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>Szo</value>
-  </data>
-  <data name="Sunday" xml:space="preserve">
-    <value>Vasárnap</value>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>V</value>
-  </data>
   <data name="Daily" xml:space="preserve">
-    <value>Napi</value>
+    <value>Codziennie</value>
   </data>
   <data name="DailyShort" xml:space="preserve">
-    <value>Napi</value>
+    <value>Codz</value>
   </data>
-  <data name="In the afternoon" xml:space="preserve">
-    <value>Délután</value>
+  <data name="Friday" xml:space="preserve">
+    <value>Piątek</value>
   </data>
-  <data name="In the evening" xml:space="preserve">
-    <value>Este</value>
-  </data>
-  <data name="In the morning" xml:space="preserve">
-    <value>Reggel</value>
-  </data>
-  <data name="In" xml:space="preserve">
-    <value>ban ben</value>
+  <data name="FridayShort" xml:space="preserve">
+    <value>Pi</value>
   </data>
   <data name="Hungary" xml:space="preserve">
-    <value>Magyarország</value>
+    <value>Węgry</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>w</value>
+  </data>
+  <data name="In the afternoon" xml:space="preserve">
+    <value>Po południu</value>
+  </data>
+  <data name="In the evening" xml:space="preserve">
+    <value>Wieczorem</value>
+  </data>
+  <data name="In the morning" xml:space="preserve">
+    <value>Rankiem</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Poniedziałek</value>
+  </data>
+  <data name="MondayShort" xml:space="preserve">
+    <value>Po</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sobota</value>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>So</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Niedziela</value>
+  </data>
+  <data name="SundayShort" xml:space="preserve">
+    <value>Ni</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Czwartek</value>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>Cz</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Wtorek</value>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Wt</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Środa</value>
+  </data>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>Śr</value>
   </data>
   <data name="Destination" xml:space="preserve">
-    <value>Rendeltetési hely</value>
+    <value>Miejsce docelowe</value>
   </data>
   <data name="Origin" xml:space="preserve">
-    <value>Szállítási állomás</value>
+    <value>Stacja wysyłkowa</value>
   </data>
   <data name="Owner" xml:space="preserve">
-    <value>Tulajdonos</value>
+    <value>Właściciel</value>
   </data>
   <data name="Owners" xml:space="preserve">
-    <value>Tulajdonosok</value>
+    <value>Właściciele</value>
   </data>
   <data name="Poland" xml:space="preserve">
-    <value>Lengyelország</value>
+    <value>Polska</value>
   </data>
   <data name="At night" xml:space="preserve">
-    <value>Éjszaka</value>
+    <value>W nocy</value>
   </data>
   <data name="Austria" xml:space="preserve">
-    <value>Ausztria</value>
+    <value>Austria</value>
   </data>
   <data name="Bale" xml:space="preserve">
-    <value>Bála</value>
+    <value>Bela</value>
   </data>
   <data name="Bales" xml:space="preserve">
-    <value>Bálák</value>
+    <value>Bele</value>
   </data>
   <data name="Barrel" xml:space="preserve">
-    <value>Hordók</value>
+    <value>Beczki</value>
   </data>
   <data name="Barrels" xml:space="preserve">
-    <value>Hordók</value>
+    <value>Beczki</value>
   </data>
   <data name="BigSack" xml:space="preserve">
-    <value>Nagy zsák</value>
+    <value>Duży worek</value>
   </data>
   <data name="BigSacks" xml:space="preserve">
-    <value>Nagy zsákok</value>
+    <value>Duże worki</value>
   </data>
   <data name="Bottle" xml:space="preserve">
-    <value>Üveg</value>
+    <value>Butelka</value>
   </data>
   <data name="Bottles" xml:space="preserve">
-    <value>Palackok</value>
+    <value>Butelki</value>
   </data>
   <data name="CzechRepublic" xml:space="preserve">
-    <value>Cseh Köztársaság</value>
+    <value>Republika Czeska</value>
   </data>
   <data name="DayNameCasing" xml:space="preserve">
     <value>LOWER</value>
   </data>
   <data name="Days" xml:space="preserve">
-    <value>Napok</value>
+    <value>Dni</value>
   </data>
   <data name="Denmark" xml:space="preserve">
-    <value>Dánia</value>
+    <value>Dania</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Üres</value>
+    <value>Pusty</value>
   </data>
   <data name="France" xml:space="preserve">
-    <value>Franciaország</value>
+    <value>Francja</value>
   </data>
   <data name="Germany" xml:space="preserve">
-    <value>Németország</value>
+    <value>Niemcy</value>
   </data>
   <data name="Italy" xml:space="preserve">
-    <value>Olaszország</value>
+    <value>Włochy</value>
   </data>
   <data name="Netherlands" xml:space="preserve">
-    <value>Hollandia</value>
+    <value>Holandia</value>
   </data>
   <data name="Pallet" xml:space="preserve">
-    <value>Raklap</value>
+    <value>Paleta</value>
   </data>
   <data name="Pallets" xml:space="preserve">
-    <value>Raklapok</value>
+    <value>Palety</value>
   </data>
   <data name="Pieces" xml:space="preserve">
-    <value>Darabok</value>
+    <value>Sztuki</value>
   </data>
   <data name="Roll" xml:space="preserve">
-    <value>Tekercs</value>
+    <value>Rolka</value>
   </data>
   <data name="Rolls" xml:space="preserve">
-    <value>Tekercsek</value>
+    <value>Rolki</value>
   </data>
   <data name="Sack" xml:space="preserve">
-    <value>Zsák</value>
+    <value>Worek</value>
   </data>
   <data name="Sacks" xml:space="preserve">
-    <value>Zsákok</value>
+    <value>Worki</value>
   </data>
   <data name="Slovakia" xml:space="preserve">
-    <value>Szlovákia</value>
+    <value>Słowacja</value>
   </data>
   <data name="Sweden" xml:space="preserve">
-    <value>Svédország</value>
+    <value>Szwecja</value>
   </data>
   <data name="Switzerland" xml:space="preserve">
-    <value>Svájc</value>
+    <value>Szwajcaria</value>
   </data>
   <data name="United Kingdom" xml:space="preserve">
-    <value>Egyesült Királyság</value>
+    <value>Zjednoczone Królestwo</value>
   </data>
   <data name="YearsInOperation" xml:space="preserve">
-    <value>Üzemeltetési évek</value>
+    <value>Lata eksploatacji</value>
   </data>
 </root>

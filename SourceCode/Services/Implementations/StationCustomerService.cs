@@ -155,7 +155,7 @@ public class StationCustomerService
 
         static void AddOrRemoveCustomerCargos(ModulesDbContext dbContext, StationCustomer entity, StationCustomer existing)
         {
-            foreach (var cargo in entity.Cargos)
+            foreach (var cargo in entity.Cargos.Where(c => c.IsValid()))
             {
                 cargo.TrackOrAreaColor = cargo.TrackOrAreaColor?.ToLowerInvariant();
                 var current = existing.Cargos.AsQueryable().FirstOrDefault(scc => scc.Id == cargo.Id);

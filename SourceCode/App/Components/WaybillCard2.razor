@@ -25,7 +25,7 @@
                                 <div class="name" style="font-size: @StationNameTextSize(Item.Destination.StationName, Item.ShowFlag())">
                                     @if (Item.ShowFlag())
                                     {
-                                        <span class="flag"><img  src="@Item.Destination.FlagSrc()" /></span>
+                                        <span class="flag"><img class="flagimage" src="@Item.Destination.FlagSrc()" /></span>
                                     }
                                     <span>@Item.Destination.StationName()</span>
                                 </div>
@@ -100,7 +100,7 @@
                             <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.ShowFlag())">
                                 @if (Item.ShowFlag())
                                 {
-                                    <span class="flag"><img src="@Item.Origin.FlagSrc()" /></span>
+                                    <span class="flag"><img class="flagimage" src="@Item.Origin.FlagSrc()" /></span>
                                 }
                                 <span>@Item.Origin.StationName()</span>
                             </div>

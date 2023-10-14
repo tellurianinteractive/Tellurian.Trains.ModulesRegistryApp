@@ -66,14 +66,8 @@
                 <AppButton Href="@EditHref(person)" Label="Edit" />
                 <AppButton Href="@ModulesHref(person)" Label="Modules" />
                 <AppButton Href="@StationsHref(person)" Label="Stations" />
-                @if (person.MayBeInvited())
-                {
-                    <AppButton Href="@InviteHref(person)" Label="Invite" />
-                }
-                @if (person.User.IsLockedOut())
-                {
-                    <AppButton Label="Unlock" OnClickCallback="@(() => UnlockUser(person.User))" />
-                }
+                <AppButton Href="@InviteHref(person)" Label="Invite" IsHidden="@(!person.MayBeInvited())" />
+                <AppButton Label="Unlock" OnClickCallback="@(() => UnlockUser(person.User))" IsHidden=@(!person.User.IsLockedOut()) />
             }
         </TemplateColumn>
     </QuickGrid>
