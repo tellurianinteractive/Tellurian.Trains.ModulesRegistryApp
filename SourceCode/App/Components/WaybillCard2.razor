@@ -225,5 +225,5 @@
     string OwnerNamesTextSize(string? text) =>
         text is null || text.Length < 20 ? "7pt" : "6pt";
 
-    string QwnerNamesText(Waybill it) => $"{it.Destination.DualLanguageLabel("Owners")} {it.OwnerNames}";
+    string OwnerNamesText(Waybill it) => $"{it.Destination.DualLanguageLabel("Owners")} {it.OwnerNames}";
 }

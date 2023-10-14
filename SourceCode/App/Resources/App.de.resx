@@ -1419,4 +1419,7 @@
   <data name="ExternalLinks" xml:space="preserve">
     <value>Externe Links</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Leerwagenbestellung</value>
+  </data>
 </root>

@@ -288,4 +288,10 @@
   <data name="YearsInOperation" xml:space="preserve">
     <value>Lata eksploatacji</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Zamówienie na pusty wagon</value>
+  </data>
+  <data name="Yard" xml:space="preserve">
+    <value>Stacja kolejowa</value>
+  </data>
 </root>

@@ -87,6 +87,7 @@ builder.Services.AddScoped<CargoService>();
 builder.Services.AddScoped<ContentService>();
 builder.Services.AddScoped<CountryService>();
 builder.Services.AddScoped<DocumentService>();
+builder.Services.AddScoped<EmptyWagonOrderService>();
 builder.Services.AddScoped<ExternalStationService>();
 builder.Services.AddScoped<GroupCategoryService>();
 builder.Services.AddScoped<GroupService>();

@@ -789,4 +789,10 @@
   <data name="Owner" xml:space="preserve">
     <value>Ejer</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Tomvogn ordre</value>
+  </data>
+  <data name="Yard" xml:space="preserve">
+    <value>Banegård</value>
+  </data>
 </root>

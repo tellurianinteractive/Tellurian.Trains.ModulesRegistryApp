@@ -628,6 +628,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty wagon order.
+        /// </summary>
+        internal static string EmptyWagonOrder {
+            get {
+                return ResourceManager.GetString("EmptyWagonOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Epoch.
         /// </summary>
         internal static string Epoch {
@@ -2055,6 +2064,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string with {
             get {
                 return ResourceManager.GetString("with", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yard.
+        /// </summary>
+        internal static string Yard {
+            get {
+                return ResourceManager.GetString("Yard", resourceCulture);
             }
         }
         

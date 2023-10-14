@@ -1,0 +1,103 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Item is not null)
+{
+    <Pocket>
+        <div class="emptywagonorder" style="position: relative; height:90mm">
+            <div class="destination" style="height: 4cm">
+                <table width="100%" class="destination">
+                    <tr>
+                        <td colspan="2" class="box destination">
+                            <div class="label">@Item.Languages.DualLanguageText("Destination")</div>
+                            <div class="name" style="font-size: @StationNameTextSize(Item.StationName)">
+                                <span>@Item.StationName</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="customer">
+                                <span>@Item.CustomerName</span>
+                            </div>
+                        </td>
+                    </tr>
+                    @if (Item.TrackOrArea().HasValue())
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="item">
+                                    <span class="icon"><i class="fas fa-warehouse"></i></span>
+                                    <span class="trackorarea" style="background-color: @Item.TrackOrAreaColor(); color: @Item.TrackOrAreaTextColor()">
+                                        @Item.TrackOrArea()
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="2">
+                            <div class="item">
+                                <span class="icon">
+                                    <i class="fas fa-dolly-flatbed"></i>
+                                </span>
+                                <span>@Item.CargoName</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table width="100%">
+                    <tbody>
+                        <tr>
+                            <td class="box origin">
+                                <div class="label">@Item.Languages.DualLanguageText( "Origin")</div>
+                                <div class="name">
+                                    <span>@Item.Languages.DualLanguageText("Yard")</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="emptyorder">
+                                <div>@Item.Languages.TranslatedText("EmptyWagonOrder")</div>
+                                <div>@("en".TranslatedText("EmptyWagonOrder"))</div>
+                                <div>@("de".TranslatedText("EmptyWagonOrder"))</div>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table width="100%" style="position: absolute; top: 76mm">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="label">@Item.Languages.DualLanguageText("Class")</div>
+                            <div class="daysandclass">@Item.WagonClasses()</div>
+                        </td>
+                        <td>
+                            <div class="label">@Item.Languages.DualLanguageText("Days")</div>
+                            <div class="daysandclass">@Localizer["Today"]</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="line-height:8pt; font-size: 7pt; border-top: solid 1px">
+                            @Item.Languages.DualLanguageText("Owner"):<br /> @Item.OwnerNames
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </Pocket>
+}
+@code {
+    [Parameter] public EmptyWagonOrder? Item { get; set; }
+
+    string StationNameTextSize(string? text) =>
+    string.IsNullOrWhiteSpace(text) ? Large :
+    text.Length < 18 ? Large : Small;
+
+    const string Large = "14pt";
+    const string Small = "12pt";
+}

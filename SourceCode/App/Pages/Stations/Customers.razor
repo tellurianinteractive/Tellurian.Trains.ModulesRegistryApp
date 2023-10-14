@@ -20,9 +20,10 @@
 
 @if (MayEdit)
 {
-    <div style="display:flex; flex-direction:row; justify-content: space-between;">
-        <div><AppButton Label="Add" Href="@FreightCustomerHref(0)" /></div>
-        <div><AppButton Label="Waybills-Preview" Href="@WaybillsHref(StationId)" IsDisabled="@(StationId < 1)" IconName="@FontAwesome.Preview" /></div>
+    <div style="display:flex; flex-direction:row; justify-content: left;">
+        <div><AppButton Label="Add" Href="@FreightCustomerHref(0)" AlwaysShowLabel=true /></div>
+        <div><AppButton Label="Waybills-Preview" Href="@WaybillsHref(StationId)" IsHidden="@(StationId < 1)" IconName="@FontAwesome.Preview" AlwaysShowLabel=true/></div>
+        <div><AppButton Label="EmptyWagonOrder-Preview" Href="@EmptyWagonOrdersHref(StationId)" IsHidden="@(StationId < 1)" IconName="@FontAwesome.Preview" AlwaysShowLabel=true /></div>
     </div>
     <hr />
 }
@@ -88,4 +89,6 @@
 
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";
     string WaybillsHref(int stationId) => $"/reports/waybills/station/{stationId}";
+    string EmptyWagonOrdersHref(int stationId) => $"/reports/emptywagonorders/station/{stationId}";
+
 }

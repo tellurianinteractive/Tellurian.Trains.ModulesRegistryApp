@@ -288,4 +288,10 @@
   <data name="YearsInOperation" xml:space="preserve">
     <value>Üzemeltetési évek</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Üres kocsi rendelés</value>
+  </data>
+  <data name="Yard" xml:space="preserve">
+    <value>Vasút udvar</value>
+  </data>
 </root>

@@ -789,4 +789,10 @@
   <data name="Owner" xml:space="preserve">
     <value>Eigentümer</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Leerwagenbestellung</value>
+  </data>
+  <data name="Yard" xml:space="preserve">
+    <value>Bahnhof</value>
+  </data>
 </root>

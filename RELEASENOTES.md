@@ -7,6 +7,7 @@ Release date 2023-10-15
 - **Meeting** page improved: direct links to external meeting web pages, flags indicating country for meeting.
 - **Waybill preview** for layout waybills now consider validity years for cargo customer/cargo flow.
 - **Waybill translations** now also fully supports Polish and Hungarian. 
+- **Empty Wagon Order** is now implemented (issue #167). You can print orders to request empty wagons for your outgoing freights. 
 - **Buttons** now hides button text when page with under 1600 px to preserve horisontal space.
 - **Bug fix** of error when saving cargo flow with incomplete data.
 ## Release 1.9.6

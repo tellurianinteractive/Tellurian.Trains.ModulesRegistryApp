@@ -6,20 +6,20 @@
 {
     @if (OpenInNewTab)
     {
-        <button type="button "class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            <button type="button " class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
     }
     else
     {
-        <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText</span></a>
+            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
     }
 }
 else if (IsSubmit)
 {
-    <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
 }
 else
 {
-    <button type="button" class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="sm-hide">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        <button type="button" class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
     }
 </span>
 
@@ -35,6 +35,7 @@ else
     [Parameter] public int OnClickParameter { get; set; }
     [Parameter] public bool OpenInNewTab { get; set; }
     [Parameter] public bool IsHidden { get; set; }
+    [Parameter] public bool AlwaysShowLabel { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -75,5 +76,6 @@ else
     string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string ObjectNameLocalized => ObjectName.HasNoValue() ? string.Empty : Localizer[ObjectName].ToString();
     string Display => IsHidden ? "none" : "inline-block";
+    string HideLabelCss => AlwaysShowLabel ? "" : "sm-hide";
 
 }

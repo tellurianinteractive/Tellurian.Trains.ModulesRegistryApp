@@ -176,9 +176,9 @@ public static class CargoCustomerExtensions
         me.HasLimitedYearsInOperation() ? $"{me.FromYear}-{me.UptoYear}" : string.Empty;
 
     public static string DualLanguageLabel(this CargoCustomer it, string resourceKey, string? otherEnglishText = null) =>
-        resourceKey.DualLanguageLabel(it.Languages, otherEnglishText);
+        it.Languages.DualLanguageText(resourceKey, otherEnglishText);
  
-    public static string DualLanguageLabel(this string resourceKey, string languageTwoLetterISOCode, string? otherEnglishText = null)
+    public static string DualLanguageText(this string languageTwoLetterISOCode, string resourceKey, string? otherEnglishText = null)
     {
         var resourceManager = Resources.Strings.ResourceManager;
         var culture = new CultureInfo(languageTwoLetterISOCode);
@@ -186,7 +186,14 @@ public static class CargoCustomerExtensions
         var englishText = otherEnglishText ?? resourceKey;
         if (localizedText.HasValue() && englishText != localizedText) return $"{englishText}/{localizedText}";
         return englishText;
+    }
 
+    public static string TranslatedText(this string languageTwoLetterISOCode, string resourceKey)
+    {
+        var resourceManager = Resources.Strings.ResourceManager;
+        var culture = new CultureInfo(languageTwoLetterISOCode);
+        var localizedText = resourceManager.GetString(resourceKey, culture);
+        return localizedText ?? string.Empty;
     }
 
     public static string ForeColor(this CargoCustomer? me) =>

@@ -1,0 +1,51 @@
+﻿@page "/reports/emptywagonorders/station/{stationId:int}"
+@page "/reports/emptywagonorders/station/{stationId:int}/customer/{customerId:int}"
+
+@layout PrintLayout
+@inject IStringLocalizer<App> Localizer
+@inject ILanguageService LanguageService
+@inject EmptyWagonOrderService EmptyWagonOrderService
+@if (EmptyWagonOrders is null)
+{
+    <ActionMessage Label="CreatingReport" AlertType="Spinning" />
+}
+else if (EmptyWagonOrders.Count() == 0)
+{
+        <ActionMessage Label="NoRecords" />
+}
+else
+{
+    @foreach (var itemsPerPage in EmptyWagonOrders.ItemsPerPage(Waybill.ItemsPerPage))
+    {
+        <div>
+            @foreach (var item in itemsPerPage)
+            {
+                <EmptyWagonOrderCard Item="@item"></EmptyWagonOrderCard>
+            }
+        </div>
+    }
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int? StationId { get; set; }
+    [Parameter] public int? CustomerId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<EmptyWagonOrder>? EmptyWagonOrders { get; set; }
+    bool IsLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmptyWagonOrders = null;
+        if (!IsLoading)
+        {
+            IsLoading = true;
+            Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+             if (StationId > 0)
+            {
+                var items = await EmptyWagonOrderService.GetEmptyWagonOrdersAsync(Principal, StationId.Value, CustomerId);
+                EmptyWagonOrders = items.AsPrintable();
+            }
+        }
+    }
+}

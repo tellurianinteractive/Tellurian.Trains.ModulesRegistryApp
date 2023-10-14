@@ -1,0 +1,92 @@
+﻿.emptywagonorder {
+    line-height: 14pt;
+    font-weight: 600;
+    font-family: 'Bahnschrift','Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+.trackorarea {
+    padding: 0px 5px 0px 5px;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.label {
+    font-size: 9pt;
+    max-height: 9pt;
+    line-height: 11pt;
+    vertical-align: top;
+}
+
+.destination {
+    background-color: #FFFFE0;
+}
+
+.icon {
+    display: inline-block;
+    width: 3mm;
+    height: 3mm;
+}
+
+.box {
+    height: 8.5mm;
+    padding: 1px;
+}
+
+    .box.destination {
+        border: 2px solid red;
+    }
+
+    .box.origin {
+        border: 2px solid gray;
+    }
+
+.name { /* font-size is set dynamically in code */
+    font-weight: bold;
+    line-height: 15pt;
+    width: 44mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: central;
+    padding-top: 2px;
+}
+
+.customer {
+    font-weight: bold;
+    font-size: 12pt;
+    line-height: 15pt;
+    width: 46mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item {
+    font-weight: bold;
+    font-size: 10pt;
+    min-height: 12pt;
+    max-width: 46mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.smaller {
+    font-weight: bold;
+    font-size: 8pt;
+    min-height: 11pt;
+}
+
+.daysandclass {
+    font-weight: bold;
+    font-size: 14pt;
+    min-height: 15pt;
+    padding: 1px;
+    line-height: 16pt;
+    height: 16pt;
+}
+.emptyorder {
+    font-size: 10pt;
+    color: red;
+}

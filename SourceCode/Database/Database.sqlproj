@@ -179,6 +179,7 @@
     <Build Include="dbo\Tables\Groups\GroupMember.sql" />
     <Build Include="dbo\Tables\Stations\Region.sql" />
     <Build Include="dbo\Views\ModuleOwnerNames.sql" />
+    <Build Include="dbo\Procedures\GetEmptyWagonOrders.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
