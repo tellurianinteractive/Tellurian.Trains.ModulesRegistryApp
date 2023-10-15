@@ -1,7 +1,11 @@
 ﻿.background {
     color: white;
 }
+.errorcard {
+    font-size: 7pt;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 
+}
 h1 {
     width: 100%;
     text-align: center;
@@ -12,5 +16,7 @@ h1 {
 ul {
     list-style: url('/images/Square.png');
     list-style-position: outside;
-    font-size: 8pt;
+}
+p {
+    padding-left: 10px;
 }
