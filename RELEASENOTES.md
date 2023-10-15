@@ -7,6 +7,7 @@ Release date 2023-10-15
 - **Stations** can now be labelled as *harbour*. This will be used later to extend waybill matching.
 - **Bug fix** extends what is considerdd as valid characterns in text input fields.
 - **Bug fix** of FREMO-module number format.
+- **No Waybill** explanatory text is updated. This informs the reasons why waybills don't show in preview/print.
 ## Release 1.9.7
 Release date 2023-10-14
 - **Meeting** page improved: direct links to external meeting web pages, flags indicating country for meeting.

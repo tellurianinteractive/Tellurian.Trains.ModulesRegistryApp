@@ -1,11 +1,19 @@
-﻿## Ingen fragtbrev?
-Der kan være flere grunde til, at der ikke vises fragtbrev til udskrivning til stationen.
-For at udskrive fragtbrev skal følgende kriterier være opfyldt:
-- Stationen skal være forbundet til et land. Dette gøres ved at tildele stationen en *region*.
-- Stationen skal have fragtkunder, der sender eller modtager varer, der matcher andre stationer.
-- Varekunderne og / eller varestrømmen skal være gyldige i mindst et år af mødets tidsperiode, eller at der ikke er angivet nogen tidsperiode.
+﻿# Ingen fragtbreve?
+Fragtbreve kan oprettes på to måder:
+- Til et specifikt træf.
+- Som fragtbreve genanvendelige ved flere møder.
 
-Hvis du har en station i layoutet, der er markeret som 'skyggestation', får alle stationskunder et fragtbrev for hver godstype.
+Der kan være flere årsager til, at der ikke vises fragtbreve til udskrivning for stationen:
 
-Hvis du har et 'internationalt' møde med grænseoverskridende laststrøm,
-kun laststrømme markeret som *import* eller *eksport* vil matche fragtkunder på stationer i et andet land.
+## Mødelayout fragtbreve
+YTræf fragtbreve er interne fragter mellem moduler, der er til stede i banen:
+- Stationen skal registreres på træffet på den rigtige bane.
+- Stationen skal have fragtkunder, som *modtager* varer, som andre stationer i banen sender. Bemærk at du ikke får fragtbreve for varer du *sender*.
+- Stationen skal tildeles en *region*.
+- Hvis varekunderne og/eller varestrømmen har start- og/eller slutdato, skal gyldigheden falde inden for træffets tidsperiode.
+
+## Genanvendelige fragtbreve
+Dette er fragtbrevet, du opretter til din station, og som kan genbruges til flere træf:
+- Stationen skal have fragtkunder, der *sender* eller *modtager* varer, som andre modulstationer eller eksterne stationer sender.
+- Stationen skal tildeles en *region*.
+- Hvis varekunderne og/eller varestrømmen har start- og/eller slutdato, skal gyldigheden falde inden for godstypens gyldighedsperiode. Nogle lasttyper har gyldighed af historisk grund.

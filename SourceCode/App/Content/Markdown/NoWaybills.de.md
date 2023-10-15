@@ -1,11 +1,19 @@
-﻿## Keine Frachtbriefe?
-Es kann mehrere Gründe geben, warum für die Station keine Frachtbriefe zum Ausdrucken angezeigt werden.
-Um Frachtbriefe drucken zu können, müssen folgende Kriterien erfüllt sein:
-- Die Station muss mit einem Land verbunden sein. Dies geschieht, indem der Station eine *Region* zugewiesen wird.
-- Der Bahnhof muss Frachtkunden haben, die Güter senden oder empfangen, die zu anderen Bahnhöfen passen.
-- Die Warenkunden und / oder der Warenfluss müssen mindestens ein Jahr des Sitzungszeitraums gültig sein oder es wurde kein Zeitraum angegeben.
+﻿# Keine Frachtbriefe?
+Frachtbriefe können auf zwei Arten erstellt werden:
+- Für ein bestimmtes treffen.
+- Als Frachtbriefe bei mehreren Besprechungen wiederverwendbar.
 
-Wenn Sie eine Station im Layout haben, die als „Schattenstation“ gekennzeichnet ist, erhalten alle Stationskunden für jede Frachtart einen Frachtbrief.
+Dass für den Bahnhof keine Frachtbriefe zum Ausdrucken angezeigt werden, kann mehrere Gründe haben:
 
-Wenn Sie ein „internationales“ Meeting mit grenzüberschreitendem Frachtfluss haben,
-nur mit *import* oder *export* gekennzeichnete Frachtströme werden Frachtkunden an Bahnhöfen in einem anderen Land zugeordnet.
+## Frachtbriefe für Besprechungslayouts
+Meeting-Frachtbriefe sind interne Frachten zwischen in der Bahn vorhandenen Modulen:
+- Der Bahnhof muss zum Treffen auf der richtigen Gleisanlage angemeldet werden
+- Der Bahnhof muss Frachtkunden haben, die Güter *empfangen*, die andere Layout-Bahnhöfe versenden. Beachten Sie, dass Sie keine Frachtbriefe für Waren erhalten, die Sie *versenden*.
+- Der Station muss eine *Region* zugeordnet sein.
+- Wenn die Warenkunden und/oder der Warenfluss ein Start- und/oder Enddatum haben, muss die Gültigkeit innerhalb des Besprechungszeitraums liegen.
+
+## Wiederverwendbare Frachtbriefe
+Dies sind die Frachtbriefe, die Sie für Ihre Station erstellen und die bei mehreren Besprechungen wiederverwendet werden können:
+- Die Station muss Frachtkunden haben, die Güter *senden* oder *empfangen*, die andere Modulstationen oder externe Stationen versenden.
+- Der Station muss eine *Region* zugeordnet sein.
+- Wenn der Warenkunde und/oder der Warenfluss ein Start- und/oder Enddatum haben, muss die Gültigkeit innerhalb des Gültigkeitszeitraums der Ladungsart liegen. Einige Ladungsarten haben aus historischen Gründen Gültigkeit.

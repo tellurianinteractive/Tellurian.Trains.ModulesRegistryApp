@@ -1,11 +1,20 @@
-﻿## No waybills?
-There can be several reasons why no waybills are displayed for printing for the station.
-In order to print waybills, the follwoing criteria have to be fulfilled:
-- The station must be connected to a country. This is done by assigning a *region* to the station.
-- The station must have freight customers who send or receive goods that match other stations.
-- The goods customers and / or the goods flow must be valid for at least one year of the meeting's time period, or that no time period has been specified.
+﻿# No waybills?
+Waybills can be created in two ways:
+- For a specific meeting layout.
+- As waybills reusableat several meetings.
 
-If you have a station in the layout that is marked as 'shadow station', all station customers will get a waybill for each cargo type.
+There can be several reasons why no waybills are displayed for printing for the station:
 
-If you have an 'international' meeting with crossborder cargo flow, 
-only cargo flows marked as *import* or *export* will match cargo customers at stations in another country.
+## Meeting layout waybills
+Meeting waybills are internal freights between modules present in the meeting layout:
+- The station must be registered på the meeting on the right track-layout
+- The station must have freight customers who *receives* goods that other layout stations send. Note that you don't get waybills for goods you *send*.
+- The station must be assiged a *region*.
+- If the goods customers and/or the goods flow has start and/or end date, the validity must fall within the meeting's time period.
+
+## Resusable waybills
+These are the waybill you create for your station and that can be reusedat several meetings:
+- The station must have freight customers who *sends* or *receives* goods that other module-stations or external stations send.
+- The station must be assiged a *region*.
+- If the goods customers and/or the goods flow has start and/or end date, the validity must fall within the cargo type's validity period. 
+Some cargo types has valitity for historiocal reason.
