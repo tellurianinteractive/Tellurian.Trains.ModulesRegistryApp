@@ -5,6 +5,7 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.9.8
 Release date 2023-10-15
 - **Stations** can now be labelled as *harbour*. This will be used later to extend waybill matching.
+- **User settings** now permits user to add their FREMO module user signature.
 - **Bug fix** extends what is considerdd as valid characterns in text input fields.
 - **Bug fix** of FREMO-module number format.
 - **No Waybill** explanatory text is updated. This informs the reasons why waybills don't show in preview/print.

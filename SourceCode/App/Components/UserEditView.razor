@@ -22,7 +22,7 @@ else
             <AppInputText Width="2" Label="EmailAddress" @bind-Value="@Person.EmailAddresses" />
             <AppInputText Width="2" Label="CityName" @bind-Value="@Person.CityName" />
             <AppInputSelect Width="2" Label="Country" @bind-Value="@Person.CountryId" Items="CountryItems" IsDisabled=true />
-            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="@Person.FremoOwnerSignature" IsDisabled=true/>
+            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="@Person.FremoOwnerSignature" IsDisabled=MayAddFremoModuleOwnerSignature />
             <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
             <AppDisplay Width="4" Label="ApiKey" Value="@User.ApiKey()" BackColor="#e9ecef" />
 
@@ -38,7 +38,7 @@ else
     User? User;
     Person? Person;
     IEnumerable<ListboxItem> CountryItems = Enumerable.Empty<ListboxItem>();
-   
+
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
@@ -82,5 +82,7 @@ else
         }
         return null;
     }
+
+    bool MayAddFremoModuleOwnerSignature => Person?.FremoOwnerSignature.HasValue() == true;
 
 }
