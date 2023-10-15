@@ -1419,8 +1419,8 @@
   <data name="ExternalLinks" xml:space="preserve">
     <value>External Resources</value>
   </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Empty wagon orders</value>
+  <data name="EmptyCarOrder" xml:space="preserve">
+    <value>Empty car order</value>
   </data>
   <data name="IsHarbour" xml:space="preserve">
     <value>Is harbour?</value>

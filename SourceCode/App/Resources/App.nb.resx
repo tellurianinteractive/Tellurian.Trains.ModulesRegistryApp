@@ -1419,7 +1419,7 @@
   <data name="ExternalLinks" xml:space="preserve">
     <value>Eksterne lenker</value>
   </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
+  <data name="EmptyCarOrder" xml:space="preserve">
     <value>Tomvognordre</value>
   </data>
   <data name="IsHarbour" xml:space="preserve">

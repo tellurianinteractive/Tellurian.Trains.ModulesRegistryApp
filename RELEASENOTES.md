@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.9
+Release date 2023-10-17
+- **Wagon Error Card** improved. Signature of issuer added.
+- **Bug fix** of *empty car order* displaying German or English texts twice.
 ## Release 1.9.8
 Release date 2023-10-15
 - **Stations** can now be labelled as *harbour*. This will be used later to extend waybill matching.

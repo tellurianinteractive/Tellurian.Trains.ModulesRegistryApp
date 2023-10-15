@@ -59,9 +59,12 @@
                         </tr>
                         <tr>
                             <td class="emptyorder">
-                                <div>@Item.Languages.TranslatedText("EmptyWagonOrder")</div>
-                                <div>@("en".TranslatedText("EmptyWagonOrder"))</div>
-                                <div>@("de".TranslatedText("EmptyWagonOrder"))</div>
+                                @if (Item.Languages.HasValueExcept("en", "de"))
+                                {
+                                    <div>@Item.Languages.TranslatedText("EmptyCarOrder")</div>
+                                }
+                                <div>@("en".TranslatedText("EmptyCarOrder"))</div>
+                                <div>@("de".TranslatedText("EmptyCarOrder"))</div>
 
                             </td>
                         </tr>
