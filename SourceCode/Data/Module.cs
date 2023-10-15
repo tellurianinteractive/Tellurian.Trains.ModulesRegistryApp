@@ -152,11 +152,11 @@ public static class ModuleExtensionsForFremoName
         {
             if (me.ModuleOwnerships.First().Person?.FremoOwnerSignature is not null)
             {
-                return $"{me.ModuleOwnerships.First().Person.FremoOwnerSignature}{me.FremoNumber.Value}";
+                return $"{me.ModuleOwnerships.First().Person.FremoOwnerSignature}{me.FremoNumber.Value:000}";
             }
             else if (me.ModuleOwnerships.First().Group is not null)
             {
-                return $"{me.ModuleOwnerships.First().Group.ShortName}{me.FremoNumber.Value}";
+                return $"{me.ModuleOwnerships.First().Group.ShortName}{me.FremoNumber.Value:000}";
             }
         }
         return null;
