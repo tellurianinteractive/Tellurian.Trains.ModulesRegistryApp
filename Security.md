@@ -21,7 +21,7 @@ In addition, the site uses a strict policy for what resources the app may access
 
 ## Design Considerations
 The site uses handcrafted code for authentication and authorisation. 
-It is a deliberate choice to *not* use out-of-the-box solutins for example ASP.NET standard authentication, solution based on *Indentity Server* or Microsofts *Azure AD*.
+It is a deliberate choice to *not* use out-of-the-box solutions for example ASP.NET standard authentication, solution based on *Indentity Server* or Microsofts *Azure AD*.
 There are several reasons:
 - The app requirements are quite limited. For example user self registration is not applicable.
 - The out-of-the-box solutions will create a dependency on external code/services that are overcomplicated in view of the requirements.
