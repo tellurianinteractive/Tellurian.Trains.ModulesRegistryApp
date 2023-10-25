@@ -89,7 +89,7 @@ BEGIN
 		CargoUnit AS CU ON CU.Id = CCC.QuantityUnitId INNER JOIN
 		CargoPackagingUnit AS CPU ON CPU.Id = CCC.PackageUnitId INNER JOIN
 		ModuleOwnerNames AS MON ON MON.StationId = CCC.StationId INNER JOIN
-		Layout AS L ON L.ID = CCC.LayoutId
+		Layout AS L ON L.Id = CCC.LayoutId
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
 		--C.NHMCode > 0 AND
