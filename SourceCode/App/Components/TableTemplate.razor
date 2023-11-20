@@ -19,7 +19,7 @@ else
                 @TableHeader
                 @if (RowEditTemplate is not null)
                 {
-                    <th >@Localizer["Actions"]</th>
+                    <th>@Localizer["Actions"]</th>
                 }
             </tr>
         </thead>
@@ -46,9 +46,9 @@ else
                             <td colspan="@EditColspan">
                                 @RowEditTemplate(item)
                             </td>
-                            <td  style="display: inline-block">
+                            <td style="display: inline-block">
                                 <AppButton Label="Cancel" OnClickCallback="Cancel" />
-                            
+
                             </td>
                         </tr>
                     }
@@ -74,7 +74,7 @@ else
 
     bool IsReadOnly => !MayEdit;
     bool CanSave => MayEdit;
-    string ItemKey(TItem item) => Key is null ? item.GetHashCode().ToString() : Key(item);
+    string ItemKey(TItem item) => Key is null ? item?.GetHashCode().ToString() ?? string.Empty : Key(item);
     string EditItemKey(TItem item) => ItemKey(item) + "E";
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
 

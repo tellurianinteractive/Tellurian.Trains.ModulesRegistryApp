@@ -1425,4 +1425,7 @@
   <data name="IsHarbour" xml:space="preserve">
     <value>Is harbour?</value>
   </data>
+  <data name="IsKeyRequired" xml:space="preserve">
+    <value>Is key required?</value>
+  </data>
 </root>

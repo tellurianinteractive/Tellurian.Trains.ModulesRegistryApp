@@ -19,6 +19,7 @@ public partial class Station
     public bool IsShadow { get; set; }
     public bool IsTerminus { get; set; }
     public bool IsHarbour { get; set; }
+    public bool IsKeyRequired { get; set; }
     public int? RegionId { get; set; }
     public int? PdfInstructionId { get; set; }
     public int? PrimaryModuleId { get; set; }
