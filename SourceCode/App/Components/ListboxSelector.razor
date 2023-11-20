@@ -10,7 +10,7 @@
                 <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
             }
         </select>
-        <button disabled="@(Id == 0)" class="btn btn-primary" @onclick="OnSelectedItem"><span class="@FontAwesome.Ok" /> @Localizer["Ok"]</button>
+        <AppButton Label="Ok" OnClickCallback="OnSelectedItem"/>
     </div>
 }
 

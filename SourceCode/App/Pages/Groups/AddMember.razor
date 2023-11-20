@@ -48,7 +48,7 @@
         <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="GroupMember.MayBorrowGroupsModules" />
         <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="GroupMember.MemberMayBorrowMyModules" />
         <div class="col-12">
-            <button type="submit" class="btn btn-sm btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" />@Localizer["Save"]</button>
+            <AppButton IsSubmit=true Label="Save"  />
         </div>
     </EditForm>
 }

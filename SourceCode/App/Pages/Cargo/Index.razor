@@ -38,6 +38,7 @@
         <TemplateColumn Title="@Localizer["Actions"]" Context="cargo">
             @if (MayEdit)
             {
+                <AppButton Label="Edit" />
                 <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
             }
         </TemplateColumn>
@@ -47,36 +48,13 @@
 
 </Paginator>
 
-@*<TableTemplate Items="Cargos?.OrderBy(c => c.NhmCode)">
-    <TableHeader>
-        <th>@Localizer["NHMCode"]</th>
-        <th>@Localizer["Name"]</th>
-        <th>@Localizer["DefaultClasses"]</th>
-        <th style="text-align: center">@Localizer["FromYear"]</th>
-        <th style="text-align: center">@Localizer["UptoYear"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="cargo">
-        <td>@cargo.NhmCodeOrEmpty()</td>
-        <td>@cargo.LocalizedName()</td>
-        <td>@cargo.DefaultClasses</td>
-        <td style="text-align: center">@cargo.FromYear</td>
-        <td style="text-align: center">@cargo.UptoYear</td>
-        <td>
-            @if (MayEdit)
-            {
-                <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
-            }
-        </td>
-    </RowTemplate>
-</TableTemplate>*@
-
-
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<Cargo>? Cargos;
     bool MayEdit;
+
+    string EditHref(Cargo cargo) => $"Cargo/{cargo.Id}/Edit";
 
     IQueryable<Cargo> FilteredItems
     {

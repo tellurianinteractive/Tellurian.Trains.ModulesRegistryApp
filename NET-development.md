@@ -1,8 +1,8 @@
 # .NET Development
-*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, April 2023*
+*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, November 2023*
 
 This article aim to describe technology choices, when developing software in modern .NET.
-At the time of writing 2023, all new .NET development should use .NET 7 or later.
+At the time of writing november 2023, all new .NET development should use .NET 8 or later.
 
 ## Modern .NET
 Modern .NET is free and fully open source; the framework libraries, the runtime, and the compilers.
@@ -86,7 +86,7 @@ The components written in Blazor can be rendered in several environments:
   - running the component on web assembly in the browser, and
   - in a cross platform MAUI application.
 
-  With the forthcoming .NET 8, you will also be able to mix rendering modes in the same application.
+  In.NET 8, you will also be able to mix rendering modes in the same application.
   This makes Blazor components the most highly resuable user interface components in .NET.
 - **Multiplatform Application User Interface** abbreviated **MAUI** is the newest technologi
 aimed to make it easier to create apps that runs natively on  *ioS*, *Android*, *macOs* and *Windows*
@@ -142,7 +142,7 @@ on any other platform.
 .NET is known for interoperability:
 - Call functions in Dynamic Link Libraries (DLL) compiled in a non .NET language.
 - C++ interop to wrap a native C++ class and enable code authored in C# or another .NET language to access it.
-- Exposing COM-components to .NET so .NET code can call it (Windows only).
+- Exposing COM-components to .NET so .NET code can call it (Windows only). This has been improved in .NET 8.
 - Support for *dynamic objects* for interoperatbility with languages such as IronPython and IronRuby.
 - Blazor interoperability in the browser with JavaScript and libraries in any language compiled to Web Assembly.
 
@@ -159,9 +159,12 @@ the management of the underlying infrastucture is managed by the cloud provider.
 .NET also has excellent support for deploy to containers and 
 to deploy containers to orchestration services such as Kubernetes.
 
+You can also deploy *ahead of time (AOT)* compiled console and WEB API applications, 
+which makes binarys smallar and with faster startup time.
+
 ## Performance
 .NET applications can be very performant, also compared with other technologies.
-An example of independent performance tests are available at [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r21)
+An example of independent performance tests are available at [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22)
 
 Performance is in focus, and .NET have a lot of performance improvements with every release.
 
@@ -175,8 +178,6 @@ and *only when the result can be measured*.
 
 To measure the performance of your code and the effect on code
 changes you make, use [BenchMark .NET](https://github.com/dotnet/BenchmarkDotNet).
-
-
 
 ## IoT Development
 You can build IoT apps with C# and .NET that run on Raspberry Pi, HummingBoard, BeagleBoard, Pine A64, and more.

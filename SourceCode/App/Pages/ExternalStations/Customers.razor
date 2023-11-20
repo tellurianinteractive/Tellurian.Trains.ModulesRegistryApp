@@ -16,7 +16,7 @@
 
 @if (MayEdit)
 {
-    <a class="btn btn-sm btn-secondary" href="@FreightCustomerHref(0)"><span class="@FontAwesome.Add" />@Localizer["Add"]</a>
+    <AppButton Label="Add" Href="@FreightCustomerHref(0)" />
     <hr />
 }
 @if (StationCustomers is not null)

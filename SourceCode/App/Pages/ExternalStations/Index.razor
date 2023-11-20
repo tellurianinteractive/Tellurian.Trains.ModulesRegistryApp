@@ -48,10 +48,10 @@
             <td style="text-align: center">@item.OpenedYear</td>
             <td style="text-align: center">@item.ClosedYear</td>
             <td>
-                <a class="btn btn-secondary btn-sm" href="ExternalStations/@item.Id/StationCustomers"><span class="@FontAwesome.Customer" /> @Localizer["FreightCustomers"]</a>
+                <AppButton Label="FreightCustomers" IconName="@FontAwesome.Customer" Href="@FreightCustomersHref(item)" />
                 @if (MayEdit)
                 {
-                <a class="btn btn-primary btn-sm" href="ExternalStations/@item.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                    <AppButton Label="Edit" Href="@EditHref(item)"/>
                 }
                 @if (Principal.IsCountryOrGlobalAdministrator())
                 {
@@ -74,7 +74,8 @@
     Country? Country;
     Region? Region;
 
-
+    string EditHref(ExternalStation station) => $"ExternalStations/{station.Id}/Edit";
+    string FreightCustomersHref(ExternalStation station) => $"ExternalStations/{station.Id}/StationCustomers";
 
     protected override async Task OnInitializedAsync()
     {

@@ -18,7 +18,7 @@
 }
 else if (MayBeDeleted)
 {
-    <button class="btn btn-danger btn-sm" @onclick="OnDelete"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
+    <AppButton Label="ConfirmDelete" OnClickCallback="OnDelete" AlwaysShowLabel=true/>
 }
 else
 {

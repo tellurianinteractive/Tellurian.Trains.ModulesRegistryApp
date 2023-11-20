@@ -22,7 +22,7 @@ else
 {
     @if (Principal.IsCountryAdministratorInCountry(CountryId))
     {
-        <a class="btn btn-sm btn-secondary" href="groups/0/edit"><span class="fa fa-plus-square" /> @Localizer["Add"]</a>
+        <AppButton Label="Add" Href="@EditHref(0)"/>
     }
     <table class="table table-striped table-responsive-sm">
         <thead>
@@ -116,5 +116,4 @@ else
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
     string IndexHref => $"Groups/Country/{AppService.LastCountryId}";
-
 }

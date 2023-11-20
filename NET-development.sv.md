@@ -1,7 +1,8 @@
 # .NET-utveckling
-*Av [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, april 2023*
+*Av [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, november 2023*
 
-Den här artikeln syftar till att beskriva teknikval vid utveckling av mjukvara i modernt .NET. I skrivande stund 2023 bör all ny .NET-utveckling använda .NET 7 eller senare.
+Den här artikeln syftar till att beskriva teknikval vid utveckling av mjukvara i modernt .NET. 
+I skrivande stund novenber 2023 bör all ny .NET-utveckling använda .NET 8 eller senare.
 
 ## Nuvarande .NET
 Nuvarande .NET är gratis och öppen källkod; rambiblioteken, exekveringsmotorerna och kompilatorerna. 
@@ -80,7 +81,7 @@ Med Razor-syntaxen kan du skriva webbsidor som en blandning av HTML, CSS och C#.
 Du kan interagera med JavaScript och vilken kod som helst som kan kompileras till Web Assembly (C, Rust och andra). 
   Det finns många färdiga komponenter tillgängliga. Komponenterna skrivna i Blazor kan renderas i flera miljöer:
   - på en webbserver som uppdaterar webbanvändargränssnittet via websockets,
-  - på en webbserver som skickar vanlig html till webbläsaren (ny i .NET 8),
+  - på en webbserver som skickar vanlig html till webbläsaren (nytt i .NET 8),
   - inbäddad i vilken webbapplikation som helst med vilket ramverk som helst,
   - kör komponenten på webbsammansättning i webbläsaren, och
   - i en plattformsoberoende MAUI-applikation.
@@ -121,7 +122,7 @@ Oftare kommer du att använda ett ramverk som bygger på dessa standarder.
 .NET är känt för interoperabilitet:
 - Anropsfunktioner i Dynamic Link Libraries (DLL) kompilerade på ett icke .NET-språk.
 - C++ interop för att kapsla in en inbyggd C++-klass och anropa denna från C# eller ett annat .NET-språk.
-- Att exponera COM-komponenter för .NET så att .NET-kod kan anropa dessa det (endast Windows).
+- Att exponera COM-komponenter för .NET så att .NET-kod kan anropa dessa det (endast Windows). Detta stöd har förbättats i .NET 8.
 - Stöd för dynamiska objekt för interoperabilitet med språk som IronPython och IronRuby.
 - Blazor interoperabilitet i webbläsaren med JavaScript och bibliotek på valfritt språk som kompileras till Web Assembly.
 
@@ -132,6 +133,9 @@ Du får ofta en viss nivå av gratis cloud computing, vilket vanligtvis räcker för
 Det enklaste sättet att distribuera till ett molnmiljö kallas mjukvara som en tjänst, där hanteringen av den underliggande infrastrukturen hanteras av molnleverantören.
 
 .NET har också utmärkt stöd för distribution till containers och för att distribuera containers till orkestreringstjänster som Kubernetes.
+
+Stödet för *ahead of time (AOT)* kompilering stöds för konsolapplikationer och WEB API. 
+Innebär mindre exekverbara filer och har kortare uppstartstid.
 
 ## IoT-utveckling
 Du kan bygga IoT-appar med C# och .NET som körs på Raspberry Pi, HummingBoard, BeagleBoard, Pine A64 och mer. Det finns tre vanliga tillvägagångssätt:
@@ -145,7 +149,7 @@ Stöd för GitHub är inbyggt i Visual Studio, vilket gör GitHub till ett rekommend
 
 ## Prestanda
 .NET-applikationer kan ha hög prestanda, även jämfört med andra tekniker. 
-Ett exempel på oberoende prestandatester finns på [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r21).
+Ett exempel på oberoende prestandatester finns på [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22).
 Prestanda är i fokus, och .NET har många prestandaförbättringar med varje utgåva.
 
 Du måste fråga dig själv: Hur kritisk är min applikation? Att skriva din kod lätt att förstå är att föredra. Optimering bör endast tillämpas vid flaskhalsar och endast när resultatet kan mätas.

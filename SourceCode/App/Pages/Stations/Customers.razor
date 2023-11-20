@@ -21,7 +21,7 @@
 @if (MayEdit)
 {
     <div style="display:flex; flex-direction:row; justify-content: left;">
-        <div><AppButton Label="Add" Href="@FreightCustomerHref(0)" AlwaysShowLabel=true /></div>
+        <div><AppButton Label="Add" Href="@FreightCustomerHref(0)" /></div>
         <div><AppButton Label="Waybills-Preview" Href="@WaybillsHref(StationId)" IsHidden="@(StationId < 1)" IconName="@FontAwesome.Preview" AlwaysShowLabel=true/></div>
         <div><AppButton Label="EmptyWagonOrder-Preview" Href="@EmptyWagonOrdersHref(StationId)" IsHidden="@(StationId < 1)" IconName="@FontAwesome.Preview" AlwaysShowLabel=true /></div>
     </div>

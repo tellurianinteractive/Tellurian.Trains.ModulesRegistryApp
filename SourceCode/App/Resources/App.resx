@@ -1428,4 +1428,7 @@
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Is key required?</value>
   </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Empty wagon order</value>
+  </data>
 </root>
