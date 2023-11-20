@@ -2,10 +2,10 @@
 
 namespace ModulesRegistry.Security;
 
-internal sealed class ApiUserAuthenticationMiddelware
+internal sealed class ApiUserAuthenticationMiddelware(RequestDelegate next)
 {
-    private readonly RequestDelegate Next;
-    public ApiUserAuthenticationMiddelware(RequestDelegate next) => Next = next;
+    private readonly RequestDelegate Next = next;
+
     public async Task Invoke(HttpContext httpContext, UserService userService)
     {
         if (httpContext.Request.Path.StartsWithSegments("/api"))

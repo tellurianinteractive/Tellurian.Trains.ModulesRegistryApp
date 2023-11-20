@@ -5,13 +5,9 @@ namespace ModulesRegistry.Api;
 
 [Route("api/cargoes")]
 [ApiController]
-public class CargoController : ControllerBase
+public class CargoController(CargoService cargoService) : ControllerBase
 {
-    public CargoController(CargoService cargoService)
-    {
-        CargoService = cargoService;
-    }
-    private readonly CargoService CargoService;
+    private readonly CargoService CargoService = cargoService;
 
     [Route("")]
     public async Task<IActionResult> Index()

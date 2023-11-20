@@ -3,10 +3,9 @@ using ModulesRegistry.Services.Projections;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class StationCustomerService
+public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public StationCustomerService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<StationCustomer>> AllAsync(ClaimsPrincipal? principal, int stationId, int customerId = 0)
     {

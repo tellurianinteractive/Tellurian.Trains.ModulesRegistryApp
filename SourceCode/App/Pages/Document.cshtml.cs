@@ -5,13 +5,9 @@ using ModulesRegistry.Services.Implementations;
 namespace ModulesRegistry.Pages;
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-public class DocumentModel : PageModel
+public class DocumentModel(DocumentService documentService) : PageModel
 {
-    private readonly DocumentService DocumentService;
-    public DocumentModel(DocumentService documentService)
-    {
-        DocumentService = documentService;
-    }
+    private readonly DocumentService DocumentService = documentService;
 
     public async Task<IActionResult> OnGetAsync(int id)
     {

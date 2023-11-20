@@ -2,13 +2,9 @@
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class GroupService
+public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public GroupService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId, int? onlyGroupId = null)
     {

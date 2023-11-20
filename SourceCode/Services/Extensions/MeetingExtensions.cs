@@ -36,6 +36,7 @@ public static class MeetingExtensions
         };
 
     static private string StatusColor(this Meeting meeting, DateTime at) =>
+        meeting.EndDate >= at ? "gray" :
         (MeetingStatus)meeting.Status switch
         {
             MeetingStatus.Canceled => "red",

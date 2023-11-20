@@ -4,13 +4,9 @@ using ModulesRegistry.Services.Implementations;
 namespace ModulesRegistry.Api;
 
 [Route("api/layouts")]
-public class LayoutController : Controller
+public class LayoutController(LayoutService layoutService) : Controller
 {
-    public LayoutController(LayoutService layoutService)
-    {
-        LayoutService = layoutService;
-    }
-    private LayoutService LayoutService { get; }
+    private LayoutService LayoutService { get; } = layoutService;
     public Task<AuthenticationState>? AuthenticationStateTask { get; }
 
     [Route("{layoutId:int}/vehicles", Order = 1)]

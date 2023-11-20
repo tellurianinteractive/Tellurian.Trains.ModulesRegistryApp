@@ -11,9 +11,6 @@ using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
 
-//[assembly: NeutralResourcesLanguage(LanguageUtility.DefaultLanguage)]
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsProduction())
@@ -110,17 +107,16 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 
+
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-    app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 else app.UseExceptionHandler("/Error");
 app.UseSecurityHeaders(SecurityHeadersPolicy.CreateSecurityHeaderCollection(app.Environment));
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
-var supportedCultures = LanguageUtility.FullySupportedLanguages;
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

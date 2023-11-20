@@ -319,7 +319,7 @@
     <value>måste börja med en stor bokstav</value>
   </data>
   <data name="MustBeSelected" xml:space="preserve">
-    <value>måste väljas.</value>
+    <value>måste väljas</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Namn</value>
@@ -661,7 +661,7 @@
     <value>Träffar</value>
   </data>
   <data name="MustBeBetween" xml:space="preserve">
-    <value>måste vara mellan {0} och {1}.</value>
+    <value>måste vara mellan {0} och {1}</value>
   </data>
   <data name="IsFremo" xml:space="preserve">
     <value>Är FREMO-träff?</value>
@@ -723,8 +723,8 @@
   <data name="Update" xml:space="preserve">
     <value>Uppdatera</value>
   </data>
-  <data name="MayOnlyContainOrdinaryText" xml:space="preserve">
-    <value>Får bara innehålla vanlig text</value>
+  <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
+    <value>får bara innehålla vanlig text</value>
   </data>
   <data name="FileExceedsMaxSizeOf" xml:space="preserve">
     <value>Filen överstiger den maximala storleken på {0} kB</value>

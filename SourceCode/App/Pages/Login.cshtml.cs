@@ -5,10 +5,9 @@ using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Pages;
 
-public class LoginModel : PageModel
+public class LoginModel(UserService userService) : PageModel
 {
-    public LoginModel(UserService userService) { UserService = userService; }
-    private readonly UserService UserService;
+    private readonly UserService UserService = userService;
     public string? ReturnUrl { get; set; }
 
     public async Task<IActionResult> OnGetAsync(string? username, string? password, string? returnUrl) =>

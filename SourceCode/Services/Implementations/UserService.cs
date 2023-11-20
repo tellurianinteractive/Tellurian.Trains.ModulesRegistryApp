@@ -1,12 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public sealed class UserService
+public sealed class UserService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public UserService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<User?> FindByIdAsync(int id)
     {

@@ -1,9 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class RegionService
+public class RegionService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public RegionService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? maybeCountryId = null)
     {

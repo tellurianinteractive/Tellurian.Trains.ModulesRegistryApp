@@ -1,13 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class OperatingDayService
+public class OperatingDayService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-
-    public OperatingDayService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> BasicDaysItemsAsync()
     {

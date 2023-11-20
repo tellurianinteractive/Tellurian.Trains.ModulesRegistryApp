@@ -1,14 +1,9 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class StationService
+public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ITimeProvider TimeProvider;
-    public StationService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeProvider;
 
     public async Task<IEnumerable<ListboxItem>> StationItemsAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef)
     {

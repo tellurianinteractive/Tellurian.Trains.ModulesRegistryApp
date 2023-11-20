@@ -3,13 +3,9 @@ using System.Net.Mail;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class CloudMailSender : IMailSender
+public sealed class CloudMailSender(IOptions<CloudMailSenderSettings> options) : IMailSender
 {
-    public CloudMailSender(IOptions<CloudMailSenderSettings> options)
-    {
-        Settings = options.Value;
-    }
-    private readonly CloudMailSenderSettings Settings;
+    private readonly CloudMailSenderSettings Settings = options.Value;
 
     public async Task<int> SendMailMessageAsync(MailMessage message)
     {

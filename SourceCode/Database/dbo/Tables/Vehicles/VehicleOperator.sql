@@ -1,7 +1,9 @@
 ﻿CREATE TABLE [dbo].[VehicleOperator] (
     [Id]                        INT            IDENTITY (1, 1) NOT NULL,
     [Signature]                 NVARCHAR (6)   NOT NULL,
-    [FullName]                  NVARCHAR (50)  NOT NULL,
+    [ShortName]                 NVARCHAR (30)  NOT NULL,
+    [FullName]                  NVARCHAR (100) NOT NULL,
+    [RICS]                      SMALLINT       NULL,
     [LogotypeImage]             VARBINARY(MAX) NULL,
     [PrimaryOperatingCountryId] INT            NOT NULL,
     [FirstYearInOperation]      SMALLINT       NULL,
@@ -15,8 +17,7 @@
     CONSTRAINT [PK_Operator] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Operator_PrimaryOperatingCountry] FOREIGN KEY ([PrimaryOperatingCountryId]) REFERENCES [dbo].[Country] ([Id]),
     CONSTRAINT [FK_Operator_OnlyInLayout] FOREIGN KEY ([OnlyInLayoutId]) REFERENCES [dbo].[Layout] ([Id]),
-    CONSTRAINT [UX_VehicleOperator] UNIQUE ([Signature], [FirstYearInOperation], [OnlyInLayoutId])
-
+    CONSTRAINT [UX_VehicleOperator] UNIQUE ([PrimaryOperatingCountryId], [Signature], [FirstYearInOperation], [OnlyInLayoutId])
 );
 
 GO

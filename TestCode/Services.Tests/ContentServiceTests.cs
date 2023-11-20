@@ -10,7 +10,7 @@ public class ContentServiceTests
     public async Task ReadsMaxDate()
     {
         var target = new ContentService(new NoOpHttpClientFactory(), @"..\..\..\..\..\SourceCode\App\Content\Markdown");
-        Assert.AreEqual(DateTimeOffset.Parse("2021-03-04 18:31:21 +00:00"), await target.GetLastModifiedTimeOfTextContent("termsofuse"));
+        Assert.AreEqual(DateTimeOffset.Parse("2023-09-29 09:53:32 +00:00"), await target.GetLastModifiedTimeOfTextContent("termsofuse"));
     }
 
     private class NoOpHttpClientFactory : IHttpClientFactory

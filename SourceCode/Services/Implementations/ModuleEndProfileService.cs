@@ -1,12 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class ModuleEndProfileService
+public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int? scaleId)
     {

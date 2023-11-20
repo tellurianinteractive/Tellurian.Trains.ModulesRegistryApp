@@ -3,13 +3,9 @@ using System.Net.Mail;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class LoggingOnlyMailSender : IMailSender
+public sealed class LoggingOnlyMailSender(ILogger<LoggingOnlyMailSender> logger) : IMailSender
 {
-    public LoggingOnlyMailSender(ILogger<LoggingOnlyMailSender> logger)
-    {
-        Logger = logger;
-    }
-    private readonly ILogger Logger;
+    private readonly ILogger Logger = logger;
 
     public Task<int> SendMailMessageAsync(MailMessage message)
     {

@@ -1,10 +1,9 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class PropertyService
+public class PropertyService(IDbContextFactory<ModulesDbContext> factory)
 {
     private const string EndProfile = "EndProfile";
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public PropertyService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public Task<IEnumerable<ListboxItem>> GetEndProfileListboxItemsAsync() => GetListboxItemsAsync(EndProfile);
     public Task<int> RemoveEndProfile(string value) => RemoveProperty(EndProfile, value);

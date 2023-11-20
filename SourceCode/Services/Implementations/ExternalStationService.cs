@@ -2,11 +2,9 @@
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class ExternalStationService
+public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ExternalStationService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
-
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? maybeCountryId, int? maybeRegionId)
     {

@@ -3,16 +3,10 @@ using System.Linq;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class WiFredThrottleService
+public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
 {
-    public WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-    }
-
-    private IDbContextFactory<ModulesDbContext> Factory { get; }
-    public ITimeProvider TimeProvider { get; }
+    private IDbContextFactory<ModulesDbContext> Factory { get; } = factory;
+    public ITimeProvider TimeProvider { get; } = timeProvider;
 
 
     public async Task<WiFredThrottle?> FindById(ClaimsPrincipal? principal, int id)

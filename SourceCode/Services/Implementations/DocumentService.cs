@@ -2,19 +2,13 @@
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class DocumentService
+public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
 {
     public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
     public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station) };
 
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ITimeProvider TimeProvider;
-
-    public DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeProvider;
 
     public async Task<Document?> FindByIdAsync(int id)
     {

@@ -2,15 +2,10 @@
 
 namespace ModulesRegistry.Models;
 
-public class LayoutParticipation
+public class LayoutParticipation(Layout layout, MeetingParticipant participant)
 {
-    public LayoutParticipation(Layout layout, MeetingParticipant participant)
-    {
-        Layout = layout;
-        Participant = participant;
-    }
-    public Layout Layout { get;  }
-    public MeetingParticipant Participant { get;  }
+    public Layout Layout { get; } = layout;
+    public MeetingParticipant Participant { get; } = participant;
     public bool IsParticipating { get; set; }
 
     public LayoutParticipant? AsLayoutParticipant =>

@@ -1,9 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public sealed class CargoService
+public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public CargoService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<Data.Api.CargoType>> CargoTypesAsync()
     {

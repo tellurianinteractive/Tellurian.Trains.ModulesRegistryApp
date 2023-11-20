@@ -23,15 +23,5 @@ internal static class CargoPackagingUnitMapper
             entity.ToTable("CargoPackagingUnit");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.SingularResourceCode)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.PluralResourceCode)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.PrepositionResourceCode)
-                .HasMaxLength(4);
         });
 }

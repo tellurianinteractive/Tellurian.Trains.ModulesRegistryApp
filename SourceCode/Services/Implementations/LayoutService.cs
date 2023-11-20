@@ -5,17 +5,11 @@ using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class LayoutService
+public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<LayoutService> logger)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ITimeProvider TimeProvider;
-    private readonly ILogger<LayoutService> Logger;
-    public LayoutService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<LayoutService> logger)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-        Logger = logger;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeProvider;
+    private readonly ILogger<LayoutService> Logger = logger;
 
     public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
     {

@@ -5,13 +5,9 @@ namespace ModulesRegistry.Api;
 
 [Route("api/languages")]
 [ApiController]
-public class LanguageController : ControllerBase
+public class LanguageController(ILanguageService service) : ControllerBase
 {
-    public LanguageController(ILanguageService service)
-    {
-        Service = service;
-    }
-    readonly ILanguageService Service;
+    readonly ILanguageService Service = service;
 
     [HttpGet("all/supported")]
     public IActionResult GetSupportedLanguages() => Ok(Service.GetSupportedLanguages());

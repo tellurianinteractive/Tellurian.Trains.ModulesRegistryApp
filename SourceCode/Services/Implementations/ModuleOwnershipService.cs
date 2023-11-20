@@ -2,13 +2,9 @@
 using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;
-public class ModuleOwnershipService
+public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<(int Count, string Message, Module? Entity)> TransferOwnershipAsync(ClaimsPrincipal? principal, ModuleOwnership origin, ModuleOwnership newOwnership)
     {
@@ -78,8 +74,7 @@ public class ModuleOwnershipService
 
     private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
     {
-        var connection = dbContext.Database.GetDbConnection() as SqlConnection;
-        if (connection is null) throw new ArgumentException(nameof(connection));
+        if (dbContext.Database.GetDbConnection() is not SqlConnection connection) throw new ArgumentException(nameof(connection));
 
         var sql = "INSERT INTO ModuleOwnership (PersonId, GroupId, ModuleId, OwnedShare) VALUES (@PersonId, @GroupId, @ModuleId, @OwnedShare)";
         var command = connection.CreateCommand();

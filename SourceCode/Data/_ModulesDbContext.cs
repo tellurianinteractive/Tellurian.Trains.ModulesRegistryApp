@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
+#pragma warning disable IDE0290 // Use primary constructor
 
 public partial class ModulesDbContext : DbContext
 {

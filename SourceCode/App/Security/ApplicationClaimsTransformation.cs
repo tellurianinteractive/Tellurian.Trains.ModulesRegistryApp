@@ -7,18 +7,11 @@ using System.Security.Claims;
 
 namespace ModulesRegistry.Security;
 
-public class ApplicationClaimsTransformation : IClaimsTransformation
+public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, ContentService contentService, AppService appService) : IClaimsTransformation
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ContentService ContentService;
-    private readonly AppService AppService;
-
-    public ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext> factory, ContentService contentService, AppService appService)
-    {
-        Factory = factory;
-        ContentService = contentService;
-        AppService = appService;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ContentService ContentService = contentService;
+    private readonly AppService AppService = appService;
 
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {

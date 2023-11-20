@@ -1,8 +1,7 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
-public class StationCustomerWaybillsService
+public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<StationCustomerWaybill>> GetStationCustomerWaybillsAsync(ClaimsPrincipal? principal, int stationCustomerId)
     {

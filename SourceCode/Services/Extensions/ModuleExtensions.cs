@@ -24,7 +24,7 @@ static public class ModuleExtensions
     public static int OwningGroupId(this Module? module) =>
         module.IsGroupOwned() ? module.ModuleOwnerships.First(mo => mo.GroupId > 0).GroupId ?? 0 : 0;
     public static int[] OwningPersonsIds(this Module? module) =>
-        module.IsPersonOwned() ? module.ModuleOwnerships.Where(mo => mo.PersonId > 0).Select(mo => mo.PersonId!.Value).ToArray() : Array.Empty<int>();
+        module.IsPersonOwned() ? module.ModuleOwnerships.Where(mo => mo.PersonId > 0).Select(mo => mo.PersonId!.Value).ToArray() : [];
     public static MarkupString Name(this Module? module) =>
         module is null ? new(""):
         new(

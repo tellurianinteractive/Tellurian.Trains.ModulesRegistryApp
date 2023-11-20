@@ -1,11 +1,11 @@
 ﻿using System.Text;
 
-namespace ModulesRegistry.Services.Extensions;
+namespace ModulesRegistry.Data.Extensions;
 public static class LocoAddressExtensions
 {
     public static bool TryParseLocoAdresses(this string? text, out int[] addresses)
     {
-        addresses = Array.Empty<int>();
+        addresses = [];
         if (string.IsNullOrWhiteSpace(text)) return true;
         var itemGroups = text.Split(',');
         if (itemGroups.Length == 0) return true;
@@ -32,7 +32,7 @@ public static class LocoAddressExtensions
             }
             if (interval.Length > 2) return false;
         }
-        addresses = result.ToArray();
+        addresses = [.. result];
         return true;
 
     }

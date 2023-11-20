@@ -5,6 +5,7 @@
     [IsShadow]         BIT           NOT NULL,
     [IsTerminus]       BIT           NOT NULL,
     [IsHarbour]        BIT           NOT NULL DEFAULT(0),
+    [IsKeyRequired]    BIT           NOT NULL DEFAULT(0),
     [RegionId]         INT           NULL,
     [PdfInstructionId] INT           NULL,
     [PrimaryModuleId]  INT NULL, 

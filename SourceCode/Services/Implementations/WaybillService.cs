@@ -6,16 +6,10 @@ using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class WaybillService
+public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger<WaybillService> logger)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ILogger<WaybillService> Logger;
-
-    public WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger<WaybillService> logger)
-    {
-        Factory = factory;
-        Logger = logger;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ILogger<WaybillService> Logger = logger;
 
     public async Task<string> GetStationOwnerNames(ClaimsPrincipal? principal, int stationId)
     {

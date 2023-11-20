@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModulesRegistry.Services.Extensions;
 
-namespace ModulesRegistry.Services.Tests;
+namespace ModulesRegistry.Data.Extensions.Tests;
 
 [TestClass]
 public class LocoAddressExtensionsTests

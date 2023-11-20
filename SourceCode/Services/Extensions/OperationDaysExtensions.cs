@@ -25,7 +25,7 @@ public static class OperatingDayExtensions
 
 public static class OperationDaysExtensions
 {
-    private static readonly Day[] Days = new[] {
+    private static readonly Day[] Days = [
             new Day(0, 0x7F, "Daily"),
             new Day(1, 0x01, "Monday"),
             new Day(2, 0x02, "Tuesday"),
@@ -34,7 +34,7 @@ public static class OperationDaysExtensions
             new Day(5, 0x10, "Friday"),
             new Day(6, 0x20, "Saturday"),
             new Day(7, 0x40, "Sunday"),
-            new Day(0, 0x80, "OnDemand") };
+            new Day(0, 0x80, "OnDemand") ];
 
 
     internal static Day[] GetDays(this byte flags, bool haveSundayFirst = false, bool expandDays = false) =>
@@ -129,19 +129,12 @@ public static class OperationDaysExtensions
     }
 }
 
-internal class Day
+internal class Day(byte number, byte flag, string resourceKey)
 {
-    public Day(byte number, byte flag, string resourceKey)
-    {
-        Number = number;
-        Flag = flag;
-        FullNameResourceKey = resourceKey;
-        ShortNameResourceKey = resourceKey + "Short";
-    }
-    public byte Flag { get; }
-    public byte Number { get; }
-    private string FullNameResourceKey { get; }
-    private string ShortNameResourceKey { get; }
+    public byte Flag { get; } = flag;
+    public byte Number { get; } = number;
+    private string FullNameResourceKey { get; } = resourceKey;
+    private string ShortNameResourceKey { get; } = resourceKey + "Short";
     public string GetLocalizedShortName(CultureInfo? specificCulture = null)
     {
         var resourceManager = Strings.ResourceManager;

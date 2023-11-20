@@ -5,16 +5,10 @@ using System.Resources;
 using System.Text;
 
 namespace ModulesRegistry.Services.Implementations;
-public class EmptyWagonOrderService
+public class EmptyWagonOrderService(IDbContextFactory<ModulesDbContext> factory, ILogger<EmptyWagonOrderService> logger)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ILogger<EmptyWagonOrderService> Logger;
-
-    public EmptyWagonOrderService(IDbContextFactory<ModulesDbContext> factory, ILogger<EmptyWagonOrderService> logger)
-    {
-        Factory = factory;
-        Logger = logger;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ILogger<EmptyWagonOrderService> Logger = logger;
 
     public async Task<IEnumerable<EmptyWagonOrder>> GetEmptyWagonOrdersAsync(ClaimsPrincipal? principal, int stationId, int? stationCustomerId = null)
     {

@@ -1,6 +1,6 @@
 ﻿using System.Resources;
 
-namespace ModulesRegistry.Services.Extensions;
+namespace ModulesRegistry.Data.Extensions;
 
 public static class EnumExtensions
 {

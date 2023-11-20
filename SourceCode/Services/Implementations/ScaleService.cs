@@ -1,9 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public sealed class ScaleService
+public sealed class ScaleService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public ScaleService(IDbContextFactory<ModulesDbContext> factory) => Factory = factory;
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal)
     {

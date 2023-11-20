@@ -1,12 +1,8 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public sealed class CountryService
+public sealed class CountryService(IDbContextFactory<ModulesDbContext> factory)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    public CountryService(IDbContextFactory<ModulesDbContext> factory)
-    {
-        Factory = factory;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
     public async Task<Country?> FindById(int id)
     {

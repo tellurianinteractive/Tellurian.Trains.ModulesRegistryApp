@@ -4,11 +4,6 @@ namespace ModulesRegistry.Data;
 
 public partial class CargoDirection
 {
-
-    public CargoDirection()
-    {
-    }
-
     public int Id { get; set; }
     public required string FullName { get; set; }
     public required string ShortName { get; set; }

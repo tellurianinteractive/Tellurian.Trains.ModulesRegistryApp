@@ -6,15 +6,11 @@
         DateTime LocalTime { get; }
     }
 
-    public class SystemTimeProvider : ITimeProvider
+    public class SystemTimeProvider(TimeZoneInfo? timeZoneInfo = null) : ITimeProvider
     {
-        public SystemTimeProvider(TimeZoneInfo? timeZoneInfo = null)
-        {
-            TimeZoneInfo = timeZoneInfo ?? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-        }
         public DateTimeOffset Now => DateTimeOffset.Now;
         public DateTime LocalTime => TimeZoneInfo.ConvertTimeFromUtc(Now.UtcDateTime, TimeZoneInfo);
 
-        private readonly TimeZoneInfo TimeZoneInfo;
+        private readonly TimeZoneInfo TimeZoneInfo = timeZoneInfo ?? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
     }
 }

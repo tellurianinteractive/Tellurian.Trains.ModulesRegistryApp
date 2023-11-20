@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace ModulesRegistry.Data.Extensions;
 
@@ -27,6 +28,6 @@ public static class StringExtensions
         string.Concat(value[0].ToString().ToLowerInvariant(), value.AsSpan(1));
 
     public static string[] Items(this string? value, char separator = ';') =>
-        string.IsNullOrWhiteSpace(value) ? Array.Empty<string>() :
+        string.IsNullOrWhiteSpace(value) ? [] :
         value.Trim().Split(separator);
 }

@@ -1,15 +1,9 @@
 ﻿namespace ModulesRegistry.Services.Implementations;
 
-public class MeetingService
+public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ITimeProvider TimeProvider;
-
-    public MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeProvider;
 
     public async Task<IEnumerable<Data.Api.Meeting>> GetMeetingsAsync(int? countryId, string? countries = null)
     {

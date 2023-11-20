@@ -5,15 +5,10 @@ using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class ModuleService
+public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
 {
-    private readonly IDbContextFactory<ModulesDbContext> Factory;
-    private readonly ITimeProvider TimeProvider;
-    public ModuleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
-    {
-        Factory = factory;
-        TimeProvider = timeProvider;
-    }
+    private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeProvider;
 
     public async Task<IEnumerable<ListboxItem>> ModuleItems(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, int? stationId)
     {
@@ -454,8 +449,7 @@ public sealed class ModuleService
 
     private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
     {
-        var connection = dbContext.Database.GetDbConnection() as SqlConnection;
-        if (connection is null) throw new ArgumentException(nameof(connection));
+        if (dbContext.Database.GetDbConnection() is not SqlConnection connection) throw new ArgumentException(nameof(connection));
 
         var sql = "INSERT INTO ModuleOwnership (PersonId, GroupId, ModuleId, OwnedShare) VALUES (@PersonId, @GroupId, @ModuleId, @OwnedShare)";
         var command = connection.CreateCommand();

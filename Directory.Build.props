@@ -3,6 +3,7 @@
 		<Platform>AnyCPU</Platform>
 		<Version>1.9.10</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
+		<NeutralLanguage>en-150</NeutralLanguage>
 	</PropertyGroup>
 
 	<PropertyGroup>

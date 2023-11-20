@@ -29,8 +29,8 @@ internal static class LoginLogoutHandler
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
-                    new Claim(ClaimTypes.Email, user.EmailAddress),
+                    new(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
+                    new(ClaimTypes.Email, user.EmailAddress),
                 };
                 await TrySignIn(user, claims);
             }

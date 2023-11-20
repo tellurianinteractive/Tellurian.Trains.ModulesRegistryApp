@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -24,6 +27,8 @@ public partial class Cargo
     public string? SV { get; set; }
 }
 
+
+
 public static class CargoExtentions
 {
     public static string MajorNhmCode(this Cargo? me) =>
@@ -47,8 +52,6 @@ internal static class CargoMapper
         builder.Entity<Cargo>(entity =>
         {
             entity.ToTable("Cargo");
-
-            entity.Property(e => e.NhmCode).HasColumnName("NHMCode");
 
             entity.HasOne<NHM>()
                 .WithMany()

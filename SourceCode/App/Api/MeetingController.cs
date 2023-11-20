@@ -5,13 +5,9 @@ using ModulesRegistry.Services.Implementations;
 namespace ModulesRegistry.Api;
 
 [Route("api/meetings")]
-public class MeetingController : ControllerBase
+public class MeetingController(MeetingService meetingService) : ControllerBase
 {
-    public MeetingController(MeetingService meetingService)
-    {
-        MeetingService = meetingService;
-    }
-    private readonly MeetingService MeetingService;
+    private readonly MeetingService MeetingService = meetingService;
 
 
     [Route("{countryId:int?}", Order = 1)]
