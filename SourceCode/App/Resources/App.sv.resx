@@ -1431,4 +1431,7 @@
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Tomvagnsbeställning</value>
   </data>
+  <data name="MeetingType" xml:space="preserve">
+    <value>Typ av arrangemang</value>
+  </data>
 </root>

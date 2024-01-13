@@ -61,6 +61,114 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved.
+        /// </summary>
+        public static string Approved {
+            get {
+                return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autumn.
+        /// </summary>
+        public static string Autumn {
+            get {
+                return ResourceManager.GetString("Autumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bidirectional.
+        /// </summary>
+        public static string Bidirectional {
+            get {
+                return ResourceManager.GetString("Bidirectional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Canceled.
+        /// </summary>
+        public static string Canceled {
+            get {
+                return ResourceManager.GetString("Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Club event.
+        /// </summary>
+        public static string ClubEvent {
+            get {
+                return ResourceManager.GetString("ClubEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domain members.
+        /// </summary>
+        public static string DomainMembers {
+            get {
+                return ResourceManager.GetString("DomainMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eastwards.
+        /// </summary>
+        public static string Eastwards {
+            get {
+                return ResourceManager.GetString("Eastwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to East-west.
+        /// </summary>
+        public static string EastWest {
+            get {
+                return ResourceManager.GetString("EastWest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed.
+        /// </summary>
+        public static string Fixed {
+            get {
+                return ResourceManager.GetString("Fixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully applied, detailed.
+        /// </summary>
+        public static string FullyAppliedDetailed {
+            get {
+                return ResourceManager.GetString("FullyAppliedDetailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully applied, simple.
+        /// </summary>
+        public static string FullyAppliedSimple {
+            get {
+                return ResourceManager.GetString("FullyAppliedSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group members.
+        /// </summary>
+        public static string GroupMembers {
+            get {
+                return ResourceManager.GetString("GroupMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incomplete data.
         /// </summary>
         public static string IncompleteData {
@@ -79,11 +187,29 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Market.
+        /// </summary>
+        public static string Market {
+            get {
+                return ResourceManager.GetString("Market", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Module is registered for upcoming meeting.
         /// </summary>
         public static string ModuleIsRegisteredForUpcomingMeeting {
             get {
                 return ResourceManager.GetString("ModuleIsRegisteredForUpcomingMeeting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Module meeting.
+        /// </summary>
+        public static string ModuleMeeting {
+            get {
+                return ResourceManager.GetString("ModuleMeeting", resourceCulture);
             }
         }
         
@@ -102,6 +228,24 @@ namespace ModulesRegistry.Data.Resources {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not applicable.
+        /// </summary>
+        public static string NotApplicable {
+            get {
+                return ResourceManager.GetString("NotApplicable", resourceCulture);
             }
         }
         
@@ -142,6 +286,114 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not scheduled.
+        /// </summary>
+        public static string NotScheduled {
+            get {
+                return ResourceManager.GetString("NotScheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only posts.
+        /// </summary>
+        public static string OnlyPosts {
+            get {
+                return ResourceManager.GetString("OnlyPosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional.
+        /// </summary>
+        public static string Optional {
+            get {
+                return ResourceManager.GetString("Optional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Partially applied.
+        /// </summary>
+        public static string PartiallyApplied {
+            get {
+                return ResourceManager.GetString("PartiallyApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planned.
+        /// </summary>
+        public static string Planned {
+            get {
+                return ResourceManager.GetString("Planned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preliminary.
+        /// </summary>
+        public static string Preliminary {
+            get {
+                return ResourceManager.GetString("Preliminary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing.
+        /// </summary>
+        public static string Preparing {
+            get {
+                return ResourceManager.GetString("Preparing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private.
+        /// </summary>
+        public static string Private {
+            get {
+                return ResourceManager.GetString("Private", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public.
+        /// </summary>
+        public static string Public {
+            get {
+                return ResourceManager.GetString("Public", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready to test.
+        /// </summary>
+        public static string ReadyToTest {
+            get {
+                return ResourceManager.GetString("ReadyToTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removable.
+        /// </summary>
+        public static string Removable {
+            get {
+                return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spring.
+        /// </summary>
+        public static string Spring {
+            get {
+                return ResourceManager.GetString("Spring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A station must have at least one module referring to it.
         /// </summary>
         public static string StationMustHaveAtLeastOneModuleReferringToIt {
@@ -151,11 +403,110 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Summer.
+        /// </summary>
+        public static string Summer {
+            get {
+                return ResourceManager.GetString("Summer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tested.
+        /// </summary>
+        public static string Tested {
+            get {
+                return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undefined.
+        /// </summary>
+        public static string Undefined {
+            get {
+                return ResourceManager.GetString("Undefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under approval.
+        /// </summary>
+        public static string UnderApproval {
+            get {
+                return ResourceManager.GetString("UnderApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under construction.
+        /// </summary>
+        public static string UnderConstruction {
+            get {
+                return ResourceManager.GetString("UnderConstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under repair.
+        /// </summary>
+        public static string UnderRepair {
+            get {
+                return ResourceManager.GetString("UnderRepair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         public static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unspecified.
+        /// </summary>
+        public static string Unspecified {
+            get {
+                return ResourceManager.GetString("Unspecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All users.
+        /// </summary>
+        public static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to West-east.
+        /// </summary>
+        public static string WestEast {
+            get {
+                return ResourceManager.GetString("WestEast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Westwards.
+        /// </summary>
+        public static string Westwards {
+            get {
+                return ResourceManager.GetString("Westwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Winter.
+        /// </summary>
+        public static string Winter {
+            get {
+                return ResourceManager.GetString("Winter", resourceCulture);
             }
         }
         

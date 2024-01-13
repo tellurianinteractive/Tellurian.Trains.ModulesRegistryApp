@@ -1,5 +1,8 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
 
+@attribute [Authorize(Policy = "User")]
+
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject ITimeProvider TimeProvider

@@ -23,6 +23,7 @@
         <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
         <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
+        <AppInputSelect Width="2" @bind-Value="Meeting.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
         <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
         <AppInputCheck Width="4" Label="IsOrganisingGroupInternal" @bind-Value="Meeting.IsOrganiserInternal" />
         <AppInputText Width="12" Label="ExternalLink" @bind-Value="Meeting.ExternalLink"/>
@@ -33,7 +34,11 @@
         <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
     </Inputs>
     <Buttons>
-        <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
+        @if(Id > 0)
+        {
+            <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
+        }
+        
     </Buttons>
 </EditTemplate>
 
@@ -70,6 +75,7 @@
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting);
             if (result.Entity is not null) Meeting = result.Entity;
+            Id = Meeting.Id;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }

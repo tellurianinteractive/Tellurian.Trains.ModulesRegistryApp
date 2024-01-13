@@ -14,3 +14,4 @@ internal static class AuthorizationPolicyDefinitions
         return services;
     }
 }
+

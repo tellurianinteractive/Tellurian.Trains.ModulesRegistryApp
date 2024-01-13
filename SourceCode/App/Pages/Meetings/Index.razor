@@ -18,7 +18,8 @@
 <TableTemplate Items="Meetings">
     <TableHeader>
         <th>@Localizer["Country"]</th>
-        <th>@Localizer["Meeting"]</th>
+        <th colspan="2">@Localizer["Meeting"]</th>
+        <th>@Localizer["Layouts"]</th>
         <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Venue"]</th>
         <th>@Localizer["City"]</th>
@@ -28,7 +29,9 @@
     </TableHeader>
     <RowTemplate Context="item">
         <td><img src="@item.meeting.OrganiserGroup.Country.FlagSrc()" /></td>
+        <td><span class="@MeetingTypeIcon(item.meeting)" title="@(item.meeting.MeetingType.ToEnumLocalized<MeetingType>())"></span></td>
         <td><a target="@MeetingLinkTarget(item.meeting)" href="@MeetingHref(item.meeting, "view")">@item.meeting.Name</a></td>
+        <td>@item.meeting.Scales()</td>
         <td align="center">@item.meeting.DisplayedStatus(TimeProvider.LocalTime)</td>
         <td>@item.meeting.VenueName</td>
         <td>@item.meeting.CityName</td>
@@ -65,5 +68,13 @@
     protected override async Task OnParametersSetAsync()
     {
         Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
-    }   
+    }
+
+    string MeetingTypeIcon(Meeting meeting) => meeting.MeetingType switch
+    {
+        0 => FontAwesome.Modules,
+        1 => FontAwesome.ClubEvent,
+        2 => FontAwesome.Market,
+        _ => "",
+    };
 }

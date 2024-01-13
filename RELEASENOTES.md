@@ -2,6 +2,13 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.13
+Release date 2024-01-13
+- **Access** to meeting registration is now resticted to users that have accepted *terms of use*.
+- **Not Authorised** message has how texts added that describes possible reasons.
+## Release 1.9.12
+Release date 2023-12-02
+- **Meeting list** now contains layout scales (only if layouts are added to the meeting).
 ## Release 1.9.11
 Release date 2023-11-20
 - **Is key required** issue #191 added for stations that require a key for loco driver to access sidings.

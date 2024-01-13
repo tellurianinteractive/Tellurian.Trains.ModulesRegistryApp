@@ -97,15 +97,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved.
-        /// </summary>
-        internal static string Approved {
-            get {
-                return ResourceManager.GetString("Approved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Arrival.
         /// </summary>
         internal static string Arrival {
@@ -129,15 +120,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Austria {
             get {
                 return ResourceManager.GetString("Austria", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Autumn.
-        /// </summary>
-        internal static string Autumn {
-            get {
-                return ResourceManager.GetString("Autumn", resourceCulture);
             }
         }
         
@@ -192,15 +174,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string BestRegards {
             get {
                 return ResourceManager.GetString("BestRegards", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Bidirectional.
-        /// </summary>
-        internal static string Bidirectional {
-            get {
-                return ResourceManager.GetString("Bidirectional", resourceCulture);
             }
         }
         
@@ -529,15 +502,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Domain members.
-        /// </summary>
-        internal static string DomainMembers {
-            get {
-                return ResourceManager.GetString("DomainMembers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 10&apos; Dry container.
         /// </summary>
         internal static string DryContainer10 {
@@ -597,24 +561,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Duplicated {
             get {
                 return ResourceManager.GetString("Duplicated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Eastwards.
-        /// </summary>
-        internal static string Eastwards {
-            get {
-                return ResourceManager.GetString("Eastwards", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to East-west.
-        /// </summary>
-        internal static string EastWest {
-            get {
-                return ResourceManager.GetString("EastWest", resourceCulture);
             }
         }
         
@@ -691,15 +637,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed.
-        /// </summary>
-        internal static string Fixed {
-            get {
-                return ResourceManager.GetString("Fixed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 20&apos; Flat rack container.
         /// </summary>
         internal static string FlatRackContainer20 {
@@ -763,38 +700,11 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fully applied, detailed.
-        /// </summary>
-        internal static string FullyAppliedDetailed {
-            get {
-                return ResourceManager.GetString("FullyAppliedDetailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fully applied, simple.
-        /// </summary>
-        internal static string FullyAppliedSimple {
-            get {
-                return ResourceManager.GetString("FullyAppliedSimple", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Germany.
         /// </summary>
         internal static string Germany {
             get {
                 return ResourceManager.GetString("Germany", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Group members.
-        /// </summary>
-        internal static string GroupMembers {
-            get {
-                return ResourceManager.GetString("GroupMembers", resourceCulture);
             }
         }
         
@@ -1186,15 +1096,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not scheduled.
-        /// </summary>
-        internal static string NotScheduled {
-            get {
-                return ResourceManager.GetString("NotScheduled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to on.
         /// </summary>
         internal static string On {
@@ -1218,15 +1119,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string OnDemandShort {
             get {
                 return ResourceManager.GetString("OnDemandShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Only posts.
-        /// </summary>
-        internal static string OnlyPosts {
-            get {
-                return ResourceManager.GetString("OnlyPosts", resourceCulture);
             }
         }
         
@@ -1321,15 +1213,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Partially applied.
-        /// </summary>
-        internal static string PartiallyApplied {
-            get {
-                return ResourceManager.GetString("PartiallyApplied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Participant has registered modules.
         /// </summary>
         internal static string ParticipantHasRegisteredModules {
@@ -1384,15 +1267,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Planned.
-        /// </summary>
-        internal static string Planned {
-            get {
-                return ResourceManager.GetString("Planned", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Plate.
         /// </summary>
         internal static string Plate {
@@ -1420,47 +1294,11 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preliminary.
-        /// </summary>
-        internal static string Preliminary {
-            get {
-                return ResourceManager.GetString("Preliminary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Preparing.
-        /// </summary>
-        internal static string Preparing {
-            get {
-                return ResourceManager.GetString("Preparing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Private.
-        /// </summary>
-        internal static string Private {
-            get {
-                return ResourceManager.GetString("Private", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Quantity.
         /// </summary>
         internal static string Quantity {
             get {
                 return ResourceManager.GetString("Quantity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ready to test.
-        /// </summary>
-        internal static string ReadyToTest {
-            get {
-                return ResourceManager.GetString("ReadyToTest", resourceCulture);
             }
         }
         
@@ -1524,15 +1362,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string RegistrationOpen {
             get {
                 return ResourceManager.GetString("RegistrationOpen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Removable.
-        /// </summary>
-        internal static string Removable {
-            get {
-                return ResourceManager.GetString("Removable", resourceCulture);
             }
         }
         
@@ -1654,15 +1483,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spring.
-        /// </summary>
-        internal static string Spring {
-            get {
-                return ResourceManager.GetString("Spring", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Square meter.
         /// </summary>
         internal static string Squaremeter {
@@ -1686,15 +1506,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Summer.
-        /// </summary>
-        internal static string Summer {
-            get {
-                return ResourceManager.GetString("Summer", resourceCulture);
             }
         }
         
@@ -1749,15 +1560,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string TankContainers30 {
             get {
                 return ResourceManager.GetString("TankContainers30", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tested.
-        /// </summary>
-        internal static string Tested {
-            get {
-                return ResourceManager.GetString("Tested", resourceCulture);
             }
         }
         
@@ -1879,33 +1681,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Under approval.
-        /// </summary>
-        internal static string UnderApproval {
-            get {
-                return ResourceManager.GetString("UnderApproval", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Under construction.
-        /// </summary>
-        internal static string UnderConstruction {
-            get {
-                return ResourceManager.GetString("UnderConstruction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Under repair.
-        /// </summary>
-        internal static string UnderRepair {
-            get {
-                return ResourceManager.GetString("UnderRepair", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to United Kingdom.
         /// </summary>
         internal static string United_Kingdom {
@@ -2014,24 +1789,6 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to West-east.
-        /// </summary>
-        internal static string WestEast {
-            get {
-                return ResourceManager.GetString("WestEast", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Westwards.
-        /// </summary>
-        internal static string Westwards {
-            get {
-                return ResourceManager.GetString("Westwards", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to When needed.
         /// </summary>
         internal static string WhenNeeded {
@@ -2046,15 +1803,6 @@ namespace ModulesRegistry.Services.Resources {
         internal static string WhenNeededShort {
             get {
                 return ResourceManager.GetString("WhenNeededShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Winter.
-        /// </summary>
-        internal static string Winter {
-            get {
-                return ResourceManager.GetString("Winter", resourceCulture);
             }
         }
         

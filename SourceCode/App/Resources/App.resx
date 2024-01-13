@@ -1431,4 +1431,7 @@
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Empty wagon order</value>
   </data>
+  <data name="MeetingType" xml:space="preserve">
+    <value>Type of event</value>
+  </data>
 </root>

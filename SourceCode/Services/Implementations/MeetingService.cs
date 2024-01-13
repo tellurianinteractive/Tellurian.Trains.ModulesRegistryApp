@@ -35,7 +35,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator || gm.PersonId == principal.PersonId()))
-            .Include(m => m.Layouts)
+            .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
             .ToReadOnlyListAsync();
 
         return meetings.Where(m => principal.IsCountryOrGlobalAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))

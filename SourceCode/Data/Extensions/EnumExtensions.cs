@@ -36,4 +36,13 @@ public static class EnumExtensions
     public static IEnumerable<ListboxItem> LandscapeSeasonListboxItems() =>
         Enum.GetValues<LandscapeSeason>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
+    public static IEnumerable<ListboxItem> MeetingTypeListboxItems() =>
+    Enum.GetValues<MeetingType>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+
+    public static string ToEnumLocalized<T>(this int value) where T : struct
+    {
+        var resourceKey = Enum.GetName(typeof(T), value);
+        return resourceKey.HasValue() ? ResourceManager.GetString(resourceKey) ?? resourceKey : resourceKey ?? string.Empty;
+    }
+
 }

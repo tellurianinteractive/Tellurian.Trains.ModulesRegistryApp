@@ -49,4 +49,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="KeeperSignature" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="960dfbc7-156a-4063-86ef-90f58b133320" ChangeDateTime="12/22/2023 14:45:50">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[EventTypeId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MeetingTypeEnum" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="be8146e6-177f-43a9-8c8d-277decea5ec9" ChangeDateTime="12/22/2023 15:50:54">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[MeetingTypeEnum]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MeetingType" />
+  </Operation>
 </Operations>

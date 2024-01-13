@@ -27,7 +27,7 @@ public static class MeetingExtensions
             _ => (MeetingStatus)meeting.Status switch
             {
                 MeetingStatus.Preliminary => "fa fa-question-circle",
-                MeetingStatus.Planned => meeting.GroupDomainId.HasValue ? "fa fa-calendar-check" : "fa fa-check-double",
+                MeetingStatus.Planned => meeting.GroupDomainId.HasValue ? "fa fa-calendar-check" : "fa fa-check-circle",
                 MeetingStatus.UnderApproval => "fa fa-flag",
                 MeetingStatus.Approved  => meeting.GroupDomainId.HasValue ? "fa fa-check-double" : "fa fa-check-circle",
 
@@ -36,7 +36,7 @@ public static class MeetingExtensions
         };
 
     static private string StatusColor(this Meeting meeting, DateTime at) =>
-        meeting.EndDate >= at ? "gray" :
+        meeting.EndDate <= at ? "gray" :
         (MeetingStatus)meeting.Status switch
         {
             MeetingStatus.Canceled => "red",

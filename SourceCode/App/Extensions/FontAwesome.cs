@@ -6,6 +6,7 @@ public static class FontAwesome
     public const string Cancel = "fa fa-user-slash";
     public const string Cargo = "fa fa-box-open";
     public const string Clone = "fa fa-clone";
+    public const string ClubEvent = "fa fa-house";
     public const string Customer = "fa fa-industry";
     public const string Delete = "fa fa-trash-alt";
     public const string ConfirmDelete = "fa fa-trash-alt";
@@ -15,6 +16,7 @@ public static class FontAwesome
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
     public const string Manage = "fa fa-tasks";
+    public const string Market = "fa fa-shopping-cart";
     public const string Meeting = "fa fa-calendar-alt";
     public const string Module = "fa fa-box";
     public const string Modules = "fa fa-box";
@@ -54,6 +56,7 @@ public static class FontAwesome
             {nameof(Cancel), Cancel },
             {nameof(Cargo), Cargo },
             {nameof(Clone), Clone },
+            {nameof(ClubEvent), ClubEvent },
             {nameof(Customer), Customer },
             {nameof(Delete), Delete },
             {nameof(ConfirmDelete), ConfirmDelete },
@@ -63,6 +66,7 @@ public static class FontAwesome
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
             {nameof(Manage), Manage },
+            {nameof(Market), Market },
             {nameof(Meeting), Meeting },
             {nameof(Module), Module },
             {nameof(Modules), Modules },
@@ -96,6 +100,4 @@ public static class FontAwesome
             {nameof(View), View },
             {nameof(Wifi), Wifi },
        };
-
-
 }

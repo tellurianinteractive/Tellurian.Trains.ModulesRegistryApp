@@ -25,6 +25,7 @@ public class Meeting
     public DateTime StartDate { get; set; } = DateTime.Today.AddYears(1);
     public DateTime EndDate { get; set; } = DateTime.Today.AddYears(1).AddDays(4);
     public int Status { get; set; }
+    public int MeetingType { get; set; } 
     public string Details { get; set; }
     public string Accomodation { get; set; }
     public string Food { get; set; }
@@ -36,6 +37,13 @@ public class Meeting
 }
 
 #nullable enable
+
+public enum MeetingType
+{
+    ModuleMeeting = 0, // Default
+    ClubEvent = 1,
+    Market = 2,
+}
 
 public static class MeetingExtensions
 {
@@ -102,6 +110,9 @@ public static class MeetingExtensions
             principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId) ||
             meeting.IsOpenForRegistration(at));
 
+
+    public static string Scales(this Meeting meeting) =>
+        string.Join(", ", meeting.Layouts.Select(l => l.PrimaryModuleStandard.Scale.ShortName).Distinct());
 }
 
 public static class MeetingMapping
