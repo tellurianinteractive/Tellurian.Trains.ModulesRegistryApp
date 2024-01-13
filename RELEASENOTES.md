@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2024-01-13
 - **Access** to meeting registration is now resticted to users that have accepted *terms of use*.
 - **Not Authorised** message has how texts added that describes possible reasons.
+- **Security update** to latest releases of external components.
 ## Release 1.9.12
 Release date 2023-12-02
 - **Meeting list** now contains layout scales (only if layouts are added to the meeting).
