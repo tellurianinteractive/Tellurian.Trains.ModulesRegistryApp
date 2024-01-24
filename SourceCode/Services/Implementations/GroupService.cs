@@ -61,6 +61,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
                 .Where(g => (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)) || g.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
                 .Include(g => g.GroupDomain)
                 .Include(g => g.Country)
+                .Include(g => g.GroupMembers)
                 .OrderBy(g => g.FullName)
                 .ToListAsync();
             return items.Select(i => (i, i.GroupMembers.Any(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())));

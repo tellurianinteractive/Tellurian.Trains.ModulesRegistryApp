@@ -15,17 +15,19 @@
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="Meeting.MayDelete(Principal)">
     <Inputs>
-        <AppInputText Width="4" Label="Name" @bind-Value="Meeting.Name" />
-        <AppInputSelect Width="4" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" />
-        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" />
-
+        <AppInputSelect Width="2" @bind-Value="Meeting.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
+        <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
+        <AppInputText Width="3" Label="Name" @bind-Value="Meeting.Name" />
+        <AppInputSelect Width="3" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
+        
         <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
         <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
-        <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
-        <AppInputSelect Width="2" @bind-Value="Meeting.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="true" />
+        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="Meeting.ShowTime()" />
+
         <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
         <AppInputCheck Width="4" Label="IsOrganisingGroupInternal" @bind-Value="Meeting.IsOrganiserInternal" />
+
         <AppInputText Width="12" Label="ExternalLink" @bind-Value="Meeting.ExternalLink"/>
 
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
@@ -38,7 +40,7 @@
         {
             <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
         }
-        
+       
     </Buttons>
 </EditTemplate>
 
@@ -74,16 +76,22 @@
         if (Meeting is not null)
         {
             var result = await MeetingService.SaveAsync(Principal, Meeting);
-            if (result.Entity is not null) Meeting = result.Entity;
-            Id = Meeting.Id;
+            if (result.Entity is not null)
+            {
+                Meeting = result.Entity;
+                Id = Meeting.Id;
+            }
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
     void OnStartDateChanged()
     {
-        Meeting.EndDate = Meeting.StartDate.AddDays(4);
-        StateHasChanged();
+        if ((Meeting.EndDate - Meeting.StartDate).TotalDays > 7)
+        {
+            Meeting.EndDate = Meeting.StartDate.AddDays(1);
+            StateHasChanged();            
+        }
     }
 
     bool DatesIsLocked(Meeting meeting) =>
@@ -92,6 +100,7 @@
           RegisteredModulesCount > 0);
 
     bool MaySelectOrganiserGroup => OrganiserGroupId == 0;
+
 
     string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
     string MeetingHref(int meetingId, string? function) => function.HasNoValue() ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";

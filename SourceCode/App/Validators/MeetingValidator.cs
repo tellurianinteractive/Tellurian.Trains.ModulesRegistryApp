@@ -43,7 +43,7 @@ public class MeetingValidator : AbstractValidator<Meeting>
             .WithName(n => localizer[nameof(n.StartDate)]);
         RuleFor(m => m.EndDate)
             .NotEmpty()
-            .GreaterThan(m => m.StartDate)
+            .GreaterThanOrEqualTo(m => m.StartDate)
             .WithName(n => localizer[nameof(n.EndDate)]);
         RuleFor(m => m.Status)
             .MustBeSelected(localizer)

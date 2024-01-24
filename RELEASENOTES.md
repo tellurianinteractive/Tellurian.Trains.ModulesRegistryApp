@@ -2,6 +2,13 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.14
+Release date 2024-01-24
+- **Meetings** of type *ClubEvent* or *Market* can now be given opening and closing times.
+The opening times will be visible if it's a one day arrangement.
+The icons for these meeting types are also fixed.
+- **Bug fix** of issue #192 *Group administrators cannot create meeting*.
+- **Security update** to latest releases of external components.
 ## Release 1.9.13
 Release date 2024-01-13
 - **Access** to meeting registration is now resticted to users that have accepted *terms of use*.

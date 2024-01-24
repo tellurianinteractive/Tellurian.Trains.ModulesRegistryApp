@@ -35,8 +35,8 @@
         <td align="center">@item.meeting.DisplayedStatus(TimeProvider.LocalTime)</td>
         <td>@item.meeting.VenueName</td>
         <td>@item.meeting.CityName</td>
-        <td align="center">@item.meeting.StartDate.ToString("d")</td>
-        <td align="center">@item.meeting.EndDate.ToString("d")</td>
+        <td align="center">@item.meeting.StartOrEventDate()</td>
+        <td align="center">@item.meeting.EndDateOrTimes()</td>
         <td>
             <AppButton Label="Edit" Href="@MeetingHref(item.meeting, "edit")" IsHidden="@(!item.MayEdit)" />
             <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting, "register")" IsHidden="@(!item.meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
