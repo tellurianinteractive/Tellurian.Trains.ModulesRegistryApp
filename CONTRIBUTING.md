@@ -16,9 +16,14 @@ As a test user you use the application and report back with:
 You can improve a translationns in an already supported language, 
 or if you want the application in yet another language, you can make a new complete translation.
 
+> The easiest way to work with translations is using [Visual Studio](https://visualstudio.microsoft.com/downloads/) with and these extensions:
+> - **ResX Manager** makes it very easy to edit ESX-files for existing languages and adding new ones.
+> - **Markdown Editor** makes is easy to edit *markdown* files, there is a preview so see the result.
+
 ### Improving the translation to an already supported language
 Follow the instructions below. The only thing you don't need to do is adding new files.
 Change files of the existing langauge and create a pull request.
+
 ### Adding the new language to the app
 There are two main ways to add your translation to the app:
 - Create a *pull-request* using Git. This is the preferred way, so use it if you are familiar with it. 
@@ -46,7 +51,7 @@ After translation with Google, you can refine the translation if necessary.
 Resource files are XML-files with shorter texts or single words. However, the content is very noisy, and its important to not
 change anything but the translated words/sentences. The files are located in three places:
 * App.xx.resx [App/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Resources),
-* Strings.xx.resx [Data/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Data/Resources),
+* Strings.xx.resx and Validators.xx.resx [Data/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Data/Resources),
 * Strings.xx.resx [Services/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Services/Resources)
 
 Where *xx* is the two-letter language code for the translated language.
@@ -57,7 +62,7 @@ Where *xx* is the two-letter language code for the translated language.
 4. Add the translated files to your local repository.
 
 ##### When the Translation Is Ready
-If you are working with GitHub, commit locally and name it as *Translated to x* where x is the name of the langauge. 
+If you are working with GitHub, commit locally and comment it as *Translated to x* where x is the name of the langauge. 
 Create a pull-request and push it to the remote repository.
 Otherwise; send an email with the translated files.
 
