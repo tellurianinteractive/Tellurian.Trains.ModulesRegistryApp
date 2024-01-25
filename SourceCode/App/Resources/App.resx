@@ -1434,4 +1434,10 @@
   <data name="MeetingType" xml:space="preserve">
     <value>Type of event</value>
   </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="InternalWaybills" xml:space="preserve">
+    <value>Internal waybills</value>
+  </data>
 </root>

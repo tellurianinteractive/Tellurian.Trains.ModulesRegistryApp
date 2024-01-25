@@ -13,7 +13,7 @@
 @inject CountryService CountryService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="true" />
+<PageHeading ObjectName="ExternalStations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="false" />
 
 <ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" SelectedId="CountryId"/>
 

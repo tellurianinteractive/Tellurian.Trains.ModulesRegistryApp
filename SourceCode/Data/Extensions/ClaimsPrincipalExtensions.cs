@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace ModulesRegistry.Data.Extensions;
@@ -44,6 +46,22 @@ public static class ClaimsPrincipalExtensions
     public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.ObjectId);
     public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.GlobalAdministrator);
     public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.CountryAdministrator);
+
+    public static MarkupString LoginStatus(this ClaimsPrincipal principal, IStringLocalizer localizer) =>
+        new($"""{principal.GivenName()} {principal.Surname()} <span class="{principal.LoginIcon()}" title="{principal.LoginRole(localizer)}"/> """);
+
+    private static string LoginIcon(this ClaimsPrincipal principal) =>
+        principal.IsGlobalAdministrator() ? "fa fa-globe-europe" :
+        principal.IsCountryAdministrator() ? "fa fa-flag" :
+        principal.IsAuthenticated() ? "fa fa-user" :
+        "";
+
+    private static string LoginRole(this ClaimsPrincipal principal, IStringLocalizer localizer) =>
+        principal.IsGlobalAdministrator() ? localizer["GlobalAdministrator"] :
+        principal.IsCountryAdministrator() ? localizer["CountryAdministrator"] :
+        principal.IsAuthenticated() ? localizer["User"] :
+        "";
+
 
     #region Administrator scope
 

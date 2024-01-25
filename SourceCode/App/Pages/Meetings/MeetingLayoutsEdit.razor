@@ -31,8 +31,8 @@
                 @if (MayEdit)
                 {
                     <AppButton Label="Edit" Href="@LayoutHref(meetingLayout.Id)" />
-                    <AppButton Label="Modules" Href="@LayoutModulesHref(meetingLayout.Id)" />
-                    <AppButton Label="Waybills" Href="@WaybillsHref(meetingLayout.Id)" />
+                    <AppButton Label="Modules" Title="RegisteredModules" Href="@LayoutModulesHref(meetingLayout.Id)" />
+                    <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(meetingLayout.Id)" />
                     <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
                 }
             </td>

@@ -12,6 +12,7 @@ Diese Artikel geben allgemeine Hinweise zur optimalen Verwendung der Modulregist
 Der Zweck besteht darin, Sie dahin zu führen, wo und wie Sie Daten der Reihe nach eingeben
 um Daten konsistent und in hoher Qualität zu halten.
 - [**Stationen und Module**](Content/articles-modulesandstations) führt Sie durch die Eingabe von Daten über Module und Stationen.
+- [**Frachtkunden und Frachten**](Content/articles-CustomersAndFreights) führt Sie durch die Erstellung von Frachtbriefen.
 
 ## Hilfetexte
 Auf vielen Seiten, auf denen Sie Daten eingeben, können Sie oben rechts auf <span class="fa fa-question-circle"></span> klicken, um Hilfe zu erhalten.

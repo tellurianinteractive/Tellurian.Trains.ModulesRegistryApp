@@ -8,7 +8,9 @@
 
 <AuthorizeView>
     <Authorized>
-        <b>@UserLoginStatus(context.User)</b>
+        <span class="languageselector"><LanguageSelector /></span>
+
+        <b>@context.User.LoginStatus(Localizer)</b>
         <a class="ml-md-auto btn btn-primary"
            href="/logout?returnUrl=/"
            target="_top">@Localizer["Logout"]</a>
@@ -37,9 +39,4 @@
 
     private string ReturnUrl => Navigator.ToBaseRelativePath(Navigator.Uri);
 
-    private string UserLoginStatus(ClaimsPrincipal principal) =>
-        $"{Localizer["LoggedInAs"]} {principal.GivenName()} {principal.Surname()} {AdministratorStatus(principal)}";
-
-    private string AdministratorStatus(ClaimsPrincipal principal) =>
-       principal.IsGlobalAdministrator() ? ", " + Localizer.LocalizedCasing("GlobalAdministrator") : principal.IsCountryAdministrator() ? ", " + Localizer.LocalizedCasing("CountryAdministrator") : string.Empty;
 }

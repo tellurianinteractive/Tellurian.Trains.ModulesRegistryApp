@@ -27,7 +27,7 @@ You should only enter these fields to override what is specified for the *custom
 - **Other wagon class** overrides the default wagon class(es) for the selected *cargo type*-
 - **Other name** gives you an option to override the name of the *cargo type*. 
 Note that *cargo type* names are language aware, but your *other name* is not.
-- **Other from year** and **Other to year** should only filled if historically relevant and different from *opening* and *closing* dates of the sustomer.
+- **Other from year** and **Other to year** should only filled if historically relevant and different from *opening* and *closing* dates of the customer.
 In particular, don't fill in the *up to year* if you want the cargo flow to exists *until further notice*.
 
 

@@ -1434,4 +1434,10 @@
   <data name="MeetingType" xml:space="preserve">
     <value>Typ av arrangemang</value>
   </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Varaktighet</value>
+  </data>
+  <data name="InternalWaybills" xml:space="preserve">
+    <value>Interna fraktsedlar</value>
+  </data>
 </root>

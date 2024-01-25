@@ -53,6 +53,13 @@ a, .btn-link {
     margin-top: 30px;
 }
 
+@media print {
+    .noprint {
+        display: none;
+    }
+}
+
+
 .fa {
     padding-right: 4pt;
 }

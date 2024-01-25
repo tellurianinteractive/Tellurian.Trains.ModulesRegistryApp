@@ -8,11 +8,16 @@ Release date 2024-01-24
 The opening times will be visible if it's a one day arrangement.
 The icons for these meeting types are also fixed.
 - **Bug fix** of issue #192 *Group administrators cannot create meeting*.
+- **Bug fix** of meeting status tooltip, now showing what the icon means.
+- **Translations** added for how to enter *external stations*.
+- **Documentation** added for how to create cargo flows and waybills.
+- **Printing** improvements, menu and top row will not be visible when printing any page. Also buttons are hidden when printing.
+- **Buttons** now have tooltip when hovering over it.
 - **Security update** to latest releases of external components.
 ## Release 1.9.13
 Release date 2024-01-13
 - **Access** to meeting registration is now resticted to users that have accepted *terms of use*.
-- **Not Authorised** message has how texts added that describes possible reasons.
+- **Not Authorised** message now has texts added that describes possible reasons.
 - **Security update** to latest releases of external components.
 ## Release 1.9.12
 Release date 2023-12-02

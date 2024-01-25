@@ -17,7 +17,10 @@
 <ContentView ContentName="TermsOfUse" ShowModificationTime="true" />
 <AuthorizeView>
     <Authorized>
-        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" />
+        @if (!Principal.IsLatestTermsOfUseAccepted())
+        {
+        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" />           
+        }
     </Authorized>
 </AuthorizeView>
 

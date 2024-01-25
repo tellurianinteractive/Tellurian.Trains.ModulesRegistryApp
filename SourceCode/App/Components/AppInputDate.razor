@@ -9,7 +9,14 @@
     {
         <label class="form-control-label text-end" for="@Label">@Localizer[Label]</label>
     }
-    <input disabled=@IsDisabled type="@InputType" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" @onfocusout="OnChange" />
+    @if (ShowTime)
+    {
+        <input disabled=@IsDisabled type="datetime-local" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" @onfocusout="OnChange" />
+    }
+    else
+    {
+        <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" @onfocusout="OnChange" />        
+    }
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -22,7 +29,6 @@
     [Parameter] public bool ShowTime { get; set; }
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
-    string InputType => ShowTime ? "datetime-local" : "date";
 
     protected override void OnInitialized()
     {
@@ -33,7 +39,7 @@
     {
         if (DateTime.TryParse(value, LanguageUtility.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeDate))
         {
-            result = maybeDate.Date;
+            result = ShowTime ? maybeDate : maybeDate.Date;
             validationErrorMessage = "";
             return true;
         }

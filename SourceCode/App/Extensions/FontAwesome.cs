@@ -7,11 +7,13 @@ public static class FontAwesome
     public const string Cargo = "fa fa-box-open";
     public const string Clone = "fa fa-clone";
     public const string ClubEvent = "fa fa-home";
+    public const string Country = "fa fa-flag";
     public const string Customer = "fa fa-industry";
     public const string Delete = "fa fa-trash-alt";
     public const string ConfirmDelete = "fa fa-trash-alt";
     public const string Erase = "fa fa-eraser";
     public const string Edit = "fa fa-edit";
+    public const string Global = "fa fa-globe-europe";
     public const string Group = "fa fa-users";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
@@ -62,6 +64,7 @@ public static class FontAwesome
             {nameof(ConfirmDelete), ConfirmDelete },
             {nameof(Edit), Edit },
             {nameof(Erase), Erase },
+            {nameof(Global), Global },
             {nameof(Group), Group },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },

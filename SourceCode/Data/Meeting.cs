@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
@@ -47,7 +48,8 @@ public enum MeetingType
 
 public static class MeetingExtensions
 {
-    public static bool ShowTime(this Meeting? meeting) => meeting?.MeetingType != (int)MeetingType.ModuleMeeting;
+    public static bool ShowTime(this Meeting? meeting) => 
+        meeting?.MeetingType != (int)MeetingType.ModuleMeeting;
     public static string Day(this Meeting meeting, int day) =>
     meeting.StartDate.AddDays(day - 1).DayOfWeek.ToString();
 
@@ -115,12 +117,12 @@ public static class MeetingExtensions
     public static string Scales(this Meeting meeting) =>
         string.Join(", ", meeting.Layouts.Select(l => l.PrimaryModuleStandard.Scale.ShortName).Distinct());
 
-    public static string StartOrEventDate(this Meeting meeting) =>
-        meeting.StartDate.ToString("d");
+    public static MarkupString StartOrEventDate(this Meeting meeting) =>
+        new(meeting.StartDate.ToString("d"));
 
-    public static string EndDateOrTimes(this Meeting meeting) =>
-        meeting.ShowTime() && meeting.EndDate.Date == meeting.StartDate.Date ? $"{meeting.StartDate:t}-{meeting.EndDate:t}":
-        meeting.EndDate.ToString("d");
+    public static MarkupString EndDateOrTimes(this Meeting meeting) =>
+        meeting.ShowTime() && meeting.EndDate.Date == meeting.StartDate.Date ? new($"""<i>{meeting.StartDate:t}-{meeting.EndDate:t}</i>"""):
+        new(meeting.EndDate.ToString("d"));
 }
 
 public static class MeetingMapping

@@ -23,9 +23,8 @@
         <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Venue"]</th>
         <th>@Localizer["City"]</th>
-        <th style="text-align: center">@Localizer["StartDate"]</th>
-        <th style="text-align: center">@Localizer["EndDate"]</th>
-        <th>@Localizer["Actions"]</th>
+        <th colspan="2" style="text-align: center">@Localizer["Duration"]</th>
+        <th class="noprint">@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="item">
         <td><img src="@item.meeting.OrganiserGroup.Country.FlagSrc()" /></td>
@@ -37,7 +36,7 @@
         <td>@item.meeting.CityName</td>
         <td align="center">@item.meeting.StartOrEventDate()</td>
         <td align="center">@item.meeting.EndDateOrTimes()</td>
-        <td>
+        <td class="noprint">
             <AppButton Label="Edit" Href="@MeetingHref(item.meeting, "edit")" IsHidden="@(!item.MayEdit)" />
             <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting, "register")" IsHidden="@(!item.meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
         </td>

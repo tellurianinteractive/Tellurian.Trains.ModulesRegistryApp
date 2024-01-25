@@ -12,6 +12,7 @@ Disse artikler giver generelle råd om, hvordan du bruger modulregistret på den
 Formålet er at guide dig til, hvor og hvordan du indtaster data i rækkefølge
 at holde data konsistente og med høj kvalitet.
 - [**Stationer og moduler**](Content/articles-modulesandstations) guider dig til at indtaste data om modul og stationer.
+- [**Fragtkunder og fragter**](Content/articles-CustomersAndFreights) guider dig hvordan du opretter frakgtbreve.
 
 ## Hjælpetekster
 På mange sider, hvor du indtaster data, kan du klikke på <span class="fa fa-question-circle"></span> i øverste højre hjørne for at få hjælp.

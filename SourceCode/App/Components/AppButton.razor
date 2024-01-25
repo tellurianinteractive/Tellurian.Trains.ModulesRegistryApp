@@ -6,20 +6,20 @@
 {
     @if (OpenInNewTab)
     {
-            <button type="button " class="@ButtonClass" disabled="@Disabled" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            <button type="button " class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
     }
     else
     {
-            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
+            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
     }
 }
 else if (IsSubmit)
 {
-        <button type="submit" class="@ButtonClass" disabled="@Disabled"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
 }
 else
 {
-        <button type="button" class="@ButtonClass" disabled="@Disabled" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
     }
 </span>
 
@@ -36,6 +36,7 @@ else
     [Parameter] public bool OpenInNewTab { get; set; }
     [Parameter] public bool IsHidden { get; set; }
     [Parameter] public bool AlwaysShowLabel { get; set; }
+    [Parameter] public string? Title { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -68,6 +69,7 @@ else
         _ => "info"
     };
     string LabelText => Labels is not null ? String.Join(' ', Labels.Select(l => Localizer[l])) : string.Empty;
+    string TitleText => Title.HasValue() ? Localizer[Title] : LabelText;
     string[]? Labels => Label.HasValue() ? Label.Split("-") : Type.HasValue() ? Type.AsArray() : "Button".AsArray();
     string LabelOrType => Label ?? Type ?? "Button";
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;

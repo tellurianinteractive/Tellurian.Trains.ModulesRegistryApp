@@ -22,7 +22,7 @@ else
 {
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
     {
-        <h3>@participant.Person.Name(), @participant.Person.CityName</h3>
+        <h4>@participant.Person.Name(), @participant.Person.CityName</h4>
         @if (participant.LayoutModules.Any())
         {
 
@@ -31,16 +31,16 @@ else
                     <th width="70%">@Localizer["Module"]</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
                     <th width="100px" align="center">@Localizer["IsStation"]</th>
-                    <th>@Localizer["Actions"] </th>
+                    <th class="noprint">@Localizer["Actions"] </th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Module.FullName</td>
                     <td width="120px">@item.RegisteredTime.ToString("d")</td>
                     <td width="100px" align="center">@item.HasLayoutStation().AsYesOrNo()</td>
-                    <td>
+                    <td class="noprint">
                         @if (item.HasLayoutStation())
                         {
-                            <AppButton Label="Waybills" Href="@WaybillsHref(item)" />
+                            <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
                         }
                     </td>
                 </RowTemplate>

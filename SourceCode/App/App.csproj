@@ -37,6 +37,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\Help\ExternalStation.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStation.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStation.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStation.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\ReasonsForNotAuthorised.nb.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

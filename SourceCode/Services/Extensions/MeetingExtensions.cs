@@ -3,9 +3,12 @@
 namespace ModulesRegistry.Services.Extensions;
 public static class MeetingExtensions
 {
-   public static string Status(this Meeting? meeting, DateTime at) =>
-        meeting is null ? string.Empty :
-        Resources.Strings.ResourceManager.GetString(meeting.StatusResourceName(at)) ?? string.Empty;
+    public static string Status(this Meeting? meeting, DateTime at)
+    {
+        if (meeting is null) return string.Empty;
+        var resourceKey = meeting.StatusResourceName(at);
+        return Resources.Strings.ResourceManager.GetString(resourceKey) ?? resourceKey;
+    }
 
     internal static string StatusResourceName(this Meeting? meeting, DateTime at) =>
         meeting is null ? string.Empty :
@@ -35,7 +38,7 @@ public static class MeetingExtensions
             }
         };
 
-    static private string StatusColor(this Meeting meeting, DateTime at) =>
+    public static string StatusColor(this Meeting meeting, DateTime at) =>
         meeting.EndDate <= at ? "gray" :
         (MeetingStatus)meeting.Status switch
         {

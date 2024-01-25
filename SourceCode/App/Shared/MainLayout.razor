@@ -10,25 +10,28 @@
                 SuccessIcon="fa fa-check-circle"
                 WarningIcon="fa fa-exclamation-triangle"
                 ErrorIcon="fa fa-exclamation-circle"
-                Position="Blazored.Toast.Configuration.ToastPosition.TopRight"/>
+                Position="Blazored.Toast.Configuration.ToastPosition.TopRight" />
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <div class="noprint">
+            <NavMenu />
+        </div>
     </div>
     <div class="main">
-        <div class="top-row px-4 auth">
-            <span class="languageselector"><LanguageSelector/></span>
-            <LoginControl />
-            <NavLink class="nav-link" href="TermsOfUse">
-                @Localizer["TermsOfUse"]
-            </NavLink>
-            <NavLink class="nav-link" href="Contact">
-                @Localizer["Contact"]
-            </NavLink>
-            <NavLink class="nav-link" href="About">
-                @Localizer["About"]
-            </NavLink>
+        <div class="noprint">
+            <div class="top-row px-4 auth">
+                <LoginControl />
+                <a class="nav-link" href="TermsOfUse">
+                    @Localizer["TermsOfUse"]
+                </a>
+                <a class="nav-link" href="Contact">
+                    @Localizer["Contact"]
+                </a>
+                <a class="nav-link" href="About">
+                    @Localizer["About"]
+                </a>
+            </div>
         </div>
         <div class="content px-4">
             @Body

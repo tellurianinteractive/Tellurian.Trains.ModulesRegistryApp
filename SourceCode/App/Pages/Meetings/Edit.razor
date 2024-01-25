@@ -22,8 +22,8 @@
         
         <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
         <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="true" />
-        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="Meeting.ShowTime()" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="Starts" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="@Meeting.ShowTime()" />
+        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="Ends" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="@Meeting.ShowTime()" />
 
         <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
         <AppInputCheck Width="4" Label="IsOrganisingGroupInternal" @bind-Value="Meeting.IsOrganiserInternal" />
@@ -89,7 +89,14 @@
     {
         if ((Meeting.EndDate - Meeting.StartDate).TotalDays > 7)
         {
-            Meeting.EndDate = Meeting.StartDate.AddDays(1);
+            if (Meeting.ShowTime())
+            {
+                Meeting.EndDate = Meeting.StartDate.AddDays(0);
+            }
+            else
+            {
+                Meeting.EndDate = Meeting.StartDate.AddDays(3);
+            }
             StateHasChanged();            
         }
     }
