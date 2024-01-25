@@ -1,38 +1,38 @@
-## Godskunder och frakter
-En viktig del av ett trafikspel är frakter.
-Frakterna kan styras på två sätt:
-- Vagnar i fasta omlopp, där de går på tidtabell.
+ï»¿## Godskunder och frakter
+En viktig del av ett trafikspel Ã¤r frakter.
+Frakterna kan styras pÃ¥ tvÃ¥ sÃ¤tt:
+- Vagnar i fasta omlopp, dÃ¤r de gÃ¥r pÃ¥ tidtabell.
 - Vagnlaster som styrs med fraktsedlar.
 
 ### Fraktsedlar
-I **Modulregistret** kan man producera fraktsedlar på två sätt:
-- Per trafikplats där man skapar fraktsedlar som kan återanvändas från träff till träff.
-- Fraktsedlar för frakter mellan de trafikplatser som finns med på en viss träff.
+I **Modulregistret** kan man producera fraktsedlar pÃ¥ tvÃ¥ sÃ¤tt:
+- Per trafikplats dÃ¤r man skapar fraktsedlar som kan Ã¥teranvÃ¤ndas frÃ¥n trÃ¤ff till trÃ¤ff.
+- Fraktsedlar fÃ¶r frakter mellan de trafikplatser som finns med pÃ¥ en viss trÃ¤ff.
 
 Modulregistret har i princip samma funktioner som *Gula Sidorna*, men med vissa skillnader.
 
 ### Godskunder
-I **Modulregistret** lägger man in godskunder och godsflöden för vilka varor som skickas och mottas.
-Man kan lägga in godskunder och godsflöden för sin egen modulstation, 
-men även för *externa stationer*.
+I **Modulregistret** lÃ¤gger man in godskunder och godsflÃ¶den fÃ¶r vilka varor som skickas och mottas.
+Man kan lÃ¤gga in godskunder och godsflÃ¶den fÃ¶r sin egen modulstation, 
+men Ã¤ven fÃ¶r *externa stationer*.
 
-En *extern station* är en verklig station som måste läggas in med historiskt korrekta data
-om stationen, dess kunder och godsflöden.
+En *extern station* Ã¤r en verklig station som mÃ¥ste lÃ¤ggas in med historiskt korrekta data
+om stationen, dess kunder och godsflÃ¶den.
 
-### Så här skapas fraktsedlar
-Till skillnad från *Gula Sidorna* kan man inte själv skapa valfria fraktsedlar i **Modulregistret**.
-Istället skapar applikationen fraktsedlar genom att matcha avsändande och mottagande godskunders godsflöde.
-Matchningen görs på följande data:
-- **Tema** för avsändande och mottagande station skall överensstämma. Detta förhindrar att t.ex. amerikanskt och europeiskt tema blandas.
-- **Skala** för att undvika att skapa fratsedlar mellan moduler av olika skala. Externa stationer har ingen skala, så de matchas oavsett skala.
-- **Typ av last** skall överensstämma. Detta matchas på lastens interna id, och inte på namnet. Ett eget namn på lasttypen påverkar *inte* matchningen.
-- **Årtal** skall överlappa: tidsperioderna för *typ av gods*, *avsändande och mottagande station och godsföde*. 
-Detta innebär att fraktsedlar blir historikst korrekta.
+### SÃ¥ hÃ¤r skapas fraktsedlar
+Till skillnad frÃ¥n *Gula Sidorna* kan man inte sjÃ¤lv skapa valfria fraktsedlar i **Modulregistret**.
+IstÃ¤llet skapar applikationen fraktsedlar genom att matcha avsÃ¤ndande och mottagande godskunders godsflÃ¶de.
+Matchningen gÃ¶rs pÃ¥ fÃ¶ljande data:
+- **Tema** fÃ¶r avsÃ¤ndande och mottagande station skall Ã¶verensstÃ¤mma. Detta fÃ¶rhindrar att t.ex. amerikanskt och europeiskt tema blandas.
+- **Skala** fÃ¶r att undvika att skapa fratsedlar mellan moduler av olika skala. Externa stationer har ingen skala, sÃ¥ de matchas oavsett skala.
+- **Typ av last** skall Ã¶verensstÃ¤mma. Detta matchas pÃ¥ lastens interna id, och inte pÃ¥ namnet. Ett eget namn pÃ¥ lasttypen pÃ¥verkar *inte* matchningen.
+- **Ã…rtal** skall Ã¶verlappa: tidsperioderna fÃ¶r *typ av gods*, *avsÃ¤ndande och mottagande station och godsfÃ¶de*. 
+Detta innebÃ¤r att fraktsedlar blir historikst korrekta.
 
 ### Anpassa och skriva ut fraktsedlar
-De fraktsedlar som skapas kan anpassas på flera sätt:
+De fraktsedlar som skapas kan anpassas pÃ¥ flera sÃ¤tt:
 - Antal att skriva ut.
 - Om man vill skriva ut givet antal eller angivet antal per trafikdag.
-- Om man vill ha en returfraktsedel för tomvagn.
+- Om man vill ha en returfraktsedel fÃ¶r tomvagn.
 
-För avgående vagnslatser kan kan även skriva ut tomvagnsbeställningar, fraktsedlar som man placerar vid tågmagasin.
+FÃ¶r avgÃ¥ende vagnslatser kan kan Ã¤ven skriva ut tomvagnsbestÃ¤llningar, fraktsedlar som man placerar vid tÃ¥gmagasin.

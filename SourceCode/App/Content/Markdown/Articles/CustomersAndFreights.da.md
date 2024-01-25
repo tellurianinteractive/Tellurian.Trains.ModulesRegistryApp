@@ -1,38 +1,38 @@
-## Fragtkunder og fragter
-En vigtig del af en køreplansession er fragt.
-Fragterne kan styres på to måder:
-- Vogne i fast turnus, hvor de kører efter køreplan.
+ï»¿## Fragtkunder og fragter
+En vigtig del af en kÃ¸replansession er fragt.
+Fragterne kan styres pÃ¥ to mÃ¥der:
+- Vogne i fast turnus, hvor de kÃ¸rer efter kÃ¸replan.
 - Vogne styret af fragtbreve.
 
 ### Fragtbreve
-I **Modulregistret** kan fragtbreve fremstilles på to måder:
-- Fragtbreve, der kan genbruges fra møde til møde.
-- Fragtbreve for fragt mellem godsstationerne, der er i et bestemt mødelayout.
+I **Modulregistret** kan fragtbreve fremstilles pÃ¥ to mÃ¥der:
+- Fragtbreve, der kan genbruges fra mÃ¸de til mÃ¸de.
+- Fragtbreve for fragt mellem godsstationerne, der er i et bestemt mÃ¸delayout.
 
-**Modulregistret** har grundlæggende de samme funktioner som *De Gule Sider*, men med nogle forskelle.
+**Modulregistret** har grundlÃ¦ggende de samme funktioner som *De Gule Sider*, men med nogle forskelle.
 
 ### Fragtkunder
-I **Modulregistret** indtaster du fragtkunder og fragtstrømme, som varer sendes og modtages for.
-Du kan indtaste fragtkunder og varestrømme til din egen modulstation,
-men også for *eksterne stationer*.
+I **Modulregistret** indtaster du fragtkunder og fragtstrÃ¸mme, som varer sendes og modtages for.
+Du kan indtaste fragtkunder og varestrÃ¸mme til din egen modulstation,
+men ogsÃ¥ for *eksterne stationer*.
 
 En *ekstern station* er en rigtig station, der skal indtastes med historisk korrekte data
-om stationen, dens kunder og godsstrømme.
+om stationen, dens kunder og godsstrÃ¸mme.
 
-### Sådan oprettes fragtbreve
-I modsætning til *De Gule Sider* kan du ikke selv oprette fragtbreve manuelt i **Modulregisteret**.
-I stedet opretter applikationen fragtbreve ved at matche fragtstrømmen for de afsendende og modtagende fragtkunder.
-Matchningen foretages på følgende data:
-- **Tema** for sende- og modtagestationen skal matche. Dette forhindrer f.eks. amerikanske og europæiske temaer er blandet.
-- **Skala** for at undgå at skabe fragt mellem moduler af forskellig skala. Eksterne stationer har ingen skala, så de matches uanset skala.
-- **Type af vare** skal matche. Dette matches på varens interne id og ikke på navnet. Et tilpasset varenavn påvirker *ikke* matchningen.
-- **År** skal overlappe: tidsperioderne for *varetype*, *sende- og modtagestation og fragtfoder*.
-Det betyder, at fragtbreve er skabt historisk nøjagtige.
+### SÃ¥dan oprettes fragtbreve
+I modsÃ¦tning til *De Gule Sider* kan du ikke selv oprette fragtbreve manuelt i **Modulregisteret**.
+I stedet opretter applikationen fragtbreve ved at matche fragtstrÃ¸mmen for de afsendende og modtagende fragtkunder.
+Matchningen foretages pÃ¥ fÃ¸lgende data:
+- **Tema** for sende- og modtagestationen skal matche. Dette forhindrer f.eks. amerikanske og europÃ¦iske temaer er blandet.
+- **Skala** for at undgÃ¥ at skabe fragt mellem moduler af forskellig skala. Eksterne stationer har ingen skala, sÃ¥ de matches uanset skala.
+- **Type af vare** skal matche. Dette matches pÃ¥ varens interne id og ikke pÃ¥ navnet. Et tilpasset varenavn pÃ¥virker *ikke* matchningen.
+- **Ã…r** skal overlappe: tidsperioderne for *varetype*, *sende- og modtagestation og fragtfoder*.
+Det betyder, at fragtbreve er skabt historisk nÃ¸jagtige.
 
 ### Tilpas og udskriv fragtbreve
-De fragtbreve, der oprettes, kan tilpasses på flere måder:
+De fragtbreve, der oprettes, kan tilpasses pÃ¥ flere mÃ¥der:
 - Antal til udskrivning.
-- Hvis du ønsker at udskrive et givet antal eller angivet antal pr. trafikdag.
+- Hvis du Ã¸nsker at udskrive et givet antal eller angivet antal pr. trafikdag.
 - Hvis du vil have et returfragtbrev for en tomvogn.
 
-Ved afgående vognlæs kan du også printe tomme vognordrer, som du afgiver på skyggebanegården.
+Ved afgÃ¥ende vognlÃ¦s kan du ogsÃ¥ printe tomme vognordrer, som du afgiver pÃ¥ skyggebanegÃ¥rden.

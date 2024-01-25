@@ -1,38 +1,38 @@
-## Frachtkunden und Frachten
+ï»¿## Frachtkunden und Frachten
 Ein wichtiger Teil einer Fahrplansitzung sind Frachten.
-Die Frachten können auf zwei Arten gesteuert werden:
+Die Frachten kÃ¶nnen auf zwei Arten gesteuert werden:
 - Waggons in festen Turnus, die nach einem Fahrplan verkehren.
 - Durch Frachtbriefe kontrollierte Wagenladungen.
 
 ### Frachtbriefe
-In der **Modulregistrierung** können Frachtbriefe auf zwei Arten erstellt werden:
-- Frachtbriefe, die von Besprechung zu Besprechung wiederverwendet werden können.
-- Frachtbriefe für Fracht zwischen den Güterbahnhöfen, die sich in einem bestimmten Treffen befinden.
+In der **Modulregistrierung** kÃ¶nnen Frachtbriefe auf zwei Arten erstellt werden:
+- Frachtbriefe, die von Besprechung zu Besprechung wiederverwendet werden kÃ¶nnen.
+- Frachtbriefe fÃ¼r Fracht zwischen den GÃ¼terbahnhÃ¶fen, die sich in einem bestimmten Treffen befinden.
 
-Die **Module Registry** hat grundsätzlich die gleichen Funktionen wie die *Yellow Pages*, jedoch mit einigen Unterschieden.
+Die **Module Registry** hat grundsÃ¤tzlich die gleichen Funktionen wie die *Yellow Pages*, jedoch mit einigen Unterschieden.
 
 ### Frachtkunden
-Im **Modulregister** tragen Sie Frachtkunden und Frachtströme ein, für die Waren versendet und empfangen werden.
-Sie können Frachtkunden und Warenströme für Ihren eigenen Modulbahnhof erfassen,
-sondern auch für *Externe Stationen*.
+Im **Modulregister** tragen Sie Frachtkunden und FrachtstrÃ¶me ein, fÃ¼r die Waren versendet und empfangen werden.
+Sie kÃ¶nnen Frachtkunden und WarenstrÃ¶me fÃ¼r Ihren eigenen Modulbahnhof erfassen,
+sondern auch fÃ¼r *Externe Stationen*.
 
 Eine *Externe Station* ist eine reale Station, die mit historisch korrekten Daten eingegeben werden muss
-über den Bahnhof, seine Kunden und Güterströme.
+Ã¼ber den Bahnhof, seine Kunden und GÃ¼terstrÃ¶me.
 
 ### So entstehen Frachtbriefe
-Im Gegensatz zu den *Gelben Seiten* können Sie im **Modulregister** Frachtbriefe nicht manuell selbst erstellen.
+Im Gegensatz zu den *Gelben Seiten* kÃ¶nnen Sie im **Modulregister** Frachtbriefe nicht manuell selbst erstellen.
 Stattdessen erstellt die Anwendung Frachtbriefe, indem sie den Frachtfluss der sendenden und empfangenden Frachtkunden abgleicht.
 Der Abgleich erfolgt anhand der folgenden Daten:
-- **Thema** für die sendende und empfangende Station muss übereinstimmen. Dies verhindert z.B. Amerikanische und europäische Themen sind gemischt.
-- **Maßstab**, um die Entstehung von Frachten zwischen Modulen unterschiedlicher Größe zu vermeiden. Externe Stationen haben keinen Maßstab und werden daher unabhängig vom Maßstab angepasst.
-- **Beladungsart** muss übereinstimmen. Dies wird mit der internen ID der Ladung abgeglichen und nicht mit dem Namen. Ein benutzerdefinierter Lasttypname *hat* keinen Einfluss auf die Übereinstimmung.
-- **Jahre** müssen sich überschneiden: die Zeiträume für *Warenart*, *Absende- und Empfangsstation und Frachtzuführung*.
+- **Thema** fÃ¼r die sendende und empfangende Station muss Ã¼bereinstimmen. Dies verhindert z.B. Amerikanische und europÃ¤ische Themen sind gemischt.
+- **MaÃŸstab**, um die Entstehung von Frachten zwischen Modulen unterschiedlicher GrÃ¶ÃŸe zu vermeiden. Externe Stationen haben keinen MaÃŸstab und werden daher unabhÃ¤ngig vom MaÃŸstab angepasst.
+- **Beladungsart** muss Ã¼bereinstimmen. Dies wird mit der internen ID der Ladung abgeglichen und nicht mit dem Namen. Ein benutzerdefinierter Lasttypname *hat* keinen Einfluss auf die Ãœbereinstimmung.
+- **Jahre** mÃ¼ssen sich Ã¼berschneiden: die ZeitrÃ¤ume fÃ¼r *Warenart*, *Absende- und Empfangsstation und FrachtzufÃ¼hrung*.
 Das bedeutet, dass Frachtbriefe historisch korrekt erstellt werden.
 
 ### Frachtbriefe anpassen und drucken
-Die erstellten Frachtbriefe können auf verschiedene Arten angepasst werden:
+Die erstellten Frachtbriefe kÃ¶nnen auf verschiedene Arten angepasst werden:
 - Nummer zum Ausdrucken.
-- Wenn Sie eine bestimmte Anzahl oder eine bestimmte Anzahl pro Betriebstag drucken möchten.
-- Wenn Sie einen Rückfrachtbrief für ein leeres Wagen wünschen.
+- Wenn Sie eine bestimmte Anzahl oder eine bestimmte Anzahl pro Betriebstag drucken mÃ¶chten.
+- Wenn Sie einen RÃ¼ckfrachtbrief fÃ¼r ein leeres Wagen wÃ¼nschen.
 
-Für abfahrende Waggonladungen können Sie auch Leerwagenbestellungen ausdrucken, die Sie am Schattenbahnhof aufgeben.
+FÃ¼r abfahrende Waggonladungen kÃ¶nnen Sie auch Leerwagenbestellungen ausdrucken, die Sie am Schattenbahnhof aufgeben.

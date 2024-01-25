@@ -37,6 +37,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Content\Markdown\Articles\CustomersAndFreights.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\CustomersAndFreights.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\CustomersAndFreights.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\CustomersAndFreights.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\CustomersAndFreights.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Help\ExternalStation.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
