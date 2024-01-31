@@ -120,4 +120,10 @@
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Zamówienie na pusty wagon</value>
   </data>
+  <data name="WrongEpochTheme" xml:space="preserve">
+    <value>Feil epoke/tema</value>
+  </data>
+  <data name="FootstepsTooWide" xml:space="preserve">
+    <value>Fottrinn for brede</value>
+  </data>
 </root>

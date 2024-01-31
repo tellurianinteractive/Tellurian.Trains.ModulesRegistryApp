@@ -1440,4 +1440,10 @@
   <data name="InternalWaybills" xml:space="preserve">
     <value>Interne fragtbreve</value>
   </data>
+  <data name="WrongEpochTheme" xml:space="preserve">
+    <value>Forkert epoke/tema</value>
+  </data>
+  <data name="FootstepsTooWide" xml:space="preserve">
+    <value>Fodtrin for brede</value>
+  </data>
 </root>
