@@ -39,6 +39,7 @@ Interoperability codes describe how a wagon/car can be used.
 - 41 Wagons with axles for international use after special agreement only
 - 42 Wagons with axles for domestic use only.
 - 81 Wagons with bogies for international use after special agreement only.
+- 82 Wagons with bogies for domestic use only.
 
 ### Passenger Cars
 #### Examples
@@ -49,5 +50,4 @@ Interoperability codes describe how a wagon/car can be used.
 - 60 Passenger cars not run in renevue-earning service for domestic use only.
 - 61 Passenger cars with air-condition and for internationak use that complies to TSI/RIC/COTIF/PPW.
 
-- 82 Wagons with bogies for domestic use only.
 
