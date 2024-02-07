@@ -31,7 +31,7 @@ GO
 CREATE TRIGGER [DeleteStationCustomerCargo] ON [StationCustomerCargo] INSTEAD OF DELETE 
 AS
 BEGIN
-    DELETE FROM [StationCustomerWaybill] WHERE [OtherStationCustomerCargoId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [StationCustomerWaybill] WHERE ISNULL([OtherStationCustomerCargoId],0) IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomerWaybill] WHERE [StationCustomerCargoId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomerCargo] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END

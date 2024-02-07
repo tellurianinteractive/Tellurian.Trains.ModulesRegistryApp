@@ -21,3 +21,5 @@
 	CONSTRAINT [FK_LayoutStation_Country] FOREIGN KEY ([OtherCountryId]) REFERENCES [dbo].[Country] ([Id]),
 	CONSTRAINT [FK_LayoutStation_IsPartOf_LayoutStation] FOREIGN KEY ([PartOfOtherLayoutStationId]) REFERENCES [dbo].[LayoutStation] ([Id])
 )
+GO
+CREATE INDEX [IX_LayoutStation_LayoutParticipantId] ON [LayoutStation] ([LayoutParticipantId])

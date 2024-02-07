@@ -93,10 +93,10 @@ BEGIN
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
 		--C.NHMCode > 0 AND
-		(CCS.FromYear IS NULL OR CCS.FromYear <= L.LastYear) AND
-		(CCS.UptoYear IS NULL OR CCS.UptoYear >= L.FirstYear) AND
-		(CCC.FromYear IS NULL OR CCC.FromYear <= L.LastYear) AND
-		(CCC.UptoYear IS NULL OR CCC.UptoYear >= L.FirstYear) AND
+		(CCS.FromYear IS NULL OR CCS.FromYear <= ISNULL(L.LastYear, 9999)) AND
+		(CCS.UptoYear IS NULL OR CCS.UptoYear >= ISNULL(L.FirstYear, 0)) AND
+		(CCC.FromYear IS NULL OR CCC.FromYear <= ISNULL(L.LastYear, 9999)) AND
+		(CCC.UptoYear IS NULL OR CCC.UptoYear >= ISNULL(L.FirstYear, 0)) AND
 		CCS.IsSupply <> 0 AND CCC.IsSupply = 0 AND
 		CCS.StationId <> CCC.StationId AND 
 		CCS.LayoutId = @LayoutId AND CCC.LayoutId = @LayoutId AND

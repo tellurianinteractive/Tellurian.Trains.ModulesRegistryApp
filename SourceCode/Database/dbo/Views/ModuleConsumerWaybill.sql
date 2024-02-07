@@ -78,5 +78,5 @@ FROM
 WHERE
 	SENDER.IsModuleStation <> 0 AND RECEIVER.IsModuleStation <> 0 AND 
 	((SENDER.CountryId = RECEIVER.CountryId) OR (SENDER.IsInternational <> 0 AND RECEIVER.IsInternational <> 0)) AND
-	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
-	(C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear )
+	(C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR ISNULL(C.FromYear,0) <= SENDER.UptoYear ) AND
+	(C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR ISNULL(C.UptoYear,9999) >= SENDER.FromYear )

@@ -14,6 +14,8 @@
 )
 
 GO
+CREATE INDEX [IX_LayoutModule_LayoutParticipantId] ON [LayoutModule] ([LayoutParticipantId])
+GO
 CREATE TRIGGER [DeleteLayoutModule] ON [LayoutModule] INSTEAD OF DELETE
 AS
 BEGIN

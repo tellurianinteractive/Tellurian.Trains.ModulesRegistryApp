@@ -4,11 +4,11 @@
     [TimetableId] INT NOT NULL,
     [OperatorId] INT NULL,
     [SpareNumber] TINYINT NOT NULL DEFAULT 0, -- Spare vehicles are 1 and above.
-    [RequiredClass] NVARCHAR(10) NULL,
+    [RequiredClass] NVARCHAR(10) NULL, -- Can be a complete class or just the initial main class letter.
     [IsTractionUnit] BIT NOT NULL DEFAULT 0,
     [IsDoubleDirectionOperation] BIT NOT NULL DEFAULT 0, -- Only applies to traction units with or without trainsets with control car.
     [AtTimetableStationId] INT NULL, -- For example a shuting loco placed at a specific station.
-    [MaxNumberOfUnits] TINYINT NOT NULL DEFAULT 1, -- Wagonsets can consist of more that one unit. A loco can have several units operating as one loco. */
+    [MaxNumberOfUnits] TINYINT NOT NULL DEFAULT 1, -- Wagonsets can consist of more that one unit. A loco can have several units operating as one loco.
     [Description] NVARCHAR(50) NULL,
 
     CONSTRAINT [PK_TimetableVehicle] PRIMARY KEY CLUSTERED ([Id] ASC),

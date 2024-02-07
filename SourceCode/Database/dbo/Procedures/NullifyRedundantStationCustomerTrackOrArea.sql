@@ -11,7 +11,7 @@ AS
 				StationCustomerCargo SCC INNER JOIN 
 				StationCustomer SC ON SCC.StationCustomerId = SC.Id 
 			WHERE 
-				SC.TrackOrArea = SCC.TrackOrArea
+				ISNULL(SC.TrackOrArea, '') = ISNULL(SCC.TrackOrArea,'')
 		)
 
 	UPDATE 
@@ -25,6 +25,6 @@ AS
 				StationCustomerCargo SCC INNER JOIN 
 				StationCustomer SC ON SCC.StationCustomerId = SC.Id 
 			WHERE 
-				SC.TrackOrAreaColor = SCC.TrackOrAreaColor
+				ISNULL(SC.TrackOrAreaColor, '') = ISNULL(SCC.TrackOrAreaColor,'')
 		)
 RETURN 0

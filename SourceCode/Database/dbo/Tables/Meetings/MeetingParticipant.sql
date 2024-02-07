@@ -15,9 +15,11 @@
     CONSTRAINT [FK_MeetingParticipant_Person] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
 );
 GO
+CREATE INDEX [IX_MeetingParticipant_MeetingId] ON [MeetingParticipant] ([MeetingId])
+GO
 CREATE TRIGGER [DeleteMeetingParticipant] ON [MeetingParticipant] INSTEAD OF DELETE 
 AS
 BEGIN
-    DELETE FROM [LayoutParticipant] WHERE MeetingParticipantId IN (SELECT Id FROM DELETED)
+    DELETE FROM [LayoutParticipant] WHERE [MeetingParticipantId] IN (SELECT Id FROM DELETED)
     DELETE FROM [MeetingParticipant] WHERE Id IN (SELECT Id FROM DELETED)
 END

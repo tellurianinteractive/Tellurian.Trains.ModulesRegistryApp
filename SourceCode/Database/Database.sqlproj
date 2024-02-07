@@ -48,6 +48,8 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+    <SqlCodeAnalysisRules>-Microsoft.Rules.Data.SR0001</SqlCodeAnalysisRules>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -193,5 +195,8 @@
   <ItemGroup>
     <Build Include="dbo\Tables\Meetings\MeetingParticipantPurchasedItem.sql" />
     <Build Include="dbo\Tables\Meetings\MeetingPurchaseableItem.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StaticCodeAnalysis.SuppressMessages.xml" />
   </ItemGroup>
 </Project>

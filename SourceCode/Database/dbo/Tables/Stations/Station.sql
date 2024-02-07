@@ -18,7 +18,7 @@ GO
 CREATE TRIGGER [DeleteStation] ON [Station] INSTEAD OF DELETE 
 AS
 BEGIN
-    UPDATE [Module] SET [StationId] = NULL WHERE [StationId] IN (SELECT [Id] FROM DELETED)
+    UPDATE [Module] SET [StationId] = NULL WHERE ISNULL([StationId],0) IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomer] WHERE [StationId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [Station] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END

@@ -80,5 +80,5 @@ WHERE
     SENDER.StationId <> RECEIVER.StationId AND
     SCW.OtherExternalCustomerCargoId IS NULL AND
     SCW.OtherStationCustomerCargoId IS NULL AND
-    (C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR C.FromYear <= SENDER.UptoYear ) AND
-    (C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR C.UptoYear >= SENDER.FromYear ) 
+    (C.FromYear IS NULL OR SENDER.UptoYear IS NULL OR ISNULL(C.FromYear,0) <= SENDER.UptoYear ) AND
+    (C.UptoYear IS NULL OR SENDER.FromYear IS NULL OR ISNULL(C.UptoYear,9999) >= SENDER.FromYear ) 

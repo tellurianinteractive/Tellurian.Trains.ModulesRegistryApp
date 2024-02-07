@@ -9,6 +9,11 @@
     CONSTRAINT [FK_LayoutParticipant_Layout] FOREIGN KEY ([LayoutId]) REFERENCES [dbo].[Layout] ([Id])
 );
 GO
+CREATE INDEX [IX_LayoutParticipant_LayoutId] ON [LayoutParticipant] ([LayoutId])
+GO
+CREATE INDEX [IX_LayoutParticipant_MeetingParticipantId] ON [LayoutParticipant] ([MeetingParticipantId])
+GO
+
 CREATE TRIGGER [DeleteLayoutParticipant] ON [dbo].[LayoutParticipant] INSTEAD OF DELETE
 AS
 BEGIN

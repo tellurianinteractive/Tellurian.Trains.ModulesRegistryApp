@@ -47,3 +47,5 @@
     CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]) ON DELETE CASCADE
 );
 GO
+CREATE INDEX [IX_Module_StationId] ON [Module] ([StationId]);
+GO

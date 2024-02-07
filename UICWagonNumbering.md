@@ -16,8 +16,8 @@ hauled passenger vehicles, tractive rolling stock and special vehicles.
 
 ### Goods Wagons
 
-||*second digit*|0|1|2|3|4|5|6|7|8|9|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| |*second digit*|0|1|2|3|4|5|6|7|8|9|
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |***first digit***|**Traffic**|Domestic or international|International|Domestic|International|Domestic|International|Domestic|International|Domestic|Domestic or international|
 |**0**|with axles||TSI/COTIF|TSI/COTIF||||||||
 |**1**|with bogies|Used by industri|TSI/COTIF|TSI/COTIF||||||||

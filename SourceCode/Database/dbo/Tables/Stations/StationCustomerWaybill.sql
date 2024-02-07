@@ -23,6 +23,8 @@
     CONSTRAINT [FK_StationCustomerWaybill_OperatingDayId] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
 )
 GO
+CREATE INDEX [IX_StationCustomerWaybill_OtherExternalCustomerCargoId] ON [StationCustomerWaybill] ([OtherExternalCustomerCargoId])
+GO
 CREATE NONCLUSTERED INDEX [IX_StationCustomerWaybill_StationCustomerId]
     ON [dbo].[StationCustomerWaybill] ([StationCustomerId] ASC, [StationCustomerCargoId] ASC)
     INCLUDE ([OtherStationCustomerCargoId], [OtherExternalCustomerCargoId], [OtherRegionId],[OperatingDayId])

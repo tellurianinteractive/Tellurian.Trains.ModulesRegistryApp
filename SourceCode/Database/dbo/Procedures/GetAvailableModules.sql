@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[GetAvailableModules]
 	@LayoutId INT,
-	@PersonId INT
+	@PersonId INT NULL
 AS
 	SET NOCOUNT ON;
 	SELECT
@@ -38,7 +38,7 @@ AS
 	WHERE
 		MO.OwnedShare > 0 AND
 		M.FunctionalState > 3 AND -- See public enum ModuleFunctionalState
-		MO.PersonId = @PersonId AND
+		ISNULL(MO.PersonId, 0) = @PersonId AND
 		@LayoutId NOT IN (SELECT LP.LayoutId FROM LayoutParticipant AS LP INNER JOIN LayoutModule LM ON LM.LayoutParticipantId = LP.Id AND LM.ModuleId = M.Id AND LP.PersonId = @PersonId)
 	
 	RETURN 0

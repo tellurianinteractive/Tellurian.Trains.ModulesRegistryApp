@@ -6,25 +6,25 @@
     [TimetableScheduleId] INT NOT NULL,
     [FromDepartureId] INT NOT NULL,
     [ToArrivalId] INT NOT NULL,
-    [PositionInTrain] TINYINT NOT NULL DEFAULT 1,
+    [PositionInTrain] TINYINT NOT NULL DEFAULT 1, /* Zero means no wagon, only a card will be transported. */
     [ShowConnectNote] BIT NOT NULL DEFAULT 1, /* Use loco, couple wagon, load cargo etc */
-    [ShowDisconnectNote] BIT NOT NULL DEFAULT 1,
+    [ShowDisconnectNote] BIT NOT NULL DEFAULT 1, /* Examples when not 1: arriving at shadow yard, or same trainset continues in new train with same loco. */
     
-    /* Only Loco Schedule */
+    /* Additional for Loco Schedule only*/
     [IsUnmanned] BIT NOT NULL DEFAULT 0, /* When a loco is unmanned on a train part, it cannot be assigned to a driver duty. */
-    [GetAtStagingArea] BIT NOT NULL DEFAULT 0,
-    [PutAtStagingArea] BIT NOT NULL DEFAULT 0,
-    [ReverseLoco] BIT NOT NULL DEFAULT 0,
-    [TurnLoco] BIT NOT NULL DEFAULT 0,
+    [GetAtStagingArea] BIT NOT NULL DEFAULT 0, /* When true, a note is added to instruct driver to get loco from staging area and drive it to departure track. */
+    [PutAtStagingArea] BIT NOT NULL DEFAULT 0, /* When true, a note is added to instruct driver to put loco at staging area after arrival.  */
+    [ReverseLoco] BIT NOT NULL DEFAULT 0, /* After arrival, the loco should be reversed to the other end of the train using another track or loco lift. */
+    [TurnLoco] BIT NOT NULL DEFAULT 0, /* After arrival, the loco should be turned using a turtablle or loco lift. */
 
-    /* Only Cargo Schedule */
+    /* Additional for Cargo Schedule only */
     [TransferOriginTimetableStationId] INT NULL, /* The wagonset is for wagons orginating from this station only. */
     [TransferDestinationTimetableStationId] INT NULL, /* The wagonset has final destination at this station */
-    [AndBefore] BIT NOT NULL DEFAULT 0, /* The wagonset is originating from departure station or transfer origin or before that */
-    [AndBeyond] BIT NOT NULL DEFAULT 0, /* The wagonset is all wagons to the arrival station or transfer destination and beyond */
-    [AndRegions] BIT NOT NULL DEFAULT 0, /* The wagonset contains wagons to arrival station and regions attached to this station or transfer destination. */
-    [AndLocalDestinations] BIT NOT NULL DEFAULT 0, /* The wagonset contains wagons to all sub-stations under the arrival station or transfer destination */
-    [AllDestinations] BIT NOT NULL DEFAULT 0, /* The wagonset brings wagons from departure station or transfer origin til all destinations */
+    [AndBefore] BIT NOT NULL DEFAULT 0, /* The wagonset is originating from departure station or before OR if transfer origin is not null from it and before */
+    [AndBeyond] BIT NOT NULL DEFAULT 0, /* The wagonset is destinated to the arrival station and beyyond OR if transfer destination is not null to it and beyond */
+    [AndRegions] BIT NOT NULL DEFAULT 0, /* The wagonset contains wagons to arrival station and regions attached to this station OR if transfer destination is not null to it and regions attached to it.. */
+    [AndLocalDestinations] BIT NOT NULL DEFAULT 0, /* The wagonset contains wagons to all stations present in the current layout. */
+    [AllDestinations] BIT NOT NULL DEFAULT 0, /* The wagonset brings wagons from departure station or transfer origin to all destinations */
     [MaxNumberOfWagons] TINYINT NULL, /* Recommended maximum number of wagons in the wagonset. */
 
     CONSTRAINT [PK_TimetableScheduleTrainPart] PRIMARY KEY CLUSTERED ([Id] ASC),

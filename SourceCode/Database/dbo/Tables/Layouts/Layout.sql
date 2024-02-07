@@ -29,6 +29,8 @@
     CONSTRAINT [FK_Layout_PrimaryOperationCountry] FOREIGN KEY ([PrimaryOperationCountryId]) REFERENCES [dbo].[Country] ([Id])
 );
 GO
+CREATE INDEX [IX_Layout_MeetingId] ON [Layout] ([MeetingId])
+GO
 CREATE TRIGGER [DeleteLayout] ON [Layout] INSTEAD OF DELETE 
 AS
 BEGIN
