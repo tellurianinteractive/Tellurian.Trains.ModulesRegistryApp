@@ -23,3 +23,6 @@
 )
 GO
 CREATE INDEX [IX_LayoutStation_LayoutParticipantId] ON [LayoutStation] ([LayoutParticipantId])
+GO
+CREATE INDEX [IX_LayoutStation_StationId] ON [LayoutStation] (StationId)
+GO

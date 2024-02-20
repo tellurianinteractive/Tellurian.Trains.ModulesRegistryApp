@@ -110,6 +110,10 @@ else
                     <hr />
                     @if (Participant.Id > 0)
                     {
+                        @if (Meeting.PermitsRegistrations())
+                        {
+                            <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
+                        }
                         <TableTemplate Items="@LayoutParticipation(Meeting.Layouts, Participant)">
                             <TableHeader>
                                 <th width="100px">@Localizer["Actions"]</th>

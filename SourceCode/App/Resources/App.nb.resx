@@ -1440,4 +1440,13 @@
   <data name="InternalWaybills" xml:space="preserve">
     <value>Interne fraktsedler</value>
   </data>
+  <data name="Participation" xml:space="preserve">
+    <value>Deltakelse</value>
+  </data>
+  <data name="RegisterOrModifyParticipation" xml:space="preserve">
+    <value>Registrer eller endre deltakelse</value>
+  </data>
+  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
+    <value>Velg eller endre deltakelse i baner</value>
+  </data>
 </root>

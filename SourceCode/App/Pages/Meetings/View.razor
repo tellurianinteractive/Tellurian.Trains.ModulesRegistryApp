@@ -2,6 +2,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
+@inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
 @inject GroupService GroupService
@@ -24,13 +25,19 @@ else
     {
         <h2 style="color: red">@Meeting.Status.MeetingStatus()</h2>
     }
+    else if (Meeting.PermitsRegistrations())
+    {
+    }
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
     @Item("Organiser", Meeting.Organiser())
     @if (!Meeting.IsCancelled())
     {
         @Item("Status", Meeting.Status.MeetingStatus())
-
+        <div style="padding: 5px 0px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+            <h4>@Localizer["RegisterOrModifyParticipation"]</h4>
+            <AppButton IconName="Register" Label="Register-Participation" Href="@MeetingHref(Meeting, "register")" IsHidden="@(!Meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
+        </div>
         @if (Meeting.Layouts.Any())
         {
             <TableTemplate Items="@Meeting.Layouts">
@@ -54,7 +61,7 @@ else
                 </RowTemplate>
             </TableTemplate>
         }
-  
+
 
         <MarkdownView Label="Details" Markdown="@Meeting.Details" />
         <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
@@ -86,4 +93,7 @@ else
 
     MarkupString Item(string label, string text, string element = "div") =>
         new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
+
+    string MeetingHref(Meeting meeting, string? function) =>
+        function.HasNoValue() ? $"meetings/{meeting.Id}" : $"meetings/{meeting.Id}/{function}";
 }

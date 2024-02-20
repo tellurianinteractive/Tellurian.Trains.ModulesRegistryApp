@@ -1446,4 +1446,13 @@
   <data name="FootstepsTooWide" xml:space="preserve">
     <value>Footsteps too wide</value>
   </data>
+  <data name="Participation" xml:space="preserve">
+    <value>Participation</value>
+  </data>
+  <data name="RegisterOrModifyParticipation" xml:space="preserve">
+    <value>Register or modify participation</value>
+  </data>
+  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
+    <value>Select or modify layout participation</value>
+  </data>
 </root>

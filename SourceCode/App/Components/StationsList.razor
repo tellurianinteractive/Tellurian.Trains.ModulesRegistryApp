@@ -6,6 +6,7 @@
     {
         <div>
             <AppButton Label="Add" Href="@StationEditHref(0)" />
+            <AppButton Label="Modules" IconName="@FontAwesome.Modules" Href="@ModulesHref()" />
         </div>
     }
     else
@@ -63,6 +64,7 @@
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string StationDeleteHref(int id) => $"Stations/{id}/Delete";
     string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
+    string ModulesHref() => OwnershipRef.Href("Modules");
 
     MarkupString Name(Station station) => new(
     station.HasConfigurationLabel() ? $"{station.FullName} <span class=\"fa fa-ruler\" /> {station.ConfigurationLabel()}" :

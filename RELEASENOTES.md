@@ -2,6 +2,13 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.15
+Release date 2024-02-20, thanks for your feedback!
+- **User interface improvements**:
+  - Easier to navigate between *modules* and *stations* pages.
+  - Meeting registration now also possible on the meeting information page.
+  - More descriptive text that tells you to also register in one or several meeting layouts.
+- **Bug fix** of deleting *station*. It now also deletes it from past meetings.
 ## Release 1.9.14
 Release date 2024-01-24
 - **Meetings** of type *ClubEvent* or *Market* can now be given opening and closing times.

@@ -13,6 +13,7 @@
 
 <ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
 
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }

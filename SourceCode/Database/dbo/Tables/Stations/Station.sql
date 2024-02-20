@@ -20,6 +20,8 @@ AS
 BEGIN
     UPDATE [Module] SET [StationId] = NULL WHERE ISNULL([StationId],0) IN (SELECT [Id] FROM DELETED)
     DELETE FROM [StationCustomer] WHERE [StationId] IN (SELECT [Id] FROM DELETED)
+    DELETE FROM [LayoutModule] WHERE [LayoutStationId] IN (SELECT [Id] FROM [LayoutStation] WHERE [StationId] IN (SELECT [Id] FROM DELETED))
+    DELETE FROM [LayoutStation] WHERE [StationId] IN (SELECT [Id] FROM DELETED)
     DELETE FROM [Station] WHERE [Id] IN (SELECT [Id] FROM DELETED)
 END
 

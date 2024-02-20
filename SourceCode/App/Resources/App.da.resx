@@ -1446,4 +1446,13 @@
   <data name="FootstepsTooWide" xml:space="preserve">
     <value>Fodtrin for brede</value>
   </data>
+  <data name="Participation" xml:space="preserve">
+    <value>Deltagelse</value>
+  </data>
+  <data name="RegisterOrModifyParticipation" xml:space="preserve">
+    <value>Tilmeld eller rediger deltagelse</value>
+  </data>
+  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
+    <value>Vælg eller rediger deltagelse i baner</value>
+  </data>
 </root>

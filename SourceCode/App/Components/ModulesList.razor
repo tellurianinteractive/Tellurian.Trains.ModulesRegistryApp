@@ -8,7 +8,8 @@
 @if (Modules is not null && MayEdit)
 {
     <div>
-        <a class="btn btn-sm btn-secondary" href="@ModuleEditHref(0)"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+        <AppButton Label="Add" Href="@ModuleEditHref(0)" />
+        <AppButton Label="Stations" IconName="@FontAwesome.Stations" Href="@StationsHref()"/>
     </div>
 }
 
@@ -88,4 +89,5 @@
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string StationCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");
     string TransferOwnershipHref(int id) => OwnershipRef.Href("Modules", id, "Transfer");
+    string StationsHref() => OwnershipRef.Href("Stations");
 }

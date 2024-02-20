@@ -16,6 +16,8 @@
 GO
 CREATE INDEX [IX_LayoutModule_LayoutParticipantId] ON [LayoutModule] ([LayoutParticipantId])
 GO
+CREATE INDEX [IX_LayoutModule_LayoutStationId] ON [LayoutModule] ([LayoutStationId])
+GO
 CREATE TRIGGER [DeleteLayoutModule] ON [LayoutModule] INSTEAD OF DELETE
 AS
 BEGIN
@@ -23,3 +25,4 @@ BEGIN
 	DELETE FROM [LayoutStation] WHERE Id IN (SELECT [LayoutStationId] FROM DELETED)
 END
 GO
+
