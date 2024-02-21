@@ -13,11 +13,11 @@ to identify uniquely a vehicle inside each group of freight wagons,
 hauled passenger vehicles, tractive rolling stock and special vehicles.
 
 ## Interoperability Codes
-
+Interoperability codes describe how a wagon/car can be used.
 ### Goods Wagons
 
-| |*second digit*|0|1|2|3|4|5|6|7|8|9|
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|     |*second digit*| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|:---:|:------------:|:-:|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 |***first digit***|**Traffic**|Domestic or international|International|Domestic|International|Domestic|International|Domestic|International|Domestic|Domestic or international|
 |**0**|with axles||TSI/COTIF|TSI/COTIF||||||||
 |**1**|with bogies|Used by industri|TSI/COTIF|TSI/COTIF||||||||
@@ -26,7 +26,7 @@ hauled passenger vehicles, tractive rolling stock and special vehicles.
 |**4**|with axles|Service wagons|Other wagons|Other wagons|||||||Wagons with special numbering|
 |**8**|with bogies|Service wagons|Other wagons|Other wagons|||||||Wagons with special numbering|
 
-
+#### Examples
 - 01 Wagons with axles for international use that complies to TSI/COTIF.
 - 02 Wagons with axles for domestic use that complies to TSI/COTIF.
 - 10 Wagons with bogies used by industry.
@@ -38,12 +38,16 @@ hauled passenger vehicles, tractive rolling stock and special vehicles.
 - 32 Wagons with bogies for domestic use that complies to TSI/COTIF.
 - 41 Wagons with axles for international use after special agreement only
 - 42 Wagons with axles for domestic use only.
+- 81 Wagons with bogies for international use after special agreement only.
+- 82 Wagons with bogies for domestic use only.
+
+### Passenger Cars
+#### Examples
 - 50 Passenger cars for domestic use only.
 - 51 Passenger cars with air-condition and for international use that complies to TSI/RIC/COTIF/PPW.
 - 55 Passenger cars with special numbering for technical characteristics for international use after special agreement.
 - 56 Passenger cars for international use that complies to TSI/RIC/COTIF/PPW.
 - 60 Passenger cars not run in renevue-earning service for domestic use only.
-- 61 Passenger cars with air-condition and for internationa use that complies to TSI/RIC/COTIF/PPW.
-- 81 Wagons with bogies for international use after special agreement only
-- 82 Wagons with bogies for domestic use only.
+- 61 Passenger cars with air-condition and for internationak use that complies to TSI/RIC/COTIF/PPW.
+
 
