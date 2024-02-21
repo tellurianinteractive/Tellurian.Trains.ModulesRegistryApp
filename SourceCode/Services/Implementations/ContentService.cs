@@ -10,7 +10,7 @@ public sealed class ContentService
         MarkdownPath = markdownPath ?? MarkdownPath;
     }
     public async Task<TextContent> GetTextContent(string content) =>
-        await LanguageUtility.CurrentCulture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
+        await LanguageExtensions.CurrentCulture.GetMarkdownAsync(MarkdownPath, content).ConfigureAwait(false);
 
     public async Task<TextContent> GetTextContent(string content, string? language)
     {

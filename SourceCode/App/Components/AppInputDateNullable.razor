@@ -30,7 +30,7 @@
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTime? result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        if (DateTime.TryParse(value, LanguageUtility.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeDate))
+        if (DateTime.TryParse(value, LanguageExtensions.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeDate))
         {
             result = maybeDate.Date;
             validationErrorMessage = "";

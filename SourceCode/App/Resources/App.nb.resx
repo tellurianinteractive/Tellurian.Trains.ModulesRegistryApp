@@ -1449,4 +1449,22 @@
   <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
     <value>Velg eller endre deltakelse i baner</value>
   </data>
+  <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
+    <value>Baner du deltar på</value>
+  </data>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>Mine treff</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>Du er for øyeblikket ikke registrert til noe kommende treff</value>
+  </data>
+  <data name="MyForthcomingMeetings" xml:space="preserve">
+    <value>Mine kommende treff</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>Du deltar dager</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Din ankomsttid den første dagen</value>
+  </data>
 </root>

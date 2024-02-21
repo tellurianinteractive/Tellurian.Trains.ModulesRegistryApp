@@ -52,14 +52,14 @@ public static class WaybillExtensions
         //emptyReturn.OwnerStationId = 0;
         emptyReturn.Origin = newOrigin;
         emptyReturn.Origin!.IsOrigin=true;
-        emptyReturn.Origin!.CargoName = LanguageUtility.GetLocalizedString("Empty", emptyReturn.Origin.Language());
+        emptyReturn.Origin!.CargoName = LanguageExtensions.GetLocalizedString("Empty", emptyReturn.Origin.Language());
         emptyReturn.Origin!.SpecialCargoName = string.Empty;
         emptyReturn.Origin!.ReadyTimeResourceKey = string.Empty;
         emptyReturn.Origin!.TrackOrArea = string.Empty;
         //emptyReturn.Destination!.OperationDaysFlags = waybill.Origin!.OperationDaysFlags;
         emptyReturn.Destination = newDestination;
         emptyReturn.Destination!.IsOrigin = false;
-        emptyReturn.Destination!.CargoName = LanguageUtility.GetLocalizedString("Empty", emptyReturn.Destination.Language());
+        emptyReturn.Destination!.CargoName = LanguageExtensions.GetLocalizedString("Empty", emptyReturn.Destination.Language());
         emptyReturn.Destination!.SpecialCargoName = string.Empty;
         emptyReturn.Destination!.ReadyTimeResourceKey = string.Empty;
         emptyReturn.Destination!.PackagingUnitResourceKey = string.Empty;
@@ -85,13 +85,13 @@ public static class WaybillExtensions
 
     private static string DestinationWagonQuantity(this Waybill waybill) =>
         waybill.Quantity > 1 ?
-            $"{LanguageUtility.GetLocalizedString("TrainsetWith", waybill.Destination.Language())} {waybill.Quantity} {waybill.Destination.QuantityUnit()}" : // NOTE: Temporary fix until wagons and trainset are redefined.
+            $"{LanguageExtensions.GetLocalizedString("TrainsetWith", waybill.Destination.Language())} {waybill.Quantity} {waybill.Destination.QuantityUnit()}" : // NOTE: Temporary fix until wagons and trainset are redefined.
             $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}";
     private static string OriginWagonQuantity(this Waybill waybill)
     {
         var language = waybill.Origin.Language();
         return waybill.Quantity > 1 ?
-             $"{LanguageUtility.GetLocalizedString("TrainsetWith", language)} {waybill.Quantity} {waybill.Destination.QuantityUnit(language)}" : // NOTE: Temporary fix until wagons and trainset are redefined.
+             $"{LanguageExtensions.GetLocalizedString("TrainsetWith", language)} {waybill.Quantity} {waybill.Destination.QuantityUnit(language)}" : // NOTE: Temporary fix until wagons and trainset are redefined.
              $"{waybill.Quantity} {waybill.Destination.QuantityUnit(language)}";
     }
 
@@ -159,10 +159,10 @@ public static class CargoCustomerExtensions
 
     internal static string Language(this CargoCustomer? me)
     {
-        if (me is null) return LanguageUtility.DefaultLanguage;
+        if (me is null) return LanguageExtensions.DefaultLanguage;
         if (me.Languages.Length == 2) return me.Languages;
         var languages = me.Languages.Split(',');
-        return languages.Length > 0 ? languages[0] : LanguageUtility.DefaultLanguage;
+        return languages.Length > 0 ? languages[0] : LanguageExtensions.DefaultLanguage;
     }
 
     public static bool HasLimitedYearsInOperation([NotNullWhen(true)] this CargoCustomer? me) =>

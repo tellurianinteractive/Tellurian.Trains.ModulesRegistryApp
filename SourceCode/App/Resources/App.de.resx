@@ -1455,4 +1455,22 @@
   <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
     <value>Teilnahme an der Bahnanlage auswählen oder ändern</value>
   </data>
+  <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
+    <value>Bahnen, an denen Du teilnimmt</value>
+  </data>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>Meine Treffen</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>Sie sind derzeit für kein bevorstehendes Treffen angemeldet</value>
+  </data>
+  <data name="MyForthcomingMeetings" xml:space="preserve">
+    <value>Meine bevorstehenden Treffen</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>Du nimmst an Tagen teil</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Ihre Ankunftszeit am ersten Tag</value>
+  </data>
 </root>

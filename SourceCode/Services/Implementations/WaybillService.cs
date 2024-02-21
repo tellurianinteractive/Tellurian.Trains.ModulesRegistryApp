@@ -285,7 +285,7 @@ internal static class WaybillMapper
     private static string GetCargoColumnName(this IDataRecord record, string columnName)
     {
         var language = record.GetString(columnName, "EN").FirstItem("EN");
-        if (LanguageUtility.CargoSupportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase))) return language;
+        if (LanguageExtensions.CargoSupportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase))) return language;
         return "EN";
     }
 }

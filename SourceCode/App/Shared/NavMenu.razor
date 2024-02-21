@@ -6,7 +6,7 @@
 
     <a class="navbar-brand" style="margin-left:10px; margin-bottom:0px" href="">
         @Localizer["AppName"] @AppService.AppVersion
-        <span style="display:block; font-size: 7pt">&copy; 2021-@DateTime.Now.Year Tellurian Interactive AB, @LanguageUtility.GetLocalizedString("Sweden")  </span>
+        <span style="display:block; font-size: 7pt">&copy; 2021-@DateTime.Now.Year Tellurian Interactive AB, @LanguageExtensions.GetLocalizedString("Sweden")  </span>
     </a>
 
 
@@ -47,6 +47,11 @@
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="Stations/Index">
                     <span class="@FontAwesome.Tools" aria-hidden="true" />@Localizer["MyStations"]
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="Meetings/My">
+                    <span class="@FontAwesome.Meeting" aria-hidden="true" />@Localizer["MyMeetings"]
                 </NavLink>
             </li>
 

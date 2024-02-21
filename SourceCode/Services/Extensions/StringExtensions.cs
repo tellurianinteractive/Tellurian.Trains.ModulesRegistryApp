@@ -30,7 +30,7 @@ public static partial class StringExtensions
             .Build();
     }
 
-    internal static string? ValueOrNull(this string? value) =>
+    public static string? ValueOrNull(this string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value;
 
     [GeneratedRegex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]

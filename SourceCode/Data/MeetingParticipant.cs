@@ -1,6 +1,8 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Text;
 
 namespace ModulesRegistry.Data;
 

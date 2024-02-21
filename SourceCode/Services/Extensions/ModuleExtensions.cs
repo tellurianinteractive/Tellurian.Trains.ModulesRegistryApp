@@ -34,7 +34,7 @@ static public class ModuleExtensions
     public static MarkupString StatusIcon(this Module? module) => new($"<span title=\"{module.StatusTitle()}\" class=\"{module.StatusSymbol()}\"/>");
     private static string StatusTitle(this Module? module) => 
         module is null ? string.Empty :
-        LanguageUtility.GetLocalizedString(module.Status().ToString());
+        LanguageExtensions.GetLocalizedString(module.Status().ToString());
 
     private static string StatusSymbol(this Module? module) => module.Status() switch
     {

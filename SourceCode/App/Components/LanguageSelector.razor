@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager Navigator
 
 <div class="languageselector">
-    @foreach (var language in LanguageUtility.FullySupportedCultures)
+    @foreach (var language in LanguageExtensions.FullySupportedCultures)
     {
         <img style="padding: 2px" src="@Flag(language)" @onclick="@(()=>OnClick(language))" />
     }

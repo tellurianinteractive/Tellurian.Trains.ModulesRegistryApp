@@ -25,7 +25,7 @@ public abstract record UserMessage(User Recipient, string Subject, TextContent M
     protected void AppendHelloPhrase(StringBuilder stringBuilder)
     {
         stringBuilder.Append("<h1>");
-        stringBuilder.Append(LanguageUtility.GetLocalizedString("Hello", Recipient.PreferredLanguage()));
+        stringBuilder.Append(LanguageExtensions.GetLocalizedString("Hello", Recipient.PreferredLanguage()));
         stringBuilder.Append(' ');
         stringBuilder.Append(Recipient.Person.FirstName);
         stringBuilder.AppendLine("</h1>");
@@ -47,7 +47,7 @@ public record UserInvitation(User Recipient, Person Inviter, string Subject, Tex
         if (invitation.HasPersonalMessage) text.Append($"<p>{invitation.PersonalMessage}</p>");
         text.AppendLine(invitation.Message.AsHtml);
         text.AppendLine(invitation.Recipient.ConfirmationLinkTag(invitation.BaseUri));
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
+        text.Append($"<p>{LanguageExtensions.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
         text.Append($"<p>{invitation.Inviter.FirstName} {invitation.Inviter.LastName}</p>");
         return text.ToString();
     }
@@ -68,8 +68,8 @@ public record PasswordResetRequest(User Recipient, string Subject, TextContent M
         passwordResetRequest.AppendHelloPhrase(text);
         text.AppendLine(passwordResetRequest.Message.AsHtml);
         text.AppendLine(passwordResetRequest.Recipient.ConfirmationLinkTag(passwordResetRequest.BaseUri));
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
-        text.Append($"<p>{LanguageUtility.GetLocalizedString("AppName", preferredLanguage)}</p>");
+        text.Append($"<p>{LanguageExtensions.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
+        text.Append($"<p>{LanguageExtensions.GetLocalizedString("AppName", preferredLanguage)}</p>");
         return text.ToString();
     }
 

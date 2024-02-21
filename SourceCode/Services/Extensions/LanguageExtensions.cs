@@ -4,7 +4,7 @@ using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public static class LanguageUtility
+public static class LanguageExtensions
 {
     public const string DefaultLanguage = "en";
     public static string CurrentLanguage => CurrentCulture.TwoLetterISOLanguageName;

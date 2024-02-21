@@ -1,0 +1,33 @@
+﻿@inject ITimeProvider TimeProvider
+@inject IStringLocalizer<App> Localizer
+
+@if (Meeting is not null)
+{
+    <div class="meeting">
+        <div class="header">@Meeting.Name, @Meeting.CityName <span>@Meeting.DisplayedStatus(TimeProvider.LocalTime)</span></div>
+        <div class="info">@Meeting.StartOrEventDate() - @Meeting.EndDateOrTimes()</div>
+        <div class="info">@Localizer["YouParticipateDays"]: <span class="strong">@string.Join(", ", Meeting.Participants.First().Days(Meeting))</span></div>
+        @if (Meeting.Participants.First().ArrivalTime.HasValue)
+        {
+            <div class="info">@Localizer["YourArrivalTime"]: <span class="strong">@Meeting.Participants.First().ArrivalTime!.Value.ToString("t")</span></div>
+        }
+        @if (Meeting.Layouts is not null && Meeting.Layouts.Any())
+        {
+            <div>
+                @Localizer["LayoutsYouAreParticipatingIn"]: <span class="layout">@string.Join(", ", Meeting.Layouts.Select(l => l.PrimaryModuleStandard.ShortName))</span>
+            </div>
+        }
+        @if (MayEdit)
+        {
+            <AppButton Label="Edit" Href="@MeetingEditHref(Meeting.Id)" />
+        }
+    </div>
+}
+
+
+@code {
+    [Parameter] public Meeting? Meeting { get; set; }
+    [Parameter] public bool MayEdit { get; set; }
+
+    string MeetingEditHref(int meetingId) => $"Meetings/{meetingId}/Register";
+}

@@ -2,7 +2,7 @@
 
 public sealed class LanguageService : ILanguageService
 {
-    public string[] GetSupportedLanguages() => LanguageUtility.FullySupportedLanguages;
+    public string[] GetSupportedLanguages() => LanguageExtensions.FullySupportedLanguages;
 
     
 }

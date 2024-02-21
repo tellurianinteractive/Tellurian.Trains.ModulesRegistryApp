@@ -1455,4 +1455,22 @@
   <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
     <value>Select or modify layout participation</value>
   </data>
+  <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
+    <value>Layouts you are participating in</value>
+  </data>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>My meetings</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>You are currently not registered to any forthcoming meeting</value>
+  </data>
+  <data name="MyForthcomingMeetings" xml:space="preserve">
+    <value>My forthcoming meetings</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>You participate days</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Your arrival time the first day</value>
+  </data>
 </root>

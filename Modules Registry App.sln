@@ -18,7 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NET-development.sv.md = NET-development.sv.md
 		README.md = README.md
 		RELEASENOTES.md = RELEASENOTES.md
-		UICWagonNumbering.md = UICWagonNumbering.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "TestCode\Services.Tests\Services.Tests.csproj", "{45A1B422-6765-4169-9083-580C89E1E59B}"
@@ -113,8 +112,8 @@ Global
 		{00E89979-CC4B-4FDE-9677-27BE19105636} = {5941055C-D2E9-4640-A78B-C5B349AE6F84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ExcelExportMode = SingleSheet
-		RESX_NeutralResourcesLanguage = en-GB
 		SolutionGuid = {4DE13B24-69A5-43A9-8C14-702D3B2DEB39}
+		RESX_NeutralResourcesLanguage = en-GB
+		RESX_ExcelExportMode = SingleSheet
 	EndGlobalSection
 EndGlobal

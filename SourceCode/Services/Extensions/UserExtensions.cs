@@ -15,7 +15,7 @@ public static class UserExtensions
 
     public static string ConfirmationLinkTag(this User? user, string baseUri) =>
         user is null ? string.Empty :
-        $"<p><a href=\"{user.ConfirmationLink(baseUri)}\">{LanguageUtility.GetLocalizedString("CreatePassword", user.PreferredLanguage())}</a></p>";
+        $"<p><a href=\"{user.ConfirmationLink(baseUri)}\">{LanguageExtensions.GetLocalizedString("CreatePassword", user.PreferredLanguage())}</a></p>";
 
     public static string PrimaryEmail(this User? user) =>
         user is null ? string.Empty :

@@ -1,0 +1,55 @@
+﻿@page "/Meetings/My"
+@page "/Persons/{Id:int}/Meetings"
+@page "/Persons/{Id:int}/Meetings/InGroup/{GroupId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject PersonService PersonService
+@inject MeetingService MeetingService
+
+<PageHeading IconClass="@FontAwesome.Meeting" Label="MyForthcomingMeetings" PageAction="PageAction.List" />
+
+@if (RegisteredMeetings is not null)
+{
+  
+    @if (RegisteredMeetings.Any())
+    {
+        @foreach (var meeting in RegisteredMeetings.OrderBy(m => m.StartDate))
+        {
+            <MeetingWithLayouts Meeting="meeting" MayEdit=MayEdit/>
+        }
+    }
+    else
+    {
+        @Localizer["YouAreCurrentlyNotRegisteredToAnyForthComingMeeting"]
+    }
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int GroupId { get; set; }
+    private ClaimsPrincipal? Principal;
+    private Person? Participant;
+    private IEnumerable<Meeting>? RegisteredMeetings;
+
+    protected async override Task OnParametersSetAsync()
+    {
+
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (PersonId > 0)
+        {
+            Participant = await PersonService.FindByIdAsync(Principal, PersonId);
+            RegisteredMeetings = await MeetingService.GetRegisteredMeetingsForPerson(Principal, PersonId);
+        }
+        else
+        {
+            RegisteredMeetings = [];
+        }
+
+    }
+
+    int PersonId => Id > 0 ? Id : Principal.PersonId();
+    bool MayEdit => Id == Principal.PersonId() || Principal.IsCountryAdministratorInCountry(Principal.CountryId()) || Principal.IsGlobalAdministrator();
+}

@@ -122,9 +122,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseRequestLocalization(options =>
 {
-    options.SetDefaultCulture(LanguageUtility.DefaultLanguage);
-    options.AddSupportedCultures(LanguageUtility.FullySupportedLanguages);
-    options.AddSupportedUICultures(LanguageUtility.FullySupportedLanguages);
+    options.SetDefaultCulture(LanguageExtensions.DefaultLanguage);
+    options.AddSupportedCultures(LanguageExtensions.FullySupportedLanguages);
+    options.AddSupportedUICultures(LanguageExtensions.FullySupportedLanguages);
     options.FallBackToParentCultures = true;
     options.FallBackToParentUICultures = true;
 });

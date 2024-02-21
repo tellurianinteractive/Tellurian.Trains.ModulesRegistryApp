@@ -1455,4 +1455,22 @@
   <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
     <value>Välj eller ändra deltagande i banor</value>
   </data>
+  <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
+    <value>Banor du deltar i</value>
+  </data>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>Mina träffar</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>Du är för närvarande inte registrerad på något kommande träff</value>
+  </data>
+  <data name="MyForthcomingMeetings" xml:space="preserve">
+    <value>Mina kommande träffar</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>Du deltar dagar</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Din ankomsttid första dagen</value>
+  </data>
 </root>

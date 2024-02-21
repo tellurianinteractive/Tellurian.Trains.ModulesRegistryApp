@@ -1,0 +1,21 @@
+﻿.meeting {
+    padding: 5px 0px;
+    border-bottom: 1px solid lightgray;
+}
+
+.header {
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+.info {
+
+}
+
+.layout {
+    font-weight: bold;
+}
+
+.strong {
+    font-weight: bold;
+}
