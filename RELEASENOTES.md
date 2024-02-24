@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.16
+Release date 2024-02-24
+- **Empty wagon order** improved and missing texts added. Fix of issue #195. Thanks to Fredrik Pettersson.
 ## Release 1.9.15
 Release date 2024-02-21, thanks for your feedback!
 - **My meetings** page added for easier way to edit meeting and layout details you are attending to.

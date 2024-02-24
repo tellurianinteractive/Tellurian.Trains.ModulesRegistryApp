@@ -193,7 +193,7 @@ public static class CargoCustomerExtensions
         var resourceManager = Resources.Strings.ResourceManager;
         var culture = new CultureInfo(languageTwoLetterISOCode);
         var localizedText = resourceManager.GetString(resourceKey, culture);
-        return localizedText ?? string.Empty;
+        return localizedText ?? resourceKey;
     }
 
     public static string ForeColor(this CargoCustomer? me) =>

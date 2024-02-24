@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+using System.Resources;
+using ModulesRegistry.Data.Resources;
 
 namespace ModulesRegistry.Data.Extensions;
 
@@ -30,4 +31,10 @@ public static class StringExtensions
     public static string[] Items(this string? value, char separator = ';') =>
         string.IsNullOrWhiteSpace(value) ? [] :
         value.Trim().Split(separator);
+
+    public static string ToLowerLanguageSensitive(this string? value) =>
+        value is null ? string.Empty :
+        Strings.Casing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? value.ToLowerInvariant() :
+        value;
+    
 }

@@ -36,12 +36,7 @@
                     }
                     <tr>
                         <td colspan="2">
-                            <div class="item">
-                                <span class="icon">
-                                    <i class="fas fa-dolly-flatbed"></i>
-                                </span>
-                                <span>@Item.CargoName</span>
-                            </div>
+                            <span style="display: inline-block">@Item.EmptyWagonForCargo()</span>
                         </td>
                     </tr>
                 </table>
@@ -61,10 +56,10 @@
                             <td class="emptyorder">
                                 @if (Item.Languages.HasValueExcept("en", "de"))
                                 {
-                                    <div>@Item.Languages.TranslatedText("EmptyCarOrder")</div>
+                                    <div>@Item.Languages.TranslatedText("EmptyWagonOrder")</div>
                                 }
-                                <div>@("en".TranslatedText("EmptyCarOrder"))</div>
-                                <div>@("de".TranslatedText("EmptyCarOrder"))</div>
+                                <div>@("en".TranslatedText("EmptyWagonOrder"))</div>
+                                <div>@("de".TranslatedText("EmptyWagonOrder"))</div>
 
                             </td>
                         </tr>

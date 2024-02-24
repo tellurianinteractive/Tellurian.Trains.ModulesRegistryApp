@@ -97,6 +97,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LOWER.
+        /// </summary>
+        public static string Casing {
+            get {
+                return ResourceManager.GetString("Casing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Club event.
         /// </summary>
         public static string ClubEvent {
@@ -129,6 +138,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string EastWest {
             get {
                 return ResourceManager.GetString("EastWest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty wagon for {0}.
+        /// </summary>
+        public static string EmptyWagonForCargo {
+            get {
+                return ResourceManager.GetString("EmptyWagonForCargo", resourceCulture);
             }
         }
         

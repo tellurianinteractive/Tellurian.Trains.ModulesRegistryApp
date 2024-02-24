@@ -41,6 +41,9 @@ public static class EmptyWagonOrderExtensions
         order.CargoTrackOrAreaColor.HasValue() ? order.CargoTrackOrAreaColor.TextColor() :
         order.CustomerTrackOrAreaColor.TextColor() ?? "#000000";
 
+    public static string EmptyWagonForCargo(this EmptyWagonOrder order) =>
+        string.Format(Resources.Strings.EmptyWagonForCargo, order.CargoName.ToLowerLanguageSensitive());
+
     public static EmptyWagonOrder Clone(this EmptyWagonOrder order) =>
         new()
         {

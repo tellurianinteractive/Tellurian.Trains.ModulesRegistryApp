@@ -270,4 +270,10 @@
   <data name="Market" xml:space="preserve">
     <value>Markt</value>
   </data>
+  <data name="EmptyWagonForCargo" xml:space="preserve">
+    <value>Leerer Wagen für {0}</value>
+  </data>
+  <data name="Casing" xml:space="preserve">
+    <value>UPPER</value>
+  </data>
 </root>
