@@ -4,7 +4,7 @@
 public static class ModuleOwnershipRefExtensions
 {
     public static string Href(this ModuleOwnershipRef ownershipRef, string objectName, int objectId =0, string ActionName = "") =>
-        objectId == 0 ?
+        objectId == 0 && ActionName == "" ?
             ownershipRef.IsPerson ? $"/Persons/{ownershipRef.PersonId}/{objectName}" :
             ownershipRef.IsGroup ? $"/Groups/{ownershipRef.GroupId}/{objectName}" : "" :
         ownershipRef.IsPersonInGroup ?
