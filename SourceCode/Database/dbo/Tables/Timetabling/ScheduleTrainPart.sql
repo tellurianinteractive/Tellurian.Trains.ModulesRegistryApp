@@ -46,5 +46,5 @@ GO
     AS
     BEGIN
         DELETE FROM [DriverDutyScheduleLocoPart] WHERE TimetableScheduleLocoPartId IN (SELECT Id FROM DELETED)
-        DELETE FROM [TimetableScheduleTrainPart] WHERE Id IN (SELECT Id FROM DELETED)
+        DELETE FROM [ScheduleTrainPart] WHERE Id IN (SELECT Id FROM DELETED)
     END

@@ -6,7 +6,6 @@
     [Number] SMALLINT NOT NULL,
     [OperatingDayId] INT NOT NULL,
     [TrainCategoryId] INT NOT NULL,
-    [TimetableRoutePatternId] INT NULL,
     [MaxSpeed] SMALLINT NOT NULL DEFAULT 100,
     [InstructionMarkdown] VARCHAR(1000) NULL,
     [Image] VARBINARY(MAX) NULL, 
@@ -16,7 +15,6 @@
     CONSTRAINT [FK_Train_Operator] FOREIGN KEY ([OperatorId]) REFERENCES [dbo].[VehicleOperator] ([Id]),
     CONSTRAINT [FK_Train_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
     CONSTRAINT [FK_Train_TrainCategory] FOREIGN KEY ([TrainCategoryId]) REFERENCES [dbo].[TrainCategory] ([Id]),
-    CONSTRAINT [FK_Train_TimetableRoutePattern] FOREIGN KEY ([TimetableRoutePatternId]) REFERENCES [dbo].[TimetableRoutePattern] ([Id]),
 );
 GO
 CREATE NONCLUSTERED INDEX [IX_Train_TimetableId]
