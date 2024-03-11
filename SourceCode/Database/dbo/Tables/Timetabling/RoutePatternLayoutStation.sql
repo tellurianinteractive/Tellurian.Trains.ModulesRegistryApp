@@ -7,5 +7,5 @@
 	[StopMinutes] TINYINT NOT NULL DEFAULT 0, /* Zero means no stop */
 	CONSTRAINT [PK_TimetabletRoutePatternTimetableStation] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_TimetableRoutePatternTimetableStation_TimetableRoutePattern] FOREIGN KEY ([TimetableRoutePatternId]) REFERENCES [dbo].[TimetableRoutePattern] ([Id]) ON DELETE CASCADE,
-	CONSTRAINT [FK_TimetableRoutePatternTimetableStation_TimetableStation] FOREIGN KEY ([TimetableStationId]) REFERENCES [dbo].[TimetableStation] ([Id]),
+	CONSTRAINT [FK_TimetableRoutePatternTimetableStation_TimetableStation] FOREIGN KEY ([TimetableStationId]) REFERENCES [dbo].[LayoutStation] ([Id]),
 )

@@ -26,7 +26,7 @@ public class Meeting
     public DateTime StartDate { get; set; } = DateTime.Today.AddYears(1);
     public DateTime EndDate { get; set; } = DateTime.Today.AddYears(1).AddDays(4);
     public int Status { get; set; }
-    public int MeetingType { get; set; } 
+    public int MeetingType { get; set; }
     public string Details { get; set; }
     public string Accomodation { get; set; }
     public string Food { get; set; }
@@ -48,7 +48,7 @@ public enum MeetingType
 
 public static class MeetingExtensions
 {
-    public static bool ShowTime(this Meeting? meeting) => 
+    public static bool ShowTime(this Meeting? meeting) =>
         meeting?.MeetingType != (int)MeetingType.ModuleMeeting;
     public static string Day(this Meeting meeting, int day) =>
     meeting.StartDate.AddDays(day - 1).DayOfWeek.ToString();
@@ -121,8 +121,12 @@ public static class MeetingExtensions
         new(meeting.StartDate.ToString("d"));
 
     public static MarkupString EndDateOrTimes(this Meeting meeting) =>
-        meeting.ShowTime() && meeting.EndDate.Date == meeting.StartDate.Date ? new($"""<i>{meeting.StartDate:t}-{meeting.EndDate:t}</i>"""):
+        meeting.ShowTime() && meeting.EndDate.Date == meeting.StartDate.Date ? new($"""<i>{meeting.StartDate:t}-{meeting.EndDate:t}</i>""") :
         new(meeting.EndDate.ToString("d"));
+
+    public static string Duration(this Meeting meeting) =>
+        meeting.ShowTime() ?$"{meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
+        $"{meeting.StartOrEventDate()} - {meeting.EndDateOrTimes()}";
 }
 
 public static class MeetingMapping

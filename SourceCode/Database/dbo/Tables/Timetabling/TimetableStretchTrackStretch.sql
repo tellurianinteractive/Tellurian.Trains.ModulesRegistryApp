@@ -6,6 +6,6 @@
     [TrackStretchPosition] TINYINT NOT NULL,
     CONSTRAINT [PK_TimetableStretchTrackStretch] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_TimetableStretchTrackStretch_TimetableStretch] FOREIGN KEY ([TimetableStretchId]) REFERENCES [dbo].[TimetableStretch] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_TimetableStretch_TrackStretch] FOREIGN KEY ([TimetableTrackStretchId]) REFERENCES [dbo].[TimetableTrackStretch] ([Id]),
+    CONSTRAINT [FK_TimetableStretch_TrackStretch] FOREIGN KEY ([TimetableTrackStretchId]) REFERENCES [dbo].[TrackStretch] ([Id]),
 
 )

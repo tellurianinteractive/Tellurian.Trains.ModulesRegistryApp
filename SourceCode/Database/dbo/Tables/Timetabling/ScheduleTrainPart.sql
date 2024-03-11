@@ -1,9 +1,9 @@
-﻿CREATE TABLE [dbo].[TimetableScheduleTrainPart]
+﻿CREATE TABLE [dbo].[ScheduleTrainPart]
 /* This is a joint table for schedules for locos, wagon sets AND cargo wagon blocks */
 (
     /* Common for all types of schedules */
     [Id] INT NOT NULL IDENTITY (1, 1),
-    [TimetableScheduleId] INT NOT NULL,
+    [ScheduleId] INT NOT NULL,
     [FromDepartureId] INT NOT NULL,
     [ToArrivalId] INT NOT NULL,
     [PositionInTrain] TINYINT NOT NULL DEFAULT 1, /* Zero means no wagon, only a card will be transported. */
@@ -28,21 +28,21 @@
     [MaxNumberOfWagons] TINYINT NULL, /* Recommended maximum number of wagons in the wagonset. */
 
     CONSTRAINT [PK_TimetableScheduleTrainPart] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_TimetableScheduleTrainPart_TimetableSchedule] FOREIGN KEY ([TimetableScheduleId]) REFERENCES [dbo].[TimetableSchedule] ([Id]),
+    CONSTRAINT [FK_TimetableScheduleTrainPart_TimetableSchedule] FOREIGN KEY ([ScheduleId]) REFERENCES [dbo].[Schedule] ([Id]),
     CONSTRAINT [FK_TimetableScheduleTrainPart_Departure] FOREIGN KEY ([FromDepartureId]) REFERENCES [dbo].[TrainStationCall] ([Id]),
     CONSTRAINT [FK_TimetableScheduleTrainPart_Arrival] FOREIGN KEY ([ToArrivalId]) REFERENCES [dbo].[TrainStationCall] ([Id]),
-    CONSTRAINT [FK_CargoScheduleTrainPart_TransferOriginTimetableStation] FOREIGN KEY ([TransferOriginTimetableStationId]) REFERENCES [dbo].[TimetableStation] ([Id]),
-    CONSTRAINT [FK_CargoScheduleTrainPart_TransferDestinationTimetableStation] FOREIGN KEY ([TransferDestinationTimetableStationId]) REFERENCES [dbo].[TimetableStation] ([Id]),
+    CONSTRAINT [FK_CargoScheduleTrainPart_TransferOriginTimetableStation] FOREIGN KEY ([TransferOriginTimetableStationId]) REFERENCES [dbo].[LayoutStation] ([Id]),
+    CONSTRAINT [FK_CargoScheduleTrainPart_TransferDestinationTimetableStation] FOREIGN KEY ([TransferDestinationTimetableStationId]) REFERENCES [dbo].[LayoutStation] ([Id]),
 );
 GO
 CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_FromDepartureId]
-    ON [dbo].[TimetableScheduleTrainPart]([FromDepartureId] ASC);
+    ON [dbo].[ScheduleTrainPart]([FromDepartureId] ASC);
 GO
 CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_ToArrivalId]
-    ON [dbo].[TimetableScheduleTrainPart]([ToArrivalId] ASC);
+    ON [dbo].[ScheduleTrainPart]([ToArrivalId] ASC);
 
 GO
-    CREATE TRIGGER [DeleteTimetableScheduleTrainPart] ON [TimetableScheduleTrainPart] INSTEAD OF DELETE
+    CREATE TRIGGER [DeleteTimetableScheduleTrainPart] ON [ScheduleTrainPart] INSTEAD OF DELETE
     AS
     BEGIN
         DELETE FROM [DriverDutyScheduleLocoPart] WHERE TimetableScheduleLocoPartId IN (SELECT Id FROM DELETED)

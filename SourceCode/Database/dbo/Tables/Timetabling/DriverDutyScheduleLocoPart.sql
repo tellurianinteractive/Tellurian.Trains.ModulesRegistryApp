@@ -6,6 +6,6 @@
     
     CONSTRAINT [PK_DriverDutyScheduleLocoPart] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_DriverDutyScheduleLocoPart_DriverDuty] FOREIGN KEY ([DriverDutyId]) REFERENCES [dbo].[DriverDuty] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_DriverDutyScheduleLocoPart_ScheduleTrainPart] FOREIGN KEY ([TimetableScheduleLocoPartId]) REFERENCES [dbo].[TimetableScheduleTrainPart] ([Id])
+    CONSTRAINT [FK_DriverDutyScheduleLocoPart_ScheduleTrainPart] FOREIGN KEY ([TimetableScheduleLocoPartId]) REFERENCES [dbo].[ScheduleTrainPart] ([Id])
     
 )

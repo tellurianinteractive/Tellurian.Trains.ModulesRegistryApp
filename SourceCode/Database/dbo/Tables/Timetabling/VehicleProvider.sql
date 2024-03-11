@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[TimetableVehicleProvider]
+﻿CREATE TABLE [dbo].[VehicleProvider]
 (
     [Id] INT NOT NULL IDENTITY (1, 1),
     [TimetableVehicleId] INT NOT NULL,
@@ -14,6 +14,6 @@
     
 
     CONSTRAINT [PK_TimetableVehicleProvider] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_TimetableVehicleProvider_TimetableVehicle] FOREIGN KEY ([TimetableVehicleId]) REFERENCES [dbo].[TimetableVehicle] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_TimetableVehicleProvider_TimetableVehicle] FOREIGN KEY ([TimetableVehicleId]) REFERENCES [dbo].[TimetabledVehicle] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_TimetableVehicleProvider_LayoutParticipant] FOREIGN KEY ([ProvidingLayoutParticipantId]) REFERENCES [dbo].[LayoutParticipant] ([Id]),
 )

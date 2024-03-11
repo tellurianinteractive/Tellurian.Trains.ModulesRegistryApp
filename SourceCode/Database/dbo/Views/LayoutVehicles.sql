@@ -25,9 +25,9 @@
 		TV.IsTractionUnit
 	FROM 
 		Timetable T
-		INNER JOIN TimetableVehicle AS TV ON TV.TimetableId = T.Id
+		INNER JOIN TimetabledVehicle AS TV ON TV.TimetableId = T.Id
 		INNER JOIN VehicleOperator AS VO ON TV.OperatorId = VO.Id
-		INNER JOIN TimetableVehicleProvider TVP ON TVP.TimetableVehicleId = TV.Id
+		INNER JOIN VehicleProvider TVP ON TVP.TimetableVehicleId = TV.Id
 		INNER JOIN LayoutParticipant LP ON LP.Id = TVP.ProvidingLayoutParticipantId
 		INNER JOIN Person P ON P.Id = LP.PersonId
 

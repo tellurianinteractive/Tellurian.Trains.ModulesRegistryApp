@@ -29,15 +29,18 @@ else
     {
     }
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
-    @Item("Dates", $"{Meeting.StartDate:ddd d MMM} - {Meeting.EndDate:ddd d MMM yyyy}")
+    @Item("Duration", Meeting.Duration())
     @Item("Organiser", Meeting.Organiser())
     @if (!Meeting.IsCancelled())
     {
         @Item("Status", Meeting.Status.MeetingStatus())
-        <div style="padding: 5px 0px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-            <h4>@Localizer["RegisterOrModifyParticipation"]</h4>
-            <AppButton IconName="Register" Label="Register-Participation" Href="@MeetingHref(Meeting, "register")" IsHidden="@(!Meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
-        </div>
+        @if (Meeting.MayRegister(Principal, TimeProvider.Now.DateTime))
+        {
+            <div style="padding: 5px 0px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+                <h4>@Localizer["RegisterOrModifyParticipation"]</h4>
+                <AppButton IconName="Register" Label="Register-Participation" Href="@MeetingHref(Meeting, "register")" IsHidden="false" />
+            </div>
+        }
         @if (Meeting.Layouts.Any())
         {
             <TableTemplate Items="@Meeting.Layouts">
