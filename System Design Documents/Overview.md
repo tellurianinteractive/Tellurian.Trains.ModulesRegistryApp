@@ -3,7 +3,7 @@
 > WORK IN PROGRESS
 
 This document describes the overall system design of the *Module Registry*.
-It is intended as an introduction to a developer. 
+It is intended as an introduction to a developer
 that want to learn about the principles for how 
 the system is designed.
 
@@ -34,7 +34,7 @@ Each project in the solution performs a specific task:
 Other projects in the solution is for test or experimental purposes. 
 
 ## User Interface
-The user interfaces is build with *Razor Components* and located in the *App* project:
+The user interface is build with *Razor Components* and located in the *App* project:
 - The **Pages** folder are the *page* components that are *routeable*.
 Pages are organised in subfolders to make it easier to see what pages are related.
 - The **Components** folder contains the *non-page* components, which are used as parts in a *page* component.
@@ -60,15 +60,16 @@ To work with the database, good knowledge of SQL and database administration is 
 It is also important with knowledge of how to use *Microsoft SQL Management Studio* and
 the features of the *database* project type in Visual Studio.
 
-The database design is maintaned as CREATE statements, one file per table or view.
-These files also contain definitions of the relations between tables (reference integrity), default values
-views, triggers, and stored procedures. 
+The database design is maintaned as CREATE statements, one file per table, view and stored procedure.
+The table definitions also contains the definitions of the relations between tables (reference integrity), default values
+views, and triggers. 
 
-> NOTE: Only use triggers for overriding the default behaviour of cascade deletes.
+> NOTE: Triggers are only used to overriding the default behaviour of cascade deletes.
 
-The tooling checks the consistency of all SQL code at design time.
+The Visual Studio database tooling checks the consistency of all SQL code at design time.
 The tooling also makes it possible to make changes in the table/view definitions and publish 
 them to an existing database, only updating things that actually changed.
+
 >NOTE that *Entity Framework*'s migration feature is NOT used.
 
 You must *manually* maintain consistency between the *domain objects*, their *database mapping* in Entity Framework,

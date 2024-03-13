@@ -19,29 +19,27 @@ have a real station sending or receiving cargo, maybe to match their module
 stations cargo flow.
 
 ### Create Waybills
-Waybills can be created in three ways:
-1. By *generating waybills* for a freight customer. 
+Waybills can be created by *generating waybills* for a freight customer. 
 This method finds all matching cargo customers at other module stations and
 external stations, and is stored for each station customer in the 
 table *StationCustomerWaybill*. 
 The gererantion can be repeated, and only adds waybills that are not 
 in the station customer's list.
-2. By *manually create waybills*. These can only be to/from *regions*
-and never to a specific station.
-By *printing layout specific waybills*. These waybills will only
-be the internal freights between the stations present in a specific
-meeting layout, and they will not be saved.
+
+There are also an option to create waybills per meeting layout,
+with internal freights only. 
+
+### Modifying Waybills
+After waybills are gererated, they can be edited, for example 
+number to print (where zero disable printing), and
+if an empty return waybill should be created, etc.
+
 
 ### Printing Waybills
-Nornally, waybills are printed 10 per page, first 5 in top row and
+Nornally, waybills are printed 12 per page, first 6 in top row and
 then 5 in last row.
-The printing function has some trick to align forward and return waybills
-together so they appear one under the other. 
-In order to make it work, waybills are fist sorted so that waybills
-and its returns are retrieve first and in order.
-The printing rearranged the order 1,6,2,7,3,8,4,9,5,10, which
-means that waybill 1 and its corresponding return will end in position 1 and 6, which
-means that the return is printen under ist corresponding forward waybill.
+The printing function always print waybills with empty return first,
+so they can be cut in pairs and folded.
 
 ## Technical Solution
 ### Cargo Flow
@@ -58,12 +56,7 @@ and to the *other* end of the waybill as a relation to ether another
 *StationCustomerCargo*, 
 an *ExternalStationCustomerCargo*
 while the other one is NULL.
-### Manually Created Waybills
-The user can add waybills and the *other* end can only be a *region*.
-Also these are stored in **StationCustomerWaybill** and sets both
-*StationCustomerCargo*, 
-an *ExternalStationCustomerCargo*
-to NULL.
+
 > There is no need to manually create waybills to other stations, 
 because the generated one cover all possible cases.
 

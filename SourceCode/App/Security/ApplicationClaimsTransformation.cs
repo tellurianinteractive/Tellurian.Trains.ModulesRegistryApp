@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;
 
@@ -78,6 +79,7 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
             // Special claims
             if (user.MayUploadSkpDrawing) result.Add(Claim(AppClaimTypes.MayUploadSkpDrawing, true));
             if (user.MayManageWiFreds) result.Add(Claim(AppClaimTypes.MayManageWiFreds, true));
+            if (user.IsLockedOut()) result.Add(Claim(AppClaimTypes.IsLockedOut, true));
         }
 
         static void AddPersonalClaims(Person? person, List<Claim> result)

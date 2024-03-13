@@ -1,0 +1,19 @@
+﻿@if (Principal is null || !Principal.IsAuthenticated())
+{
+    <ContentView ContentName="@NotAuthenticatedContent" />
+}
+else if(!Principal.IsLatestTermsOfUseAccepted())
+{
+    <ContentView ContentName="@TermsOfUseNotAcceptedContent" />
+}
+else if (Principal.IsAuthenticated())
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public ClaimsPrincipal? Principal { get; set; }
+    [Parameter] public string? NotAuthenticatedContent { get; set; }
+    [Parameter] public string? TermsOfUseNotAcceptedContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

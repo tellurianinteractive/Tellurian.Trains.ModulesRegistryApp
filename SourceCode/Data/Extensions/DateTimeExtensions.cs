@@ -14,4 +14,7 @@ public static class DateTimeExtensions
         period.to.HasValue ? $"- {period.to.Value}" :
         string.Empty;
 
+    public static DateTimeOffset ToDateTimeOffset(this DateTime dateTime) =>
+        new(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, TimeSpan.Zero);
+
 }

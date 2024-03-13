@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.9.19
+Release date 2024-03-13
+- **List of modules** for a meeting has layout improvements.
+- **Meeting registration** information when not logged in is improved.
+- **Security updates** of external components.
 ## Release 1.9.18
 Release date 2024-03-11
 - **Bug fix** of text that only shoud be visible if meeting registration is permitted.

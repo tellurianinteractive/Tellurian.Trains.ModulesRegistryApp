@@ -13,12 +13,12 @@ As a test user you use the application and report back with:
 * suggestions for new features. You can start a [discussion](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/discussions) and write a description of what you want.
 
 ## As Translator
-You can improve a translationns in an already supported language, 
+You can improve a translations in an already supported language, 
 or if you want the application in yet another language, you can make a new complete translation.
 
 > The easiest way to work with translations is using [Visual Studio](https://visualstudio.microsoft.com/downloads/) with and these extensions:
-> - **ResX Manager** makes it very easy to edit ESX-files for existing languages and adding new ones.
-> - **Markdown Editor** makes is easy to edit *markdown* files, there is a preview so see the result.
+> - **ResX Manager** makes it very easy to edit RESX-files for existing languages and adding new ones.
+> - **Markdown Editor** makes is easy to edit *markdown* files, there is a preview pane for viewing the result.
 
 ### Improving the translation to an already supported language
 Follow the instructions below. The only thing you don't need to do is adding new files.
@@ -43,7 +43,7 @@ Markdown texts are longer texts with formatting. They are located [here](https:/
 3. Use a Markdown editor, it is important to preserve all formatting. There are free online of for download.
 4. Translate the texts and save. It works using Google Translate, but the translation add spaces that ruins the format, so you will have to fix that manually.
 After translation with Google, you can refine the translation if necessary.
-5. Save the file locally. If you work with GitHub *pull requests**, add the translated files to your local repository.
+5. Save the file locally. If you work with GitHub *pull requests*, add the translated files to your local repository.
 
 > NOTE: Do not translate the file *TermsOfUse.md*.
 
@@ -78,10 +78,10 @@ If you want to contribute to the development of the application, there are two m
 
 ##### Recommended Skills
 To contribute, you need some experience in the following fields:
-* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the latest version of .NET, from nov 2022 it is .NET 7.0.
+* [**.NET**](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five) development. We use the [latest version of .NET](https://dotnet.microsoft.com/).
 * Using [**Blazor**](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) as web user interface framework. We do <u>not</u> use JavaScript based frameworks like Angular, React or Vue. Front-end is written in **C#**, **HTML** and **CSS**.
-* Back-end is written in **C#**. 
-* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer. Note that the *migrations* feature is not used.
+* Back-end is written in **C#** and **SQL**. 
+* Using [**Entity Framework**](https://docs.microsoft.com/en-us/ef/core/) as data access layer. Note that the *migrations* feature is <u>not</u> used.
 * Using [**Sql Server**](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for local development and tests, and [**Azure SQL Database**](https://azure.microsoft.com/en-us/products/azure-sql/database/) as production database. The database structure and some logic are coded in **SQL** and is also checked in as [source code in GitHub](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Database/dbo).
 * Using [**Visual Studio**](https://visualstudio.microsoft.com/) as development environment.
 Visual Studio has excellent support for coding and publishing apps written in C#, HTML/CSS, and built in database design- and deployment tools. 
@@ -109,23 +109,23 @@ It normally comes bundled with *.NET SDK* and *Git*-tooling, or you can opt-in d
 6. You can now make modifications and pull-requests.
 
 #### Working with databases
-It is possible to develop and test against the production database. 
-You will get read and write rights but initially no rights to modify the database schema.
+It is often better to work against a database with real data to see effects of changes and to catch real errors.
+There are two options: 
+- To get a local copy of the production database. 
+Then you need to install [SQL Server Developer Edition](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) and 
+request a fresh copy of the production database using the [*sqlpackage.exe*](https://docs.microsoft.com/en-us/sql/tools/sqlpackage/) 
+utility program and then import this create a local database, or
+- Work directly against the production database. Here are the options:
+  - With read/write only. You can test and modify application features but not delete any data and not modify database schema.
+  - With full rights to modify database schema. This option is only for experience and trusted developers.
 
->Please report back any problems with the instructions below.
+For running the application, you must add a [local *secrets* file](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets), see example below.
+The file must be located at *&percnt;APPDATA&percnt;\Microsoft\UserSecrets\ModulesRegistryDevelopmentSecrets\secrets.json*.
 
-In order to run the application locally, you also need to install *SQL Server*.
-1. Download [*SQL Server Developer Edition*](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) and run the installation.
-2. Build the *Database* project in the solution, and the publish it. 
-3. In the *Publish dialog* you select your local server and giv the database a name of your choice.
-4. The database is created and the schema is published to the database.
-5. You need to fill some tables with data. In the folder *dbo/Scripts/Initial data* are SQL-scrips per table that you need to run. You can open a file, connect to your database, and execute these SQL-script.
-6. You can also request a fresh copy of the production database using the [*sqlpackage.exe*](https://docs.microsoft.com/en-us/sql/tools/sqlpackage/) utility program and then import this create a local database.
-
-After the database is created and filled with initial data, you need to configure the application to connect to it.
-1. Store the database connection string in your local [app secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets) using the key *ConnectionStrings:TimetablePlanningDatabase*.
-2. In order to login you need to patch a record into the *User* table. You can create a hashed password by modifying *PasswordTests.cs* in project *Services.Tests*. Dont commit your changes in *PasswordTests.cs*!
-3. Debug the application by starting it from within Visual Studio. It should open in a browser and you should be able to login. 
-
-Optional installation
-1. Install the *Entity Framework Core* [powershell tools](https://docs.microsoft.com/en-us/ef/core/cli/powershell).
+````
+{
+  "ConnectionStrings:TimetablePlanningDatabase": "Server=localhost\\mssqlserver01;Database=Tellurian.Trains.Database;Trusted_Connection=True;TrustServerCertificate=True",
+  "TestUsername": "your account email",
+  "TestPassword": "yout account password"
+  }
+````

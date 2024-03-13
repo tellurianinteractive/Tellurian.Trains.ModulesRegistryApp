@@ -25,6 +25,7 @@ public static class AppClaimTypes
     public const string DomainId = nameof(DomainId);
     public const string MayUploadSkpDrawing = nameof(MayUploadSkpDrawing);
     public const string MayManageWiFreds = nameof(MayManageWiFreds);
+    public const string IsLockedOut = nameof(IsLockedOut);
 }
 
 public static class ClaimsPrincipalExtensions
@@ -39,10 +40,10 @@ public static class ClaimsPrincipalExtensions
     public static int CountryId(this ClaimsPrincipal? principal, int? maybeCountryId) => maybeCountryId ?? (principal.IsGlobalAdministrator() ? 0 : principal.CountryId());
     public static bool IsDemo(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.Demo);
     public static bool IsReadOnly(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.ReadOnly);
+    public static bool IsLockedOut(this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.IsLockedOut);
     public static bool MayUploadSkpDrawing(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayUploadSkpDrawing);
     public static bool MayManageWiFreds(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayManageWiFreds);
-
-    public static bool IsLatestTermsOfUseAccepted([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
+    public static bool IsLatestTermsOfUseAccepted(this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
     public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.ObjectId);
     public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.GlobalAdministrator);
     public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.CountryAdministrator);
@@ -162,9 +163,13 @@ public static class ClaimsPrincipalExtensions
     private static bool GetBool(this ClaimsPrincipal? principal, string claimType) =>
         principal is not null && bool.TryParse(principal.Claims.Claim(claimType)?.Value, out var value) && value;
 
+    private static DateTimeOffset? GetDateTimeOffset(this ClaimsPrincipal? principal, string claimType) =>
+        principal is not null && DateTimeOffset.TryParse(principal.Claims.Claim(claimType)?.Value, out var value) ? value : null;
+
+
     private static bool Any(this ClaimsPrincipal? principal, string claimType) => principal?.Claims.Any(c => c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase)) == true;
     private static bool None(this ClaimsPrincipal? principal, string claimType) => !principal.Any(claimType); 
-    private static Claim? Claim(this IEnumerable<Claim> claims, string claimType) =>
+    public static Claim? Claim(this IEnumerable<Claim> claims, string claimType) =>
         claims.SingleOrDefault(c => c?.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase) == true);
 
     #endregion

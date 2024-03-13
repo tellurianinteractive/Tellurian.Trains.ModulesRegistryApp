@@ -22,13 +22,11 @@ else
 {
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
     {
-        <h4>@participant.Person.Name(), @participant.Person.CityName</h4>
         @if (participant.LayoutModules.Any())
         {
-
-            <TableTemplate Items="participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
+            <TableTemplate Items="participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true" >
                 <TableHeader>
-                    <th width="70%">@Localizer["Module"]</th>
+                    <th width="70%">@participant.Person.Name(), @participant.Person.CityName</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
                     <th width="100px" align="center">@Localizer["IsStation"]</th>
                     <th class="noprint">@Localizer["Actions"] </th>
@@ -49,7 +47,10 @@ else
         }
         else
         {
-            <ActionMessage Label="NoModulesRegistered" AlertType="warning" />
+            <div style="margin: 10px 0px; padding: 4px">
+                <span style="font-weight: bold; ">@participant.Person.Name(), @participant.Person.CityName</span>: @Localizer["NoModulesRegistered"]
+
+            </div>
         }
     }
 }

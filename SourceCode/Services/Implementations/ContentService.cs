@@ -2,7 +2,7 @@
 
 public sealed class ContentService
 {
-    private readonly string MarkdownPath = "content/markdown";
+    public readonly string MarkdownPath = "content/markdown";
     private readonly IHttpClientFactory ClientFactory;
     public ContentService(IHttpClientFactory clientFactory, string? markdownPath = null)
     {
@@ -32,6 +32,6 @@ public sealed class ContentService
         var files = directory.GetFiles($"{content}.*");
         if (files.Length == 0) return Task.FromResult(DateTimeOffset.MinValue);
         var lastModified = files.Max(f => f.LastWriteTimeUtc);
-        return Task.FromResult(new DateTimeOffset(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, TimeSpan.Zero));
+        return Task.FromResult(lastModified.ToDateTimeOffset());
     }
 }
