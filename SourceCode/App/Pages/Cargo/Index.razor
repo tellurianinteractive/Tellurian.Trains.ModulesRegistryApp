@@ -38,8 +38,7 @@
         <TemplateColumn Title="@Localizer["Actions"]" Context="cargo">
             @if (MayEdit)
             {
-                <AppButton Label="Edit" />
-                <a class="btn btn-primary btn-sm" href="Cargo/@cargo.Id/Edit"><span class="@FontAwesome.Edit" /> @Localizer["Edit"]</a>
+                <AppButton Label="Edit" Href="@EditHref(cargo)"/>
             }
         </TemplateColumn>
     </QuickGrid>

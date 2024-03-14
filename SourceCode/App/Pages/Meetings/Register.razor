@@ -81,11 +81,14 @@ else
         {
             if (IsMeetingOrganiser || Principal.IsCountryOrGlobalAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
             {
-                <button class="btn btn-sm btn-primary" @onclick="OnValidSubmit"><span class="@FontAwesome.Register" /> @Localizer["Register"]</button>
+                <div style="margin: 10px 0px;">
+                        <AppButton Label="Register" OnClickCallback="OnValidSubmit" />
+
+                </div>
             }
         }
 
-        if (Participant is not null)
+        if (Participant is not null && Participant.Id > 0)
         {
 
             <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
