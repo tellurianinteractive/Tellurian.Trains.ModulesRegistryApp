@@ -412,7 +412,7 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A station must have at least one module referring to it.
+        ///   Looks up a localized string similar to An operating location must have at least one module referring to it.
         /// </summary>
         public static string StationMustHaveAtLeastOneModuleReferringToIt {
             get {

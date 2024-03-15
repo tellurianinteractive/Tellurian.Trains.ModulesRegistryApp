@@ -607,7 +607,8 @@
     <value>Last</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>MERKNAD: Legg til en modul først for å deretter legge den til som en stasjon!</value>
+    <value>MERKNAD: Legg til en modul først for å deretter legge den til som et driftsted
+!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Ingenting å se her ennå!</value>
@@ -1466,5 +1467,14 @@
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Din ankomsttid den første dagen</value>
+  </data>
+  <data name="OperationLocation" xml:space="preserve">
+    <value>Driftssted</value>
+  </data>
+  <data name="OperationLocations" xml:space="preserve">
+    <value>Driftssteder</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>Mine driftssteder</value>
   </data>
 </root>

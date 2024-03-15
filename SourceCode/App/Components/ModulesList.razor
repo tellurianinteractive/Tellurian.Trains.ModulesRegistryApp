@@ -9,7 +9,7 @@
 {
     <div>
         <AppButton Label="Add" Href="@ModuleEditHref(0)" />
-        <AppButton Label="Stations" IconName="@FontAwesome.Stations" Href="@StationsHref()"/>
+        <AppButton Label="OperationLocations" IconName="@FontAwesome.Stations" Href="@StationsHref()"/>
     </div>
 }
 
@@ -53,7 +53,7 @@
             }
             @if (module.StationId.HasValue)
             {
-                <AppButton Label="Station" Href="@StationEditHref(module.StationId.Value)" />
+                <AppButton Label="OperationLocation" Href="@StationEditHref(module.StationId.Value)" />
                 <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
             }
         </td>

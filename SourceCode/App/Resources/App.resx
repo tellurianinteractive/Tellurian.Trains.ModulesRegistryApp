@@ -607,7 +607,7 @@
     <value>Cargo</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>NOTE: Add a module first in order to then add it as a station!</value>
+    <value>NOTE: Add a module first in order to then add it as an operation location!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Nothing to se here yet!</value>
@@ -1472,5 +1472,14 @@
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Your arrival time the first day</value>
+  </data>
+  <data name="OperationLocation" xml:space="preserve">
+    <value>Operation location</value>
+  </data>
+  <data name="OperationLocations" xml:space="preserve">
+    <value>Operation localtions</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>My operation locations</value>
   </data>
 </root>

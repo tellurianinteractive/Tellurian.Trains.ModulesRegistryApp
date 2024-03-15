@@ -121,7 +121,7 @@
     <value>Okänd</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>En station måste ha minst en modul som hänvisar till den</value>
+    <value>En driftplats måste ha minst en modul som hänvisar till den</value>
   </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Obehörig</value>

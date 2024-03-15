@@ -538,7 +538,7 @@
     <value>Bahnhof</value>
   </data>
   <data name="Stations" xml:space="preserve">
-    <value>Banhöfe</value>
+    <value>Bahnhöfe</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Suche</value>
@@ -607,7 +607,7 @@
     <value>Ladung</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>HINWEIS: Fügen Sie zuerst ein Modul hinzu, um es dann als Station hinzuzufügen!</value>
+    <value>HINWEIS: Fügen Sie zuerst ein Modul hinzu, um es dann als Betriebsstandort hinzuzufügen!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Hier gibt es noch nichts zu sehen!</value>
@@ -1472,5 +1472,14 @@
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Ihre Ankunftszeit am ersten Tag</value>
+  </data>
+  <data name="OperationLocation" xml:space="preserve">
+    <value>Betriebsstandort</value>
+  </data>
+  <data name="OperationLocations" xml:space="preserve">
+    <value>Betriebsstandorte</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>Meine Betriebsstandorte</value>
   </data>
 </root>

@@ -124,7 +124,7 @@
     <value>Not 100% owner</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>A station must have at least one module referring to it</value>
+    <value>An operating location must have at least one module referring to it</value>
   </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Unauthorised</value>

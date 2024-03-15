@@ -607,7 +607,8 @@
     <value>Gods</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>OBS: Lägg först till en modul för att sedan lägga till den som en station!</value>
+    <value>OBS: Lägg först till en modul för att sedan lägga till den som en driftplats
+!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Inget att se här ännu!</value>
@@ -1472,5 +1473,14 @@
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Din ankomsttid första dagen</value>
+  </data>
+  <data name="OperationLocation" xml:space="preserve">
+    <value>Driftplats</value>
+  </data>
+  <data name="OperationLocations" xml:space="preserve">
+    <value>Driftplatser</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>Mina driftplatser</value>
   </data>
 </root>

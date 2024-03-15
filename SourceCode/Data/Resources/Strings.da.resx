@@ -121,7 +121,7 @@
     <value>Ukendt</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>En station skal have mindst et modul, der henviser til den</value>
+    <value>Et driftsted skal have mindst et modul, der henviser til den</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
     <value>Modulet er registreret til det kommende møde</value>

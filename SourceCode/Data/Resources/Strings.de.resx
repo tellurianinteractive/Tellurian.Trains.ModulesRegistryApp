@@ -121,7 +121,7 @@
     <value>Unbekannt</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>Eine Station muss mindestens ein Modul haben, das darauf verweist</value>
+    <value>Ein Betriebsstandort muss mindestens ein Modul haben, das darauf verweist</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
     <value>Das Modul ist für das bevorstehende Meeting registriert</value>
