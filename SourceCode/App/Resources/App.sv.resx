@@ -607,8 +607,7 @@
     <value>Gods</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>OBS: Lägg först till en modul för att sedan lägga till den som en driftplats
-!</value>
+    <value>OBS: Lägg först till en modul för att sedan lägga till den som en driftplats!</value>
   </data>
   <data name="Nothing to se here yet!" xml:space="preserve">
     <value>Inget att se här ännu!</value>

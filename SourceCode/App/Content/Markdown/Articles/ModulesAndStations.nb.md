@@ -1,6 +1,6 @@
-﻿## Moduler og stasjoner
+﻿## Moduler og driftsplasser
 **Denne artikkelen gir en oversikt over hvordan du best legger inn data
-om modulene og stasjonene dine i modulregisteret.**
+om modulene og driftsplasser dine i modulregisteret.**
 
 ### Hva definerer en modul?
 Når du legger inn moduldata i Modulregisteret, tenk på en modul
@@ -20,33 +20,33 @@ Kanskje kan rekkefølgen på de interne seksjonene endres, eller noen seksjoner 
 Modulregisteret støtter modulvarianter. Du kan bruke samme modulnavn for alle varianter,
 men oppgi egne data, dokumentasjon og tegninger for hver variant.
 
-### Når er en modul også en stasjon?
-Alle moduler som har en *trafikkoperativ funksjon* bør også oppføres som en *stasjon* i modulregisteret.
+### Når er en modul også en driftsplass?
+Alle moduler som har en *trafikkoperativ funksjon* bør også oppføres som en *driftsplass* i modulregisteret.
 Driftsegenskaper er ting som påvirker togstyring og ruteplanlegging.
 Eksempler på operasjonelle funksjoner er:
-- En *gren*, dvs. en modul med bryter til minst ett sidespor eller et veikryss.
-Et *stopp*, der tog kan stoppe for passasjerbytte,
-- En *skiftegård*, også en *skyggegård*.
+- En *forgrening*, dvs. en modul med bryter til minst ett sidespor eller et veikryss.
+- Et *stopp*, der tog kan stoppe for passasjerbytte,
+- En *skiftebanegård*, også en *skyggebanegård*.
 
-#### Stasjonsdokumentasjon
-Du bør oppgi følgende dokumentasjon for stasjonen din:
+#### Dokumentasjon av driftsplasser
+Du bør oppgi følgende dokumentasjon for driftsplassen din:
 - Hvordan starte, bruke og slå av kontrollsystemet.
 - En skisse med plass til hver fraktkunde og steder å parkere godsvogner for lasting eller lossing.
 
 I Modulregisteret kan du dokumentere plasseringen av laste- eller lossestedene
 med tekst og bakgrunnsfarge.
-Hvis du gjør det, vil fraktsedlene også inkludere det,
+Hvis du gjør det, vil fraktsedlene også inkludere denne informasjon,
 som sammen med skissen din gjør det enkelt for skiftpersonalet
 å vite hvor godsvognene skal plasseres.
 
 
-#### Varianter av en stasjon
-En variant av en stasjon er i hovedsak en variant av modulen.
+#### Varianter av en driftsplass
+En variant av en driftsplass er i hovedsak en variant av modulen.
 Det er imidlertid noen flere ting å vurdere:
 - *Fraktkunder*: Du må legge inn alle fraktkunder og deres lasteflyt videre
 største varianten, og ingenting på de andre variantene.
 Når du så lager og skriver ut fraktsedler får du et komplett sett.
 Deltar du da på et modultreff med en mindre variant, bruker du rett og slett ikke
 fraktsedler for fraktkundene som ikke er i den varianten.
-- *Stasjonsdokumentasjon*: Du må tilpasse dokumentasjon for hver variant.
+- *Instruksjoner*: Du må overjene at tilpasse dokumentasjon for hver variant.
 
