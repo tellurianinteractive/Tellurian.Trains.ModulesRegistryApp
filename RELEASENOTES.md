@@ -3,10 +3,11 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.10.0
-Release date 2024-03-18
+Release date 2024-03-19
 - **Operational location** replaces the term *Station* in order to make it clear that all
 types of places where timing is required should be defined as a *Operation location*. 
 Documentation has also been updated to reflect this.
+- **Operational location** can now have cargo customers disabled. This does not delete existing cargo customers, just disable to add new ones.
 - **Translations** added for help texts for *Operation locations*.
 ## Release 1.9.19
 Release date 2024-03-13

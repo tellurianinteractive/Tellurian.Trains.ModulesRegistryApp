@@ -41,7 +41,10 @@
         <td>
             <AppButton Label="Edit" Href="@StationEditHref(station.Id)" IsHidden="@(!MayEdit)" />
             <AppButton Label="Delete" Href="@StationDeleteHref(station.Id)" IsHidden="@(!MayEdit)" />
-            <AppButton Label="FreightCustomers" Href="@CargoCustomersHref(station.Id)" IconName="Customer" />
+            @if (station.HasCargoCustomers)
+            {
+                <AppButton Label="FreightCustomers" Href="@CargoCustomersHref(station.Id)" IconName="Customer" />
+            }
         </td>
     </RowTemplate>
 </TableTemplate>

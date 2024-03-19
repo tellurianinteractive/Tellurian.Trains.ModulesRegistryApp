@@ -95,6 +95,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
                 .Where(m => m.ModuleOwnerships.Any(mo => ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId))
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+                .Include(m => m.Station)
                 .Include(m => m.Scale)
                 .Include(m => m.Standard)
                 .ToListAsync();

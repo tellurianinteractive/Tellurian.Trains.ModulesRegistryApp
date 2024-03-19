@@ -9,7 +9,7 @@
 {
     <div>
         <AppButton Label="Add" Href="@ModuleEditHref(0)" />
-        <AppButton Label="OperationLocations" IconName="@FontAwesome.Stations" Href="@StationsHref()"/>
+        <AppButton Label="OperationLocations" IconName="@FontAwesome.Stations" Href="@StationsHref()" />
     </div>
 }
 
@@ -45,16 +45,19 @@
             {
                 <AppButton Label="Edit" Href="@ModuleEditHref(module.Id)" />
                 <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)" />
-                <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
                 @if (module.Id > 0)
                 {
                     <AppButton Label="Clone" OnClickCallback="(() => Clone(module.Id))" />
                 }
             }
+            <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
             @if (module.StationId.HasValue)
             {
-                <AppButton Label="OperationLocation" Href="@StationEditHref(module.StationId.Value)" />
-                <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
+                <AppButton Label="OperationLocation" IconName="@FontAwesome.Station" Href="@StationEditHref(module.StationId.Value)" />
+                @if (module.Station?.HasCargoCustomers == true)
+                {
+                    <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
+                }
             }
         </td>
     </RowTemplate>
