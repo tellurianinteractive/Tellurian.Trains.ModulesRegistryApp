@@ -6,6 +6,7 @@
     [Category]      NVARCHAR (20) NOT NULL,
     [CityName]      NVARCHAR (50) NULL,
     [GroupDomainId] INT           NULL,
+    [ApiKey]        UNIQUEIDENTIFIER NULL, 
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Group_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id]),
     CONSTRAINT [FK_Group_GroupDomain] FOREIGN KEY ([GroupDomainId]) REFERENCES [dbo].[GroupDomain] ([Id])

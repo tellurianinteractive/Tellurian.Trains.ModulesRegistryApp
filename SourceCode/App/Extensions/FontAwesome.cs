@@ -17,6 +17,7 @@ public static class FontAwesome
     public const string Group = "fa fa-users";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
+    public const string Mail = "fa fa-mail-bulk";
     public const string Manage = "fa fa-tasks";
     public const string Market = "fa fa-shopping-cart";
     public const string Meeting = "fa fa-calendar-alt";
@@ -68,6 +69,7 @@ public static class FontAwesome
             {nameof(Group), Group },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
+            {nameof(Mail), Mail },
             {nameof(Manage), Manage },
             {nameof(Market), Market },
             {nameof(Meeting), Meeting },

@@ -77,4 +77,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IsExchange" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c28dd5bd-30a5-472f-884e-5e320ae8b8b3" ChangeDateTime="03/20/2024 15:05:20">
+    <Property Name="ElementName" Value="[dbo].[Meeting].[ApiKey]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Meeting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AccessKey" />
+  </Operation>
 </Operations>

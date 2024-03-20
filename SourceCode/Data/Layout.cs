@@ -45,13 +45,18 @@ public static class LayoutExtensions
 
     public static string Description(this Layout? me) =>
        me is null || me.PrimaryModuleStandard is null ? string.Empty :
-       me.ShortName.HasValue() ?me.ShortName :
+       me.ShortName.HasValue() ? me.ShortName :
        me.PrimaryModuleStandard.ShortName;
 
-     internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
-        layout.IsRegistrationPermitted &&
-        layout.RegistrationOpeningDate <= at &&
-        layout.RegistrationClosingDate.AddDays(1) >= at;
+    public static string DescriptionWithTheme(this Layout? me) =>
+        me is null  || me.Theme.HasNoValue() ? string.Empty : 
+        me.Meeting is not null ? $"{me.Meeting.Name}: {me.Description()} - {me.Theme}" :
+        $"{me.Description}: {me.Theme}";
+
+    internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
+       layout.IsRegistrationPermitted &&
+       layout.RegistrationOpeningDate <= at &&
+       layout.RegistrationClosingDate.AddDays(1) >= at;
 
     internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
         layout.IsRegistrationPermitted &&

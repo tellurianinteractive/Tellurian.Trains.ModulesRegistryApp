@@ -11,7 +11,22 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
     private readonly ITimeProvider TimeProvider = timeProvider;
     private readonly ILogger<LayoutService> Logger = logger;
 
-    public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
+    public async Task<Layout?> GetLayoutAsync(ClaimsPrincipal? principal, int layoutId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Layouts.Where(l =>l.Id == layoutId)
+                .Include(l => l.Meeting)
+                .ThenInclude(m => m.OrganiserGroup)
+                .ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
+                .Include(l => l.PrimaryModuleStandard)
+                .FirstOrDefaultAsync();
+        }
+        return null;
+    }
+
+        public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
     {
         if (principal.IsAuthenticated())
         {

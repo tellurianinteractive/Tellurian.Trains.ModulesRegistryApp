@@ -1482,4 +1482,7 @@
   <data name="MyOperationLocations" xml:space="preserve">
     <value>Mina driftplatser</value>
   </data>
+  <data name="SendMailToAll" xml:space="preserve">
+    <value>Skicka mail till alla</value>
+  </data>
 </root>

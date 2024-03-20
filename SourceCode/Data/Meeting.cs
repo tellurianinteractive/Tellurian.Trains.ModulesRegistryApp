@@ -31,6 +31,7 @@ public class Meeting
     public string Accomodation { get; set; }
     public string Food { get; set; }
     public string ExternalLink { get; set; }
+    public Guid? AccessKey { get; set; } = Guid.NewGuid();
     public virtual Group OrganiserGroup { get; set; }
     public virtual GroupDomain GroupDomain { get; set; }
     public virtual ICollection<Layout> Layouts { get; set; }
