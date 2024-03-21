@@ -9,6 +9,7 @@ When you click on *Send mail to all* it starts your preferred mail application a
 that prevent you from spreading the participants email addresses to other receivers of the mail.
 I also select yourself as primary receiver. Because it is an ordinary mail, you can write and attach any content you want.
   >NOTE: Only administrators including members with administrator rights in the meetings organiser group can send mail this way.
+- **Component update** to latest versions of external components.
 ## Release 1.10.0
 Release date 2024-03-19
 - **Operational location** replaces the term *Station* in order to make it clear that all

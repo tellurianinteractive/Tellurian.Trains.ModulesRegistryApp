@@ -27,6 +27,7 @@ All functions for managing modules are now in place, including:
 * **Manage groups and group members**, including group member's modules, stations and station freight customers.
 * Administrators can **manage meetings, external stations, regions, cargo types, module standards and module end profiles**.
 * Users and meeting organisers can **register a participant** and add modules to a layout.
+* Meeting organiserns can send emails to all meeting participants or all participants in a specific layout.
 * **Create waybills** for individual stations and waybills for internal freights between modules registered for a meeting layout. 
 * Domains **change group visibiliy** for groups within same domain for better collaboration. FREMO is such a domain.
 * **User management** for administrators and regular users.
