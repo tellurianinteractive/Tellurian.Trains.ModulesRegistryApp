@@ -12,6 +12,7 @@ SELECT
 	SCW.PrintCount,
 	SCW.PrintPerOperatingDay,
 	SCW.HasEmptyReturn,
+	SCW.HasSameCargoReturn,
 	SENDER.StationId AS OriginStationId,
 	SENDER.StationCustomerId AS OriginStationCustomerId,
 	SENDER.StationName AS OriginStationName,

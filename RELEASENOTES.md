@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.10.2
+Release date 2024-04-06
+- **Bug fix** of creating waybills to foreign external stations, where the external customers flows *imports* is respected.
 ## Release 1.10.1
 Release date 2024-03-21
 - **Mailing all participants** in a meeting or only all participants in a specific layout is now possible. 

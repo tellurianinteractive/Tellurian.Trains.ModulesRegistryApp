@@ -40,6 +40,10 @@ BEGIN
 		ME.OperatingDayId AS OperatingDayId,
 		0 AS [IsManuallyCreated],
 		0 AS [HasEmptyReturn],
+		CASE
+			WHEN (ME.NHMCode = 0) THEN 1
+			ELSE 0
+		END AS [HasSameCargoReturn],
 		0 AS [HideLoadingTimes],
 		0 AS [HideUnloadingTimes],
 		0 AS [PrintPerOperatingDay],

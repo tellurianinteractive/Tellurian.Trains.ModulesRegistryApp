@@ -36,6 +36,10 @@ BEGIN
 		ME.OperatingDayId AS OperatingDayId,
 		0 AS [IsManuallyCreated],
 		0 AS [HasEmptyReturn],
+		CASE
+			WHEN (ME.NHMCode = 0) THEN 1
+			ELSE 0
+		END AS [HasSameCargoReturn],
 		0 AS [HideLoadingTimes],
 		0 AS [HideUnloadingTimes],
 		0 AS [PrintPerOperatingDay],
@@ -51,11 +55,9 @@ BEGIN
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply
 		--AND ME.QuantityUnitId = OTHER.QuantityUnitId
-		AND (ME.CountryId = OTHER.CountryId OR ME.IsInternational <> 0 ) 
+		AND ((ME.CountryId = OTHER.CountryId) OR (ME.IsInternational <> 0 AND OTHER.IsInternational <> 0))
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
 		AND (ME.UptoYear IS NULL OR OTHER.FromYear IS NULL OR ME.UptoYear >= OTHER.FromYear )
 		AND SCW.Id IS NULL
 
-	
-	
 END

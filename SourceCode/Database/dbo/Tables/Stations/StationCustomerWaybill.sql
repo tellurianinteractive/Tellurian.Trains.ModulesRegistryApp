@@ -9,6 +9,7 @@
     [OperatingDayId]                INT DEFAULT ((8)) NOT NULL,
     [IsManuallyCreated]             BIT DEFAULT ((0)) NOT NULL,
     [HasEmptyReturn]                BIT DEFAULT ((0)) NOT NULL,
+    [HasSameCargoReturn]            BIT DEFAULT ((0)) NOT NULL,
     [HideLoadingTimes]              BIT DEFAULT ((0)) NOT NULL,
     [HideUnloadingTimes]            BIT DEFAULT ((0)) NOT NULL,
     [PrintPerOperatingDay]          BIT DEFAULT ((0)) NOT NULL,
