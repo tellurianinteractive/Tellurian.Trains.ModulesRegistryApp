@@ -8,6 +8,7 @@ Release date 2024-04-06
 - **Waybill** will print *express* frights with red cargo name and have a red cross over line, issue #197.
 - **Waybill** return can now be with same cargo as origin cargo. Thanks to Fredrik for the idea, issue #196.
 - **Bug fix** of creating waybills to foreign external stations, now the external customers flows *imports* is respected.
+- **Component update** to latest versions of external components.
 ## Release 1.10.1
 Release date 2024-03-21
 - **Mailing all participants** in a meeting or only all participants in a specific layout is now possible. 
