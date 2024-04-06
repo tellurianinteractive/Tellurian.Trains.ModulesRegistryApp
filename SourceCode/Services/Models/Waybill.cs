@@ -23,6 +23,9 @@ public class Waybill
     public int QuantityUnitId { get; set; }
     public string QuantityShortUnit { get; set; } = string.Empty;
     public bool HasEmptyReturn { get; set; }
+    public bool HasSameCargoReturn { get; set; }
+    public bool IsExpress {  get; set; }
+    public bool IsCoolingRequired { get; set; }
     public bool MatchReturn { get; set; }
     public int PrintCount { get; set; } 
     public bool PrintPerOperatingDay { get; set; }
@@ -47,10 +50,13 @@ public class Waybill
         QuantityUnitId = QuantityUnitId,
         QuantityShortUnit=QuantityShortUnit,
         HasEmptyReturn = HasEmptyReturn,
+        HasSameCargoReturn = HasSameCargoReturn,
         MatchReturn = MatchReturn,
         PrintCount = PrintCount,
         PrintPerOperatingDay = PrintPerOperatingDay,   
+        IsCoolingRequired = IsCoolingRequired,
         IsEmptyReturn = IsEmptyReturn,
+        IsExpress = IsExpress,
         HideLoadingTimes = HideLoadingTimes,
         HideUnloadingTimes = HideUnloadingTimes,
         OwnerNames = OwnerNames,

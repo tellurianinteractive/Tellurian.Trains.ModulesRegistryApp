@@ -45,5 +45,6 @@ FROM
 	[LayoutParticipant] LP ON LS.LayoutParticipantId = LP.Id INNER JOIN
 	[MeetingParticipant] MP ON LP.MeetingParticipantId = MP.Id
 WHERE
-	MP.CancellationTime IS NULL
+	MP.CancellationTime IS NULL AND
+	S.HasCargoCustomers <> 0
 

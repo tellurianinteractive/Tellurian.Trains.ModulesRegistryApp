@@ -35,6 +35,8 @@
         </PropertyColumn>
         <PropertyColumn Property="@(c => c.FromYear)" Title="@Localizer["FromYear"]" Align="Align.Center" />
         <PropertyColumn Property="@(c => c.UptoYear)" Title="@Localizer["UptoYear"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.IsExpress.AsYesOrNo())" Title="@Localizer["IsExpress"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.IsCoolingRequired.AsYesOrNo())" Title="@Localizer["RequiresCooling"]" Align="Align.Center" />
         <TemplateColumn Title="@Localizer["Actions"]" Context="cargo">
             @if (MayEdit)
             {

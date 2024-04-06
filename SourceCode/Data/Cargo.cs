@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
-using ModulesRegistry.Data.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ModulesRegistry.Data;
 
@@ -25,6 +22,8 @@ public partial class Cargo
     public string? NB { get; set; }
     public string? PL { get; set; }
     public string? SV { get; set; }
+    public bool IsExpress { get; set; }
+    public bool IsCoolingRequired { get; set; }
 }
 
 

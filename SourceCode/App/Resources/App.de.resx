@@ -1485,4 +1485,16 @@
   <data name="SendMailToAll" xml:space="preserve">
     <value>Senden eine E-Mail an alle</value>
   </data>
+  <data name="HasSameCargoReturn" xml:space="preserve">
+    <value>Gleiche Frachtart zurückgeben?</value>
+  </data>
+  <data name="HasCargoCustomers" xml:space="preserve">
+    <value>Hat Frachtkunden?</value>
+  </data>
+  <data name="IsExpress" xml:space="preserve">
+    <value>Expressware?</value>
+  </data>
+  <data name="IsCoolingRequired" xml:space="preserve">
+    <value>Braucht Kühlung?</value>
+  </data>
 </root>

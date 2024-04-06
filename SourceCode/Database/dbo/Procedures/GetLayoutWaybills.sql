@@ -77,6 +77,7 @@ BEGIN
 		END AS PrintCount,
 		CAST (0 AS BIT) AS PrintPerOperatingDay,
 		CAST (0 AS BIT) AS HasEmptyReturn,
+		CAST (0 AS BIT) AS HasSameCargoReturn,
 		MON.Names AS OwnerNames
 	FROM
 		LayoutCustomerCargo AS CCS INNER JOIN

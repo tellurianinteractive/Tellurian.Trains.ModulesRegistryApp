@@ -70,7 +70,9 @@ SELECT
 	C.NB,
 	C.NL,
 	C.PL,
-	C.SV
+	C.SV,
+	C.IsExpress,
+	C.IsCoolingRequired
 FROM
 	StationCustomerWaybill AS SCW INNER JOIN
 	ConsumerCustomerCargo RECEIVER ON SCW.OtherExternalCustomerCargoId = RECEIVER.StationCustomerCargoId INNER JOIN

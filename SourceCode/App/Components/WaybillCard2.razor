@@ -4,20 +4,27 @@
 {
     <Pocket>
         <div class="waybill" style="position: relative; height:90mm">
-            @if (Item.HasEmptyReturn)
+            @if (Item.HasReturn())
             {
 
                 <svg class="emptyreturn" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 24 24">
-                    <title>Empty return</title>
+                    <title>Return</title>
                     <g id="Shuffle">
                         <path d="M5.284,5.507a7.007,7.007,0,0,1,11.282,6.582h4.042A11.012,11.012,0,0,0,2.447,2.671L.839,1.062v6h6Z" />
                         <path d="M18.213,18.479l1.609,1.609v-6h-6l1.556,1.555A7.007,7.007,0,0,1,4.1,9.061H.053a11.011,11.011,0,0,0,18.16,9.418Z" />
                     </g>
                 </svg>
             }
-            <div class="destination" style="height: 4cm">
+            @if (Item.IsExpress)
+            {
 
-                <table width="100%" class="destination">
+                <svg style="stroke-width: 2; position: absolute; height: 92mm; width: 48mm;">
+                    <line style="stroke: red;" x1="47mm" y1="11mm" x2="0mm" y2="76mm" />
+                </svg>
+            }
+            <div class="@DestinationCssClass(Item)" style="height: 4cm">
+
+                <table width="100%" class="@DestinationCssClass(Item)">
                     <tbody>
                         <tr>
                             <td colspan="2" class="box destination" style="color: @Item.Destination.ForeColor(); background-color: @Item.Destination.BackColor()">
@@ -66,7 +73,7 @@
                                             <i class="fas fa-dolly-flatbed"></i>
                                         }
                                     </span>
-                                    <span>@Item.Destination.CargoName()</span>
+                                    <span style="color: @CargoNameColor(Item)">@Item.Destination.CargoName()</span>
                                 </div>
                             </td>
                         </tr>
@@ -96,7 +103,7 @@
                 <tbody>
                     <tr>
                         <td colspan="2" class="box origin" style="color: @Item.Origin.ForeColor(); background-color: @Item.Origin.BackColor()">
-                            <div class="label">@Item.Origin.DualLanguageLabel( "Origin")</div>
+                            <div class="label">@Item.Origin.DualLanguageLabel("Origin")</div>
                             <div class="name" style="font-size: @StationNameTextSize(Item.Origin.StationName, Item.ShowFlag())">
                                 @if (Item.ShowFlag())
                                 {
@@ -179,7 +186,7 @@
                     {
                         <tr>
                             <td colspan="2">
-                                <span class="icon"><i class="fas fa-calendar"/></span>
+                                <span class="icon"><i class="fas fa-calendar" /></span>
                                 <span class="smaller">@Item.Origin.YearsInOperation()</span>
                             </td>
                         </tr>
@@ -200,13 +207,13 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height:8pt; font-size: 7pt; border-top: solid 1px">
-                            @Item.Destination.DualLanguageLabel("Owner"):<br/> @Item.OwnerNames
+                            @Item.Destination.DualLanguageLabel("Owner"):<br /> @Item.OwnerNames
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-         
+
     </Pocket>
 }
 
@@ -215,7 +222,7 @@
 
     string StationNameTextSize(string? text, bool hasFlag) =>
         string.IsNullOrWhiteSpace(text) ? Large :
-        hasFlag && text.Length < 15 ? Large : 
+        hasFlag && text.Length < 15 ? Large :
         hasFlag ? Small :
         text.Length < 18 ? Large : Small;
 
@@ -226,4 +233,7 @@
         text is null || text.Length < 20 ? "7pt" : "6pt";
 
     string OwnerNamesText(Waybill it) => $"{it.Destination.DualLanguageLabel("Owners")} {it.OwnerNames}";
+
+    string DestinationCssClass(Waybill it) => it.IsEmptyReturn ? "destination-empty" : "destination";
+    string CargoNameColor(Waybill it) => it.IsExpress ? "red" : "black";
 }

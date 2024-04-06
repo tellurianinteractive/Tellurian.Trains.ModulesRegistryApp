@@ -53,7 +53,7 @@ SELECT
 	COALESCE(SS.MainTheme, 'EUROPE') AS MainTheme,
 	CO.NHMCode
 FROM 
-	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId
+	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId AND S.HasCargoCustomers <> 0
 	INNER JOIN [StationStandard] SS ON SS.Id = S.Id 
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id

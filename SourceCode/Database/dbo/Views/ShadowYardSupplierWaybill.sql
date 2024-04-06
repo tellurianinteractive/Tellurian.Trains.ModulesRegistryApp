@@ -71,7 +71,9 @@ SELECT
 	C.NB,
 	C.NL,
 	C.PL,
-	C.SV
+	C.SV,
+	C.IsExpress,
+	C.IsCoolingRequired
 FROM
 	StationCustomerWaybill AS SCW INNER JOIN
 	ShadowYardCustomerCargo AS SENDER ON SENDER.StationCustomerCargoId = SCW.StationCustomerCargoId INNER JOIN

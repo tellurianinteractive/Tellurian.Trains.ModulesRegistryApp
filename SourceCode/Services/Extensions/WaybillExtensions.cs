@@ -1,4 +1,6 @@
 ﻿using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Services.Models;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;
@@ -24,47 +26,58 @@ public static class WaybillExtensions
                             clone.OperatingDayFlag = day.Flag;
 
                             result.Add(clone);
-                            if (clone.HasEmptyReturn) result.Add(clone.EmptyReturn());
+                            if (clone.HasReturn()) result.Add(clone.Return());
                         }
                     }
                 }
                 else
                 {
                     result.Add(item);
-                    if (item.HasEmptyReturn) result.Add(item.EmptyReturn());
+                    if (item.HasReturn()) result.Add(item.Return());
                 }
             }
         }
         return result;
     }
 
-    private static byte WaybillSendingDaysFlags(this Waybill it) 
+    private static byte WaybillSendingDaysFlags(this Waybill it)
     {
         byte intersectionDays = (byte)(it.Destination!.OperationDaysFlags & it.Origin!.OperationDaysFlags);
         return intersectionDays == 0 ? it.Origin.OperationDaysFlags : intersectionDays;
     }
 
-    private static Waybill EmptyReturn(this Waybill waybill)
+    private static Waybill Return(this Waybill waybill)
     {
-        var emptyReturn = waybill.Clone;
-        var newOrigin = emptyReturn.Destination;
-        var newDestination = emptyReturn.Origin;
-        //emptyReturn.OwnerStationId = 0;
-        emptyReturn.Origin = newOrigin;
-        emptyReturn.Origin!.IsOrigin=true;
-        emptyReturn.Origin!.CargoName = LanguageExtensions.GetLocalizedString("Empty", emptyReturn.Origin.Language());
-        emptyReturn.Origin!.SpecialCargoName = string.Empty;
-        emptyReturn.Origin!.ReadyTimeResourceKey = string.Empty;
-        emptyReturn.Origin!.TrackOrArea = string.Empty;
-        //emptyReturn.Destination!.OperationDaysFlags = waybill.Origin!.OperationDaysFlags;
-        emptyReturn.Destination = newDestination;
-        emptyReturn.Destination!.IsOrigin = false;
-        emptyReturn.Destination!.CargoName = LanguageExtensions.GetLocalizedString("Empty", emptyReturn.Destination.Language());
-        emptyReturn.Destination!.SpecialCargoName = string.Empty;
-        emptyReturn.Destination!.ReadyTimeResourceKey = string.Empty;
-        emptyReturn.Destination!.PackagingUnitResourceKey = string.Empty;
-        emptyReturn.IsEmptyReturn = true;
-        return emptyReturn;
+        if (waybill.Destination.CargoName=="Expressgods")  Debugger.Break();
+        var returnWaybill = waybill.Clone;
+        var newOrigin = returnWaybill.Destination;
+        var newDestination = returnWaybill.Origin;
+        returnWaybill.Origin = newOrigin;
+        returnWaybill.Origin!.IsOrigin = true;
+
+        returnWaybill.Origin!.CargoName = waybill.HasSameCargoReturn ? newOrigin.CargoName : 
+            LanguageExtensions.GetLocalizedString("Empty", returnWaybill.Origin.Language());
+
+        if (returnWaybill.HasEmptyReturn)
+        {
+            returnWaybill.Origin!.SpecialCargoName = string.Empty;
+            returnWaybill.Origin!.ReadyTimeResourceKey = string.Empty;
+            returnWaybill.Origin!.TrackOrArea = string.Empty;
+
+        }
+        returnWaybill.Destination = newDestination;
+        returnWaybill.Destination!.IsOrigin = false;
+        returnWaybill.Destination!.CargoName =             waybill.HasSameCargoReturn ? newDestination.CargoName : 
+            LanguageExtensions.GetLocalizedString("Empty", returnWaybill.Destination.Language());
+
+        if (returnWaybill.HasEmptyReturn)
+        {
+            returnWaybill.Destination!.SpecialCargoName = string.Empty;
+            returnWaybill.Destination!.ReadyTimeResourceKey = string.Empty;
+            returnWaybill.Destination!.PackagingUnitResourceKey = string.Empty;
+            returnWaybill.IsEmptyReturn = true;
+        }
+        return returnWaybill;
     }
 
     public static string DestinationQuantity(this Waybill waybill) =>
@@ -107,7 +120,7 @@ public static class WaybillExtensions
     public static bool HasDifferentCargoNameTranslations(this Waybill? me) =>
         me is not null && !me.Origin.CargoName().Equals(me.Destination.CargoName());
 
-    public static bool HasDifferentQuantityTranslations(this Waybill? me ) =>
+    public static bool HasDifferentQuantityTranslations(this Waybill? me) =>
         me is not null && !me.Origin.QuantityUnit().Equals(me.Destination.QuantityUnit());
 
     public static string SendingDays(this Waybill? me)
@@ -128,9 +141,11 @@ public static class WaybillExtensions
     me.Destination.UnloadingReady();
 
     public static string WagonClass(this Waybill? me) =>
-        me is  null ? string.Empty :
-        me.SpecialWagonClass.HasValue() ? me.SpecialWagonClass : 
+        me is null ? string.Empty :
+        me.SpecialWagonClass.HasValue() ? me.SpecialWagonClass :
         me.DefaultWagonClass;
+
+    public static bool HasReturn(this Waybill? me) => me is not null && (me.HasSameCargoReturn || me.HasEmptyReturn);
 }
 
 public static class CargoCustomerExtensions
@@ -177,7 +192,7 @@ public static class CargoCustomerExtensions
 
     public static string DualLanguageLabel(this CargoCustomer it, string resourceKey, string? otherEnglishText = null) =>
         it.Languages.DualLanguageText(resourceKey, otherEnglishText);
- 
+
     public static string DualLanguageText(this string languageTwoLetterISOCode, string resourceKey, string? otherEnglishText = null)
     {
         var resourceManager = Resources.Strings.ResourceManager;
@@ -203,11 +218,11 @@ public static class CargoCustomerExtensions
          me is null || me.IsUncolored() ? "#FFFFFF" : me.BackColor;
 
     private static bool IsUncolored([NotNullWhen(false)] this CargoCustomer? me) =>
-        me is null || me.Waybill is null || me.IsInternal() ;
+        me is null || me.Waybill is null || me.IsInternal();
 
     public static bool IsInternal(this CargoCustomer? me) =>
         me is not null && me.IsModuleStation && (!me.IsOrigin || me.StationId == me.Waybill.OwnerStationId || me.Waybill.HasEmptyReturn);
-            //(me.IsOrigin && waybill.Origin.StationId == waybill.OwnerStationId && waybill.IsEmptyReturn));
+    //(me.IsOrigin && waybill.Origin.StationId == waybill.OwnerStationId && waybill.IsEmptyReturn));
 
     internal static string QuantityUnit(this CargoCustomer me, string? otherLanguage = null) =>
         me.Waybill.QuantityShortUnit.HasValue() ? me.Waybill.QuantityShortUnit :

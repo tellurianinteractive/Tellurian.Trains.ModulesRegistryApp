@@ -209,6 +209,9 @@ internal static class WaybillMapper
             PrintCount = record.GetInt("PrintCount"),
             PrintPerOperatingDay = record.GetBool("PrintPerOperatingDay"),
             HasEmptyReturn = record.GetBool("HasEmptyReturn"),
+            HasSameCargoReturn = record.GetBool("HasSameCargoReturn"),
+            IsExpress = record.GetBool("IsExpress"),
+            IsCoolingRequired = record.GetBool("IsCoolingRequired")
             //MatchReturn = record.GetBool("MatchReturn")
         };
         waybill.Origin.Waybill = waybill;

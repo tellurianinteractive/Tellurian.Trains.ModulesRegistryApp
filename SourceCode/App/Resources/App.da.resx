@@ -1485,4 +1485,16 @@
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail til alle</value>
   </data>
+  <data name="HasSameCargoReturn" xml:space="preserve">
+    <value>Returnere samme godstype?</value>
+  </data>
+  <data name="HasCargoCustomers" xml:space="preserve">
+    <value>Har fragtkunder?</value>
+  </data>
+  <data name="IsExpress" xml:space="preserve">
+    <value>Ekspresvare?</value>
+  </data>
+  <data name="IsCoolingRequired" xml:space="preserve">
+    <value>Brug for køling?</value>
+  </data>
 </root>

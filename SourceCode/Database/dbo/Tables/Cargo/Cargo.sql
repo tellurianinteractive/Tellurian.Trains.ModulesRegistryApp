@@ -13,6 +13,8 @@
     [NB]             NVARCHAR (50) NULL,
     [PL]             NVARCHAR (50) NULL,
     [SV]             NVARCHAR (50) NULL,
+    [IsExpress] BIT NOT NULL DEFAULT 0, 
+    [IsCoolingRequired] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_Cargo] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
