@@ -71,6 +71,8 @@ BEGIN
 		C.NB,
 		C.PL,
 		C.SV,
+		C.IsExpress,
+		C.IsCoolingRequired,
 		CASE
 			WHEN CU.IsBearer <> 0 THEN CCC.Quantity
 			ELSE 1
