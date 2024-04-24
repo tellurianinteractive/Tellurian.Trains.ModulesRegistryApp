@@ -13,9 +13,9 @@ public static class MailHolderExtensions
     {
         var href = new StringBuilder(1000);
         href.Append("mailto:");
-        href.Append(sender.EmailAddresses);
+        href.Append(sender.EmailWithName());
         href.Append("?bcc=");
-        href.Append(string.Join(";", receipients.Where(r => r.EmailAddresses.HasValue() && !r.EmailAddresses.Contains(sender.EmailAddresses)).Select(r => r.EmailAddresses)));
+        href.Append(string.Join(",", receipients.Where(r => r.EmailAddresses.HasValue() && !r.EmailAddresses.Contains(sender.EmailAddresses)).Select(r => r.EmailWithName())));
         href.Append("&subject=");
         href.Append(subject);
         return href.ToString();

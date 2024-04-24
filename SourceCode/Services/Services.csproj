@@ -6,13 +6,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Markdig" Version="0.36.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.3" />
+		<PackageReference Include="Markdig" Version="0.37.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.4" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.4" />
 		<PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
 	</ItemGroup>
 
