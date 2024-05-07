@@ -8,7 +8,7 @@ Release date 2024-05-07
 Deleting a module that is part of an operational place (station) will now delete all modules within the same operational places as well as the operational places.
 - **Fix** of issue #198. When a partly owned module is registerd on a meeting layout, the module will be visible
 for all owners that are registered, not just the owner that registered the module to the layout.
-
+- **Component update** to latest versions of external components.
 ## Release 1.10.3
 Release date 2024-04-24
 - **Bug fix** of mail button emaal link.
