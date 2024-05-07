@@ -36,7 +36,7 @@
         <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
     </Inputs>
     <Buttons>
-        @if(Id > 0)
+        @if(Meeting.Id > 0)
         {
             <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
         }

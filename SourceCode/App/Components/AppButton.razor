@@ -1,27 +1,31 @@
 ﻿@inject IStringLocalizer<App> Localizer
 @inject IJSRuntime JSRuntime
 
-<span style="margin-left: 4px; display: @Display">
-@if (Href.HasValue())
-{
-    @if (OpenInNewTab)
-    {
-            <button type="button " class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
-    }
-    else
-    {
-            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
-    }
-}
-else if (IsSubmit)
-{
-        <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
-}
-else
-{
-        <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
-    }
+<span class="noprint">
+
+    <span style="margin-left: 4px; display: @Display">
+        @if (Href.HasValue())
+        {
+            @if (OpenInNewTab)
+            {
+                <button type="button " class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            }
+            else
+            {
+                <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
+            }
+        }
+        else if (IsSubmit)
+        {
+            <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        }
+        else
+        {
+            <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+        }
+    </span>
 </span>
+
 
 @code {
     [Parameter] public string Label { get; set; } = "Button";

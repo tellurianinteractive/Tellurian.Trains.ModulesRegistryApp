@@ -6,7 +6,7 @@
         <div style="flex-grow: 4">
             <span class="@IconClass" /> @Localizer.HeadingText(Label, ObjectName, Owner, PageAction)
         </div>
-        <div style="flex-grow: 1; text-align:right">
+        <div class="noprint" style="flex-grow: 1; text-align:right">
             @if (IsHelpAvailable)
             {
                 <span class="fa fa-question-circle" @onclick="ToggleHelp" />
