@@ -16,17 +16,15 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Layouts.Where(l =>l.Id == layoutId)
-                .Include(l => l.Meeting)
-                .ThenInclude(m => m.OrganiserGroup)
-                .ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
+            return await dbContext.Layouts.Where(l => l.Id == layoutId)
+                .Include(l => l.Meeting).ThenInclude(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
                 .Include(l => l.PrimaryModuleStandard)
                 .FirstOrDefaultAsync();
         }
         return null;
     }
 
-        public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
+    public async Task<int> ModulesRegisteredCountAsync(ClaimsPrincipal? principal, int meetingId)
     {
         if (principal.IsAuthenticated())
         {
@@ -135,49 +133,46 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         return result;
     }
 
-    [Obsolete("Use new methods above.")]
-    public async Task<IEnumerable<Module>> GetAvailableModules(ClaimsPrincipal? principal, LayoutParticipant participant, Layout layout)
+
+    // THIS IS NOT READY YET
+    private async Task<IEnumerable<RegisteredModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutId, int personId)
     {
+        const string storedProcedureName = "RegisteredModules";
+        var result = new List<RegisteredModule>(200);
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-
-            var participantsGroups = await dbContext.Groups
-                .Include(g => g.GroupMembers)
-                .Where(g => g.GroupMembers.Any(gm => gm.PersonId == participant.PersonId))
-                .ToReadOnlyListAsync();
-
-            var groupsParticipantCanBorrowModulesIn = await dbContext.GroupMembers.AsNoTracking()
-                .Where(gm => gm.MayBorrowGroupsModules && gm.PersonId == participant.PersonId)
-                .Select(gm => gm.GroupId)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var personsIdYouCanBorrowModulesFrom = participantsGroups
-                 .Where(g => g.GroupMembers.Any(gm => gm.MemberMayBorrowMyModules))
-                 .SelectMany(g => g.GroupMembers.Select(gm => gm.PersonId));
-
-            var myModulesAndModulesInMyGroups = await dbContext.Modules
-                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
-                .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
-                .Include(m => m.Standard)
-                .Where(m => m.ScaleId == layout.PrimaryModuleStandard.ScaleId)
-                .ToReadOnlyListAsync();
-
-
-
-
-            if (myModulesAndModulesInMyGroups is not null)
+            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+            if (connection is not null)
             {
-                return myModulesAndModulesInMyGroups
-                   .Where(m => m.ModuleOwnerships.Any(
-                        mo => mo.PersonId == participant.PersonId || personsIdYouCanBorrowModulesFrom.Any(id => id == mo.PersonId) || groupsParticipantCanBorrowModulesIn.Any(id => id == mo.GroupId)));
+                var command = new SqlCommand(storedProcedureName, connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 120
+                };
+                command.Parameters.AddWithValue("@LayoutId", layoutId);
+                command.Parameters.AddWithValue("@PersonId", personId);
+                try
+                {
+                    connection.Open();
+                    var reader = await command.ExecuteReaderAsync();
+                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
+                    while (await reader.ReadAsync())
+                    {
+                        result.Add(reader.MapRegisteredModule());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogCritical(ex, "Failed {storedProcedureName} for layout id={layoutId} and person id = {personId}", storedProcedureName, layoutId, personId);
+                    throw;
+                }
             }
         }
-        return Array.Empty<Module>();
+        return result;
     }
 
-    public async Task<IEnumerable<LayoutModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutId, int personId)
+    public async Task<IEnumerable<LayoutModule>> GetLayoutModulesAsync(ClaimsPrincipal? principal, int layoutId, int personId)
     {
         if (principal.IsAuthenticated())
         {
@@ -187,11 +182,12 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(lp => lp.LayoutParticipant).ThenInclude(mp => mp.MeetingParticipant).ThenInclude(mp => mp.Person)
-                .Where(lm => lm.LayoutParticipant.LayoutId == layoutId && lm.LayoutParticipant.MeetingParticipant.PersonId == personId)
+                .Where(lm => lm.LayoutParticipant.LayoutId == layoutId && lm.Module.ModuleOwnerships.Any(mo => mo.PersonId == personId))
                 .ToListAsync();
         }
-        return Array.Empty<LayoutModule>();
+        return [];
     }
+
 
     /// <summary>
     /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>
@@ -246,7 +242,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
     }
 
 
-    public async Task<(int Count, string Message)> RemoveModuleAsync(ClaimsPrincipal? principal, int layoutModuleId)
+    public async Task<(int Count, string Message)> RemoveModuleWithStationAsync(ClaimsPrincipal? principal, int layoutModuleId)
     {
         if (principal.IsAuthenticated())
         {
@@ -257,13 +253,14 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
 
             if (existing is null) return (-1, Resources.Strings.NoModification);
 
-            var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
-            
-            if (!stationIsReferredFromOtherLayoutModule && existing.LayoutStation is not null)
-            {
-                dbContext.LayoutStations.Remove(existing.LayoutStation);
-            }
-            dbContext.LayoutModules.Remove(existing);
+            //var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
+
+            //if (!stationIsReferredFromOtherLayoutModule && existing.LayoutStation is not null)
+            //{
+            //    dbContext.LayoutStations.Remove(existing.LayoutStation);
+            //    var stationRemoved = await dbContext.SaveChangesAsync();
+            //}
+            dbContext.LayoutModules.Remove(existing); // If there is a layout station associated with this module, all modules referring that layout station are removed. See database table LayoutModule trigger.
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }

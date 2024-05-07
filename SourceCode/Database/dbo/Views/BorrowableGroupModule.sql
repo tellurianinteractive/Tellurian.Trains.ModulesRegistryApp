@@ -1,4 +1,5 @@
 ﻿CREATE VIEW [dbo].[BorrowableGroupModule] AS 
+-- Borrowable modules from group member that permit this
 SELECT 
 	M.Id AS ModuleId,
 	M.FullName AS ModuleName,
@@ -39,6 +40,7 @@ WHERE
 	MO.OwnedShare > 0 AND
 	MOGM.MemberMayBorrowMyModules <> 0
 UNION
+-- Borrowable modules for group members that are permitted to borrow the group owned modules.
 SELECT
 	M.Id AS ModuleId,
 	M.FullName AS ModuleName,

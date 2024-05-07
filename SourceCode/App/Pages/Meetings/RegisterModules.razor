@@ -178,7 +178,7 @@ else
     {
         if (Layout is not null && LayoutParticipant is not null)
         {
-            var result = await LayoutService.RemoveModuleAsync(Principal, layoutModuleId);
+            var result = await LayoutService.RemoveModuleWithStationAsync(Principal, layoutModuleId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
@@ -188,7 +188,7 @@ else
     {
         if (LayoutId > 0 && MeetingParticipant is not null)
         {
-            ParticipantsRegisteredModules = await LayoutService.GetRegisteredModulesAsync(Principal, LayoutId, MeetingParticipant.PersonId);
+            ParticipantsRegisteredModules = await LayoutService.GetLayoutModulesAsync(Principal, LayoutId, MeetingParticipant.PersonId);
             ParticipantsAvailableModules = await LayoutService.GetsAvailableModules(Principal, LayoutId, MeetingParticipant.PersonId);
             ParticipantsBorrowableModules = await LayoutService.GetBorrowableModules(Principal, LayoutId, MeetingParticipant.PersonId);
             AvailablePackages = ParticipantsAvailableModules.AsModulePackages();

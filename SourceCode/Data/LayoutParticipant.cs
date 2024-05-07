@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ModulesRegistry.Data;
 
@@ -29,6 +30,14 @@ public static class LayoutParticipantExtensions
 {
     public static bool IsValid(this LayoutParticipant me) =>
         me is not null && me.MeetingParticipantId > 0 && me.LayoutId > 0 && me.PersonId > 0;
+
+    public static IEnumerable<LayoutModule> AllLayoutModules(this LayoutParticipant layoutParticipant, IEnumerable<LayoutModule> layoutModules)
+    {
+        if (layoutParticipant.LayoutModules.Count > 0 && layoutParticipant.LayoutModules.All(lm => lm.Module.ModuleOwnerships.All(mo =>  mo.OwnedShare == 1))) 
+            return layoutParticipant.LayoutModules;
+        return layoutModules.Where(lm => lm.Module.ModuleOwnerships.Any(mo => mo.PersonId == layoutParticipant.PersonId));
+    }
+
 }
 
 internal static class LayoutParticipantMapping

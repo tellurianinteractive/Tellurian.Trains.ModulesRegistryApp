@@ -79,6 +79,15 @@ public static class IDataRecordExtensions
         return t.TotalMinutes;
     }
 
+    public static DateTimeOffset GetDateTimeOffset(this IDataRecord record, string columnName)
+    {
+        var i = record.GetColumIndex(columnName);
+        if (record.IsDBNull(i)) return DateTimeOffset.MinValue;
+        var value = record.GetValue(i);
+        if (value is DateTimeOffset offset) return offset;
+        throw new InvalidOperationException(columnName);
+    }
+
     public static bool GetBool(this IDataRecord record, string columnName)
     {
         var i = record.GetColumIndex(columnName);

@@ -26,9 +26,7 @@ public class LayoutModule
 # nullable enable
 public static class LayoutModuleExtensions
 {
-
     public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStationId.HasValue;
-
 }
 
 

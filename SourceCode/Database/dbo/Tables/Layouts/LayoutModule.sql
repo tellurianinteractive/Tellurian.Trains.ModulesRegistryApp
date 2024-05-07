@@ -21,6 +21,7 @@ GO
 CREATE TRIGGER [DeleteLayoutModule] ON [LayoutModule] INSTEAD OF DELETE
 AS
 BEGIN
+	DELETE FROM [LayoutModule] WHERE [LayoutStationId] IN (SELECT [LayoutStationId] FROM DELETED)
 	DELETE FROM [LayoutModule] WHERE Id IN (SELECT Id FROM DELETED)
 	DELETE FROM [LayoutStation] WHERE Id IN (SELECT [LayoutStationId] FROM DELETED)
 END

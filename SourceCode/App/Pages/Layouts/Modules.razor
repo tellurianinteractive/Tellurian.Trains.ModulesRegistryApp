@@ -28,9 +28,9 @@ else
     }
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
     {
-        @if (participant.LayoutModules.Any())
+        @if (participant.AllLayoutModules(LayoutModules).Any())
         {
-            <TableTemplate Items="participant.LayoutModules.OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true" >
+            <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true" >
                 <TableHeader>
                     <th width="70%">@participant.Person.Name(), @participant.Person.CityName</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
@@ -69,13 +69,15 @@ else
     Layout? Layout;
     IEnumerable<LayoutParticipant>? LayoutParticipants;
     IEnumerable<LayoutStation>? LayoutStations;
+    IEnumerable<LayoutModule>? LayoutModules;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Layout = await LayoutService.GetLayoutAsync(Principal, Id);
         LayoutParticipants = await LayoutParticipantService.GetAllForLayout(Principal, Id);
-        LayoutStations = LayoutParticipants is null ? Enumerable.Empty<LayoutStation>() : LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
+        LayoutModules = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutModules).ToList();
+        LayoutStations = LayoutParticipants is null ? []: LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
     }
 
     bool IsParticipant => LayoutParticipants is not null && LayoutParticipants.Any(lp => lp.PersonId == Principal.PersonId());
