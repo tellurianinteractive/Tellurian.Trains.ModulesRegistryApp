@@ -9,6 +9,7 @@ Deleting a module that is part of an operational place (station) will now delete
 - **Fix** of issue #198. When a partly owned module is registerd on a meeting layout, the module will be visible
 for all owners that are registered, not just the owner that registered the module to the layout.
 - **Buttons** made invisible when printing page.
+- **FREMO module** prefix and module number are now only available for persons with a FREMO member number.
 - **Component update** to latest versions of external components.
 ## Release 1.10.3
 Release date 2024-04-24

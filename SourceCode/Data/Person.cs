@@ -69,5 +69,8 @@ public static class PersonExtensions
         person.FremoMemberNumber <= 9999 ? $"{person.Country.PhoneNumber:000}{person.FremoMemberNumber:0000}" :
         $"{person.FremoMemberNumber:0000000}";
 
+    public static bool IsFremoMember(this Person person) =>
+        person.FremoMemberNumber > 0;
+
 }
 
