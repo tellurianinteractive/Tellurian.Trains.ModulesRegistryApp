@@ -178,7 +178,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.LayoutModules
-                .Include(ls => ls.LayoutStation)
+                .Include(ls => ls.LayoutStation).ThenInclude(ls => ls.Station)
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(lp => lp.LayoutParticipant).ThenInclude(mp => mp.MeetingParticipant).ThenInclude(mp => mp.Person)

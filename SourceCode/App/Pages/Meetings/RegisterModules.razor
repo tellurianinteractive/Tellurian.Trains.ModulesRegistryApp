@@ -44,9 +44,15 @@ else
                         <td>@item.RegisteredTime.ToString("g")</td>
                         @*                    <td>@item.LayoutPosition()</td>
                 *@                    <td>
+
+                            
                             @if (MayRemove(item))
                             {
                                 <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
+                            }
+                            @if (item.HasLayoutStation())
+                            {
+                                <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
                             }
                         </td>
                     </RowTemplate>
@@ -201,4 +207,6 @@ else
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> AllRegisteredModuleIds => ParticipantsRegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Description())).ToList();
+    string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{it.LayoutStation.StationId}";
+
 }
