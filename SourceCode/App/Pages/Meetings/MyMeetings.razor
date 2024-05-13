@@ -12,12 +12,12 @@
 
 @if (RegisteredMeetings is not null)
 {
-  
+
     @if (RegisteredMeetings.Any())
     {
         @foreach (var meeting in RegisteredMeetings.OrderBy(m => m.StartDate))
         {
-            <MeetingWithLayouts Meeting="meeting" MayEdit=MayEdit/>
+            <MeetingWithLayouts Meeting="meeting" MayEdit=MayEdit(meeting) />
         }
     }
     else
@@ -37,19 +37,12 @@
     protected async override Task OnParametersSetAsync()
     {
 
-        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (PersonId > 0)
-        {
-            Participant = await PersonService.FindByIdAsync(Principal, PersonId);
-            RegisteredMeetings = await MeetingService.GetRegisteredMeetingsForPerson(Principal, PersonId);
-        }
-        else
-        {
-            RegisteredMeetings = [];
-        }
 
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Participant = await PersonService.FindByIdAsync(Principal, PersonId);
+        RegisteredMeetings = await MeetingService.GetRegisteredMeetingsForPerson(Principal, PersonId);
     }
 
     int PersonId => Id > 0 ? Id : Principal.PersonId();
-    bool MayEdit => Id == Principal.PersonId() || Principal.IsCountryAdministratorInCountry(Principal.CountryId()) || Principal.IsGlobalAdministrator();
+    bool MayEdit(Meeting? meeting) => Principal.IsGlobalAdministrator() || (meeting is not null && Principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId)) || PersonId == Principal.PersonId();
 }

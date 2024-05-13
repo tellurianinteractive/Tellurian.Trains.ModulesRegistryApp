@@ -84,7 +84,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<IEnumerable<Meeting>> GetRegisteredMeetingsForPerson(ClaimsPrincipal? principal, int personId)
     {
-        if ((principal.IsAuthenticated() && principal.Id() == personId) || principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator())
+        if ((principal.IsAuthenticated() && principal.PersonId() == personId) || principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Meetings

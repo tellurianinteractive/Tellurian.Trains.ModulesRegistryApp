@@ -5,6 +5,9 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.10.5
 Release date 2024-05-13
 - **Meeting waybills** can now be viewed and printed from the module registration page.
+- **Bug fix** Upcoming meetings where the user is registered now visible under *my Meetings*. Thanks to Jerker Andersson for reporting this.
+- **Bug fix** User can now edit meeting and layout participation, but not remove any registered modules after registration is closed.
+  > NOTE: If necessary, meeting organiser can delete modules from meeting.
 ## Release 1.10.4
 Release date 2024-05-07
 - **Bug fix** of deleting module, that is part of an operational place, from meeting layout. 
