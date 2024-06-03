@@ -4,7 +4,7 @@
 
 @inject ExternalStationService ExternalStationService
 
-<PageHeading ObjectName="FreightCustomers" Owner="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading ObjectName="FreightCustomers" Context="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 @if (MayEdit)
 {
     <AppButton Label="Add" Href="@CustomerAddHref(Station)" />

@@ -104,6 +104,7 @@ builder.Services.AddScoped<StationCustomerService>();
 builder.Services.AddScoped<StationCustomerWaybillsService>();
 builder.Services.AddScoped<ScaleService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 

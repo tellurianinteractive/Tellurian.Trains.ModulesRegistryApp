@@ -9,7 +9,7 @@
 @inject ModuleService ModuleService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Modules" Owner="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 
 <ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
 

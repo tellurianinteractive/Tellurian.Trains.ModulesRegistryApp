@@ -1,0 +1,62 @@
+﻿@page "/vehicles"
+@page "/vehicles/my"
+
+@inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+@inject VehicleService VehicleService
+
+<PageHeading Label="@Label" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
+
+@if (MayEdit)
+{
+    <AppButton Href="@AddHref" Label="Add" />
+}
+<hr/>
+<QuickGrid Items="FilteredVehicles" Virtualize="true" Pagination="PaginationState">
+    <PropertyColumn Title="@Localizer["InventoryNumber"]" Property="v => v.InventoryNumber" Sortable="true" />
+    <PropertyColumn Title="@Localizer["PrototypeInfo"]" Property="v => v.PrototypeInfo()" Sortable="true" />
+    <PropertyColumn Title="@Localizer["ModelInfo"]" Property="v => v.ModelInfo()" Sortable="true" />
+    <PropertyColumn Title="@Localizer["Scale"]" Property="v => v.Scale.Display()" Sortable="true" />
+    <TemplateColumn Title="@Localizer["Features"]" Context="vehicle">
+        @vehicle.Features(Localizer)
+    </TemplateColumn>
+    <TemplateColumn Title="@Localizer["Actions"]" Context="vehicle">
+        @if (MayEdit)
+        {
+            <AppButton Href="@EditHref(vehicle)" Label="Edit" />
+        }
+    </TemplateColumn>
+
+</QuickGrid>
+<Paginator State="PaginationState" />
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<Vehicle>? Vehicles;
+    IQueryable<Vehicle> FilteredVehicles => Vehicles is null ? Enumerable.Empty<Vehicle>().AsQueryable() : Vehicles.AsQueryable();
+
+    bool MayEdit;
+    bool IsMyVehiclesPage;
+    PaginationState PaginationState = new() { ItemsPerPage = 30 };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        MayEdit = Principal.IsAuthenticated();
+        IsMyVehiclesPage = Navigator.Uri.EndsWith("My", StringComparison.OrdinalIgnoreCase);
+        if (IsMyVehiclesPage)
+        {
+            Vehicles = await VehicleService.GetPersonsOwnedVehiclesAsync(Principal, Principal.PersonId());
+        }
+        else
+        {
+            Vehicles = []; // TODO: Add fetch all vehicles.
+        }
+    }
+
+    string Label => IsMyVehiclesPage ? "MyVehicles" : "Vehicles";
+
+    string EditHref(Vehicle vehicle) => $"/vehicles/my/{vehicle.Id}";
+    string AddHref => "/vehicles/my/0";
+}

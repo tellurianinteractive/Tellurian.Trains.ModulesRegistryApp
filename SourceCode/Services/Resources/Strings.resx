@@ -117,212 +117,125 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Community" xml:space="preserve">
-    <value>Community</value>
-  </data>
-  <data name="DeletedSuccessfully" xml:space="preserve">
-    <value>Deleted successfully.</value>
-  </data>
-  <data name="DeleteFailed" xml:space="preserve">
-    <value>Deletion failed!</value>
-  </data>
-  <data name="MayNotBeDeleted" xml:space="preserve">
-    <value>May not be deleted.</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Non-profit association</value>
-  </data>
-  <data name="NothingToDelete" xml:space="preserve">
-    <value>Nothing to delete.</value>
-  </data>
-  <data name="Saved" xml:space="preserve">
-    <value>Saved.</value>
-  </data>
-  <data name="SaveFailed" xml:space="preserve">
-    <value>Saving failed!</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="Sweden" xml:space="preserve">
-    <value>Sweden</value>
-  </data>
-  <data name="Denmark" xml:space="preserve">
-    <value>Denmark</value>
-  </data>
-  <data name="Germany" xml:space="preserve">
-    <value>Germany</value>
-  </data>
-  <data name="Norway" xml:space="preserve">
-    <value>Norway</value>
-  </data>
-  <data name="Switzerland" xml:space="preserve">
-    <value>Switzerland</value>
-  </data>
-  <data name="AppName" xml:space="preserve">
-    <value>The Module Registry</value>
-  </data>
-  <data name="PasswordPolicy" xml:space="preserve">
-    <value>Minimum length {0} characters, consisting of minimum {1} letters {2}, {3} digits {4} and {5} special characters {6}.</value>
-  </data>
-  <data name="PasswordInvalid" xml:space="preserve">
-    <value>Password does not meet policy requirements.</value>
-  </data>
-  <data name="PasswordsDontMatch" xml:space="preserve">
-    <value>Password and confirmed password don't match.</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Create password</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello</value>
-  </data>
-  <data name="BestRegards" xml:space="preserve">
-    <value>Best regards</value>
-  </data>
-  <data name="NotAuthorized" xml:space="preserve">
-    <value>Not authorized</value>
+  <data name="Afternoon" xml:space="preserve">
+    <value>Afternoon</value>
   </data>
   <data name="AlreadyExists" xml:space="preserve">
     <value>Already exists</value>
   </data>
-  <data name="NotFound" xml:space="preserve">
-    <value>Not found</value>
+  <data name="And" xml:space="preserve">
+    <value>and</value>
   </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Not applicable</value>
-  </data>
-  <data name="Optional" xml:space="preserve">
-    <value>Optional</value>
-  </data>
-  <data name="CloningFailed" xml:space="preserve">
-    <value>Cloning failed</value>
-  </data>
-  <data name="ClonedSuccessfully" xml:space="preserve">
-    <value>Cloned successfully</value>
-  </data>
-  <data name="NoModification" xml:space="preserve">
-    <value>No modification</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Fault" xml:space="preserve">
-    <value>Fault</value>
-  </data>
-  <data name="United Kingdom" xml:space="preserve">
-    <value>United Kingdom</value>
-  </data>
-  <data name="Netherlands" xml:space="preserve">
-    <value>Netherlands</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>Undefined</value>
-  </data>
-  <data name="Canceled" xml:space="preserve">
-    <value>Canceled</value>
+  <data name="AppName" xml:space="preserve">
+    <value>The Module Registry</value>
   </data>
   <data name="Arrival" xml:space="preserve">
     <value>Arrival</value>
   </data>
-  <data name="Departure" xml:space="preserve">
-    <value>Departure</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="Receive" xml:space="preserve">
-    <value>Receive</value>
-  </data>
-  <data name="Import" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="Export" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="In the evening" xml:space="preserve">
-    <value>In the evening</value>
-  </data>
   <data name="At night" xml:space="preserve">
     <value>At night</value>
   </data>
-  <data name="In the afternoon" xml:space="preserve">
-    <value>In the afternoon</value>
+  <data name="Austria" xml:space="preserve">
+    <value>Austria</value>
   </data>
-  <data name="In the morning" xml:space="preserve">
-    <value>In the morning</value>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
   </data>
-  <data name="Wagons" xml:space="preserve">
-    <value>Wagons</value>
+  <data name="Bale" xml:space="preserve">
+    <value>Bale</value>
   </data>
-  <data name="Tonnes" xml:space="preserve">
-    <value>Tonnes</value>
+  <data name="Bales" xml:space="preserve">
+    <value>Bales</value>
+  </data>
+  <data name="Barrel" xml:space="preserve">
+    <value>Barrel</value>
+  </data>
+  <data name="Barrels" xml:space="preserve">
+    <value>Barrels</value>
+  </data>
+  <data name="BestRegards" xml:space="preserve">
+    <value>Best regards</value>
+  </data>
+  <data name="BigSack" xml:space="preserve">
+    <value>Big sack</value>
+  </data>
+  <data name="BigSacks" xml:space="preserve">
+    <value>Big sacks</value>
+  </data>
+  <data name="Bottle" xml:space="preserve">
+    <value>Bottle</value>
+  </data>
+  <data name="Bottles" xml:space="preserve">
+    <value>Bottles</value>
+  </data>
+  <data name="Box" xml:space="preserve">
+    <value>Box</value>
+  </data>
+  <data name="Boxes" xml:space="preserve">
+    <value>Boxes</value>
+  </data>
+  <data name="Bulk" xml:space="preserve">
+    <value>Bulk</value>
+  </data>
+  <data name="BulkContainer30" xml:space="preserve">
+    <value>30' Bulk container</value>
+  </data>
+  <data name="BulkContainers30" xml:space="preserve">
+    <value>30' Bulk containers</value>
+  </data>
+  <data name="Bundle" xml:space="preserve">
+    <value>Bundle</value>
+  </data>
+  <data name="Bundles" xml:space="preserve">
+    <value>Bundles</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Cargo</value>
+  </data>
+  <data name="CargoRack" xml:space="preserve">
+    <value>Cargo rack</value>
+  </data>
+  <data name="CargoRacks" xml:space="preserve">
+    <value>Cargo racks</value>
+  </data>
+  <data name="CargoUnit" xml:space="preserve">
+    <value>Cargo unit</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="ClonedSuccessfully" xml:space="preserve">
+    <value>Cloned successfully</value>
+  </data>
+  <data name="CloningFailed" xml:space="preserve">
+    <value>Cloning failed</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Community</value>
+  </data>
+  <data name="Consignee" xml:space="preserve">
+    <value>Consignee</value>
+  </data>
+  <data name="Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Create password</value>
+  </data>
+  <data name="Cubicmeter" xml:space="preserve">
+    <value>Cubic meter</value>
   </data>
   <data name="Cubicmeters" xml:space="preserve">
     <value>Cubic meters</value>
   </data>
-  <data name="Pieces" xml:space="preserve">
-    <value>Pieces</value>
-  </data>
-  <data name="To" xml:space="preserve">
-    <value>to</value>
-  </data>
-  <data name="And" xml:space="preserve">
-    <value>and</value>
-  </data>
-  <data name="DayNameCasing" xml:space="preserve">
-    <value>UPPER</value>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>Mo</value>
-  </data>
-  <data name="Monday" xml:space="preserve">
-    <value>Monday</value>
-  </data>
-  <data name="Tuesday" xml:space="preserve">
-    <value>Tuesday</value>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>Tu</value>
-  </data>
-  <data name="Wednesday" xml:space="preserve">
-    <value>Wednesday</value>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>We</value>
-  </data>
-  <data name="Thursday" xml:space="preserve">
-    <value>Thursday</value>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>Th</value>
-  </data>
-  <data name="Friday" xml:space="preserve">
-    <value>Friday</value>
-  </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>Fr</value>
-  </data>
-  <data name="Saturday" xml:space="preserve">
-    <value>Saturday</value>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>Sa</value>
-  </data>
-  <data name="Sunday" xml:space="preserve">
-    <value>Sunday</value>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>Su</value>
+  <data name="CzechRepublic" xml:space="preserve">
+    <value>Czech Republic</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>Daily</value>
@@ -330,56 +243,32 @@
   <data name="DailyShort" xml:space="preserve">
     <value>Daily</value>
   </data>
-  <data name="Container" xml:space="preserve">
-    <value>Container</value>
+  <data name="DayNameCasing" xml:space="preserve">
+    <value>UPPER</value>
   </data>
-  <data name="Trailers" xml:space="preserve">
-    <value>Trailers</value>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>All users</value>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Deleted successfully.</value>
   </data>
-  <data name="None" xml:space="preserve">
-    <value>None</value>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Deletion failed!</value>
   </data>
-  <data name="with" xml:space="preserve">
-    <value>with</value>
+  <data name="Denmark" xml:space="preserve">
+    <value>Denmark</value>
   </data>
-  <data name="ParticipantHasRegisteredModules" xml:space="preserve">
-    <value>Participant has registered modules</value>
+  <data name="Departure" xml:space="preserve">
+    <value>Departure</value>
   </data>
-  <data name="Trainset" xml:space="preserve">
-    <value>Trainset</value>
+  <data name="Destination" xml:space="preserve">
+    <value>Destination</value>
   </data>
-  <data name="Northwards" xml:space="preserve">
-    <value>Northwards</value>
+  <data name="Dieselelectric" xml:space="preserve">
+    <value>Diesel electric</value>
   </data>
-  <data name="Southwards" xml:space="preserve">
-    <value>Southwards</value>
-  </data>
-  <data name="Boxes" xml:space="preserve">
-    <value>Boxes</value>
-  </data>
-  <data name="Barrels" xml:space="preserve">
-    <value>Barrels</value>
-  </data>
-  <data name="Bales" xml:space="preserve">
-    <value>Bales</value>
-  </data>
-  <data name="Sacks" xml:space="preserve">
-    <value>Sacks</value>
-  </data>
-  <data name="Pallets" xml:space="preserve">
-    <value>Pallets</value>
-  </data>
-  <data name="Bottles" xml:space="preserve">
-    <value>Bottles</value>
-  </data>
-  <data name="CargoRacks" xml:space="preserve">
-    <value>Cargo racks</value>
-  </data>
-  <data name="LiquidContainer" xml:space="preserve">
-    <value>Liquid container</value>
+  <data name="Dieselhydraulic" xml:space="preserve">
+    <value>Diesel hydraulic</value>
   </data>
   <data name="DryContainer10" xml:space="preserve">
     <value>10' Dry container</value>
@@ -390,147 +279,6 @@
   <data name="DryContainer40" xml:space="preserve">
     <value>40' Dry contrainer</value>
   </data>
-  <data name="ReeferContainer20" xml:space="preserve">
-    <value>20' Reefer container</value>
-  </data>
-  <data name="ReeferContainer40" xml:space="preserve">
-    <value>40' Reefer container</value>
-  </data>
-  <data name="FlatRackContainer20" xml:space="preserve">
-    <value>20' Flat rack container</value>
-  </data>
-  <data name="FlatRackContainer40" xml:space="preserve">
-    <value>40' Flat rack container</value>
-  </data>
-  <data name="OpenTopContainer20" xml:space="preserve">
-    <value>20' Open top container</value>
-  </data>
-  <data name="OpenTopContainer40" xml:space="preserve">
-    <value>40' Open top container</value>
-  </data>
-  <data name="HighCubeContainer20" xml:space="preserve">
-    <value>20' High cube container</value>
-  </data>
-  <data name="HighCubeContainer40" xml:space="preserve">
-    <value>40' High cube container</value>
-  </data>
-  <data name="HighCubeReeferContainer40" xml:space="preserve">
-    <value>40' High cube reefer container</value>
-  </data>
-  <data name="Cargo" xml:space="preserve">
-    <value>Cargo</value>
-  </data>
-  <data name="Carrier" xml:space="preserve">
-    <value>Carrier</value>
-  </data>
-  <data name="Class" xml:space="preserve">
-    <value>Class</value>
-  </data>
-  <data name="Consignee" xml:space="preserve">
-    <value>Consignee</value>
-  </data>
-  <data name="Destination" xml:space="preserve">
-    <value>Destination</value>
-  </data>
-  <data name="Epoch" xml:space="preserve">
-    <value>Epoch</value>
-  </data>
-  <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
-  </data>
-  <data name="Instructions" xml:space="preserve">
-    <value>Instructions</value>
-  </data>
-  <data name="Origin" xml:space="preserve">
-    <value>Origin</value>
-  </data>
-  <data name="Shipper" xml:space="preserve">
-    <value>Shipper</value>
-  </data>
-  <data name="Wagon" xml:space="preserve">
-    <value>Wagon</value>
-  </data>
-  <data name="In" xml:space="preserve">
-    <value>in</value>
-  </data>
-  <data name="CargoUnit" xml:space="preserve">
-    <value>Cargo unit</value>
-  </data>
-  <data name="Days" xml:space="preserve">
-    <value>Days</value>
-  </data>
-  <data name="LoadingReadyTime" xml:space="preserve">
-    <value>Loading finished</value>
-  </data>
-  <data name="UnloadingReadyTime" xml:space="preserve">
-    <value>Unloading finished</value>
-  </data>
-  <data name="Afternoon" xml:space="preserve">
-    <value>Afternoon</value>
-  </data>
-  <data name="Evening" xml:space="preserve">
-    <value>Evening</value>
-  </data>
-  <data name="Night" xml:space="preserve">
-    <value>Night</value>
-  </data>
-  <data name="Morning" xml:space="preserve">
-    <value>Morning</value>
-  </data>
-  <data name="Noon" xml:space="preserve">
-    <value>Noon</value>
-  </data>
-  <data name="Italy" xml:space="preserve">
-    <value>Italy</value>
-  </data>
-  <data name="Unload" xml:space="preserve">
-    <value>Unload</value>
-  </data>
-  <data name="Load" xml:space="preserve">
-    <value>Load</value>
-  </data>
-  <data name="ImportAgent" xml:space="preserve">
-    <value>Import agent</value>
-  </data>
-  <data name="ExportAgent" xml:space="preserve">
-    <value>Export agent</value>
-  </data>
-  <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
-  </data>
-  <data name="Rolls" xml:space="preserve">
-    <value>Rolls</value>
-  </data>
-  <data name="BigSacks" xml:space="preserve">
-    <value>Big sacks</value>
-  </data>
-  <data name="Bundles" xml:space="preserve">
-    <value>Bundles</value>
-  </data>
-  <data name="Plates" xml:space="preserve">
-    <value>Plates</value>
-  </data>
-  <data name="Bale" xml:space="preserve">
-    <value>Bale</value>
-  </data>
-  <data name="Barrel" xml:space="preserve">
-    <value>Barrel</value>
-  </data>
-  <data name="BigSack" xml:space="preserve">
-    <value>Big sack</value>
-  </data>
-  <data name="Bottle" xml:space="preserve">
-    <value>Bottle</value>
-  </data>
-  <data name="Box" xml:space="preserve">
-    <value>Box</value>
-  </data>
-  <data name="Bundle" xml:space="preserve">
-    <value>Bundle</value>
-  </data>
-  <data name="CargoRack" xml:space="preserve">
-    <value>Cargo rack</value>
-  </data>
   <data name="DryContainers10" xml:space="preserve">
     <value>10' Dry containers</value>
   </data>
@@ -540,11 +288,74 @@
   <data name="DryContainers40" xml:space="preserve">
     <value>40' Dry contrainers</value>
   </data>
+  <data name="DualMode" xml:space="preserve">
+    <value>Dual mode</value>
+  </data>
+  <data name="Duplicated" xml:space="preserve">
+    <value>Duplicated</value>
+  </data>
+  <data name="Electric" xml:space="preserve">
+    <value>Electric</value>
+  </data>
+  <data name="ElectricBattery" xml:space="preserve">
+    <value>Electric, battery</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Empty</value>
+  </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Empty wagon order</value>
+  </data>
+  <data name="Epoch" xml:space="preserve">
+    <value>Epoch</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Evening" xml:space="preserve">
+    <value>Evening</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportAgent" xml:space="preserve">
+    <value>Export agent</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Fault</value>
+  </data>
+  <data name="FlatRackContainer20" xml:space="preserve">
+    <value>20' Flat rack container</value>
+  </data>
+  <data name="FlatRackContainer40" xml:space="preserve">
+    <value>40' Flat rack container</value>
+  </data>
   <data name="FlatRackContainers20" xml:space="preserve">
     <value>20' Flat rack containers</value>
   </data>
   <data name="FlatRackContainers40" xml:space="preserve">
     <value>40' Flat rack containers</value>
+  </data>
+  <data name="France" xml:space="preserve">
+    <value>France</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="FridayShort" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
+  <data name="HighCubeContainer20" xml:space="preserve">
+    <value>20' High cube container</value>
+  </data>
+  <data name="HighCubeContainer40" xml:space="preserve">
+    <value>40' High cube container</value>
   </data>
   <data name="HighCubeContainers20" xml:space="preserve">
     <value>20' High cube containers</value>
@@ -552,35 +363,125 @@
   <data name="HighCubeContainers40" xml:space="preserve">
     <value>40' High cube containers</value>
   </data>
+  <data name="HighCubeReeferContainer40" xml:space="preserve">
+    <value>40' High cube reefer container</value>
+  </data>
   <data name="HighCubeReeferContainers40" xml:space="preserve">
     <value>40' High cube reefer containers</value>
+  </data>
+  <data name="Hungary" xml:space="preserve">
+    <value>Hungary</value>
+  </data>
+  <data name="Hydrogen" xml:space="preserve">
+    <value>Hydrogen</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportAgent" xml:space="preserve">
+    <value>Import agent</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>in</value>
+  </data>
+  <data name="In the afternoon" xml:space="preserve">
+    <value>In the afternoon</value>
+  </data>
+  <data name="In the evening" xml:space="preserve">
+    <value>In the evening</value>
+  </data>
+  <data name="In the morning" xml:space="preserve">
+    <value>In the morning</value>
+  </data>
+  <data name="Incomplete" xml:space="preserve">
+    <value>Not complete</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instructions</value>
+  </data>
+  <data name="Internal" xml:space="preserve">
+    <value>Internal meeting</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventory number</value>
+  </data>
+  <data name="Italy" xml:space="preserve">
+    <value>Italy</value>
+  </data>
+  <data name="LiquidContainer" xml:space="preserve">
+    <value>Liquid container</value>
   </data>
   <data name="LiquidContainers" xml:space="preserve">
     <value>Liquid containers</value>
   </data>
-  <data name="OpenTopContainers20" xml:space="preserve">
-    <value>20' Open top containers</value>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
   </data>
-  <data name="OpenTopContainers40" xml:space="preserve">
-    <value>40' Open top containers</value>
+  <data name="LoadingReadyTime" xml:space="preserve">
+    <value>Loading finished</value>
   </data>
-  <data name="Pallet" xml:space="preserve">
-    <value>Pallet</value>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-address</value>
   </data>
-  <data name="Plate" xml:space="preserve">
-    <value>Plate</value>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>May not be deleted.</value>
   </data>
-  <data name="ReeferContainers20" xml:space="preserve">
-    <value>20' Reefer containers</value>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
   </data>
-  <data name="ReeferContainers40" xml:space="preserve">
-    <value>40' Reefer containers</value>
+  <data name="MondayShort" xml:space="preserve">
+    <value>Mo</value>
   </data>
-  <data name="Roll" xml:space="preserve">
-    <value>Roll</value>
+  <data name="Morning" xml:space="preserve">
+    <value>Morning</value>
   </data>
-  <data name="Sack" xml:space="preserve">
-    <value>Sack</value>
+  <data name="Netherlands" xml:space="preserve">
+    <value>Netherlands</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Night</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoModification" xml:space="preserve">
+    <value>No modification</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Non-profit association</value>
+  </data>
+  <data name="Noon" xml:space="preserve">
+    <value>Noon</value>
+  </data>
+  <data name="Northwards" xml:space="preserve">
+    <value>Northwards</value>
+  </data>
+  <data name="Norway" xml:space="preserve">
+    <value>Norway</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Not applicable</value>
+  </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>Not authorized</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Nothing to delete.</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>on</value>
   </data>
   <data name="OnDemand" xml:space="preserve">
     <value>On demand</value>
@@ -588,47 +489,128 @@
   <data name="OnDemandShort" xml:space="preserve">
     <value>On demand</value>
   </data>
-  <data name="WhenNeeded" xml:space="preserve">
-    <value>When needed</value>
+  <data name="OpenTopContainer20" xml:space="preserve">
+    <value>20' Open top container</value>
   </data>
-  <data name="WhenNeededShort" xml:space="preserve">
-    <value>When needed</value>
+  <data name="OpenTopContainer40" xml:space="preserve">
+    <value>40' Open top container</value>
   </data>
-  <data name="Internal" xml:space="preserve">
-    <value>Internal meeting</value>
+  <data name="OpenTopContainers20" xml:space="preserve">
+    <value>20' Open top containers</value>
   </data>
-  <data name="RegistrationOpen" xml:space="preserve">
-    <value>Registration open</value>
+  <data name="OpenTopContainers40" xml:space="preserve">
+    <value>40' Open top containers</value>
   </data>
-  <data name="RegistrationClosed" xml:space="preserve">
-    <value>Registration closed</value>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
   </data>
-  <data name="YearsInOperation" xml:space="preserve">
-    <value>Years in operation</value>
+  <data name="Origin" xml:space="preserve">
+    <value>Origin</value>
   </data>
-  <data name="Bulk" xml:space="preserve">
-    <value>Bulk</value>
+  <data name="OtherHook" xml:space="preserve">
+    <value>Other hook</value>
   </data>
-  <data name="SendDays" xml:space="preserve">
-    <value>Send {0}.</value>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
   </data>
-  <data name="Cubicmeter" xml:space="preserve">
-    <value>Cubic meter</value>
+  <data name="Owners" xml:space="preserve">
+    <value>Owners</value>
   </data>
-  <data name="TrainsetWith" xml:space="preserve">
-    <value>Trainset with</value>
+  <data name="Pallet" xml:space="preserve">
+    <value>Pallet</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="Pallets" xml:space="preserve">
+    <value>Pallets</value>
+  </data>
+  <data name="ParticipantHasRegisteredModules" xml:space="preserve">
+    <value>Participant has registered modules</value>
+  </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Password does not meet policy requirements.</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Minimum length {0} characters, consisting of minimum {1} letters {2}, {3} digits {4} and {5} special characters {6}.</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Password and confirmed password don't match.</value>
   </data>
   <data name="Piece" xml:space="preserve">
     <value>Piece</value>
   </data>
-  <data name="Ton" xml:space="preserve">
-    <value>Ton</value>
+  <data name="Pieces" xml:space="preserve">
+    <value>Pieces</value>
   </data>
-  <data name="On" xml:space="preserve">
-    <value>on</value>
+  <data name="Plate" xml:space="preserve">
+    <value>Plate</value>
+  </data>
+  <data name="Plates" xml:space="preserve">
+    <value>Plates</value>
+  </data>
+  <data name="Poland" xml:space="preserve">
+    <value>Poland</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Receive" xml:space="preserve">
+    <value>Receive</value>
+  </data>
+  <data name="ReeferContainer20" xml:space="preserve">
+    <value>20' Reefer container</value>
+  </data>
+  <data name="ReeferContainer40" xml:space="preserve">
+    <value>40' Reefer container</value>
+  </data>
+  <data name="ReeferContainers20" xml:space="preserve">
+    <value>20' Reefer containers</value>
+  </data>
+  <data name="ReeferContainers40" xml:space="preserve">
+    <value>40' Reefer containers</value>
+  </data>
+  <data name="RegistrationClosed" xml:space="preserve">
+    <value>Registration closed</value>
+  </data>
+  <data name="RegistrationOpen" xml:space="preserve">
+    <value>Registration open</value>
+  </data>
+  <data name="Roll" xml:space="preserve">
+    <value>Roll</value>
+  </data>
+  <data name="Rolls" xml:space="preserve">
+    <value>Rolls</value>
+  </data>
+  <data name="Sack" xml:space="preserve">
+    <value>Sack</value>
+  </data>
+  <data name="Sacks" xml:space="preserve">
+    <value>Sacks</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Saving failed!</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="SendDays" xml:space="preserve">
+    <value>Send {0}.</value>
+  </data>
+  <data name="Shipper" xml:space="preserve">
+    <value>Shipper</value>
+  </data>
+  <data name="Slovakia" xml:space="preserve">
+    <value>Slovakia</value>
+  </data>
+  <data name="Southwards" xml:space="preserve">
+    <value>Southwards</value>
   </data>
   <data name="Squaremeter" xml:space="preserve">
     <value>Square meter</value>
@@ -636,26 +618,23 @@
   <data name="Squaremeters" xml:space="preserve">
     <value>Square meters</value>
   </data>
-  <data name="France" xml:space="preserve">
-    <value>France</value>
+  <data name="Steam" xml:space="preserve">
+    <value>Steam</value>
   </data>
-  <data name="Unavailable" xml:space="preserve">
-    <value>Unavailable</value>
+  <data name="Success" xml:space="preserve">
+    <value>OK</value>
   </data>
-  <data name="Untested" xml:space="preserve">
-    <value>Untested</value>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
   </data>
-  <data name="Incomplete" xml:space="preserve">
-    <value>Not complete</value>
+  <data name="SundayShort" xml:space="preserve">
+    <value>Su</value>
   </data>
-  <data name="Available" xml:space="preserve">
-    <value>Available</value>
+  <data name="Sweden" xml:space="preserve">
+    <value>Sweden</value>
   </data>
-  <data name="Trailer" xml:space="preserve">
-    <value>Trailer</value>
-  </data>
-  <data name="BulkContainer30" xml:space="preserve">
-    <value>30' Bulk container</value>
+  <data name="Switzerland" xml:space="preserve">
+    <value>Switzerland</value>
   </data>
   <data name="TankContainer30" xml:space="preserve">
     <value>30' Tank container</value>
@@ -663,8 +642,59 @@
   <data name="TankContainers30" xml:space="preserve">
     <value>30' Tank containers</value>
   </data>
-  <data name="BulkContainers30" xml:space="preserve">
-    <value>30' Bulk containers</value>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="Ton" xml:space="preserve">
+    <value>Ton</value>
+  </data>
+  <data name="Tonnes" xml:space="preserve">
+    <value>Tonnes</value>
+  </data>
+  <data name="Trailer" xml:space="preserve">
+    <value>Trailer</value>
+  </data>
+  <data name="Trailers" xml:space="preserve">
+    <value>Trailers</value>
+  </data>
+  <data name="Trainset" xml:space="preserve">
+    <value>Trainset</value>
+  </data>
+  <data name="TrainsetWith" xml:space="preserve">
+    <value>Trainset with</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Undefined</value>
+  </data>
+  <data name="United Kingdom" xml:space="preserve">
+    <value>United Kingdom</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Unload" xml:space="preserve">
+    <value>Unload</value>
+  </data>
+  <data name="UnloadingReadyTime" xml:space="preserve">
+    <value>Unloading finished</value>
+  </data>
+  <data name="Untested" xml:space="preserve">
+    <value>Untested</value>
   </data>
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Updated successfully</value>
@@ -672,43 +702,40 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Update failed</value>
   </data>
-  <data name="Poland" xml:space="preserve">
-    <value>Poland</value>
+  <data name="Users" xml:space="preserve">
+    <value>All users</value>
   </data>
-  <data name="CzechRepublic" xml:space="preserve">
-    <value>Czech Republic</value>
+  <data name="Wagon" xml:space="preserve">
+    <value>Wagon</value>
   </data>
-  <data name="Slovakia" xml:space="preserve">
-    <value>Slovakia</value>
+  <data name="Wagons" xml:space="preserve">
+    <value>Wagons</value>
   </data>
-  <data name="Hungary" xml:space="preserve">
-    <value>Hungary</value>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
   </data>
-  <data name="Austria" xml:space="preserve">
-    <value>Austria</value>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>We</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="WeinertHook" xml:space="preserve">
+    <value>Weinert hook</value>
   </data>
-  <data name="Duplicated" xml:space="preserve">
-    <value>Duplicated</value>
+  <data name="WhenNeeded" xml:space="preserve">
+    <value>When needed</value>
   </data>
-  <data name="InventoryNumber" xml:space="preserve">
-    <value>Inventory number</value>
+  <data name="WhenNeededShort" xml:space="preserve">
+    <value>When needed</value>
   </data>
-  <data name="MacAddress" xml:space="preserve">
-    <value>MAC-address</value>
-  </data>
-  <data name="Owners" xml:space="preserve">
-    <value>Owners</value>
-  </data>
-  <data name="Owner" xml:space="preserve">
-    <value>Owner</value>
-  </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Empty wagon order</value>
+  <data name="with" xml:space="preserve">
+    <value>with</value>
   </data>
   <data name="Yard" xml:space="preserve">
     <value>Yard</value>
+  </data>
+  <data name="YearsInOperation" xml:space="preserve">
+    <value>Years in operation</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

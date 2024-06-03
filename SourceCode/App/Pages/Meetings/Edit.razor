@@ -11,7 +11,7 @@
 @inject LayoutService LayoutService
 @inject GroupService GroupService
 
-<PageHeading Owner="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" />
+<PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" />
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="Meeting.MayDelete(Principal)">
     <Inputs>

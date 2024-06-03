@@ -4,7 +4,7 @@
 <div>
     <div class="flex-container">
         <div style="flex-grow: 4">
-            <span class="@IconClass" /> @Localizer.HeadingText(Label, ObjectName, Owner, PageAction)
+            <span class="@IconClass" /> @Localizer.HeadingText(Label, ObjectName, Context, PageAction)
         </div>
         <div class="noprint" style="flex-grow: 1; text-align:right">
             @if (IsHelpAvailable)
@@ -24,12 +24,11 @@
     [Parameter] public string? IconClass { get; set; }
     [Parameter] public string? Label { get; set; }
     [Parameter] public string? ObjectName { get; set; }
-    [Parameter] public object? Owner { get; set; }
+    [Parameter] public object? Context { get; set; }
     [Parameter] public PageAction PageAction { get; set; }
     [Parameter] public string? HelpContext { get; set; }
     [Parameter] public bool ShowHelpInitially { get; set; }
 
-    //bool HelpIsVisible { get; set; }
     bool HelpIsHidden => PageHistory.IsShowningHelp != true;
     bool IsHelpAvailable => HelpContext.HasValue();
     string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help/{HelpContext}";

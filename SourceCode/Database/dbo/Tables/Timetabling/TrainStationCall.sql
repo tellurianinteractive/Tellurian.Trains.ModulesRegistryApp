@@ -13,7 +13,10 @@
     CONSTRAINT [FK_TrainStationCall_Train] FOREIGN KEY ([TrainId]) REFERENCES [dbo].[Train] ([Id]),
     CONSTRAINT [FK_TrainStationCall_StationTrack] FOREIGN KEY ([StationTrackId]) REFERENCES [dbo].[StationTrack] ([Id])
 );
-    GO
+GO
+    CREATE NONCLUSTERED INDEX [IX_TrainStationCall_TrainId] ON
+        [dbo].[TrainStationCall]( TrainId ASC);
+GO
     CREATE TRIGGER [DeleteTrainStationCall] ON [TrainStationCall] INSTEAD OF DELETE
     AS
     BEGIN
@@ -21,4 +24,5 @@
         DELETE FROM [ScheduleTrainPart] WHERE ToArrivalId IN (SELECT Id FROM DELETED)
         DELETE FROM [TrainStationCall] WHERE Id IN (SELECT Id FROM DELETED)
     END
+
    

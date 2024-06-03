@@ -117,110 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
-  </data>
-  <data name="AuthenticationInProgress" xml:space="preserve">
-    <value>Authentication in progress...</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
-  </data>
-  <data name="EditPerson" xml:space="preserve">
-    <value>Edit person</value>
-  </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>First name</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Last name</value>
-  </data>
-  <data name="EmailAddresses" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="CityName" xml:space="preserve">
-    <value>City name</value>
-  </data>
-  <data name="IsUser" xml:space="preserve">
-    <value>Is user?</value>
-  </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="AppName" xml:space="preserve">
-    <value>The Modules Registry</value>
-  </data>
-  <data name="SignedInAs" xml:space="preserve">
-    <value>Signed in as {0}</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Log out</value>
-  </data>
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
   </data>
-  <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+  <data name="Accomodation" xml:space="preserve">
+    <value>Accomodation</value>
   </data>
-  <data name="GettingData" xml:space="preserve">
-    <value>Fetching data. Please wait...</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="AddNew" xml:space="preserve">
-    <value>Add new</value>
-  </data>
-  <data name="Category" xml:space="preserve">
-    <value>Category</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
-  </data>
-  <data name="Group" xml:space="preserve">
-    <value>Group</value>
-  </data>
-  <data name="Groups" xml:space="preserve">
-    <value>Groups</value>
-  </data>
-  <data name="ShortName" xml:space="preserve">
-    <value>Abbreviation</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Country</value>
-  </data>
-  <data name="Community" xml:space="preserve">
-    <value>Community</value>
-  </data>
-  <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Non-profit association</value>
-  </data>
-  <data name="City" xml:space="preserve">
-    <value>City</value>
-  </data>
-  <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Is group admin?</value>
-  </data>
-  <data name="IsDataAdministrator" xml:space="preserve">
-    <value>Is data admin?</value>
-  </data>
-  <data name="MembersIn" xml:space="preserve">
-    <value>Members in</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
@@ -228,1139 +135,182 @@
   <data name="AddMemberIn" xml:space="preserve">
     <value>Add member in</value>
   </data>
-  <data name="Members" xml:space="preserve">
-    <value>Members</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Email address</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="TermsOfUse" xml:space="preserve">
-    <value>Terms of use</value>
-  </data>
-  <data name="UserConfirmationFailed" xml:space="preserve">
-    <value>User confirmation failed!</value>
-  </data>
-  <data name="NoEmailProvided" xml:space="preserve">
-    <value>No email address provided</value>
-  </data>
-  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
-    <value>No registration ID is provided</value>
-  </data>
-  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
-    <value>No user found with email '{0}' and registration ID '{1}'</value>
-  </data>
-  <data name="UserConfirmed" xml:space="preserve">
-    <value>User confirmed</value>
-  </data>
-  <data name="UserWelcome" xml:space="preserve">
-    <value>{0}, welcome!</value>
-  </data>
-  <data name="YouMayNowLogin" xml:space="preserve">
-    <value>You may now login</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Create password</value>
-  </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Invite</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello</value>
-  </data>
-  <data name="InvitationSent" xml:space="preserve">
-    <value>Invitation sent</value>
-  </data>
-  <data name="ModuleOwners" xml:space="preserve">
-    <value>Module owners</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="Invited" xml:space="preserve">
-    <value>Invited</value>
-  </data>
-  <data name="LoggedInAs" xml:space="preserve">
-    <value>Logged in as</value>
-  </data>
-  <data name="GlobalAdministrator" xml:space="preserve">
-    <value>Global administrator</value>
-  </data>
-  <data name="CountryAdministrator" xml:space="preserve">
-    <value>Country administrator</value>
-  </data>
-  <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
-    <value>You are not authorized to view this page.</value>
-  </data>
-  <data name="SorryNothingToDisplayHere" xml:space="preserve">
-    <value>Sorry, nothing to display here.</value>
-  </data>
-  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
-    <value>must begin with a capital letter</value>
-  </data>
-  <data name="MustBeSelected" xml:space="preserve">
-    <value>must be selected</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Scale" xml:space="preserve">
-    <value>Scale</value>
-  </data>
-  <data name="Standard" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-  <data name="ThemeNote" xml:space="preserve">
-    <value>Theme note</value>
-  </data>
-  <data name="FromYear" xml:space="preserve">
-    <value>From year</value>
-  </data>
-  <data name="UptoYear" xml:space="preserve">
-    <value>Up to year</value>
-  </data>
-  <data name="FunctionalState" xml:space="preserve">
-    <value>Functional state</value>
-  </data>
-  <data name="LandscapeState" xml:space="preserve">
-    <value>Landscape state</value>
-  </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
-  </data>
-  <data name="Radius" xml:space="preserve">
-    <value>Radius</value>
-  </data>
-  <data name="Angle" xml:space="preserve">
-    <value>Angle</value>
-  </data>
-  <data name="Length" xml:space="preserve">
-    <value>Length</value>
-  </data>
-  <data name="Is2R" xml:space="preserve">
-    <value>Is 2R?</value>
-  </data>
-  <data name="Is3R" xml:space="preserve">
-    <value>Is 3R?</value>
-  </data>
-  <data name="IsTurntable" xml:space="preserve">
-    <value>Is turntable?</value>
-  </data>
-  <data name="IsDuckunder" xml:space="preserve">
-    <value>Is duckunder?</value>
-  </data>
-  <data name="IsJunction" xml:space="preserve">
-    <value>Is junction?</value>
-  </data>
-  <data name="IsStation" xml:space="preserve">
-    <value>Is station?</value>
-  </data>
-  <data name="Module" xml:space="preserve">
-    <value>Module</value>
-  </data>
-  <data name="HasNarrowGauge" xml:space="preserve">
-    <value>Has narrow gauge?</value>
-  </data>
-  <data name="HasNormalGauge" xml:space="preserve">
-    <value>Has normal gauge?</value>
-  </data>
-  <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Through tracks</value>
-  </data>
-  <data name="PreferredTheme" xml:space="preserve">
-    <value>Preferred theme</value>
-  </data>
-  <data name="ModuleStandards" xml:space="preserve">
-    <value>Module standards</value>
-  </data>
-  <data name="TrackSystem" xml:space="preserve">
-    <value>Track system</value>
-  </data>
-  <data name="NormalGauge" xml:space="preserve">
-    <value>Normal gauge</value>
-  </data>
-  <data name="NarrowGauge" xml:space="preserve">
-    <value>Narrow gauge</value>
-  </data>
-  <data name="ElectricSystem" xml:space="preserve">
-    <value>Electric system</value>
-  </data>
-  <data name="Couplings" xml:space="preserve">
-    <value>Couplings</value>
-  </data>
-  <data name="NoRecordsToDisplay" xml:space="preserve">
-    <value>No records to display</value>
-  </data>
-  <data name="CreateModule" xml:space="preserve">
-    <value>Create module</value>
-  </data>
-  <data name="EditModule" xml:space="preserve">
-    <value>Edit module</value>
-  </data>
-  <data name="RepresentsFromYear" xml:space="preserve">
-    <value>Represents from year</value>
-  </data>
-  <data name="RepresentsToYear" xml:space="preserve">
-    <value>Represents to year</value>
-  </data>
-  <data name="FremoNumber" xml:space="preserve">
-    <value>FREMO no.</value>
-  </data>
-  <data name="PackageLabel" xml:space="preserve">
-    <value>Box label</value>
-  </data>
-  <data name="ConfigurationLabel" xml:space="preserve">
-    <value>Variant</value>
-  </data>
-  <data name="MiddleName" xml:space="preserve">
-    <value>Middle name</value>
-  </data>
-  <data name="OwnedBy" xml:space="preserve">
-    <value>owned by</value>
-  </data>
-  <data name="For" xml:space="preserve">
-    <value>For</value>
-  </data>
-  <data name="PasswordPolicy" xml:space="preserve">
-    <value>Password policy</value>
-  </data>
-  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
-    <value>Password must have minimum {0} characters</value>
-  </data>
-  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
-    <value>Password must fulfil these requirements:</value>
-  </data>
-  <data name="PasswordMinimumOfThese" xml:space="preserve">
-    <value>Minimum {0} of these {2}: {1}</value>
-  </data>
-  <data name="Letters" xml:space="preserve">
-    <value>Letters</value>
-  </data>
-  <data name="Digits" xml:space="preserve">
-    <value>Digits</value>
-  </data>
-  <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special characters</value>
-  </data>
-  <data name="LinkToExternalContent" xml:space="preserve">
-    <value>Link to external content</value>
-  </data>
-  <data name="ThisContentWasModified" xml:space="preserve">
-    <value>This content was modified {0:d} {0:t}</value>
-  </data>
-  <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Please read and scroll to bottom to accept. This is required to use this application.</value>
-  </data>
-  <data name="EndPlates" xml:space="preserve">
-    <value>End plates</value>
-  </data>
-  <data name="Direction" xml:space="preserve">
-    <value>Direction</value>
-  </data>
-  <data name="EndProfile" xml:space="preserve">
-    <value>End profile</value>
-  </data>
-  <data name="NumberOfSections" xml:space="preserve">
-    <value>Number of sections</value>
-  </data>
-  <data name="SignalFeature" xml:space="preserve">
-    <value>Has signal?</value>
-  </data>
-  <data name="OverheadLineFeature" xml:space="preserve">
-    <value>Has overhead line?</value>
-  </data>
-  <data name="MaxSpeed" xml:space="preserve">
-    <value>Max speed</value>
-  </data>
-  <data name="Signature" xml:space="preserve">
-    <value>Signature</value>
-  </data>
-  <data name="IsTerminus" xml:space="preserve">
-    <value>Is terminus?</value>
-  </data>
-  <data name="IsShadowStation" xml:space="preserve">
-    <value>Is shadow station?</value>
-  </data>
-  <data name="DisplayOrder" xml:space="preserve">
-    <value>Displayed order</value>
-  </data>
-  <data name="IsScheduled" xml:space="preserve">
-    <value>Is scheduled?</value>
-  </data>
-  <data name="IsSiding" xml:space="preserve">
-    <value>Is siding?</value>
-  </data>
-  <data name="Usage" xml:space="preserve">
-    <value>Usage</value>
-  </data>
-  <data name="SpeedLimit" xml:space="preserve">
-    <value>Max speed</value>
-  </data>
-  <data name="MaxTrainLength" xml:space="preserve">
-    <value>Max train length</value>
-  </data>
-  <data name="PlatformLength" xml:space="preserve">
-    <value>Platform length</value>
-  </data>
-  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
-    <value>Fill out new track and click Add before saving.</value>
-  </data>
-  <data name="IsThroughTrack" xml:space="preserve">
-    <value>Is through track?</value>
-  </data>
-  <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
-  </data>
-  <data name="FremoName" xml:space="preserve">
-    <value>FREMO name</value>
-  </data>
-  <data name="Station" xml:space="preserve">
-    <value>Station</value>
-  </data>
-  <data name="Stations" xml:space="preserve">
-    <value>Stations</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="FremoPrefix" xml:space="preserve">
-    <value>FREMO module prefix</value>
-  </data>
-  <data name="FindOutMore" xml:space="preserve">
-    <value>Find out more</value>
-  </data>
-  <data name="AreaOfResponsibility" xml:space="preserve">
-    <value>Area of responsibility</value>
+  <data name="AddModuleFirst" xml:space="preserve">
+    <value>NOTE: Add a module first in order to then add it as an operation location!</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Add new</value>
   </data>
   <data name="AdministersGroups" xml:space="preserve">
     <value>Administers groups</value>
   </data>
-  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
-    <value>Reset password has been requested</value>
-  </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
-  </data>
-  <data name="UserSettings" xml:space="preserve">
-    <value>User settings</value>
-  </data>
-  <data name="IHaveReadAndUnderstand" xml:space="preserve">
-    <value>I have read and understand</value>
-  </data>
-  <data name="Track" xml:space="preserve">
-    <value>Track</value>
-  </data>
-  <data name="Tracks" xml:space="preserve">
-    <value>Tracks</value>
-  </data>
-  <data name="TrackNumber" xml:space="preserve">
-    <value>Track number</value>
-  </data>
-  <data name="DefaultClasses" xml:space="preserve">
-    <value>Wagon classes</value>
-  </data>
-  <data name="NHMCode" xml:space="preserve">
-    <value>NHM Code</value>
-  </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="German" xml:space="preserve">
-    <value>German</value>
-  </data>
-  <data name="Dutch" xml:space="preserve">
-    <value>Dutch</value>
-  </data>
-  <data name="Polish" xml:space="preserve">
-    <value>Polish</value>
-  </data>
-  <data name="Danish" xml:space="preserve">
-    <value>Danish</value>
-  </data>
-  <data name="Swedish" xml:space="preserve">
-    <value>Swedish</value>
-  </data>
-  <data name="Norwegian" xml:space="preserve">
-    <value>Norwegian</value>
-  </data>
-  <data name="Cargo" xml:space="preserve">
-    <value>Cargo</value>
-  </data>
-  <data name="AddModuleFirst" xml:space="preserve">
-    <value>NOTE: Add a module first in order to then add it as an operation location!</value>
-  </data>
-  <data name="Nothing to se here yet!" xml:space="preserve">
-    <value>Nothing to se here yet!</value>
-  </data>
-  <data name="Designation" xml:space="preserve">
-    <value>Designation</value>
-  </data>
-  <data name="CargoTypes" xml:space="preserve">
-    <value>Cargo types</value>
-  </data>
-  <data name="CargoType" xml:space="preserve">
-    <value>Cargo type</value>
-  </data>
-  <data name="IsInvited" xml:space="preserve">
-    <value>Is invited?</value>
-  </data>
-  <data name="Member" xml:space="preserve">
-    <value>Member</value>
-  </data>
-  <data name="Exits" xml:space="preserve">
-    <value>Exits</value>
-  </data>
-  <data name="Venue" xml:space="preserve">
-    <value>Venue</value>
-  </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>Start date</value>
-  </data>
-  <data name="EndDate" xml:space="preserve">
-    <value>End date</value>
-  </data>
-  <data name="Organiser" xml:space="preserve">
-    <value>Organiser</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="Details" xml:space="preserve">
-    <value>Details</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="Meeting" xml:space="preserve">
-    <value>Meeting</value>
-  </data>
-  <data name="Owners" xml:space="preserve">
-    <value>Owners</value>
-  </data>
-  <data name="Meetings" xml:space="preserve">
-    <value>Meetings</value>
-  </data>
-  <data name="MustBeBetween" xml:space="preserve">
-    <value>must be between {0} and {1}</value>
-  </data>
-  <data name="IsFremo" xml:space="preserve">
-    <value>Is FREMO-meeting?</value>
-  </data>
-  <data name="StartHour" xml:space="preserve">
-    <value>Start hour</value>
-  </data>
-  <data name="EndHour" xml:space="preserve">
-    <value>End hour</value>
-  </data>
-  <data name="StartWeekday" xml:space="preserve">
-    <value>Start weekday</value>
-  </data>
-  <data name="FirstYear" xml:space="preserve">
-    <value>First year</value>
-  </data>
-  <data name="LastYear" xml:space="preserve">
-    <value>Last year</value>
-  </data>
-  <data name="PrimaryModuleStandard" xml:space="preserve">
-    <value>Primary module standard</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>Game settings</value>
-  </data>
-  <data name="Layouts" xml:space="preserve">
-    <value>Layouts</value>
-  </data>
-  <data name="Layout" xml:space="preserve">
-    <value>Layout</value>
-  </data>
-  <data name="OperatingPeriod" xml:space="preserve">
-    <value>Operating period</value>
-  </data>
-  <data name="ResponsibleGroup" xml:space="preserve">
-    <value>Responsible group</value>
-  </data>
-  <data name="ModuleStandard" xml:space="preserve">
-    <value>Module standard</value>
-  </data>
-  <data name="RegisterModules" xml:space="preserve">
-    <value>Register modules</value>
-  </data>
-  <data name="UploadDocuments" xml:space="preserve">
-    <value>Upload documents</value>
-  </data>
-  <data name="SelectFile" xml:space="preserve">
-    <value>Select file</value>
-  </data>
-  <data name="Drawing" xml:space="preserve">
-    <value>Drawing</value>
-  </data>
-  <data name="Documentation" xml:space="preserve">
-    <value>Documentation</value>
-  </data>
-  <data name="OperatingInstructions" xml:space="preserve">
-    <value>Operating instructions</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Update</value>
-  </data>
-  <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
-    <value>must only contain ordinary text</value>
-  </data>
-  <data name="FileExceedsMaxSizeOf" xml:space="preserve">
-    <value>File exceeds maximum size of {0} kB</value>
-  </data>
-  <data name="MaxUploadFileSizeKb" xml:space="preserve">
-    <value>Max upload file size is {0} kB</value>
-  </data>
-  <data name="TextColor" xml:space="preserve">
-    <value>Text colour</value>
-  </data>
-  <data name="BackColor" xml:space="preserve">
-    <value>Background colour</value>
-  </data>
-  <data name="InAll" xml:space="preserve">
-    <value>in all</value>
-  </data>
-  <data name="Countries" xml:space="preserve">
-    <value>Countries</value>
-  </data>
-  <data name="ShowAll" xml:space="preserve">
-    <value>Show all</value>
-  </data>
-  <data name="Regions" xml:space="preserve">
-    <value>Regions</value>
-  </data>
-  <data name="FreightCustomersAt" xml:space="preserve">
-    <value>Freight customers at {0}</value>
-  </data>
-  <data name="TrackOrArea" xml:space="preserve">
-    <value>Track no. or loading area</value>
-  </data>
-  <data name="FreightCustomers" xml:space="preserve">
-    <value>Freight customers</value>
-  </data>
-  <data name="OpenedYear" xml:space="preserve">
-    <value>Opened year</value>
-  </data>
-  <data name="ClosedYear" xml:space="preserve">
-    <value>Closed year</value>
-  </data>
-  <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Colour</value>
-  </data>
-  <data name="Days" xml:space="preserve">
-    <value>Days</value>
-  </data>
-  <data name="OtherName" xml:space="preserve">
-    <value>Other name</value>
-  </data>
-  <data name="CargoFlow" xml:space="preserve">
-    <value>Cargo flow</value>
-  </data>
-  <data name="FreightCustomer" xml:space="preserve">
-    <value>Freight customer</value>
-  </data>
-  <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
-  </data>
-  <data name="QuantityUnit" xml:space="preserve">
-    <value>Quantity unit</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
-  </data>
-  <data name="UnloadingReady" xml:space="preserve">
-    <value>Unloading ready</value>
-  </data>
-  <data name="LoadingReady" xml:space="preserve">
-    <value>Loading ready</value>
-  </data>
-  <data name="MustBeAColor" xml:space="preserve">
-    <value>Must be a colour</value>
-  </data>
-  <data name="IsUnavailable" xml:space="preserve">
-    <value>Is unavailable?</value>
-  </data>
-  <data name="HasIntegratedLocoNet" xml:space="preserve">
-    <value>Has integrated LocoNet?</value>
-  </data>
-  <data name="Visibility" xml:space="preserve">
-    <value>Visibility</value>
-  </data>
-  <data name="NoInformation" xml:space="preserve">
-    <value>No information</value>
-  </data>
-  <data name="GettingContent" xml:space="preserve">
-    <value>Getting content...</value>
-  </data>
-  <data name="OtherTrackOrArea" xml:space="preserve">
-    <value>Other track no. or loading area</value>
-  </data>
-  <data name="MustBeAnyOf" xml:space="preserve">
-    <value>Must be any of {0}</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Not applicable</value>
-  </data>
-  <data name="Domain" xml:space="preserve">
-    <value>Droup domain</value>
-  </data>
-  <data name="IsStationOrPartOf" xml:space="preserve">
-    <value>Is station or part of</value>
-  </data>
-  <data name="IsOnlyOwner" xml:space="preserve">
-    <value>Is the only owner?</value>
-  </data>
-  <data name="IsPartOfStation" xml:space="preserve">
-    <value>Is referring to a station?</value>
-  </data>
-  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
-    <value>Is registered in an upcoming meeting?</value>
-  </data>
-  <data name="ConfirmDelete" xml:space="preserve">
-    <value>Confirm delete</value>
-  </data>
-  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
-    <value>Conditions for delete are not met</value>
-  </data>
-  <data name="YouAreLockedOut" xml:space="preserve">
-    <value>You are locked out!</value>
-  </data>
-  <data name="OwnedPercent" xml:space="preserve">
-    <value>Owned %</value>
-  </data>
-  <data name="TypeMinimumCharachers" xml:space="preserve">
-    <value>Type minimum {0} charachers</value>
-  </data>
-  <data name="ExternalStations" xml:space="preserve">
-    <value>External stations</value>
-  </data>
-  <data name="Note" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="ExternalStation" xml:space="preserve">
-    <value>External station</value>
-  </data>
-  <data name="Supplying" xml:space="preserve">
-    <value>Supplying</value>
-  </data>
-  <data name="Consuming" xml:space="preserve">
-    <value>Consuming</value>
-  </data>
-  <data name="ExternalFreightCustomers" xml:space="preserve">
-    <value>External freight customers</value>
-  </data>
-  <data name="HaveFreightFlow" xml:space="preserve">
-    <value>Have freight flow?</value>
-  </data>
-  <data name="MakeStation" xml:space="preserve">
-    <value>Make station</value>
-  </data>
-  <data name="Dates" xml:space="preserve">
-    <value>Dates</value>
-  </data>
-  <data name="MyModules" xml:space="preserve">
-    <value>My modules</value>
-  </data>
-  <data name="MyStations" xml:space="preserve">
-    <value>My stations</value>
-  </data>
-  <data name="View" xml:space="preserve">
-    <value>View</value>
-  </data>
-  <data name="OperationTheme" xml:space="preserve">
-    <value>Operation theme</value>
-  </data>
-  <data name="RegistrationOpens" xml:space="preserve">
-    <value>Registration opens</value>
-  </data>
-  <data name="Discussions" xml:space="preserve">
-    <value>Discussions</value>
-  </data>
-  <data name="RegistrationCloses" xml:space="preserve">
-    <value>Registration closes</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
-  </data>
-  <data name="SelectPersonToRegister" xml:space="preserve">
-    <value>Select person to register</value>
-  </data>
-  <data name="RegistrationTime" xml:space="preserve">
-    <value>Signed up</value>
-  </data>
-  <data name="Registered" xml:space="preserve">
-    <value>Signed up</value>
-  </data>
-  <data name="Withdrawn" xml:space="preserve">
-    <value>Withdrawn</value>
-  </data>
-  <data name="AvailableModules" xml:space="preserve">
-    <value>Available modules</value>
-  </data>
-  <data name="RegisteredModules" xml:space="preserve">
-    <value>Registered modules</value>
-  </data>
-  <data name="Participant" xml:space="preserve">
-    <value>Participant</value>
-  </data>
-  <data name="Registration" xml:space="preserve">
-    <value>Registration</value>
-  </data>
-  <data name="NoModulesRegistered" xml:space="preserve">
-    <value>No modules registered</value>
-  </data>
-  <data name="Finished" xml:space="preserve">
-    <value>Finished</value>
-  </data>
-  <data name="Place" xml:space="preserve">
-    <value>Place</value>
-  </data>
-  <data name="EnglishName" xml:space="preserve">
-    <value>English name</value>
-  </data>
-  <data name="IsStandAlone" xml:space="preserve">
-    <value>Is stand-alone?</value>
-  </data>
-  <data name="ClickOKToDelete" xml:space="preserve">
-    <value>Click OK to delete</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="OtherWagonClass" xml:space="preserve">
-    <value>Other wagon class</value>
-  </data>
-  <data name="PasswordResetFailed" xml:space="preserve">
-    <value>Password reset failed</value>
-  </data>
-  <data name="Transfer" xml:space="preserve">
-    <value>Transfer</value>
-  </data>
-  <data name="TransferOwnership" xml:space="preserve">
-    <value>Transfer ownership</value>
-  </data>
-  <data name="Owner" xml:space="preserve">
-    <value>Owner</value>
-  </data>
-  <data name="NewOwner" xml:space="preserve">
-    <value>New owner</value>
-  </data>
-  <data name="TransferredShare" xml:space="preserve">
-    <value>Transferred share</value>
-  </data>
-  <data name="Width" xml:space="preserve">
-    <value>Width</value>
-  </data>
-  <data name="Straight" xml:space="preserve">
-    <value>Straight</value>
-  </data>
-  <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Max trainset length (wagons)</value>
-  </data>
-  <data name="Participants" xml:space="preserve">
-    <value>Participants</value>
-  </data>
-  <data name="PasswordConfirmationDoesNotMatch" xml:space="preserve">
-    <value>Password confirmation does not match</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="ModuleRegistrationCloses" xml:space="preserve">
-    <value>Module registrations closes</value>
-  </data>
-  <data name="PackagingUnit" xml:space="preserve">
-    <value>Packaging unit</value>
-  </data>
-  <data name="PasswordResetMailSent" xml:space="preserve">
-    <value>Password reset mail sent</value>
-  </data>
-  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
-    <value>Password reset has been requested</value>
-  </data>
-  <data name="NotAuthorised" xml:space="preserve">
-    <value>Unauthorised</value>
-  </data>
-  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
-    <value>all words must begin with a capital letter</value>
-  </data>
-  <data name="Waybills" xml:space="preserve">
-    <value>Waybills</value>
-  </data>
-  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
-    <value>Meeting dates cannot be changed</value>
-  </data>
-  <data name="Fault" xml:space="preserve">
-    <value>Fault</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>Success</value>
-  </data>
-  <data name="OtherColor" xml:space="preserve">
-    <value>Other colour</value>
-  </data>
-  <data name="OtherFromYear" xml:space="preserve">
-    <value>Other from year</value>
-  </data>
-  <data name="OtherUptoYear" xml:space="preserve">
-    <value>Other to-year</value>
-  </data>
-  <data name="Italian" xml:space="preserve">
-    <value>Italian</value>
-  </data>
-  <data name="French" xml:space="preserve">
-    <value>French</value>
-  </data>
-  <data name="SaveAll" xml:space="preserve">
-    <value>Save all</value>
-  </data>
-  <data name="MayBorrowGroupsModules" xml:space="preserve">
-    <value>May borrow the group's modules?</value>
-  </data>
-  <data name="LastLoginTime" xml:space="preserve">
-    <value>Last logged in</value>
-  </data>
-  <data name="WagonError" xml:space="preserve">
-    <value>Wagon error</value>
-  </data>
-  <data name="NonStandardWheelset" xml:space="preserve">
-    <value>Non-standard wheelset</value>
-  </data>
-  <data name="WrongBackToBackDistance" xml:space="preserve">
-    <value>Wrong back-to-back distance</value>
-  </data>
-  <data name="RollsSluggishly" xml:space="preserve">
-    <value>Rolls sluggishly</value>
-  </data>
-  <data name="NonStandardCoupling" xml:space="preserve">
-    <value>Non-standard coupling</value>
-  </data>
-  <data name="CouplingNotFixed" xml:space="preserve">
-    <value>Coupling not fixed</value>
-  </data>
-  <data name="CouplingTooLowOrHigh" xml:space="preserve">
-    <value>Coupling too low or high</value>
-  </data>
-  <data name="WagonTooLightOrHeavy" xml:space="preserve">
-    <value>Wagon too light or heavy</value>
-  </data>
-  <data name="WagonEasilyDerails" xml:space="preserve">
-    <value>Wagon easily derails</value>
-  </data>
-  <data name="WagonHasLooseParts" xml:space="preserve">
-    <value>The wagon has loose parts</value>
-  </data>
-  <data name="OtherPleaseSpecify" xml:space="preserve">
-    <value>Other, please specify</value>
-  </data>
-  <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
-  </data>
-  <data name="LandscapeSeason" xml:space="preserve">
-    <value>Season</value>
-  </data>
-  <data name="Available" xml:space="preserve">
-    <value>Available</value>
-  </data>
-  <data name="Unavailable" xml:space="preserve">
-    <value>Unavailable</value>
-  </data>
-  <data name="FrequentlyAskedQuestions" xml:space="preserve">
-    <value>Frequently Asked Questions</value>
-  </data>
-  <data name="Class" xml:space="preserve">
-    <value>Class</value>
-  </data>
-  <data name="CountriesStatistics" xml:space="preserve">
-    <value>Country Statistics</value>
-  </data>
-  <data name="CargoCustomers" xml:space="preserve">
-    <value>Freight customers</value>
-  </data>
-  <data name="Statistics" xml:space="preserve">
-    <value>Statistics</value>
-  </data>
-  <data name="RepresentativeStation" xml:space="preserve">
-    <value>Representative station</value>
-  </data>
-  <data name="NotDefined" xml:space="preserve">
-    <value>Not defined</value>
-  </data>
-  <data name="Participate" xml:space="preserve">
-    <value>Participate</value>
-  </data>
-  <data name="LatestArrivalTime" xml:space="preserve">
-    <value>Latest arrival time</value>
-  </data>
-  <data name="MustBeValidDccAdresses" xml:space="preserve">
-    <value>must be valid DCC addresses</value>
-  </data>
-  <data name="FremoReservedAdresses" xml:space="preserve">
-    <value>FREMO reserved loco addresses</value>
-  </data>
-  <data name="LocoAddressExample" xml:space="preserve">
-    <value>Example: 2000-2099,3201,3350-3355</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
+    <value>Administrator's area of responsibility</value>
   </data>
   <data name="AdministratorSettings" xml:space="preserve">
     <value>Administrator settings</value>
   </data>
-  <data name="MustBeValidEmailAddresses" xml:space="preserve">
-    <value>must be valid email addresses separated by semicolon</value>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>all words must begin with a capital letter</value>
   </data>
-  <data name="IsGlobalAdministrator" xml:space="preserve">
-    <value>Is global administrator?</value>
+  <data name="Angle" xml:space="preserve">
+    <value>Angle</value>
   </data>
-  <data name="IsCountryAdministrator" xml:space="preserve">
-    <value>Is country administrator?</value>
+  <data name="AppName" xml:space="preserve">
+    <value>The Modules Registry</value>
   </data>
-  <data name="IsApiAccessPermitted" xml:space="preserve">
-    <value>Is API access permitted?</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
-  <data name="MayUploadSkpDrawing" xml:space="preserve">
-    <value>May upload SketchUp drawing?</value>
-  </data>
-  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
-    <value>Administrator's area of responsibility</value>
-  </data>
-  <data name="PasswordResetAttempts" xml:space="preserve">
-    <value>Number of password reset attempts</value>
-  </data>
-  <data name="FailedLoginAttempts" xml:space="preserve">
-    <value>Number of failed login attempts</value>
-  </data>
-  <data name="UserIsLockedOut" xml:space="preserve">
-    <value>User is locked out!</value>
-  </data>
-  <data name="ModuleEndProfiles" xml:space="preserve">
-    <value>Module end profiles</value>
-  </data>
-  <data name="GetStarted" xml:space="preserve">
-    <value>Get started</value>
-  </data>
-  <data name="Accomodation" xml:space="preserve">
-    <value>Accomodation</value>
-  </data>
-  <data name="of" xml:space="preserve">
-    <value>of</value>
-  </data>
-  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>DO NOT describe what applies to individual layouts below! Add a layout.</value>
-  </data>
-  <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
-  </data>
-  <data name="Characters" xml:space="preserve">
-    <value>Characters</value>
-  </data>
-  <data name="FetchingData" xml:space="preserve">
-    <value>Fetching data...</value>
-  </data>
-  <data name="NoParticipantsRegistered" xml:space="preserve">
-    <value>No participants registered</value>
-  </data>
-  <data name="VenueName" xml:space="preserve">
-    <value>Venue name</value>
-  </data>
-  <data name="GroupDomain" xml:space="preserve">
-    <value>Group domain</value>
-  </data>
-  <data name="InPartnershipWith" xml:space="preserve">
-    <value>In partnership with</value>
-  </data>
-  <data name="IsOrganisingGroupInternal" xml:space="preserve">
-    <value>Is internal for the organising group?</value>
-  </data>
-  <data name="ContactPerson" xml:space="preserve">
-    <value>Contact person</value>
-  </data>
-  <data name="IsRegistrationPermitted" xml:space="preserve">
-    <value>Is registration permitted?</value>
-  </data>
-  <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
-  </data>
-  <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
-    <value>Meeting is not yet open for registration</value>
-  </data>
-  <data name="Count" xml:space="preserve">
-    <value>Count</value>
-  </data>
-  <data name="Generate" xml:space="preserve">
-    <value>Generate</value>
-  </data>
-  <data name="InvitationToModuleRegistry" xml:space="preserve">
-    <value>Invitation to the Module Registry</value>
-  </data>
-  <data name="UserIsReadOnly" xml:space="preserve">
-    <value>User has only read access?</value>
-  </data>
-  <data name="CreatingReport" xml:space="preserve">
-    <value>Creating report...</value>
-  </data>
-  <data name="LokAndWagonCards" xml:space="preserve">
-    <value>Loco- and wagon cards</value>
-  </data>
-  <data name="FastClock" xml:space="preserve">
-    <value>Fast clock</value>
-  </data>
-  <data name="MemberMayBorrowMyModules" xml:space="preserve">
-    <value>Member may borrow my modules?</value>
-  </data>
-  <data name="Food" xml:space="preserve">
-    <value>Food</value>
-  </data>
-  <data name="ExternalLink" xml:space="preserve">
-    <value>External link</value>
-  </data>
-  <data name="PrintPerOperatingDay" xml:space="preserve">
-    <value>Print per operating day</value>
-  </data>
-  <data name="HasEmptyReturn" xml:space="preserve">
-    <value>Has empty return?</value>
-  </data>
-  <data name="HideLoadingTimes" xml:space="preserve">
-    <value>Hide loading times?</value>
-  </data>
-  <data name="HideUnloadingTimes" xml:space="preserve">
-    <value>Hide unloading times?</value>
-  </data>
-  <data name="SecondCustomer" xml:space="preserve">
-    <value>Second customer</value>
-  </data>
-  <data name="PrintCount" xml:space="preserve">
-    <value>Number of prints</value>
-  </data>
-  <data name="Package" xml:space="preserve">
-    <value>Box</value>
-  </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
-  </data>
-  <data name="ArrivalTime" xml:space="preserve">
-    <value>Arrival time</value>
+  <data name="AreaOfResponsibility" xml:space="preserve">
+    <value>Area of responsibility</value>
   </data>
   <data name="Arrival" xml:space="preserve">
     <value>Arrival</value>
   </data>
-  <data name="MyAvailableModules" xml:space="preserve">
-    <value>My available modules</value>
+  <data name="ArrivalTime" xml:space="preserve">
+    <value>Arrival time</value>
   </data>
-  <data name="OtherAvailableModules" xml:space="preserve">
-    <value>Other available modules</value>
+  <data name="ArticleNumber" xml:space="preserve">
+    <value>Article number</value>
   </data>
-  <data name="InternationalName" xml:space="preserve">
-    <value>International name</value>
+  <data name="AssistantOnly" xml:space="preserve">
+    <value>Assistant only</value>
   </data>
-  <data name="LastActive" xml:space="preserve">
-    <value>Last active</value>
+  <data name="AuthenticationInProgress" xml:space="preserve">
+    <value>Authentication in progress...</value>
   </data>
-  <data name="RemoveFiltering" xml:space="preserve">
-    <value>Remove filtering</value>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
   </data>
-  <data name="UpdatingWaybills" xml:space="preserve">
-    <value>Updating waybills...</value>
+  <data name="AvailableModules" xml:space="preserve">
+    <value>Available modules</value>
   </data>
-  <data name="ManageWaybills" xml:space="preserve">
-    <value>Manage waybills</value>
+  <data name="BackColor" xml:space="preserve">
+    <value>Background colour</value>
   </data>
-  <data name="ManageCargoFlow" xml:space="preserve">
-    <value>Manage cargo flow</value>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Barcode-ID</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Canceled</value>
   </data>
-  <data name="Unregister" xml:space="preserve">
-    <value>Unregister</value>
+  <data name="Cargo" xml:space="preserve">
+    <value>Cargo</value>
   </data>
-  <data name="NoModulesAvailable" xml:space="preserve">
-    <value>No modules available</value>
+  <data name="CargoCustomers" xml:space="preserve">
+    <value>Freight customers</value>
   </data>
-  <data name="More" xml:space="preserve">
-    <value>More...</value>
+  <data name="CargoFlow" xml:space="preserve">
+    <value>Cargo flow</value>
   </data>
-  <data name="PrimaryOperatingCountry" xml:space="preserve">
-    <value>Primary operating country</value>
+  <data name="CargoType" xml:space="preserve">
+    <value>Cargo type</value>
   </data>
-  <data name="FirstYearInOperation" xml:space="preserve">
-    <value>First year in operation</value>
+  <data name="CargoTypes" xml:space="preserve">
+    <value>Cargo types</value>
   </data>
-  <data name="FinalYearInOperating" xml:space="preserve">
-    <value>Final year in operation</value>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
   </data>
-  <data name="NewMeeting" xml:space="preserve">
-    <value>New meeting</value>
+  <data name="Characters" xml:space="preserve">
+    <value>Characters</value>
   </data>
-  <data name="NotAcceptedTermsOfUse" xml:space="preserve">
-    <value>Has not accepted terms of use</value>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
-  <data name="PasswordCreated" xml:space="preserve">
-    <value>Password created</value>
+  <data name="CityName" xml:space="preserve">
+    <value>City name</value>
   </data>
-  <data name="FremoMemberNumber" xml:space="preserve">
-    <value>FREMO member number</value>
+  <data name="Class" xml:space="preserve">
+    <value>Class</value>
   </data>
-  <data name="Throttles" xml:space="preserve">
-    <value>Throttles</value>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Click OK to delete</value>
   </data>
-  <data name="MyThrottles" xml:space="preserve">
-    <value>My throttles</value>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
   </data>
-  <data name="MacAddress" xml:space="preserve">
-    <value>MAC-address</value>
+  <data name="ClosedYear" xml:space="preserve">
+    <value>Closed year</value>
   </data>
-  <data name="InventoryNumber" xml:space="preserve">
-    <value>Inventory number</value>
+  <data name="Color" xml:space="preserve">
+    <value>Colour</value>
   </data>
-  <data name="Validated" xml:space="preserve">
-    <value>Validated</value>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
   </data>
-  <data name="Throttle" xml:space="preserve">
-    <value>Throttle</value>
+  <data name="Community" xml:space="preserve">
+    <value>Community</value>
   </data>
-  <data name="MustBeAMacAddress" xml:space="preserve">
-    <value>Must be a MAC-address</value>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Conditions for delete are not met</value>
   </data>
-  <data name="MustBeADccAddress" xml:space="preserve">
-    <value>Must be a DCC-address 1-9999</value>
+  <data name="ConfigurationLabel" xml:space="preserve">
+    <value>Variant</value>
   </data>
-  <data name="MayVerifyWiFreds" xml:space="preserve">
-    <value>May verify wiFREDs</value>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Confirm delete</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Consuming" xml:space="preserve">
+    <value>Consuming</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Contact person</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="CountriesStatistics" xml:space="preserve">
+    <value>Country Statistics</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="CountryAdministrator" xml:space="preserve">
+    <value>Country administrator</value>
+  </data>
+  <data name="CouplingNotFixed" xml:space="preserve">
+    <value>Coupling not fixed</value>
+  </data>
+  <data name="Couplings" xml:space="preserve">
+    <value>Couplings</value>
+  </data>
+  <data name="CouplingTooLowOrHigh" xml:space="preserve">
+    <value>Coupling too low or high</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>Create module</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Create password</value>
+  </data>
+  <data name="CreatingReport" xml:space="preserve">
+    <value>Creating report...</value>
+  </data>
+  <data name="Danish" xml:space="preserve">
+    <value>Danish</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
   </data>
   <data name="DccAddress" xml:space="preserve">
     <value>DCC-address</value>
-  </data>
-  <data name="WiFredThrottles" xml:space="preserve">
-    <value>wiFRED throttles</value>
   </data>
   <data name="DccAddress1" xml:space="preserve">
     <value>DCC-address 1</value>
@@ -1374,104 +324,719 @@
   <data name="DccAddress4" xml:space="preserve">
     <value>DCC-address 4</value>
   </data>
-  <data name="WiFredThrottle" xml:space="preserve">
-    <value>wiFRED throttle</value>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Wagon classes</value>
   </data>
-  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
-    <value>Meeting organiser do not accept registrations here.</value>
-  </data>
-  <data name="Verify" xml:space="preserve">
-    <value>Verify</value>
-  </data>
-  <data name="BarcodeId" xml:space="preserve">
-    <value>Barcode-ID</value>
-  </data>
-  <data name="Validate" xml:space="preserve">
-    <value>Validate</value>
-  </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="_CASING" xml:space="preserve">
-    <value>_LOWER</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="AssistantOnly" xml:space="preserve">
-    <value>Assistant only</value>
+  <data name="Designation" xml:space="preserve">
+    <value>Designation</value>
   </data>
-  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
-    <value>No module ownerships found</value>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
   </data>
-  <data name="ModulesNotFound" xml:space="preserve">
-    <value>No modules found</value>
+  <data name="Digits" xml:space="preserve">
+    <value>Digits</value>
   </data>
-  <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+  <data name="Direction" xml:space="preserve">
+    <value>Direction</value>
   </data>
-  <data name="Persons" xml:space="preserve">
-    <value>People</value>
+  <data name="Discussions" xml:space="preserve">
+    <value>Discussions</value>
   </data>
-  <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Displayed order</value>
   </data>
-  <data name="ExternalLinks" xml:space="preserve">
-    <value>External Resources</value>
+  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
+    <value>DO NOT describe what applies to individual layouts below! Add a layout.</value>
   </data>
-  <data name="EmptyCarOrder" xml:space="preserve">
-    <value>Empty car order</value>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
   </data>
-  <data name="IsHarbour" xml:space="preserve">
-    <value>Is harbour?</value>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
   </data>
-  <data name="IsKeyRequired" xml:space="preserve">
-    <value>Is key required?</value>
+  <data name="Domain" xml:space="preserve">
+    <value>Droup domain</value>
   </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Empty wagon order</value>
-  </data>
-  <data name="MeetingType" xml:space="preserve">
-    <value>Type of event</value>
+  <data name="Drawing" xml:space="preserve">
+    <value>Drawing</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Duration</value>
   </data>
-  <data name="InternalWaybills" xml:space="preserve">
-    <value>Internal waybills</value>
+  <data name="Dutch" xml:space="preserve">
+    <value>Dutch</value>
   </data>
-  <data name="WrongEpochTheme" xml:space="preserve">
-    <value>Wrong epoch/theme</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditModule" xml:space="preserve">
+    <value>Edit module</value>
+  </data>
+  <data name="EditPerson" xml:space="preserve">
+    <value>Edit person</value>
+  </data>
+  <data name="ElectricSystem" xml:space="preserve">
+    <value>Electric system</value>
+  </data>
+  <data name="EmailAddresses" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmptyCarOrder" xml:space="preserve">
+    <value>Empty car order</value>
+  </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Empty wagon order</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="EndHour" xml:space="preserve">
+    <value>End hour</value>
+  </data>
+  <data name="EndPlates" xml:space="preserve">
+    <value>End plates</value>
+  </data>
+  <data name="EndProfile" xml:space="preserve">
+    <value>End profile</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>English name</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Exits" xml:space="preserve">
+    <value>Exits</value>
+  </data>
+  <data name="ExternalFreightCustomers" xml:space="preserve">
+    <value>External freight customers</value>
+  </data>
+  <data name="ExternalLink" xml:space="preserve">
+    <value>External link</value>
+  </data>
+  <data name="ExternalLinks" xml:space="preserve">
+    <value>External Resources</value>
+  </data>
+  <data name="ExternalStation" xml:space="preserve">
+    <value>External station</value>
+  </data>
+  <data name="ExternalStations" xml:space="preserve">
+    <value>External stations</value>
+  </data>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Number of failed login attempts</value>
+  </data>
+  <data name="FastClock" xml:space="preserve">
+    <value>Fast clock</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Fault</value>
+  </data>
+  <data name="FetchingData" xml:space="preserve">
+    <value>Fetching data...</value>
+  </data>
+  <data name="FileExceedsMaxSizeOf" xml:space="preserve">
+    <value>File exceeds maximum size of {0} kB</value>
+  </data>
+  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
+    <value>Fill out new track and click Add before saving.</value>
+  </data>
+  <data name="FinalYearInOperating" xml:space="preserve">
+    <value>Final year in operation</value>
+  </data>
+  <data name="FindOutMore" xml:space="preserve">
+    <value>Find out more</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="FirstYear" xml:space="preserve">
+    <value>First year</value>
+  </data>
+  <data name="FirstYearInOperation" xml:space="preserve">
+    <value>First year in operation</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Food</value>
   </data>
   <data name="FootstepsTooWide" xml:space="preserve">
     <value>Footsteps too wide</value>
   </data>
-  <data name="Participation" xml:space="preserve">
-    <value>Participation</value>
+  <data name="For" xml:space="preserve">
+    <value>For</value>
   </data>
-  <data name="RegisterOrModifyParticipation" xml:space="preserve">
-    <value>Register or modify participation</value>
+  <data name="FreightCustomer" xml:space="preserve">
+    <value>Freight customer</value>
   </data>
-  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
-    <value>Select or modify layout participation</value>
+  <data name="FreightCustomers" xml:space="preserve">
+    <value>Freight customers</value>
+  </data>
+  <data name="FreightCustomersAt" xml:space="preserve">
+    <value>Freight customers at {0}</value>
+  </data>
+  <data name="FremoMemberNumber" xml:space="preserve">
+    <value>FREMO member number</value>
+  </data>
+  <data name="FremoName" xml:space="preserve">
+    <value>FREMO name</value>
+  </data>
+  <data name="FremoNumber" xml:space="preserve">
+    <value>FREMO no.</value>
+  </data>
+  <data name="FremoPrefix" xml:space="preserve">
+    <value>FREMO module prefix</value>
+  </data>
+  <data name="FremoReservedAdresses" xml:space="preserve">
+    <value>FREMO reserved loco addresses</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="FrequentlyAskedQuestions" xml:space="preserve">
+    <value>Frequently Asked Questions</value>
+  </data>
+  <data name="FromYear" xml:space="preserve">
+    <value>From year</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="FunctionalState" xml:space="preserve">
+    <value>Functional state</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Game settings</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Get started</value>
+  </data>
+  <data name="GettingContent" xml:space="preserve">
+    <value>Getting content...</value>
+  </data>
+  <data name="GettingData" xml:space="preserve">
+    <value>Fetching data. Please wait...</value>
+  </data>
+  <data name="GlobalAdministrator" xml:space="preserve">
+    <value>Global administrator</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="GroupDomain" xml:space="preserve">
+    <value>Group domain</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="HasCargoCustomers" xml:space="preserve">
+    <value>Has freight customers?</value>
+  </data>
+  <data name="HasEmptyReturn" xml:space="preserve">
+    <value>Has empty return?</value>
+  </data>
+  <data name="HasIntegratedLocoNet" xml:space="preserve">
+    <value>Has integrated LocoNet?</value>
+  </data>
+  <data name="HasNarrowGauge" xml:space="preserve">
+    <value>Has narrow gauge?</value>
+  </data>
+  <data name="HasNormalGauge" xml:space="preserve">
+    <value>Has normal gauge?</value>
+  </data>
+  <data name="HasRemoteCouplings" xml:space="preserve">
+    <value>Has remote couplings?</value>
+  </data>
+  <data name="HasSameCargoReturn" xml:space="preserve">
+    <value>Return same cargo type?</value>
+  </data>
+  <data name="HasSound" xml:space="preserve">
+    <value>Has sound?</value>
+  </data>
+  <data name="HaveFreightFlow" xml:space="preserve">
+    <value>Have freight flow?</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello</value>
+  </data>
+  <data name="HideLoadingTimes" xml:space="preserve">
+    <value>Hide loading times?</value>
+  </data>
+  <data name="HideUnloadingTimes" xml:space="preserve">
+    <value>Hide unloading times?</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="IHaveReadAndUnderstand" xml:space="preserve">
+    <value>I have read and understand</value>
+  </data>
+  <data name="InAll" xml:space="preserve">
+    <value>in all</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="InPartnershipWith" xml:space="preserve">
+    <value>In partnership with</value>
+  </data>
+  <data name="InternalWaybills" xml:space="preserve">
+    <value>Internal waybills</value>
+  </data>
+  <data name="InternationalName" xml:space="preserve">
+    <value>International name</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventory number</value>
+  </data>
+  <data name="InvitationSent" xml:space="preserve">
+    <value>Invitation sent</value>
+  </data>
+  <data name="InvitationToModuleRegistry" xml:space="preserve">
+    <value>Invitation to the Module Registry</value>
+  </data>
+  <data name="Invite" xml:space="preserve">
+    <value>Invite</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Invited</value>
+  </data>
+  <data name="Is2R" xml:space="preserve">
+    <value>Is 2R?</value>
+  </data>
+  <data name="Is3R" xml:space="preserve">
+    <value>Is 3R?</value>
+  </data>
+  <data name="IsApiAccessPermitted" xml:space="preserve">
+    <value>Is API access permitted?</value>
+  </data>
+  <data name="IsCoolingRequired" xml:space="preserve">
+    <value>Needs cooling?</value>
+  </data>
+  <data name="IsCountryAdministrator" xml:space="preserve">
+    <value>Is country administrator?</value>
+  </data>
+  <data name="IsDataAdministrator" xml:space="preserve">
+    <value>Is data admin?</value>
+  </data>
+  <data name="IsDuckunder" xml:space="preserve">
+    <value>Is duckunder?</value>
+  </data>
+  <data name="IsExpress" xml:space="preserve">
+    <value>Express goods?</value>
+  </data>
+  <data name="IsFremo" xml:space="preserve">
+    <value>Is FREMO-meeting?</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Is global administrator?</value>
+  </data>
+  <data name="IsGroupAdministrator" xml:space="preserve">
+    <value>Is group admin?</value>
+  </data>
+  <data name="IsHarbour" xml:space="preserve">
+    <value>Is harbour?</value>
+  </data>
+  <data name="IsInvited" xml:space="preserve">
+    <value>Is invited?</value>
+  </data>
+  <data name="IsJunction" xml:space="preserve">
+    <value>Is junction?</value>
+  </data>
+  <data name="IsKeyRequired" xml:space="preserve">
+    <value>Is key required?</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Is the only owner?</value>
+  </data>
+  <data name="IsOrganisingGroupInternal" xml:space="preserve">
+    <value>Is internal for the organising group?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Is referring to a station?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Is registered in an upcoming meeting?</value>
+  </data>
+  <data name="IsRegistrationPermitted" xml:space="preserve">
+    <value>Is registration permitted?</value>
+  </data>
+  <data name="IsScheduled" xml:space="preserve">
+    <value>Is scheduled?</value>
+  </data>
+  <data name="IsShadowStation" xml:space="preserve">
+    <value>Is shadow station?</value>
+  </data>
+  <data name="IsSiding" xml:space="preserve">
+    <value>Is siding?</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Is stand-alone?</value>
+  </data>
+  <data name="IsStation" xml:space="preserve">
+    <value>Is station?</value>
+  </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Is station or part of</value>
+  </data>
+  <data name="IsTerminus" xml:space="preserve">
+    <value>Is terminus?</value>
+  </data>
+  <data name="IsThroughTrack" xml:space="preserve">
+    <value>Is through track?</value>
+  </data>
+  <data name="IsTurntable" xml:space="preserve">
+    <value>Is turntable?</value>
+  </data>
+  <data name="IsUnavailable" xml:space="preserve">
+    <value>Is unavailable?</value>
+  </data>
+  <data name="IsUser" xml:space="preserve">
+    <value>Is user?</value>
+  </data>
+  <data name="IsWeathered" xml:space="preserve">
+    <value>Is weathered?</value>
+  </data>
+  <data name="Italian" xml:space="preserve">
+    <value>Italian</value>
+  </data>
+  <data name="KeeperSignature" xml:space="preserve">
+    <value>Keepers signature</value>
+  </data>
+  <data name="LandscapeSeason" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="LandscapeState" xml:space="preserve">
+    <value>Landscape state</value>
+  </data>
+  <data name="LastActive" xml:space="preserve">
+    <value>Last active</value>
+  </data>
+  <data name="LastLoginTime" xml:space="preserve">
+    <value>Last logged in</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Last year</value>
+  </data>
+  <data name="LatestArrivalTime" xml:space="preserve">
+    <value>Latest arrival time</value>
+  </data>
+  <data name="Layout" xml:space="preserve">
+    <value>Layout</value>
+  </data>
+  <data name="Layouts" xml:space="preserve">
+    <value>Layouts</value>
   </data>
   <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
     <value>Layouts you are participating in</value>
   </data>
-  <data name="MyMeetings" xml:space="preserve">
-    <value>My meetings</value>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
   </data>
-  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
-    <value>You are currently not registered to any forthcoming meeting</value>
+  <data name="Letters" xml:space="preserve">
+    <value>Letters</value>
+  </data>
+  <data name="LinkToExternalContent" xml:space="preserve">
+    <value>Link to external content</value>
+  </data>
+  <data name="LoadingReady" xml:space="preserve">
+    <value>Loading ready</value>
+  </data>
+  <data name="LocoAddressExample" xml:space="preserve">
+    <value>Example: 2000-2099,3201,3350-3355</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged in as</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="LokAndWagonCards" xml:space="preserve">
+    <value>Loco- and wagon cards</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-address</value>
+  </data>
+  <data name="MakeStation" xml:space="preserve">
+    <value>Make station</value>
+  </data>
+  <data name="ManageCargoFlow" xml:space="preserve">
+    <value>Manage cargo flow</value>
+  </data>
+  <data name="ManageWaybills" xml:space="preserve">
+    <value>Manage waybills</value>
+  </data>
+  <data name="Manufacturer" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="MaxChars" xml:space="preserve">
+    <value>Max {0} characters.</value>
+  </data>
+  <data name="MaxSpeed" xml:space="preserve">
+    <value>Max speed</value>
+  </data>
+  <data name="MaxTrainLength" xml:space="preserve">
+    <value>Max train length</value>
+  </data>
+  <data name="MaxTrainsetLength" xml:space="preserve">
+    <value>Max trainset length (wagons)</value>
+  </data>
+  <data name="MaxUploadFileSizeKb" xml:space="preserve">
+    <value>Max upload file size is {0} kB</value>
+  </data>
+  <data name="MayBorrowGroupsModules" xml:space="preserve">
+    <value>May borrow the group's modules?</value>
+  </data>
+  <data name="MayUploadSkpDrawing" xml:space="preserve">
+    <value>May upload SketchUp drawing?</value>
+  </data>
+  <data name="MayVerifyWiFreds" xml:space="preserve">
+    <value>May verify wiFREDs</value>
+  </data>
+  <data name="Meeting" xml:space="preserve">
+    <value>Meeting</value>
+  </data>
+  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
+    <value>Meeting dates cannot be changed</value>
+  </data>
+  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
+    <value>Meeting organiser do not accept registrations here.</value>
+  </data>
+  <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
+    <value>Meeting is not yet open for registration</value>
+  </data>
+  <data name="Meetings" xml:space="preserve">
+    <value>Meetings</value>
+  </data>
+  <data name="MeetingType" xml:space="preserve">
+    <value>Type of event</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
+  <data name="MemberMayBorrowMyModules" xml:space="preserve">
+    <value>Member may borrow my modules?</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="MembersIn" xml:space="preserve">
+    <value>Members in</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle name</value>
+  </data>
+  <data name="ModelData" xml:space="preserve">
+    <value>Model data</value>
+  </data>
+  <data name="ModelInfo" xml:space="preserve">
+    <value>Model info</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="ModuleEndProfiles" xml:space="preserve">
+    <value>Module end profiles</value>
+  </data>
+  <data name="ModuleOwners" xml:space="preserve">
+    <value>Module owners</value>
+  </data>
+  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
+    <value>No module ownerships found</value>
+  </data>
+  <data name="ModuleRegistrationCloses" xml:space="preserve">
+    <value>Module registrations closes</value>
+  </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Modules</value>
+  </data>
+  <data name="ModulesNotFound" xml:space="preserve">
+    <value>No modules found</value>
+  </data>
+  <data name="ModuleStandard" xml:space="preserve">
+    <value>Module standard</value>
+  </data>
+  <data name="ModuleStandards" xml:space="preserve">
+    <value>Module standards</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>More...</value>
+  </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Must be a colour</value>
+  </data>
+  <data name="MustBeADccAddress" xml:space="preserve">
+    <value>Must be a DCC-address 1-9999</value>
+  </data>
+  <data name="MustBeAMacAddress" xml:space="preserve">
+    <value>Must be a MAC-address</value>
+  </data>
+  <data name="MustBeAnyOf" xml:space="preserve">
+    <value>Must be any of {0}</value>
+  </data>
+  <data name="MustBeBetween" xml:space="preserve">
+    <value>must be between {0} and {1}</value>
+  </data>
+  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
+    <value>must begin with a capital letter</value>
+  </data>
+  <data name="MustBeSelected" xml:space="preserve">
+    <value>must be selected</value>
+  </data>
+  <data name="MustBeValidDccAdresses" xml:space="preserve">
+    <value>must be valid DCC addresses</value>
+  </data>
+  <data name="MustBeValidEmailAddresses" xml:space="preserve">
+    <value>must be valid email addresses separated by semicolon</value>
+  </data>
+  <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
+    <value>must only contain ordinary text</value>
+  </data>
+  <data name="MyAvailableModules" xml:space="preserve">
+    <value>My available modules</value>
   </data>
   <data name="MyForthcomingMeetings" xml:space="preserve">
     <value>My forthcoming meetings</value>
   </data>
-  <data name="YouParticipateDays" xml:space="preserve">
-    <value>You participate days</value>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>My meetings</value>
   </data>
-  <data name="YourArrivalTime" xml:space="preserve">
-    <value>Your arrival time the first day</value>
+  <data name="MyModules" xml:space="preserve">
+    <value>My modules</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>My operation locations</value>
+  </data>
+  <data name="MyStations" xml:space="preserve">
+    <value>My stations</value>
+  </data>
+  <data name="MyThrottles" xml:space="preserve">
+    <value>My throttles</value>
+  </data>
+  <data name="MyVehicles" xml:space="preserve">
+    <value>My vehicles</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NarrowGauge" xml:space="preserve">
+    <value>Narrow gauge</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>New meeting</value>
+  </data>
+  <data name="NewOwner" xml:space="preserve">
+    <value>New owner</value>
+  </data>
+  <data name="NHMCode" xml:space="preserve">
+    <value>NHM Code</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoEmailProvided" xml:space="preserve">
+    <value>No email address provided</value>
+  </data>
+  <data name="NoInformation" xml:space="preserve">
+    <value>No information</value>
+  </data>
+  <data name="NoModulesAvailable" xml:space="preserve">
+    <value>No modules available</value>
+  </data>
+  <data name="NoModulesRegistered" xml:space="preserve">
+    <value>No modules registered</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Non-profit association</value>
+  </data>
+  <data name="NonStandardCoupling" xml:space="preserve">
+    <value>Non-standard coupling</value>
+  </data>
+  <data name="NonStandardWheelset" xml:space="preserve">
+    <value>Non-standard wheelset</value>
+  </data>
+  <data name="NoParticipantsRegistered" xml:space="preserve">
+    <value>No participants registered</value>
+  </data>
+  <data name="NoRecordsToDisplay" xml:space="preserve">
+    <value>No records to display</value>
+  </data>
+  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
+    <value>No registration ID is provided</value>
+  </data>
+  <data name="NormalGauge" xml:space="preserve">
+    <value>Normal gauge</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="NotAcceptedTermsOfUse" xml:space="preserve">
+    <value>Has not accepted terms of use</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Not applicable</value>
+  </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Unauthorised</value>
+  </data>
+  <data name="NotDefined" xml:space="preserve">
+    <value>Not defined</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Nothing to se here yet!" xml:space="preserve">
+    <value>Nothing to se here yet!</value>
+  </data>
+  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
+    <value>No user found with email '{0}' and registration ID '{1}'</value>
+  </data>
+  <data name="NumberOfSections" xml:space="preserve">
+    <value>Number of sections</value>
+  </data>
+  <data name="NumberOfThroughTracks" xml:space="preserve">
+    <value>Through tracks</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="OpenedYear" xml:space="preserve">
+    <value>Opened year</value>
+  </data>
+  <data name="OperatingInstructions" xml:space="preserve">
+    <value>Operating instructions</value>
+  </data>
+  <data name="OperatingPeriod" xml:space="preserve">
+    <value>Operating period</value>
   </data>
   <data name="OperationLocation" xml:space="preserve">
     <value>Operation location</value>
@@ -1479,22 +1044,511 @@
   <data name="OperationLocations" xml:space="preserve">
     <value>Operation locations</value>
   </data>
-  <data name="MyOperationLocations" xml:space="preserve">
-    <value>My operation locations</value>
+  <data name="OperationTheme" xml:space="preserve">
+    <value>Operation theme</value>
+  </data>
+  <data name="Organiser" xml:space="preserve">
+    <value>Organiser</value>
+  </data>
+  <data name="OtherAvailableModules" xml:space="preserve">
+    <value>Other available modules</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Other colour</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Other from year</value>
+  </data>
+  <data name="OtherName" xml:space="preserve">
+    <value>Other name</value>
+  </data>
+  <data name="OtherPleaseSpecify" xml:space="preserve">
+    <value>Other, please specify</value>
+  </data>
+  <data name="OtherTrackOrArea" xml:space="preserve">
+    <value>Other track no. or loading area</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Other to-year</value>
+  </data>
+  <data name="OtherWagonClass" xml:space="preserve">
+    <value>Other wagon class</value>
+  </data>
+  <data name="OverheadLineFeature" xml:space="preserve">
+    <value>Has overhead line?</value>
+  </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>owned by</value>
+  </data>
+  <data name="OwnedPercent" xml:space="preserve">
+    <value>Owned %</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="Owners" xml:space="preserve">
+    <value>Owners</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Box</value>
+  </data>
+  <data name="PackageLabel" xml:space="preserve">
+    <value>Box label</value>
+  </data>
+  <data name="PackagingUnit" xml:space="preserve">
+    <value>Packaging unit</value>
+  </data>
+  <data name="Participant" xml:space="preserve">
+    <value>Participant</value>
+  </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Participants</value>
+  </data>
+  <data name="Participate" xml:space="preserve">
+    <value>Participate</value>
+  </data>
+  <data name="Participation" xml:space="preserve">
+    <value>Participation</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordConfirmationDoesNotMatch" xml:space="preserve">
+    <value>Password confirmation does not match</value>
+  </data>
+  <data name="PasswordCreated" xml:space="preserve">
+    <value>Password created</value>
+  </data>
+  <data name="PasswordMinimumOfThese" xml:space="preserve">
+    <value>Minimum {0} of these {2}: {1}</value>
+  </data>
+  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
+    <value>Password must fulfil these requirements:</value>
+  </data>
+  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
+    <value>Password must have minimum {0} characters</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Password policy</value>
+  </data>
+  <data name="PasswordResetAttempts" xml:space="preserve">
+    <value>Number of password reset attempts</value>
+  </data>
+  <data name="PasswordResetFailed" xml:space="preserve">
+    <value>Password reset failed</value>
+  </data>
+  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
+    <value>Password reset has been requested</value>
+  </data>
+  <data name="PasswordResetMailSent" xml:space="preserve">
+    <value>Password reset mail sent</value>
+  </data>
+  <data name="PeriodInThisVersion" xml:space="preserve">
+    <value>Period in this version</value>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>People</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="PlatformLength" xml:space="preserve">
+    <value>Platform length</value>
+  </data>
+  <data name="PleaseReadAndAccept" xml:space="preserve">
+    <value>Please read and scroll to bottom to accept. This is required to use this application.</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>Polish</value>
+  </data>
+  <data name="PreferredTheme" xml:space="preserve">
+    <value>Preferred theme</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="PrimaryModuleStandard" xml:space="preserve">
+    <value>Primary module standard</value>
+  </data>
+  <data name="PrimaryOperatingCountry" xml:space="preserve">
+    <value>Primary operating country</value>
+  </data>
+  <data name="PrintCount" xml:space="preserve">
+    <value>Number of prints</value>
+  </data>
+  <data name="PrintPerOperatingDay" xml:space="preserve">
+    <value>Print per operating day</value>
+  </data>
+  <data name="PrototypeData" xml:space="preserve">
+    <value>Prototype data</value>
+  </data>
+  <data name="PrototypeInfo" xml:space="preserve">
+    <value>Prototype info</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="QuantityUnit" xml:space="preserve">
+    <value>Quantity unit</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="Regions" xml:space="preserve">
+    <value>Regions</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Registered" xml:space="preserve">
+    <value>Signed up</value>
+  </data>
+  <data name="RegisteredModules" xml:space="preserve">
+    <value>Registered modules</value>
+  </data>
+  <data name="RegisterModules" xml:space="preserve">
+    <value>Register modules</value>
+  </data>
+  <data name="RegisterOrModifyParticipation" xml:space="preserve">
+    <value>Register or modify participation</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Registration</value>
+  </data>
+  <data name="RegistrationCloses" xml:space="preserve">
+    <value>Registration closes</value>
+  </data>
+  <data name="RegistrationOpens" xml:space="preserve">
+    <value>Registration opens</value>
+  </data>
+  <data name="RegistrationTime" xml:space="preserve">
+    <value>Signed up</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveFiltering" xml:space="preserve">
+    <value>Remove filtering</value>
+  </data>
+  <data name="RepresentativeStation" xml:space="preserve">
+    <value>Representative station</value>
+  </data>
+  <data name="RepresentsFromYear" xml:space="preserve">
+    <value>Represents from year</value>
+  </data>
+  <data name="RepresentsToYear" xml:space="preserve">
+    <value>Represents to year</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
+    <value>Reset password has been requested</value>
+  </data>
+  <data name="ResponsibleGroup" xml:space="preserve">
+    <value>Responsible group</value>
+  </data>
+  <data name="RollsSluggishly" xml:space="preserve">
+    <value>Rolls sluggishly</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Save all</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SecondCustomer" xml:space="preserve">
+    <value>Second customer</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Select file</value>
+  </data>
+  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
+    <value>Select or modify layout participation</value>
+  </data>
+  <data name="SelectPersonToRegister" xml:space="preserve">
+    <value>Select person to register</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
   </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail to all</value>
   </data>
-  <data name="HasSameCargoReturn" xml:space="preserve">
-    <value>Return same cargo type?</value>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
-  <data name="HasCargoCustomers" xml:space="preserve">
-    <value>Has freight customers?</value>
+  <data name="ShortName" xml:space="preserve">
+    <value>Abbreviation</value>
   </data>
-  <data name="IsExpress" xml:space="preserve">
-    <value>Express goods?</value>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Show all</value>
   </data>
-  <data name="IsCoolingRequired" xml:space="preserve">
-    <value>Needs cooling?</value>
+  <data name="SignalFeature" xml:space="preserve">
+    <value>Has signal?</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="SignedInAs" xml:space="preserve">
+    <value>Signed in as {0}</value>
+  </data>
+  <data name="SorryNothingToDisplayHere" xml:space="preserve">
+    <value>Sorry, nothing to display here.</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Special characters</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>Max speed</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="StartHour" xml:space="preserve">
+    <value>Start hour</value>
+  </data>
+  <data name="StartWeekday" xml:space="preserve">
+    <value>Start weekday</value>
+  </data>
+  <data name="Station" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Stations</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Straight</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Supplying" xml:space="preserve">
+    <value>Supplying</value>
+  </data>
+  <data name="Swedish" xml:space="preserve">
+    <value>Swedish</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Terms of use</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>Text colour</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ThemeNote" xml:space="preserve">
+    <value>Theme note</value>
+  </data>
+  <data name="ThisContentWasModified" xml:space="preserve">
+    <value>This content was modified {0:d} {0:t}</value>
+  </data>
+  <data name="Throttle" xml:space="preserve">
+    <value>Throttle</value>
+  </data>
+  <data name="Throttles" xml:space="preserve">
+    <value>Throttles</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="TrackNumber" xml:space="preserve">
+    <value>Track number</value>
+  </data>
+  <data name="TrackOrArea" xml:space="preserve">
+    <value>Track no. or loading area</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
+  <data name="TrackSystem" xml:space="preserve">
+    <value>Track system</value>
+  </data>
+  <data name="Traction" xml:space="preserve">
+    <value>Traction</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="TransferOwnership" xml:space="preserve">
+    <value>Transfer ownership</value>
+  </data>
+  <data name="TransferredShare" xml:space="preserve">
+    <value>Transferred share</value>
+  </data>
+  <data name="TypeMinimumCharachers" xml:space="preserve">
+    <value>Type minimum {0} charachers</value>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="UnloadingReady" xml:space="preserve">
+    <value>Unloading ready</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="Unregister" xml:space="preserve">
+    <value>Unregister</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpdatingWaybills" xml:space="preserve">
+    <value>Updating waybills...</value>
+  </data>
+  <data name="UploadDocuments" xml:space="preserve">
+    <value>Upload documents</value>
+  </data>
+  <data name="UptoYear" xml:space="preserve">
+    <value>Up to year</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="UserConfirmationFailed" xml:space="preserve">
+    <value>User confirmation failed!</value>
+  </data>
+  <data name="UserConfirmed" xml:space="preserve">
+    <value>User confirmed</value>
+  </data>
+  <data name="UserIsLockedOut" xml:space="preserve">
+    <value>User is locked out!</value>
+  </data>
+  <data name="UserIsReadOnly" xml:space="preserve">
+    <value>User has only read access?</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>User settings</value>
+  </data>
+  <data name="UserWelcome" xml:space="preserve">
+    <value>{0}, welcome!</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Validate</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>Vehicle</value>
+  </data>
+  <data name="VehicleClass" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="VehicleNumber" xml:space="preserve">
+    <value>Vehicle number</value>
+  </data>
+  <data name="Venue" xml:space="preserve">
+    <value>Venue</value>
+  </data>
+  <data name="VenueName" xml:space="preserve">
+    <value>Venue name</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="WagonEasilyDerails" xml:space="preserve">
+    <value>Wagon easily derails</value>
+  </data>
+  <data name="WagonError" xml:space="preserve">
+    <value>Wagon error</value>
+  </data>
+  <data name="WagonHasLooseParts" xml:space="preserve">
+    <value>The wagon has loose parts</value>
+  </data>
+  <data name="WagonTooLightOrHeavy" xml:space="preserve">
+    <value>Wagon too light or heavy</value>
+  </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>Waybills</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="Wheels" xml:space="preserve">
+    <value>Wheels</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="WiFredThrottle" xml:space="preserve">
+    <value>wiFRED throttle</value>
+  </data>
+  <data name="WiFredThrottles" xml:space="preserve">
+    <value>wiFRED throttles</value>
+  </data>
+  <data name="Withdrawn" xml:space="preserve">
+    <value>Withdrawn</value>
+  </data>
+  <data name="WrongBackToBackDistance" xml:space="preserve">
+    <value>Wrong back-to-back distance</value>
+  </data>
+  <data name="WrongEpochTheme" xml:space="preserve">
+    <value>Wrong epoch/theme</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>You are currently not registered to any forthcoming meeting</value>
+  </data>
+  <data name="YouAreLockedOut" xml:space="preserve">
+    <value>You are locked out!</value>
+  </data>
+  <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
+    <value>You are not authorized to view this page.</value>
+  </data>
+  <data name="YouMayNowLogin" xml:space="preserve">
+    <value>You may now login</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>You participate days</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Your arrival time the first day</value>
+  </data>
+  <data name="_CASING" xml:space="preserve">
+    <value>_LOWER</value>
   </data>
 </root>

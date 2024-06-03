@@ -117,14 +117,71 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Unknown" xml:space="preserve">
-    <value>Ukendt</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkendt</value>
   </data>
-  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>Et driftsted skal have mindst et modul, der henviser til den</value>
+  <data name="Autumn" xml:space="preserve">
+    <value>Efterår</value>
+  </data>
+  <data name="Bidirectional" xml:space="preserve">
+    <value>Tovejs</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Aflyst</value>
+  </data>
+  <data name="ClubEvent" xml:space="preserve">
+    <value>Klubbegivenhed</value>
+  </data>
+  <data name="DomainMembers" xml:space="preserve">
+    <value>Domæne medlemmer</value>
+  </data>
+  <data name="Eastwards" xml:space="preserve">
+    <value>Østpå</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>Øst-vest</value>
+  </data>
+  <data name="EmptyWagonForCargo" xml:space="preserve">
+    <value>Tom vogn til {0}</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="FullyAppliedDetailed" xml:space="preserve">
+    <value>Fuldt implementeret, detaljeret</value>
+  </data>
+  <data name="FullyAppliedSimple" xml:space="preserve">
+    <value>Fuldt implementeret, enkelt</value>
+  </data>
+  <data name="GroupMembers" xml:space="preserve">
+    <value>Gruppemedlemmer</value>
+  </data>
+  <data name="IncompleteData" xml:space="preserve">
+    <value>Ufuldstændige data</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Inviteret</value>
+  </data>
+  <data name="Market" xml:space="preserve">
+    <value>Marked</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
     <value>Modulet er registreret til det kommende møde</value>
+  </data>
+  <data name="ModuleMeeting" xml:space="preserve">
+    <value>Modultræf</value>
+  </data>
+  <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
+    <value>Modulnavn/variant er allerede taget</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ikke anvendelig</value>
   </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Uberettiget</value>
@@ -138,32 +195,53 @@
   <data name="NotPlacedInLayout" xml:space="preserve">
     <value>Ikke placeret i sporplan</value>
   </data>
-  <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
-    <value>Modulnavn/variant er allerede taget</value>
+  <data name="NotScheduled" xml:space="preserve">
+    <value>Ikke planlagt</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>Nej</value>
+  <data name="OnlyPosts" xml:space="preserve">
+    <value>Kun stolper</value>
   </data>
-  <data name="Invited" xml:space="preserve">
-    <value>Inviteret</value>
+  <data name="Optional" xml:space="preserve">
+    <value>Valgfri</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
-  </data>
-  <data name="IncompleteData" xml:space="preserve">
-    <value>Ufuldstændige data</value>
-  </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Godkendt</value>
-  </data>
-  <data name="Preliminary" xml:space="preserve">
-    <value>Præliminært</value>
+  <data name="PartiallyApplied" xml:space="preserve">
+    <value>Delvist implementeret</value>
   </data>
   <data name="Planned" xml:space="preserve">
     <value>Planlagt</value>
   </data>
-  <data name="Canceled" xml:space="preserve">
-    <value>Aflyst</value>
+  <data name="Preliminary" xml:space="preserve">
+    <value>Præliminært</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Forberedes</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Privat</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Offentlig</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Klar til test</value>
+  </data>
+  <data name="Removable" xml:space="preserve">
+    <value>Aftagelig</value>
+  </data>
+  <data name="Spring" xml:space="preserve">
+    <value>Forår</value>
+  </data>
+  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
+    <value>Et driftsted skal have mindst et modul, der henviser til den</value>
+  </data>
+  <data name="Summer" xml:space="preserve">
+    <value>Sommer</value>
+  </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Testet</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Udefineret</value>
   </data>
   <data name="UnderApproval" xml:space="preserve">
     <value>Under godkendelse</value>
@@ -174,103 +252,25 @@
   <data name="UnderRepair" xml:space="preserve">
     <value>Under reparation</value>
   </data>
-  <data name="ReadyToTest" xml:space="preserve">
-    <value>Klar til test</value>
-  </data>
-  <data name="Tested" xml:space="preserve">
-    <value>Testet</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Ikke anvendelig</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>Ingen</value>
-  </data>
-  <data name="Preparing" xml:space="preserve">
-    <value>Forberedes</value>
-  </data>
-  <data name="PartiallyApplied" xml:space="preserve">
-    <value>Delvist implementeret</value>
-  </data>
-  <data name="FullyAppliedDetailed" xml:space="preserve">
-    <value>Fuldt implementeret, detaljeret</value>
-  </data>
-  <data name="FullyAppliedSimple" xml:space="preserve">
-    <value>Fuldt implementeret, enkelt</value>
-  </data>
-  <data name="Removable" xml:space="preserve">
-    <value>Aftagelig</value>
-  </data>
-  <data name="Fixed" xml:space="preserve">
-    <value>Fast</value>
-  </data>
-  <data name="OnlyPosts" xml:space="preserve">
-    <value>Kun stolper</value>
-  </data>
-  <data name="Optional" xml:space="preserve">
-    <value>Valgfri</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>Udefineret</value>
-  </data>
-  <data name="Eastwards" xml:space="preserve">
-    <value>Østpå</value>
-  </data>
-  <data name="Westwards" xml:space="preserve">
-    <value>Vestpå</value>
-  </data>
-  <data name="Private" xml:space="preserve">
-    <value>Privat</value>
-  </data>
-  <data name="GroupMembers" xml:space="preserve">
-    <value>Gruppemedlemmer</value>
-  </data>
-  <data name="DomainMembers" xml:space="preserve">
-    <value>Domæne medlemmer</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Alle brugere</value>
-  </data>
-  <data name="Public" xml:space="preserve">
-    <value>Offentlig</value>
-  </data>
-  <data name="NotScheduled" xml:space="preserve">
-    <value>Ikke planlagt</value>
-  </data>
-  <data name="EastWest" xml:space="preserve">
-    <value>Øst-vest</value>
-  </data>
-  <data name="Bidirectional" xml:space="preserve">
-    <value>Tovejs</value>
-  </data>
-  <data name="WestEast" xml:space="preserve">
-    <value>Vest-øst</value>
+  <data name="Unknown" xml:space="preserve">
+    <value>Ukendt</value>
   </data>
   <data name="Unspecified" xml:space="preserve">
     <value>Uspecificeret</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>Alle brugere</value>
+  </data>
+  <data name="WestEast" xml:space="preserve">
+    <value>Vest-øst</value>
+  </data>
+  <data name="Westwards" xml:space="preserve">
+    <value>Vestpå</value>
+  </data>
   <data name="Winter" xml:space="preserve">
     <value>Vinter</value>
   </data>
-  <data name="Spring" xml:space="preserve">
-    <value>Forår</value>
-  </data>
-  <data name="Summer" xml:space="preserve">
-    <value>Sommer</value>
-  </data>
-  <data name="Autumn" xml:space="preserve">
-    <value>Efterår</value>
-  </data>
-  <data name="ModuleMeeting" xml:space="preserve">
-    <value>Modultræf</value>
-  </data>
-  <data name="ClubEvent" xml:space="preserve">
-    <value>Klubbegivenhed</value>
-  </data>
-  <data name="Market" xml:space="preserve">
-    <value>Marked</value>
-  </data>
-  <data name="EmptyWagonForCargo" xml:space="preserve">
-    <value>Tom vogn til {0}</value>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
   </data>
 </root>

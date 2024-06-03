@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace ModulesRegistry.Data;
+#pragma warning disable IDE0028 // Simplify collection initialization
 
 public class Meeting
 {
@@ -102,7 +103,7 @@ public static class MeetingExtensions
 
     public static bool IsClosedForRegistration([NotNullWhen(false)] this Meeting? meeting, DateTime at) =>
         meeting is not null &&
-        meeting.Layouts.Any() &&
+        meeting.Layouts.Count != 0 &&
         meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
 
     public static bool MayDelete(this Meeting meeting, ClaimsPrincipal? principal) =>

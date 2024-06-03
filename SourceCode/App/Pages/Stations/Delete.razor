@@ -8,7 +8,7 @@
 
 @inject StationService StationService
 
-<PageHeading ObjectName="OperationLocation" Owner="@Station" IconClass="@FontAwesome.Station" PageAction="PageAction.Delete" />
+<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="PageAction.Delete" />
 
 <ul>
     <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>

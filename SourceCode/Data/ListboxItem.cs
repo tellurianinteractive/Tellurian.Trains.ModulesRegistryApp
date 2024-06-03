@@ -9,3 +9,5 @@ public record ListboxItem(int Id, string Description)
     public string? BackColor { get; init; }
     public int DisplayOrder { get; set; }
 }
+
+public record TextboxItem(string Description);

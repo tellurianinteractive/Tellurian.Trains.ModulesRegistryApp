@@ -36,11 +36,12 @@ public static class FontAwesome
     public const string Settings = "fa fa-user-cog";
     public const string Signature = "fa fa-file-signature";
     public const string Show = "fa fa-info";
+    public const string Sound = "fa fa-volume-up";
     public const string Station = "fa fa-school";
     public const string Stations = "fa fa-school";
     public const string Standard = "fa fa-pencil-ruler";
     public const string Sync = "fa fa-sync";
-    public const string Train = "fa fa-train-subway";
+    public const string Train = "fa fa-train";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
     public const string Unlock = "fa fa-lock-open";
@@ -49,6 +50,7 @@ public static class FontAwesome
     public const string User = "fa fa-user";
     public const string Waybill = "fa fa-file-invoice";
     public const string Waybills = "fa fa-file-invoice";
+    public const string Vehicle = "fa fa-train";
     public const string Verify = "fa fa-check-square";
     public const string View = "fa fa-eye";
     public const string Wifi = "fa fa-wifi";
@@ -88,6 +90,7 @@ public static class FontAwesome
             {nameof(Settings), Settings },
             {nameof(Show), Show },
             {nameof(Signature), Signature },
+            {nameof(Sound), Sound },
             {nameof(Station), Station },
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },
@@ -101,6 +104,7 @@ public static class FontAwesome
             {nameof(User), User },
             {nameof(Waybill), Waybill },
             {nameof(Waybills), Waybills },
+            {nameof(Vehicle), Vehicle },
             {nameof(Verify), Verify },
             {nameof(View), View },
             {nameof(Wifi), Wifi },

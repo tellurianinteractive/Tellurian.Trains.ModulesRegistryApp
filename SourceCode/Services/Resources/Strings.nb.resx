@@ -117,212 +117,125 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppName" xml:space="preserve">
-    <value>Modulregisteret</value>
-  </data>
-  <data name="Community" xml:space="preserve">
-    <value>Samfunnsgruppe</value>
-  </data>
-  <data name="PasswordPolicy" xml:space="preserve">
-    <value>Minimumslengde {0} tegn, bestående av minimum {1} bokstaver {2}, {3} sifre {4} og {5} spesialtegn {6}.</value>
-  </data>
-  <data name="Switzerland" xml:space="preserve">
-    <value>Sveits</value>
-  </data>
-  <data name="Norway" xml:space="preserve">
-    <value>Norge</value>
-  </data>
-  <data name="Germany" xml:space="preserve">
-    <value>Tyskland</value>
-  </data>
-  <data name="Denmark" xml:space="preserve">
-    <value>Danmark</value>
-  </data>
-  <data name="Sweden" xml:space="preserve">
-    <value>Sverige</value>
-  </data>
-  <data name="PasswordInvalid" xml:space="preserve">
-    <value>Passordet oppfyller ikke kravene til policyen.</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
-  </data>
-  <data name="Saved" xml:space="preserve">
-    <value>Lagret.</value>
-  </data>
-  <data name="NothingToDelete" xml:space="preserve">
-    <value>Ingenting å slette.</value>
-  </data>
-  <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Ideell forening</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Nei</value>
-  </data>
-  <data name="MayNotBeDeleted" xml:space="preserve">
-    <value>Kan ikke slettes.</value>
-  </data>
-  <data name="DeleteFailed" xml:space="preserve">
-    <value>Sletting mislyktes!</value>
-  </data>
-  <data name="DeletedSuccessfully" xml:space="preserve">
-    <value>Slettet.</value>
-  </data>
-  <data name="SaveFailed" xml:space="preserve">
-    <value>Lagring mislyktes!</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Oprett passord</value>
-  </data>
-  <data name="PasswordsDontMatch" xml:space="preserve">
-    <value>Passord og bekreftet passord samsvarer ikke.</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hei</value>
-  </data>
-  <data name="BestRegards" xml:space="preserve">
-    <value>Med vennlig hilsen</value>
-  </data>
-  <data name="NotAuthorized" xml:space="preserve">
-    <value>Ikke autorisert</value>
+  <data name="Afternoon" xml:space="preserve">
+    <value>Ettermiddag</value>
   </data>
   <data name="AlreadyExists" xml:space="preserve">
     <value>Eksisterer allerede</value>
   </data>
-  <data name="NotFound" xml:space="preserve">
-    <value>Ikke funnet</value>
+  <data name="And" xml:space="preserve">
+    <value>og</value>
   </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>Ukjent</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Ikke aktuelt</value>
-  </data>
-  <data name="Optional" xml:space="preserve">
-    <value>Valgfri</value>
-  </data>
-  <data name="CloningFailed" xml:space="preserve">
-    <value>Kloning mislyktes</value>
-  </data>
-  <data name="ClonedSuccessfully" xml:space="preserve">
-    <value>Klonet</value>
-  </data>
-  <data name="NoModification" xml:space="preserve">
-    <value>Ingen endringer</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Fault" xml:space="preserve">
-    <value>Fejl</value>
-  </data>
-  <data name="United Kingdom" xml:space="preserve">
-    <value>Storbritannia</value>
-  </data>
-  <data name="Netherlands" xml:space="preserve">
-    <value>Nederland</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>Udefinert</value>
-  </data>
-  <data name="Canceled" xml:space="preserve">
-    <value>Avlyst</value>
+  <data name="AppName" xml:space="preserve">
+    <value>Modulregisteret</value>
   </data>
   <data name="Arrival" xml:space="preserve">
     <value>Ankomst</value>
   </data>
-  <data name="Departure" xml:space="preserve">
-    <value>Avgang</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Sende</value>
-  </data>
-  <data name="Receive" xml:space="preserve">
-    <value>Motta</value>
-  </data>
-  <data name="Import" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="Export" xml:space="preserve">
-    <value>Eksport</value>
-  </data>
-  <data name="In the evening" xml:space="preserve">
-    <value>Om kvelden</value>
-  </data>
   <data name="At night" xml:space="preserve">
     <value>Om natten</value>
   </data>
-  <data name="In the afternoon" xml:space="preserve">
-    <value>På ettermiddagen</value>
+  <data name="Austria" xml:space="preserve">
+    <value>Østerrike</value>
   </data>
-  <data name="In the morning" xml:space="preserve">
-    <value>Om morgenen</value>
+  <data name="Available" xml:space="preserve">
+    <value>Tilgjengelig</value>
   </data>
-  <data name="Wagons" xml:space="preserve">
-    <value>Vogner</value>
+  <data name="Bale" xml:space="preserve">
+    <value>Bal</value>
   </data>
-  <data name="Tonnes" xml:space="preserve">
-    <value>Tonn</value>
+  <data name="Bales" xml:space="preserve">
+    <value>Baller</value>
+  </data>
+  <data name="Barrel" xml:space="preserve">
+    <value>Tønne</value>
+  </data>
+  <data name="Barrels" xml:space="preserve">
+    <value>Tønner</value>
+  </data>
+  <data name="BestRegards" xml:space="preserve">
+    <value>Med vennlig hilsen</value>
+  </data>
+  <data name="BigSack" xml:space="preserve">
+    <value>Storsekk</value>
+  </data>
+  <data name="BigSacks" xml:space="preserve">
+    <value>Storsekker</value>
+  </data>
+  <data name="Bottle" xml:space="preserve">
+    <value>Flaske</value>
+  </data>
+  <data name="Bottles" xml:space="preserve">
+    <value>Flasker</value>
+  </data>
+  <data name="Box" xml:space="preserve">
+    <value>Eske</value>
+  </data>
+  <data name="Boxes" xml:space="preserve">
+    <value>Esker</value>
+  </data>
+  <data name="Bulk" xml:space="preserve">
+    <value>Bulk</value>
+  </data>
+  <data name="BulkContainer30" xml:space="preserve">
+    <value>30' Bulkcontainer</value>
+  </data>
+  <data name="BulkContainers30" xml:space="preserve">
+    <value>30' Bulkcontainere</value>
+  </data>
+  <data name="Bundle" xml:space="preserve">
+    <value>Bunt</value>
+  </data>
+  <data name="Bundles" xml:space="preserve">
+    <value>Bunter</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Avlyst</value>
+  </data>
+  <data name="Cargo" xml:space="preserve">
+    <value>Gods</value>
+  </data>
+  <data name="CargoRack" xml:space="preserve">
+    <value>Lastestativ</value>
+  </data>
+  <data name="CargoRacks" xml:space="preserve">
+    <value>Lastestativ</value>
+  </data>
+  <data name="CargoUnit" xml:space="preserve">
+    <value>Lastenhet</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Speditør</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ClonedSuccessfully" xml:space="preserve">
+    <value>Klonet</value>
+  </data>
+  <data name="CloningFailed" xml:space="preserve">
+    <value>Kloning mislyktes</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Samfunnsgruppe</value>
+  </data>
+  <data name="Consignee" xml:space="preserve">
+    <value>Mottaker</value>
+  </data>
+  <data name="Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Oprett passord</value>
+  </data>
+  <data name="Cubicmeter" xml:space="preserve">
+    <value>Kubikkmeter</value>
   </data>
   <data name="Cubicmeters" xml:space="preserve">
     <value>Kubikkmeter</value>
   </data>
-  <data name="Pieces" xml:space="preserve">
-    <value>Stykker</value>
-  </data>
-  <data name="To" xml:space="preserve">
-    <value>til</value>
-  </data>
-  <data name="And" xml:space="preserve">
-    <value>og</value>
-  </data>
-  <data name="DayNameCasing" xml:space="preserve">
-    <value>LOWER</value>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>M</value>
-  </data>
-  <data name="Monday" xml:space="preserve">
-    <value>Måndag</value>
-  </data>
-  <data name="Tuesday" xml:space="preserve">
-    <value>Tirsdag</value>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>Ti</value>
-  </data>
-  <data name="Wednesday" xml:space="preserve">
-    <value>Onsdag</value>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>O</value>
-  </data>
-  <data name="Thursday" xml:space="preserve">
-    <value>Torsdag</value>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>To</value>
-  </data>
-  <data name="Friday" xml:space="preserve">
-    <value>Fredag</value>
-  </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>F</value>
-  </data>
-  <data name="Saturday" xml:space="preserve">
-    <value>Lørdag</value>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>L</value>
-  </data>
-  <data name="Sunday" xml:space="preserve">
-    <value>Søndag</value>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>S</value>
+  <data name="CzechRepublic" xml:space="preserve">
+    <value>Tsjekkisk Republikk</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>Daglig</value>
@@ -330,56 +243,32 @@
   <data name="DailyShort" xml:space="preserve">
     <value>Dagl</value>
   </data>
-  <data name="Container" xml:space="preserve">
-    <value>Container</value>
+  <data name="DayNameCasing" xml:space="preserve">
+    <value>LOWER</value>
   </data>
-  <data name="Trailers" xml:space="preserve">
-    <value>Trailers</value>
+  <data name="Days" xml:space="preserve">
+    <value>Dage</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>Alle brukere</value>
+  <data name="DeletedSuccessfully" xml:space="preserve">
+    <value>Slettet.</value>
   </data>
-  <data name="None" xml:space="preserve">
-    <value>Ingen</value>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Sletting mislyktes!</value>
   </data>
-  <data name="with" xml:space="preserve">
-    <value>med</value>
+  <data name="Denmark" xml:space="preserve">
+    <value>Danmark</value>
   </data>
-  <data name="ParticipantHasRegisteredModules" xml:space="preserve">
-    <value>Deltakeren har registrert moduler</value>
+  <data name="Departure" xml:space="preserve">
+    <value>Avgang</value>
   </data>
-  <data name="Trainset" xml:space="preserve">
-    <value>Togsett</value>
+  <data name="Destination" xml:space="preserve">
+    <value>Destinasjon</value>
   </data>
-  <data name="Northwards" xml:space="preserve">
-    <value>Nordover</value>
+  <data name="Dieselelectric" xml:space="preserve">
+    <value>Dieselelektrisk</value>
   </data>
-  <data name="Southwards" xml:space="preserve">
-    <value>Sørover</value>
-  </data>
-  <data name="Boxes" xml:space="preserve">
-    <value>Esker</value>
-  </data>
-  <data name="Barrels" xml:space="preserve">
-    <value>Tønner</value>
-  </data>
-  <data name="Bales" xml:space="preserve">
-    <value>Baller</value>
-  </data>
-  <data name="Sacks" xml:space="preserve">
-    <value>Sekker</value>
-  </data>
-  <data name="Pallets" xml:space="preserve">
-    <value>Paller</value>
-  </data>
-  <data name="Bottles" xml:space="preserve">
-    <value>Flasker</value>
-  </data>
-  <data name="CargoRacks" xml:space="preserve">
-    <value>Lastestativ</value>
-  </data>
-  <data name="LiquidContainer" xml:space="preserve">
-    <value>Væskeveholder</value>
+  <data name="Dieselhydraulic" xml:space="preserve">
+    <value>Dieselhydraulisk</value>
   </data>
   <data name="DryContainer10" xml:space="preserve">
     <value>10' Tørrcontainer</value>
@@ -390,147 +279,6 @@
   <data name="DryContainer40" xml:space="preserve">
     <value>40' Tørrcontainer</value>
   </data>
-  <data name="ReeferContainer20" xml:space="preserve">
-    <value>20' Frysecontainer</value>
-  </data>
-  <data name="ReeferContainer40" xml:space="preserve">
-    <value>40' Frysecontainer</value>
-  </data>
-  <data name="Cargo" xml:space="preserve">
-    <value>Gods</value>
-  </data>
-  <data name="Carrier" xml:space="preserve">
-    <value>Speditør</value>
-  </data>
-  <data name="Class" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="Consignee" xml:space="preserve">
-    <value>Mottaker</value>
-  </data>
-  <data name="Destination" xml:space="preserve">
-    <value>Destinasjon</value>
-  </data>
-  <data name="Epoch" xml:space="preserve">
-    <value>Epoke</value>
-  </data>
-  <data name="Empty" xml:space="preserve">
-    <value>Tom</value>
-  </data>
-  <data name="Instructions" xml:space="preserve">
-    <value>Instruksjoner</value>
-  </data>
-  <data name="Origin" xml:space="preserve">
-    <value>Avsenderstasjon</value>
-  </data>
-  <data name="Shipper" xml:space="preserve">
-    <value>Avsender</value>
-  </data>
-  <data name="Wagon" xml:space="preserve">
-    <value>Vogn</value>
-  </data>
-  <data name="In" xml:space="preserve">
-    <value>i</value>
-  </data>
-  <data name="CargoUnit" xml:space="preserve">
-    <value>Lastenhet</value>
-  </data>
-  <data name="Days" xml:space="preserve">
-    <value>Dage</value>
-  </data>
-  <data name="LoadingReadyTime" xml:space="preserve">
-    <value>Lasting er klar</value>
-  </data>
-  <data name="UnloadingReadyTime" xml:space="preserve">
-    <value>Utlasting klar</value>
-  </data>
-  <data name="Afternoon" xml:space="preserve">
-    <value>Ettermiddag</value>
-  </data>
-  <data name="Evening" xml:space="preserve">
-    <value>Kveld</value>
-  </data>
-  <data name="Night" xml:space="preserve">
-    <value>Natt</value>
-  </data>
-  <data name="Morning" xml:space="preserve">
-    <value>Morgen</value>
-  </data>
-  <data name="Noon" xml:space="preserve">
-    <value>Middagstid</value>
-  </data>
-  <data name="Italy" xml:space="preserve">
-    <value>Italia</value>
-  </data>
-  <data name="Unload" xml:space="preserve">
-    <value>Last ut</value>
-  </data>
-  <data name="Load" xml:space="preserve">
-    <value>Last</value>
-  </data>
-  <data name="ImportAgent" xml:space="preserve">
-    <value>Import agent</value>
-  </data>
-  <data name="ExportAgent" xml:space="preserve">
-    <value>Eksport agent</value>
-  </data>
-  <data name="Immediately" xml:space="preserve">
-    <value>Umiddelbart</value>
-  </data>
-  <data name="Rolls" xml:space="preserve">
-    <value>Ruller</value>
-  </data>
-  <data name="BigSacks" xml:space="preserve">
-    <value>Storsekker</value>
-  </data>
-  <data name="Bundles" xml:space="preserve">
-    <value>Bunter</value>
-  </data>
-  <data name="FlatRackContainer20" xml:space="preserve">
-    <value>20' Flat stativ container</value>
-  </data>
-  <data name="FlatRackContainer40" xml:space="preserve">
-    <value>40' Flat stativ container</value>
-  </data>
-  <data name="HighCubeContainer20" xml:space="preserve">
-    <value>20' High cube container</value>
-  </data>
-  <data name="HighCubeContainer40" xml:space="preserve">
-    <value>40' High cube container</value>
-  </data>
-  <data name="HighCubeReeferContainer40" xml:space="preserve">
-    <value>40' High cube kjølecontainer</value>
-  </data>
-  <data name="OpenTopContainer20" xml:space="preserve">
-    <value>20' Åpen topp container</value>
-  </data>
-  <data name="OpenTopContainer40" xml:space="preserve">
-    <value>40' Åpen topp container</value>
-  </data>
-  <data name="Plates" xml:space="preserve">
-    <value>Plater</value>
-  </data>
-  <data name="Bale" xml:space="preserve">
-    <value>Bal</value>
-  </data>
-  <data name="Barrel" xml:space="preserve">
-    <value>Tønne</value>
-  </data>
-  <data name="BigSack" xml:space="preserve">
-    <value>Storsekk</value>
-  </data>
-  <data name="Bottle" xml:space="preserve">
-    <value>Flaske</value>
-  </data>
-  <data name="Box" xml:space="preserve">
-    <value>Eske</value>
-  </data>
-  <data name="Bundle" xml:space="preserve">
-    <value>Bunt</value>
-  </data>
-  <data name="CargoRack" xml:space="preserve">
-    <value>Lastestativ</value>
-  </data>
   <data name="DryContainers10" xml:space="preserve">
     <value>10' Tørrcontainere</value>
   </data>
@@ -540,11 +288,74 @@
   <data name="DryContainers40" xml:space="preserve">
     <value>40' Tørrcontainere</value>
   </data>
+  <data name="DualMode" xml:space="preserve">
+    <value>Dual mode</value>
+  </data>
+  <data name="Duplicated" xml:space="preserve">
+    <value>Duplisert</value>
+  </data>
+  <data name="Electric" xml:space="preserve">
+    <value>Elektrisk</value>
+  </data>
+  <data name="ElectricBattery" xml:space="preserve">
+    <value>Elektrisk, batteri</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Tom</value>
+  </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Tomvognordre</value>
+  </data>
+  <data name="Epoch" xml:space="preserve">
+    <value>Epoke</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="Evening" xml:space="preserve">
+    <value>Kveld</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Eksport</value>
+  </data>
+  <data name="ExportAgent" xml:space="preserve">
+    <value>Eksport agent</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Fejl</value>
+  </data>
+  <data name="FlatRackContainer20" xml:space="preserve">
+    <value>20' Flat stativ container</value>
+  </data>
+  <data name="FlatRackContainer40" xml:space="preserve">
+    <value>40' Flat stativ container</value>
+  </data>
   <data name="FlatRackContainers20" xml:space="preserve">
     <value>20' Flat stativ containere</value>
   </data>
   <data name="FlatRackContainers40" xml:space="preserve">
     <value>40' Flat stativ containere</value>
+  </data>
+  <data name="France" xml:space="preserve">
+    <value>Frankrike</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Fredag</value>
+  </data>
+  <data name="FridayShort" xml:space="preserve">
+    <value>F</value>
+  </data>
+  <data name="Germany" xml:space="preserve">
+    <value>Tyskland</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hei</value>
+  </data>
+  <data name="HighCubeContainer20" xml:space="preserve">
+    <value>20' High cube container</value>
+  </data>
+  <data name="HighCubeContainer40" xml:space="preserve">
+    <value>40' High cube container</value>
   </data>
   <data name="HighCubeContainers20" xml:space="preserve">
     <value>20' High cube containere</value>
@@ -552,35 +363,122 @@
   <data name="HighCubeContainers40" xml:space="preserve">
     <value>40' High cube containere</value>
   </data>
+  <data name="HighCubeReeferContainer40" xml:space="preserve">
+    <value>40' High cube kjølecontainer</value>
+  </data>
   <data name="HighCubeReeferContainers40" xml:space="preserve">
     <value>40' High cube kjølecontainere</value>
+  </data>
+  <data name="Hungary" xml:space="preserve">
+    <value>Ungarn</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Umiddelbart</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportAgent" xml:space="preserve">
+    <value>Import agent</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>i</value>
+  </data>
+  <data name="In the afternoon" xml:space="preserve">
+    <value>På ettermiddagen</value>
+  </data>
+  <data name="In the evening" xml:space="preserve">
+    <value>Om kvelden</value>
+  </data>
+  <data name="In the morning" xml:space="preserve">
+    <value>Om morgenen</value>
+  </data>
+  <data name="Incomplete" xml:space="preserve">
+    <value>Ikke ferdig</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instruksjoner</value>
+  </data>
+  <data name="Internal" xml:space="preserve">
+    <value>Internt treff</value>
+  </data>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventarnummer</value>
+  </data>
+  <data name="Italy" xml:space="preserve">
+    <value>Italia</value>
+  </data>
+  <data name="LiquidContainer" xml:space="preserve">
+    <value>Væskeveholder</value>
   </data>
   <data name="LiquidContainers" xml:space="preserve">
     <value>Væskebeholdere</value>
   </data>
-  <data name="OpenTopContainers20" xml:space="preserve">
-    <value>20' Åpen topp containere</value>
+  <data name="Load" xml:space="preserve">
+    <value>Last</value>
   </data>
-  <data name="OpenTopContainers40" xml:space="preserve">
-    <value>40' Åpen topp containere</value>
+  <data name="LoadingReadyTime" xml:space="preserve">
+    <value>Lasting er klar</value>
   </data>
-  <data name="Pallet" xml:space="preserve">
-    <value>Pall</value>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-adresse</value>
   </data>
-  <data name="Plate" xml:space="preserve">
-    <value>Plate</value>
+  <data name="MayNotBeDeleted" xml:space="preserve">
+    <value>Kan ikke slettes.</value>
   </data>
-  <data name="ReeferContainers20" xml:space="preserve">
-    <value>20' Frysecontainere</value>
+  <data name="Monday" xml:space="preserve">
+    <value>Måndag</value>
   </data>
-  <data name="ReeferContainers40" xml:space="preserve">
-    <value>40' Frysecontainere</value>
+  <data name="MondayShort" xml:space="preserve">
+    <value>M</value>
   </data>
-  <data name="Roll" xml:space="preserve">
-    <value>Rulle</value>
+  <data name="Morning" xml:space="preserve">
+    <value>Morgen</value>
   </data>
-  <data name="Sack" xml:space="preserve">
-    <value>Sekk</value>
+  <data name="Netherlands" xml:space="preserve">
+    <value>Nederland</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Natt</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="NoModification" xml:space="preserve">
+    <value>Ingen endringer</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Ideell forening</value>
+  </data>
+  <data name="Noon" xml:space="preserve">
+    <value>Middagstid</value>
+  </data>
+  <data name="Northwards" xml:space="preserve">
+    <value>Nordover</value>
+  </data>
+  <data name="Norway" xml:space="preserve">
+    <value>Norge</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ikke aktuelt</value>
+  </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>Ikke autorisert</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Ikke funnet</value>
+  </data>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Ingenting å slette.</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>på</value>
   </data>
   <data name="OnDemand" xml:space="preserve">
     <value>På forespørsel</value>
@@ -588,47 +486,128 @@
   <data name="OnDemandShort" xml:space="preserve">
     <value>På forespørsel</value>
   </data>
-  <data name="WhenNeeded" xml:space="preserve">
-    <value>Når det trengs</value>
+  <data name="OpenTopContainer20" xml:space="preserve">
+    <value>20' Åpen topp container</value>
   </data>
-  <data name="WhenNeededShort" xml:space="preserve">
-    <value>Når det trengs</value>
+  <data name="OpenTopContainer40" xml:space="preserve">
+    <value>40' Åpen topp container</value>
   </data>
-  <data name="Internal" xml:space="preserve">
-    <value>Internt treff</value>
+  <data name="OpenTopContainers20" xml:space="preserve">
+    <value>20' Åpen topp containere</value>
   </data>
-  <data name="RegistrationOpen" xml:space="preserve">
-    <value>Påmelding åpnet</value>
+  <data name="OpenTopContainers40" xml:space="preserve">
+    <value>40' Åpen topp containere</value>
   </data>
-  <data name="RegistrationClosed" xml:space="preserve">
-    <value>Påmeldingen stengt</value>
+  <data name="Optional" xml:space="preserve">
+    <value>Valgfri</value>
   </data>
-  <data name="YearsInOperation" xml:space="preserve">
-    <value>År i drift</value>
+  <data name="Origin" xml:space="preserve">
+    <value>Avsenderstasjon</value>
   </data>
-  <data name="Bulk" xml:space="preserve">
-    <value>Bulk</value>
+  <data name="OtherHook" xml:space="preserve">
+    <value>Annen krok</value>
   </data>
-  <data name="SendDays" xml:space="preserve">
-    <value>Send {0}.</value>
+  <data name="Owner" xml:space="preserve">
+    <value>Eier</value>
   </data>
-  <data name="Cubicmeter" xml:space="preserve">
-    <value>Kubikkmeter</value>
+  <data name="Owners" xml:space="preserve">
+    <value>Eiere</value>
   </data>
-  <data name="TrainsetWith" xml:space="preserve">
-    <value>Togsett med</value>
+  <data name="Pallet" xml:space="preserve">
+    <value>Pall</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Mengde</value>
+  <data name="Pallets" xml:space="preserve">
+    <value>Paller</value>
+  </data>
+  <data name="ParticipantHasRegisteredModules" xml:space="preserve">
+    <value>Deltakeren har registrert moduler</value>
+  </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Passordet oppfyller ikke kravene til policyen.</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Minimumslengde {0} tegn, bestående av minimum {1} bokstaver {2}, {3} sifre {4} og {5} spesialtegn {6}.</value>
+  </data>
+  <data name="PasswordsDontMatch" xml:space="preserve">
+    <value>Passord og bekreftet passord samsvarer ikke.</value>
   </data>
   <data name="Piece" xml:space="preserve">
     <value>Stykk</value>
   </data>
-  <data name="Ton" xml:space="preserve">
-    <value>Tonn</value>
+  <data name="Pieces" xml:space="preserve">
+    <value>Stykker</value>
   </data>
-  <data name="On" xml:space="preserve">
-    <value>på</value>
+  <data name="Plate" xml:space="preserve">
+    <value>Plate</value>
+  </data>
+  <data name="Plates" xml:space="preserve">
+    <value>Plater</value>
+  </data>
+  <data name="Poland" xml:space="preserve">
+    <value>Polen</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Mengde</value>
+  </data>
+  <data name="Receive" xml:space="preserve">
+    <value>Motta</value>
+  </data>
+  <data name="ReeferContainer20" xml:space="preserve">
+    <value>20' Frysecontainer</value>
+  </data>
+  <data name="ReeferContainer40" xml:space="preserve">
+    <value>40' Frysecontainer</value>
+  </data>
+  <data name="ReeferContainers20" xml:space="preserve">
+    <value>20' Frysecontainere</value>
+  </data>
+  <data name="ReeferContainers40" xml:space="preserve">
+    <value>40' Frysecontainere</value>
+  </data>
+  <data name="RegistrationClosed" xml:space="preserve">
+    <value>Påmeldingen stengt</value>
+  </data>
+  <data name="RegistrationOpen" xml:space="preserve">
+    <value>Påmelding åpnet</value>
+  </data>
+  <data name="Roll" xml:space="preserve">
+    <value>Rulle</value>
+  </data>
+  <data name="Rolls" xml:space="preserve">
+    <value>Ruller</value>
+  </data>
+  <data name="Sack" xml:space="preserve">
+    <value>Sekk</value>
+  </data>
+  <data name="Sacks" xml:space="preserve">
+    <value>Sekker</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Lørdag</value>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Lagret.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Lagring mislyktes!</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Sende</value>
+  </data>
+  <data name="SendDays" xml:space="preserve">
+    <value>Send {0}.</value>
+  </data>
+  <data name="Shipper" xml:space="preserve">
+    <value>Avsender</value>
+  </data>
+  <data name="Slovakia" xml:space="preserve">
+    <value>Slovakia</value>
+  </data>
+  <data name="Southwards" xml:space="preserve">
+    <value>Sørover</value>
   </data>
   <data name="Squaremeter" xml:space="preserve">
     <value>Kvadratmeter</value>
@@ -636,26 +615,23 @@
   <data name="Squaremeters" xml:space="preserve">
     <value>Kvadratmeter</value>
   </data>
-  <data name="France" xml:space="preserve">
-    <value>Frankrike</value>
+  <data name="Steam" xml:space="preserve">
+    <value>Damp</value>
   </data>
-  <data name="Unavailable" xml:space="preserve">
-    <value>Utilgjengelig</value>
+  <data name="Success" xml:space="preserve">
+    <value>OK</value>
   </data>
-  <data name="Untested" xml:space="preserve">
-    <value>Utestet</value>
+  <data name="Sunday" xml:space="preserve">
+    <value>Søndag</value>
   </data>
-  <data name="Incomplete" xml:space="preserve">
-    <value>Ikke ferdig</value>
+  <data name="SundayShort" xml:space="preserve">
+    <value>S</value>
   </data>
-  <data name="Available" xml:space="preserve">
-    <value>Tilgjengelig</value>
+  <data name="Sweden" xml:space="preserve">
+    <value>Sverige</value>
   </data>
-  <data name="Trailer" xml:space="preserve">
-    <value>Trailer</value>
-  </data>
-  <data name="BulkContainer30" xml:space="preserve">
-    <value>30' Bulkcontainer</value>
+  <data name="Switzerland" xml:space="preserve">
+    <value>Sveits</value>
   </data>
   <data name="TankContainer30" xml:space="preserve">
     <value>30' Tankcontainer</value>
@@ -663,8 +639,59 @@
   <data name="TankContainers30" xml:space="preserve">
     <value>30' Tankcontainere</value>
   </data>
-  <data name="BulkContainers30" xml:space="preserve">
-    <value>30' Bulkcontainere</value>
+  <data name="Thursday" xml:space="preserve">
+    <value>Torsdag</value>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>til</value>
+  </data>
+  <data name="Ton" xml:space="preserve">
+    <value>Tonn</value>
+  </data>
+  <data name="Tonnes" xml:space="preserve">
+    <value>Tonn</value>
+  </data>
+  <data name="Trailer" xml:space="preserve">
+    <value>Trailer</value>
+  </data>
+  <data name="Trailers" xml:space="preserve">
+    <value>Trailers</value>
+  </data>
+  <data name="Trainset" xml:space="preserve">
+    <value>Togsett</value>
+  </data>
+  <data name="TrainsetWith" xml:space="preserve">
+    <value>Togsett med</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tirsdag</value>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Ti</value>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Utilgjengelig</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Udefinert</value>
+  </data>
+  <data name="United Kingdom" xml:space="preserve">
+    <value>Storbritannia</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Ukjent</value>
+  </data>
+  <data name="Unload" xml:space="preserve">
+    <value>Last ut</value>
+  </data>
+  <data name="UnloadingReadyTime" xml:space="preserve">
+    <value>Utlasting klar</value>
+  </data>
+  <data name="Untested" xml:space="preserve">
+    <value>Utestet</value>
   </data>
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Oppdatert</value>
@@ -672,43 +699,40 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Oppdatering mislyktes</value>
   </data>
-  <data name="Poland" xml:space="preserve">
-    <value>Polen</value>
+  <data name="Users" xml:space="preserve">
+    <value>Alle brukere</value>
   </data>
-  <data name="CzechRepublic" xml:space="preserve">
-    <value>Tsjekkisk Republikk</value>
+  <data name="Wagon" xml:space="preserve">
+    <value>Vogn</value>
   </data>
-  <data name="Slovakia" xml:space="preserve">
-    <value>Slovakia</value>
+  <data name="Wagons" xml:space="preserve">
+    <value>Vogner</value>
   </data>
-  <data name="Hungary" xml:space="preserve">
-    <value>Ungarn</value>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Onsdag</value>
   </data>
-  <data name="Austria" xml:space="preserve">
-    <value>Østerrike</value>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>O</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Feil</value>
+  <data name="WeinertHook" xml:space="preserve">
+    <value>Weinert krok</value>
   </data>
-  <data name="Duplicated" xml:space="preserve">
-    <value>Duplisert</value>
+  <data name="WhenNeeded" xml:space="preserve">
+    <value>Når det trengs</value>
   </data>
-  <data name="InventoryNumber" xml:space="preserve">
-    <value>Inventarnummer</value>
+  <data name="WhenNeededShort" xml:space="preserve">
+    <value>Når det trengs</value>
   </data>
-  <data name="MacAddress" xml:space="preserve">
-    <value>MAC-adresse</value>
-  </data>
-  <data name="Owners" xml:space="preserve">
-    <value>Eiere</value>
-  </data>
-  <data name="Owner" xml:space="preserve">
-    <value>Eier</value>
-  </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Tomvognordre</value>
+  <data name="with" xml:space="preserve">
+    <value>med</value>
   </data>
   <data name="Yard" xml:space="preserve">
     <value>Banegård</value>
+  </data>
+  <data name="YearsInOperation" xml:space="preserve">
+    <value>År i drift</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
   </data>
 </root>

@@ -5,6 +5,7 @@ using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data;
+#pragma warning disable IDE0028 // Simplify collection initialization
 
 public partial class Module
 {
@@ -112,6 +113,8 @@ public static class ModuleExtensions
             Straight = me.Straight,
             Theme = me.Theme,
         };
+
+    public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
     public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) => 
         module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);
 

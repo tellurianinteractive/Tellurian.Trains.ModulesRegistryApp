@@ -13,7 +13,7 @@
 @inject StationService StationService
 @inject StationCustomerWaybillsService WaybillService
 
-<PageHeading Label="Waybills" Owner="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
+<PageHeading Label="Waybills" Context="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
 
 @if (!IsGeneratingWaybills)
 {

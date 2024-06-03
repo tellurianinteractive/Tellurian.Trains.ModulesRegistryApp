@@ -8,6 +8,7 @@ public partial class Scale
     {
         ModuleStandards = new HashSet<ModuleStandard>();
         Modules = new HashSet<Module>();
+        Vehicles = new HashSet<Vehicle>();
     }
 
     public int Id { get; set; }
@@ -16,6 +17,7 @@ public partial class Scale
 
     public virtual ICollection<ModuleStandard> ModuleStandards { get; set; }
     public virtual ICollection<Module> Modules { get; set; }
+    public virtual ICollection<Vehicle> Vehicles { get; set; }
 }
 
 # nullable enable

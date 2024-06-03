@@ -12,6 +12,7 @@ public partial class Person
     {
         GroupMembers = new HashSet<GroupMember>();
         ModuleOwnerships = new HashSet<ModuleOwnership>();
+        Vehicles = new HashSet<Vehicle>();
     }
 
     public int Id { get; set; }
@@ -30,6 +31,7 @@ public partial class Person
     public virtual User User { get; set; }
     public virtual ICollection<GroupMember> GroupMembers { get; set; }
     public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
+    public virtual ICollection<Vehicle> Vehicles { get; set; }
 }
 
 # nullable enable

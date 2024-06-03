@@ -7,7 +7,7 @@
 
 @inject MeetingService MeetingService
 
-<PageHeading Label="Layouts" Owner="@Meeting" IconClass="Layout" />
+<PageHeading Label="Layouts" Context="@Meeting" IconClass="Layout" />
 @if (Meeting is not null)
 {
     @if (MayEdit)

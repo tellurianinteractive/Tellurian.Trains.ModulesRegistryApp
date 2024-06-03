@@ -9,7 +9,7 @@
 
 @inject ModuleService ModuleService
 
-<PageHeading ObjectName="Module" Owner="@Module" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" />
+<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" />
 
 <ul>
     <li>@Localizer["IsOnlyOwner"]: @IsFullOwner.AsYesOrNoWithColor()</li>

@@ -15,7 +15,7 @@
 @inject StationService StationService
 @inject ModuleStandardService ModuleStandardService
 
-<PageHeading ObjectName="Module" Owner="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" />
+<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" />
 
 @if (Module is null)
 {

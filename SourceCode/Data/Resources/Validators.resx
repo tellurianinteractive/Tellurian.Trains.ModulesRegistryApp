@@ -120,6 +120,12 @@
   <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
     <value>all words must begin with capital letter</value>
   </data>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Wagon classes</value>
+  </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Must be a colour</value>
+  </data>
   <data name="MustBeADccAddress" xml:space="preserve">
     <value>Must be a DCC-address 1-9999</value>
   </data>
@@ -146,11 +152,5 @@
   </data>
   <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
     <value>must only contain ordinary text</value>
-  </data>
-  <data name="MustBeAColor" xml:space="preserve">
-    <value>Must be a colour</value>
-  </data>
-  <data name="DefaultClasses" xml:space="preserve">
-    <value>Wagon classes</value>
   </data>
 </root>

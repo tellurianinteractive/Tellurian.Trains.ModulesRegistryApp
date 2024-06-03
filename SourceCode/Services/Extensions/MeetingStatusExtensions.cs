@@ -1,7 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace ModulesRegistry.Services.Extensions;
+
 public static class MeetingExtensions
+{
+    public static bool MayAdministerMeetings(this Meeting? meetingWithOrganiserGroupMembers, ClaimsPrincipal? principal) =>
+        meetingWithOrganiserGroupMembers?.OrganiserGroup is null ? false :
+        principal.IsCountryAdministratorInCountry(meetingWithOrganiserGroupMembers.OrganiserGroup.CountryId) ||
+        meetingWithOrganiserGroupMembers.OrganiserGroup.GroupMembers.Any(gm => gm.IsAnyAdministrator());
+}
+
+public static class MeetingStatusExtensions
 {
     public static string Status(this Meeting? meeting, DateTime at)
     {

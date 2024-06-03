@@ -117,84 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Daily" xml:space="preserve">
-    <value>Codziennie</value>
-  </data>
-  <data name="DailyShort" xml:space="preserve">
-    <value>Codz</value>
-  </data>
-  <data name="Friday" xml:space="preserve">
-    <value>Piątek</value>
-  </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>Pi</value>
-  </data>
-  <data name="Hungary" xml:space="preserve">
-    <value>Węgry</value>
-  </data>
-  <data name="In" xml:space="preserve">
-    <value>w</value>
-  </data>
-  <data name="In the afternoon" xml:space="preserve">
-    <value>Po południu</value>
-  </data>
-  <data name="In the evening" xml:space="preserve">
-    <value>Wieczorem</value>
-  </data>
-  <data name="In the morning" xml:space="preserve">
-    <value>Rankiem</value>
-  </data>
-  <data name="Monday" xml:space="preserve">
-    <value>Poniedziałek</value>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>Po</value>
-  </data>
-  <data name="Saturday" xml:space="preserve">
-    <value>Sobota</value>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>So</value>
-  </data>
-  <data name="Sunday" xml:space="preserve">
-    <value>Niedziela</value>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>Ni</value>
-  </data>
-  <data name="Thursday" xml:space="preserve">
-    <value>Czwartek</value>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>Cz</value>
-  </data>
-  <data name="Tuesday" xml:space="preserve">
-    <value>Wtorek</value>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>Wt</value>
-  </data>
-  <data name="Wednesday" xml:space="preserve">
-    <value>Środa</value>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>Śr</value>
-  </data>
-  <data name="Destination" xml:space="preserve">
-    <value>Miejsce docelowe</value>
-  </data>
-  <data name="Origin" xml:space="preserve">
-    <value>Stacja wysyłkowa</value>
-  </data>
-  <data name="Owner" xml:space="preserve">
-    <value>Właściciel</value>
-  </data>
-  <data name="Owners" xml:space="preserve">
-    <value>Właściciele</value>
-  </data>
-  <data name="Poland" xml:space="preserve">
-    <value>Polska</value>
-  </data>
   <data name="At night" xml:space="preserve">
     <value>W nocy</value>
   </data>
@@ -228,6 +150,12 @@
   <data name="CzechRepublic" xml:space="preserve">
     <value>Republika Czeska</value>
   </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Codziennie</value>
+  </data>
+  <data name="DailyShort" xml:space="preserve">
+    <value>Codz</value>
+  </data>
   <data name="DayNameCasing" xml:space="preserve">
     <value>LOWER</value>
   </data>
@@ -237,20 +165,65 @@
   <data name="Denmark" xml:space="preserve">
     <value>Dania</value>
   </data>
+  <data name="Destination" xml:space="preserve">
+    <value>Miejsce docelowe</value>
+  </data>
   <data name="Empty" xml:space="preserve">
     <value>Pusty</value>
+  </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Zamówienie na pusty wagon</value>
   </data>
   <data name="France" xml:space="preserve">
     <value>Francja</value>
   </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Piątek</value>
+  </data>
+  <data name="FridayShort" xml:space="preserve">
+    <value>Pi</value>
+  </data>
   <data name="Germany" xml:space="preserve">
     <value>Niemcy</value>
+  </data>
+  <data name="Hungary" xml:space="preserve">
+    <value>Węgry</value>
+  </data>
+  <data name="Hydrogen" xml:space="preserve">
+    <value>Hydrogen</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>w</value>
+  </data>
+  <data name="In the afternoon" xml:space="preserve">
+    <value>Po południu</value>
+  </data>
+  <data name="In the evening" xml:space="preserve">
+    <value>Wieczorem</value>
+  </data>
+  <data name="In the morning" xml:space="preserve">
+    <value>Rankiem</value>
   </data>
   <data name="Italy" xml:space="preserve">
     <value>Włochy</value>
   </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Poniedziałek</value>
+  </data>
+  <data name="MondayShort" xml:space="preserve">
+    <value>Po</value>
+  </data>
   <data name="Netherlands" xml:space="preserve">
     <value>Holandia</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>Stacja wysyłkowa</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Właściciel</value>
+  </data>
+  <data name="Owners" xml:space="preserve">
+    <value>Właściciele</value>
   </data>
   <data name="Pallet" xml:space="preserve">
     <value>Paleta</value>
@@ -260,6 +233,9 @@
   </data>
   <data name="Pieces" xml:space="preserve">
     <value>Sztuki</value>
+  </data>
+  <data name="Poland" xml:space="preserve">
+    <value>Polska</value>
   </data>
   <data name="Roll" xml:space="preserve">
     <value>Rolka</value>
@@ -273,8 +249,20 @@
   <data name="Sacks" xml:space="preserve">
     <value>Worki</value>
   </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sobota</value>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>So</value>
+  </data>
   <data name="Slovakia" xml:space="preserve">
     <value>Słowacja</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Niedziela</value>
+  </data>
+  <data name="SundayShort" xml:space="preserve">
+    <value>Ni</value>
   </data>
   <data name="Sweden" xml:space="preserve">
     <value>Szwecja</value>
@@ -282,16 +270,31 @@
   <data name="Switzerland" xml:space="preserve">
     <value>Szwajcaria</value>
   </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Czwartek</value>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>Cz</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Wtorek</value>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Wt</value>
+  </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>Zjednoczone Królestwo</value>
   </data>
-  <data name="YearsInOperation" xml:space="preserve">
-    <value>Lata eksploatacji</value>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Środa</value>
   </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Zamówienie na pusty wagon</value>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>Śr</value>
   </data>
   <data name="Yard" xml:space="preserve">
     <value>Stacja kolejowa</value>
+  </data>
+  <data name="YearsInOperation" xml:space="preserve">
+    <value>Lata eksploatacji</value>
   </data>
 </root>

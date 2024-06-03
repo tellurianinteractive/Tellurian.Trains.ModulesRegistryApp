@@ -1,6 +1,8 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
+using System.Security.Claims;
 
 namespace ModulesRegistry.Data;
 

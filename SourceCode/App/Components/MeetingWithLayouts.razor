@@ -1,33 +1,39 @@
 ﻿@inject ITimeProvider TimeProvider
 @inject IStringLocalizer<App> Localizer
 
-@if (Meeting is not null)
+@if (HasAllData)
 {
     <div class="meeting">
-        <div class="header">@Meeting.Name, @Meeting.CityName <span>@Meeting.DisplayedStatus(TimeProvider.LocalTime)</span></div>
-        <div class="info">@Meeting.StartOrEventDate() - @Meeting.EndDateOrTimes()</div>
-        <div class="info">@Localizer["YouParticipateDays"]: <span class="strong">@string.Join(", ", Meeting.Participants.First().Days(Meeting))</span></div>
-        @if (Meeting.Participants.First().ArrivalTime.HasValue)
+        <div class="header">@MeetingParticipant.Meeting.Name, @MeetingParticipant.Meeting.CityName <span>@MeetingParticipant.Meeting.DisplayedStatus(TimeProvider.LocalTime)</span></div>
+        <div class="info">@MeetingParticipant.Meeting.StartOrEventDate() - @MeetingParticipant.Meeting.EndDateOrTimes()</div>
+        <div class="info">@Localizer["YouParticipateDays"]: <span class="strong">@string.Join(", ", MeetingParticipant.Days())</span></div>
+        @if (MeetingParticipant.ArrivalTime.HasValue)
         {
-            <div class="info">@Localizer["YourArrivalTime"]: <span class="strong">@Meeting.Participants.First().ArrivalTime!.Value.ToString("t")</span></div>
+            <div class="info">@Localizer["YourArrivalTime"]: <span class="strong">@MeetingParticipant.ArrivalTime!.Value.ToString("t")</span></div>
         }
-        @if (Meeting.Layouts is not null && Meeting.Layouts.Any())
+        @if (MeetingParticipant.LayoutParticipations.Any())
         {
             <div>
-                @Localizer["LayoutsYouAreParticipatingIn"]: <span class="layout">@string.Join(", ", Meeting.Layouts.Select(l => l.PrimaryModuleStandard.ShortName))</span>
+                @Localizer["LayoutsYouAreParticipatingIn"]: <span class="layout">@string.Join(", ", MeetingParticipant.LayoutParticipations.Select(l => l.Layout.PrimaryModuleStandard.ShortName))</span>
             </div>
         }
         @if (MayEdit)
         {
-            <AppButton Label="Edit" Href="@MeetingEditHref(Meeting.Id)" />
+            <AppButton Label="Edit" Href="@MeetingEditHref(MeetingParticipant)" />
         }
     </div>
 }
 
 
 @code {
-    [Parameter] public Meeting? Meeting { get; set; }
+    /// <summary>
+    /// Shoud include Meeting, and LayoutParticipants with Layouts.
+    /// </summary>
+    [Parameter] public MeetingParticipant? MeetingParticipant { get; set; }
     [Parameter] public bool MayEdit { get; set; }
 
-    string MeetingEditHref(int meetingId) => $"Meetings/{meetingId}/Register";
+    string MeetingEditHref(MeetingParticipant participant) => $"Meetings/{participant.Meeting.Id}/Edit/{participant.PersonId}";
+
+    [MemberNotNullWhen(true, nameof(MeetingParticipant))]
+    bool HasAllData => MeetingParticipant is not null && MeetingParticipant.Meeting is not null && MeetingParticipant.LayoutParticipations.All(lp => lp.Layout is not null);
 }

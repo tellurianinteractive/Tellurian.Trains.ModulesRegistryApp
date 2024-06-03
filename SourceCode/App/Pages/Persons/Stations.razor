@@ -7,7 +7,7 @@
 @inject StationService StationService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Stations" Owner="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
+<PageHeading ObjectName="Stations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
 
 <StationsList Stations="OwnedStations" OwningPersonId="OwnerId" OwningGroupId=GroupId MayEdit="MayEdit" AnyModules="true" />
 

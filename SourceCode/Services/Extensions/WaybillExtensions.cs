@@ -1,5 +1,4 @@
 ﻿using ModulesRegistry.Services.Implementations;
-using ModulesRegistry.Services.Models;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 

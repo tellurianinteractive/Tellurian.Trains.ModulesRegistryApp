@@ -30,7 +30,7 @@ else
     {
         @if (participant.AllLayoutModules(LayoutModules).Any())
         {
-            <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true" >
+            <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
                     <th width="70%">@participant.Person.Name(), @participant.Person.CityName</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
@@ -66,22 +66,29 @@ else
     [Parameter] public int Id { get; set; }
 
     ClaimsPrincipal? Principal;
+    Meeting? Meeting;
     Layout? Layout;
     IEnumerable<LayoutParticipant>? LayoutParticipants;
     IEnumerable<LayoutStation>? LayoutStations;
     IEnumerable<LayoutModule>? LayoutModules;
+    bool IsOrganiser;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Layout = await LayoutService.GetLayoutAsync(Principal, Id);
-        LayoutParticipants = await LayoutParticipantService.GetAllForLayout(Principal, Id);
-        LayoutModules = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutModules).ToList();
-        LayoutStations = LayoutParticipants is null ? []: LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
+        if (Layout is not null)
+        {
+            Meeting = Layout.Meeting;
+            IsOrganiser = Meeting.MayAdministerMeetings(Principal);
+            LayoutParticipants = await LayoutParticipantService.GetAllForLayout(Principal, Id);
+            if (LayoutParticipants.Any())
+            {
+                LayoutModules = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutModules).ToList();
+                LayoutStations = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
+            }
+        }
     }
-
-    bool IsParticipant => LayoutParticipants is not null && LayoutParticipants.Any(lp => lp.PersonId == Principal.PersonId());
-    bool IsOrganiser => Layout is not null && (Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(Layout.Meeting.OrganiserGroup.CountryId) || Layout.Meeting.OrganiserGroup.GroupMembers.Any(gm => gm.Id == Principal.PersonId() ));
 
     string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
 

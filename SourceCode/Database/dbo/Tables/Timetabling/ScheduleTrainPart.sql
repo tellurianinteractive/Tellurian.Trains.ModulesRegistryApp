@@ -40,11 +40,11 @@ CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_FromDepartureId]
 GO
 CREATE NONCLUSTERED INDEX [IX_ScheduleTrainPart_ToArrivalId]
     ON [dbo].[ScheduleTrainPart]([ToArrivalId] ASC);
-
 GO
+
     CREATE TRIGGER [DeleteTimetableScheduleTrainPart] ON [ScheduleTrainPart] INSTEAD OF DELETE
     AS
     BEGIN
-        DELETE FROM [DriverDutyScheduleLocoPart] WHERE TimetableScheduleLocoPartId IN (SELECT Id FROM DELETED)
+        DELETE FROM [DriverDutyScheduleLocoPart] WHERE ISNULL(TimetableScheduleLocoPartId,0) IN (SELECT Id FROM DELETED)
         DELETE FROM [ScheduleTrainPart] WHERE Id IN (SELECT Id FROM DELETED)
     END

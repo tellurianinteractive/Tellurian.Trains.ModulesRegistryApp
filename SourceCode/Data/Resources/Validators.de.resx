@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>alle Wörter müssen mit einem Großbuchstaben beginnen</value>
+  </data>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Wagenklassen</value>
+  </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Muss eine Farbe sein</value>
+  </data>
   <data name="MustBeADccAddress" xml:space="preserve">
     <value>Muss eine DCC-Adresse 1-9999 sein</value>
   </data>
@@ -143,14 +152,5 @@
   </data>
   <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
     <value>darf nur normalen Text enthalten</value>
-  </data>
-  <data name="MustBeAColor" xml:space="preserve">
-    <value>Muss eine Farbe sein</value>
-  </data>
-  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
-    <value>alle Wörter müssen mit einem Großbuchstaben beginnen</value>
-  </data>
-  <data name="DefaultClasses" xml:space="preserve">
-    <value>Wagenklassen</value>
   </data>
 </root>

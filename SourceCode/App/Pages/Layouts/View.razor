@@ -6,7 +6,7 @@
 @inject MeetingService MeetingService
 @inject GroupService GroupService
 
-<PageHeading Label="Layouts" Owner="@Meeting" IconClass="Layout" />
+<PageHeading Label="Layouts" Context="@Meeting" IconClass="Layout" />
 
 @if (Meeting is null)
 {

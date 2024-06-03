@@ -16,6 +16,11 @@ public partial class GroupMember
     public virtual Group Group { get; set; }
     public virtual Person Person { get; set; }
     public override string ToString() => $"{Person?.Name()} in {Group?.ShortName}";
+}
+
+public static class GroupMemberExtensions
+{
+    public static bool IsAnyAdministrator(this GroupMember groupMember) => groupMember.IsGroupAdministrator || groupMember.IsDataAdministrator;
 
 }
 

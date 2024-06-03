@@ -123,9 +123,10 @@ public static class ClaimsPrincipalExtensions
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting) =>
         principal is not null && principal.IsCountryOrGlobalAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
 
+    [Obsolete("Use MeetingParticipant.MayUnregisterModules")]
     public static bool MayRemove([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting, LayoutModule? module) =>
         principal is not null && meeting is not null && module is not null &&
-        (principal.IsCountryOrGlobalAdministrator() || principal.IsAnyGroupAdministrator(meeting.OrganiserGroup));
+        (principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId) || principal.IsAnyGroupAdministrator(meeting.OrganiserGroup));
 
     #endregion
 
@@ -162,10 +163,6 @@ public static class ClaimsPrincipalExtensions
 
     private static bool GetBool(this ClaimsPrincipal? principal, string claimType) =>
         principal is not null && bool.TryParse(principal.Claims.Claim(claimType)?.Value, out var value) && value;
-
-    private static DateTimeOffset? GetDateTimeOffset(this ClaimsPrincipal? principal, string claimType) =>
-        principal is not null && DateTimeOffset.TryParse(principal.Claims.Claim(claimType)?.Value, out var value) ? value : null;
-
 
     private static bool Any(this ClaimsPrincipal? principal, string claimType) => principal?.Claims.Any(c => c.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase)) == true;
     private static bool None(this ClaimsPrincipal? principal, string claimType) => !principal.Any(claimType); 

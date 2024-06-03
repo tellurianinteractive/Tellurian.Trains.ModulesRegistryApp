@@ -7,17 +7,18 @@
 @inject IStringLocalizer<App> Localizer
 @inject PersonService PersonService
 @inject MeetingService MeetingService
+@inject ITimeProvider TimeProvider
 
 <PageHeading IconClass="@FontAwesome.Meeting" Label="MyForthcomingMeetings" PageAction="PageAction.List" />
 
-@if (RegisteredMeetings is not null)
+@if (MyParticipations is not null)
 {
 
-    @if (RegisteredMeetings.Any())
+    @if (MyParticipations.Any())
     {
-        @foreach (var meeting in RegisteredMeetings.OrderBy(m => m.StartDate))
+        @foreach (var participant in MyParticipations.OrderBy(m => m.Meeting.StartDate))
         {
-            <MeetingWithLayouts Meeting="meeting" MayEdit=MayEdit(meeting) />
+            <MeetingWithLayouts MeetingParticipant="participant" MayEdit="participant.MayEditParticipation(Principal, participant.Meeting, TimeProvider)" />
         }
     }
     else
@@ -32,17 +33,14 @@
     [Parameter] public int GroupId { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Participant;
-    private IEnumerable<Meeting>? RegisteredMeetings;
+    private IEnumerable<MeetingParticipant>? MyParticipations;
 
     protected async override Task OnParametersSetAsync()
     {
-
-
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Participant = await PersonService.FindByIdAsync(Principal, PersonId);
-        RegisteredMeetings = await MeetingService.GetRegisteredMeetingsForPerson(Principal, PersonId);
+        MyParticipations = await MeetingService.GetRegisteredMeetingsForPerson(Principal, PersonId, GroupId);
     }
 
     int PersonId => Id > 0 ? Id : Principal.PersonId();
-    bool MayEdit(Meeting? meeting) => Principal.IsGlobalAdministrator() || (meeting is not null && Principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId)) || PersonId == Principal.PersonId();
 }

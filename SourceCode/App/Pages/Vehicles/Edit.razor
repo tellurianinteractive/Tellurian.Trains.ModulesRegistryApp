@@ -1,0 +1,102 @@
+﻿@page "/vehicles/my/{VehicleId:int}"
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+@inject VehicleService VehicleService
+@inject ScaleService ScaleService
+
+<PageHeading  Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle"/>
+
+@if (Vehicle is null)
+{
+
+}
+else
+{
+    <EditTemplate Item="@Vehicle" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value="@Vehicle.InventoryNumber" />
+            <h3>@Localizer["PrototypeData"]</h3>
+            <AppInputText Width="1" Label="KeeperSignature" @bind-Value="@Vehicle.KeeperSignature" />
+            <AppInputText Width="1" Label="Class" @bind-Value="@Vehicle.VehicleClass" />
+            <AppInputText Width="2" Label="VehicleNumber" @bind-Value="@Vehicle.VehicleNumber" />
+            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.PrototypeManufacturerName" />
+            <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="@Vehicle.TractionFeatureId" />
+            <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="@Vehicle.Theme" ShowPleaseSelect=true />
+            <h4>@Localizer["PeriodInThisVersion"]</h4>
+            <AppInputNumber Width="1" Label="FromYear" @bind-Value="@Vehicle.ThisEmbodiementFromYear" />
+            <AppInputNumber Width="1" Label="UptoYear" @bind-Value="@Vehicle.ThisEmbodiementUptoYear" />
+            <h3>@Localizer["ModelData"]</h3>
+            <AppInputSelect Width="2" Label="Scale" @bind-Value="@Vehicle.ScaleId" Items="ScaleItems" OnChangeNotifier="@( async () => await ScaleHasChanged(Vehicle.ScaleId))" />
+            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.ModelManufacturerName" />
+            <AppInputText Width="2" Label="ArticleNumber" @bind-Value="@Vehicle.ModelNumber" />
+            <AppInputSelectNullable Width="2" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="@Vehicle.CouplingFeatureId" />
+            <AppInputSelectNullable Width="2" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="@Vehicle.WheelsFeatureId"/>
+            <div />
+            <AppInputText Width="2" Label="DecoderType" @bind-Value="@Vehicle.DecoderType" />
+            <AppInputNumber Width="1" Label="DccAddress" @bind-Value="@Vehicle.DccAddress" />
+            <div/>
+            <AppInputCheck Width="2" Label="HasSound" @bind-Value="@Vehicle.HasSound" />
+            <AppInputCheck Width="2" Label="HasRemoteCouplings" @bind-Value="@Vehicle.HasRemoteCouplings" />
+            <AppInputCheck Width="2" Label="IsWeathered" @bind-Value="@Vehicle.IsWeathered" />
+            <div />
+            <AppInputText Width="10" Label="Note" @bind-Value="@Vehicle.Note"  Placeholder="@Localizer.MaxChars(200)"/>
+        </Inputs>
+    </EditTemplate>
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int VehicleId { get; set; }
+    ClaimsPrincipal? Principal;
+    Vehicle? Vehicle;
+    IEnumerable<ListboxItem> CouplingFeatureItems = [];
+    IEnumerable<ListboxItem> TractionFeatureItems = [];
+    IEnumerable<ListboxItem> WheelsFeatureItems = [];
+    IEnumerable<ListboxItem> ScaleItems = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
+        TractionFeatureItems = await VehicleService.GetTractionFeaturesListboxDataAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (VehicleId > 0)
+        {
+            Vehicle = await VehicleService.GetPrincipalOwnedVehicle(Principal, VehicleId);
+        }
+        else
+        {
+            Vehicle = new Vehicle() { OwningPersonId = Principal.PersonId(), ScaleId = 3 };
+        }
+        await LoadScaleRelatedListboxes(Vehicle?.ScaleId);
+    }
+
+    private async Task LoadScaleRelatedListboxes(int? scaleId)
+    {
+        if (scaleId.HasValue)
+        {
+            CouplingFeatureItems = await VehicleService.GetCouplingFeaturesListboxDataAsync(scaleId.Value);
+            WheelsFeatureItems = await VehicleService.GetWheelsFeaturesListboxDataAsync(scaleId.Value);
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        var result = await VehicleService.SaveAsync(Principal, Vehicle!);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        Vehicle = result.Entity;
+    }
+
+    async Task ScaleHasChanged(int scaleId)
+    {
+        await LoadScaleRelatedListboxes(scaleId);
+    }
+
+    string Label => VehicleId == 0 ? "Add" : "Edit";
+    PageAction PageAction => VehicleId == 0 ? PageAction.Add : PageAction.Edit;
+}

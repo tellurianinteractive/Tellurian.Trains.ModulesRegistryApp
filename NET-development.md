@@ -1,8 +1,8 @@
 # .NET Development
-*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, November 2023*
+*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, June 2024*
 
 This article aim to describe technology choices, when developing software in modern .NET.
-At the time of writing november 2023, all new .NET development should use .NET 8 or later.
+At the time of writing, all new .NET development should use .NET 8.
 
 ## Modern .NET
 Modern .NET is free and fully open source; the framework libraries, the runtime, and the compilers.
@@ -25,6 +25,7 @@ All languges on .NET uses the same runtime and the same type system, so you can 
 written in any .NET program with each other. There are some rules to follow to make it work.
 - **C#** is the most common language used in .NET development. Is a C-family type of language and 
 shares most of its properties with the Java programming language.
+Even if it is primarily an object oriented language, functional concepts are also quite common.
 - **F#** is a functional first language with a pragmatic approach. F# has a much more succint syntax, 
 which means that F# programs are significantly smaller that correponding C# programs.
 - **VB.NET** is the modern variant of the BASIC programming language. 
@@ -43,13 +44,15 @@ that Microsoft and other library writers has to offer:
 ## Developmemt tools
 Microsoft is known for its good development tools.
 This section only covers free tools for developing .NET applications.
+#### Cross Platform Tools
 - **Visual Studio Code** is now one of the most popular editor for writing software in almost any language.
 It is a cross-platform application that runs om *Windows*, *macOS* and *Linux*.
 Customisation is made by installing diffrerent plugins for a certain language or other purposes.
+#### Windows Only Tools
 - **Visual Studio** has a *community edition* that is free and very capable for development .NET applications.
 Customisation is made by choosing to install one or several *workloads*. 
 There are also many useful free plugins to install from the Visual Studio Markeplace.
-Visual Studio is a Windows only application, but there is also a separate version for *macOS*.
+Visual Studio is a Windows only application.
 - **SQL Server** has a free *developer edition* that is a full featured version with some limitations. 
 There is also a free *express edition* ideal for smaller applications. 
 SQL Server also has a cloud version but no free tier, the smallest SQL Server cloud database
@@ -88,14 +91,17 @@ The components written in Blazor can be rendered in several environments:
 
   In.NET 8, you will also be able to mix rendering modes in the same application.
   This makes Blazor components the most highly resuable user interface components in .NET.
+- **ASP.NET** is a framework for creating web applications.
+ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
+Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
 - **Multiplatform Application User Interface** abbreviated **MAUI** is the newest technologi
 aimed to make it easier to create apps that runs natively on  *ioS*, *Android*, *macOs* and *Windows*
 using the native user interface of each of these platforms. MAUI is an evolution of *Xmamarin Forms*.
 You can also embed *Blazor* components in a MAUI application, 
 or  write a MAUI applications only using Blazor components.
-- **ASP.NET** is a framework for creating web applications.
-ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
-Using the *Razor* syntax you can write web pages as a mix of HTML, CSS and C#.
+- **UNO Platform** is an Open-source .NET platform for building single codebase 
+native mobile, web, desktop and embedded apps quickly with either XAML or C# Markup.
+
 
 ## Data storage
 There are several types of ways to store data and access it.

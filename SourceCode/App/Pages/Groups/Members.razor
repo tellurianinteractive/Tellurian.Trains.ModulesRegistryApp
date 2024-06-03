@@ -9,7 +9,7 @@
 @inject CountryService CountryService
 @inject MeetingService MeetingService
 
-<PageHeading Label="MembersIn" Owner="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
+<PageHeading Label="MembersIn" Context="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
 @if (IsGroupAdministrator && Group.Id > 0)
 {

@@ -12,7 +12,7 @@
 @inject StationService StationService
 @inject ExternalStationService ExternalStationService
 
-<PageHeading Label="FreightCustomers" Owner="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading Label="FreightCustomers" Context="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
 @if (MayEdit)
 {

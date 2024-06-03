@@ -1,5 +1,5 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
-
+@page "/Meetings/{MeetingId:int}/Edit/{PersonId:int}"
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject ITimeProvider TimeProvider
@@ -9,7 +9,7 @@
 @inject GroupService GroupService
 @inject PersonService PersonService
 
-<PageHeading Label="Registration" Owner="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
+<PageHeading Label="Registration" Context="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
 
 @if (Meeting.IsNotPermittingRegistrations())
 {
@@ -143,11 +143,11 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int MeetingId { get; set; }
+    [Parameter] public int PersonId { get; set; }
 
     ClaimsPrincipal? Principal;
 
     int CountryId;
-    int PersonId;
     MeetingParticipant? Participant;
     Meeting? Meeting;
     IEnumerable<ListboxItem>? CountryItems;
@@ -168,14 +168,21 @@ else
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
-                IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
-                if (IsMeetingOrganiser)
+                if (PersonId > 0 && (Principal.IsCountryOrGlobalAdministrator() || PersonId == Principal.PersonId()))
                 {
-                    CountryItems = await CountryService.ListboxItemsAsync(Principal, IsMeetingOrganiser);
+                    await OnSelectedPerson(PersonId);
                 }
                 else
                 {
-                    await OnSelectedPerson(Principal.PersonId());
+                    IsMeetingOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+                    if (IsMeetingOrganiser)
+                    {
+                        CountryItems = await CountryService.ListboxItemsAsync(Principal, IsMeetingOrganiser);
+                    }
+                    else
+                    {
+                        await OnSelectedPerson(Principal.PersonId());
+                    }
                 }
             }
         }

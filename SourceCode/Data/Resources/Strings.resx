@@ -117,26 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
-  <data name="NotFullOwner" xml:space="preserve">
-    <value>Not 100% owner</value>
+  <data name="Autumn" xml:space="preserve">
+    <value>Autumn</value>
   </data>
-  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
-    <value>An operating location must have at least one module referring to it</value>
+  <data name="Bidirectional" xml:space="preserve">
+    <value>Bidirectional</value>
   </data>
-  <data name="NotAuthorised" xml:space="preserve">
-    <value>Unauthorised</value>
+  <data name="Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Casing" xml:space="preserve">
+    <value>LOWER</value>
+  </data>
+  <data name="ClubEvent" xml:space="preserve">
+    <value>Club event</value>
+  </data>
+  <data name="DomainMembers" xml:space="preserve">
+    <value>Domain members</value>
+  </data>
+  <data name="Eastwards" xml:space="preserve">
+    <value>Eastwards</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>East-west</value>
+  </data>
+  <data name="EmptyWagonForCargo" xml:space="preserve">
+    <value>Empty wagon for {0}</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="FullyAppliedDetailed" xml:space="preserve">
+    <value>Fully applied, detailed</value>
+  </data>
+  <data name="FullyAppliedSimple" xml:space="preserve">
+    <value>Fully applied, simple</value>
+  </data>
+  <data name="GroupMembers" xml:space="preserve">
+    <value>Group members</value>
+  </data>
+  <data name="IncompleteData" xml:space="preserve">
+    <value>Incomplete data</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Invited</value>
+  </data>
+  <data name="Market" xml:space="preserve">
+    <value>Market</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
     <value>Module is registered for upcoming meeting</value>
   </data>
-  <data name="NothingToDelete" xml:space="preserve">
-    <value>Nothing to delete</value>
-  </data>
-  <data name="NotPlacedInLayout" xml:space="preserve">
-    <value>Not located in track plan</value>
+  <data name="ModuleMeeting" xml:space="preserve">
+    <value>Module meeting</value>
   </data>
   <data name="ModuleNameIsAlreadyTaken" xml:space="preserve">
     <value>Module name/variant is already taken</value>
@@ -144,26 +180,71 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Invited" xml:space="preserve">
-    <value>Invited</value>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Not applicable</value>
   </data>
-  <data name="IncompleteData" xml:space="preserve">
-    <value>Incomplete data</value>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Unauthorised</value>
   </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="NotFullOwner" xml:space="preserve">
+    <value>Not 100% owner</value>
   </data>
-  <data name="Preliminary" xml:space="preserve">
-    <value>Preliminary</value>
+  <data name="NothingToDelete" xml:space="preserve">
+    <value>Nothing to delete</value>
+  </data>
+  <data name="NotPlacedInLayout" xml:space="preserve">
+    <value>Not located in track plan</value>
+  </data>
+  <data name="NotScheduled" xml:space="preserve">
+    <value>Not scheduled</value>
+  </data>
+  <data name="OnlyPosts" xml:space="preserve">
+    <value>Only posts</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="PartiallyApplied" xml:space="preserve">
+    <value>Partially applied</value>
   </data>
   <data name="Planned" xml:space="preserve">
     <value>Planned</value>
   </data>
-  <data name="Canceled" xml:space="preserve">
-    <value>Canceled</value>
+  <data name="Preliminary" xml:space="preserve">
+    <value>Preliminary</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Ready to test</value>
+  </data>
+  <data name="Removable" xml:space="preserve">
+    <value>Removable</value>
+  </data>
+  <data name="Spring" xml:space="preserve">
+    <value>Spring</value>
+  </data>
+  <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
+    <value>An operating location must have at least one module referring to it</value>
+  </data>
+  <data name="Summer" xml:space="preserve">
+    <value>Summer</value>
+  </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Tested</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Undefined</value>
   </data>
   <data name="UnderApproval" xml:space="preserve">
     <value>Under approval</value>
@@ -174,106 +255,25 @@
   <data name="UnderRepair" xml:space="preserve">
     <value>Under repair</value>
   </data>
-  <data name="ReadyToTest" xml:space="preserve">
-    <value>Ready to test</value>
-  </data>
-  <data name="Tested" xml:space="preserve">
-    <value>Tested</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Not applicable</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="Preparing" xml:space="preserve">
-    <value>Preparing</value>
-  </data>
-  <data name="PartiallyApplied" xml:space="preserve">
-    <value>Partially applied</value>
-  </data>
-  <data name="FullyAppliedDetailed" xml:space="preserve">
-    <value>Fully applied, detailed</value>
-  </data>
-  <data name="FullyAppliedSimple" xml:space="preserve">
-    <value>Fully applied, simple</value>
-  </data>
-  <data name="Removable" xml:space="preserve">
-    <value>Removable</value>
-  </data>
-  <data name="Fixed" xml:space="preserve">
-    <value>Fixed</value>
-  </data>
-  <data name="OnlyPosts" xml:space="preserve">
-    <value>Only posts</value>
-  </data>
-  <data name="Optional" xml:space="preserve">
-    <value>Optional</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>Undefined</value>
-  </data>
-  <data name="Eastwards" xml:space="preserve">
-    <value>Eastwards</value>
-  </data>
-  <data name="Westwards" xml:space="preserve">
-    <value>Westwards</value>
-  </data>
-  <data name="Private" xml:space="preserve">
-    <value>Private</value>
-  </data>
-  <data name="GroupMembers" xml:space="preserve">
-    <value>Group members</value>
-  </data>
-  <data name="DomainMembers" xml:space="preserve">
-    <value>Domain members</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>All users</value>
-  </data>
-  <data name="Public" xml:space="preserve">
-    <value>Public</value>
-  </data>
-  <data name="NotScheduled" xml:space="preserve">
-    <value>Not scheduled</value>
-  </data>
-  <data name="EastWest" xml:space="preserve">
-    <value>East-west</value>
-  </data>
-  <data name="Bidirectional" xml:space="preserve">
-    <value>Bidirectional</value>
-  </data>
-  <data name="WestEast" xml:space="preserve">
-    <value>West-east</value>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
   </data>
   <data name="Unspecified" xml:space="preserve">
     <value>Unspecified</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>All users</value>
+  </data>
+  <data name="WestEast" xml:space="preserve">
+    <value>West-east</value>
+  </data>
+  <data name="Westwards" xml:space="preserve">
+    <value>Westwards</value>
+  </data>
   <data name="Winter" xml:space="preserve">
     <value>Winter</value>
   </data>
-  <data name="Spring" xml:space="preserve">
-    <value>Spring</value>
-  </data>
-  <data name="Summer" xml:space="preserve">
-    <value>Summer</value>
-  </data>
-  <data name="Autumn" xml:space="preserve">
-    <value>Autumn</value>
-  </data>
-  <data name="ModuleMeeting" xml:space="preserve">
-    <value>Module meeting</value>
-  </data>
-  <data name="ClubEvent" xml:space="preserve">
-    <value>Club event</value>
-  </data>
-  <data name="Market" xml:space="preserve">
-    <value>Market</value>
-  </data>
-  <data name="EmptyWagonForCargo" xml:space="preserve">
-    <value>Empty wagon for {0}</value>
-  </data>
-  <data name="Casing" xml:space="preserve">
-    <value>LOWER</value>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

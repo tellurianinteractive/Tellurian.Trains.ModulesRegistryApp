@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Shared;
 using System.Globalization;
 using System.Text;
@@ -19,20 +20,20 @@ public static class LocalizedStringExtensions
         label.HasValue() ? $"{localizer.ActionName(action)} {localizer.ObjectName(label, !action.IsEmpty())}" :
         $"{localizer.ActionName(action)} {localizer.ObjectName(objectName, !action.IsEmpty())}";
 
-    private static string ActionName(this IStringLocalizer me, PageAction action) =>
+    private static string ActionName(this IStringLocalizer localizer, PageAction action) =>
         action.IsEmpty() ? string.Empty :
-        me[action.ToString()].Value;
+        localizer[action.ToString()].Value;
 
-    public static string HeadingText(this IStringLocalizer localizer, string? label, string? objectName, object? owner, PageAction action)
+    public static string HeadingText(this IStringLocalizer localizer, string? label, string? objectName, object? context, PageAction action)
     {
         var text = new StringBuilder(100);
         text.Append(localizer.ActionText(label, objectName, action));
-        if (owner is not null)
+        if (context is not null)
         {
             text.Append(' ');
             //text.Append(me["For"].Value.ToLowerInvariant());
             //text.Append(' ');
-            text.Append(localizer.Name(owner));
+            text.Append(localizer.Description(context));
         }
         return text.ToString();
     }
@@ -54,6 +55,9 @@ public static class LocalizedStringExtensions
     public static string EditOrViewObject(this IStringLocalizer localizer, string objectName, bool isEdit) =>
          isEdit ? localizer.EditObject(objectName) : $"{localizer[objectName].Value}";
 
+    public static string MaxChars(this IStringLocalizer localizer, int maxChars) =>
+        string.Format(localizer["MaxChars"], maxChars);
+
 
     public static string NotFound<T>(this IStringLocalizer localizer) => $"{localizer[typeof(T).Name]} {localizer["NotFound"].Value.ToLowerInvariant()}";
 
@@ -69,8 +73,8 @@ public static class LocalizedStringExtensions
     public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) => 
         localizer["_CASING"] == "_LOWER" ? localizer[resourceName].Value.ToLowerInvariant() : localizer[resourceName].Value;
 
-    private static string Name(this IStringLocalizer me, object? owner) =>
-        owner switch
+    private static string Description(this IStringLocalizer me, object? context) =>
+        context switch
         {
             Person p => p.Name(),
             Group g => g.FullName,
@@ -81,6 +85,7 @@ public static class LocalizedStringExtensions
             Region r => r.LocalName,
             Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",
             StationCustomer sc => $"{sc.CustomerName}",
+            Vehicle v => $"{v.DisplayInfo()}",
             _ => string.Empty
         };
 

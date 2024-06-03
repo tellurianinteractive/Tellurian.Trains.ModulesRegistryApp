@@ -120,1247 +120,197 @@
   <data name="About" xml:space="preserve">
     <value>Om</value>
   </data>
-  <data name="AuthenticationInProgress" xml:space="preserve">
-    <value>Autentisering pågår ...</value>
-  </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
-  </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>Fornavn</value>
-  </data>
-  <data name="EmailAddresses" xml:space="preserve">
-    <value>E-post</value>
-  </data>
-  <data name="IsUser" xml:space="preserve">
-    <value>Er bruker?</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Brukere</value>
-  </data>
-  <data name="SignedInAs" xml:space="preserve">
-    <value>Logget på som {0}</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logg ut</value>
-  </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Kontakt</value>
-  </data>
-  <data name="GettingData" xml:space="preserve">
-    <value>Henter data. Vennligst vent...</value>
-  </data>
-  <data name="AddNew" xml:space="preserve">
-    <value>Legg til ny</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>Fullt navn</value>
-  </data>
-  <data name="Groups" xml:space="preserve">
-    <value>Grupper</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Land</value>
-  </data>
-  <data name="NonProfitAssociation" xml:space="preserve">
-    <value>Ideell forening</value>
-  </data>
-  <data name="IsGroupAdministrator" xml:space="preserve">
-    <value>Er gruppeadmin?</value>
-  </data>
-  <data name="MembersIn" xml:space="preserve">
-    <value>Mitglieder in</value>
-  </data>
-  <data name="AddMemberIn" xml:space="preserve">
-    <value>Legg til medlem i</value>
-  </data>
-  <data name="Select" xml:space="preserve">
-    <value>Velg</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passord</value>
-  </data>
-  <data name="UserConfirmationFailed" xml:space="preserve">
-    <value>Brukerbekreftelse mislyktes!</value>
-  </data>
-  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
-    <value>Ingen registrerings-ID er oppgitt</value>
-  </data>
-  <data name="UserConfirmed" xml:space="preserve">
-    <value>Bruker bekreftet</value>
-  </data>
-  <data name="YouMayNowLogin" xml:space="preserve">
-    <value>Du kan nå logge på</value>
-  </data>
-  <data name="ConfirmPassword" xml:space="preserve">
-    <value>Bekreft passord</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Beskjed</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Lagre</value>
-  </data>
-  <data name="InvitationSent" xml:space="preserve">
-    <value>Invitasjon sendt</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hei</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="Invite" xml:space="preserve">
-    <value>Inviter</value>
-  </data>
-  <data name="CreatePassword" xml:space="preserve">
-    <value>Lag passord</value>
-  </data>
-  <data name="UserWelcome" xml:space="preserve">
-    <value>{0}, velkommen!</value>
-  </data>
-  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
-    <value>Ingen brukere funnet med e-postadressen '{0}' og registrerings-ID '{1}'</value>
-  </data>
-  <data name="NoEmailProvided" xml:space="preserve">
-    <value>Ingen e-postadresse oppgitt</value>
-  </data>
-  <data name="TermsOfUse" xml:space="preserve">
-    <value>Vilkår for bruk</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Epostadresse</value>
-  </data>
-  <data name="Members" xml:space="preserve">
-    <value>Medlemmer</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Legg til</value>
-  </data>
-  <data name="IsDataAdministrator" xml:space="preserve">
-    <value>Er dataadministrator?</value>
-  </data>
-  <data name="City" xml:space="preserve">
-    <value>Sted</value>
-  </data>
-  <data name="Community" xml:space="preserve">
-    <value>Samfunnsorganisasjon</value>
-  </data>
-  <data name="ShortName" xml:space="preserve">
-    <value>Forkortelse</value>
-  </data>
-  <data name="Group" xml:space="preserve">
-    <value>Gruppe</value>
-  </data>
-  <data name="Category" xml:space="preserve">
-    <value>Kategori</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Slett</value>
-  </data>
-  <data name="Modules" xml:space="preserve">
-    <value>Moduler</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Logg Inn</value>
-  </data>
-  <data name="AppName" xml:space="preserve">
-    <value>Moduleregisteret</value>
-  </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Handlinger</value>
-  </data>
-  <data name="CityName" xml:space="preserve">
-    <value>Stednavn</value>
-  </data>
-  <data name="LastName" xml:space="preserve">
-    <value>Etternavn</value>
-  </data>
-  <data name="EditPerson" xml:space="preserve">
-    <value>Rediger person</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Rediger</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Velkommen</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Hjem</value>
-  </data>
-  <data name="ModuleOwners" xml:space="preserve">
-    <value>Moduleiere</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Nei</value>
-  </data>
-  <data name="Invited" xml:space="preserve">
-    <value>Invitert</value>
-  </data>
-  <data name="LoggedInAs" xml:space="preserve">
-    <value>Logget inn som</value>
-  </data>
-  <data name="GlobalAdministrator" xml:space="preserve">
-    <value>Global administrator</value>
-  </data>
-  <data name="CountryAdministrator" xml:space="preserve">
-    <value>Landsadministrator</value>
-  </data>
-  <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
-    <value>Du er ikke autorisert til å se denne siden.</value>
-  </data>
-  <data name="SorryNothingToDisplayHere" xml:space="preserve">
-    <value>Beklager, ingenting å vise her.</value>
-  </data>
-  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
-    <value>må begynne med en stor bokstav</value>
-  </data>
-  <data name="MustBeSelected" xml:space="preserve">
-    <value>må velges</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Navn</value>
-  </data>
-  <data name="Scale" xml:space="preserve">
-    <value>Skala</value>
-  </data>
-  <data name="Standard" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-  <data name="ThemeNote" xml:space="preserve">
-    <value>Temanotat</value>
-  </data>
-  <data name="FromYear" xml:space="preserve">
-    <value>Fra år</value>
-  </data>
-  <data name="UptoYear" xml:space="preserve">
-    <value>Opp til året</value>
-  </data>
-  <data name="FunctionalState" xml:space="preserve">
-    <value>Funksjonell tilstand</value>
-  </data>
-  <data name="LandscapeState" xml:space="preserve">
-    <value>Landskapstilstand</value>
-  </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>Ukjent</value>
-  </data>
-  <data name="Radius" xml:space="preserve">
-    <value>Radius</value>
-  </data>
-  <data name="Angle" xml:space="preserve">
-    <value>Vinkel</value>
-  </data>
-  <data name="Length" xml:space="preserve">
-    <value>Lengde</value>
-  </data>
-  <data name="Is2R" xml:space="preserve">
-    <value>Er 2R?</value>
-  </data>
-  <data name="Is3R" xml:space="preserve">
-    <value>Er 3R?</value>
-  </data>
-  <data name="IsTurntable" xml:space="preserve">
-    <value>Er vendeskive?</value>
-  </data>
-  <data name="IsDuckunder" xml:space="preserve">
-    <value>Er duckunder?</value>
-  </data>
-  <data name="IsJunction" xml:space="preserve">
-    <value>Er forgrening?</value>
-  </data>
-  <data name="IsStation" xml:space="preserve">
-    <value>Er stasjon?</value>
-  </data>
-  <data name="Module" xml:space="preserve">
-    <value>Modul</value>
-  </data>
-  <data name="HasNarrowGauge" xml:space="preserve">
-    <value>Har smalspor?</value>
-  </data>
-  <data name="HasNormalGauge" xml:space="preserve">
-    <value>Har normalspor?</value>
-  </data>
-  <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Gjennomgående spor</value>
-  </data>
-  <data name="PreferredTheme" xml:space="preserve">
-    <value>Foretrukket tema</value>
-  </data>
-  <data name="ModuleStandards" xml:space="preserve">
-    <value>Modulstandarder</value>
-  </data>
-  <data name="TrackSystem" xml:space="preserve">
-    <value>Sporsystem</value>
-  </data>
-  <data name="NormalGauge" xml:space="preserve">
-    <value>Normalspor</value>
-  </data>
-  <data name="NarrowGauge" xml:space="preserve">
-    <value>Smalspor</value>
-  </data>
-  <data name="ElectricSystem" xml:space="preserve">
-    <value>Elektrisk system</value>
-  </data>
-  <data name="Couplings" xml:space="preserve">
-    <value>Koblinger</value>
-  </data>
-  <data name="NoRecordsToDisplay" xml:space="preserve">
-    <value>Ingen oppføringer å vise</value>
-  </data>
-  <data name="CreateModule" xml:space="preserve">
-    <value>Opprett modul</value>
-  </data>
-  <data name="EditModule" xml:space="preserve">
-    <value>Rediger modul</value>
-  </data>
-  <data name="RepresentsFromYear" xml:space="preserve">
-    <value>Representerer fra år</value>
-  </data>
-  <data name="RepresentsToYear" xml:space="preserve">
-    <value>Representerer til år</value>
-  </data>
-  <data name="FremoNumber" xml:space="preserve">
-    <value>FREMO nr.</value>
-  </data>
-  <data name="PackageLabel" xml:space="preserve">
-    <value>Boks merking</value>
-  </data>
-  <data name="ConfigurationLabel" xml:space="preserve">
-    <value>Variant</value>
-  </data>
-  <data name="MiddleName" xml:space="preserve">
-    <value>Mellomnavn</value>
-  </data>
-  <data name="OwnedBy" xml:space="preserve">
-    <value>eid av</value>
-  </data>
-  <data name="For" xml:space="preserve">
-    <value>For</value>
-  </data>
-  <data name="PasswordPolicy" xml:space="preserve">
-    <value>Passordpolicy</value>
-  </data>
-  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
-    <value>Passordet må inneholde minst {0} tegn</value>
-  </data>
-  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
-    <value>Passordet må oppfylle disse kravene:</value>
-  </data>
-  <data name="PasswordMinimumOfThese" xml:space="preserve">
-    <value>Minimum {0} av disse {2}: {1}</value>
-  </data>
-  <data name="Letters" xml:space="preserve">
-    <value>Bokstaver</value>
-  </data>
-  <data name="Digits" xml:space="preserve">
-    <value>Sifre</value>
-  </data>
-  <data name="SpecialCharacters" xml:space="preserve">
-    <value>Spesialkarakterer</value>
-  </data>
-  <data name="LinkToExternalContent" xml:space="preserve">
-    <value>Lenke til eksternt innhold</value>
-  </data>
-  <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Vennligst les og rull til bunnen for å godta. Dette er nødvendig for å bruke denne applikasjonen.</value>
-  </data>
-  <data name="EndPlates" xml:space="preserve">
-    <value>Endeplater</value>
-  </data>
-  <data name="Direction" xml:space="preserve">
-    <value>Retning</value>
-  </data>
-  <data name="EndProfile" xml:space="preserve">
-    <value>Endeprofile</value>
-  </data>
-  <data name="NumberOfSections" xml:space="preserve">
-    <value>Antall seksjoner</value>
-  </data>
-  <data name="ThisContentWasModified" xml:space="preserve">
-    <value>Dette innholdet ble endret {0:d} {0:t}</value>
-  </data>
-  <data name="SignalFeature" xml:space="preserve">
-    <value>Har signal?</value>
-  </data>
-  <data name="OverheadLineFeature" xml:space="preserve">
-    <value>Har luftledning?</value>
-  </data>
-  <data name="MaxSpeed" xml:space="preserve">
-    <value>Maks. hastighet</value>
-  </data>
-  <data name="Signature" xml:space="preserve">
-    <value>Signatur</value>
-  </data>
-  <data name="IsTerminus" xml:space="preserve">
-    <value>Er sekkestasjon?</value>
-  </data>
-  <data name="IsShadowStation" xml:space="preserve">
-    <value>Er skyggestasjon?</value>
-  </data>
-  <data name="DisplayOrder" xml:space="preserve">
-    <value>Viste rekkefølge</value>
-  </data>
-  <data name="IsScheduled" xml:space="preserve">
-    <value>Er trafikkspor?</value>
-  </data>
-  <data name="IsSiding" xml:space="preserve">
-    <value>Er sidespor?</value>
-  </data>
-  <data name="Usage" xml:space="preserve">
-    <value>Bruk</value>
-  </data>
-  <data name="SpeedLimit" xml:space="preserve">
-    <value>Maks. hastighet</value>
-  </data>
-  <data name="MaxTrainLength" xml:space="preserve">
-    <value>Maks toglengde</value>
-  </data>
-  <data name="PlatformLength" xml:space="preserve">
-    <value>Plattformlengde</value>
-  </data>
-  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
-    <value>Fyll ut nytt spor og klikk Legg til før du lagrer.</value>
-  </data>
-  <data name="IsThroughTrack" xml:space="preserve">
-    <value>Er spor gjennom?</value>
-  </data>
-  <data name="Clone" xml:space="preserve">
-    <value>Klon</value>
-  </data>
-  <data name="FremoName" xml:space="preserve">
-    <value>FREMO navn</value>
-  </data>
-  <data name="Station" xml:space="preserve">
-    <value>Stasjon</value>
-  </data>
-  <data name="Stations" xml:space="preserve">
-    <value>Stasjoner</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Søk</value>
-  </data>
-  <data name="FremoPrefix" xml:space="preserve">
-    <value>FREMO moduleprefix</value>
-  </data>
-  <data name="FindOutMore" xml:space="preserve">
-    <value>Finn ut mer</value>
-  </data>
-  <data name="AreaOfResponsibility" xml:space="preserve">
-    <value>Ansvarsområde</value>
-  </data>
-  <data name="AdministersGroups" xml:space="preserve">
-    <value>Administrerer grupper</value>
-  </data>
-  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
-    <value>Nullstill passord er bedt om</value>
-  </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Tilbakestille passord</value>
-  </data>
-  <data name="UserSettings" xml:space="preserve">
-    <value>Brukerinnstillinger</value>
-  </data>
-  <data name="IHaveReadAndUnderstand" xml:space="preserve">
-    <value>Jeg har lest og forstått</value>
-  </data>
-  <data name="Track" xml:space="preserve">
-    <value>Spor</value>
-  </data>
-  <data name="Tracks" xml:space="preserve">
-    <value>Spor</value>
-  </data>
-  <data name="TrackNumber" xml:space="preserve">
-    <value>Spornummer</value>
-  </data>
-  <data name="DefaultClasses" xml:space="preserve">
-    <value>Vognklasser</value>
-  </data>
-  <data name="NHMCode" xml:space="preserve">
-    <value>NHM-kode</value>
-  </data>
-  <data name="English" xml:space="preserve">
-    <value>Engelsk</value>
-  </data>
-  <data name="German" xml:space="preserve">
-    <value>Tysk</value>
-  </data>
-  <data name="Dutch" xml:space="preserve">
-    <value>Nederlandsk</value>
-  </data>
-  <data name="Polish" xml:space="preserve">
-    <value>Polsk</value>
-  </data>
-  <data name="Danish" xml:space="preserve">
-    <value>Dansk</value>
-  </data>
-  <data name="Swedish" xml:space="preserve">
-    <value>Svensk</value>
-  </data>
-  <data name="Norwegian" xml:space="preserve">
-    <value>Norsk</value>
-  </data>
-  <data name="Cargo" xml:space="preserve">
-    <value>Last</value>
-  </data>
-  <data name="AddModuleFirst" xml:space="preserve">
-    <value>MERKNAD: Legg til en modul først for å deretter legge den til som et driftsplass!</value>
-  </data>
-  <data name="Nothing to se here yet!" xml:space="preserve">
-    <value>Ingenting å se her ennå!</value>
-  </data>
-  <data name="Designation" xml:space="preserve">
-    <value>Betegnelse</value>
-  </data>
-  <data name="CargoTypes" xml:space="preserve">
-    <value>Lastetyper</value>
-  </data>
-  <data name="CargoType" xml:space="preserve">
-    <value>Lastetype</value>
-  </data>
-  <data name="IsInvited" xml:space="preserve">
-    <value>Er invitert?</value>
-  </data>
-  <data name="Member" xml:space="preserve">
-    <value>Medlem</value>
-  </data>
-  <data name="Exits" xml:space="preserve">
-    <value>Utganger</value>
-  </data>
-  <data name="Venue" xml:space="preserve">
-    <value>Treffsted</value>
-  </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>Startdato</value>
-  </data>
-  <data name="EndDate" xml:space="preserve">
-    <value>Sluttdato</value>
-  </data>
-  <data name="Organiser" xml:space="preserve">
-    <value>Arrangør</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="Details" xml:space="preserve">
-    <value>Detaljer</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Beskrivelse</value>
-  </data>
-  <data name="Meeting" xml:space="preserve">
-    <value>Treff</value>
-  </data>
-  <data name="Owners" xml:space="preserve">
-    <value>Eiere</value>
-  </data>
-  <data name="Meetings" xml:space="preserve">
-    <value>Treff</value>
-  </data>
-  <data name="MustBeBetween" xml:space="preserve">
-    <value>må være mellom {0} og {1}</value>
-  </data>
-  <data name="IsFremo" xml:space="preserve">
-    <value>Er FREMO-treff?</value>
-  </data>
-  <data name="StartHour" xml:space="preserve">
-    <value>Start time</value>
-  </data>
-  <data name="EndHour" xml:space="preserve">
-    <value>Slutt time</value>
-  </data>
-  <data name="StartWeekday" xml:space="preserve">
-    <value>Første ukedag</value>
-  </data>
-  <data name="FirstYear" xml:space="preserve">
-    <value>Første år</value>
-  </data>
-  <data name="LastYear" xml:space="preserve">
-    <value>Slutt år</value>
-  </data>
-  <data name="PrimaryModuleStandard" xml:space="preserve">
-    <value>Primær modulstandard</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>Spillinnstillinger</value>
-  </data>
-  <data name="Layouts" xml:space="preserve">
-    <value>Baner</value>
-  </data>
-  <data name="Layout" xml:space="preserve">
-    <value>Bane</value>
-  </data>
-  <data name="OperatingPeriod" xml:space="preserve">
-    <value>Driftsperiode</value>
-  </data>
-  <data name="ResponsibleGroup" xml:space="preserve">
-    <value>Ansvarlig gruppe</value>
-  </data>
-  <data name="ModuleStandard" xml:space="preserve">
-    <value>Modulstandard</value>
-  </data>
-  <data name="RegisterModules" xml:space="preserve">
-    <value>Registrer moduler</value>
-  </data>
-  <data name="UploadDocuments" xml:space="preserve">
-    <value>Last opp dokumenter</value>
-  </data>
-  <data name="SelectFile" xml:space="preserve">
-    <value>Velg fil</value>
-  </data>
-  <data name="Drawing" xml:space="preserve">
-    <value>Tegning</value>
-  </data>
-  <data name="Documentation" xml:space="preserve">
-    <value>Dokumentasjon</value>
-  </data>
-  <data name="OperatingInstructions" xml:space="preserve">
-    <value>Bruksanvisning</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Oppdater</value>
-  </data>
-  <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
-    <value>må kun inneholde ordinær tekst</value>
-  </data>
-  <data name="FileExceedsMaxSizeOf" xml:space="preserve">
-    <value>Filen overstiger maksimumsstørrelsen på {0} kB</value>
-  </data>
-  <data name="MaxUploadFileSizeKb" xml:space="preserve">
-    <value>Maksimal filstørrelse for opplasting er {0} kB</value>
-  </data>
-  <data name="TextColor" xml:space="preserve">
-    <value>Tekstfarge</value>
-  </data>
-  <data name="BackColor" xml:space="preserve">
-    <value>Bakgrunnsfarge</value>
-  </data>
-  <data name="InAll" xml:space="preserve">
-    <value>i alle</value>
-  </data>
-  <data name="Countries" xml:space="preserve">
-    <value>Land</value>
-  </data>
-  <data name="ShowAll" xml:space="preserve">
-    <value>Vis alle</value>
-  </data>
-  <data name="Regions" xml:space="preserve">
-    <value>Regioner</value>
-  </data>
-  <data name="FreightCustomersAt" xml:space="preserve">
-    <value>Fraktkunder på {0}</value>
-  </data>
-  <data name="TrackOrArea" xml:space="preserve">
-    <value>Spor nr. eller lasteområde</value>
-  </data>
-  <data name="FreightCustomers" xml:space="preserve">
-    <value>Fraktkunder</value>
-  </data>
-  <data name="OpenedYear" xml:space="preserve">
-    <value>Åpnet år</value>
-  </data>
-  <data name="ClosedYear" xml:space="preserve">
-    <value>Stengt år</value>
-  </data>
-  <data name="Comment" xml:space="preserve">
-    <value>Kommentar</value>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Farve</value>
-  </data>
-  <data name="Days" xml:space="preserve">
-    <value>Dager</value>
-  </data>
-  <data name="OtherName" xml:space="preserve">
-    <value>Annet navn</value>
-  </data>
-  <data name="CargoFlow" xml:space="preserve">
-    <value>Laststrøm</value>
-  </data>
-  <data name="FreightCustomer" xml:space="preserve">
-    <value>Fraktkunde</value>
-  </data>
-  <data name="Documents" xml:space="preserve">
-    <value>Dokumenter</value>
-  </data>
-  <data name="QuantityUnit" xml:space="preserve">
-    <value>Mengdenhet</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Mengde</value>
-  </data>
-  <data name="UnloadingReady" xml:space="preserve">
-    <value>Lossing klar</value>
-  </data>
-  <data name="LoadingReady" xml:space="preserve">
-    <value>Lasting klar</value>
-  </data>
-  <data name="MustBeAColor" xml:space="preserve">
-    <value>Må være en farge</value>
-  </data>
-  <data name="IsUnavailable" xml:space="preserve">
-    <value>Er ikke tilgjengelig?</value>
-  </data>
-  <data name="HasIntegratedLocoNet" xml:space="preserve">
-    <value>Har integrert LocoNet?</value>
-  </data>
-  <data name="Visibility" xml:space="preserve">
-    <value>Synlighet</value>
-  </data>
-  <data name="NoInformation" xml:space="preserve">
-    <value>Ingen informasjon</value>
-  </data>
-  <data name="GettingContent" xml:space="preserve">
-    <value>Henter innhold...</value>
-  </data>
-  <data name="OtherTrackOrArea" xml:space="preserve">
-    <value>Annet spor nr. eller lasteområde</value>
-  </data>
-  <data name="MustBeAnyOf" xml:space="preserve">
-    <value>Må være en av {0}</value>
-  </data>
-  <data name="NotApplicable" xml:space="preserve">
-    <value>Ikke aktuelt</value>
-  </data>
-  <data name="Domain" xml:space="preserve">
-    <value>Gruppedomene</value>
-  </data>
-  <data name="IsStationOrPartOf" xml:space="preserve">
-    <value>Er stasjon eller en del av</value>
-  </data>
-  <data name="IsOnlyOwner" xml:space="preserve">
-    <value>Er den eneste eieren?</value>
-  </data>
-  <data name="IsPartOfStation" xml:space="preserve">
-    <value>Er en del av en stasjon?</value>
-  </data>
-  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
-    <value>Er registrert i et kommende treff?</value>
-  </data>
-  <data name="ConfirmDelete" xml:space="preserve">
-    <value>Bekreft sletting</value>
-  </data>
-  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
-    <value>Vilkår for sletting ikke oppfylt</value>
-  </data>
-  <data name="YouAreLockedOut" xml:space="preserve">
-    <value>Du er utelukket!</value>
-  </data>
-  <data name="OwnedPercent" xml:space="preserve">
-    <value>Eid %</value>
-  </data>
-  <data name="TypeMinimumCharachers" xml:space="preserve">
-    <value>Skriv inn minst {0} tegn</value>
-  </data>
-  <data name="ExternalStations" xml:space="preserve">
-    <value>Eksterne stasjoner</value>
-  </data>
-  <data name="Note" xml:space="preserve">
-    <value>Merknad</value>
-  </data>
-  <data name="ExternalStation" xml:space="preserve">
-    <value>Ekstern stasjon</value>
-  </data>
-  <data name="Supplying" xml:space="preserve">
-    <value>Leverer</value>
-  </data>
-  <data name="Consuming" xml:space="preserve">
-    <value>Forbruker</value>
-  </data>
-  <data name="ExternalFreightCustomers" xml:space="preserve">
-    <value>Eksterne fraktkunder</value>
-  </data>
-  <data name="HaveFreightFlow" xml:space="preserve">
-    <value>Har godstrøm?</value>
-  </data>
-  <data name="MakeStation" xml:space="preserve">
-    <value>Gjør til stasjon</value>
-  </data>
-  <data name="Dates" xml:space="preserve">
-    <value>Datoer</value>
-  </data>
-  <data name="MyModules" xml:space="preserve">
-    <value>Mine moduler</value>
-  </data>
-  <data name="MyStations" xml:space="preserve">
-    <value>Mine stasjoner</value>
-  </data>
-  <data name="View" xml:space="preserve">
-    <value>Vis</value>
-  </data>
-  <data name="OperationTheme" xml:space="preserve">
-    <value>Trafikk tema</value>
-  </data>
-  <data name="RegistrationOpens" xml:space="preserve">
-    <value>Påmeldingen åpnes</value>
-  </data>
-  <data name="Discussions" xml:space="preserve">
-    <value>Diskusjoner</value>
-  </data>
-  <data name="RegistrationCloses" xml:space="preserve">
-    <value>Påmeldingen stenger</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Registrer</value>
-  </data>
-  <data name="SelectPersonToRegister" xml:space="preserve">
-    <value>Velg person du vil registrere</value>
-  </data>
-  <data name="RegistrationTime" xml:space="preserve">
-    <value>Meldt seg</value>
-  </data>
-  <data name="Registered" xml:space="preserve">
-    <value>Registrert</value>
-  </data>
-  <data name="Withdrawn" xml:space="preserve">
-    <value>Tilbaketrukket</value>
-  </data>
-  <data name="AvailableModules" xml:space="preserve">
-    <value>Tilgjengelige moduler</value>
-  </data>
-  <data name="RegisteredModules" xml:space="preserve">
-    <value>Registrerte moduler</value>
-  </data>
-  <data name="Participant" xml:space="preserve">
-    <value>Deltager</value>
-  </data>
-  <data name="Registration" xml:space="preserve">
-    <value>Påmelding</value>
-  </data>
-  <data name="NoModulesRegistered" xml:space="preserve">
-    <value>Ingen moduler registrert</value>
-  </data>
-  <data name="Finished" xml:space="preserve">
-    <value>Ferdig</value>
-  </data>
-  <data name="Place" xml:space="preserve">
-    <value>Plass</value>
-  </data>
-  <data name="EnglishName" xml:space="preserve">
-    <value>Engelsk navn</value>
-  </data>
-  <data name="IsStandAlone" xml:space="preserve">
-    <value>Er frittstående?</value>
-  </data>
-  <data name="ClickOKToDelete" xml:space="preserve">
-    <value>Klikk OK for å slette</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Avbryt</value>
-  </data>
-  <data name="OtherWagonClass" xml:space="preserve">
-    <value>Annen vognklasse</value>
-  </data>
-  <data name="PasswordResetFailed" xml:space="preserve">
-    <value>Tilbakestilling av passord mislyktes</value>
-  </data>
-  <data name="Transfer" xml:space="preserve">
-    <value>Overfør</value>
-  </data>
-  <data name="TransferOwnership" xml:space="preserve">
-    <value>Overfør eierskap</value>
-  </data>
-  <data name="Owner" xml:space="preserve">
-    <value>Eier</value>
-  </data>
-  <data name="NewOwner" xml:space="preserve">
-    <value>Ny eier</value>
-  </data>
-  <data name="TransferredShare" xml:space="preserve">
-    <value>Overført andel</value>
-  </data>
-  <data name="Width" xml:space="preserve">
-    <value>Bredde</value>
-  </data>
-  <data name="Straight" xml:space="preserve">
-    <value>Rett</value>
-  </data>
-  <data name="MaxTrainsetLength" xml:space="preserve">
-    <value>Maks togsett længde (vogner)</value>
-  </data>
-  <data name="Participants" xml:space="preserve">
-    <value>Deltagere</value>
-  </data>
-  <data name="PasswordConfirmationDoesNotMatch" xml:space="preserve">
-    <value>Passordbekreftelse samsvarer ikke</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Feil</value>
-  </data>
-  <data name="ModuleRegistrationCloses" xml:space="preserve">
-    <value>Modulregistreringer stenger</value>
-  </data>
-  <data name="PackagingUnit" xml:space="preserve">
-    <value>Emballasjeenhet</value>
-  </data>
-  <data name="PasswordResetMailSent" xml:space="preserve">
-    <value>E -post for tilbakestilling av passord sendt</value>
-  </data>
-  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
-    <value>Tilbakestilling av passord er forespurt</value>
-  </data>
-  <data name="NotAuthorised" xml:space="preserve">
-    <value>Uautorisert</value>
-  </data>
-  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
-    <value>alle ord må begynne med stor bokstav</value>
-  </data>
-  <data name="Waybills" xml:space="preserve">
-    <value>Fraktbrev</value>
-  </data>
-  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
-    <value>Treffdatoer kan ikke endres</value>
-  </data>
-  <data name="Fault" xml:space="preserve">
-    <value>Feil</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="OtherColor" xml:space="preserve">
-    <value>Annen farge</value>
-  </data>
-  <data name="OtherFromYear" xml:space="preserve">
-    <value>Annet fra-år</value>
-  </data>
-  <data name="OtherUptoYear" xml:space="preserve">
-    <value>Annet til-år</value>
-  </data>
-  <data name="Italian" xml:space="preserve">
-    <value>Italiensk</value>
-  </data>
-  <data name="French" xml:space="preserve">
-    <value>Fransk</value>
-  </data>
-  <data name="SaveAll" xml:space="preserve">
-    <value>Lagre alt</value>
-  </data>
-  <data name="MayBorrowGroupsModules" xml:space="preserve">
-    <value>Kan låne gruppens moduler?</value>
-  </data>
-  <data name="LastLoginTime" xml:space="preserve">
-    <value>Sist logget inn</value>
-  </data>
-  <data name="WagonError" xml:space="preserve">
-    <value>Vognfeil</value>
-  </data>
-  <data name="NonStandardWheelset" xml:space="preserve">
-    <value>Ikke-standard hjulsett</value>
-  </data>
-  <data name="WrongBackToBackDistance" xml:space="preserve">
-    <value>Feil back-to-back avstand</value>
-  </data>
-  <data name="RollsSluggishly" xml:space="preserve">
-    <value>Ruller tregt</value>
-  </data>
-  <data name="NonStandardCoupling" xml:space="preserve">
-    <value>Ikke standard kobling</value>
-  </data>
-  <data name="CouplingNotFixed" xml:space="preserve">
-    <value>Kobling ikke fast</value>
-  </data>
-  <data name="CouplingTooLowOrHigh" xml:space="preserve">
-    <value>Kobling for lav eller høy</value>
-  </data>
-  <data name="WagonTooLightOrHeavy" xml:space="preserve">
-    <value>Vognen er for lett eller tung</value>
-  </data>
-  <data name="WagonEasilyDerails" xml:space="preserve">
-    <value>Vogn sporer lett av</value>
-  </data>
-  <data name="WagonHasLooseParts" xml:space="preserve">
-    <value>Vognen har løse deler</value>
-  </data>
-  <data name="OtherPleaseSpecify" xml:space="preserve">
-    <value>Annet, spesifiser</value>
-  </data>
-  <data name="Tools" xml:space="preserve">
-    <value>Verktøy</value>
-  </data>
-  <data name="LandscapeSeason" xml:space="preserve">
-    <value>Årstid</value>
-  </data>
-  <data name="Available" xml:space="preserve">
-    <value>Tilgjengelig</value>
-  </data>
-  <data name="Unavailable" xml:space="preserve">
-    <value>Utilgjengelig</value>
-  </data>
-  <data name="FrequentlyAskedQuestions" xml:space="preserve">
-    <value>Ofte stilte spørsmål</value>
-  </data>
-  <data name="Class" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="CountriesStatistics" xml:space="preserve">
-    <value>Landstatistikk</value>
-  </data>
-  <data name="CargoCustomers" xml:space="preserve">
-    <value>Fraktkunder</value>
-  </data>
-  <data name="Statistics" xml:space="preserve">
-    <value>Statistikk</value>
-  </data>
-  <data name="RepresentativeStation" xml:space="preserve">
-    <value>Representativ stasjon</value>
-  </data>
-  <data name="NotDefined" xml:space="preserve">
-    <value>Ikke definert</value>
-  </data>
-  <data name="Participate" xml:space="preserve">
-    <value>Delta</value>
-  </data>
-  <data name="LatestArrivalTime" xml:space="preserve">
-    <value>Siste ankomsttid</value>
-  </data>
-  <data name="MustBeValidDccAdresses" xml:space="preserve">
-    <value>må være gyldige DCC-adresser</value>
-  </data>
-  <data name="FremoReservedAdresses" xml:space="preserve">
-    <value>FREMO reserverte adresser</value>
-  </data>
-  <data name="LocoAddressExample" xml:space="preserve">
-    <value>Eksempel: 2000-2099,3201,3350-3355</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Innstillinger</value>
-  </data>
-  <data name="AdministratorSettings" xml:space="preserve">
-    <value>Administratorinnstillinger</value>
-  </data>
-  <data name="MustBeValidEmailAddresses" xml:space="preserve">
-    <value>må være gyldige e-postadresser atskilt med semikolon</value>
-  </data>
-  <data name="IsGlobalAdministrator" xml:space="preserve">
-    <value>Er global administrator?</value>
-  </data>
-  <data name="IsCountryAdministrator" xml:space="preserve">
-    <value>Er landsadministrator?</value>
-  </data>
-  <data name="IsApiAccessPermitted" xml:space="preserve">
-    <value>Er API-tilgang tillatt?</value>
-  </data>
-  <data name="MayUploadSkpDrawing" xml:space="preserve">
-    <value>Kan du laste opp SketchUp-tegning?</value>
-  </data>
-  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
-    <value>Administrator sitt ansvarsområde</value>
-  </data>
-  <data name="PasswordResetAttempts" xml:space="preserve">
-    <value>Antall forsøk på tilbakestilling av passord</value>
-  </data>
-  <data name="FailedLoginAttempts" xml:space="preserve">
-    <value>Antall mislykkede påloggingsforsøk</value>
-  </data>
-  <data name="UserIsLockedOut" xml:space="preserve">
-    <value>Brukeren er utestengt!</value>
-  </data>
-  <data name="ModuleEndProfiles" xml:space="preserve">
-    <value>Modul endeprofiler</value>
-  </data>
-  <data name="GetStarted" xml:space="preserve">
-    <value>Kom i gang</value>
+  <data name="Accept" xml:space="preserve">
+    <value>Akseptere</value>
   </data>
   <data name="Accomodation" xml:space="preserve">
     <value>Overnatting</value>
   </data>
-  <data name="of" xml:space="preserve">
-    <value>av</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Handlinger</value>
   </data>
-  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>IKKE beskriv hva som gjelder for individuelle sporoppsett nedenfor! Legg til sporoppsett.</value>
+  <data name="Add" xml:space="preserve">
+    <value>Legg til</value>
   </data>
-  <data name="Preview" xml:space="preserve">
-    <value>Forhåndsvisning</value>
+  <data name="AddMemberIn" xml:space="preserve">
+    <value>Legg til medlem i</value>
   </data>
-  <data name="Characters" xml:space="preserve">
-    <value>Tegn</value>
+  <data name="AddModuleFirst" xml:space="preserve">
+    <value>MERKNAD: Legg til en modul først for å deretter legge den til som et driftsplass!</value>
   </data>
-  <data name="FetchingData" xml:space="preserve">
-    <value>Henter data...</value>
+  <data name="AddNew" xml:space="preserve">
+    <value>Legg til ny</value>
   </data>
-  <data name="NoParticipantsRegistered" xml:space="preserve">
-    <value>Ingen deltakere påmeldt</value>
+  <data name="AdministersGroups" xml:space="preserve">
+    <value>Administrerer grupper</value>
   </data>
-  <data name="VenueName" xml:space="preserve">
-    <value>Treffsted</value>
+  <data name="AdministratorAreaOfResposibility" xml:space="preserve">
+    <value>Administrator sitt ansvarsområde</value>
   </data>
-  <data name="GroupDomain" xml:space="preserve">
-    <value>Gruppedomene</value>
+  <data name="AdministratorSettings" xml:space="preserve">
+    <value>Administratorinnstillinger</value>
   </data>
-  <data name="InPartnershipWith" xml:space="preserve">
-    <value>I samarbeid med</value>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>alle ord må begynne med stor bokstav</value>
   </data>
-  <data name="IsOrganisingGroupInternal" xml:space="preserve">
-    <value>Er internt for arrangørgruppen?</value>
+  <data name="Angle" xml:space="preserve">
+    <value>Vinkel</value>
   </data>
-  <data name="ContactPerson" xml:space="preserve">
-    <value>Kontaktperson</value>
+  <data name="AppName" xml:space="preserve">
+    <value>Moduleregisteret</value>
   </data>
-  <data name="IsRegistrationPermitted" xml:space="preserve">
-    <value>Er registrering tillatt?</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkjent</value>
   </data>
-  <data name="Theme" xml:space="preserve">
-    <value>Tema</value>
-  </data>
-  <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
-    <value>Treffen er ennå ikke åpen for påmelding</value>
-  </data>
-  <data name="Count" xml:space="preserve">
-    <value>Antall</value>
-  </data>
-  <data name="Generate" xml:space="preserve">
-    <value>Generer</value>
-  </data>
-  <data name="InvitationToModuleRegistry" xml:space="preserve">
-    <value>Invitasjon til Modulregisteret</value>
-  </data>
-  <data name="UserIsReadOnly" xml:space="preserve">
-    <value>Bruker har kun lesetilgang?</value>
-  </data>
-  <data name="CreatingReport" xml:space="preserve">
-    <value>Oppretter rapport...</value>
-  </data>
-  <data name="LokAndWagonCards" xml:space="preserve">
-    <value>Lok- og vognkort</value>
-  </data>
-  <data name="FastClock" xml:space="preserve">
-    <value>Hurtigklokke</value>
-  </data>
-  <data name="MemberMayBorrowMyModules" xml:space="preserve">
-    <value>Kan et medlem låne modulene mine?</value>
-  </data>
-  <data name="Food" xml:space="preserve">
-    <value>Mat</value>
-  </data>
-  <data name="ExternalLink" xml:space="preserve">
-    <value>Ekstern lenke</value>
-  </data>
-  <data name="PrintPerOperatingDay" xml:space="preserve">
-    <value>Skriv ut per driftsdag</value>
-  </data>
-  <data name="HasEmptyReturn" xml:space="preserve">
-    <value>Har tom retur?</value>
-  </data>
-  <data name="HideLoadingTimes" xml:space="preserve">
-    <value>Skjul lastetider?</value>
-  </data>
-  <data name="HideUnloadingTimes" xml:space="preserve">
-    <value>Skjule lossetider?</value>
-  </data>
-  <data name="SecondCustomer" xml:space="preserve">
-    <value>Andre kunde</value>
-  </data>
-  <data name="PrintCount" xml:space="preserve">
-    <value>Antall utskrifter</value>
-  </data>
-  <data name="Package" xml:space="preserve">
-    <value>Boks</value>
-  </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Fjern</value>
-  </data>
-  <data name="ArrivalTime" xml:space="preserve">
-    <value>Ankomsttid</value>
+  <data name="AreaOfResponsibility" xml:space="preserve">
+    <value>Ansvarsområde</value>
   </data>
   <data name="Arrival" xml:space="preserve">
     <value>Ankomst</value>
   </data>
-  <data name="MyAvailableModules" xml:space="preserve">
-    <value>Mine tilgjengelige moduler</value>
+  <data name="ArrivalTime" xml:space="preserve">
+    <value>Ankomsttid</value>
   </data>
-  <data name="OtherAvailableModules" xml:space="preserve">
-    <value>Andre tilgjengelige moduler</value>
+  <data name="ArticleNumber" xml:space="preserve">
+    <value>Artikkel nummer</value>
   </data>
-  <data name="InternationalName" xml:space="preserve">
-    <value>Internasjonalt navn</value>
+  <data name="AssistantOnly" xml:space="preserve">
+    <value>Bare assistent</value>
   </data>
-  <data name="LastActive" xml:space="preserve">
-    <value>Sist aktiv</value>
+  <data name="AuthenticationInProgress" xml:space="preserve">
+    <value>Autentisering pågår ...</value>
   </data>
-  <data name="RemoveFiltering" xml:space="preserve">
-    <value>Fjern filtrering</value>
+  <data name="Available" xml:space="preserve">
+    <value>Tilgjengelig</value>
   </data>
-  <data name="UpdatingWaybills" xml:space="preserve">
-    <value>Oppdaterer fraktsedler...</value>
+  <data name="AvailableModules" xml:space="preserve">
+    <value>Tilgjengelige moduler</value>
   </data>
-  <data name="ManageWaybills" xml:space="preserve">
-    <value>Administrer fraktsedler</value>
+  <data name="BackColor" xml:space="preserve">
+    <value>Bakgrunnsfarge</value>
   </data>
-  <data name="ManageCargoFlow" xml:space="preserve">
-    <value>Administrer vareflyt</value>
+  <data name="BarcodeId" xml:space="preserve">
+    <value>Strekkode-ID</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Avbryt</value>
   </data>
   <data name="Canceled" xml:space="preserve">
     <value>Kansellert</value>
   </data>
-  <data name="Unregister" xml:space="preserve">
-    <value>Avregistrer</value>
+  <data name="Cargo" xml:space="preserve">
+    <value>Last</value>
   </data>
-  <data name="NoModulesAvailable" xml:space="preserve">
-    <value>Ingen moduler tilgjengelig</value>
+  <data name="CargoCustomers" xml:space="preserve">
+    <value>Fraktkunder</value>
   </data>
-  <data name="More" xml:space="preserve">
-    <value>Mere...</value>
+  <data name="CargoFlow" xml:space="preserve">
+    <value>Laststrøm</value>
   </data>
-  <data name="PrimaryOperatingCountry" xml:space="preserve">
-    <value>Primært driftsland</value>
+  <data name="CargoType" xml:space="preserve">
+    <value>Lastetype</value>
   </data>
-  <data name="FirstYearInOperation" xml:space="preserve">
-    <value>Første år i drift</value>
+  <data name="CargoTypes" xml:space="preserve">
+    <value>Lastetyper</value>
   </data>
-  <data name="FinalYearInOperating" xml:space="preserve">
-    <value>Siste år i drift</value>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
   </data>
-  <data name="NewMeeting" xml:space="preserve">
-    <value>Ny treff</value>
+  <data name="Characters" xml:space="preserve">
+    <value>Tegn</value>
   </data>
-  <data name="NotAcceptedTermsOfUse" xml:space="preserve">
-    <value>Har ikke akseptert bruksvilkår</value>
+  <data name="City" xml:space="preserve">
+    <value>Sted</value>
   </data>
-  <data name="PasswordCreated" xml:space="preserve">
-    <value>Passord opprettet</value>
+  <data name="CityName" xml:space="preserve">
+    <value>Stednavn</value>
   </data>
-  <data name="FremoMemberNumber" xml:space="preserve">
-    <value>FREMO medlemsnummer</value>
+  <data name="Class" xml:space="preserve">
+    <value>Type</value>
   </data>
-  <data name="Throttles" xml:space="preserve">
-    <value>Håndkontroller</value>
+  <data name="ClickOKToDelete" xml:space="preserve">
+    <value>Klikk OK for å slette</value>
   </data>
-  <data name="MyThrottles" xml:space="preserve">
-    <value>Mine håndkontroller</value>
+  <data name="Clone" xml:space="preserve">
+    <value>Klon</value>
   </data>
-  <data name="MacAddress" xml:space="preserve">
-    <value>MAC-adresse</value>
+  <data name="ClosedYear" xml:space="preserve">
+    <value>Stengt år</value>
   </data>
-  <data name="InventoryNumber" xml:space="preserve">
-    <value>Inventarnummer</value>
+  <data name="Color" xml:space="preserve">
+    <value>Farve</value>
   </data>
-  <data name="Validated" xml:space="preserve">
-    <value>Bekreftet</value>
+  <data name="Comment" xml:space="preserve">
+    <value>Kommentar</value>
   </data>
-  <data name="Throttle" xml:space="preserve">
-    <value>Håndkontroll</value>
+  <data name="Community" xml:space="preserve">
+    <value>Samfunnsorganisasjon</value>
   </data>
-  <data name="MustBeAMacAddress" xml:space="preserve">
-    <value>Må være en MAC-adresse</value>
+  <data name="ConditionsForDeleteNotMet" xml:space="preserve">
+    <value>Vilkår for sletting ikke oppfylt</value>
   </data>
-  <data name="MustBeADccAddress" xml:space="preserve">
-    <value>Må være en DCC-adresse 1-9999</value>
+  <data name="ConfigurationLabel" xml:space="preserve">
+    <value>Variant</value>
   </data>
-  <data name="MayVerifyWiFreds" xml:space="preserve">
-    <value>Kan verifisere wiFREDs</value>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Bekreft sletting</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Bekreft passord</value>
+  </data>
+  <data name="Consuming" xml:space="preserve">
+    <value>Forbruker</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Kontaktperson</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Antall</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Land</value>
+  </data>
+  <data name="CountriesStatistics" xml:space="preserve">
+    <value>Landstatistikk</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Land</value>
+  </data>
+  <data name="CountryAdministrator" xml:space="preserve">
+    <value>Landsadministrator</value>
+  </data>
+  <data name="CouplingNotFixed" xml:space="preserve">
+    <value>Kobling ikke fast</value>
+  </data>
+  <data name="Couplings" xml:space="preserve">
+    <value>Koblinger</value>
+  </data>
+  <data name="CouplingTooLowOrHigh" xml:space="preserve">
+    <value>Kobling for lav eller høy</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>Opprett modul</value>
+  </data>
+  <data name="CreatePassword" xml:space="preserve">
+    <value>Lag passord</value>
+  </data>
+  <data name="CreatingReport" xml:space="preserve">
+    <value>Oppretter rapport...</value>
+  </data>
+  <data name="Danish" xml:space="preserve">
+    <value>Dansk</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Datoer</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dager</value>
   </data>
   <data name="DccAddress" xml:space="preserve">
     <value>DCC-adresse</value>
-  </data>
-  <data name="WiFredThrottles" xml:space="preserve">
-    <value>wiFRED håndkontroller</value>
   </data>
   <data name="DccAddress1" xml:space="preserve">
     <value>DCC-adresse 1</value>
@@ -1374,98 +324,716 @@
   <data name="DccAddress4" xml:space="preserve">
     <value>DCC-adresse 4</value>
   </data>
-  <data name="WiFredThrottle" xml:space="preserve">
-    <value>wiFRED håndkontroll</value>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Vognklasser</value>
   </data>
-  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
-    <value>Møtearrangør tar ikke imot påmeldinger her.</value>
-  </data>
-  <data name="Verify" xml:space="preserve">
-    <value>Bekreft</value>
-  </data>
-  <data name="BarcodeId" xml:space="preserve">
-    <value>Strekkode-ID</value>
-  </data>
-  <data name="Validate" xml:space="preserve">
-    <value>Bekreft</value>
-  </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Godkjent</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Slett</value>
   </data>
   <data name="Deleted" xml:space="preserve">
     <value>Slettet</value>
   </data>
-  <data name="_CASING" xml:space="preserve">
-    <value>_LOWER</value>
+  <data name="Description" xml:space="preserve">
+    <value>Beskrivelse</value>
   </data>
-  <data name="AssistantOnly" xml:space="preserve">
-    <value>Bare assistent</value>
+  <data name="Designation" xml:space="preserve">
+    <value>Betegnelse</value>
   </data>
-  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
-    <value>Ingen moduleierskap funnet</value>
+  <data name="Details" xml:space="preserve">
+    <value>Detaljer</value>
   </data>
-  <data name="ModulesNotFound" xml:space="preserve">
-    <value>Ingen moduler funnet</value>
+  <data name="Digits" xml:space="preserve">
+    <value>Sifre</value>
   </data>
-  <data name="Accept" xml:space="preserve">
-    <value>Akseptere</value>
+  <data name="Direction" xml:space="preserve">
+    <value>Retning</value>
   </data>
-  <data name="Persons" xml:space="preserve">
-    <value>Personer</value>
+  <data name="Discussions" xml:space="preserve">
+    <value>Diskusjoner</value>
   </data>
-  <data name="Unlock" xml:space="preserve">
-    <value>Lås opp</value>
+  <data name="DisplayOrder" xml:space="preserve">
+    <value>Viste rekkefølge</value>
   </data>
-  <data name="ExternalLinks" xml:space="preserve">
-    <value>Eksterne lenker</value>
+  <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
+    <value>IKKE beskriv hva som gjelder for individuelle sporoppsett nedenfor! Legg til sporoppsett.</value>
   </data>
-  <data name="EmptyCarOrder" xml:space="preserve">
-    <value>Tomvognordre</value>
+  <data name="Documentation" xml:space="preserve">
+    <value>Dokumentasjon</value>
   </data>
-  <data name="IsHarbour" xml:space="preserve">
-    <value>Er havn?</value>
+  <data name="Documents" xml:space="preserve">
+    <value>Dokumenter</value>
   </data>
-  <data name="IsKeyRequired" xml:space="preserve">
-    <value>Er nøkkel nødvendig?</value>
+  <data name="Domain" xml:space="preserve">
+    <value>Gruppedomene</value>
   </data>
-  <data name="EmptyWagonOrder" xml:space="preserve">
-    <value>Tomvognordre</value>
-  </data>
-  <data name="MeetingType" xml:space="preserve">
-    <value>Type arrangement</value>
+  <data name="Drawing" xml:space="preserve">
+    <value>Tegning</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Varighet</value>
   </data>
+  <data name="Dutch" xml:space="preserve">
+    <value>Nederlandsk</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="EditModule" xml:space="preserve">
+    <value>Rediger modul</value>
+  </data>
+  <data name="EditPerson" xml:space="preserve">
+    <value>Rediger person</value>
+  </data>
+  <data name="ElectricSystem" xml:space="preserve">
+    <value>Elektrisk system</value>
+  </data>
+  <data name="EmailAddresses" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="EmptyCarOrder" xml:space="preserve">
+    <value>Tomvognordre</value>
+  </data>
+  <data name="EmptyWagonOrder" xml:space="preserve">
+    <value>Tomvognordre</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Sluttdato</value>
+  </data>
+  <data name="EndHour" xml:space="preserve">
+    <value>Slutt time</value>
+  </data>
+  <data name="EndPlates" xml:space="preserve">
+    <value>Endeplater</value>
+  </data>
+  <data name="EndProfile" xml:space="preserve">
+    <value>Endeprofile</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Engelsk</value>
+  </data>
+  <data name="EnglishName" xml:space="preserve">
+    <value>Engelsk navn</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="Exits" xml:space="preserve">
+    <value>Utganger</value>
+  </data>
+  <data name="ExternalFreightCustomers" xml:space="preserve">
+    <value>Eksterne fraktkunder</value>
+  </data>
+  <data name="ExternalLink" xml:space="preserve">
+    <value>Ekstern lenke</value>
+  </data>
+  <data name="ExternalLinks" xml:space="preserve">
+    <value>Eksterne lenker</value>
+  </data>
+  <data name="ExternalStation" xml:space="preserve">
+    <value>Ekstern stasjon</value>
+  </data>
+  <data name="ExternalStations" xml:space="preserve">
+    <value>Eksterne stasjoner</value>
+  </data>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Antall mislykkede påloggingsforsøk</value>
+  </data>
+  <data name="FastClock" xml:space="preserve">
+    <value>Hurtigklokke</value>
+  </data>
+  <data name="Fault" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="FetchingData" xml:space="preserve">
+    <value>Henter data...</value>
+  </data>
+  <data name="FileExceedsMaxSizeOf" xml:space="preserve">
+    <value>Filen overstiger maksimumsstørrelsen på {0} kB</value>
+  </data>
+  <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
+    <value>Fyll ut nytt spor og klikk Legg til før du lagrer.</value>
+  </data>
+  <data name="FinalYearInOperating" xml:space="preserve">
+    <value>Siste år i drift</value>
+  </data>
+  <data name="FindOutMore" xml:space="preserve">
+    <value>Finn ut mer</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Ferdig</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Fornavn</value>
+  </data>
+  <data name="FirstYear" xml:space="preserve">
+    <value>Første år</value>
+  </data>
+  <data name="FirstYearInOperation" xml:space="preserve">
+    <value>Første år i drift</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Mat</value>
+  </data>
+  <data name="For" xml:space="preserve">
+    <value>For</value>
+  </data>
+  <data name="FreightCustomer" xml:space="preserve">
+    <value>Fraktkunde</value>
+  </data>
+  <data name="FreightCustomers" xml:space="preserve">
+    <value>Fraktkunder</value>
+  </data>
+  <data name="FreightCustomersAt" xml:space="preserve">
+    <value>Fraktkunder på {0}</value>
+  </data>
+  <data name="FremoMemberNumber" xml:space="preserve">
+    <value>FREMO medlemsnummer</value>
+  </data>
+  <data name="FremoName" xml:space="preserve">
+    <value>FREMO navn</value>
+  </data>
+  <data name="FremoNumber" xml:space="preserve">
+    <value>FREMO nr.</value>
+  </data>
+  <data name="FremoPrefix" xml:space="preserve">
+    <value>FREMO moduleprefix</value>
+  </data>
+  <data name="FremoReservedAdresses" xml:space="preserve">
+    <value>FREMO reserverte adresser</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>Fransk</value>
+  </data>
+  <data name="FrequentlyAskedQuestions" xml:space="preserve">
+    <value>Ofte stilte spørsmål</value>
+  </data>
+  <data name="FromYear" xml:space="preserve">
+    <value>Fra år</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Fullt navn</value>
+  </data>
+  <data name="FunctionalState" xml:space="preserve">
+    <value>Funksjonell tilstand</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Spillinnstillinger</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generer</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>Tysk</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>Kom i gang</value>
+  </data>
+  <data name="GettingContent" xml:space="preserve">
+    <value>Henter innhold...</value>
+  </data>
+  <data name="GettingData" xml:space="preserve">
+    <value>Henter data. Vennligst vent...</value>
+  </data>
+  <data name="GlobalAdministrator" xml:space="preserve">
+    <value>Global administrator</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="GroupDomain" xml:space="preserve">
+    <value>Gruppedomene</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Grupper</value>
+  </data>
+  <data name="HasCargoCustomers" xml:space="preserve">
+    <value>Har fraktkunder?</value>
+  </data>
+  <data name="HasEmptyReturn" xml:space="preserve">
+    <value>Har tom retur?</value>
+  </data>
+  <data name="HasIntegratedLocoNet" xml:space="preserve">
+    <value>Har integrert LocoNet?</value>
+  </data>
+  <data name="HasNarrowGauge" xml:space="preserve">
+    <value>Har smalspor?</value>
+  </data>
+  <data name="HasNormalGauge" xml:space="preserve">
+    <value>Har normalspor?</value>
+  </data>
+  <data name="HasRemoteCouplings" xml:space="preserve">
+    <value>Har fjernkoblinger?</value>
+  </data>
+  <data name="HasSameCargoReturn" xml:space="preserve">
+    <value>Returner samme type last?</value>
+  </data>
+  <data name="HasSound" xml:space="preserve">
+    <value>Har lyd?</value>
+  </data>
+  <data name="HaveFreightFlow" xml:space="preserve">
+    <value>Har godstrøm?</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hei</value>
+  </data>
+  <data name="HideLoadingTimes" xml:space="preserve">
+    <value>Skjul lastetider?</value>
+  </data>
+  <data name="HideUnloadingTimes" xml:space="preserve">
+    <value>Skjule lossetider?</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="IHaveReadAndUnderstand" xml:space="preserve">
+    <value>Jeg har lest og forstått</value>
+  </data>
+  <data name="InAll" xml:space="preserve">
+    <value>i alle</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="InPartnershipWith" xml:space="preserve">
+    <value>I samarbeid med</value>
+  </data>
   <data name="InternalWaybills" xml:space="preserve">
     <value>Interne fraktsedler</value>
   </data>
-  <data name="Participation" xml:space="preserve">
-    <value>Deltakelse</value>
+  <data name="InternationalName" xml:space="preserve">
+    <value>Internasjonalt navn</value>
   </data>
-  <data name="RegisterOrModifyParticipation" xml:space="preserve">
-    <value>Registrer eller endre deltakelse</value>
+  <data name="InventoryNumber" xml:space="preserve">
+    <value>Inventarnummer</value>
   </data>
-  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
-    <value>Velg eller endre deltakelse i baner</value>
+  <data name="InvitationSent" xml:space="preserve">
+    <value>Invitasjon sendt</value>
+  </data>
+  <data name="InvitationToModuleRegistry" xml:space="preserve">
+    <value>Invitasjon til Modulregisteret</value>
+  </data>
+  <data name="Invite" xml:space="preserve">
+    <value>Inviter</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Invitert</value>
+  </data>
+  <data name="Is2R" xml:space="preserve">
+    <value>Er 2R?</value>
+  </data>
+  <data name="Is3R" xml:space="preserve">
+    <value>Er 3R?</value>
+  </data>
+  <data name="IsApiAccessPermitted" xml:space="preserve">
+    <value>Er API-tilgang tillatt?</value>
+  </data>
+  <data name="IsCoolingRequired" xml:space="preserve">
+    <value>Trenger kjøling?</value>
+  </data>
+  <data name="IsCountryAdministrator" xml:space="preserve">
+    <value>Er landsadministrator?</value>
+  </data>
+  <data name="IsDataAdministrator" xml:space="preserve">
+    <value>Er dataadministrator?</value>
+  </data>
+  <data name="IsDuckunder" xml:space="preserve">
+    <value>Er duckunder?</value>
+  </data>
+  <data name="IsExpress" xml:space="preserve">
+    <value>Ekspressgods?</value>
+  </data>
+  <data name="IsFremo" xml:space="preserve">
+    <value>Er FREMO-treff?</value>
+  </data>
+  <data name="IsGlobalAdministrator" xml:space="preserve">
+    <value>Er global administrator?</value>
+  </data>
+  <data name="IsGroupAdministrator" xml:space="preserve">
+    <value>Er gruppeadmin?</value>
+  </data>
+  <data name="IsHarbour" xml:space="preserve">
+    <value>Er havn?</value>
+  </data>
+  <data name="IsInvited" xml:space="preserve">
+    <value>Er invitert?</value>
+  </data>
+  <data name="IsJunction" xml:space="preserve">
+    <value>Er forgrening?</value>
+  </data>
+  <data name="IsKeyRequired" xml:space="preserve">
+    <value>Er nøkkel nødvendig?</value>
+  </data>
+  <data name="IsOnlyOwner" xml:space="preserve">
+    <value>Er den eneste eieren?</value>
+  </data>
+  <data name="IsOrganisingGroupInternal" xml:space="preserve">
+    <value>Er internt for arrangørgruppen?</value>
+  </data>
+  <data name="IsPartOfStation" xml:space="preserve">
+    <value>Er en del av en stasjon?</value>
+  </data>
+  <data name="IsRegisteredInUpcomingMeeting" xml:space="preserve">
+    <value>Er registrert i et kommende treff?</value>
+  </data>
+  <data name="IsRegistrationPermitted" xml:space="preserve">
+    <value>Er registrering tillatt?</value>
+  </data>
+  <data name="IsScheduled" xml:space="preserve">
+    <value>Er trafikkspor?</value>
+  </data>
+  <data name="IsShadowStation" xml:space="preserve">
+    <value>Er skyggestasjon?</value>
+  </data>
+  <data name="IsSiding" xml:space="preserve">
+    <value>Er sidespor?</value>
+  </data>
+  <data name="IsStandAlone" xml:space="preserve">
+    <value>Er frittstående?</value>
+  </data>
+  <data name="IsStation" xml:space="preserve">
+    <value>Er stasjon?</value>
+  </data>
+  <data name="IsStationOrPartOf" xml:space="preserve">
+    <value>Er stasjon eller en del av</value>
+  </data>
+  <data name="IsTerminus" xml:space="preserve">
+    <value>Er sekkestasjon?</value>
+  </data>
+  <data name="IsThroughTrack" xml:space="preserve">
+    <value>Er spor gjennom?</value>
+  </data>
+  <data name="IsTurntable" xml:space="preserve">
+    <value>Er vendeskive?</value>
+  </data>
+  <data name="IsUnavailable" xml:space="preserve">
+    <value>Er ikke tilgjengelig?</value>
+  </data>
+  <data name="IsUser" xml:space="preserve">
+    <value>Er bruker?</value>
+  </data>
+  <data name="IsWeathered" xml:space="preserve">
+    <value>Er smusset?</value>
+  </data>
+  <data name="Italian" xml:space="preserve">
+    <value>Italiensk</value>
+  </data>
+  <data name="KeeperSignature" xml:space="preserve">
+    <value>Eierbetegnelse</value>
+  </data>
+  <data name="LandscapeSeason" xml:space="preserve">
+    <value>Årstid</value>
+  </data>
+  <data name="LandscapeState" xml:space="preserve">
+    <value>Landskapstilstand</value>
+  </data>
+  <data name="LastActive" xml:space="preserve">
+    <value>Sist aktiv</value>
+  </data>
+  <data name="LastLoginTime" xml:space="preserve">
+    <value>Sist logget inn</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Slutt år</value>
+  </data>
+  <data name="LatestArrivalTime" xml:space="preserve">
+    <value>Siste ankomsttid</value>
+  </data>
+  <data name="Layout" xml:space="preserve">
+    <value>Bane</value>
+  </data>
+  <data name="Layouts" xml:space="preserve">
+    <value>Baner</value>
   </data>
   <data name="LayoutsYouAreParticipatingIn" xml:space="preserve">
     <value>Baner du deltar på</value>
   </data>
-  <data name="MyMeetings" xml:space="preserve">
-    <value>Mine treff</value>
+  <data name="Length" xml:space="preserve">
+    <value>Lengde</value>
   </data>
-  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
-    <value>Du er for øyeblikket ikke registrert til noe kommende treff</value>
+  <data name="Letters" xml:space="preserve">
+    <value>Bokstaver</value>
+  </data>
+  <data name="LinkToExternalContent" xml:space="preserve">
+    <value>Lenke til eksternt innhold</value>
+  </data>
+  <data name="LoadingReady" xml:space="preserve">
+    <value>Lasting klar</value>
+  </data>
+  <data name="LocoAddressExample" xml:space="preserve">
+    <value>Eksempel: 2000-2099,3201,3350-3355</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logget inn som</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Logg Inn</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logg ut</value>
+  </data>
+  <data name="LokAndWagonCards" xml:space="preserve">
+    <value>Lok- og vognkort</value>
+  </data>
+  <data name="MacAddress" xml:space="preserve">
+    <value>MAC-adresse</value>
+  </data>
+  <data name="MakeStation" xml:space="preserve">
+    <value>Gjør til stasjon</value>
+  </data>
+  <data name="ManageCargoFlow" xml:space="preserve">
+    <value>Administrer vareflyt</value>
+  </data>
+  <data name="ManageWaybills" xml:space="preserve">
+    <value>Administrer fraktsedler</value>
+  </data>
+  <data name="Manufacturer" xml:space="preserve">
+    <value>Produsent</value>
+  </data>
+  <data name="MaxChars" xml:space="preserve">
+    <value>Maks {0} tegn.</value>
+  </data>
+  <data name="MaxSpeed" xml:space="preserve">
+    <value>Maks. hastighet</value>
+  </data>
+  <data name="MaxTrainLength" xml:space="preserve">
+    <value>Maks toglengde</value>
+  </data>
+  <data name="MaxTrainsetLength" xml:space="preserve">
+    <value>Maks togsett længde (vogner)</value>
+  </data>
+  <data name="MaxUploadFileSizeKb" xml:space="preserve">
+    <value>Maksimal filstørrelse for opplasting er {0} kB</value>
+  </data>
+  <data name="MayBorrowGroupsModules" xml:space="preserve">
+    <value>Kan låne gruppens moduler?</value>
+  </data>
+  <data name="MayUploadSkpDrawing" xml:space="preserve">
+    <value>Kan du laste opp SketchUp-tegning?</value>
+  </data>
+  <data name="MayVerifyWiFreds" xml:space="preserve">
+    <value>Kan verifisere wiFREDs</value>
+  </data>
+  <data name="Meeting" xml:space="preserve">
+    <value>Treff</value>
+  </data>
+  <data name="MeetingDatesCannotBeChanged" xml:space="preserve">
+    <value>Treffdatoer kan ikke endres</value>
+  </data>
+  <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
+    <value>Møtearrangør tar ikke imot påmeldinger her.</value>
+  </data>
+  <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
+    <value>Treffen er ennå ikke åpen for påmelding</value>
+  </data>
+  <data name="Meetings" xml:space="preserve">
+    <value>Treff</value>
+  </data>
+  <data name="MeetingType" xml:space="preserve">
+    <value>Type arrangement</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Medlem</value>
+  </data>
+  <data name="MemberMayBorrowMyModules" xml:space="preserve">
+    <value>Kan et medlem låne modulene mine?</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Medlemmer</value>
+  </data>
+  <data name="MembersIn" xml:space="preserve">
+    <value>Mitglieder in</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Beskjed</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Mellomnavn</value>
+  </data>
+  <data name="ModelData" xml:space="preserve">
+    <value>Modelldata</value>
+  </data>
+  <data name="ModelInfo" xml:space="preserve">
+    <value>Modell info</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Modul</value>
+  </data>
+  <data name="ModuleEndProfiles" xml:space="preserve">
+    <value>Modul endeprofiler</value>
+  </data>
+  <data name="ModuleOwners" xml:space="preserve">
+    <value>Moduleiere</value>
+  </data>
+  <data name="ModuleOwnershipsNotFound" xml:space="preserve">
+    <value>Ingen moduleierskap funnet</value>
+  </data>
+  <data name="ModuleRegistrationCloses" xml:space="preserve">
+    <value>Modulregistreringer stenger</value>
+  </data>
+  <data name="Modules" xml:space="preserve">
+    <value>Moduler</value>
+  </data>
+  <data name="ModulesNotFound" xml:space="preserve">
+    <value>Ingen moduler funnet</value>
+  </data>
+  <data name="ModuleStandard" xml:space="preserve">
+    <value>Modulstandard</value>
+  </data>
+  <data name="ModuleStandards" xml:space="preserve">
+    <value>Modulstandarder</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Mere...</value>
+  </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Må være en farge</value>
+  </data>
+  <data name="MustBeADccAddress" xml:space="preserve">
+    <value>Må være en DCC-adresse 1-9999</value>
+  </data>
+  <data name="MustBeAMacAddress" xml:space="preserve">
+    <value>Må være en MAC-adresse</value>
+  </data>
+  <data name="MustBeAnyOf" xml:space="preserve">
+    <value>Må være en av {0}</value>
+  </data>
+  <data name="MustBeBetween" xml:space="preserve">
+    <value>må være mellom {0} og {1}</value>
+  </data>
+  <data name="MustBeginWithCapitalLetter" xml:space="preserve">
+    <value>må begynne med en stor bokstav</value>
+  </data>
+  <data name="MustBeSelected" xml:space="preserve">
+    <value>må velges</value>
+  </data>
+  <data name="MustBeValidDccAdresses" xml:space="preserve">
+    <value>må være gyldige DCC-adresser</value>
+  </data>
+  <data name="MustBeValidEmailAddresses" xml:space="preserve">
+    <value>må være gyldige e-postadresser atskilt med semikolon</value>
+  </data>
+  <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
+    <value>må kun inneholde ordinær tekst</value>
+  </data>
+  <data name="MyAvailableModules" xml:space="preserve">
+    <value>Mine tilgjengelige moduler</value>
   </data>
   <data name="MyForthcomingMeetings" xml:space="preserve">
     <value>Mine kommende treff</value>
   </data>
-  <data name="YouParticipateDays" xml:space="preserve">
-    <value>Du deltar dager</value>
+  <data name="MyMeetings" xml:space="preserve">
+    <value>Mine treff</value>
   </data>
-  <data name="YourArrivalTime" xml:space="preserve">
-    <value>Din ankomsttid den første dagen</value>
+  <data name="MyModules" xml:space="preserve">
+    <value>Mine moduler</value>
+  </data>
+  <data name="MyOperationLocations" xml:space="preserve">
+    <value>Mine driftsplasser</value>
+  </data>
+  <data name="MyStations" xml:space="preserve">
+    <value>Mine stasjoner</value>
+  </data>
+  <data name="MyThrottles" xml:space="preserve">
+    <value>Mine håndkontroller</value>
+  </data>
+  <data name="MyVehicles" xml:space="preserve">
+    <value>Mine kjøretøy</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="NarrowGauge" xml:space="preserve">
+    <value>Smalspor</value>
+  </data>
+  <data name="NewMeeting" xml:space="preserve">
+    <value>Ny treff</value>
+  </data>
+  <data name="NewOwner" xml:space="preserve">
+    <value>Ny eier</value>
+  </data>
+  <data name="NHMCode" xml:space="preserve">
+    <value>NHM-kode</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="NoEmailProvided" xml:space="preserve">
+    <value>Ingen e-postadresse oppgitt</value>
+  </data>
+  <data name="NoInformation" xml:space="preserve">
+    <value>Ingen informasjon</value>
+  </data>
+  <data name="NoModulesAvailable" xml:space="preserve">
+    <value>Ingen moduler tilgjengelig</value>
+  </data>
+  <data name="NoModulesRegistered" xml:space="preserve">
+    <value>Ingen moduler registrert</value>
+  </data>
+  <data name="NonProfitAssociation" xml:space="preserve">
+    <value>Ideell forening</value>
+  </data>
+  <data name="NonStandardCoupling" xml:space="preserve">
+    <value>Ikke standard kobling</value>
+  </data>
+  <data name="NonStandardWheelset" xml:space="preserve">
+    <value>Ikke-standard hjulsett</value>
+  </data>
+  <data name="NoParticipantsRegistered" xml:space="preserve">
+    <value>Ingen deltakere påmeldt</value>
+  </data>
+  <data name="NoRecordsToDisplay" xml:space="preserve">
+    <value>Ingen oppføringer å vise</value>
+  </data>
+  <data name="NoRegistrationIdIsProvided" xml:space="preserve">
+    <value>Ingen registrerings-ID er oppgitt</value>
+  </data>
+  <data name="NormalGauge" xml:space="preserve">
+    <value>Normalspor</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norsk</value>
+  </data>
+  <data name="NotAcceptedTermsOfUse" xml:space="preserve">
+    <value>Har ikke akseptert bruksvilkår</value>
+  </data>
+  <data name="NotApplicable" xml:space="preserve">
+    <value>Ikke aktuelt</value>
+  </data>
+  <data name="NotAuthorised" xml:space="preserve">
+    <value>Uautorisert</value>
+  </data>
+  <data name="NotDefined" xml:space="preserve">
+    <value>Ikke definert</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Merknad</value>
+  </data>
+  <data name="Nothing to se here yet!" xml:space="preserve">
+    <value>Ingenting å se her ennå!</value>
+  </data>
+  <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
+    <value>Ingen brukere funnet med e-postadressen '{0}' og registrerings-ID '{1}'</value>
+  </data>
+  <data name="NumberOfSections" xml:space="preserve">
+    <value>Antall seksjoner</value>
+  </data>
+  <data name="NumberOfThroughTracks" xml:space="preserve">
+    <value>Gjennomgående spor</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>av</value>
+  </data>
+  <data name="OpenedYear" xml:space="preserve">
+    <value>Åpnet år</value>
+  </data>
+  <data name="OperatingInstructions" xml:space="preserve">
+    <value>Bruksanvisning</value>
+  </data>
+  <data name="OperatingPeriod" xml:space="preserve">
+    <value>Driftsperiode</value>
   </data>
   <data name="OperationLocation" xml:space="preserve">
     <value>Driftsplass</value>
@@ -1473,22 +1041,508 @@
   <data name="OperationLocations" xml:space="preserve">
     <value>Driftsplasser</value>
   </data>
-  <data name="MyOperationLocations" xml:space="preserve">
-    <value>Mine driftsplasser</value>
+  <data name="OperationTheme" xml:space="preserve">
+    <value>Trafikk tema</value>
+  </data>
+  <data name="Organiser" xml:space="preserve">
+    <value>Arrangør</value>
+  </data>
+  <data name="OtherAvailableModules" xml:space="preserve">
+    <value>Andre tilgjengelige moduler</value>
+  </data>
+  <data name="OtherColor" xml:space="preserve">
+    <value>Annen farge</value>
+  </data>
+  <data name="OtherFromYear" xml:space="preserve">
+    <value>Annet fra-år</value>
+  </data>
+  <data name="OtherName" xml:space="preserve">
+    <value>Annet navn</value>
+  </data>
+  <data name="OtherPleaseSpecify" xml:space="preserve">
+    <value>Annet, spesifiser</value>
+  </data>
+  <data name="OtherTrackOrArea" xml:space="preserve">
+    <value>Annet spor nr. eller lasteområde</value>
+  </data>
+  <data name="OtherUptoYear" xml:space="preserve">
+    <value>Annet til-år</value>
+  </data>
+  <data name="OtherWagonClass" xml:space="preserve">
+    <value>Annen vognklasse</value>
+  </data>
+  <data name="OverheadLineFeature" xml:space="preserve">
+    <value>Har luftledning?</value>
+  </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>eid av</value>
+  </data>
+  <data name="OwnedPercent" xml:space="preserve">
+    <value>Eid %</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Eier</value>
+  </data>
+  <data name="Owners" xml:space="preserve">
+    <value>Eiere</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Boks</value>
+  </data>
+  <data name="PackageLabel" xml:space="preserve">
+    <value>Boks merking</value>
+  </data>
+  <data name="PackagingUnit" xml:space="preserve">
+    <value>Emballasjeenhet</value>
+  </data>
+  <data name="Participant" xml:space="preserve">
+    <value>Deltager</value>
+  </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Deltagere</value>
+  </data>
+  <data name="Participate" xml:space="preserve">
+    <value>Delta</value>
+  </data>
+  <data name="Participation" xml:space="preserve">
+    <value>Deltakelse</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Passord</value>
+  </data>
+  <data name="PasswordConfirmationDoesNotMatch" xml:space="preserve">
+    <value>Passordbekreftelse samsvarer ikke</value>
+  </data>
+  <data name="PasswordCreated" xml:space="preserve">
+    <value>Passord opprettet</value>
+  </data>
+  <data name="PasswordMinimumOfThese" xml:space="preserve">
+    <value>Minimum {0} av disse {2}: {1}</value>
+  </data>
+  <data name="PasswordMustFulfilTheseRequirements" xml:space="preserve">
+    <value>Passordet må oppfylle disse kravene:</value>
+  </data>
+  <data name="PasswordMustHaveNumberOfCharacters" xml:space="preserve">
+    <value>Passordet må inneholde minst {0} tegn</value>
+  </data>
+  <data name="PasswordPolicy" xml:space="preserve">
+    <value>Passordpolicy</value>
+  </data>
+  <data name="PasswordResetAttempts" xml:space="preserve">
+    <value>Antall forsøk på tilbakestilling av passord</value>
+  </data>
+  <data name="PasswordResetFailed" xml:space="preserve">
+    <value>Tilbakestilling av passord mislyktes</value>
+  </data>
+  <data name="PasswordResetHasBeenRequested" xml:space="preserve">
+    <value>Tilbakestilling av passord er forespurt</value>
+  </data>
+  <data name="PasswordResetMailSent" xml:space="preserve">
+    <value>E -post for tilbakestilling av passord sendt</value>
+  </data>
+  <data name="PeriodInThisVersion" xml:space="preserve">
+    <value>Periode i denne versjon</value>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Personer</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Plass</value>
+  </data>
+  <data name="PlatformLength" xml:space="preserve">
+    <value>Plattformlengde</value>
+  </data>
+  <data name="PleaseReadAndAccept" xml:space="preserve">
+    <value>Vennligst les og rull til bunnen for å godta. Dette er nødvendig for å bruke denne applikasjonen.</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>Polsk</value>
+  </data>
+  <data name="PreferredTheme" xml:space="preserve">
+    <value>Foretrukket tema</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Forhåndsvisning</value>
+  </data>
+  <data name="PrimaryModuleStandard" xml:space="preserve">
+    <value>Primær modulstandard</value>
+  </data>
+  <data name="PrimaryOperatingCountry" xml:space="preserve">
+    <value>Primært driftsland</value>
+  </data>
+  <data name="PrintCount" xml:space="preserve">
+    <value>Antall utskrifter</value>
+  </data>
+  <data name="PrintPerOperatingDay" xml:space="preserve">
+    <value>Skriv ut per driftsdag</value>
+  </data>
+  <data name="PrototypeData" xml:space="preserve">
+    <value>Data om forebildet</value>
+  </data>
+  <data name="PrototypeInfo" xml:space="preserve">
+    <value>Info om forbildet</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Mengde</value>
+  </data>
+  <data name="QuantityUnit" xml:space="preserve">
+    <value>Mengdenhet</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="Regions" xml:space="preserve">
+    <value>Regioner</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrer</value>
+  </data>
+  <data name="Registered" xml:space="preserve">
+    <value>Registrert</value>
+  </data>
+  <data name="RegisteredModules" xml:space="preserve">
+    <value>Registrerte moduler</value>
+  </data>
+  <data name="RegisterModules" xml:space="preserve">
+    <value>Registrer moduler</value>
+  </data>
+  <data name="RegisterOrModifyParticipation" xml:space="preserve">
+    <value>Registrer eller endre deltakelse</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Påmelding</value>
+  </data>
+  <data name="RegistrationCloses" xml:space="preserve">
+    <value>Påmeldingen stenger</value>
+  </data>
+  <data name="RegistrationOpens" xml:space="preserve">
+    <value>Påmeldingen åpnes</value>
+  </data>
+  <data name="RegistrationTime" xml:space="preserve">
+    <value>Meldt seg</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="RemoveFiltering" xml:space="preserve">
+    <value>Fjern filtrering</value>
+  </data>
+  <data name="RepresentativeStation" xml:space="preserve">
+    <value>Representativ stasjon</value>
+  </data>
+  <data name="RepresentsFromYear" xml:space="preserve">
+    <value>Representerer fra år</value>
+  </data>
+  <data name="RepresentsToYear" xml:space="preserve">
+    <value>Representerer til år</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Tilbakestille passord</value>
+  </data>
+  <data name="ResetPasswordHasBeenRequested" xml:space="preserve">
+    <value>Nullstill passord er bedt om</value>
+  </data>
+  <data name="ResponsibleGroup" xml:space="preserve">
+    <value>Ansvarlig gruppe</value>
+  </data>
+  <data name="RollsSluggishly" xml:space="preserve">
+    <value>Ruller tregt</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Lagre</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Lagre alt</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Skala</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Søk</value>
+  </data>
+  <data name="SecondCustomer" xml:space="preserve">
+    <value>Andre kunde</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Velg</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Velg fil</value>
+  </data>
+  <data name="SelectOrModifyLayoutParticipation" xml:space="preserve">
+    <value>Velg eller endre deltakelse i baner</value>
+  </data>
+  <data name="SelectPersonToRegister" xml:space="preserve">
+    <value>Velg person du vil registrere</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
   </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail til alle</value>
   </data>
-  <data name="HasSameCargoReturn" xml:space="preserve">
-    <value>Returner samme type last?</value>
+  <data name="Settings" xml:space="preserve">
+    <value>Innstillinger</value>
   </data>
-  <data name="HasCargoCustomers" xml:space="preserve">
-    <value>Har fraktkunder?</value>
+  <data name="ShortName" xml:space="preserve">
+    <value>Forkortelse</value>
   </data>
-  <data name="IsExpress" xml:space="preserve">
-    <value>Ekspressgods?</value>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Vis alle</value>
   </data>
-  <data name="IsCoolingRequired" xml:space="preserve">
-    <value>Trenger kjøling?</value>
+  <data name="SignalFeature" xml:space="preserve">
+    <value>Har signal?</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>Signatur</value>
+  </data>
+  <data name="SignedInAs" xml:space="preserve">
+    <value>Logget på som {0}</value>
+  </data>
+  <data name="SorryNothingToDisplayHere" xml:space="preserve">
+    <value>Beklager, ingenting å vise her.</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Spesialkarakterer</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>Maks. hastighet</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Startdato</value>
+  </data>
+  <data name="StartHour" xml:space="preserve">
+    <value>Start time</value>
+  </data>
+  <data name="StartWeekday" xml:space="preserve">
+    <value>Første ukedag</value>
+  </data>
+  <data name="Station" xml:space="preserve">
+    <value>Stasjon</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Stasjoner</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistikk</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Rett</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Supplying" xml:space="preserve">
+    <value>Leverer</value>
+  </data>
+  <data name="Swedish" xml:space="preserve">
+    <value>Svensk</value>
+  </data>
+  <data name="TermsOfUse" xml:space="preserve">
+    <value>Vilkår for bruk</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>Tekstfarge</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="ThemeNote" xml:space="preserve">
+    <value>Temanotat</value>
+  </data>
+  <data name="ThisContentWasModified" xml:space="preserve">
+    <value>Dette innholdet ble endret {0:d} {0:t}</value>
+  </data>
+  <data name="Throttle" xml:space="preserve">
+    <value>Håndkontroll</value>
+  </data>
+  <data name="Throttles" xml:space="preserve">
+    <value>Håndkontroller</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Verktøy</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Spor</value>
+  </data>
+  <data name="TrackNumber" xml:space="preserve">
+    <value>Spornummer</value>
+  </data>
+  <data name="TrackOrArea" xml:space="preserve">
+    <value>Spor nr. eller lasteområde</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Spor</value>
+  </data>
+  <data name="TrackSystem" xml:space="preserve">
+    <value>Sporsystem</value>
+  </data>
+  <data name="Traction" xml:space="preserve">
+    <value>Trekkkraft</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Overfør</value>
+  </data>
+  <data name="TransferOwnership" xml:space="preserve">
+    <value>Overfør eierskap</value>
+  </data>
+  <data name="TransferredShare" xml:space="preserve">
+    <value>Overført andel</value>
+  </data>
+  <data name="TypeMinimumCharachers" xml:space="preserve">
+    <value>Skriv inn minst {0} tegn</value>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Utilgjengelig</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Ukjent</value>
+  </data>
+  <data name="UnloadingReady" xml:space="preserve">
+    <value>Lossing klar</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Lås opp</value>
+  </data>
+  <data name="Unregister" xml:space="preserve">
+    <value>Avregistrer</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Oppdater</value>
+  </data>
+  <data name="UpdatingWaybills" xml:space="preserve">
+    <value>Oppdaterer fraktsedler...</value>
+  </data>
+  <data name="UploadDocuments" xml:space="preserve">
+    <value>Last opp dokumenter</value>
+  </data>
+  <data name="UptoYear" xml:space="preserve">
+    <value>Opp til året</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Bruk</value>
+  </data>
+  <data name="UserConfirmationFailed" xml:space="preserve">
+    <value>Brukerbekreftelse mislyktes!</value>
+  </data>
+  <data name="UserConfirmed" xml:space="preserve">
+    <value>Bruker bekreftet</value>
+  </data>
+  <data name="UserIsLockedOut" xml:space="preserve">
+    <value>Brukeren er utestengt!</value>
+  </data>
+  <data name="UserIsReadOnly" xml:space="preserve">
+    <value>Bruker har kun lesetilgang?</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Epostadresse</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Brukere</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Brukerinnstillinger</value>
+  </data>
+  <data name="UserWelcome" xml:space="preserve">
+    <value>{0}, velkommen!</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Bekreft</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Bekreftet</value>
+  </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>Kjøretøy</value>
+  </data>
+  <data name="VehicleClass" xml:space="preserve">
+    <value>Klasse/type</value>
+  </data>
+  <data name="VehicleNumber" xml:space="preserve">
+    <value>Kjøretøy nummer</value>
+  </data>
+  <data name="Venue" xml:space="preserve">
+    <value>Treffsted</value>
+  </data>
+  <data name="VenueName" xml:space="preserve">
+    <value>Treffsted</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Bekreft</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Vis</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Synlighet</value>
+  </data>
+  <data name="WagonEasilyDerails" xml:space="preserve">
+    <value>Vogn sporer lett av</value>
+  </data>
+  <data name="WagonError" xml:space="preserve">
+    <value>Vognfeil</value>
+  </data>
+  <data name="WagonHasLooseParts" xml:space="preserve">
+    <value>Vognen har løse deler</value>
+  </data>
+  <data name="WagonTooLightOrHeavy" xml:space="preserve">
+    <value>Vognen er for lett eller tung</value>
+  </data>
+  <data name="Waybills" xml:space="preserve">
+    <value>Fraktbrev</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Velkommen</value>
+  </data>
+  <data name="Wheels" xml:space="preserve">
+    <value>Hjul</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Bredde</value>
+  </data>
+  <data name="WiFredThrottle" xml:space="preserve">
+    <value>wiFRED håndkontroll</value>
+  </data>
+  <data name="WiFredThrottles" xml:space="preserve">
+    <value>wiFRED håndkontroller</value>
+  </data>
+  <data name="Withdrawn" xml:space="preserve">
+    <value>Tilbaketrukket</value>
+  </data>
+  <data name="WrongBackToBackDistance" xml:space="preserve">
+    <value>Feil back-to-back avstand</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
+    <value>Du er for øyeblikket ikke registrert til noe kommende treff</value>
+  </data>
+  <data name="YouAreLockedOut" xml:space="preserve">
+    <value>Du er utelukket!</value>
+  </data>
+  <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
+    <value>Du er ikke autorisert til å se denne siden.</value>
+  </data>
+  <data name="YouMayNowLogin" xml:space="preserve">
+    <value>Du kan nå logge på</value>
+  </data>
+  <data name="YouParticipateDays" xml:space="preserve">
+    <value>Du deltar dager</value>
+  </data>
+  <data name="YourArrivalTime" xml:space="preserve">
+    <value>Din ankomsttid den første dagen</value>
+  </data>
+  <data name="_CASING" xml:space="preserve">
+    <value>_LOWER</value>
   </data>
 </root>

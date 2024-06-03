@@ -195,5 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticCodeAnalysis.SuppressMessages.xml" />
+    <None Include="dbo\Scripts\Initial data\dbo.VehicleFeature.Table.sql" />
   </ItemGroup>
 </Project>

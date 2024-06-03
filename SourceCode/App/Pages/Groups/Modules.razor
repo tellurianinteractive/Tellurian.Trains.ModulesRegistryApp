@@ -7,7 +7,7 @@
 @inject ModuleService ModuleService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Modules" Owner="Owner" IconClass="@FontAwesome.Module"  PageAction="PageAction.List"/>
+<PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module"  PageAction="PageAction.List"/>
 
 <ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id" />
 

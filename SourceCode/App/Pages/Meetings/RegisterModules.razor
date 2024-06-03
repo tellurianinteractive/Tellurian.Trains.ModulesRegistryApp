@@ -13,7 +13,7 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<PageHeading Label="RegisterModules" Owner="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
+<PageHeading Label="RegisterModules" Context="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
 <div>
     <h2>@Localizer["Participant"]: @MeetingParticipant?.Person.Name()</h2>
 </div>
@@ -31,22 +31,18 @@ else
                 <TableTemplate Items="ParticipantsRegisteredModules">
                     <TableHeader>
                         <th>@Localizer["Package"]</th>
-                        <th>@Localizer["Owner"]</th>
                         <th>@Localizer["Module"]</th>
+                        <th>@Localizer["Owner"]</th>
                         <th>@Localizer["RegistrationTime"]</th>
-                        @*                    <th>@Localizer["Position"] </th>
-                *@                    <th>@Localizer["Actions"]</th>
+                        <th>@Localizer["Actions"]</th>
                     </TableHeader>
                     <RowTemplate Context="item">
-                        <td>@PackageName(item.Module)</td>
-                        <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
+                        <td>@item.Module.PackageName()</td>
                         <td>@item.Module.FullName</td>
+                        <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
                         <td>@item.RegisteredTime.ToString("g")</td>
-                        @*                    <td>@item.LayoutPosition()</td>
-                *@                    <td>
-
-                            
-                            @if (MayRemove(item))
+                        <td>
+                            @if (MayRemove)
                             {
                                 <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
                             }
@@ -127,17 +123,17 @@ else
     IEnumerable<ModulePackage>? AvailablePackages = Array.Empty<ModulePackage>();
     IEnumerable<ModulePackage>? BorrowablePackages = Array.Empty<ModulePackage>();
 
-    bool MayRemove(LayoutModule lm) => Principal.MayRemove(Meeting, lm);
+    bool MayRemove;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-
         if (MeetingParticipantId > 0)
         {
             MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
             if (MeetingParticipant is not null)
             {
+                MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider);
                 Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
                 if (Meeting is not null && LayoutId > 0)
                 {
@@ -203,7 +199,6 @@ else
     }
 
     string Key(ModulePackage package) => package.Name;
-    string PackageName(Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
     IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
     IEnumerable<int> AllRegisteredModuleIds => ParticipantsRegisteredModules.Select(m => m.ModuleId);
     IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.Description())).ToList();

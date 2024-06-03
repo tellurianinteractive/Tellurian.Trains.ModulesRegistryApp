@@ -9,3 +9,9 @@
     CONSTRAINT [FK_DriverDutyScheduleLocoPart_ScheduleTrainPart] FOREIGN KEY ([TimetableScheduleLocoPartId]) REFERENCES [dbo].[ScheduleTrainPart] ([Id])
     
 )
+GO
+
+CREATE NONCLUSTERED INDEX [IX_DriverDutyScheduleLocoPart_TimetableScheduleLocoPartId]
+    ON [dbo].[DriverDutyScheduleLocoPart](TimetableScheduleLocoPartId ASC);
+
+GO

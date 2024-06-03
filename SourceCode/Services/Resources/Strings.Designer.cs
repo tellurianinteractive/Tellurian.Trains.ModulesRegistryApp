@@ -502,6 +502,24 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diesel electric.
+        /// </summary>
+        internal static string Dieselelectric {
+            get {
+                return ResourceManager.GetString("Dieselelectric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diesel hydraulic.
+        /// </summary>
+        internal static string Dieselhydraulic {
+            get {
+                return ResourceManager.GetString("Dieselhydraulic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10&apos; Dry container.
         /// </summary>
         internal static string DryContainer10 {
@@ -556,11 +574,38 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dual mode.
+        /// </summary>
+        internal static string DualMode {
+            get {
+                return ResourceManager.GetString("DualMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicated.
         /// </summary>
         internal static string Duplicated {
             get {
                 return ResourceManager.GetString("Duplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Electric.
+        /// </summary>
+        internal static string Electric {
+            get {
+                return ResourceManager.GetString("Electric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Electric, battery.
+        /// </summary>
+        internal static string ElectricBattery {
+            get {
+                return ResourceManager.GetString("ElectricBattery", resourceCulture);
             }
         }
         
@@ -777,6 +822,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Hungary {
             get {
                 return ResourceManager.GetString("Hungary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hydrogen.
+        /// </summary>
+        internal static string Hydrogen {
+            get {
+                return ResourceManager.GetString("Hydrogen", resourceCulture);
             }
         }
         
@@ -1177,6 +1231,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other hook.
+        /// </summary>
+        internal static string OtherHook {
+            get {
+                return ResourceManager.GetString("OtherHook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Owner.
         /// </summary>
         internal static string Owner {
@@ -1501,6 +1564,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Steam.
+        /// </summary>
+        internal static string Steam {
+            get {
+                return ResourceManager.GetString("Steam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Success {
@@ -1785,6 +1857,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string WednesdayShort {
             get {
                 return ResourceManager.GetString("WednesdayShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weinert hook.
+        /// </summary>
+        internal static string WeinertHook {
+            get {
+                return ResourceManager.GetString("WeinertHook", resourceCulture);
             }
         }
         

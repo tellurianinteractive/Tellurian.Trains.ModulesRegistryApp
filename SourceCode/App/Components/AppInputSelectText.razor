@@ -1,0 +1,51 @@
+﻿@using System.Diagnostics.CodeAnalysis;
+@using System.Globalization;
+
+@inherits AppInputBase<string>
+@inject IStringLocalizer<App> Localizer
+
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label" for="@Label">@Localizer[Label]</label>
+    }
+    <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+        @if (ShowPleaseSelect)
+        {
+            <option value="0">@PleaseSelectText</option>
+        }
+        @if (Items is not null)
+        {
+            foreach (var item in Items)
+            {
+                <option selected="@Selected(item)" value="@item.Description">@item.Description</option>
+            }
+        }
+    </select>
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public IEnumerable<TextboxItem>? Items { get; set; }
+    [Parameter] public bool ShowPleaseSelect { get; set; }
+    [Parameter] public Action<string>? OnSelected { get; set; }
+    [Parameter] public int ItemHeight { get; set; }
+
+    string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        if (value.HasValue()) { result = value; validationErrorMessage = null; return true; }
+        result = ""; validationErrorMessage = Localizer["ValueMayNotBeNull"]; return false;
+
+    } 
+
+    string? Selected(TextboxItem item) => item.Description == CurrentValue ? "selected" : null;
+    string? Style => ItemHeight > 0 ? $"height: {ItemHeight}px; white-space: pre-wrap;" : null;
+}

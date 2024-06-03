@@ -82,18 +82,16 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return null;
     }
 
-    public async Task<IEnumerable<Meeting>> GetRegisteredMeetingsForPerson(ClaimsPrincipal? principal, int personId)
+    public async Task<IEnumerable<MeetingParticipant>> GetRegisteredMeetingsForPerson(ClaimsPrincipal? principal, int personId, int groupId)
     {
         if ((principal.IsAuthenticated() && principal.PersonId() == personId) || principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Meetings
-                .Include(m => m.Layouts.Where(l => l.LayoutParticipants.Any(lp => lp.PersonId==personId))).ThenInclude(l => l.PrimaryModuleStandard)
-                .Include(m => m.OrganiserGroup)
-                .Include(m => m.Participants.Where(p => p.PersonId == personId))    
-                .Where(m => m.EndDate > TimeProvider.Now && m.Participants.Any(p => p.PersonId == personId))
+            return await dbContext.MeetingParticipants
+                .Include(mp => mp.Meeting).ThenInclude(m => m.OrganiserGroup)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(m => m.Layout).ThenInclude(l => l.PrimaryModuleStandard)
+                .Where(mp => mp.PersonId == personId && mp.Meeting.EndDate > TimeProvider.Now && (groupId == 0 || mp.Meeting.OrganiserGroup.Id == groupId && mp.Meeting.OrganiserGroup.GroupMembers.Any(og => og.PersonId == personId)))
                 .ToReadOnlyListAsync();
-
         }
         return [];
     }

@@ -45,7 +45,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .Where(ls => ls.LayoutParticipantId == layoutId)
                 .ToListAsync();
         }
-        return Array.Empty<LayoutStation>();
+        return [];
     }
 
     public async Task<LayoutStation?> GetLayoutStationAsync(ClaimsPrincipal? principal, int? stationId)
@@ -135,7 +135,9 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
 
 
     // THIS IS NOT READY YET
+#pragma warning disable IDE0051 // Remove unused private members
     private async Task<IEnumerable<RegisteredModule>> GetRegisteredModulesAsync(ClaimsPrincipal? principal, int layoutId, int personId)
+#pragma warning restore IDE0051 // Remove unused private members
     {
         const string storedProcedureName = "RegisteredModules";
         var result = new List<RegisteredModule>(200);

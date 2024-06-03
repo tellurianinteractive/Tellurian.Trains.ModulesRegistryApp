@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
+    <value>alle ord skal begynde med et stort bogstav</value>
+  </data>
+  <data name="DefaultClasses" xml:space="preserve">
+    <value>Vognklasser</value>
+  </data>
+  <data name="MustBeAColor" xml:space="preserve">
+    <value>Skal være en farve</value>
+  </data>
   <data name="MustBeADccAddress" xml:space="preserve">
     <value>Skal være en DCC-adresse 1-9999</value>
   </data>
@@ -143,14 +152,5 @@
   </data>
   <data name="MustOnlyContainOrdinaryText" xml:space="preserve">
     <value>må kun indeholde almindelig tekst</value>
-  </data>
-  <data name="MustBeAColor" xml:space="preserve">
-    <value>Skal være en farve</value>
-  </data>
-  <data name="AllWordsMustBeginWithCapitalLetter" xml:space="preserve">
-    <value>alle ord skal begynde med et stort bogstav</value>
-  </data>
-  <data name="DefaultClasses" xml:space="preserve">
-    <value>Vognklasser</value>
   </data>
 </root>
