@@ -1,4 +1,7 @@
 ﻿@page "/vehicles/my/{VehicleId:int}"
+@page "/vehicles/{VehicleId:int}/country/{CountryId:int}/edit"
+
+@attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
@@ -49,12 +52,14 @@ else
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int VehicleId { get; set; }
+    [Parameter] public int CountryId { get; set; }
     ClaimsPrincipal? Principal;
     Vehicle? Vehicle;
     IEnumerable<ListboxItem> CouplingFeatureItems = [];
     IEnumerable<ListboxItem> TractionFeatureItems = [];
     IEnumerable<ListboxItem> WheelsFeatureItems = [];
     IEnumerable<ListboxItem> ScaleItems = [];
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,7 +72,7 @@ else
     {
         if (VehicleId > 0)
         {
-            Vehicle = await VehicleService.GetPrincipalOwnedVehicle(Principal, VehicleId);
+            Vehicle = await VehicleService.GetVehicleAsync(Principal, VehicleId, CountryId);
         }
         else
         {

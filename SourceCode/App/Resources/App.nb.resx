@@ -474,6 +474,9 @@
   <data name="Food" xml:space="preserve">
     <value>Mat</value>
   </data>
+  <data name="FootstepsTooWide" xml:space="preserve">
+    <value>Fottrinn for brede</value>
+  </data>
   <data name="For" xml:space="preserve">
     <value>For</value>
   </data>
@@ -1470,6 +1473,9 @@
   <data name="VehicleNumber" xml:space="preserve">
     <value>Kjøretøy nummer</value>
   </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>Kjøretøyer</value>
+  </data>
   <data name="Venue" xml:space="preserve">
     <value>Treffsted</value>
   </data>
@@ -1520,6 +1526,9 @@
   </data>
   <data name="WrongBackToBackDistance" xml:space="preserve">
     <value>Feil back-to-back avstand</value>
+  </data>
+  <data name="WrongEpochTheme" xml:space="preserve">
+    <value>Feil epoke/tema</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>

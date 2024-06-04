@@ -1,5 +1,7 @@
 ﻿using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace ModulesRegistry.Services.Extensions;
 public static class UserExtensions
@@ -60,6 +62,10 @@ public static class UserExtensions
         }
         return user;
     }
+
+    public static IEnumerable<MailHolder> MailHolders(this IEnumerable<User> users) => users.Select(u => new MailHolder(u.Person.FirstName, u.EmailAddress));
+
+   
 
 }
 

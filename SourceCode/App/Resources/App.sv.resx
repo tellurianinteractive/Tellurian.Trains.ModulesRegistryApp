@@ -1473,6 +1473,9 @@
   <data name="VehicleNumber" xml:space="preserve">
     <value>Fordonsnummer</value>
   </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>Fordon</value>
+  </data>
   <data name="Venue" xml:space="preserve">
     <value>Träfflokal</value>
   </data>

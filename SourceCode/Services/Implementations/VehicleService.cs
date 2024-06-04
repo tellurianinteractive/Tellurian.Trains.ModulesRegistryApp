@@ -4,18 +4,21 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
-
-    public async Task<Vehicle?> GetPrincipalOwnedVehicle(ClaimsPrincipal? principal, int vehicleId)
+    public async Task<IEnumerable<Vehicle>?> GetVehiclesByOwnerCountryAsync(ClaimsPrincipal? principal, int countryId)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Vehicles
-                .Where(v => v.Id == vehicleId && v.OwningPersonId == principal.PersonId())
-                .FirstOrDefaultAsync()
-                .ConfigureAwait(false);
+                .Include(v => v.OwningPerson)
+                .Include(v => v.CouplingFeature)
+                .Include(v => v.TractionFeature)
+                .Include(v => v.WheelsFeature)
+                .Include(v => v.Scale)
+                .Where(v => v.OwningPerson.CountryId == countryId)
+                .ToReadOnlyListAsync();
         }
-        return null;
+        return [];
     }
 
     public async Task<IEnumerable<Vehicle>?> GetPersonsOwnedVehiclesAsync(ClaimsPrincipal? principal, int? maybeOwningPersonId)
@@ -33,6 +36,38 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         }
         return [];
     }
+
+    public async Task<Vehicle?> GetVehicleAsync(ClaimsPrincipal? principal, int vehicleId, int countryId)
+    {
+        if (countryId > 0) return await GetVehicleAsAdministratorAsync(principal, vehicleId, countryId).ConfigureAwait(false);
+        return await GetPrincipalOwnedVehicle(principal, vehicleId).ConfigureAwait(false);
+    }
+
+    private async Task<Vehicle?> GetVehicleAsAdministratorAsync(ClaimsPrincipal? principal, int vehicleId, int countryId)
+    {
+        if (principal.IsCountryAdministratorInCountry(countryId))
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Vehicles
+                .Where(v => v.Id == vehicleId)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+        }
+        return null;
+    }
+    private async Task<Vehicle?> GetPrincipalOwnedVehicle(ClaimsPrincipal? principal, int vehicleId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Vehicles
+                .Where(v => v.Id == vehicleId && v.OwningPersonId == principal.PersonId())
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+        }
+        return null;
+    }
+
 
     public async Task<IEnumerable<ListboxItem>> GetTractionFeaturesListboxDataAsync()
     {

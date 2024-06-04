@@ -26,6 +26,7 @@
             <AppButton Label="RemoveFiltering" OnClickCallback="RemoveFilter" IconName="@FontAwesome.Erase" />
         }
     </div>
+    <hr/>
 }
 
 <div class="grid" tabindex="-1">
@@ -84,14 +85,7 @@
     private IEnumerable<Person> People = Array.Empty<Person>().AsQueryable();
     private IEnumerable<ListboxItem>? Countries;
 
-    private void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            AppService.LastCountryId = id;
-            Navigator.NavigateTo($"/Persons/Country/{id}");
-        }
-    }
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -110,6 +104,16 @@
         {
             AppService.LastCountryId = CountryId;
             People = await PersonService.GetAllInCountryAsync(Principal, AppService.LastCountryId);
+        }
+    }
+
+
+    private void OnSelectedCountry(int id)
+    {
+        if (id > 0)
+        {
+            AppService.LastCountryId = id;
+            Navigator.NavigateTo($"/Persons/Country/{id}");
         }
     }
 

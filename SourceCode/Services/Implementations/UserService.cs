@@ -138,10 +138,23 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory)
         return count == 0 ? null : user;
     }
 
-    public async Task<IEnumerable<User>> GetUsersAsync()
+    public async Task<IEnumerable<User>> GetUsersAsync(ClaimsPrincipal? principal)
     {
+        if (!principal.IsGlobalAdministrator()) return [];
+
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Users.Include(u => u.Person).ToListAsync();
+    }
+
+    public async Task<IEnumerable<User>> GetActiveUsersAsync(ClaimsPrincipal? principal, int countryId)
+    {
+        if (!principal.IsGlobalAdministrator()) return [];
+
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Users
+            .Include(u => u.Person)
+            .Where(u => u.Person.CountryId == countryId && u.LastSignInTime.HasValue && u.LastTermsOfUseAcceptTime.HasValue)
+            .ToReadOnlyListAsync();
     }
 
     public async Task<IEnumerable<User>> GetCountryAdministratorsAsync()

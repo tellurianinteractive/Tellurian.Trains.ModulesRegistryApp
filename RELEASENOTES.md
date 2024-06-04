@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.1
+Release date 2024-06-03
+- **Vehicles** can now also be managed by administrators.
+- **Mailing** can now also be made by administrators only to all active users in a selected country. 
+- **Component update** to latest versions of external components.
 ## Release 1.11.0
 Release date 2024-06-03
 - **My Vehicles** is added. Now you can also enter data about your model locos. 

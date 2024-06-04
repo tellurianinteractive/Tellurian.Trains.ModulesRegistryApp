@@ -1473,6 +1473,9 @@
   <data name="VehicleNumber" xml:space="preserve">
     <value>Køretøjsnummer</value>
   </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>Køretøjer</value>
+  </data>
   <data name="Venue" xml:space="preserve">
     <value>Træf lokale</value>
   </data>

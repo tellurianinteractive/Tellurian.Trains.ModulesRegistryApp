@@ -1,0 +1,59 @@
+﻿@page "/admin/users"
+@page "/admin/users/country/{CountryId:int}"
+
+@attribute [Authorize(Policy = "Admin")]
+
+@inject IStringLocalizer<App> Localizer
+@inject NavigationManager Navigator
+@inject CountryService CountryService
+@inject UserService UserService
+@inject AppService AppService
+
+<PageHeading IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
+
+<ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId />
+
+@if (Principal is not null && Users is not null)
+{
+    @foreach (var group in Users.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+    {
+        <AppButton Href="@group.Href" Label="@group.Subset"  IconName="@FontAwesome.Mail"/>
+    }
+
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int CountryId { get; set; }
+
+    private ClaimsPrincipal? Principal;
+    private IEnumerable<ListboxItem>? CountryListItems;
+    private IEnumerable<User>? Users;
+    private Country? CurrentCountry;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryListItems = await CountryService.ListboxItemsAsync(Principal);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CountryId == 0) CountryId = Principal.CountryId();
+        CurrentCountry = await CountryService.FindById(CountryId);
+        if (CurrentCountry is null) return;
+        Users = await UserService.GetActiveUsersAsync(Principal, CountryId);
+    }
+
+    private void OnSelectedCountry(int id)
+    {
+        if (id > 0)
+        {
+            AppService.LastCountryId = id;
+            Navigator.NavigateTo($"/admin/users/country/{id}");
+        }
+    }
+
+    string Language => CurrentCountry is null ? "en" : CurrentCountry.Languages.Items().First();
+
+}

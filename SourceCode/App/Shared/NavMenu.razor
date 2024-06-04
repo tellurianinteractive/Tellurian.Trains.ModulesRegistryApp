@@ -71,7 +71,16 @@
                     <span class="@FontAwesome.People" aria-hidden="true" />@Localizer["Persons"]
                 </NavLink>
             </li>
-
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="vehicles">
+                    <span class="@FontAwesome.Train" aria-hidden="true" />@Localizer["Vehicles"]
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="admin/users">
+                    <span class="@FontAwesome.User" aria-hidden="true" />@Localizer["Users"]
+                </NavLink>
+            </li>
         </AuthorizeView>
         <AuthorizeView Policy="@AppPolicyNames.User">
             <li class="nav-item px-3">
