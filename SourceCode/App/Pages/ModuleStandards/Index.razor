@@ -16,7 +16,7 @@
     <TableHeader>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Name"]</th>
-        <th>@Localizer["PreferredTheme"]</th>
+        <th>@Localizer["Theme"]</th>
         <th>@Localizer["TrackSystem"]</th>
         <th>@Localizer["ElectricSystem"]</th>
         <th>@Localizer["Couplings"]</th>
@@ -29,7 +29,7 @@
     <RowTemplate Context="standard">
         <td>@Scale(standard.Scale)</td>
         <td>@standard.ShortName</td>
-        <td>@standard.PreferredTheme</td>
+        <td>@((Theme)standard.MainThemeId) @standard.PreferredTheme</td>
         <td>@standard.TrackSystem</td>
         <td>@standard.Electricity</td>
         <td>@standard.Couplings</td>

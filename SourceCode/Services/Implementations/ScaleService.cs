@@ -12,8 +12,8 @@ public sealed class ScaleService(IDbContextFactory<ModulesDbContext> factory)
             var items = await dbContext.Scales.ToListAsync().ConfigureAwait(false);
             return items
                 .Select(s => new ListboxItem(s.Id, $"{s.ShortName} (1:{s.Denominator})"))
-                .OrderBy(l => l.Description);
+                .OrderBy(l => l.Id);
         }
-        return Array.Empty<ListboxItem>();
+        return [];
     }
 }

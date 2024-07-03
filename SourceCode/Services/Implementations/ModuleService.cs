@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.Identity.Client;
 using ModulesRegistry.Data.Resources;
 using Rationals;
 
@@ -60,13 +59,17 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         return false;
     }
 
-    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId)
+    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId, int scaleId, int themeId)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Modules.AsNoTracking()
-                .Where(m => m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId))
+                .Where(m => 
+                    (scaleId == 0 || m.ScaleId == scaleId) && 
+                    (themeId == 0 || m.Standard.MainThemeId == themeId) &&
+                    m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId)
+                 )
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(m => m.Station)
@@ -194,6 +197,9 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         ownerRef = principal.UpdateFrom(ownerRef);
         entity.Length = entity.CalculateLength();
         using var dbContext = Factory.CreateDbContext();
+        entity.ScaleId = await dbContext.ModuleStandards // This statement replaces the need to enter this in the user interface.
+            .Where(ms => ms.Id == entity.StandardId)
+            .Select(ms => ms.ScaleId).SingleOrDefaultAsync();
         var isGroupAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
         if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef))
         {

@@ -37,7 +37,9 @@ public static class EnumExtensions
         Enum.GetValues<LandscapeSeason>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
     public static IEnumerable<ListboxItem> MeetingTypeListboxItems() =>
-    Enum.GetValues<MeetingType>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+        Enum.GetValues<MeetingType>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
+    public static IEnumerable<ListboxItem> ThemesListboxItems() =>
+     Enum.GetValues<Theme>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
 
     public static string ToEnumLocalized<T>(this int value) where T : struct
     {

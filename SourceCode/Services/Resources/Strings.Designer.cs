@@ -1330,6 +1330,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planned.
+        /// </summary>
+        internal static string Planned {
+            get {
+                return ResourceManager.GetString("Planned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plate.
         /// </summary>
         internal static string Plate {
@@ -1362,6 +1371,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Quantity {
             get {
                 return ResourceManager.GetString("Quantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready to test.
+        /// </summary>
+        internal static string ReadyToTest {
+            get {
+                return ResourceManager.GetString("ReadyToTest", resourceCulture);
             }
         }
         
@@ -1636,6 +1654,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tested.
+        /// </summary>
+        internal static string Tested {
+            get {
+                return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thursday.
         /// </summary>
         internal static string Thursday {
@@ -1749,6 +1776,33 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Undefined {
             get {
                 return ResourceManager.GetString("Undefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under approval.
+        /// </summary>
+        internal static string UnderApproval {
+            get {
+                return ResourceManager.GetString("UnderApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under construction.
+        /// </summary>
+        internal static string UnderConstruction {
+            get {
+                return ResourceManager.GetString("UnderConstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under repair.
+        /// </summary>
+        internal static string UnderRepair {
+            get {
+                return ResourceManager.GetString("UnderRepair", resourceCulture);
             }
         }
         

@@ -21,6 +21,7 @@ else
         <ValidationSummary />
         <AppInputText Width="2" Label="ShortName" @bind-Value="ModuleStandard.ShortName" />
         <AppInputSelect Width="2" Label="Scale" @bind-Value="ModuleStandard.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+        <AppInputSelect Width="2" Label="MainTheme" @bind-Value="ModuleStandard.MainThemeId" Items="EnumExtensions.ThemesListboxItems()" ShowPleaseSelect="true" />
         <AppInputText Width="3" Label="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
         <AppInputFill Width="5" />
         <AppInputText Width="2" Label="TrackSystem" @bind-Value="ModuleStandard.TrackSystem" />

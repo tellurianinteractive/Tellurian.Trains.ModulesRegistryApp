@@ -41,6 +41,9 @@ public class ModuleStandardValidator : AbstractValidator<ModuleStandard>
             .MaximumLength(20)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Electricity)]);
+        RuleFor(m => m.MainThemeId)
+            .MustBeSelected(localizer)
+            .WithName(n => localizer[nameof(n.MainTheme)]);
         RuleFor(m => m.PreferredTheme)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
@@ -48,6 +51,6 @@ public class ModuleStandardValidator : AbstractValidator<ModuleStandard>
         RuleFor(m => m.AcceptedNorm)
             .MaximumLength(255)
             .When(m => m.AcceptedNorm is not null)
-            .WithName(n => localizer[nameof(n.PreferredTheme)]);
+            .WithName(n => localizer[nameof(n.AcceptedNorm)]);
     }
 }

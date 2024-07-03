@@ -4,15 +4,29 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
-    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal)
+    public async Task<IEnumerable<ListboxItem>> GetStandardsListboxItemsAsync(ClaimsPrincipal? principal)
     {
-        if (principal is not null)
+        if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.ModuleStandards
                 .Include(ms => ms.Scale)
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToReadOnlyListAsync();
+            return items
+                .Select(ms => new ListboxItem(ms.Id, $"{ms.ShortName} (1:{ms.Scale.Denominator})"))
+                .OrderBy(l => l.Description);
+        }
+        return Array.Empty<ListboxItem>();
+    }
+
+    public async Task<IEnumerable<ListboxItem>> GetStandarsdWithScaleListboxItemsAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var items = await dbContext.ModuleStandards
+                .Include(ms => ms.Scale)
+                .ToReadOnlyListAsync();
             return items
                 .Select(ms => new ListboxItem(ms.Id, $"{ms.ShortName} (1:{ms.Scale.Denominator})"))
                 .OrderBy(l => l.Description);
@@ -28,8 +42,7 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
             return await dbContext.ModuleStandards
                 .Include(ms => ms.Scale)
                 .OrderBy(ms => ms.ShortName)
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToReadOnlyListAsync();
         }
         return Array.Empty<ModuleStandard>();
     }

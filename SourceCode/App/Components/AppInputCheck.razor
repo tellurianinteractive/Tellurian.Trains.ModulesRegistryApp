@@ -14,7 +14,7 @@
             <input disabled="@IsDisabled" type="checkbox" class="form-check-input @CssClass" id="@Label" @bind="@CurrentValue" />
             @if (!string.IsNullOrWhiteSpace(Label))
             {
-                <label class="form-check-label" for="@Label">@Localizer[Label]</label>
+                <label class="form-check-label" for="@Label">@LabelText(Localizer)</label>
             }
         </div>
     }

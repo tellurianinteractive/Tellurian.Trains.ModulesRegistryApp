@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using ModulesRegistry.Data.Extensions;
 using System.Linq.Expressions;
 
 namespace ModulesRegistry.Components;
@@ -17,4 +19,11 @@ public abstract partial class AppInputBase<TValue>
     public void OnChange() => OnChangeNotifier?.Invoke();
 
     public string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+    public string LabelText(IStringLocalizer<App> localizer) 
+    {
+        if (Label.HasNoValue()) return string.Empty;
+        var items = Label.Split('-');
+        return string.Join('/', items.Select(x => localizer[x]));
+    }
 }

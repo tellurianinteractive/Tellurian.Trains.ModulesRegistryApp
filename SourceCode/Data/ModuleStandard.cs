@@ -18,7 +18,7 @@ public partial class ModuleStandard
     public string PreferredTheme { get; set; }
     public string AcceptedNorm { get; set; }
     public string MainTheme { get; set; } = "EUROPE";
-
+    public int MainThemeId { get; set; }
     public virtual Scale Scale { get; set; }
 }
 

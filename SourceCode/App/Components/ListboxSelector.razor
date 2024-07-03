@@ -2,7 +2,8 @@
 
 @if (IsVisible && Items is not null)
 {
-    <div class="form-group">
+
+    <div class="form-group" style="padding-right: @PaddingRight">
         <select class="form-control-sm " id="countryid" @bind="Id" @onselect="OnSelectedItem">
             <option value="0">@Label</option>
             @foreach (var item in Items)
@@ -10,8 +11,14 @@
                 <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
             }
         </select>
-        <AppButton Label="Ok" OnClickCallback="OnSelectedItem"/>
-        <hr/>
+        <AppButton Label="Ok" OnClickCallback="OnSelectedItem" />
+        @if (Inline)
+        {
+        }
+        else
+        {
+            <hr />
+        }
     </div>
 }
 
@@ -21,6 +28,8 @@
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public int SelectedId { get; set; }
+    [Parameter] public bool Inline { get; set; }
+
     int Id { get; set; }
 
     protected override void OnParametersSet()
@@ -37,5 +46,6 @@
     private string Label => $"{Localizer["Select"]} {LocalizedItemType.ToLowerInvariant()}";
     private string LocalizedItemType => ItemType is null ? string.Empty : Localizer[ItemType].Value;
     string? Selected(ListboxItem item) => Items is not null && (item.Id == Id) ? "selected" : null;
+    string PaddingRight => Inline ? "20px" : "";
 
 }

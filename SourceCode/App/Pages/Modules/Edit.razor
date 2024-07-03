@@ -25,14 +25,13 @@ else
 {
     <EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
         <Inputs>
-            <AppInputSelect Width="2" Label="Scale" @bind-Value="Module.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
-            <AppInputSelect Width="2" Label="Standard" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-            <AppInputText Width="3" Label="Name" @bind-Value="Module.FullName" />
+            <AppInputSelect Width="3" Label="Standard-Scale" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+            <AppInputText Width="4" Label="Name" @bind-Value="Module.FullName" />
             <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue()" />
             <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
             <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
             <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
-
+            <br/>
             <AppInputSelect Width="2" Label="Visibility" @bind-Value="Module.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
             <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
@@ -121,7 +120,7 @@ else
                 OwningGroup = await GroupService.FindByIdAsync(Principal, GroupId);
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
-            ModuleStandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
+            ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
             StationItems = await StationService.StationItemsAsync(Principal, OwnershipRef);
             Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers };
         }

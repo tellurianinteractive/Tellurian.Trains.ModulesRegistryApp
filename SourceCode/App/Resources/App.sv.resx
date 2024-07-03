@@ -783,6 +783,9 @@
   <data name="MacAddress" xml:space="preserve">
     <value>MAC-adress</value>
   </data>
+  <data name="MainTheme" xml:space="preserve">
+    <value>Huvudtema</value>
+  </data>
   <data name="MakeStation" xml:space="preserve">
     <value>Gör till station</value>
   </data>

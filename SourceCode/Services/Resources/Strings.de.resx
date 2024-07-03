@@ -540,6 +540,9 @@
   <data name="Pieces" xml:space="preserve">
     <value>Stücke</value>
   </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Geplant</value>
+  </data>
   <data name="Plate" xml:space="preserve">
     <value>Schebe</value>
   </data>
@@ -551,6 +554,9 @@
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Menge</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Bereit zum Testen</value>
   </data>
   <data name="Receive" xml:space="preserve">
     <value>Erhalten</value>
@@ -642,6 +648,9 @@
   <data name="TankContainers30" xml:space="preserve">
     <value>30' Tankcontainer</value>
   </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Geprüft</value>
+  </data>
   <data name="Thursday" xml:space="preserve">
     <value>Donnerstag</value>
   </data>
@@ -680,6 +689,15 @@
   </data>
   <data name="Undefined" xml:space="preserve">
     <value>Nicht definiert</value>
+  </data>
+  <data name="UnderApproval" xml:space="preserve">
+    <value>In Genehmigung</value>
+  </data>
+  <data name="UnderConstruction" xml:space="preserve">
+    <value>Im Bau</value>
+  </data>
+  <data name="UnderRepair" xml:space="preserve">
+    <value>In Reperatur</value>
   </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>Vereinigtes Königreich</value>

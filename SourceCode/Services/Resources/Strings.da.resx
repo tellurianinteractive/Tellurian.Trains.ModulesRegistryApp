@@ -540,6 +540,9 @@
   <data name="Pieces" xml:space="preserve">
     <value>Stykker</value>
   </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planlagt</value>
+  </data>
   <data name="Plate" xml:space="preserve">
     <value>Plade</value>
   </data>
@@ -551,6 +554,9 @@
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Kvantitet</value>
+  </data>
+  <data name="ReadyToTest" xml:space="preserve">
+    <value>Klar til test</value>
   </data>
   <data name="Receive" xml:space="preserve">
     <value>Modtage</value>
@@ -642,6 +648,9 @@
   <data name="TankContainers30" xml:space="preserve">
     <value>30' Tankcontainere</value>
   </data>
+  <data name="Tested" xml:space="preserve">
+    <value>Testet</value>
+  </data>
   <data name="Thursday" xml:space="preserve">
     <value>Torsdag</value>
   </data>
@@ -680,6 +689,15 @@
   </data>
   <data name="Undefined" xml:space="preserve">
     <value>Udefineret</value>
+  </data>
+  <data name="UnderApproval" xml:space="preserve">
+    <value>Under godkendelse</value>
+  </data>
+  <data name="UnderConstruction" xml:space="preserve">
+    <value>Under konstruksjon</value>
+  </data>
+  <data name="UnderRepair" xml:space="preserve">
+    <value>Under reparation</value>
   </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>Storbritanien</value>
