@@ -5,8 +5,9 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.11.2
 Release date 2024-07-03
 - **Polishing off** some rough edges in the user interface for *Module* and *Module standard*.
-- **Main theme** for modules, i.e. *Europe/US* now mor structured in *module standards*.
+- **Main theme** for modules, i.e. *Europe/US* now more structured in *module standards*.
 - **Modules list** can now also be fildered by *scale* and *theme*.
+- **Component update** to latest versions of external components.
 ## Release 1.11.1
 Release date 2024-06-03
 - **Vehicles** can now also be managed by administrators.
