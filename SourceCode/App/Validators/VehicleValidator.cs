@@ -17,14 +17,14 @@ public class VehicleValidator : AbstractValidator<Vehicle>
         RuleFor(x => x.Theme).NotEmpty().Length(1, 10).WithName(x => localizer[nameof(x.Theme)]);
 
         RuleFor(x => x.ModelManufacturerName).NotEmpty().Length(1, 20).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.ModelManufacturerName)]);
-        RuleFor(x => x.ModelNumber).Length(1, 10).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.ModelNumber)]);
+        RuleFor(x => x.ModelNumber).Length(0, 16).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.ModelNumber)]);
         RuleFor(x => x.ThisEmbodiementFromYear).MustBeValidYear(localizer).WithName(x => localizer[nameof(x.ThisEmbodiementFromYear)]);
         RuleFor(x => x.ThisEmbodiementUptoYear).MustBeValidYear(localizer).WithName(x => localizer[nameof(x.ThisEmbodiementUptoYear)]);
         RuleFor(x => x.ScaleId).MustBeSelected(localizer).WithName(x => localizer[nameof(x.Scale)]);
-        RuleFor(x => x.DecoderType).Length(1, 20).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.DecoderType)]);
+        RuleFor(x => x.DecoderType).Length(0, 20).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.DecoderType)]);
 
         RuleFor(x => x.OwningPersonId).MustBeSelected(localizer).WithName(x => localizer["Owner"]);
-        RuleFor(x => x.Note).Length(1, 200).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.Note)]);
+        RuleFor(x => x.Note).Length(0, 200).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.Note)]);
 
     }
 }

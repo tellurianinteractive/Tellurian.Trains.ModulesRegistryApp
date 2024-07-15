@@ -9,7 +9,7 @@
     [ScaleId] INT NOT NULL,
     [ModelManufacturerName] NVARCHAR(20) NULL,
     [ModelImage] VARBINARY(MAX) NULL,
-    [ModelNumber] NVARCHAR(10) NULL,
+    [ModelNumber] NVARCHAR(16) NULL,
     [CouplingFeatureId] INT NULL,
     [WheelsFeatureId] INT NULL,
     [ThisEmbodiementFromYear] SMALLINT NULL,

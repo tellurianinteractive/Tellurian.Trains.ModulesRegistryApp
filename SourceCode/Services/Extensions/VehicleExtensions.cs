@@ -8,7 +8,12 @@ public static class VehicleExtensions
 {
     public static string ModelInfo(this Vehicle? vehicle) =>
         vehicle is null ? string.Empty :
-        $"{vehicle.ModelManufacturerName} {vehicle.ModelNumber}".Trim();
+        $"{vehicle.ModelManufacturerName} {vehicle.ModelNumber} {vehicle.Note.MaxLenght(30)}".Trim();
+
+    public static string PeriodInfo(this Vehicle? vehicle) =>
+        vehicle is null ? string.Empty :
+         $"{vehicle.ThisEmbodiementFromYear} - {vehicle.ThisEmbodiementUptoYear}";
+
 
     public static string PrototypeInfo(this Vehicle? vehicle) =>
         vehicle is null ? string.Empty :

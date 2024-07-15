@@ -2,11 +2,16 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.3
+Release date 2024-07-15
+- **My Vehicles** has relaxed validation and some fields made optional.
+- **My Vehicles** import from CSV under test for eventual future release.
+- **Component update** to latest versions of external components.
 ## Release 1.11.2
 Release date 2024-07-03
 - **Polishing off** some rough edges in the user interface for *Module* and *Module standard*.
 - **Main theme** for modules, i.e. *Europe/US* now more structured in *module standards*.
-- **Modules list** can now also be fildered by *scale* and *theme*.
+- **Modules list** can now also be filtered by *scale* and *theme*.
 - **Component update** to latest versions of external components.
 ## Release 1.11.1
 Release date 2024-06-03

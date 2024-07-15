@@ -16,6 +16,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
                 .Include(v => v.WheelsFeature)
                 .Include(v => v.Scale)
                 .Where(v => v.OwningPerson.CountryId == countryId)
+                .OrderBy(v => v.OwningPerson.FirstName).ThenBy(v => v.OwningPerson.LastName).ThenBy(v => v.InventoryNumber)
                 .ToReadOnlyListAsync();
         }
         return [];
@@ -32,7 +33,9 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
                 .Include(v => v.TractionFeature)
                 .Include(v => v.WheelsFeature)
                 .Include(v => v.Scale)
-                .Where(v => v.OwningPersonId == personId).ToReadOnlyListAsync();
+                .Where(v => v.OwningPersonId == personId)
+                .OrderBy(v => v.InventoryNumber)
+                .ToReadOnlyListAsync();
         }
         return [];
     }

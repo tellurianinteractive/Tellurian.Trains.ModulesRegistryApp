@@ -36,5 +36,11 @@ public static class StringExtensions
         value is null ? string.Empty :
         Strings.Casing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? value.ToLowerInvariant() :
         value;
+
+    public static string MaxLenght(this string? value, int max) =>
+        value is null ? string.Empty :
+        value.Length <= max ? value :
+        value[..max];
+
     
 }
