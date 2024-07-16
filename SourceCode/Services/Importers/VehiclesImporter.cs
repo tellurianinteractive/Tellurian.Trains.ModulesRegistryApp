@@ -157,10 +157,9 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
 
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debugger.Break();
-            throw;
+            return[];
         }
         return items;
     }

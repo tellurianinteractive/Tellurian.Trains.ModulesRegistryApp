@@ -30,9 +30,11 @@ else
         {
             @if (IsMeetingOrganiser)
             {
-                <h3>@Localizer["SelectPersonToRegister"]</h3>
-                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" />
-                <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
+                <div class="noprint">
+                    <h3>@Localizer["SelectPersonToRegister"]</h3>
+                    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" />
+                    <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
+                </div>
             }
             @if (IsMeetingOrganiser && Participant is null)
             {
@@ -49,14 +51,14 @@ else
                         <th>@Localizer["City"]</th>
                         <th>@Localizer["Layouts"]</th>
                         <th>@Localizer["Arrival"]</th>
-                        <th>@Localizer["Actions"]</th>
+                        <th class="noprint">@Localizer["Actions"]</th>
                     </TableHeader>
                     <RowTemplate Context="item">
                         <td style="@ParticipantStatusStyle(item)">@item.Person.Name()</td>
                         <td>@item.Person.CityName</td>
                         <td>@(item.CancellationTime.HasValue ? "" : ParticipantLayoutNames(item))</td>
                         <td>@(item.CancellationTime.HasValue ? "" : $"{item.FirstParticipationDay()} {ArrivalTime(item.ArrivalTime)}")</td>
-                        <td>
+                        <td class="noprint">
                             <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
                             @if (item.CancellationTime.HasValue)
                             {

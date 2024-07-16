@@ -3,6 +3,7 @@
 
 @attribute [Authorize(Policy = "User")]
 
+@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject VehicleService VehicleService
@@ -53,13 +54,15 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int VehicleId { get; set; }
     [Parameter] public int CountryId { get; set; }
+    string? SearchPrototype;
+    string? SearchModel;
     ClaimsPrincipal? Principal;
     Vehicle? Vehicle;
     IEnumerable<ListboxItem> CouplingFeatureItems = [];
     IEnumerable<ListboxItem> TractionFeatureItems = [];
     IEnumerable<ListboxItem> WheelsFeatureItems = [];
     IEnumerable<ListboxItem> ScaleItems = [];
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,6 +73,8 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
+        SearchPrototype = Navigator.TryGetQueryStringValue("Prototype", out string prototype) ? prototype : null;
+        SearchModel = Navigator.TryGetQueryStringValue("Model", out string model) ? model : null;
         if (VehicleId > 0)
         {
             Vehicle = await VehicleService.GetVehicleAsync(Principal, VehicleId, CountryId);
@@ -95,6 +100,15 @@ else
         var result = await VehicleService.SaveAsync(Principal, Vehicle!);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Vehicle = result.Entity;
+        await Task.Delay(3000);
+        if (Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase))
+        {
+            Navigator.NavigateTo($"/vehicles/my?Prototype={SearchPrototype}&Model={SearchModel}");
+        }
+        else
+        {
+            Navigator.NavigateTo($"/vehicles/country/{CountryId}?Prototype={SearchPrototype}&Model={SearchModel}");
+        }
     }
 
     async Task ScaleHasChanged(int scaleId)

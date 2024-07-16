@@ -37,10 +37,18 @@ public static class StringExtensions
         Strings.Casing.Equals("LOWER", StringComparison.OrdinalIgnoreCase) ? value.ToLowerInvariant() :
         value;
 
-    public static string MaxLenght(this string? value, int max) =>
+    public static string MaxLenght(this string? value, int max, bool endDotted = false) =>
         value is null ? string.Empty :
         value.Length <= max ? value :
+        endDotted ? $"{value[..value.LengtUptoLastSpace(max)]}..." :
         value[..max];
+
+    private static int LengtUptoLastSpace(this string? value, int max)
+    {
+        if (value is null) return 0;
+        var pos = value[..max].LastIndexOf(' ');
+        return pos > 0 ? pos : max;
+    }
 
     
 }

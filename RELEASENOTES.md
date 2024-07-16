@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2024-07-15
 - **My Vehicles** has relaxed validation and some fields made optional.
 - **My Vehicles** import from CSV under test for eventual future release.
+- **My Vehicles** can be sorted and filtered for *prototype* and *model*.
 - **Component update** to latest versions of external components.
 ## Release 1.11.2
 Release date 2024-07-03

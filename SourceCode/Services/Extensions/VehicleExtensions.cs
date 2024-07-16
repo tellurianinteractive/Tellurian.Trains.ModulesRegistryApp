@@ -8,7 +8,7 @@ public static class VehicleExtensions
 {
     public static string ModelInfo(this Vehicle? vehicle) =>
         vehicle is null ? string.Empty :
-        $"{vehicle.ModelManufacturerName} {vehicle.ModelNumber} {vehicle.Note.MaxLenght(30)}".Trim();
+        $"{vehicle.ModelManufacturerName} {vehicle.ModelNumber} {vehicle.Note.MaxLenght(30, true)}".Trim();
 
     public static string PeriodInfo(this Vehicle? vehicle) =>
         vehicle is null ? string.Empty :

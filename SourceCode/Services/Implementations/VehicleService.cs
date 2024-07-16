@@ -1,10 +1,12 @@
-﻿namespace ModulesRegistry.Services.Implementations;
+﻿using System.Collections;
+
+namespace ModulesRegistry.Services.Implementations;
 
 public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
-    public async Task<IEnumerable<Vehicle>?> GetVehiclesByOwnerCountryAsync(ClaimsPrincipal? principal, int countryId)
+    public async Task<IEnumerable<Vehicle>> GetVehiclesByOwnerCountryAsync(ClaimsPrincipal? principal, int countryId)
     {
         if (principal.IsAuthenticated())
         {
@@ -22,7 +24,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         return [];
     }
 
-    public async Task<IEnumerable<Vehicle>?> GetPersonsOwnedVehiclesAsync(ClaimsPrincipal? principal, int? maybeOwningPersonId)
+    public async Task<IEnumerable<Vehicle>> GetPersonsOwnedVehiclesAsync(ClaimsPrincipal? principal, int? maybeOwningPersonId)
     {
         if (principal.IsAuthenticated())
         {
@@ -37,7 +39,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
                 .OrderBy(v => v.InventoryNumber)
                 .ToReadOnlyListAsync();
         }
-        return [];
+        return Enumerable.Empty<Vehicle>().AsQueryable();
     }
 
     public async Task<Vehicle?> GetVehicleAsync(ClaimsPrincipal? principal, int vehicleId, int countryId)
