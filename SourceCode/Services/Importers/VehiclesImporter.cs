@@ -1,6 +1,5 @@
 ﻿namespace ModulesRegistry.Services.Importers;
 
-using System.Diagnostics;
 using Column = (string Name, int Index);
 
 /// <summary>
@@ -17,11 +16,20 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
         return 0;
     }
 
+    public async Task<int> UpdateLocos(string csvFilePathname, CancellationToken cancellationToken)
+    {
+        var vehicles = await ImportFromCsv(csvFilePathname, cancellationToken);
+        if (vehicles.Any()) return await UpdateVehiclesAsync(vehicles, cancellationToken);
+        return 0;
+
+    }
+
     public async Task<IEnumerable<Vehicle>> ImportFromCsv(string csvFilePathname, CancellationToken cancellationToken)
     {
         if (Path.Exists(csvFilePathname))
         {
-            var lines = await File.ReadAllLinesAsync(csvFilePathname, cancellationToken);
+            var encoding = System.Text.Encoding.Latin1;
+            var lines = await File.ReadAllLinesAsync(csvFilePathname, encoding, cancellationToken);
             if (lines.Length > 1)
             {
                 using var db = await Factory.CreateDbContextAsync(cancellationToken);
@@ -47,6 +55,21 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
         return await db.SaveChangesAsync(cancellationToken);
     }
 
+    private async Task<int> UpdateVehiclesAsync(IEnumerable<Vehicle> vehicles, CancellationToken cancellationToken)
+    {
+        using var db = await Factory.CreateDbContextAsync(cancellationToken);
+        var count = 0;
+        foreach (var vehicle in vehicles)
+        {
+            var existing = await db.Vehicles.FirstOrDefaultAsync(v => v.OwningPersonId == 19 && v.InventoryNumber == vehicle.InventoryNumber, cancellationToken);
+            if (existing is null) continue;
+            existing.ThisEmbodiementFromYear = vehicle.ThisEmbodiementFromYear;
+            existing.ThisEmbodiementUptoYear = vehicle.ThisEmbodiementUptoYear;
+            count += await db.SaveChangesAsync(cancellationToken);
+        }
+        return count;
+    }
+
 
     private static Vehicle CreateVehicle(string[] fields, Column[] columns, List<VehicleFeature> features)
     {
@@ -59,7 +82,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
             switch (column.Name)
             {
                 case "Id":
-                    result.InventoryNumber =int.Parse(fields[column.Index]);
+                    result.InventoryNumber = int.Parse(fields[column.Index]);
                     break;
                 case "Operator":
                     result.KeeperSignature = fields[column.Index];
@@ -83,7 +106,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
                     if (short.TryParse(fields[column.Index], out short fromYear)) result.ThisEmbodiementFromYear = fromYear;
                     break;
                 case "UptoYear":
-                    if (short.TryParse(fields[column.Index], out short uptoYear)) result.ThisEmbodiementFromYear = uptoYear;
+                    if (short.TryParse(fields[column.Index], out short uptoYear)) result.ThisEmbodiementUptoYear = uptoYear;
                     break;
                 case "ScaleId":
                     result.ScaleId = int.Parse(fields[column.Index]);
@@ -159,7 +182,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
         }
         catch (Exception)
         {
-            return[];
+            return [];
         }
         return items;
     }

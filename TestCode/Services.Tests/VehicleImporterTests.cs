@@ -34,6 +34,18 @@ public class VehicleImporterTests
         var result = await importer!.ImportLocos("Test data\\LokExportModulregistret.txt", cancellationSource.Token);
         Assert.IsTrue(result > 0);
     }
+
+    [TestMethod]
+    public async Task UpdateLocos()
+    {
+        var app = AppBuilder.Create([]);
+        var cancellationSource = new CancellationTokenSource();
+
+        var importer = app.Services.GetService<VehiclesImporter>();
+        var result = await importer!.UpdateLocos("Test data\\LokExportModulregistret.txt", cancellationSource.Token);
+        Assert.IsTrue(result > 0);
+
+    }
 }
 
 public static class AppBuilder

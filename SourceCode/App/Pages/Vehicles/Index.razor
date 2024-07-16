@@ -109,7 +109,7 @@
         $"/vehicles/{vehicle.Id}/country/{CountryId}/edit?Prototype={SearchPrototype}&Model={SearchModel}";
 
     string AddHref => 
-        IsMyVehiclesPage ? "/vehicles/my/0?Prototype={SearchPrototype}&Model={SearchModel}" : 
+        IsMyVehiclesPage ? $"/vehicles/my/0?Prototype={SearchPrototype}&Model={SearchModel}" : 
         $"vehicles/0/country/{CountryId}/edit?Prototype={SearchPrototype}&Model={SearchModel}";
     
         bool IsSelectCountryVisible => !IsMyVehiclesPage && (Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(CountryId));
