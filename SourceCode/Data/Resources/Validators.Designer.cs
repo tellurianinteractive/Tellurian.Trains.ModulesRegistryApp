@@ -124,6 +124,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to must be between {0} and {1} or empty.
+        /// </summary>
+        public static string MustBeBetweenOrEmpty {
+            get {
+                return ResourceManager.GetString("MustBeBetweenOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to must begin with a capital letter.
         /// </summary>
         public static string MustBeginWithCapitalLetter {

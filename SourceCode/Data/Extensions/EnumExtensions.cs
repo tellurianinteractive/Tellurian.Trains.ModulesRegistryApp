@@ -40,7 +40,8 @@ public static class EnumExtensions
         Enum.GetValues<MeetingType>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
     public static IEnumerable<ListboxItem> ThemesListboxItems() =>
      Enum.GetValues<Theme>().Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
-
+    public static IEnumerable<ListboxItem> EnginePowerUnitListboxItems() =>
+     Enum.GetValues<EnginePowerUnit>().OrderBy(x => (int)x).Select(value => new ListboxItem((int)value, ResourceManager.GetString(value.ToString()) ?? value.ToString()));
     public static string ToEnumLocalized<T>(this int value) where T : struct
     {
         var resourceKey = Enum.GetName(typeof(T), value);

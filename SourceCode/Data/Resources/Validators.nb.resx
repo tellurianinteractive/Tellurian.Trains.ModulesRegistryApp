@@ -138,6 +138,9 @@
   <data name="MustBeBetween" xml:space="preserve">
     <value>må være mellom {0} og {1}</value>
   </data>
+  <data name="MustBeBetweenOrEmpty" xml:space="preserve">
+    <value>må være mellom {0} og {1} eller tom</value>
+  </data>
   <data name="MustBeginWithCapitalLetter" xml:space="preserve">
     <value>må begynne med en stor bokstav</value>
   </data>

@@ -57,6 +57,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Vehicle> Vehicles { get; set; }
     public virtual DbSet<VehicleFeature> VehicleFeatures { get; set; }
+    public virtual DbSet<VehicleOperator> VehicleOperators { get; set; }
     public virtual DbSet<WiFredThrottle> WiFredThrottles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -106,6 +107,8 @@ public partial class ModulesDbContext : DbContext
 
         modelBuilder.MapVehicle();
         modelBuilder.MapVehicleFeature();
+        modelBuilder.MapVehicleInteroperability();
+        modelBuilder.MapVehicleOperator();
 
 
 

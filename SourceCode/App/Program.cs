@@ -1,4 +1,5 @@
 using Azure.Identity;
+using Blazored.LocalStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -71,7 +72,7 @@ builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
 
 });
 builder.Services.AddBlazoredToast();
-
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddScoped<ITimeProvider, SystemTimeProvider>();

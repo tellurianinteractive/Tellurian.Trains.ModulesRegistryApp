@@ -408,6 +408,9 @@
   <data name="EndProfile" xml:space="preserve">
     <value>Endeprofile</value>
   </data>
+  <data name="EnginePower" xml:space="preserve">
+    <value>Motorkraft</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>Engelsk</value>
   </data>
@@ -519,6 +522,9 @@
   <data name="FunctionalState" xml:space="preserve">
     <value>Funksjonell tilstand</value>
   </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Funksjoner</value>
+  </data>
   <data name="GameSettings" xml:space="preserve">
     <value>Spillinnstillinger</value>
   </data>
@@ -590,6 +596,9 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Jeg har lest og forstått</value>
+  </data>
+  <data name="ImageLink" xml:space="preserve">
+    <value>Bildelink</value>
   </data>
   <data name="InAll" xml:space="preserve">
     <value>i alle</value>
@@ -720,6 +729,9 @@
   <data name="Italian" xml:space="preserve">
     <value>Italiensk</value>
   </data>
+  <data name="Keeper" xml:space="preserve">
+    <value>Eier</value>
+  </data>
   <data name="KeeperSignature" xml:space="preserve">
     <value>Eierbetegnelse</value>
   </data>
@@ -795,6 +807,9 @@
   <data name="ManageWaybills" xml:space="preserve">
     <value>Administrer fraktsedler</value>
   </data>
+  <data name="ManufacturedYear" xml:space="preserve">
+    <value>Produksjonsår</value>
+  </data>
   <data name="Manufacturer" xml:space="preserve">
     <value>Produsent</value>
   </data>
@@ -858,6 +873,9 @@
   <data name="MiddleName" xml:space="preserve">
     <value>Mellomnavn</value>
   </data>
+  <data name="Model" xml:space="preserve">
+    <value>Modell</value>
+  </data>
   <data name="ModelData" xml:space="preserve">
     <value>Modelldata</value>
   </data>
@@ -908,6 +926,9 @@
   </data>
   <data name="MustBeBetween" xml:space="preserve">
     <value>må være mellom {0} og {1}</value>
+  </data>
+  <data name="MustBeBetweenOrEmpty" xml:space="preserve">
+    <value>må være mellom {0} og {1} eller tom</value>
   </data>
   <data name="MustBeginWithCapitalLetter" xml:space="preserve">
     <value>må begynne med en stor bokstav</value>
@@ -1185,6 +1206,9 @@
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Skriv ut per driftsdag</value>
   </data>
+  <data name="Prototype" xml:space="preserve">
+    <value>Forbild</value>
+  </data>
   <data name="PrototypeData" xml:space="preserve">
     <value>Data om forebildet</value>
   </data>
@@ -1393,7 +1417,7 @@
     <value>Sporsystem</value>
   </data>
   <data name="Traction" xml:space="preserve">
-    <value>Trekkkraft</value>
+    <value>Trekkraft</value>
   </data>
   <data name="Transfer" xml:space="preserve">
     <value>Overfør</value>
@@ -1508,6 +1532,9 @@
   </data>
   <data name="Waybills" xml:space="preserve">
     <value>Fraktbrev</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Vekt</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Velkommen</value>

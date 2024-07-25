@@ -8,8 +8,9 @@
 @inject IToastService ToastService
 @inject VehicleService VehicleService
 @inject ScaleService ScaleService
+@inject CountryService CountryService
 
-<PageHeading  Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle"/>
+<PageHeading Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle" />
 
 @if (Vehicle is null)
 {
@@ -17,34 +18,76 @@
 }
 else
 {
+    @if (Vehicle.PrototypeImageHref.HasValue())
+    {
+        <Image Href="@Vehicle.PrototypeImageHref" CssClass="image vehicle"/>
+    }
     <EditTemplate Item="@Vehicle" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
         <Inputs>
-            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value="@Vehicle.InventoryNumber" />
             <h3>@Localizer["PrototypeData"]</h3>
+
+            <AppInputSelectNullable Width="2" Label="Keeper-Country" @bind-Value="@Vehicle.KeeperCountryId" Items="CountryItems" ShowNoneOption="true" />
             <AppInputText Width="1" Label="KeeperSignature" @bind-Value="@Vehicle.KeeperSignature" />
             <AppInputText Width="1" Label="Class" @bind-Value="@Vehicle.VehicleClass" />
             <AppInputText Width="2" Label="VehicleNumber" @bind-Value="@Vehicle.VehicleNumber" />
-            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.PrototypeManufacturerName" />
-            <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="@Vehicle.TractionFeatureId" />
             <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="@Vehicle.Theme" ShowPleaseSelect=true />
+            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.PrototypeManufacturerName" />
+            <AppInputNumber Width="1" Label="ManufacturedYear" @bind-Value="@Vehicle.PrototypeManufactureYear" />
+            <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="@Vehicle.TractionFeatureId" ShowNoneOption="true" />
+            <AppInputNumber Width="1" Label="Length" Unit="m" @bind-Value="@Vehicle.PrototypeLength" Step="0.01" />
+            <AppInputNumber Width="1" Label="Weight" Unit="t" @bind-Value="@Vehicle.PrototypeWeight" Step="0.01" />
+            <AppInputNumber Width="1" Label="EnginePower" Unit="kW" @bind-Value="@Vehicle.EnginePower" />
+            <AppInputText Width="12" Label="Prototype-ImageLink" @bind-Value="@Vehicle.PrototypeImageHref" />
+
             <h4>@Localizer["PeriodInThisVersion"]</h4>
             <AppInputNumber Width="1" Label="FromYear" @bind-Value="@Vehicle.ThisEmbodiementFromYear" />
             <AppInputNumber Width="1" Label="UptoYear" @bind-Value="@Vehicle.ThisEmbodiementUptoYear" />
             <h3>@Localizer["ModelData"]</h3>
-            <AppInputSelect Width="2" Label="Scale" @bind-Value="@Vehicle.ScaleId" Items="ScaleItems" OnChangeNotifier="@( async () => await ScaleHasChanged(Vehicle.ScaleId))" />
-            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.ModelManufacturerName" />
-            <AppInputText Width="2" Label="ArticleNumber" @bind-Value="@Vehicle.ModelNumber" />
-            <AppInputSelectNullable Width="2" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="@Vehicle.CouplingFeatureId" />
-            <AppInputSelectNullable Width="2" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="@Vehicle.WheelsFeatureId"/>
-            <div />
+            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value="@Vehicle.InventoryNumber" />
+            <AppInputSelect Width="1" Label="Scale" @bind-Value="@Vehicle.ScaleId" Items="ScaleItems" OnChangeNotifier="@( async () => await ScaleHasChanged(Vehicle.ScaleId))" />
+            <AppInputText Width="2" Label="Model=Manufacturer" @bind-Value="@Vehicle.ModelManufacturerName" />
+            <AppInputText Width="1" Label="ArticleNumber" @bind-Value="@Vehicle.ModelNumber" />
+            <AppInputSelectNullable Width="1" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="@Vehicle.CouplingFeatureId" ShowNoneOption="true" />
+            <AppInputSelectNullable Width="1" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="@Vehicle.WheelsFeatureId" ShowNoneOption="true" />
             <AppInputText Width="2" Label="DecoderType" @bind-Value="@Vehicle.DecoderType" />
             <AppInputNumber Width="1" Label="DccAddress" @bind-Value="@Vehicle.DccAddress" />
-            <div/>
+            <div />
             <AppInputCheck Width="2" Label="HasSound" @bind-Value="@Vehicle.HasSound" />
             <AppInputCheck Width="2" Label="HasRemoteCouplings" @bind-Value="@Vehicle.HasRemoteCouplings" />
             <AppInputCheck Width="2" Label="IsWeathered" @bind-Value="@Vehicle.IsWeathered" />
             <div />
-            <AppInputText Width="10" Label="Note" @bind-Value="@Vehicle.Note"  Placeholder="@Localizer.MaxChars(200)"/>
+            <AppInputText Width="10" Label="Note" @bind-Value="@Vehicle.Note" Placeholder="@Localizer.MaxChars(200)" />
+            <h3>@Localizer["Functions"]</h3>
+            <AppInputText Width="1" Label="F0" @bind-Value="@Vehicle.F0" />
+            <AppInputText Width="1" Label="F1" @bind-Value="@Vehicle.F1" />
+            <AppInputText Width="1" Label="F2" @bind-Value="@Vehicle.F2" />
+            <AppInputText Width="1" Label="F3" @bind-Value="@Vehicle.F3" />
+            <AppInputText Width="1" Label="F4" @bind-Value="@Vehicle.F4" />
+            <AppInputText Width="1" Label="F5" @bind-Value="@Vehicle.F5" />
+            <AppInputText Width="1" Label="F6" @bind-Value="@Vehicle.F6" />
+            <AppInputText Width="1" Label="F7" @bind-Value="@Vehicle.F7" />
+            <AppInputText Width="1" Label="F8" @bind-Value="@Vehicle.F8" />
+            <AppInputText Width="1" Label="F9" @bind-Value="@Vehicle.F9" />
+            <AppInputText Width="1" Label="F10" @bind-Value="@Vehicle.F10" />
+            <AppInputText Width="1" Label="F11" @bind-Value="@Vehicle.F11" />
+            <AppInputText Width="1" Label="F12" @bind-Value="@Vehicle.F12" />
+            <AppInputText Width="1" Label="F13" @bind-Value="@Vehicle.F13" />
+            <AppInputText Width="1" Label="F14" @bind-Value="@Vehicle.F14" />
+            <AppInputText Width="1" Label="F15" @bind-Value="@Vehicle.F15" />
+            <AppInputText Width="1" Label="F16" @bind-Value="@Vehicle.F16" />
+            <AppInputText Width="1" Label="F17" @bind-Value="@Vehicle.F17" />
+            <AppInputText Width="1" Label="F18" @bind-Value="@Vehicle.F18" />
+            <AppInputText Width="1" Label="F19" @bind-Value="@Vehicle.F19" />
+            <AppInputText Width="1" Label="F20" @bind-Value="@Vehicle.F20" />
+            <AppInputText Width="1" Label="F21" @bind-Value="@Vehicle.F21" />
+            <AppInputText Width="1" Label="F22" @bind-Value="@Vehicle.F22" />
+            <AppInputText Width="1" Label="F23" @bind-Value="@Vehicle.F23" />
+            <AppInputText Width="1" Label="F24" @bind-Value="@Vehicle.F24" />
+            <AppInputText Width="1" Label="F25" @bind-Value="@Vehicle.F25" />
+            <AppInputText Width="1" Label="F26" @bind-Value="@Vehicle.F26" />
+            <AppInputText Width="1" Label="F27" @bind-Value="@Vehicle.F27" />
+            <AppInputText Width="1" Label="F28" @bind-Value="@Vehicle.F28" />
+            <AppInputText Width="1" Label="F29" @bind-Value="@Vehicle.F29" />
         </Inputs>
     </EditTemplate>
 }
@@ -54,10 +97,9 @@ else
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int VehicleId { get; set; }
     [Parameter] public int CountryId { get; set; }
-    string? SearchPrototype;
-    string? SearchModel;
     ClaimsPrincipal? Principal;
     Vehicle? Vehicle;
+    IEnumerable<ListboxItem> CountryItems = [];
     IEnumerable<ListboxItem> CouplingFeatureItems = [];
     IEnumerable<ListboxItem> TractionFeatureItems = [];
     IEnumerable<ListboxItem> WheelsFeatureItems = [];
@@ -69,12 +111,11 @@ else
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
         TractionFeatureItems = await VehicleService.GetTractionFeaturesListboxDataAsync();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        SearchPrototype = Navigator.TryGetQueryStringValue("Prototype", out string prototype) ? prototype : null;
-        SearchModel = Navigator.TryGetQueryStringValue("Model", out string model) ? model : null;
         if (VehicleId > 0)
         {
             Vehicle = await VehicleService.GetVehicleAsync(Principal, VehicleId, CountryId);
@@ -103,11 +144,11 @@ else
         await Task.Delay(3000);
         if (Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase))
         {
-            Navigator.NavigateTo($"/vehicles/my?Prototype={SearchPrototype}&Model={SearchModel}");
+            Navigator.NavigateTo($"/vehicles/my");
         }
         else
         {
-            Navigator.NavigateTo($"/vehicles/country/{CountryId}?Prototype={SearchPrototype}&Model={SearchModel}");
+            Navigator.NavigateTo($"/vehicles/country/{CountryId}");
         }
     }
 

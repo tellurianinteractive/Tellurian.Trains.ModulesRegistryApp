@@ -5,7 +5,7 @@
     <div class="col-6">
         @if (Label.HasValue())
         {
-            <label class="form-control-label" for="@Label"><strong>@Localizer[Label] (@Localizer["Markdown"])</strong></label>
+            <label class="form-control-label" for="@Label"><strong>@LabelText(Localizer) (@Localizer["Markdown"])</strong></label>
         }
         @if (IsVisible)
         {

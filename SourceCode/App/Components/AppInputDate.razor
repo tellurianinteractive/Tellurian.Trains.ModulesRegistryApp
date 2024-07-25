@@ -7,7 +7,7 @@
 <div class="@BootstrapWrapperCss">
     @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="form-control-label text-end" for="@Label">@Localizer[Label]</label>
+        <label class="form-control-label text-end" for="@Label">@LabelText(Localizer)</label>
     }
     @if (ShowTime)
     {

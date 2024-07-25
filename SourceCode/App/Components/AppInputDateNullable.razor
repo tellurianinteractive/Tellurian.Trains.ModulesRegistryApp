@@ -7,7 +7,7 @@
 <div class="@BootstrapWrapperCss">
     @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="form-control-label text-end" for="@Label">@Localizer[Label]</label>
+        <label class="form-control-label text-end" for="@Label">@LabelText(Localizer)</label>
     }
     <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" />
     @if (ValidationFor is not null)

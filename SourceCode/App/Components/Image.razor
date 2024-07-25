@@ -1,0 +1,41 @@
+﻿@inject HttpClient Http
+
+<img class="@CssClass" src="data:@ContentType(Href);base64,@Base64Data" />
+@code {
+    [Parameter] public string? Href { get; set; }
+    [Parameter] public string? CssClass { get; set; }
+    string Base64Data = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Href.HasValue())
+        {
+            var extension = Path.GetExtension(Href);
+
+            try
+            {
+                var data = await Http.GetByteArrayAsync(Href);
+                Base64Data = Convert.ToBase64String(data);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+    }
+
+    private string ContentType(string? href)
+    {
+        var extension = Path.GetExtension(href);
+        return extension switch
+        {
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            _ => "",
+        };
+
+    }
+}

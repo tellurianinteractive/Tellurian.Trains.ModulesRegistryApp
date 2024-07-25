@@ -187,6 +187,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Horsepower.
+        /// </summary>
+        public static string Horsepower {
+            get {
+                return ResourceManager.GetString("Horsepower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incomplete data.
         /// </summary>
         public static string IncompleteData {
@@ -201,6 +210,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Invited {
             get {
                 return ResourceManager.GetString("Invited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilowatt.
+        /// </summary>
+        public static string Kilowatt {
+            get {
+                return ResourceManager.GetString("Kilowatt", resourceCulture);
             }
         }
         

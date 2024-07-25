@@ -5,6 +5,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject VehicleService VehicleService
 @inject CountryService CountryService
@@ -18,20 +19,27 @@
 {
     <AppButton Href="@AddHref" Label="Add" />
 }
+@if (Filter.HasFilter)
+{
+    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+}
 <hr />
 <QuickGrid Items="FilteredVehicles" Virtualize="true" Pagination="PaginationState">
-    <PropertyColumn Title="@Localizer["InventoryNumber"]" Property="v => v.InventoryNumber" Sortable="true"></PropertyColumn>
+    @if (!IsMyVehiclesPage)
+    {
+        <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true" />
+    }
     <PropertyColumn Title="@Localizer["PrototypeInfo"]" Property="v => v.PrototypeInfo()" Sortable="true">
         <ColumnOptions>
             <div class="search-box">
-                <input type="search" autofocus @bind="SearchPrototype" @bind:event="oninput" placeholder="@Localizer["PrototypeInfo"]" />
+                <input type="search" autofocus @bind="@Filter.PrototypeInfo" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["PrototypeInfo"]" />
             </div>
         </ColumnOptions>
     </PropertyColumn>
     <PropertyColumn Title="@Localizer["ModelInfo"]" Property="v => v.ModelInfo()" Sortable="true" >
         <ColumnOptions>
             <div class="search-box">
-                <input type="search" autofocus @bind="SearchModel" @bind:event="oninput" placeholder="@Localizer["ModelInfo"]" />
+                <input type="search" autofocus @bind="@Filter.ModelInfo" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["ModelInfo"]" />
             </div>
         </ColumnOptions>
     </PropertyColumn>
@@ -40,10 +48,7 @@
     <TemplateColumn Title="@Localizer["Features"]" Context="vehicle">
         @vehicle.Features(Localizer)
     </TemplateColumn>
-    @if (!IsMyVehiclesPage)
-    {
-        <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true" />
-    }
+    <PropertyColumn Title="@Localizer["InventoryNumber"]" Property="v => v.InventoryNumber" Sortable="true" Align="Align.Right"></PropertyColumn>
     <TemplateColumn Title="@Localizer["Actions"]" Context="vehicle">
         @if (MayEdit)
         {
@@ -57,14 +62,13 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
-    string? SearchPrototype;
-    string? SearchModel;
+    VehicleFilter Filter = new();
     ClaimsPrincipal? Principal;
     IEnumerable<ListboxItem>? Countries;
     IEnumerable<Vehicle>? Vehicles;
     IQueryable<Vehicle> FilteredVehicles => Vehicles is null ? Enumerable.Empty<Vehicle>().AsQueryable() :
-        Vehicles.Where(v => (SearchPrototype.HasNoValue() || v.PrototypeInfo().Contains(SearchPrototype, StringComparison.OrdinalIgnoreCase))
-        && (SearchModel.HasNoValue() || v.ModelInfo().Contains(SearchModel, StringComparison.OrdinalIgnoreCase))).AsQueryable();
+        Vehicles.Where(v => (Filter.PrototypeInfo.HasNoValue() || v.PrototypeInfo().Contains(Filter.PrototypeInfo, StringComparison.OrdinalIgnoreCase))
+        && (Filter.ModelInfo.HasNoValue() || v.ModelInfo().Contains(Filter.ModelInfo, StringComparison.OrdinalIgnoreCase))).AsQueryable();
 
     bool MayEdit;
     bool IsMyVehiclesPage;
@@ -78,8 +82,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        SearchPrototype = Navigator.TryGetQueryStringValue("Prototype", out string prototype) ? prototype : null;
-        SearchModel = Navigator.TryGetQueryStringValue("Model", out string model) ? model : null; if (CountryId == 0) CountryId = Principal.CountryId();
+        Filter = await LocalStorage.GetItemAsync<VehicleFilter>("VehicleFilter") ?? new();
         MayEdit = Principal.IsAuthenticated();
         IsMyVehiclesPage = Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase);
         if (IsMyVehiclesPage)
@@ -102,15 +105,22 @@
         }
     }
 
+    private void OnFilterChanged()
+    {
+        LocalStorage.SetItemAsync("VehicleFilter", Filter);
+    }
+
     string Label => IsMyVehiclesPage ? "MyVehicles" : "Vehicles";
 
     string EditHref(Vehicle vehicle) => 
-        IsMyVehiclesPage ? $"/vehicles/my/{vehicle.Id}?Prototype={SearchPrototype}&Model={SearchModel}" : 
-        $"/vehicles/{vehicle.Id}/country/{CountryId}/edit?Prototype={SearchPrototype}&Model={SearchModel}";
+        IsMyVehiclesPage ? $"/vehicles/my/{vehicle.Id}" : 
+        $"/vehicles/{vehicle.Id}/country/{CountryId}/edit";
 
     string AddHref => 
-        IsMyVehiclesPage ? $"/vehicles/my/0?Prototype={SearchPrototype}&Model={SearchModel}" : 
-        $"vehicles/0/country/{CountryId}/edit?Prototype={SearchPrototype}&Model={SearchModel}";
+        IsMyVehiclesPage ? $"/vehicles/my/0" : 
+        $"vehicles/0/country/{CountryId}/edit";
     
         bool IsSelectCountryVisible => !IsMyVehiclesPage && (Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(CountryId));
 }
+
+

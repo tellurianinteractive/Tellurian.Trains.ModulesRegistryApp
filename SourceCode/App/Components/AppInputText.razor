@@ -6,7 +6,7 @@
 <div class="@WidthCss">
     @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="form-control-label" for="@Label">@Localizer[Label]</label>
+        <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
     }
     <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
     @if (ValidationFor is not null)

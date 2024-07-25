@@ -59,14 +59,18 @@ a, .btn-link {
     }
 }
 
+.image {
+}
+
+    .image.vehicle {
+        height: 3cm;
+        padding: 10px;
+    }
+    
 
 .fa {
     padding-right: 4pt;
 }
-/*
-.btn {
-    margin-right: 5px;
-}*/
 
 .icon {
     width: 32px;
@@ -120,6 +124,7 @@ h4 {
         color: red;
         font-weight: bold;
     }
+
     .meeting.preliminary {
         font-style: italic;
     }
@@ -166,10 +171,14 @@ blockquote {
     .markdown li {
         line-height: 1.4;
     }
+
 .quickgrid {
     --col-gap: 0.5rem;
 }
-.quickgrid  button {font-weight: bold}
+
+    .quickgrid button {
+        font-weight: bold
+    }
 
 .tooltip {
     position: relative;

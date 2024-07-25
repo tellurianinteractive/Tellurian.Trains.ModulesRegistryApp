@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace ModulesRegistry.Services.Implementations;
+﻿namespace ModulesRegistry.Services.Implementations;
 
 public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 {
@@ -18,7 +16,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
                 .Include(v => v.WheelsFeature)
                 .Include(v => v.Scale)
                 .Where(v => v.OwningPerson.CountryId == countryId)
-                .OrderBy(v => v.OwningPerson.FirstName).ThenBy(v => v.OwningPerson.LastName).ThenBy(v => v.InventoryNumber)
+                .OrderBy(v => v.OwningPerson.FirstName).ThenBy(v => v.OwningPerson.LastName).ThenBy(v => v.KeeperSignature).ThenBy(v => v.VehicleClass).ThenBy(v => v.VehicleNumber)
                 .ToReadOnlyListAsync();
         }
         return [];
@@ -36,7 +34,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
                 .Include(v => v.WheelsFeature)
                 .Include(v => v.Scale)
                 .Where(v => v.OwningPersonId == personId)
-                .OrderBy(v => v.InventoryNumber)
+                .OrderBy(v => v.KeeperSignature).ThenBy(v => v.VehicleClass).ThenBy(v => v.VehicleNumber)
                 .ToReadOnlyListAsync();
         }
         return Enumerable.Empty<Vehicle>().AsQueryable();
@@ -112,18 +110,38 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         entity.FormatData();
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Vehicles.FindAsync(entity.Id).ConfigureAwait(false);
+        int result;
         if (existing is null)
         {
             dbContext.Add(entity);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(entity);
+            result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
         else
         {
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
             if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(existing);
+            result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
+        var vehicle = existing ?? entity;
+        await AddPrototypeLengthForSameKeeperAndClass(vehicle);
+        await AddPrototypeWeightForSameKeeperAndClass(vehicle);
+        return result.SaveResult(vehicle);
+    }
+
+    public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Vehicles
+            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength==null &&
+                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeLength, vehicle.PrototypeLength));
+    }
+    public async Task<int> AddPrototypeWeightForSameKeeperAndClass(Vehicle vehicle)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Vehicles
+            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeWeight == null &&
+                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeWeight, vehicle.PrototypeWeight));
     }
 }

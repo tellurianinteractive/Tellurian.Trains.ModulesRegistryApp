@@ -4,6 +4,7 @@ using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Shared;
 using System.Globalization;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace ModulesRegistry.Extensions;
@@ -72,6 +73,16 @@ public static class LocalizedStringExtensions
 
     public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) => 
         localizer["_CASING"] == "_LOWER" ? localizer[resourceName].Value.ToLowerInvariant() : localizer[resourceName].Value;
+
+    public static string FromParts(this IStringLocalizer localizer, string resourceName)
+    {
+        if (resourceName.HasNoValue()) return string.Empty;
+        var parts = resourceName.Split(['-', '/', '=']);
+        if (parts.Length == 1) return localizer[parts[0]];
+        var localized = parts.Select(p => (localizer[p] ?? p).ToLowerInvariant());
+        var separator = resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : " ";
+        return string.Join(separator, localized).ToFirstUpperInvariant();
+    }
 
     private static string Description(this IStringLocalizer me, object? context) =>
         context switch

@@ -408,6 +408,9 @@
   <data name="EndProfile" xml:space="preserve">
     <value>End profile</value>
   </data>
+  <data name="EnginePower" xml:space="preserve">
+    <value>Engine power</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
@@ -519,6 +522,9 @@
   <data name="FunctionalState" xml:space="preserve">
     <value>Functional state</value>
   </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Functions</value>
+  </data>
   <data name="GameSettings" xml:space="preserve">
     <value>Game settings</value>
   </data>
@@ -590,6 +596,9 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>I have read and understand</value>
+  </data>
+  <data name="ImageLink" xml:space="preserve">
+    <value>Image link</value>
   </data>
   <data name="InAll" xml:space="preserve">
     <value>in all</value>
@@ -720,8 +729,11 @@
   <data name="Italian" xml:space="preserve">
     <value>Italian</value>
   </data>
+  <data name="Keeper" xml:space="preserve">
+    <value>Keeper</value>
+  </data>
   <data name="KeeperSignature" xml:space="preserve">
-    <value>Keepers signature</value>
+    <value>Keeper signature</value>
   </data>
   <data name="LandscapeSeason" xml:space="preserve">
     <value>Season</value>
@@ -795,6 +807,9 @@
   <data name="ManageWaybills" xml:space="preserve">
     <value>Manage waybills</value>
   </data>
+  <data name="ManufacturedYear" xml:space="preserve">
+    <value>Manufacturing year</value>
+  </data>
   <data name="Manufacturer" xml:space="preserve">
     <value>Manufacturer</value>
   </data>
@@ -858,6 +873,9 @@
   <data name="MiddleName" xml:space="preserve">
     <value>Middle name</value>
   </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
   <data name="ModelData" xml:space="preserve">
     <value>Model data</value>
   </data>
@@ -908,6 +926,9 @@
   </data>
   <data name="MustBeBetween" xml:space="preserve">
     <value>must be between {0} and {1}</value>
+  </data>
+  <data name="MustBeBetweenOrEmpty" xml:space="preserve">
+    <value>must be between {0} and {1} or empty</value>
   </data>
   <data name="MustBeginWithCapitalLetter" xml:space="preserve">
     <value>must begin with a capital letter</value>
@@ -1184,6 +1205,9 @@
   </data>
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Print per operating day</value>
+  </data>
+  <data name="Prototype" xml:space="preserve">
+    <value>Prototype</value>
   </data>
   <data name="PrototypeData" xml:space="preserve">
     <value>Prototype data</value>
@@ -1508,6 +1532,9 @@
   </data>
   <data name="Waybills" xml:space="preserve">
     <value>Waybills</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Weight</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>

@@ -1,3 +1,4 @@
+using Azure.Messaging.EventGrid.SystemEvents;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,5 +31,12 @@ public class ExplorationTests
 
     private static IDbContextFactory<ModulesDbContext> CreateDbContextFactory(ServiceProvider sp) =>
         sp.GetRequiredService<IDbContextFactory<ModulesDbContext>>();
+
+    [TestMethod]
+    public void GetsExtensionOfHref()
+    {
+        var extension = Path.GetExtension("https://www.jernbanen.dk/Fotos/Motor/DSB_EA3005_1986.jpg");
+        Assert.AreEqual(".jpg", extension);
+    }
 }
 

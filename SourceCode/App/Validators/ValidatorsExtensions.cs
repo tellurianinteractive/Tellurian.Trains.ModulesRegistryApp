@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
-using ModulesRegistry.Services.Extensions;
 using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
@@ -62,7 +61,7 @@ public static partial class ValidatorsExtensions
         return false;
     }
 
-    private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von" };
+    private static string[] LowerCaseWords => ["i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von"];
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
@@ -79,6 +78,10 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, Station> IsRegionRequired<T>(this IRuleBuilder<T, Station> builder, IStringLocalizer localizer) =>
         builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
 
+    public static IRuleBuilderOptions<T, decimal?> IsNullOrBetweenInclusive<T>(this IRuleBuilder<T, decimal?> builder, decimal min, decimal max, IStringLocalizer localizer) =>
+        builder.Must(d => d.HasValue == false || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
+    public static IRuleBuilderOptions<T, short?> IsNullOrBetweenInclusive<T>(this IRuleBuilder<T, short?> builder, int min, int max, IStringLocalizer localizer) =>
+        builder.Must(d => d.HasValue == false || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
     private static bool IsValidEmailAddress(this string? email)
     {
         if (email == null) return false;
@@ -136,13 +139,13 @@ public static partial class ValidatorsExtensions
     private static bool IsValidEnum(this int value, Type enumType) => Enum.IsDefined(enumType, value);
 
     public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinYear, MaxYear)}");
+        builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, MinYear, MaxYear)}");
     private static bool IsValidYear(this short? year) => year is null || year >= MinYear && year <= MaxYear;
     private static int MinYear => 1900;
     private static int MaxYear => DateTimeOffset.Now.Year;
 
     public static IRuleBuilderOptions<T, short?> MustBeValidHour<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"].Value, MinHour, MaxHour)}");
+        builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, MinHour, MaxHour)}");
 
     private static bool IsValidHour(this short? hour) => hour is null || hour >= MinHour && hour <= MaxHour;
     const short MinHour = 0;

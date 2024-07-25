@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.4
+Release date 2024-07-25
+- **My Vehicles** now have more data about prototype and model, also prototype image and loco functions F0-F29.
+- **My Vehicles** can now be filtered and sorted. The filter remains active until you change or remove it.
+- **Component update** to latest versions of external components.
 ## Release 1.11.3
 Release date 2024-07-15
 - **My Vehicles** has relaxed validation and some fields made optional.

@@ -159,11 +159,17 @@
   <data name="GroupMembers" xml:space="preserve">
     <value>Gruppenmitglieder</value>
   </data>
+  <data name="Horsepower" xml:space="preserve">
+    <value>PS</value>
+  </data>
   <data name="IncompleteData" xml:space="preserve">
     <value>Unvollständige Daten</value>
   </data>
   <data name="Invited" xml:space="preserve">
     <value>Eingeladen</value>
+  </data>
+  <data name="Kilowatt" xml:space="preserve">
+    <value>Kilowatt</value>
   </data>
   <data name="Market" xml:space="preserve">
     <value>Markt</value>

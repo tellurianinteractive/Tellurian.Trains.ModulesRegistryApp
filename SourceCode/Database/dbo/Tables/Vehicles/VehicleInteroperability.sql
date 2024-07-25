@@ -7,9 +7,9 @@
 	[AppliesToPassengerCars] BIT NOT NULL DEFAULT((0)),
 	[AppliesToBogieWagons] BIT NOT NULL DEFAULT((0)),
 	[AppliesToCarCarryingWagons] BIT NOT NULL DEFAULT((0)),
-	[IsForInternationalUse] BIT NOT NULL DEFAULT((0)),
-	[IsCompliantWithInternationalStandard] BIT NOT NULL DEFAULT((0)),
-	[InternationalUseRequiresSpecialAgreement] BIT NOT NULL DEFAULT((0)),
+	[IsForInternationalUse] BIT NULL DEFAULT((0)),
+	[IsCompliantWithInternationalStandard] BIT NULL DEFAULT((0)),
+	[InternationalUseRequiresSpecialAgreement] BIT NULL DEFAULT((0)),
 	[IsSpecialVehicle] BIT NOT NULL DEFAULT((0)),
 	[WithAirCondition]  BIT NOT NULL DEFAULT((0)),
 

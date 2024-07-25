@@ -56,7 +56,14 @@
             validationErrorMessage = null;
             return true;
         }
-        throw new InvalidOperationException($"{GetType()} does not support the type '{typeof(TValue)}'.");
+        else if (IsDecimal)
+        {;
+            decimal.TryParse(value, NumberStyles.Float, CultureInfo.CurrentCulture, out var parsedValue);
+            result = (TValue)(object)parsedValue;
+            validationErrorMessage = null;
+            return true;
+        }
+        else throw new InvalidOperationException($"{GetType()} does not support the type '{typeof(TValue)}'.");
     }
 
     protected override string FormatValueAsString(TValue? value)
@@ -69,10 +76,11 @@
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
     string NumberStep => Step is null ? "1" : CurrentValue is double ? ".1" : Step;
-    string LabelMarkup => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? Localizer[Label].Value : $"{Localizer[Label]}&nbsp;({Unit})";
+    string LabelMarkup => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? LabelText(Localizer) : $"{LabelText(Localizer)}&nbsp;({Unit})";
 
     private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);
     private bool IsDouble => typeof(TValue) == typeof(double) || typeof(TValue) == typeof(double?);
     private bool IsShort => typeof(TValue) == typeof(short) || typeof(TValue) == typeof(short?);
+    private bool IsDecimal => typeof(TValue) == typeof(decimal) || typeof(TValue) == typeof(decimal?);
 
 }

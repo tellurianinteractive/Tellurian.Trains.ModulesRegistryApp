@@ -408,6 +408,9 @@
   <data name="EndProfile" xml:space="preserve">
     <value>Endprofile</value>
   </data>
+  <data name="EnginePower" xml:space="preserve">
+    <value>Motorleistung</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>Englisch</value>
   </data>
@@ -519,6 +522,9 @@
   <data name="FunctionalState" xml:space="preserve">
     <value>Funktionszustand</value>
   </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Funktionen</value>
+  </data>
   <data name="GameSettings" xml:space="preserve">
     <value>Spieleinstellungen</value>
   </data>
@@ -590,6 +596,9 @@
   </data>
   <data name="IHaveReadAndUnderstand" xml:space="preserve">
     <value>Ich habe gelesen und verstanden</value>
+  </data>
+  <data name="ImageLink" xml:space="preserve">
+    <value>Bildlink</value>
   </data>
   <data name="InAll" xml:space="preserve">
     <value>in allen</value>
@@ -720,6 +729,9 @@
   <data name="Italian" xml:space="preserve">
     <value>Italienisch</value>
   </data>
+  <data name="Keeper" xml:space="preserve">
+    <value>Egentürmer</value>
+  </data>
   <data name="KeeperSignature" xml:space="preserve">
     <value>Eigentümercode</value>
   </data>
@@ -795,6 +807,9 @@
   <data name="ManageWaybills" xml:space="preserve">
     <value>Frachtbriefe verwalten</value>
   </data>
+  <data name="ManufacturedYear" xml:space="preserve">
+    <value>Herstellungsjahr</value>
+  </data>
   <data name="Manufacturer" xml:space="preserve">
     <value>Hersteller</value>
   </data>
@@ -858,6 +873,9 @@
   <data name="MiddleName" xml:space="preserve">
     <value>Zweiter Vorname</value>
   </data>
+  <data name="Model" xml:space="preserve">
+    <value>Modell</value>
+  </data>
   <data name="ModelData" xml:space="preserve">
     <value>Modelldaten</value>
   </data>
@@ -908,6 +926,9 @@
   </data>
   <data name="MustBeBetween" xml:space="preserve">
     <value>muss zwischen {0} und {1} liegen</value>
+  </data>
+  <data name="MustBeBetweenOrEmpty" xml:space="preserve">
+    <value>muss zwischen {0} und {1} liegen oder leer sein</value>
   </data>
   <data name="MustBeginWithCapitalLetter" xml:space="preserve">
     <value>muss mit einem Großbuchstaben beginnen</value>
@@ -1184,6 +1205,9 @@
   </data>
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Ausdruck pro Betriebstag</value>
+  </data>
+  <data name="Prototype" xml:space="preserve">
+    <value>Vorbild</value>
   </data>
   <data name="PrototypeData" xml:space="preserve">
     <value>Daten zum Vorbild</value>
@@ -1508,6 +1532,9 @@
   </data>
   <data name="Waybills" xml:space="preserve">
     <value>Frachtbriefe</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Gewicht</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Herzlich willkommen</value>
