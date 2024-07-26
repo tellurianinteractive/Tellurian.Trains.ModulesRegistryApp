@@ -21,7 +21,7 @@ public static class VehicleExtensions
 
     public static string DisplayInfo(this Vehicle? vehicle) =>
         vehicle is null ? string.Empty :
-        $"{vehicle.InventoryNumber} : {vehicle.KeeperSignature} {vehicle.VehicleClass} {vehicle.VehicleNumber}";
+        $"{vehicle.KeeperSignature} {vehicle.VehicleClass} {vehicle.VehicleNumber}";
 
     public static MarkupString Features(this Vehicle vehicle, IStringLocalizer localizer)
     {
