@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 public class Vehicle
@@ -82,6 +83,7 @@ public class Vehicle
     }
 }
 
+
 internal static class VehicleMapper
 {
     public static void MapVehicle(this ModelBuilder builder)
@@ -117,4 +119,10 @@ internal static class VehicleMapper
                 .HasForeignKey(e => e.TractionFeatureId);
         });
     }
+}
+
+#nullable enable
+public static class VehicleExtensions
+{
+    public static bool HasImage(this Vehicle? vehicle) => vehicle?.PrototypeImageHref?.Length > 10 == true;
 }

@@ -15,6 +15,7 @@ public static class FontAwesome
     public const string Edit = "fa fa-edit";
     public const string Global = "fa fa-globe-europe";
     public const string Group = "fa fa-users";
+    public const string Image = "fa fa-image";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
     public const string Mail = "fa fa-mail-bulk";
@@ -69,6 +70,7 @@ public static class FontAwesome
             {nameof(Erase), Erase },
             {nameof(Global), Global },
             {nameof(Group), Group },
+            {nameof(Image), Image },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
             {nameof(Mail), Mail },

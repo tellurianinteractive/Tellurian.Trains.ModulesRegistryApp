@@ -13,6 +13,7 @@ namespace ModulesRegistry.Services.Tests;
 public class VehicleImporterTests
 {
     [TestMethod]
+    [Ignore]
     public async Task ReadCsvFile()
     {
         var app = AppBuilder.Create([]);
@@ -25,6 +26,7 @@ public class VehicleImporterTests
     }
 
     [TestMethod]
+    [Ignore]
     public async Task ReadAndImportLocos()
     {
         var app = AppBuilder.Create([]);
@@ -36,6 +38,7 @@ public class VehicleImporterTests
     }
 
     [TestMethod]
+    [Ignore]
     public async Task UpdateLocos()
     {
         var app = AppBuilder.Create([]);

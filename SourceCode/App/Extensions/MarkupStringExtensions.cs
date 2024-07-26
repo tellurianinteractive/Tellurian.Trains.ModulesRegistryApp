@@ -29,4 +29,7 @@ public static class MarkupStringExtensions
         person.UserId.HasValue && person.User?.LastTermsOfUseAcceptTime is null ? "user-clock" :
         person.UserId.HasValue ? "user-check" :
         "user-slash";
+
+    public static MarkupString ImageIcon(this Vehicle vehicle) =>
+        (vehicle.HasImage() ? $"""<a target="_blank" href="{vehicle.PrototypeImageHref}"><span class="{FontAwesome.Image}"/></a>""" : "").AsMarkup();
 }

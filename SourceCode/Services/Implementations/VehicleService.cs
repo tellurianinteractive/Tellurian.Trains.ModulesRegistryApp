@@ -125,23 +125,47 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         var vehicle = existing ?? entity;
         await AddPrototypeLengthForSameKeeperAndClass(vehicle);
         await AddPrototypeWeightForSameKeeperAndClass(vehicle);
+        await AddKeeperCountryForSameKeeper(vehicle);
+        await AddEnginePowerForSameKeeperAndClass(vehicle);
         return result.SaveResult(vehicle);
     }
 
     public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
     {
+        if (vehicle.PrototypeLength == 0) return 0; 
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Vehicles
-            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength==null &&
+            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength == null &&
                     vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
             .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeLength, vehicle.PrototypeLength));
     }
     public async Task<int> AddPrototypeWeightForSameKeeperAndClass(Vehicle vehicle)
     {
+        if (vehicle.PrototypeWeight == null) return 0;
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Vehicles
             .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeWeight == null &&
                     vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
             .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeWeight, vehicle.PrototypeWeight));
+    }
+
+    public async Task<int> AddEnginePowerForSameKeeperAndClass(Vehicle vehicle)
+    {
+        if (vehicle.EnginePower == null) return 0;
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Vehicles
+            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.EnginePower == null &&
+                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.EnginePower, vehicle.EnginePower));
+    }
+
+    public async Task<int> AddKeeperCountryForSameKeeper(Vehicle vehicle)
+    {
+        if (vehicle.KeeperCountryId == null || vehicle.KeeperCountryId.Value == 0) return 0;
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Vehicles
+            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.KeeperCountryId == null &&
+                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.KeeperCountryId, vehicle.KeeperCountryId));
     }
 }

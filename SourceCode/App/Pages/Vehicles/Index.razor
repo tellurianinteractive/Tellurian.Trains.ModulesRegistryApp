@@ -29,6 +29,9 @@
     {
         <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true" />
     }
+    <TemplateColumn Context="v">
+        @v.ImageIcon()
+    </TemplateColumn>
     <PropertyColumn Title="@Localizer["PrototypeInfo"]" Property="v => v.PrototypeInfo()" Sortable="true">
         <ColumnOptions>
             <div class="search-box">
@@ -49,7 +52,7 @@
         @vehicle.Features(Localizer)
     </TemplateColumn>
     <PropertyColumn Title="@Localizer["InventoryNumber"]" Property="v => v.InventoryNumber" Sortable="true" Align="Align.Right"></PropertyColumn>
-    <TemplateColumn Title="@Localizer["Actions"]" Context="vehicle">
+    <TemplateColumn Title="@Localizer["Actions"]" Context="vehicle" Class="noprint">
         @if (MayEdit)
         {
             <AppButton Href="@EditHref(vehicle)" Label="Edit" />
