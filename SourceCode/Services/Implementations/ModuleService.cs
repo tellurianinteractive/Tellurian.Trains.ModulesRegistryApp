@@ -59,7 +59,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         return false;
     }
 
-    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId, int scaleId, int themeId)
+    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId, int scaleId = 0, int themeId = 0)
     {
         if (principal.IsAuthenticated())
         {

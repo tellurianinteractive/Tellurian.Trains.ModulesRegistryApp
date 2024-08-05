@@ -3,33 +3,41 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 @inject CargoService CargoService
 
 <PageHeading ObjectName="CargoTypes" IconClass="@FontAwesome.Cargo" PageAction="PageAction.List" HelpContext="CargoTypes" ShowHelpInitially="false" />
 
 @if (MayEdit)
 {
-    <div class="col-12">
+    <span class="col-12">
         <AppButton Label="Add" Href="@("cargo/0/edit/")" />
-        @if (HasFilter)
-        {
-            <AppButton Label="RemoveFiltering" IconName="@FontAwesome.Erase" OnClickCallback="RemoveFilter" />
-        }
-    </div>
+    </span>
+}
+@if (Filter.HasFilter)
+{
+    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
 }
 <div class="grid" tabindex="-1">
     <QuickGrid Items="@FilteredItems" Virtualize="true" Pagination="PaginationState">
         <PropertyColumn Property="@(c => c.NhmCodeOrEmpty())" Sortable="true" Title="@Localizer["NHMCode"]">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="NhmCodeFilter" @bind:event="oninput" placeholder="@Localizer["NHMCode"]" />
+                    <input type="search" autofocus @bind="Filter.Code" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["NHMCode"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
         <PropertyColumn Property="@(c => c.LocalizedName().Value)" Sortable="true" Title="@Localizer["Name"]">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                    <input type="search" autofocus @bind="Filter.Name" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Name"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(c => c.DefaultClasses)" Title="@Localizer["DefaultClasses"]" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="Filter.WagonClass" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Class"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
@@ -53,6 +61,8 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     ClaimsPrincipal? Principal;
     IEnumerable<Cargo>? Cargos;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    CargoFilter Filter = new();
     bool MayEdit;
 
     string EditHref(Cargo cargo) => $"Cargo/{cargo.Id}/Edit";
@@ -63,27 +73,23 @@
         {
             if (Cargos is null) return Enumerable.Empty<Cargo>().AsQueryable();
             return Cargos.AsQueryable()
-                .Where(c => (NhmCodeFilter.HasNoValue() || c.NhmCode.ToString().StartsWith(NhmCodeFilter)) &&
-                NameFilter.HasNoValue() || NameFilter.HasValue() && c.LocalizedName().Value.Contains(NameFilter, StringComparison.CurrentCultureIgnoreCase));
-
+                .Where(c =>
+                    c.NhmCodeOrEmpty().StartsWithCaseInsensitive(Filter.Code) &&
+                    c.LocalizedName().Value.ContainsCaseInsensitive(Filter.Name) &&
+                    c.DefaultClasses.ContainsCaseInsensitive(Filter.WagonClass));
         }
     }
 
-    PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    string? NhmCodeFilter;
-    string? NameFilter;
-    bool HasFilter => NhmCodeFilter.HasValue() || NameFilter.HasValue();
-    void RemoveFilter()
+    void OnFilterChanged()
     {
-        NhmCodeFilter = default;
-        NameFilter = default;
-        StateHasChanged();
+        LocalStorage.SetItemAsync(nameof(CargoFilter), Filter);
     }
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         MayEdit = Principal.IsCountryOrGlobalAdministrator();
+        Filter = await LocalStorage.GetItemAsync<CargoFilter>(nameof(CargoFilter)) ?? Filter;
         Cargos = (await CargoService.GetAll()).OrderBy(c => c.NhmCode);
     }
 }

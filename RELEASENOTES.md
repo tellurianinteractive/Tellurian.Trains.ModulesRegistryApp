@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.5
+Release date 2024-08-05
+- **Bug fix** of requiring non-existing *scale* when adding new modules.
+- **Filtering and sorting** improved in several pages that displays many items.
 ## Release 1.11.4
 Release date 2024-07-25
 - **My Vehicles** now have more data about prototype and model, also prototype image and loco functions F0-F29.

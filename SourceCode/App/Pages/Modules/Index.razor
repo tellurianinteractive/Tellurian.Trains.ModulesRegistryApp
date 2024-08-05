@@ -1,11 +1,10 @@
 ﻿@page "/Modules/Index"
 @page "/Modules/Country/{CountryId:int}"
-@page "/Modules/Scale/{ScaleId:int}"
-@page "/Modules/Country/{CountryId:int}/Scale/{ScaleId:int}/Theme/{ThemeId:int}"
-
 
 @attribute [Authorize(Policy = "User")]
+
 @inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 
 @inject ModuleService ModuleService
@@ -14,29 +13,26 @@
 
 
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
-<div style="display:flex;">
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId Inline="true" />
-    <ListboxSelector OnSelected="OnSelectedScale" Items="Scales" ItemType="Scale" IsVisible="IsSelectCountryVisible" SelectedId=ScaleId Inline="true" />
-    <ListboxSelector OnSelected="OnSelectedTheme" Items="@EnumExtensions.ThemesListboxItems()" ItemType="Theme" IsVisible="IsSelectCountryVisible" SelectedId=ThemeId Inline="true" />
-</div>
-<hr />
-@if (IsFiltered)
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId Inline="true" />
+@if (Filter.HasFilter)
 {
-    <AppButton Label="RemoveFiltering" OnClickCallback="RemoveFilter" IconName="@FontAwesome.Erase" />
+    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
 }
+<hr />
+
 <div class="grid" tabindex="-1">
     <QuickGrid Items="FilteredModules" Virtualize="true" Pagination="PaginationState">
         <PropertyColumn Title="@Localizer["Scale"]" Property="p => p.Scale.Display()" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="ScaleFilter" @bind:event="oninput" placeholder="@Localizer["Scale"]" />
+                    <input type="search" autofocus @bind="Filter.Scale" @bind:event="oninput" placeholder="@Localizer["Scale"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
         <PropertyColumn Title="@Localizer["Name"]" Property="p => p.FullName" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="FullNameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
+                    <input type="search" autofocus @bind="Filter.ModuleName" @bind:event="oninput" placeholder="@Localizer["Name"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
@@ -48,7 +44,7 @@
         <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="OwnerNameFilter" @bind:event="oninput" placeholder="@Localizer["Owners"]" />
+                    <input type="search" autofocus @bind="Filter.OwnerName" @bind:event="oninput" placeholder="@Localizer["Owners"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
@@ -65,34 +61,24 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
-    [Parameter] public int ScaleId { get; set; }
-    [Parameter] public int ThemeId { get; set; }
+    int CountryOrDefaultId => CountryId > 0 ? CountryId : Filter.CountryId > 0 ? Filter.CountryId : Principal.CountryId();
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<Module>? Modules;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    private ModulesFilter Filter = new();
     private IEnumerable<ListboxItem>? Countries;
     private IEnumerable<ListboxItem>? Scales;
 
     private void OnSelectedCountry(int id)
     {
-        if (id > 0) { CountryId = id; Navigate(); }
-
+        if (id > 0)
+        {
+            CountryId = id;
+            OnFilterChanged();
+            Navigator.NavigateTo($"/Modules/Country/{CountryId}");
+        }
     }
-    private void OnSelectedScale(int id)
-    {
-        if (id > 0) { ScaleId = id; Navigate(); }
-    }
-
-    private void OnSelectedTheme(int id)
-    {
-        if (id >= 0) { ThemeId = id; Navigate(); }
-    }
-
-    private void Navigate()
-    {
-        Navigator.NavigateTo($"/Modules/Country/{CountryId}/Scale/{ScaleId}/Theme/{ThemeId}");
-    }
-
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
     private bool MayEdit(Module module) => Principal.IsGlobalAdministrator() || module.OwningPersonsIds().Contains(Principal.PersonId());
@@ -107,36 +93,22 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (CountryId < 1)
-        {
-            CountryId = Principal.CountryId();
-            Navigator.NavigateTo($"/Modules/Country/{CountryId}");
-        }
-        else
-        {
-            Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId, ScaleId, ThemeId);
-        }
+        Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryOrDefaultId);
     }
 
-    string? ScaleFilter;
-    string? FullNameFilter;
-    string? OwnerNameFilter;
-    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    private void OnFilterChanged()
+    {
+        LocalStorage.SetItemAsync(nameof(ModulesFilter), Filter);
+    }
+
     IQueryable<Module> FilteredModules =>
         Modules is null ? Enumerable.Empty<Module>().AsQueryable() :
         Modules.AsQueryable()
-            .Where(m =>
-                (ScaleFilter.HasNoValue() || m.Scale.Display().Contains(ScaleFilter, StringComparison.CurrentCultureIgnoreCase)) &&
-                (FullNameFilter.HasNoValue() || m.FullName.StartingWith(FullNameFilter)) &&
-                (OwnerNameFilter.HasNoValue() || m.OwnerNames().Contains(OwnerNameFilter, StringComparison.CurrentCultureIgnoreCase))
-            );
-    bool IsFiltered => ScaleFilter.HasValue() || FullNameFilter.HasValue() || OwnerNameFilter.HasValue();
-    void RemoveFilter()
-    {
-        ScaleFilter = default;
-        FullNameFilter = default;
-        OwnerNameFilter = default;
-    }
+    .Where(m =>
+            m.Scale.Display().ContainsCaseInsensitive(Filter.Scale) &&
+            m.FullName.ContainsCaseInsensitive(Filter.ModuleName) &&
+            m.OwnerNames().ContainsCaseInsensitive(Filter.OwnerName)
+        );
 
     string EditHref(Module? module) =>
         module is null ? string.Empty :

@@ -6,6 +6,7 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 
 @inject PersonService PersonService
@@ -19,14 +20,14 @@
 
 @if (CountryId > 0)
 {
-    <div class="col-12" style="margin-top: 10px">
+    <span class="col-12" style="margin-top: 10px">
         <AppButton Href=@AddHref(CountryId) Label="Add" />
-        @if (HasFilter)
-        {
-            <AppButton Label="RemoveFiltering" OnClickCallback="RemoveFilter" IconName="@FontAwesome.Erase" />
-        }
-    </div>
-    <hr/>
+    </span>
+    @if (Filter.HasFilter)
+    {
+        <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+    }
+    <hr />
 }
 
 <div class="grid" tabindex="-1">
@@ -34,21 +35,21 @@
         <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" Title="@Localizer["FirstName"]">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="FirstNameFilter" @bind:event="oninput" placeholder="@Localizer["FirstName"]" />
+                    <input type="search" autofocus @bind="Filter.FirstName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["FirstName"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
         <PropertyColumn Property="@(p => p.LastName)" Sortable="true" Title="@Localizer["LastName"]">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="LastNameFilter" @bind:event="oninput" placeholder="@Localizer["LastName"]" />
+                    <input type="search" autofocus @bind="Filter.LastName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["LastName"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
         <PropertyColumn Property="@(p => p.CityName)" Sortable="true" Title="@Localizer["City"]">
             <ColumnOptions>
                 <div class="search-box">
-                    <input type="search" autofocus @bind="CityNameFilter" @bind:event="oninput" placeholder="@Localizer["CityName"]" />
+                    <input type="search" autofocus @bind="Filter.CityName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["CityName"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
@@ -83,6 +84,8 @@
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<Person> People = Array.Empty<Person>().AsQueryable();
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    private PersonsFilter Filter = new();
     private IEnumerable<ListboxItem>? Countries;
 
 
@@ -95,6 +98,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
+        Filter = await LocalStorage.GetItemAsync<PersonsFilter>(nameof(PersonsFilter)) ?? Filter;
         if (CountryId < 1)
         {
             var id = Principal.CountryId();
@@ -122,25 +126,19 @@
         user = await UserService.UnlockUser(user);
     }
 
-    PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    string? FirstNameFilter;
-    string? LastNameFilter;
-    string? CityNameFilter;
+    private void OnFilterChanged()
+    {
+        LocalStorage.SetItemAsync(nameof(PersonsFilter), Filter);
+    }
+
     IQueryable<Person> FilteredPeople =>
         People.AsQueryable()
                 .Where(p =>
-                    p.FirstName.StartingWith(FirstNameFilter) &&
-                    p.LastName.StartingWith(LastNameFilter) &&
-                    p.CityName.StartingWith(CityNameFilter));
+                    p.FirstName.ContainsCaseInsensitive(Filter.FirstName) &&
+                    p.LastName.ContainsCaseInsensitive(Filter.LastName) &&
+                    p.CityName.ContainsCaseInsensitive(Filter.CityName));
 
-    void RemoveFilter()
-    {
-        FirstNameFilter = default;
-        LastNameFilter = default;
-        CityNameFilter = default;
-        StateHasChanged();
-    }
-    bool HasFilter => FirstNameFilter.HasValue() || LastNameFilter.HasValue() || CityNameFilter.HasValue();
+    
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 

@@ -1,6 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Resources;
-using ModulesRegistry.Data.Resources;
+﻿using ModulesRegistry.Data.Resources;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data.Extensions;
 
@@ -8,6 +7,12 @@ public static class StringExtensions
 {
     public static string[]? AsArray(this string? value) =>
         value is null ? null : new string[] { value };
+
+    public static bool ContainsCaseInsensitive(this string? value, string? find) =>
+        value is null || find.HasNoValue() || value.Contains(find, StringComparison.OrdinalIgnoreCase);
+
+    public static bool StartsWithCaseInsensitive(this string? value, string? start) =>
+        value is null || start.HasNoValue() || start.Length > 0 && value.StartsWith(start, StringComparison.OrdinalIgnoreCase);
 
     public static bool HasValue([NotNullWhen(true)] this string? value) =>
         !string.IsNullOrWhiteSpace(value);
@@ -54,5 +59,5 @@ public static class StringExtensions
         return pos > 0 ? pos : max;
     }
 
-    
+
 }

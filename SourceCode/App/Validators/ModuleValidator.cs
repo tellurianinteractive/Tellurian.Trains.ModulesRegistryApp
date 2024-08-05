@@ -15,10 +15,7 @@ public class ModuleValidator : AbstractValidator<Module>
             .MustBeOrdinaryText(localizer)
             .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
-        RuleFor(m => m.ScaleId)
-            .MustBeSelected(localizer)
-            .WithName(n => localizer[nameof(n.Scale)]);
-        RuleFor(m => m.ConfigurationLabel)
+         RuleFor(m => m.ConfigurationLabel)
             .MaximumLength(10)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.ConfigurationLabel)]);

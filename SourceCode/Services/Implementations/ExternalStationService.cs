@@ -6,47 +6,31 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
 
-    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? maybeCountryId, int? maybeRegionId)
+    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId, int? regionId)
     {
         if (principal is null ) return Enumerable.Empty<ListboxItem>();
-        var countryId = principal.CountryId(maybeCountryId);
+        var actualCountryId = principal.CountryId(countryId);
         var sql = string.Empty;
-        if (maybeRegionId.HasValue) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {maybeRegionId.Value}";
-        else if (countryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {countryId}";
+        if (regionId.HasValue) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {regionId.Value}";
+        else if (countryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {actualCountryId}";
         else sql = $"SELECT * FROM ListExternalStation";
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.ListboxItems.FromSqlRaw(sql).OrderBy(l => l.Description).ToListAsync();
     }
 
-
-    public async Task<IEnumerable<ExternalStation>> GetAllInRegion(ClaimsPrincipal? principal, int regionId)
+    public async Task<IEnumerable<ExternalStation>> GetAsync(ClaimsPrincipal? principal, int countryId = 0, int regionId =0)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.ExternalStations.AsNoTracking()
-                .Where(es => es.RegionId == regionId)
+                .Where(es => countryId ==0 || es.Region.CountryId == countryId && regionId==0 || (countryId == 0 && es.RegionId==regionId))
                 .Include(es => es.ExternalStationCustomers)
                 .OrderBy(es => es.FullName)
                 .ToListAsync();
         }
-        return Array.Empty<ExternalStation>();
+        return [];
     }
-    public async Task<IEnumerable<ExternalStation>> GetAllInCountry(ClaimsPrincipal? principal, int countryId)
-    {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.ExternalStations.AsNoTracking()
-                .Where(es => es.Region.CountryId == countryId)
-                .Include(es => es.ExternalStationCustomers)
-                .OrderBy(es => es.FullName)
-                .ToListAsync();
-        }
-        return Array.Empty<ExternalStation>();
-    }
-
-
     public async Task<ExternalStation?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.IsAuthenticated())

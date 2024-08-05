@@ -14,10 +14,12 @@
 <PageHeading Label="@Label" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
-
+<hr />
 @if (MayEdit)
 {
-    <AppButton Href="@AddHref" Label="Add" />
+    <span>
+        <AppButton Href="@AddHref" Label="Add" />
+    </span>
 }
 @if (Filter.HasFilter)
 {
@@ -27,7 +29,13 @@
 <QuickGrid Items="FilteredVehicles" Virtualize="true" Pagination="PaginationState">
     @if (!IsMyVehiclesPage)
     {
-        <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true" />
+        <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="@Filter.OwnerName" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["Owner"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
     }
     <TemplateColumn Context="v">
         @v.ImageIcon()
@@ -39,7 +47,7 @@
             </div>
         </ColumnOptions>
     </PropertyColumn>
-    <PropertyColumn Title="@Localizer["ModelInfo"]" Property="v => v.ModelInfo()" Sortable="true" >
+    <PropertyColumn Title="@Localizer["ModelInfo"]" Property="v => v.ModelInfo()" Sortable="true">
         <ColumnOptions>
             <div class="search-box">
                 <input type="search" autofocus @bind="@Filter.ModelInfo" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["ModelInfo"]" />
@@ -65,13 +73,17 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
-    VehicleFilter Filter = new();
+    int CountryOrDefaultId => CountryId > 0 ? CountryId : Filter.CountryId > 0 ? Filter.CountryId : Principal.CountryId();
+    VehiclesFilter Filter = new();
     ClaimsPrincipal? Principal;
     IEnumerable<ListboxItem>? Countries;
     IEnumerable<Vehicle>? Vehicles;
     IQueryable<Vehicle> FilteredVehicles => Vehicles is null ? Enumerable.Empty<Vehicle>().AsQueryable() :
-        Vehicles.Where(v => (Filter.PrototypeInfo.HasNoValue() || v.PrototypeInfo().Contains(Filter.PrototypeInfo, StringComparison.OrdinalIgnoreCase))
-        && (Filter.ModelInfo.HasNoValue() || v.ModelInfo().Contains(Filter.ModelInfo, StringComparison.OrdinalIgnoreCase))).AsQueryable();
+        Vehicles.Where(v => (
+            v.PrototypeInfo().ContainsCaseInsensitive(Filter.PrototypeInfo)) &&
+            v.ModelInfo().ContainsCaseInsensitive(Filter.ModelInfo) &&
+            v.OwningPerson.Name().ContainsCaseInsensitive(Filter.OwnerName))
+            .AsQueryable();
 
     bool MayEdit;
     bool IsMyVehiclesPage;
@@ -85,7 +97,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Filter = await LocalStorage.GetItemAsync<VehicleFilter>("VehicleFilter") ?? new();
+        Filter = await LocalStorage.GetItemAsync<VehiclesFilter>(nameof(VehiclesFilter)) ?? new();
         MayEdit = Principal.IsAuthenticated();
         IsMyVehiclesPage = Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase);
         if (IsMyVehiclesPage)
@@ -94,36 +106,39 @@
         }
         else
         {
-            Vehicles = await VehicleService.GetVehiclesByOwnerCountryAsync(Principal, CountryId);
+            Vehicles = await VehicleService.GetVehiclesByOwnerCountryAsync(Principal, CountryOrDefaultId);
         }
+        OnSelectedCountry(CountryOrDefaultId);
     }
 
 
     private void OnSelectedCountry(int id)
     {
-        if (id > 0)
+        if (id > 0 )
         {
-            AppService.LastCountryId = id;
-            Navigator.NavigateTo($"/Vehicles/Country/{id}");
+            CountryId = id;
+            OnFilterChanged();
+            Navigator.NavigateTo($"vehicles/country/{CountryId}");
         }
     }
 
     private void OnFilterChanged()
     {
-        LocalStorage.SetItemAsync("VehicleFilter", Filter);
+        Filter.CountryId = CountryId;
+        LocalStorage.SetItemAsync(nameof(VehiclesFilter), Filter);
     }
 
     string Label => IsMyVehiclesPage ? "MyVehicles" : "Vehicles";
 
-    string EditHref(Vehicle vehicle) => 
-        IsMyVehiclesPage ? $"/vehicles/my/{vehicle.Id}" : 
+    string EditHref(Vehicle vehicle) =>
+        IsMyVehiclesPage ? $"/vehicles/my/{vehicle.Id}" :
         $"/vehicles/{vehicle.Id}/country/{CountryId}/edit";
 
-    string AddHref => 
-        IsMyVehiclesPage ? $"/vehicles/my/0" : 
+    string AddHref =>
+        IsMyVehiclesPage ? $"/vehicles/my/0" :
         $"vehicles/0/country/{CountryId}/edit";
-    
-        bool IsSelectCountryVisible => !IsMyVehiclesPage && (Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(CountryId));
+
+    bool IsSelectCountryVisible => !IsMyVehiclesPage && (Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(CountryId));
 }
 
 

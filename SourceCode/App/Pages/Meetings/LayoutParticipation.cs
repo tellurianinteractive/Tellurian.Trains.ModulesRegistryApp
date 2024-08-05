@@ -1,6 +1,6 @@
 ﻿using ModulesRegistry.Data;
 
-namespace ModulesRegistry.Models;
+namespace ModulesRegistry.Pages.Meetings;
 
 public class LayoutParticipation(Layout layout, MeetingParticipant participant)
 {
