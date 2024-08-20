@@ -31,7 +31,7 @@ else
             <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
             <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
             <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
-            <br/>
+            <br />
             <AppInputSelect Width="2" Label="Visibility" @bind-Value="Module.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
             <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
@@ -46,8 +46,8 @@ else
 
             <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" OnChangedValue="UpdateLength" />
             <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" Step=".1" OnChangedValue="UpdateLength" />
-            <AppInputNumber Width="1" Label="Straight" @bind-Value="Module.Straight" Unit="mm" Step="1"  OnChangedValue="UpdateLength" />
-            <AppInputNumber Width="1" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" IsDisabled="true"  />
+            <AppInputNumber Width="1" Label="Straight" @bind-Value="Module.Straight" Unit="mm" Step="1" OnChangedValue="UpdateLength" />
+            <AppInputNumber Width="1" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" IsDisabled="true" />
             <AppInputNumber Width="1" Label="Width" @bind-Value="Module.Width" Unit="mm" Step="1" />
             <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
             <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
@@ -70,13 +70,13 @@ else
         </Inputs>
         <Buttons>
             @if (Module.StationId.HasValue)
-                {
-                <a class="btn btn-secondary btn-sm" href="@StationEditLink"><span class="fa fa-school" />@Localizer.EditObject("Station")</a>
-                }
-                else if (Module.Id > 0)
-                {
-                <a class="btn btn-secondary btn-sm" href="@StationMakeLink"><span class="fa fa-school" />@Localizer["MakeStation"]</a>
-                }
+            {
+                <AppButton Label="@Localizer.EditObject("OperationLocation")" Href="@StationEditLink" IconName="@FontAwesome.Station" />
+            }
+            else if (Module.Id > 0)
+            {
+                <AppButton Label="@Localizer["MakeOperationLocation"]" Href="@StationMakeLink" IconName="@FontAwesome.Station" />
+            }
         </Buttons>
     </EditTemplate>
 
@@ -114,9 +114,9 @@ else
         if (Principal is not null)
         {
             OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
-            if (OwnershipRef.IsPerson || OwnershipRef.IsPersonInGroup) 
+            if (OwnershipRef.IsPerson || OwnershipRef.IsPersonInGroup)
                 OwningPerson = await PersonService.FindByIdAsync(Principal, PersonId);
-            else if (OwnershipRef.IsGroup) 
+            else if (OwnershipRef.IsGroup)
                 OwningGroup = await GroupService.FindByIdAsync(Principal, GroupId);
             ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
             ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;

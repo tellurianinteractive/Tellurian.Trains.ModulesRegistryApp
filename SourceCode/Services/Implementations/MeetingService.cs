@@ -214,23 +214,23 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return principal.NotAuthorized<Meeting>();
     }
 
-    public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting entity)
+    public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting meeting)
     {
-        var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
+        var countryId = meeting.OrganiserGroup?.CountryId ?? principal.CountryId();
         if (principal.IsCountryAdministratorInCountry(countryId)) return true;
         using var dbContext = Factory.CreateDbContext();
-        return await IsMeetingOrganiser(dbContext, principal, entity)
+        return await IsMeetingOrganiser(dbContext, principal, meeting)
             .ConfigureAwait(false);
     }
 
-    private static async Task<bool> IsMeetingOrganiser(ModulesDbContext dbContext, ClaimsPrincipal? principal, Meeting entity)
+    private static async Task<bool> IsMeetingOrganiser(ModulesDbContext dbContext, ClaimsPrincipal? principal, Meeting meeting)
     {
-        var countryId = entity.OrganiserGroup?.CountryId ?? principal.CountryId();
-        if (principal.IsCountryAdministratorInCountry(countryId)) return true;
-        return await dbContext.GroupMembers.AsNoTracking()
-            .AnyAsync(gm => gm.GroupId == entity.OrganiserGroupId && gm.PersonId == principal.PersonId() && gm.IsGroupAdministrator)
+        return await dbContext.MeetingAdministrators.AsNoTracking()
+            .AnyAsync(ma => ma.MeetingId == meeting.Id && ma.PersonId == principal.PersonId())
             .ConfigureAwait(false);
     }
+
+    
 
     #region Meeting Participant
 

@@ -106,9 +106,8 @@
         }
         else
         {
-            Vehicles = await VehicleService.GetVehiclesByOwnerCountryAsync(Principal, CountryOrDefaultId);
+            OnSelectedCountry(CountryOrDefaultId);
         }
-        OnSelectedCountry(CountryOrDefaultId);
     }
 
 

@@ -179,6 +179,9 @@
     <Build Include="dbo\Tables\Stations\Region.sql" />
     <Build Include="dbo\Views\ModuleOwnerNames.sql" />
     <Build Include="dbo\Procedures\GetEmptyWagonOrders.sql" />
+    <Build Include="dbo\Procedures\ChangeAdministratorPrivilege.sql" />
+    <Build Include="dbo\Procedures\Procedure1.sql" />
+    <Build Include="dbo\Views\MeetingAdministrator.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

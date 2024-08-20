@@ -4,6 +4,7 @@
     [PersonId]                  INT NOT NULL,
     [IsGroupAdministrator]      BIT DEFAULT ((0)) NOT NULL,
     [IsDataAdministrator]       BIT DEFAULT ((0)) NOT NULL,
+    [IsMeetingAdministrator]    BIT DEFAULT ((0)) NOT NULL,
     [MayBorrowGroupsModules]    BIT DEFAULT ((0)) NOT NULL,
     [MemberMayBorrowMyModules]  BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_GroupMember] PRIMARY KEY CLUSTERED ([Id] ASC),

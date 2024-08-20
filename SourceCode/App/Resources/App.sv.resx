@@ -675,6 +675,9 @@
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Behövs nyckel?</value>
   </data>
+  <data name="IsMeetingAdministrator" xml:space="preserve">
+    <value>Är träffadministratïr</value>
+  </data>
   <data name="IsOnlyOwner" xml:space="preserve">
     <value>Är den enda ägaren?</value>
   </data>
@@ -797,6 +800,9 @@
   </data>
   <data name="MainTheme" xml:space="preserve">
     <value>Huvudtema</value>
+  </data>
+  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
+    <value>Gör till drifptsplats</value>
   </data>
   <data name="MakeStation" xml:space="preserve">
     <value>Gör till station</value>

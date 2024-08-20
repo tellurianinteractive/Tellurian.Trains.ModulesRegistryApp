@@ -10,6 +10,7 @@ public partial class GroupMember
     public int PersonId { get; set; }
     public bool IsGroupAdministrator { get; set; }
     public bool IsDataAdministrator { get; set; }
+    public bool IsMeetingAdministrator { get; set; }
     public bool MayBorrowGroupsModules { get; set; }
     public bool MemberMayBorrowMyModules { get; set; }
 

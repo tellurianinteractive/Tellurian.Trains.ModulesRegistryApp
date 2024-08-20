@@ -127,7 +127,7 @@
     <value>Bidirektional</value>
   </data>
   <data name="Canceled" xml:space="preserve">
-    <value>Absagen</value>
+    <value>Abgesagt</value>
   </data>
   <data name="Casing" xml:space="preserve">
     <value>UPPER</value>
