@@ -10,5 +10,5 @@ public class ModulesFilter
     public string? Scale { get; set; }
     public bool HasFilter => OwnerName.HasValue() || ModuleName.HasValue() || Scale.HasValue();
     public override string ToString() => HasFilter ? $"{ModuleName} {OwnerName} {Scale}" : "";
-
+    public void Clear() { OwnerName = null; ModuleName = null; Scale = null; }
 }

@@ -34,6 +34,7 @@
 @if (Filter.HasFilter)
 {
     <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase"/></span>
 }
 
 @if (HasData)
@@ -140,6 +141,12 @@
     void OnFilterChanged()
     {
         LocalStorage.SetItemAsync(nameof(ExternalStationsFilter), Filter);
+    }
+
+    void OnClearFilter()
+    {
+        Filter.Clear();
+        OnFilterChanged();
     }
 
     bool DeleteDialogOpen { get; set; }

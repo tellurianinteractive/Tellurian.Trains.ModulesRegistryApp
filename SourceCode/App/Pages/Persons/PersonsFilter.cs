@@ -10,4 +10,5 @@ public class PersonsFilter
     public string? CityName { get; set; }
     public bool HasFilter => FirstName.HasValue() || LastName.HasValue() || CityName.HasValue();
     public override string ToString() => HasFilter ? $"{FirstName} {LastName} {CityName}" : "";
+    public void Clear() {  FirstName = null; LastName = null; CityName = null; }
 }

@@ -9,4 +9,5 @@ public class CargoFilter
     public string? WagonClass { get; set; }
     public bool HasFilter => Name.HasValue() || Code.HasValue() || WagonClass.HasValue();
     public override string ToString() => HasFilter ? $"{Code} {Name} {WagonClass}" : "";
+    public void Clear() {  Name = null; Code = null; WagonClass = null; }
 }

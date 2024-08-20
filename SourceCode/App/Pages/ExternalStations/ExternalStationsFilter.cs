@@ -9,4 +9,5 @@ public class ExternalStationsFilter
 
     public bool HasFilter => Name.HasValue() || Signature.HasValue();
     public override string ToString() => HasFilter ? $"{Name} {Signature}" : "";
+    public void Clear() {  Name = null; Signature = null; }
 }

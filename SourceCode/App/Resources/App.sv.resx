@@ -228,6 +228,9 @@
   <data name="Class" xml:space="preserve">
     <value>Littra</value>
   </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Rensa filter</value>
+  </data>
   <data name="ClickOKToDelete" xml:space="preserve">
     <value>Klicka på OK för att radera</value>
   </data>

@@ -17,6 +17,7 @@
 @if (Filter.HasFilter)
 {
     <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" /></span>
 }
 <hr />
 
@@ -101,6 +102,11 @@
         LocalStorage.SetItemAsync(nameof(ModulesFilter), Filter);
     }
 
+    void OnClearFilter()
+    {
+        Filter.Clear();
+        OnFilterChanged();
+    }
     IQueryable<Module> FilteredModules =>
         Modules is null ? Enumerable.Empty<Module>().AsQueryable() :
         Modules.AsQueryable()

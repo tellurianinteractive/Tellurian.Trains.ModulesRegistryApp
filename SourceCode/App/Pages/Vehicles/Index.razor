@@ -24,6 +24,7 @@
 @if (Filter.HasFilter)
 {
     <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase"/></span>
 }
 <hr />
 <QuickGrid Items="FilteredVehicles" Virtualize="true" Pagination="PaginationState">
@@ -125,6 +126,12 @@
     {
         Filter.CountryId = CountryId;
         LocalStorage.SetItemAsync(nameof(VehiclesFilter), Filter);
+    }
+
+    void OnClearFilter()
+    {
+        Filter.Clear();
+        OnFilterChanged();
     }
 
     string Label => IsMyVehiclesPage ? "MyVehicles" : "Vehicles";

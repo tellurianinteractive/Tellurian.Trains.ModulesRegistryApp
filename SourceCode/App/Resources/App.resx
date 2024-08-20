@@ -228,6 +228,9 @@
   <data name="Class" xml:space="preserve">
     <value>Class</value>
   </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
   <data name="ClickOKToDelete" xml:space="preserve">
     <value>Click OK to delete</value>
   </data>

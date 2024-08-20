@@ -228,6 +228,9 @@
   <data name="Class" xml:space="preserve">
     <value>Litra</value>
   </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Ryd filter</value>
+  </data>
   <data name="ClickOKToDelete" xml:space="preserve">
     <value>Klik på OK for at slette</value>
   </data>

@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2024-08-20
 - **Group members** now have new right *is meeting administrator*. 
 Group members with this right may administer meetings where their group is organising the meeting or any of the layouts.
+- **Clear filter** button added on pages with filtering (issue #200).
 - **Security patch** of extenal components.
 ## Release 1.11.5
 Release date 2024-08-05
