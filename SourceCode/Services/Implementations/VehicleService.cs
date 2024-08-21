@@ -40,10 +40,11 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         return Enumerable.Empty<Vehicle>().AsQueryable();
     }
 
-    public async Task<Vehicle?> GetVehicleAsync(ClaimsPrincipal? principal, int vehicleId, int countryId)
+    public async Task<Vehicle?> GetVehicleAsync(ClaimsPrincipal? principal, int vehicleId = 0, int countryId = 0)
     {
         if (countryId > 0) return await GetVehicleAsAdministratorAsync(principal, vehicleId, countryId).ConfigureAwait(false);
-        return await GetPrincipalOwnedVehicle(principal, vehicleId).ConfigureAwait(false);
+        if (vehicleId > 0) return await GetPrincipalOwnedVehicle(principal, vehicleId).ConfigureAwait(false);
+        return null;
     }
 
     private async Task<Vehicle?> GetVehicleAsAdministratorAsync(ClaimsPrincipal? principal, int vehicleId, int countryId)

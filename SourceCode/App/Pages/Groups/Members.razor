@@ -14,6 +14,10 @@
 @if (IsGroupAdministrator && Group.Id > 0)
 {
     <AppButton Label="Add" Href="@MemberAddHref(Group.Id)" ></AppButton>
+    @if (Principal is not null)
+    {
+        <MailToButton Sender="Principal.Sender()" Recipients="@Group.GroupMembers.MailHolders()" Subject="@Group.Name()"/>
+    }
 }
 
 <TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.Name())">
@@ -88,4 +92,5 @@
     string MemberEditHref(GroupMember member) => $"Groups/{member.GroupId}/Members/{member.Id}/edit";
     string MemberAddHref(int groupId) => $"groups/{groupId}/members/add";
     string InviteHref(GroupMember member) => $"Persons/{member.PersonId}/Invite";
+
 }

@@ -1,0 +1,38 @@
+﻿@page "/myvehicles/"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigator
+@inject VehicleService VehicleService
+@inject AppService AppService
+
+<PageHeading Label="MyVehicles" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
+<hr />
+<VehiclesList Vehicles="Vehicles" MayEdit="MayEdit" ShowOwner="false" AddHrefFunc="AddHref" EditHrefFunc="EditHref" />
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<Vehicle>? Vehicles;
+
+    bool MayEdit;
+    PaginationState PaginationState = new() { ItemsPerPage = 30 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        MayEdit = Principal.IsAuthenticated();
+        Vehicles = await VehicleService.GetPersonsOwnedVehiclesAsync(Principal, Principal.PersonId());
+    }
+
+    string EditHref(Vehicle vehicle) => $"/vehicles/my/{vehicle.Id}";
+    string AddHref() => $"/vehicles/my/0";
+}
+
+
+

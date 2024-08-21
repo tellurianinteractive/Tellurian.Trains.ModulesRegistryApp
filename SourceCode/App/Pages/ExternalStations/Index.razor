@@ -78,10 +78,14 @@
     IEnumerable<ExternalStation>? ExternalStations;
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
     ExternalStationsFilter Filter = new();
+    CountryFilter FilterCountry = new();
     IEnumerable<ListboxItem>? CountryItems;
     IEnumerable<ListboxItem>? RegionItems;
     Country? Country;
     Region? Region;
+
+    int DefaultCountryId => CountryId > 0 ? CountryId : FilterCountry.CountryId > 0 ? FilterCountry.CountryId : Principal.CountryId();
+
 
     string EditHref(ExternalStation station) => $"ExternalStations/{station.Id}/Edit";
     string FreightCustomersHref(ExternalStation station) => $"ExternalStations/{station.Id}/StationCustomers";
@@ -98,21 +102,24 @@
     protected override async Task OnParametersSetAsync()
     {
         Filter = await LocalStorage.GetItemAsync<ExternalStationsFilter>(nameof(ExternalStationsFilter)) ?? Filter;
+        FilterCountry = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? FilterCountry;
         await GetCountryStations();
         await GetRegionStations();
     }
 
     async Task GetCountryStations()
     {
-        if (CountryId > 0)
+        if (DefaultCountryId > 0)
         {
-            Country = await CountryService.FindById(CountryId);
-            ExternalStations = await ExternalStationService.GetAsync(Principal, CountryId);
+            Country = await CountryService.FindById(DefaultCountryId);
+            ExternalStations = await ExternalStationService.GetAsync(Principal, DefaultCountryId);
         }
     }
 
     void OnSelectedCountry(int countryId)
     {
+        FilterCountry.CountryId = countryId;
+        LocalStorage.SetItemAsync(nameof(CountryFilter), FilterCountry);
         Navigator.NavigateTo($"ExternalStations/Country/{countryId}");
     }
 

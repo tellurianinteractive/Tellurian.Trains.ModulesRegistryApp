@@ -28,6 +28,12 @@ public partial class Group
 
 #nullable enable
 
+public static class GroupExtensions
+{
+    public static string Name(this Group group) => group.ShortName;
+       
+}
+
 internal static class GroupMapper
 {
     public static void MapGroup(this ModelBuilder builder) =>

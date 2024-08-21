@@ -5,8 +5,8 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
-@inject AppService AppService
 @inject GroupService GroupService
 @inject CountryService CountryService
 
@@ -16,13 +16,13 @@
 
 @if (Groups is null)
 {
-    @if (IsLoading) @Localizer["GettingData"]
+    @Localizer["GettingData"]
 }
 else
 {
     @if (Principal.IsCountryAdministratorInCountry(CountryId))
     {
-        <AppButton Label="Add" Href="@EditHref(0)"/>
+        <AppButton Label="Add" Href="@EditHref(0)" />
     }
     <table class="table table-striped table-responsive-sm">
         <thead>
@@ -68,31 +68,28 @@ else
     ClaimsPrincipal? Principal;
     IEnumerable<(Group value, bool mayEdit)>? Groups;
     IEnumerable<ListboxItem>? Countries;
-    bool IsLoading;
+    CountryFilter FilterCountry = new();
+    int DefaultCountryId => CountryId > 0 ? CountryId : FilterCountry.CountryId > 0 ? FilterCountry.CountryId : Principal.CountryId();
 
-    protected async override Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        if (CountryId == 0)
-        {
-            CountryId = Principal.CountryId();
-            AppService.LastCountryId = CountryId;
-            OnSelectedCountry(CountryId);
-        }
-        else
-        {
-            AppService.LastCountryId = CountryId;
-            await GetGroups(CountryId);
-        }
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        FilterCountry = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? FilterCountry;
+        await GetGroups(DefaultCountryId);
     }
 
     void OnSelectedCountry(int countryId)
     {
         if (countryId > 0)
         {
-            AppService.LastCountryId = countryId;
-            Navigator.NavigateTo(IndexHref);
+            FilterCountry.CountryId = countryId;
+            LocalStorage.SetItemAsync(nameof(CountryFilter), FilterCountry);
+            Navigator.NavigateTo($"Groups/Country/{countryId}");
         }
     }
 
@@ -100,10 +97,9 @@ else
     {
         if (countryId > 0)
         {
-            IsLoading = true;
+            Groups = null;
             StateHasChanged();
             Groups = await GroupService.GetAllAsync(Principal, countryId);
-            IsLoading = false;
         }
     }
 
@@ -115,5 +111,4 @@ else
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
-    string IndexHref => $"Groups/Country/{AppService.LastCountryId}";
 }

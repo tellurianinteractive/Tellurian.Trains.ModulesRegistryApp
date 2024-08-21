@@ -33,6 +33,9 @@ public static class MailHolderExtensions
     public static IEnumerable<MailHolder> ParticipantsMails(this IEnumerable<LayoutParticipant>? participants) =>
         participants is not null ? participants.Select(lp => new MailHolder(lp.Person.FirstName, lp.Person.EmailAddresses)) : [];
 
+    public static IEnumerable<MailHolder> MailHolders(this IEnumerable<GroupMember>? groupMembers) =>
+        groupMembers is not null ? groupMembers.Select(gm => new MailHolder(gm.Person.FirstName, gm.Person.EmailAddresses)) : [];
+
     public static MailHolder MailHolder(this ClaimsPrincipal principal) => new(principal.GivenName() ?? "Admin", principal.EmailAddess());
 
     /// <summary>

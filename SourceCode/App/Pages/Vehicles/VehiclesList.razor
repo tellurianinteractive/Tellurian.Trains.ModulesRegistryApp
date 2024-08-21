@@ -1,0 +1,98 @@
+﻿@inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
+
+@if (MayEdit)
+{
+    <span>
+        <AppButton Href="@AddHref()" Label="Add" />
+    </span>
+}
+@if (Filter.HasFilter)
+{
+    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase" /></span>
+}
+<hr/>
+
+<QuickGrid Items="FilteredVehicles" Virtualize="true" Pagination="PaginationState">
+    @if (ShowOwner)
+    {
+        <PropertyColumn Title="@Localizer["Owner"]" Property="v => v.OwningPerson.Name()" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="@Filter.OwnerName" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["Owner"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+    }
+    <TemplateColumn Context="v">
+        @v.ImageIcon()
+    </TemplateColumn>
+    <PropertyColumn Title="@Localizer["PrototypeInfo"]" Property="v => v.PrototypeInfo()" Sortable="true">
+        <ColumnOptions>
+            <div class="search-box">
+                <input type="search" autofocus @bind="@Filter.PrototypeInfo" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["PrototypeInfo"]" />
+            </div>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Title="@Localizer["ModelInfo"]" Property="v => v.ModelInfo()" Sortable="true">
+        <ColumnOptions>
+            <div class="search-box">
+                <input type="search" autofocus @bind="@Filter.ModelInfo" @bind:event="oninput" @onchange="@OnFilterChanged" placeholder="@Localizer["ModelInfo"]" />
+            </div>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Title="@Localizer["Scale"]" Property="v => v.Scale.Display()" Sortable="true" />
+    <PropertyColumn Title="@Localizer["Period"]" Property="v => v.PeriodInfo()" Sortable="true" />
+    <TemplateColumn Title="@Localizer["Features"]" Context="vehicle">
+        @vehicle.Features(Localizer)
+    </TemplateColumn>
+    <PropertyColumn Title="@Localizer["InventoryNumber"]" Property="v => v.InventoryNumber" Sortable="true" Align="Align.Right"></PropertyColumn>
+    <TemplateColumn Title="@Localizer["Actions"]" Context="vehicle" Class="noprint">
+        @if (MayEdit)
+        {
+            <AppButton Href="@EditHref(vehicle)" Label="Edit" />
+        }
+    </TemplateColumn>
+
+</QuickGrid>
+<Paginator State="PaginationState" />
+
+
+@code {
+    [Parameter] public IEnumerable<Vehicle>? Vehicles { get; set; }
+    [Parameter] public bool MayEdit { get; set; }
+    [Parameter] public bool ShowOwner { get; set; }
+    [Parameter] public Func<string>? AddHrefFunc { get; set; }
+    [Parameter] public Func<Vehicle, string>? EditHrefFunc { get; set; }
+    [Parameter] public string FilterName { get; set; } = nameof(VehiclesFilter);
+
+    VehiclesFilter Filter = new();
+    PaginationState PaginationState = new() { ItemsPerPage = 30 };
+
+    IQueryable<Vehicle> FilteredVehicles => Vehicles is null ? Enumerable.Empty<Vehicle>().AsQueryable() :
+    Vehicles.Where(v => (
+        v.PrototypeInfo().ContainsCaseInsensitive(Filter.PrototypeInfo)) &&
+        v.ModelInfo().ContainsCaseInsensitive(Filter.ModelInfo) &&
+        v.OwningPerson.Name().ContainsCaseInsensitive(Filter.OwnerName))
+        .AsQueryable();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Filter = await LocalStorage.GetItemAsync<VehiclesFilter>(FilterName) ?? new();
+    }
+
+    private void OnFilterChanged()
+    {
+        LocalStorage.SetItemAsync(FilterName, Filter);
+    }
+
+    void OnClearFilter()
+    {
+        Filter.Clear();
+        OnFilterChanged();
+    }
+
+    string? AddHref() => AddHrefFunc is not null ? AddHrefFunc() : null;
+    string? EditHref(Vehicle vehicle) => EditHrefFunc is not null ? EditHrefFunc(vehicle) : null;
+}

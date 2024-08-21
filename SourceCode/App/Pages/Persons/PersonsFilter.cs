@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using ModulesRegistry.Data.Extensions;
+﻿using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Pages.Persons;
 
