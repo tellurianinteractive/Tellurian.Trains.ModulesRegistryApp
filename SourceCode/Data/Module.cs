@@ -1,8 +1,11 @@
 ﻿#nullable disable
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using static ModulesRegistry.Data.Resources.Strings;
 
 namespace ModulesRegistry.Data;
 #pragma warning disable IDE0028 // Simplify collection initialization
@@ -68,6 +71,40 @@ public partial class Module
 # nullable enable
 public static class ModuleExtensions
 {
+    public static MarkupString Info(this Module me)
+    {
+        var text = new StringBuilder(100);
+        text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}: ");
+        if (me.IsCurve())
+        {
+            text.Append(Curve);
+            text.Append(' ');
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
+            text.Append($" {me.Angle!.Value}&deg;");
+            text.Append($" r={me.Radius!.Value}mm");
+        }
+        else if (me.IsStraight())
+        {
+            text.Append(Straight);
+            text.Append(' ');
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
+            text.Append($" {me.Length / 1000:F2}m");
+        }
+        else if (me.IsOperationsPlace())
+        {
+            var tracksCount = me.Station.StationTracks.Count;
+            text.Append(OperationsPlace);
+            text.Append(' ');
+            text.Append(tracksCount == 0 ? "": $"{tracksCount} {Tracks.ToLowerInvariant()}");
+            text.Append($" {me.Length / 1000:F2}m");
+        }
+        return new(text.ToString());
+    }
+
+    private static bool IsCurve(this Module me) => !me.IsOperationsPlace() && me.Angle.HasValue;
+    private static bool IsStraight(this Module me) => !me.IsOperationsPlace() && !me.Angle.HasValue;
+    private static bool IsOperationsPlace(this Module me) => me.Station is not null;
+
     public static Module Clone(this Module me) =>
         new()
         {
@@ -115,7 +152,7 @@ public static class ModuleExtensions
         };
 
     public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
-    public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) => 
+    public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) =>
         module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);
 
     static string CloneFullName(this Module module)

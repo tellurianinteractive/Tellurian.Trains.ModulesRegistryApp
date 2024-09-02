@@ -28,6 +28,7 @@ else
     {
         <div style="padding: 10px 0px">
             <MailToButton Recipients="LayoutParticipants.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" />
+            <MailCopyButton Recipients="LayoutParticipants.ParticipantsMails()" />
         </div>
     }
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
@@ -36,17 +37,17 @@ else
         {
             <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
-                    <th width="70%">@participant.Person.Name(), @participant.Person.CityName</th>
+                    <th width="30%">@participant.Person.Name(), @participant.Person.CityName</th>
+                    <th width="50%">@Localizer["Info"]</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
-                    <th width="100px" align="center">@Localizer["IsStation"]</th>
                     <th class="noprint">@Localizer["Actions"] </th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Module.FullName</td>
+                    <td>@item.Module.Info()</td>
                     <td width="120px">@item.RegisteredTime.ToString("d")</td>
-                    <td width="100px" align="center">@item.HasLayoutStation().AsYesOrNo()</td>
                     <td class="noprint">
-                        @if (item.HasLayoutStation())
+                        @if (item.HasLayoutStationId())
                         {
                             <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
                         }

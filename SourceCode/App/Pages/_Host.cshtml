@@ -45,6 +45,18 @@
     </div>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Blazored.Typeahead/blazored-typeahead.js"></script>
+    <script>
+        window.clipboardCopy = {
+            copyText: function (text, message) {
+                navigator.clipboard.writeText(text).then(function () {
+                    alert(message);
+                })
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            }
+        };
+    </script>
    @* <script src="https://kit.fontawesome.com/e88ec157fc.js" crossorigin="anonymous"></script>*@
 </body>
 </html>

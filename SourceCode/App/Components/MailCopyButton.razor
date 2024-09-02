@@ -1,0 +1,15 @@
+﻿@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<App> Localizer
+
+<AppButton OnClickCallback="CopyToClipboard" Label="CopyMailAddresses" IconName="@FontAwesome.Mail" />
+
+@code {
+    [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
+
+    private async Task CopyToClipboard()
+    {
+        var mailAddresses = Recipients.Select(r => r.EmailAddresses);
+        var text = string.Join(';', mailAddresses);
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", text, Localizer["Copied"].ToString());
+    }
+}

@@ -270,6 +270,12 @@
   <data name="ContactPerson" xml:space="preserve">
     <value>Kontaktperson</value>
   </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Kopierade</value>
+  </data>
+  <data name="CopyMailAdresses" xml:space="preserve">
+    <value>Kopiera mailadresser</value>
+  </data>
   <data name="Count" xml:space="preserve">
     <value>Antal</value>
   </data>

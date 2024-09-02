@@ -12,13 +12,15 @@
 
                 return await dbContect.LayoutParticipants.AsNoTracking()
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
-                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.ModuleOwnerships)
-                    .Include(x => x.Person)
                     .Include(x => x.LayoutStations).ThenInclude(ls => ls.Station)
+                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.ModuleOwnerships)
+                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Standard)
+                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Station).ThenInclude(x => x.StationTracks)
+                    .Include(x => x.Person)
                     .Where(x => x.LayoutId == layoutId && x.MeetingParticipant.CancellationTime == null)
                     .ToListAsync().ConfigureAwait(false);
             }
-            return Array.Empty<LayoutParticipant>();
+            return [];
         }
 
         public async Task<LayoutParticipant?> GetByIdAsync(ClaimsPrincipal? principal,int meetingPartictipantId, int layoutId)
@@ -29,7 +31,7 @@
                 return await dbContect.LayoutParticipants.AsNoTracking()
                     .Where(x => x.LayoutId == layoutId && x.MeetingParticipantId == meetingPartictipantId)
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
-                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module)
+                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(m => m.Standard)
                     .Include(x => x.LayoutStations).ThenInclude(ls => ls.Station)
                     .SingleOrDefaultAsync()
                     .ConfigureAwait(false);

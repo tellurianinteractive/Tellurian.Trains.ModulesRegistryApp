@@ -29,7 +29,7 @@ public class LayoutStation
 # nullable enable
 public static class LayoutStationExtensions
 {
-    public static string NameInLayout(this LayoutStation? me) =>
+        public static string NameInLayout(this LayoutStation? me) =>
         me is null ? string.Empty :
         me.OtherName ?? me.Station?.FullName ?? $"Name missing for {me.Id}";
 

@@ -59,6 +59,14 @@ internal static class LayoutParticipantMapping
             entity.HasOne(e => e.Layout)
                 .WithMany(e => e.LayoutParticipants)
                 .HasForeignKey(e => e.LayoutId);
+
+            entity.HasMany(e => e.LayoutModules)
+                .WithOne(e => e.LayoutParticipant)
+                .HasForeignKey(e => e.LayoutParticipantId);
+
+            entity.HasMany(e => e.LayoutStations)
+                .WithOne(e => e.LayoutParticipant)
+                .HasForeignKey(e => e.LayoutParticipantId);
         });
 }
 

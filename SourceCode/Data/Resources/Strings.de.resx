@@ -135,8 +135,14 @@
   <data name="ClubEvent" xml:space="preserve">
     <value>Vereinsveranstaltung</value>
   </data>
+  <data name="Curve" xml:space="preserve">
+    <value>Kurve</value>
+  </data>
   <data name="DomainMembers" xml:space="preserve">
     <value>Domain-Mitglieder</value>
+  </data>
+  <data name="DoubleTrack" xml:space="preserve">
+    <value>Zweigleisig</value>
   </data>
   <data name="Eastwards" xml:space="preserve">
     <value>Ostwärts</value>
@@ -210,6 +216,9 @@
   <data name="OnlyPosts" xml:space="preserve">
     <value>Nur Pfosten</value>
   </data>
+  <data name="OperationsPlace" xml:space="preserve">
+    <value>Betriebsstandort</value>
+  </data>
   <data name="Optional" xml:space="preserve">
     <value>Optional</value>
   </data>
@@ -237,17 +246,26 @@
   <data name="Removable" xml:space="preserve">
     <value>Abnehmbar</value>
   </data>
+  <data name="SingleTrack" xml:space="preserve">
+    <value>Einspurig</value>
+  </data>
   <data name="Spring" xml:space="preserve">
     <value>Frühling</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
     <value>Ein Betriebsstandort muss mindestens ein Modul haben, das darauf verweist</value>
   </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Gerade</value>
+  </data>
   <data name="Summer" xml:space="preserve">
     <value>Sommer</value>
   </data>
   <data name="Tested" xml:space="preserve">
     <value>Geprüft</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Spuren</value>
   </data>
   <data name="Undefined" xml:space="preserve">
     <value>Nicht definiert</value>

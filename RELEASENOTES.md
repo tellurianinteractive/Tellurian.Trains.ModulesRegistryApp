@@ -5,7 +5,8 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.11.9
 Release date 2024-09-02
 - **Transfer of module ownership** can now also be made from person to group and vice versa.
-- **Layout module list** now shows total registered participats and modules.
+- **Layout module list** now shows total registered participats and modules and a short info about each module.
+- **E-mail addresses** for layout participants can now also be copied by administrators to the clipboard.
 - **Bug fix** of adminstrators not able to save meeting.
 - **Component update** to latest versions of external components.
 ## Release 1.11.8

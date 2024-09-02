@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using System.Security.Claims;
@@ -28,7 +29,14 @@ public class LayoutModule
 # nullable enable
 public static class LayoutModuleExtensions
 {
-    public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStationId.HasValue;
+    public static MarkupString Info(this LayoutModule it, LayoutStation? station)
+    {
+        if (station is not null) 
+            it.Module.Station = it.LayoutStation.Station;
+        return it.Module.Info();
+    }
+    public static bool HasLayoutStationId(this LayoutModule it) => it.LayoutStationId.HasValue;
+    public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStation is not null;
 }
 
 

@@ -115,11 +115,29 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Curve.
+        /// </summary>
+        public static string Curve {
+            get {
+                return ResourceManager.GetString("Curve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Domain members.
         /// </summary>
         public static string DomainMembers {
             get {
                 return ResourceManager.GetString("DomainMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Double track.
+        /// </summary>
+        public static string DoubleTrack {
+            get {
+                return ResourceManager.GetString("DoubleTrack", resourceCulture);
             }
         }
         
@@ -340,6 +358,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place of operation.
+        /// </summary>
+        public static string OperationsPlace {
+            get {
+                return ResourceManager.GetString("OperationsPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optional.
         /// </summary>
         public static string Optional {
@@ -421,6 +448,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single track.
+        /// </summary>
+        public static string SingleTrack {
+            get {
+                return ResourceManager.GetString("SingleTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spring.
         /// </summary>
         public static string Spring {
@@ -439,6 +475,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Straight.
+        /// </summary>
+        public static string Straight {
+            get {
+                return ResourceManager.GetString("Straight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Summer.
         /// </summary>
         public static string Summer {
@@ -453,6 +498,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Tested {
             get {
                 return ResourceManager.GetString("Tested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracks.
+        /// </summary>
+        public static string Tracks {
+            get {
+                return ResourceManager.GetString("Tracks", resourceCulture);
             }
         }
         

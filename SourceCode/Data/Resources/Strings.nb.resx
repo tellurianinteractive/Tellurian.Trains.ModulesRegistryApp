@@ -132,8 +132,14 @@
   <data name="ClubEvent" xml:space="preserve">
     <value>Klubbarrangement</value>
   </data>
+  <data name="Curve" xml:space="preserve">
+    <value>Kurve</value>
+  </data>
   <data name="DomainMembers" xml:space="preserve">
     <value>Domenemedlemmer</value>
+  </data>
+  <data name="DoubleTrack" xml:space="preserve">
+    <value>Dobbeltspor</value>
   </data>
   <data name="Eastwards" xml:space="preserve">
     <value>Østover</value>
@@ -207,6 +213,9 @@
   <data name="OnlyPosts" xml:space="preserve">
     <value>Bare stolper</value>
   </data>
+  <data name="OperationsPlace" xml:space="preserve">
+    <value>Driftssted</value>
+  </data>
   <data name="Optional" xml:space="preserve">
     <value>Valgfri</value>
   </data>
@@ -234,17 +243,26 @@
   <data name="Removable" xml:space="preserve">
     <value>Avtakbar</value>
   </data>
+  <data name="SingleTrack" xml:space="preserve">
+    <value>Enkeltspor</value>
+  </data>
   <data name="Spring" xml:space="preserve">
     <value>Vår</value>
   </data>
   <data name="StationMustHaveAtLeastOneModuleReferringToIt" xml:space="preserve">
     <value>Et driftssted må ha minst én modul som refererer til den</value>
   </data>
+  <data name="Straight" xml:space="preserve">
+    <value>Rett</value>
+  </data>
   <data name="Summer" xml:space="preserve">
     <value>Sommer</value>
   </data>
   <data name="Tested" xml:space="preserve">
     <value>Testet</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Spor</value>
   </data>
   <data name="Undefined" xml:space="preserve">
     <value>Udefinert</value>

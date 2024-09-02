@@ -94,5 +94,8 @@ public static class LayoutMapping
             entity.HasOne(d => d.PrimaryModuleStandard)
                 .WithMany()
                 .HasForeignKey(d => d.PrimaryModuleStandardId);
+            entity.HasMany(d => d.LayoutParticipants)
+                .WithOne()
+                .HasForeignKey(d => d.LayoutId);
         });
 }

@@ -46,7 +46,7 @@ else
                             {
                                 <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
                             }
-                            @if (item.HasLayoutStation())
+                            @if (item.HasLayoutStationId())
                             {
                                 <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
                             }
