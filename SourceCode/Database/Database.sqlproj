@@ -163,7 +163,6 @@
     <Build Include="dbo\Tables\Layouts\LayoutModule.sql" />
     <Build Include="dbo\Tables\Layouts\LayoutParticipant.sql" />
     <Build Include="dbo\Tables\Layouts\LayoutStation.sql" />
-    <Build Include="dbo\Tables\Layouts\LayoutVehiclesImported.sql" />
     <Build Include="dbo\Tables\Meetings\Meeting.sql" />
     <Build Include="dbo\Tables\Meetings\MeetingParticipant.sql" />
     <Build Include="dbo\Tables\Layouts\ModuleOnTimetableTrackStretch.sql" />

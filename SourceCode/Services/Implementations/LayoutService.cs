@@ -18,7 +18,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Layouts.Where(l => l.Id == layoutId)
                 .Include(l => l.Meeting).ThenInclude(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator))
-                .Include(l => l.PrimaryModuleStandard)
+                .Include(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
                 .FirstOrDefaultAsync();
         }
         return null;

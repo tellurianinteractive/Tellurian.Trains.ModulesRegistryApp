@@ -11,7 +11,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.8" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.8" />
 		<PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />

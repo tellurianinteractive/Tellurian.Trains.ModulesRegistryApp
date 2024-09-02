@@ -9,7 +9,7 @@
 @inject LayoutParticipantService LayoutParticipantService
 @inject LayoutService LayoutService
 
-<PageHeading Label="RegisteredModules" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading Label="@PageHeadingText" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
 @if (LayoutParticipants is null)
 {
     <ActionMessage Label="FetchingData" />
@@ -20,6 +20,10 @@ else if (LayoutParticipants.Count() == 0)
 }
 else
 {
+    <h4>
+        @string.Format(Localizer["NumberPaticipantsRegistered"], LayoutParticipants.Count()),
+        @string.Format(Localizer["NumberModulesRegistered"], LayoutParticipants.Sum(lp => lp.LayoutModules.Count())).
+    </h4>
     @if (IsOrganiser)
     {
         <div style="padding: 10px 0px">
@@ -89,6 +93,7 @@ else
             }
         }
     }
+    string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithTheme()}";
 
     string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
 
@@ -98,4 +103,6 @@ else
     {
         await JSRuntime.InvokeAsync<object>("open", WaybillsHref(it), "_blank");
     }
+
+
 }

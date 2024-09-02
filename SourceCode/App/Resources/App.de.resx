@@ -984,11 +984,17 @@
   <data name="NarrowGauge" xml:space="preserve">
     <value>Schmalspur</value>
   </data>
+  <data name="NewGroupOwner" xml:space="preserve">
+    <value>Neuer Gruppenbesitzer</value>
+  </data>
   <data name="NewMeeting" xml:space="preserve">
     <value>Neues Treffen</value>
   </data>
   <data name="NewOwner" xml:space="preserve">
     <value>Neue Bezitser</value>
+  </data>
+  <data name="NewPersonOwner" xml:space="preserve">
+    <value>Neuer persönlicher Besitzer</value>
   </data>
   <data name="NHMCode" xml:space="preserve">
     <value>NHM-Code</value>
@@ -1053,11 +1059,17 @@
   <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
     <value>Kein Benutzer mit E-Mail '{0}' und Registrierungs-ID '{1}' gefunden</value>
   </data>
+  <data name="NumberModulesRegistered" xml:space="preserve">
+    <value>{0} Module registriert</value>
+  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Anzahl der Abschnitte</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Durchgangsspuren</value>
+  </data>
+  <data name="NumberPaticipantsRegistered" xml:space="preserve">
+    <value>{0} Teilnehmer registriert</value>
   </data>
   <data name="of" xml:space="preserve">
     <value>von</value>

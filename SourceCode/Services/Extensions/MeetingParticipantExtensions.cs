@@ -27,11 +27,13 @@ public static class MeetingParticipantExtensions
     }
 
     public static bool MayUnregisterModules(this MeetingParticipant? participant, ClaimsPrincipal? principal, Meeting? meetingWithOrganiserGroup, ITimeProvider timeProvider) =>
-        meetingWithOrganiserGroup?.OrganiserGroup is not null && 
+        principal.IsGlobalAdministrator() ||
+        meetingWithOrganiserGroup?.OrganiserGroup is not null &&
         (principal.IsCountryAdministratorInCountry(meetingWithOrganiserGroup.OrganiserGroup.CountryId) ||
         (meetingWithOrganiserGroup.IsOpenForRegistration(timeProvider.LocalTime) && participant?.PersonId == principal.PersonId()));
 
     public static bool MayEditParticipation(this MeetingParticipant? participant, ClaimsPrincipal? principal, Meeting? meetingWithOrganiserGroup, ITimeProvider timeProvider) =>
+        principal.IsGlobalAdministrator() ||
         meetingWithOrganiserGroup?.OrganiserGroup is not null &&
         (principal.IsCountryAdministratorInCountry(meetingWithOrganiserGroup.OrganiserGroup.CountryId) ||
         (meetingWithOrganiserGroup.StartDate > timeProvider.LocalTime) && participant?.PersonId == principal.PersonId());

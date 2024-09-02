@@ -130,7 +130,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         if (principal is not null)
         {
             using var dbContext = Factory.CreateDbContext();
-            var isMeetingOrganizer = await IsMeetingOrganiser(dbContext, principal, entity).ConfigureAwait(false);
+            var isMeetingOrganizer = await IsMeetingOrganiser( principal, entity).ConfigureAwait(false);
             if (isMeetingOrganizer)
             {
                 return await AddOrUpdate(dbContext, entity).ConfigureAwait(false);

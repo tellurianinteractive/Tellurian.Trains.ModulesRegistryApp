@@ -38,20 +38,23 @@ public class Layout
 
 public static class LayoutExtensions
 {
+   
     public static string RegistrationOpensDate(this Layout layout) => layout.RegistrationOpeningDate.ToShortDateString();
     public static string RegistrationClosesDate(this Layout layout) => layout.RegistrationClosingDate.ToShortDateString();
     public static string RegistrationOfModulesClosesDate(this Layout layout) => (layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate).ToShortDateString();
     public static DateTime ModuleRegistrationClosingDate(this Layout layout) => layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate;
 
     public static string Description(this Layout? me) =>
-       me is null || me.PrimaryModuleStandard is null ? string.Empty :
-       me.ShortName.HasValue() ? me.ShortName :
-       me.PrimaryModuleStandard.ShortName;
+        me is null ? string.Empty :
+        me.PrimaryModuleStandard is null ? me.ShortName :
+        me.PrimaryModuleStandard.Scale is null ? me.PrimaryModuleStandard.ShortName :
+        me.PrimaryModuleStandard.Scale.ShortName;
 
     public static string DescriptionWithTheme(this Layout? me) =>
-        me is null  || me.Theme.HasNoValue() ? string.Empty : 
-        me.Meeting is not null ? $"{me.Meeting.Name}: {me.Description()} - {me.Theme}" :
-        $"{me.Description}: {me.Theme}";
+        me is null  ? string.Empty : 
+        me.Theme.HasValue() ? $"{me.Meeting.Name} {me.Description()}-{me.Theme}" :
+        me.Meeting is not null ? $"{me.Meeting.Name} {me.Description()} - {me.Theme}" :
+        $"{me.Description} {me.Theme}";
 
     internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
        layout.IsRegistrationPermitted &&
@@ -61,6 +64,8 @@ public static class LayoutExtensions
     internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
         layout.IsRegistrationPermitted &&
         layout.RegistrationOpeningDate > at;
+
+
 }
 
 public static class LayoutMapping

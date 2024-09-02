@@ -2,6 +2,15 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.9
+Release date 2024-09-02
+- **Transfer of module ownership** can now also be made from person to group and vice versa.
+- **Layout module list** now shows total registered participats and modules.
+- **Bug fix** of adminstrators not able to save meeting.
+- **Component update** to latest versions of external components.
+## Release 1.11.8
+Release date 2024-08-29
+- **Bug fix** of administrators not able to change meeting data.
 ## Release 1.11.7
 Release date 2024-08-21
 - **Group members** can now be sent mails by group administrators.

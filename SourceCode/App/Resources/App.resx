@@ -984,11 +984,17 @@
   <data name="NarrowGauge" xml:space="preserve">
     <value>Narrow gauge</value>
   </data>
+  <data name="NewGroupOwner" xml:space="preserve">
+    <value>New group owner</value>
+  </data>
   <data name="NewMeeting" xml:space="preserve">
     <value>New meeting</value>
   </data>
   <data name="NewOwner" xml:space="preserve">
     <value>New owner</value>
+  </data>
+  <data name="NewPersonOwner" xml:space="preserve">
+    <value>New personal owner</value>
   </data>
   <data name="NHMCode" xml:space="preserve">
     <value>NHM Code</value>
@@ -1053,11 +1059,17 @@
   <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
     <value>No user found with email '{0}' and registration ID '{1}'</value>
   </data>
+  <data name="NumberModulesRegistered" xml:space="preserve">
+    <value>{0} modules registered</value>
+  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Number of sections</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Through tracks</value>
+  </data>
+  <data name="NumberPaticipantsRegistered" xml:space="preserve">
+    <value>{0} participants registered</value>
   </data>
   <data name="of" xml:space="preserve">
     <value>of</value>

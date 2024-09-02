@@ -984,11 +984,17 @@
   <data name="NarrowGauge" xml:space="preserve">
     <value>Smalspor</value>
   </data>
+  <data name="NewGroupOwner" xml:space="preserve">
+    <value>Ny gruppeeier</value>
+  </data>
   <data name="NewMeeting" xml:space="preserve">
     <value>Ny treff</value>
   </data>
   <data name="NewOwner" xml:space="preserve">
     <value>Ny eier</value>
+  </data>
+  <data name="NewPersonOwner" xml:space="preserve">
+    <value>Ny personlig eier</value>
   </data>
   <data name="NHMCode" xml:space="preserve">
     <value>NHM-kode</value>
@@ -1053,11 +1059,17 @@
   <data name="NoUserFoundWithEmailAndRegistrationId" xml:space="preserve">
     <value>Ingen brukere funnet med e-postadressen '{0}' og registrerings-ID '{1}'</value>
   </data>
+  <data name="NumberModulesRegistered" xml:space="preserve">
+    <value>{0} moduler registrert</value>
+  </data>
   <data name="NumberOfSections" xml:space="preserve">
     <value>Antall seksjoner</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Gjennomgående spor</value>
+  </data>
+  <data name="NumberPaticipantsRegistered" xml:space="preserve">
+    <value>{0} deltakere registrert</value>
   </data>
   <data name="of" xml:space="preserve">
     <value>av</value>

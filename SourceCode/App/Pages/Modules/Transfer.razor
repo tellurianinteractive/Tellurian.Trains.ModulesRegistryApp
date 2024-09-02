@@ -52,7 +52,8 @@ else
 
         <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
             <Inputs>
-                <AppInputSelectNullable Width="3" Label="NewOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" ShowNoneOption=true />
+                <AppInputSelectNullable Width="3" Label="NewPersonalOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" ShowNoneOption=true />
+                <AppInputSelectNullable Width="3" Label="NewGroupOwner" Items="Groups" @bind-Value="NewOwnership.GroupId" ShowNoneOption=true />
                 <AppInputSelect Width="2" Label="TransferredShare" Items="TransferSharesItems(OwnershipToTransfer)" @bind-Value="SelectedTransferShare" />
             </Inputs>
         </EditTemplate>
@@ -71,8 +72,9 @@ else
     Module? Module;
     ModuleOwnership? OwnershipToTransfer;
     ModuleOwnership? NewOwnership;
-    IEnumerable<ListboxItem> Countries = Array.Empty<ListboxItem>();
-    IEnumerable<ListboxItem> Persons = Array.Empty<ListboxItem>();
+    IEnumerable<ListboxItem> Countries = [];
+    IEnumerable<ListboxItem> Persons = [];
+    IEnumerable<ListboxItem> Groups = [];
     int PersonsCountryId;
 
     protected override async Task OnParametersSetAsync()
@@ -81,6 +83,7 @@ else
         OwnershipRef = GetOwnershipRef;
         PersonsCountryId = await GetCurrentOwnerCountryId();
         Persons = await PersonService.ListboxItemsAsync(Principal, PersonsCountryId);
+        Groups = await GroupService.ListboxItemsAsync(Principal, PersonsCountryId);
         Countries = await CountryService.ListboxItemsAsync(Principal, true, true);
         await GetModule();
     }
