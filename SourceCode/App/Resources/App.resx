@@ -273,7 +273,7 @@
   <data name="Copied" xml:space="preserve">
     <value>Copied</value>
   </data>
-  <data name="CopyMailAdresses" xml:space="preserve">
+  <data name="CopyMailAddresses" xml:space="preserve">
     <value>Copy mail addresses</value>
   </data>
   <data name="Count" xml:space="preserve">
@@ -617,6 +617,9 @@
   </data>
   <data name="InPartnershipWith" xml:space="preserve">
     <value>In partnership with</value>
+  </data>
+  <data name="InternalFreights" xml:space="preserve">
+    <value>Internal freights</value>
   </data>
   <data name="InternalWaybills" xml:space="preserve">
     <value>Internal waybills</value>

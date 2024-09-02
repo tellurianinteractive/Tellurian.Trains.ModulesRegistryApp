@@ -123,7 +123,6 @@
     <Build Include="dbo\Procedures\GetAvailableModules.sql" />
     <Build Include="dbo\Procedures\GetLayoutParticipantEmail.sql" />
     <Build Include="dbo\Procedures\GetLayoutWaybills.sql" />
-    <Build Include="dbo\Views\LayoutVehicles.sql" />
     <Build Include="dbo\Tables\WiFredThrottle.sql" />
     <Build Include="dbo\Tables\Cargo\Cargo.sql" />
     <Build Include="dbo\Tables\Cargo\CargoDirection.sql" />
