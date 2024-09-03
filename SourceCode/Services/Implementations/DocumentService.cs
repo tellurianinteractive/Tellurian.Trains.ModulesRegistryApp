@@ -117,7 +117,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 existing.DwgDrawingId = document.Id;
             }
         }
-        if (TypeName == "Module" && document.FileExtension == "skp")
+        else if (TypeName == "Module" && document.FileExtension == "skp")
         {
             var existing = await dbContext.Modules.FindAsync(Id);
             if (existing is not null)
@@ -125,7 +125,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 existing.SkpDrawingId = document.Id;
             }
         }
-        if (TypeName == "Module" && document.FileExtension == "pdf")
+        else if (TypeName == "Module" && document.FileExtension == "pdf")
         {
             var existing = await dbContext.Modules.FindAsync(Id);
             if (existing is not null)
@@ -133,7 +133,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 existing.PdfDocumentationId = document.Id;
             }
         }
-        if (TypeName == "Station" && document.FileExtension == "pdf")
+        else if (TypeName == "Station" && document.FileExtension == "pdf")
         {
             var existing = await dbContext.Stations.FindAsync(Id);
             if (existing is not null)

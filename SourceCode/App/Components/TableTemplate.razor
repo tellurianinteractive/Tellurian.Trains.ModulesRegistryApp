@@ -32,12 +32,16 @@ else
                     {
                         <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
                             @RowTemplate(item)
-                            @if (RowEditTemplate is not null)
-                            {
-                                <td>
+                            <td>
+                                @if (RowEditTemplate is not null)
+                                {
                                     <AppButton Label="Edit" OnClickCallback="(() => Edit(item))" IsDisabled="IsReadOnly" />
-                                </td>
-                            }
+                                }
+                                @if (ShowDeleteButton)
+                                {
+                                    <AppButton Label="Delete" OnClickCallback="(async () => await TryDeleteAsync(item))" IsDisabled="IsReadOnly" />
+                                }
+                            </td>
                         </tr>
                     }
                     @if (RowEditTemplate is not null && IsEditItem(item))
@@ -45,14 +49,15 @@ else
                         <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
                             <td colspan="@EditColspan">
                                 @RowEditTemplate(item)
-                            </td>
-                            <td style="display: inline-block">
+                            <br/>
+                                @if (SaveAsync is not null)
+                                {
+                                    <AppButton Label="Save" OnClickCallback="@(async() => await TrySaveAsync(item))" />
+                                }
                                 <AppButton Label="Cancel" OnClickCallback="Cancel" />
-
                             </td>
                         </tr>
                     }
-
                 }
             }
         </tbody>
@@ -70,8 +75,11 @@ else
     [Parameter] public int EditColspan { get; set; } = 2;
     [Parameter] public bool MayEdit { get; set; } = true;
     [Parameter] public bool ShowRowTemplateWhenEditing { get; set; }
+    [Parameter] public Func<TItem, Task>? DeleteAsync { get; set; }
+    [Parameter] public Func<TItem, Task>? SaveAsync { get; set; }
 
 
+    bool ShowDeleteButton => DeleteAsync is not null;
     bool IsReadOnly => !MayEdit;
     bool CanSave => MayEdit;
     string ItemKey(TItem item) => Key is null ? item?.GetHashCode().ToString() ?? string.Empty : Key(item);
@@ -90,5 +98,19 @@ else
     void Cancel()
     {
         EditedKey = null;
+    }
+
+    async Task TryDeleteAsync(TItem item)
+    {
+        if (DeleteAsync is not null) await DeleteAsync(item);
+    }
+
+    async Task TrySaveAsync(TItem item)
+    {
+        if (SaveAsync is not null) { 
+            await SaveAsync(item);
+            await Task.Delay(1000);
+            Cancel();
+        }
     }
 }

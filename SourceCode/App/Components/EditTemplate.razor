@@ -15,7 +15,7 @@ else
         <div class="col-12">
             @if (ShowSaveButton)
             {
-                <AppButton Label="@SaveLabel" IsSubmit="true" />
+                <AppButton Label="Save" IsSubmit="true" />
             }
             @Buttons
             @if (MayDelete)
@@ -30,16 +30,9 @@ else
                 }
             }
         </div>
+        <hr/>
         @SubInputs
-        @if (SubInputs is not null)
-        {
-            @if (ShowSaveButton)
-            {
-                <div class="col-12">
-                    <AppButton Label="@SaveLabel" IsSubmit="true" />
-                </div>
-            }
-        }
+        
     </EditForm>
 }
 
@@ -49,11 +42,8 @@ else
     [Parameter] public RenderFragment? Buttons { get; set; }
     [Parameter] public RenderFragment? SubInputs { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
-    [Parameter] public bool ShowSaveButton { get; set; } = true;
     [Parameter] public EventCallback OnDeleteCallback { get; set; }
+    [Parameter] public bool ShowSaveButton { get; set; } = true;
     [Parameter] public string? DeleteHref { get; set; }
     [Parameter] public bool MayDelete { get; set; }
-
-
-    string SaveLabel => SubInputs is null ? "Save" : "SaveAll";
 }

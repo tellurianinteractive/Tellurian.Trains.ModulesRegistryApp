@@ -19,28 +19,35 @@
 
 <PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Station" />
 
-<EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
-    <Inputs>
-        <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
-        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true" />
-        <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
-        <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
-        <AppInputFill Width="3" />
-        <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Station.HasCargoCustomers" />
-        <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
-        <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
-        <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Station.IsHarbour" />
-        <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Station.IsKeyRequired" />
+@if (Station is not null)
+{
+    <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
+        <Inputs>
+            <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
+            <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true" />
+            <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
+            <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
+            <AppInputFill Width="3" />
+            <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Station.HasCargoCustomers" />
+            <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
+            <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
+            <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Station.IsHarbour" />
+            <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Station.IsKeyRequired" />
 
-        <StationTracksEdit Station="Station" />
-    </Inputs>
-</EditTemplate>
-
-<DocumentsUpload DocumentedObject="Station">
-    <Uploads>
-        <DocumentUpload FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" />
-    </Uploads>
-</DocumentsUpload>
+        </Inputs>
+        <SubInputs>
+            <StationTracksEdit Station="Station" />
+        </SubInputs>
+    </EditTemplate>
+    @if (Station.Id > 0)
+    {
+        <DocumentsUpload DocumentedObject="Station">
+            <Uploads>
+                <DocumentUpload FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
+            </Uploads>
+        </DocumentsUpload>
+    }
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -51,8 +58,7 @@
     [Parameter] public int ModuleId { get; set; }
 
     ClaimsPrincipal? Principal;
-    object? Owner;
-    Station Station = new Station();
+    Station? Station;
     ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
 
     IEnumerable<ListboxItem>? ModulesItems;
@@ -67,25 +73,26 @@
         OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
         ModulesItems = await ModuleService.ModuleItems(Principal, OwnershipRef, Id);
         RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
-        Station = new Station();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (OwnershipRef.IsAny)
+        if (Id == 0)
         {
-            await GetOwner();
+            Station = new Station();
         }
-        if (Id > 0)
+        else
         {
             Station = await StationService.FindByIdAsync(Principal, Id, OwnershipRef) ?? new Station();
-            if (Station is not null) ModuleId = Station.Modules.First().Id;
+            if (Station is not null) ModuleId = Station.Modules.Single(m => m.Id == Station.PrimaryModuleId).Id;
         }
-        await SetDefaultStationName();
+        await TrySetDefaultStationName();
     }
 
-    private async Task GetOwner() =>
-        Owner = OwnershipRef.IsGroup ? await GroupService.FindByIdAsync(Principal, OwnershipRef.GroupId) : await PersonService.FindByIdAsync(Principal, OwnershipRef.PersonId);
+    private async Task OnDocumentUpdated()
+    {
+        Station = await StationService.FindByIdAsync(Principal, Id, OwnershipRef) ?? Station;
+    }
 
     async Task OnValidSubmit()
     {
@@ -98,12 +105,12 @@
         }
     }
 
-    async Task SetDefaultStationName()
+    async Task TrySetDefaultStationName()
     {
-        if (Station is not null && ModuleId > 0 && string.IsNullOrWhiteSpace(Station.FullName))
+        if (Station is not null && ModuleId > 0 && Station.FullName.HasNoValue())
         {
             var module = await ModuleService.FindByIdAsync(Principal, ModuleId);
-            Station.FullName = module is null ? string.Empty: module.FullName;
+            Station.FullName = module is null ? string.Empty : module.FullName;
         }
     }
 }

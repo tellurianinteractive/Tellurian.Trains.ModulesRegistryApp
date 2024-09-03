@@ -1,5 +1,4 @@
-﻿
-@inject IStringLocalizer<App> Localizer
+﻿@inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 
 @inject DocumentService DocumentService
@@ -12,7 +11,7 @@
         </div>
         <div class="col-md-1">
             <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="@FontAwesome.Upload" /> @Localizer["SelectFile"]</button>
-            <InputFile Id="@InputFileId" OnChange="LoadFile" accept="@Accept" hidden />
+            <InputFile Id="@InputFileId" OnChange="SaveFileAsync" accept="@Accept" hidden />
         </div>
         <div class="col-md-4">
             @MaxSizeText
@@ -25,6 +24,7 @@
     [Parameter] public object? DocumentedObject { get; set; }
     [Parameter] public string? Label { get; set; }
     [Parameter] public int? MaxFileSizeKb { get; set; }
+    [Parameter] public Func<Task>? OnUpdatedAsync { get; set; }
 
     int? DocumentId;
     long MaxFileSize => (MaxFileSizeKb ?? 1024) * 1024;
@@ -35,15 +35,15 @@
         DocumentId = owningObject.DocumentId;
     }
 
-    async Task LoadFile(InputFileChangeEventArgs e)
+    async Task SaveFileAsync(InputFileChangeEventArgs e)
     {
         if (IsFileSizeWithinLimits(e.File))
         {
             var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
             DocumentId = result.Entity?.Id;
+            if (OnUpdatedAsync is not null) await OnUpdatedAsync();
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, $"Upload of {e.File.Name}");
-
         }
         else
         {

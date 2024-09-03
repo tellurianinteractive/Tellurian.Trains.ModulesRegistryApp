@@ -109,6 +109,7 @@ public static class ModuleExtensions
         new()
         {
             Angle = me.Angle,
+            ConfigurationLabel = me.ConfigurationLabel,
             FullName = me.CloneFullName(),
             FunctionalState = me.FunctionalState,
             HasIntegratedLocoNet = me.HasIntegratedLocoNet,
@@ -120,6 +121,7 @@ public static class ModuleExtensions
             IsStandAlone = me.IsStandAlone,
             IsTurntable = me.IsTurntable,
             IsUnavailable = me.IsUnavailable,
+            LandscapeSeason = me.LandscapeSeason,
             LandscapeState = me.LandscapeState,
             Length = me.Length,
             ModuleExits = me.ModuleExits.Select(it => new ModuleExit
@@ -149,6 +151,7 @@ public static class ModuleExtensions
             StandardId = me.StandardId,
             Straight = me.Straight,
             Theme = me.Theme,
+            Width = me.Width,
         };
 
     public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;

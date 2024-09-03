@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.10
+- **Station Tracks** edit experience now improved with compact overview and better editing.
+- **Bug fix** of adding missing properties when cloning module data. Thanks to Jonas Hjelm for reporting.
+- **Bug fix** of uploaded document dissapears when saving module. Thanks to Jonas Hjelm for reporting.
 ## Release 1.11.9
 Release date 2024-09-02
 - **Transfer of module ownership** can now also be made from person to group and vice versa.

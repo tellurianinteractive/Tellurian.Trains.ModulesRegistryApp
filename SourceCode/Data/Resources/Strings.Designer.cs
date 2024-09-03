@@ -241,6 +241,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main.
+        /// </summary>
+        public static string MainTrack {
+            get {
+                return ResourceManager.GetString("MainTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Market.
         /// </summary>
         public static string Market {
@@ -444,6 +453,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Removable {
             get {
                 return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Siding.
+        /// </summary>
+        public static string SidingTrack {
+            get {
+                return ResourceManager.GetString("SidingTrack", resourceCulture);
             }
         }
         

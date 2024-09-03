@@ -103,6 +103,7 @@ builder.Services.AddScoped<RegionService>();
 builder.Services.AddScoped<StationService>();
 builder.Services.AddScoped<StationCustomerService>();
 builder.Services.AddScoped<StationCustomerWaybillsService>();
+builder.Services.AddScoped<StationTrackService>();
 builder.Services.AddScoped<ScaleService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<VehicleService>();

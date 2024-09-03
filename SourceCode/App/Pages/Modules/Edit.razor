@@ -79,17 +79,19 @@ else
             }
         </Buttons>
     </EditTemplate>
-
-    <DocumentsUpload DocumentedObject="Module">
-        <Uploads>
-            <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="250" />
-            <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="250" />
-            @if (Principal.MayUploadSkpDrawing())
-            {
-                <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="2500" />
-            }
-        </Uploads>
-    </DocumentsUpload>
+    @if (Id > 0)
+    {
+        <DocumentsUpload DocumentedObject="Module">
+            <Uploads>
+                <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
+                <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
+                @if (Principal.MayUploadSkpDrawing())
+                {
+                    <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="2500" OnUpdatedAsync="OnDocumentUpdated" />
+                }
+            </Uploads>
+        </DocumentsUpload>
+    }
 }
 
 @code {
@@ -136,6 +138,11 @@ else
             Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
+    }
+
+    private async Task OnDocumentUpdated()
+    {
+        Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef);
     }
 
     void UpdateLength()

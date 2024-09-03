@@ -129,6 +129,9 @@
   <data name="Canceled" xml:space="preserve">
     <value>Avlyst</value>
   </data>
+  <data name="Casing" xml:space="preserve">
+    <value>LOWER</value>
+  </data>
   <data name="ClubEvent" xml:space="preserve">
     <value>Klubbarrangement</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="Kilowatt" xml:space="preserve">
     <value>Kilowatt</value>
+  </data>
+  <data name="MainTrack" xml:space="preserve">
+    <value>Hovedspor</value>
   </data>
   <data name="Market" xml:space="preserve">
     <value>Marked</value>
@@ -242,6 +248,9 @@
   </data>
   <data name="Removable" xml:space="preserve">
     <value>Avtakbar</value>
+  </data>
+  <data name="SidingTrack" xml:space="preserve">
+    <value>Sidespor</value>
   </data>
   <data name="SingleTrack" xml:space="preserve">
     <value>Enkeltspor</value>

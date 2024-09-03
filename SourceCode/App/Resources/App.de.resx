@@ -813,7 +813,7 @@
   <data name="MainTheme" xml:space="preserve">
     <value>Hauptthema</value>
   </data>
-  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
+  <data name="MakeAsOperationsLocation" xml:space="preserve">
     <value>Als Betriebsstandort machen</value>
   </data>
   <data name="MakeStation" xml:space="preserve">

@@ -813,7 +813,7 @@
   <data name="MainTheme" xml:space="preserve">
     <value>Hovedtema</value>
   </data>
-  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
+  <data name="MakeAsOperationsLocation" xml:space="preserve">
     <value>Lag til driftsplass</value>
   </data>
   <data name="MakeStation" xml:space="preserve">
