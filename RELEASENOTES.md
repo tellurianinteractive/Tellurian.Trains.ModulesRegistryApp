@@ -6,20 +6,19 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2024-09-05
 - **Meeting and layout** participants pages now easier to navigate between.
 - **Layout participant list** can now be filtered to those that brings modules only or those that brings operations places only. 
-- **Station** have now a free-text field to write operating instructions.
 Note that the *send mail* and *copy mail addresses* buttons are also filtered.
+- **Station** have now a free-text field to write operating instructions.
 - **Bug fix** of validation rule for *station track platform lenght*. Both empty and zero are interpreted as *no platform*.
 ## Release 1.11.10
 Release date 2024-09-03
 - **Station Tracks** edit experience now improved with compact overview and better editing.
 - **Bug fix** of adding missing properties when cloning module data. Thanks to Jonas Hjelm for reporting.
-- **Bug fix** of uploaded document dissapears when saving module. Thanks to Jonas Hjelm for reporting.
+- **Bug fix** of uploaded document disappears when saving module. Thanks to Jonas Hjelm for reporting.
 ## Release 1.11.9
 Release date 2024-09-02
 - **Transfer of module ownership** can now also be made from person to group and vice versa.
-- **Layout module list** now shows total registered participats and modules and a short info about each module.
+- **Layout module list** now shows total registered participants and modules and a short info about each module.
 - **E-mail addresses** for layout participants can now also be copied by administrators to the clipboard.
-- **Bug fix** of adminstrators not able to save meeting.
 - **Component update** to latest versions of external components.
 ## Release 1.11.8
 Release date 2024-08-29
@@ -47,7 +46,7 @@ Release date 2024-07-25
 Release date 2024-07-15
 - **My Vehicles** has relaxed validation and some fields made optional.
 - **My Vehicles** import from CSV under test for eventual future release.
-- **My Vehicles** can be sorted and filtered for *prototype* and *model*.
+- **My Vehicles** can be sorted and filtered on *prototype* and *model*.
 - **Component update** to latest versions of external components.
 ## Release 1.11.2
 Release date 2024-07-03
@@ -80,13 +79,13 @@ for all owners that are registered, not just the owner that registered the modul
 - **Component update** to latest versions of external components.
 ## Release 1.10.3
 Release date 2024-04-24
-- **Bug fix** of mail button emaal link.
+- **Bug fix** of mail button email link.
 - **Bug fix** of printing layout internal waybills (works from 2024-04-08 16:40).
 - **Component update** to latest versions of external components.
 ## Release 1.10.2
 Release date 2024-04-06
 - **Cargo** now have properties for *is express* and *requires cooling*. This will be noted on waybills, issue #197.
-- **Waybill** will print *express* frights with red cargo name and have a red cross over line, issue #197.
+- **Waybill** will print *express* freights with red cargo name and have a red cross over line, issue #197.
 - **Waybill** return can now be with same cargo as origin cargo. Thanks to Fredrik for the idea, issue #196.
 - **Bug fix** of creating waybills to foreign external stations, now the external customers flows *imports* is respected.
 - **Component update** to latest versions of external components.
@@ -100,10 +99,10 @@ I also select yourself as primary receiver. Because it is an ordinary mail, you 
 - **Component update** to latest versions of external components.
 ## Release 1.10.0
 Release date 2024-03-19
-- **Operational location** replaces the term *Station* in order to make it clear that all
+- **Operations location** replaces the term *Station* in order to make it clear that all
 types of places where timing is required should be defined as a *Operation location*. 
 Documentation has also been updated to reflect this.
-- **Operational location** can now have cargo customers disabled. This does not delete existing cargo customers, just disable to add new ones.
+- **Operations location** can now have cargo customers disabled. This does not delete existing cargo customers, just disable to add new ones.
 - **Translations** added for help texts for *Operation locations*.
 ## Release 1.9.19
 Release date 2024-03-13
