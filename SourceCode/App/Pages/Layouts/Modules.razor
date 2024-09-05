@@ -26,16 +26,18 @@ else
     </h4>
     @if (IsOrganiser)
     {
+        <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" />
+        <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" />
         <div style="padding: 10px 0px">
-            <MailToButton Recipients="LayoutParticipants.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" />
-            <MailCopyButton Recipients="LayoutParticipants.ParticipantsMails()" />
+            <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" />
+            <MailCopyButton Recipients="FilteredParticipants!.ParticipantsMails()" />
             @if (Layout is not null)
             {
-                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People"/>
+                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People" />
             }
         </div>
     }
-    @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
+    @foreach (var participant in FilteredParticipants!.OrderBy(mp => mp.Person.Name()))
     {
         @if (participant.AllLayoutModules(LayoutModules).Any())
         {
@@ -77,9 +79,15 @@ else
     Meeting? Meeting;
     Layout? Layout;
     IEnumerable<LayoutParticipant>? LayoutParticipants;
+    IEnumerable<LayoutParticipant>? FilteredParticipants =>
+        OnlyThoseWithOperationsPlaces ? LayoutParticipants?.Where(lp => lp.LayoutStations.Count > 0) :
+        OnlyThoseWithModules ? LayoutParticipants?.Where(lp => lp.LayoutModules.Count > 0) :
+        LayoutParticipants;
     IEnumerable<LayoutStation>? LayoutStations;
     IEnumerable<LayoutModule>? LayoutModules;
     bool IsOrganiser;
+    bool OnlyThoseWithModules;
+    bool OnlyThoseWithOperationsPlaces;
 
     protected override async Task OnParametersSetAsync()
     {

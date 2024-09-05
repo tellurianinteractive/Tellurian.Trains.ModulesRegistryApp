@@ -1,9 +1,10 @@
 ﻿
-<AppButton Href="@Recipients.MailtoHref(Sender, Subject)" Label="SendMailToAll" IconName="@FontAwesome.Mail" />
+<AppButton Href="@Recipients.MailtoHref(Sender, Subject)" Label="@Label" IconName="@FontAwesome.Mail" />
 
 @code {
     [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
     [Parameter] public required MailHolder Sender { get; set; }
     [Parameter] public required string Subject { get; set; }
+    [Parameter] public string? Label { get; set; } = "SendToAll";
 
 }

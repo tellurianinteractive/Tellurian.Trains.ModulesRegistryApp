@@ -1,10 +1,11 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IStringLocalizer<App> Localizer
 
-<AppButton OnClickCallback="CopyToClipboard" Label="CopyMailAddresses" IconName="@FontAwesome.Mail" />
+<AppButton OnClickCallback="CopyToClipboard" Label="@Label" IconName="@FontAwesome.Mail" />
 
 @code {
     [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
+    [Parameter] public string? Label { get; set; } = "CopyAllMailadresses";
 
     private async Task CopyToClipboard()
     {

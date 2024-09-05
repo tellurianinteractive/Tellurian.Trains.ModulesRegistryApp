@@ -123,6 +123,9 @@
   <data name="Accept" xml:space="preserve">
     <value>Accept</value>
   </data>
+  <data name="Accomodation" xml:space="preserve">
+    <value>Accomodation</value>
+  </data>
   <data name="Accomodation2" xml:space="preserve">
     <value>Accomodation</value>
   </data>
@@ -276,8 +279,8 @@
   <data name="Copied" xml:space="preserve">
     <value>Copied</value>
   </data>
-  <data name="CopyMailAddresses" xml:space="preserve">
-    <value>Copy mail addresses</value>
+  <data name="CopyAllMailAddresses" xml:space="preserve">
+    <value>Copy all mail addresses</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>Count</value>
@@ -1088,6 +1091,12 @@
   </data>
   <data name="of" xml:space="preserve">
     <value>of</value>
+  </data>
+  <data name="OnlyThoseWithModules" xml:space="preserve">
+    <value>Only those with modules</value>
+  </data>
+  <data name="OnlyThoseWithOperationsPlaces" xml:space="preserve">
+    <value>Only those with operations places</value>
   </data>
   <data name="OpenedYear" xml:space="preserve">
     <value>Opened year</value>

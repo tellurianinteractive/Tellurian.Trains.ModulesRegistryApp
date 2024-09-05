@@ -5,6 +5,8 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.11.11
 Release date 2024-09-05
 - **Meeting and layout** participants pages now easier to navigate between.
+- **Layout participant list** can now be filtered to those that brings modules only or those that brings operations places only. 
+Note that the *send mail* and *copy mail addresses* buttons are also filtered.
 - **Bug fix** of validation rule for *station track platform lenght*. Both empty and zero are interpreted as *no platform*.
 ## Release 1.11.10
 Release date 2024-09-03

@@ -276,8 +276,8 @@
   <data name="Copied" xml:space="preserve">
     <value>Kopierade</value>
   </data>
-  <data name="CopyMailAddresses" xml:space="preserve">
-    <value>Kopiera mailadresser</value>
+  <data name="CopyAllMailAddresses" xml:space="preserve">
+    <value>Kopiera alla mailadresser</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>Antal</value>
@@ -1088,6 +1088,12 @@
   </data>
   <data name="of" xml:space="preserve">
     <value>av</value>
+  </data>
+  <data name="OnlyThoseWithModules" xml:space="preserve">
+    <value>Endast de med moduler</value>
+  </data>
+  <data name="OnlyThoseWithOperationsPlaces" xml:space="preserve">
+    <value>Endast de med driftplatser</value>
   </data>
   <data name="OpenedYear" xml:space="preserve">
     <value>Öppnad år</value>

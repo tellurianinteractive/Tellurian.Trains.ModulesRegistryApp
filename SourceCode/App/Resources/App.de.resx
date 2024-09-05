@@ -276,8 +276,8 @@
   <data name="Copied" xml:space="preserve">
     <value>Kopiert</value>
   </data>
-  <data name="CopyMailAddresses" xml:space="preserve">
-    <value>E-Mail-Adressen kopieren</value>
+  <data name="CopyAllMailAddresses" xml:space="preserve">
+    <value>alle E-Mail-Adressen kopieren</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>Anzahl</value>
@@ -1085,6 +1085,12 @@
   </data>
   <data name="of" xml:space="preserve">
     <value>von</value>
+  </data>
+  <data name="OnlyThoseWithModules" xml:space="preserve">
+    <value>Nur diejenigen mit Modulen</value>
+  </data>
+  <data name="OnlyThoseWithOperationsPlaces" xml:space="preserve">
+    <value>Nur solche mit Betriebsstandorte</value>
   </data>
   <data name="OpenedYear" xml:space="preserve">
     <value>Eröffnungsjahr</value>
