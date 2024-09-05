@@ -24,8 +24,8 @@ public class StationTrackValidator : AbstractValidator<StationTrack>
             .NotEmpty()
             .InclusiveBetween(0.2, 10.0)
             .WithName(n => localizer[nameof(n.MaxTrainLength)]);
-        RuleFor(m => m.PlatformLength)
-            .InclusiveBetween(0.2, 10.0)
+        RuleFor(m => m.PlatformLength)         
+            .IsEmptyOrInclusiveBetween(0.2, 10.0, localizer)
             .WithName(n => localizer[nameof(n.PlatformLength)]);
         RuleFor(m => (int?)m.SpeedLimit)
             .InclusiveBetween(5, 350)

@@ -11,7 +11,7 @@ public class VehicleValidator : AbstractValidator<Vehicle>
     {
         RuleFor(x => x.InventoryNumber).InclusiveBetween(1, 9999).WithName(x => localizer[nameof(x.InventoryNumber)]);
         RuleFor(x => x.PrototypeManufacturerName).Length(1, 20).MustBeOrdinaryText(localizer).WithName(localizer["Manufacturer"]);
-        RuleFor(x => x.PrototypeManufactureYear).IsNullOrBetweenInclusive(1850, DateTime.Now.Year, localizer);
+        RuleFor(x => x.PrototypeManufactureYear).IsEmptyOrInclusiveBetween(1850, DateTime.Now.Year, localizer);
         RuleFor(x => x.PrototypeImageHref).Length(0, 256);
         RuleFor(x => x.KeeperSignature).Length(1, 10).WithName(x => localizer[nameof(x.KeeperSignature)]);
         RuleFor(x => x.VehicleClass).NotEmpty().Length(1, 10).WithName(x => localizer[nameof(x.VehicleClass)]);
@@ -26,9 +26,9 @@ public class VehicleValidator : AbstractValidator<Vehicle>
 
         RuleFor(x => x.OwningPersonId).MustBeSelected(localizer).WithName(localizer.FromParts("Owner"));
         RuleFor(x => x.Note).Length(0, 200).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.Note)]);
-        RuleFor(x => x.EnginePower).IsNullOrBetweenInclusive(0, 10000, localizer).WithName(x => localizer[nameof(x.EnginePower)]);
-        RuleFor(x => x.PrototypeLength).IsNullOrBetweenInclusive(0, 100, localizer).WithName(localizer["Length"]);
-        RuleFor(x => x.PrototypeWeight).IsNullOrBetweenInclusive(0, 1000, localizer).WithName(localizer["Weight"]);
+        RuleFor(x => x.EnginePower).IsEmptyOrInclusiveBetween(0, 10000, localizer).WithName(x => localizer[nameof(x.EnginePower)]);
+        RuleFor(x => x.PrototypeLength).IsEmptyOrInclusiveBetween(0, 100, localizer).WithName(localizer["Length"]);
+        RuleFor(x => x.PrototypeWeight).IsEmptyOrInclusiveBetween(0, 1000, localizer).WithName(localizer["Weight"]);
 
         RuleFor(x => x.F0).Length(0, 12);
         RuleFor(x => x.F1).Length(0, 12);

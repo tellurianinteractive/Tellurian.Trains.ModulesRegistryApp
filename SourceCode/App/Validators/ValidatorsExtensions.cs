@@ -77,11 +77,13 @@ public static partial class ValidatorsExtensions
 
     public static IRuleBuilderOptions<T, Station> IsRegionRequired<T>(this IRuleBuilder<T, Station> builder, IStringLocalizer localizer) =>
         builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
+    public static IRuleBuilderOptions<T, double?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, double?> builder, double min, double max, IStringLocalizer localizer) =>
+    builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
 
-    public static IRuleBuilderOptions<T, decimal?> IsNullOrBetweenInclusive<T>(this IRuleBuilder<T, decimal?> builder, decimal min, decimal max, IStringLocalizer localizer) =>
-        builder.Must(d => d.HasValue == false || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
-    public static IRuleBuilderOptions<T, short?> IsNullOrBetweenInclusive<T>(this IRuleBuilder<T, short?> builder, int min, int max, IStringLocalizer localizer) =>
-        builder.Must(d => d.HasValue == false || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
+    public static IRuleBuilderOptions<T, decimal?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, decimal?> builder, decimal min, decimal max, IStringLocalizer localizer) =>
+        builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
+    public static IRuleBuilderOptions<T, short?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, short?> builder, int min, int max, IStringLocalizer localizer) =>
+        builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeBetween"]}");
     private static bool IsValidEmailAddress(this string? email)
     {
         if (email == null) return false;
