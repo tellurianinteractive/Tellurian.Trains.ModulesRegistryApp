@@ -279,6 +279,9 @@
   <data name="CopyAllMailAddresses" xml:space="preserve">
     <value>alle E-Mail-Adressen kopieren</value>
   </data>
+  <data name="CopyMailAdressesTo" xml:space="preserve">
+    <value>E-Mail-Adressen {0} kopieren</value>
+  </data>
   <data name="Count" xml:space="preserve">
     <value>Anzahl</value>
   </data>
@@ -1349,6 +1352,9 @@
   </data>
   <data name="Send" xml:space="preserve">
     <value>Senden</value>
+  </data>
+  <data name="SendMailTo" xml:space="preserve">
+    <value>E-Mail an {0} ​​senden</value>
   </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Senden eine E-Mail an alle</value>

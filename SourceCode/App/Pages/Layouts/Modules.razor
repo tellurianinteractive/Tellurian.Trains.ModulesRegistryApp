@@ -29,11 +29,11 @@ else
         <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" />
         <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" />
         <div style="padding: 10px 0px">
-            <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" />
-            <MailCopyButton Recipients="FilteredParticipants!.ParticipantsMails()" />
+            <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" Label="@SendMailLabel" />
+            <MailCopyButton Recipients="FilteredParticipants!.ParticipantsMails()" Label="@CopyMailLabel"/>
             @if (Layout is not null)
             {
-                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People" />
+                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People"/>
             }
         </div>
     }
@@ -116,5 +116,14 @@ else
         await JSRuntime.InvokeAsync<object>("open", WaybillsHref(it), "_blank");
     }
 
+    string SendMailLabel =>
+        OnlyThoseWithOperationsPlaces ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :
+        OnlyThoseWithModules ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithModules"].ToString().ToLowerInvariant()) :
+        "SendMailToAll";
+
+    string CopyMailLabel =>
+    OnlyThoseWithOperationsPlaces ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :
+    OnlyThoseWithModules ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithModules"].ToString().ToLowerInvariant()) :
+    "CopyAllMailAddresses";
 
 }
