@@ -2,7 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.11
+Release date 2024-09-05
+- **Meeting and layout** participants pages now easier to navigate between.
 ## Release 1.11.10
+Release date 2024-09-03
 - **Station Tracks** edit experience now improved with compact overview and better editing.
 - **Bug fix** of adding missing properties when cloning module data. Thanks to Jonas Hjelm for reporting.
 - **Bug fix** of uploaded document dissapears when saving module. Thanks to Jonas Hjelm for reporting.
