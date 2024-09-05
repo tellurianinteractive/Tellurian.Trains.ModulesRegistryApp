@@ -49,12 +49,12 @@ else
                         <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
                             <td colspan="@EditColspan">
                                 @RowEditTemplate(item)
-                            <br/>
+                                <br />
                                 @if (SaveAsync is not null)
                                 {
                                     <AppButton Label="Save" OnClickCallback="@(async() => await TrySaveAsync(item))" />
                                 }
-                                <AppButton Label="Cancel" OnClickCallback="Cancel" />
+                                <AppButton Label="Close" OnClickCallback="OnClose" />
                             </td>
                         </tr>
                     }
@@ -95,22 +95,24 @@ else
         EditedKey = EditItemKey(item);
     }
 
-    void Cancel()
+    void OnClose()
     {
         EditedKey = null;
     }
 
     async Task TryDeleteAsync(TItem item)
     {
-        if (DeleteAsync is not null) await DeleteAsync(item);
+        if (DeleteAsync is not null)
+        {
+            await DeleteAsync(item);
+        }
     }
 
     async Task TrySaveAsync(TItem item)
     {
-        if (SaveAsync is not null) { 
+        if (SaveAsync is not null)
+        {
             await SaveAsync(item);
-            await Task.Delay(1000);
-            Cancel();
         }
     }
 }

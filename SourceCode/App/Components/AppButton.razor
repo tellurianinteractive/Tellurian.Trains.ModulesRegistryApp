@@ -12,7 +12,7 @@
             }
             else
             {
-                <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText</span></a>
+                <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
             }
         }
         else if (IsSubmit)
@@ -79,8 +79,21 @@
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
-    string IconClass => FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
-    string ObjectNameLocalized => ObjectName.HasNoValue() ? string.Empty : Localizer[ObjectName].ToString();
+    string IconClass => 
+        FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : 
+        FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label]:
+        IconName.HasValue()? $"fa fa-{IconName}" : "fa fa-info";
+    string ObjectNameLocalized
+    {
+        get
+        {
+            if (ObjectName.HasNoValue()) return string.Empty;
+            var localizedText = Localizer[ObjectName].ToString();
+            if (localizedText.HasValue()) return localizedText;
+            return ObjectName;
+        }
+    }
+
     string Display => IsHidden ? "none" : "inline-block";
     string HideLabelCss => AlwaysShowLabel ? "" : "sm-hide";
 

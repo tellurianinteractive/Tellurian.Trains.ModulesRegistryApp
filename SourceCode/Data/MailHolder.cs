@@ -25,7 +25,7 @@ public static class MailHolderExtensions
 
     private static string EmailWithName(this MailHolder holder) => $"{HttpUtility.UrlEncode(holder.Name)}%20<{holder.EmailAddresses}>";
     public static MailHolder Sender(this ClaimsPrincipal principal) =>
-       new(principal.GivenName() ?? principal.EmailAddess(), principal.EmailAddess());
+        new(principal.GivenName() ?? principal.EmailAddess(), principal.EmailAddess());
 
     public static IEnumerable<MailHolder> ParticipantsMails(this Meeting? meeting) =>
         meeting?.Participants.Select(p => new MailHolder(p.Person.FirstName, p.Person.EmailAddresses)) ?? Array.Empty<MailHolder>();

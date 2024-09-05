@@ -30,7 +30,7 @@ public static class StationTrackExtensions
 {
     public static string DirectionText(this StationTrack track, IEnumerable<ListboxItem> items) => items.Single(i => i.Id == track.DirectionId).Description;
     public static string MaxTrainLengthText(this StationTrack track) => track.MaxTrainLength > 0 ? $"{track.MaxTrainLength:F1}m" : "";
-    public static string PlatformLengthText(this StationTrack track) => track.PlatformLength.HasValue ? $"{track.PlatformLength.Value:F1}m" : None;
+    public static string PlatformLengthText(this StationTrack track) => track.PlatformLength.HasValue && track.PlatformLength.Value > 0 ? $"{track.PlatformLength.Value:F1}m" : None;
     public static string SpeedLimitText(this StationTrack track) => track.SpeedLimit > 0 ? $"{track.SpeedLimit}km/h" : Undefined;
     public static string MainOrSidingText(this StationTrack track) => track.IsSiding ? SidingTrack : MainTrack;
 

@@ -237,6 +237,9 @@
   <data name="Clone" xml:space="preserve">
     <value>Klon</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Luk</value>
+  </data>
   <data name="ClosedYear" xml:space="preserve">
     <value>Lukket år</value>
   </data>
@@ -1077,7 +1080,7 @@
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Gennemgående spor</value>
   </data>
-  <data name="NumberPaticipantsRegistered" xml:space="preserve">
+  <data name="NumberParticipantsRegistered" xml:space="preserve">
     <value>{0} deltagere tilmeldt</value>
   </data>
   <data name="of" xml:space="preserve">

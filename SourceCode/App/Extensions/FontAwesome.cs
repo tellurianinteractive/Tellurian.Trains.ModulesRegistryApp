@@ -6,6 +6,7 @@ public static class FontAwesome
     public const string Cancel = "fa fa-user-slash";
     public const string Cargo = "fa fa-box-open";
     public const string Clone = "fa fa-clone";
+    public const string Close = "fa fa-times-circle";
     public const string ClubEvent = "fa fa-home";
     public const string Country = "fa fa-flag";
     public const string Customer = "fa fa-industry";
@@ -62,6 +63,7 @@ public static class FontAwesome
             {nameof(Cancel), Cancel },
             {nameof(Cargo), Cargo },
             {nameof(Clone), Clone },
+            {nameof(Close), Close },
             {nameof(ClubEvent), ClubEvent },
             {nameof(Customer), Customer },
             {nameof(Delete), Delete },

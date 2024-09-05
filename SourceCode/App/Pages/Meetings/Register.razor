@@ -1,5 +1,6 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
 @page "/Meetings/{MeetingId:int}/Edit/{PersonId:int}"
+
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject ITimeProvider TimeProvider
@@ -28,6 +29,7 @@ else
         }
         else
         {
+
             @if (IsMeetingOrganiser)
             {
                 <div class="noprint">
@@ -36,15 +38,21 @@ else
                     <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
                 </div>
             }
-            @if (IsMeetingOrganiser && Participant is null)
+            <h4>
+                @string.Format(Localizer["NumberParticipantsRegistered"], Meeting.Participants.Count(p => !p.CancellationTime.HasValue )).
+            </h4>
+            @if (IsMeetingOrganiser && Participant is null && Principal is not null)
             {
-                @if (Principal is not null)
-                {
-                    <div style="padding: 10px 0px">
+                <div style="padding: 10px 0px">
+                    <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal.Sender()" Subject="@Meeting.Name" />
+                    <MailCopyButton Recipients="Meeting.ParticipantsMails()" />
 
-                        <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal.Sender()" Subject="@Meeting.Name" />
-                    </div>
-                }
+                    @foreach(var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted ))
+                    {
+                        <AppButton Href="@($"layouts/{layout.Id}/modules")" ObjectName="@(layout.Description())" Label="Participants" IconName="@FontAwesome.Layout" />
+                    }
+                </div>
+
                 <TableTemplate Items="Meeting.Participants.OrderBy(p => p.Person.FirstName).ThenBy(p => p.Person.LastName)">
                     <TableHeader>
                         <th>@Localizer["Participant"]</th>

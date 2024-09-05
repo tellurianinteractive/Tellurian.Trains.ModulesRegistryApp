@@ -123,7 +123,7 @@
   <data name="Accept" xml:space="preserve">
     <value>Accept</value>
   </data>
-  <data name="Accomodation" xml:space="preserve">
+  <data name="Accomodation2" xml:space="preserve">
     <value>Accomodation</value>
   </data>
   <data name="Actions" xml:space="preserve">
@@ -236,6 +236,9 @@
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Clone</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="ClosedYear" xml:space="preserve">
     <value>Closed year</value>
@@ -813,6 +816,9 @@
   <data name="MainTheme" xml:space="preserve">
     <value>Main theme</value>
   </data>
+  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
+    <value />
+  </data>
   <data name="MakeAsOperationsLocation" xml:space="preserve">
     <value>Make as operations location</value>
   </data>
@@ -1077,7 +1083,7 @@
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Through tracks</value>
   </data>
-  <data name="NumberPaticipantsRegistered" xml:space="preserve">
+  <data name="NumberParticipantsRegistered" xml:space="preserve">
     <value>{0} participants registered</value>
   </data>
   <data name="of" xml:space="preserve">

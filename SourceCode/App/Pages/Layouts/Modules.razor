@@ -21,7 +21,7 @@ else if (LayoutParticipants.Count() == 0)
 else
 {
     <h4>
-        @string.Format(Localizer["NumberPaticipantsRegistered"], LayoutParticipants.Count()),
+        @string.Format(Localizer["NumberParticipantsRegistered"], LayoutParticipants.Count()),
         @string.Format(Localizer["NumberModulesRegistered"], LayoutParticipants.Sum(lp => lp.LayoutModules.Count())).
     </h4>
     @if (IsOrganiser)
@@ -29,6 +29,10 @@ else
         <div style="padding: 10px 0px">
             <MailToButton Recipients="LayoutParticipants.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" />
             <MailCopyButton Recipients="LayoutParticipants.ParticipantsMails()" />
+            @if (Layout is not null)
+            {
+                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People"/>
+            }
         </div>
     }
     @foreach (var participant in LayoutParticipants.OrderBy(mp => mp.Person.Name()))
@@ -54,7 +58,6 @@ else
                     </td>
                 </RowTemplate>
             </TableTemplate>
-
         }
         else
         {
@@ -85,7 +88,7 @@ else
         if (Layout is not null)
         {
             Meeting = Layout.Meeting;
-            IsOrganiser = Meeting.MayAdministerMeetings(Principal);
+            IsOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
             LayoutParticipants = await LayoutParticipantService.GetAllForLayout(Principal, Id);
             if (LayoutParticipants.Any())
             {
