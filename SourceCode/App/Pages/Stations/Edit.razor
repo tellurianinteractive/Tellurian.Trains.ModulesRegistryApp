@@ -33,7 +33,7 @@
             <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
             <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Station.IsHarbour" />
             <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Station.IsKeyRequired" />
-
+            <AppInputText Width="12"  Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Station.OperationInstructionsMarkdown" NumberOfRows="10"/>
         </Inputs>
         <SubInputs>
             <StationTracksEdit Station="Station" />

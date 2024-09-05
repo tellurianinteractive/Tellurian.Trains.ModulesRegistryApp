@@ -1617,6 +1617,9 @@
   <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
     <value>You are not authorized to view this page.</value>
   </data>
+  <data name="YouCanUseMarkdown" xml:space="preserve">
+    <value>You can use markdown to format the text</value>
+  </data>
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>You may now login</value>
   </data>

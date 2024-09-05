@@ -25,6 +25,9 @@ public partial class Station
     public int? RegionId { get; set; }
     public int? PdfInstructionId { get; set; }
     public int? PrimaryModuleId { get; set; }
+    public int? TypeOfSwitchgearId { get; set; }
+    public string BoosterTypes { get; set; }
+    public string OperationInstructionsMarkdown { get; set; }
 
     public virtual Document PdfInstruction { get; set; }
     public virtual Region Region { get; set; }

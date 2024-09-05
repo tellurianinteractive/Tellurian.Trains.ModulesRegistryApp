@@ -77,10 +77,10 @@ public static class LocalizedStringExtensions
     public static string FromParts(this IStringLocalizer localizer, string resourceName)
     {
         if (resourceName.HasNoValue()) return string.Empty;
-        var parts = resourceName.Split(['-', '/', '=']);
+        var parts = resourceName.Split(['-', '/', '=', ',']);
         if (parts.Length == 1) return localizer[parts[0]];
         var localized = parts.Select(p => (localizer[p] ?? p).ToLowerInvariant());
-        var separator = resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : " ";
+        var separator = resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : resourceName.Contains(',') ? ", ": " ";
         return string.Join(separator, localized).ToFirstUpperInvariant();
     }
 

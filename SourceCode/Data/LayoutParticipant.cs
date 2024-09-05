@@ -1,7 +1,6 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace ModulesRegistry.Data;
 
@@ -16,6 +15,7 @@ public class LayoutParticipant
     public int MeetingParticipantId { get; set; }
     public int LayoutId { get; set; }
     public int PersonId { get; set; }
+    public string NoteToOrganiserMarkdown { get; set; }
     public virtual MeetingParticipant MeetingParticipant { get; set; }
     public virtual Layout Layout { get; set; }
     public virtual Person Person { get; set; }

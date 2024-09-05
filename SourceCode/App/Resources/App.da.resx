@@ -1611,6 +1611,9 @@
   <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
     <value>Du er ikke autoriseret til at se denne side.</value>
   </data>
+  <data name="YouCanUseMarkdown" xml:space="preserve">
+    <value>Du kan bruge markdown til at formatere teksten</value>
+  </data>
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>Du kan nu logge ind</value>
   </data>

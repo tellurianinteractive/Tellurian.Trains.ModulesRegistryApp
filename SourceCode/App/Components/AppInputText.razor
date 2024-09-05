@@ -8,7 +8,14 @@
     {
         <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
     }
-    <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    @if (IsTextArea)
+    {
+        <textarea style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" rows="@NumberOfRows"/>
+    }      
+    else
+    {
+        <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+    }
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -22,6 +29,7 @@
     [Parameter] public string? InputType { get; set; }
     [Parameter] public string? TextColor { get; set; }
     [Parameter] public string? BackColor { get; set; }
+    [Parameter] public int NumberOfRows { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
@@ -33,4 +41,5 @@
     string Type => string.IsNullOrWhiteSpace(InputType) ? "text" : InputType.ToLowerInvariant();
     string PlaceholderText => string.IsNullOrWhiteSpace(Placeholder) ? string.Empty : Localizer[Placeholder].Value;
     string Disabled => IsDisabled ? "disabled" : string.Empty;
+    bool IsTextArea => NumberOfRows > 1;
 }
