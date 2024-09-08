@@ -3,13 +3,13 @@
 @inherits AppInputBase<bool>
 @inject IStringLocalizer<App> Localizer
 
-<span class="@WidthCss">
-    @if (AlignWithFields)
-    {
-        <br/>
-    }
-    @if (IsVisible)
-    {
+@if (IsVisible)
+{
+    <span class="@WidthCss">
+        @if (AlignWithFields)
+        {
+            <br />
+        }
         <span class="form-check">
             <input disabled="@IsDisabled" type="checkbox" class="form-check-input @CssClass" id="@Label" @bind="@CurrentValue" />
             @if (!string.IsNullOrWhiteSpace(Label))
@@ -17,8 +17,8 @@
                 <label class="form-check-label" for="@Label">@LabelText(Localizer)</label>
             }
         </span>
-    }
-</span>
+    </span>
+}
 
 @code {
     [Parameter] public bool AlignWithFields { get; set; }

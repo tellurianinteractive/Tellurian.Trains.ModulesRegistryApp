@@ -26,14 +26,17 @@ else
     </h4>
     @if (IsOrganiser)
     {
-        <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" />
-        <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" />
+        <span class="noprint">
+            <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" w />
+            <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" />
+        </span>
+
         <div style="padding: 10px 0px">
             <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" Label="@SendMailLabel" />
-            <MailCopyButton Recipients="FilteredParticipants!.ParticipantsMails()" Label="@CopyMailLabel"/>
+            <MailCopyButton Recipients="FilteredParticipants!.ParticipantsMails()" Label="@CopyMailLabel" />
             @if (Layout is not null)
             {
-                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People"/>
+                <AppButton Label="RegisterOrModifyParticipation" Href="@($"meetings/{Layout.MeetingId}/register")" IconName="@FontAwesome.People" />
             }
         </div>
     }
