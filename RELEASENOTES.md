@@ -4,7 +4,10 @@ The release notes are summaries of important changes and fixes in each release.
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.11.12
 Release date 2024-09-12
+- **Meeting** arrival and departure times are now mandatory.
+- **Meeting participants** list now show arrival and departure days and times.
 - **Layout participants** list now also show subset selection when printing.
+- **Layoyt participatns** list now show arrival and departure days and times.
 - **Module ownership** transfer to person or group now made mutually exclusive.
 - **Person edit** form cleaned up.
 - **Selecting country** know remembers it in all pages and to next session.

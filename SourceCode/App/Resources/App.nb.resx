@@ -390,6 +390,9 @@
   <data name="Dutch" xml:space="preserve">
     <value>Nederlandsk</value>
   </data>
+  <data name="EarliestDepartureTime" xml:space="preserve">
+    <value>Avreise tidligst</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Rediger</value>
   </data>
@@ -470,6 +473,9 @@
   </data>
   <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
     <value>Fyll ut nytt spor og klikk Legg til før du lagrer.</value>
+  </data>
+  <data name="FinalDay" xml:space="preserve">
+    <value>Siste dag</value>
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Siste år i drift</value>
@@ -1062,6 +1068,9 @@
   <data name="NotAuthorised" xml:space="preserve">
     <value>Uautorisert</value>
   </data>
+  <data name="NotAValidTime" xml:space="preserve">
+    <value>Ikke et gyldig tidspunkt</value>
+  </data>
   <data name="NotDefined" xml:space="preserve">
     <value>Ikke definert</value>
   </data>
@@ -1172,6 +1181,9 @@
   </data>
   <data name="Participate" xml:space="preserve">
     <value>Delta</value>
+  </data>
+  <data name="Participates" xml:space="preserve">
+    <value>Deltar</value>
   </data>
   <data name="Participation" xml:space="preserve">
     <value>Deltakelse</value>
@@ -1623,8 +1635,8 @@
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>Du kan nå logge på</value>
   </data>
-  <data name="YouParticipateDays" xml:space="preserve">
-    <value>Du deltar dager</value>
+  <data name="YouParticipate" xml:space="preserve">
+    <value>Du deltar</value>
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Din ankomsttid den første dagen</value>

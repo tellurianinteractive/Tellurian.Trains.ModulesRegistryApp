@@ -393,6 +393,9 @@
   <data name="Dutch" xml:space="preserve">
     <value>Dutch</value>
   </data>
+  <data name="EarliestDepartureTime" xml:space="preserve">
+    <value>Departure at the earliest</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -473,6 +476,9 @@
   </data>
   <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
     <value>Fill out new track and click Add before saving.</value>
+  </data>
+  <data name="FinalDay" xml:space="preserve">
+    <value>Final day</value>
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Final year in operation</value>
@@ -1065,6 +1071,9 @@
   <data name="NotAuthorised" xml:space="preserve">
     <value>Unauthorised</value>
   </data>
+  <data name="NotAValidTime" xml:space="preserve">
+    <value>Not a valid time</value>
+  </data>
   <data name="NotDefined" xml:space="preserve">
     <value>Not defined</value>
   </data>
@@ -1175,6 +1184,9 @@
   </data>
   <data name="Participate" xml:space="preserve">
     <value>Participate</value>
+  </data>
+  <data name="Participates" xml:space="preserve">
+    <value>Participates</value>
   </data>
   <data name="Participation" xml:space="preserve">
     <value>Participation</value>
@@ -1626,8 +1638,8 @@
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>You may now login</value>
   </data>
-  <data name="YouParticipateDays" xml:space="preserve">
-    <value>You participate days</value>
+  <data name="YouParticipate" xml:space="preserve">
+    <value>You participate</value>
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Your arrival time the first day</value>

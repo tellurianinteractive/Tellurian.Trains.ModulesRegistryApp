@@ -1,8 +1,6 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
-using System.Text;
 
 namespace ModulesRegistry.Data;
 
@@ -20,7 +18,11 @@ public class MeetingParticipant
     public bool ParticipateDay3 { get; set; }
     public bool ParticipateDay4 { get; set; }
     public bool ParticipateDay5 { get; set; }
+    public bool ParticipateDay6 { get; set; }
+    [Obsolete("Use LatestArrivalTime")]
     public DateTime? ArrivalTime { get; set; }
+    public TimeOnly? LatestArrivalTime { get; set; }
+    public TimeOnly? EarliestDepartureTime { get; set; }
 
     public DateTimeOffset RegistrationTime { get; set; }
     public DateTimeOffset? CancellationTime { get; set; }

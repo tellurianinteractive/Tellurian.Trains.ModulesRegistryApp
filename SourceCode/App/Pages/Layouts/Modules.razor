@@ -45,7 +45,7 @@ else
             <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
                     <th width="30%">@participant.Person.Name(), @participant.Person.CityName</th>
-                    <th width="50%">@Localizer["Info"]</th>
+                    <th width="50%">@participant.MeetingParticipant.Participates(Localizer)</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
                     <th class="noprint">@Localizer["Actions"] </th>
                 </TableHeader>

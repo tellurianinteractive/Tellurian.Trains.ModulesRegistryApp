@@ -29,7 +29,10 @@ else
         }
         else
         {
-
+            <h4>
+                @string.Format(Localizer["NumberParticipantsRegistered"], Meeting.Participants.Count(p => !p.CancellationTime.HasValue)).
+            </h4> 
+            <hr />
             @if (IsMeetingOrganiser)
             {
                 <div class="noprint">
@@ -38,9 +41,7 @@ else
                     <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
                 </div>
             }
-            <h4>
-                @string.Format(Localizer["NumberParticipantsRegistered"], Meeting.Participants.Count(p => !p.CancellationTime.HasValue )).
-            </h4>
+
             @if (IsMeetingOrganiser && Participant is null && Principal is not null)
             {
                 <div style="padding: 10px 0px">
@@ -57,15 +58,15 @@ else
                     <TableHeader>
                         <th>@Localizer["Participant"]</th>
                         <th>@Localizer["City"]</th>
+                        <th>@Localizer["Participates"]</th>
                         <th>@Localizer["Layouts"]</th>
-                        <th>@Localizer["Arrival"]</th>
                         <th class="noprint">@Localizer["Actions"]</th>
                     </TableHeader>
                     <RowTemplate Context="item">
                         <td style="@ParticipantStatusStyle(item)">@item.Person.Name()</td>
                         <td>@item.Person.CityName</td>
-                        <td>@(item.CancellationTime.HasValue ? "" : ParticipantLayoutNames(item))</td>
-                        <td>@(item.CancellationTime.HasValue ? "" : $"{item.FirstParticipationDay()} {ArrivalTime(item.ArrivalTime)}")</td>
+                        <td>@item.Participates(Localizer)</td>
+                        <td>@item.ParticipatesInLayouts(Localizer)</td>
                         <td class="noprint">
                             <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
                             @if (item.CancellationTime.HasValue)
@@ -91,7 +92,7 @@ else
                 <ul>
                     <li>@Localizer["Name"]: <strong>@Participant.Person.Name()</strong></li>
                     <li>@Localizer["RegistrationTime"]: <strong>@Participant.RegistrationTime.ToString("g")</strong></li>
-                    <li>@Localizer["LatestArrivalTime"]: <strong>@Participant.ArrivalTime?.ToString("t")</strong> </li>
+                    <li>@Localizer["Participates"]: <strong>@Participant.Participates(Localizer)</strong> </li>
                 </ul>
             }
             else if (Meeting.Id > 0 && PersonId > 0)
@@ -116,18 +117,19 @@ else
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
-                        <h3>@Localizer["Arrival"] @Participant.FirstParticipationDay()</h3>
-                        <AppInputTime Width="2" @bind-Value="Participant.ArrivalTime" Label="LatestArrivalTime" />
+                        <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
+                        <AppInputFill Width="@(12-Meeting.DaysCount())" />
+                        <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)"/>
+                        <AppInputTimeOnly Width="2" @bind-Value="Participant.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel(Participant)" />
                     </Inputs>
                 </EditTemplate>
-                <hr />
                 @if (Participant.Id > 0)
                 {
                     @if (Meeting.PermitsRegistrations())
                     {
                         <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
                     }
-                    <TableTemplate Items="@LayoutParticipation(Meeting.Layouts, Participant)">
+                    <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
                         <TableHeader>
                             <th width="100px">@Localizer["Actions"]</th>
                             <th width="15%">@Localizer["Layout"]</th>
@@ -305,8 +307,6 @@ else
         return personsLayoutParticipations;
     }
 
-    string ParticipantLayoutNames(MeetingParticipant mp) => string.Join(',', mp.LayoutParticipations.Select(lm => lm.Layout.Description()));
-    string ArrivalTime(DateTime? time) => time.HasValue ? time.Value.ToString("t") : "--:--";
 
     string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Description}";
     string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Description}";
@@ -315,5 +315,8 @@ else
     string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";
 
     string ParticipantStatusStyle(MeetingParticipant? it) => it is null ? string.Empty : it.CancellationTime.HasValue ? "color: red; text-decoration: line-through;" : string.Empty;
+
+    string LatestArrivalTimeLabel(MeetingParticipant? it) => $"LatestArrivalTime-{it.FirstParticipationDay()}";
+    string EarliestDepartureTimeLabel(MeetingParticipant? it) => $"EarliestDepartureTime-{it.LastParticipationDay()}";
 
 }

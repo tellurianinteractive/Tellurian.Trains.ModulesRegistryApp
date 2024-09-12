@@ -1,0 +1,46 @@
+﻿@using System.Diagnostics.CodeAnalysis;
+@using System.Globalization;
+
+@inherits AppInputBase<TimeOnly?>
+@inject IStringLocalizer<App> Localizer
+
+<div class="@BootstrapWrapperCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label text-end" for="@Label">@LabelText(Localizer)</label>
+    }
+    <input disabled=@IsDisabled type="time" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" />
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+</div>
+
+@code {
+    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+
+
+    protected override void OnInitialized()
+    {
+        if (CurrentValue is null) return;
+        CurrentValue = CurrentValue.Value;
+    }
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TimeOnly? result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        if (TimeOnly.TryParse(value, LanguageExtensions.CurrentCulture, DateTimeStyles.AssumeLocal, out var maybeTime))
+        {
+            result = maybeTime;
+            validationErrorMessage = "";
+            return true;
+        }
+        else
+        {
+            result = default;
+            validationErrorMessage = Localizer["NotAValidTime"].ToString();
+            return false;
+        }
+    }
+}

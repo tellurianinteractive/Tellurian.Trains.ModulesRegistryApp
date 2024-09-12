@@ -6,11 +6,7 @@
     <div class="meeting">
         <div class="header">@MeetingParticipant.Meeting.Name, @MeetingParticipant.Meeting.CityName <span>@MeetingParticipant.Meeting.DisplayedStatus(TimeProvider.LocalTime)</span></div>
         <div class="info">@MeetingParticipant.Meeting.StartOrEventDate() - @MeetingParticipant.Meeting.EndDateOrTimes()</div>
-        <div class="info">@Localizer["YouParticipateDays"]: <span class="strong">@string.Join(", ", MeetingParticipant.Days())</span></div>
-        @if (MeetingParticipant.ArrivalTime.HasValue)
-        {
-            <div class="info">@Localizer["YourArrivalTime"]: <span class="strong">@MeetingParticipant.ArrivalTime!.Value.ToString("t")</span></div>
-        }
+        <div class="info">@Localizer["YouParticipate"]: <span class="strong">@MeetingParticipant.Participates(Localizer)</span></div>
         @if (MeetingParticipant.LayoutParticipations.Any())
         {
             <div>

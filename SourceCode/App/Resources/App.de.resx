@@ -390,6 +390,9 @@
   <data name="Dutch" xml:space="preserve">
     <value>Niederländisch</value>
   </data>
+  <data name="EarliestDepartureTime" xml:space="preserve">
+    <value>Abreise frühestens</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Bearbeiten</value>
   </data>
@@ -470,6 +473,9 @@
   </data>
   <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
     <value>Füllen Sie einen neuen Titel aus und klicken Sie vor dem Speichern auf Hinzufügen.</value>
+  </data>
+  <data name="FinalDay" xml:space="preserve">
+    <value>Letzter Tag</value>
   </data>
   <data name="FinalYearInOperating" xml:space="preserve">
     <value>Letztes Jahr in Betrieb</value>
@@ -1062,6 +1068,9 @@
   <data name="NotAuthorised" xml:space="preserve">
     <value>Nicht autorisiert</value>
   </data>
+  <data name="NotAValidTime" xml:space="preserve">
+    <value>Keine gültige Zeit</value>
+  </data>
   <data name="NotDefined" xml:space="preserve">
     <value>Nicht definiert</value>
   </data>
@@ -1172,6 +1181,9 @@
   </data>
   <data name="Participate" xml:space="preserve">
     <value>Teilnehmen</value>
+  </data>
+  <data name="Participates" xml:space="preserve">
+    <value>Beteiligt</value>
   </data>
   <data name="Participation" xml:space="preserve">
     <value>Teilnahme</value>
@@ -1623,8 +1635,8 @@
   <data name="YouMayNowLogin" xml:space="preserve">
     <value>Du darfst dich jetzt einloggen</value>
   </data>
-  <data name="YouParticipateDays" xml:space="preserve">
-    <value>Du nimmst an Tagen teil</value>
+  <data name="YouParticipate" xml:space="preserve">
+    <value>Du nimmst teil</value>
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Ihre Ankunftszeit am ersten Tag</value>
