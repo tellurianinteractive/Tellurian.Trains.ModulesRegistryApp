@@ -819,9 +819,6 @@
   <data name="MainTheme" xml:space="preserve">
     <value>Huvudtema</value>
   </data>
-  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
-    <value>Gör till drifptsplats</value>
-  </data>
   <data name="MakeAsOperationsLocation" xml:space="preserve">
     <value>Gör till driftsplats</value>
   </data>
@@ -1011,7 +1008,7 @@
   <data name="NewOwner" xml:space="preserve">
     <value>Ny ägare</value>
   </data>
-  <data name="NewPersonOwner" xml:space="preserve">
+  <data name="NewPersonalOwner" xml:space="preserve">
     <value>Ny personlig ägare</value>
   </data>
   <data name="NHMCode" xml:space="preserve">

@@ -39,14 +39,20 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 <AppInputText Width="6" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
 
             }
+            <hr/>
             @if (Principal.IsCountryOrGlobalAdministrator() && Person.User is not null)
             {
-                <AppInputText Width="6" Label="Resposibility+" @bind-Value="Person.User.AdministratorAreaOfResposibility" Placeholder="LocoAddressExample" />
                 <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Person.User.IsApiAccessPermitted" />
                 <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Person.User.MayUploadSkpDrawing" />
                 <AppInputCheck Width="2" Label="MayVerifyWiFreds" @bind-Value="Person.User.MayManageWiFreds" />
+
+                @if (Person.User.IsGlobalAdministrator || Person.User.IsCountryAdministrator)
+                {
+                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Person.User.AdministratorAreaOfResposibility" />
+                    <AppInputFill Width="6" />
+                }
                 <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="Person.User.PasswordResetAttempts" IsDisabled=true />
                 <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="Person.User.FailedLoginAttempts" IsDisabled=true />
                 @if (Person.User.IsApiAccessPermitted)

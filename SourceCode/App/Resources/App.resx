@@ -822,9 +822,6 @@
   <data name="MainTheme" xml:space="preserve">
     <value>Main theme</value>
   </data>
-  <data name="MakeAsOperationsLocaltion" xml:space="preserve">
-    <value />
-  </data>
   <data name="MakeAsOperationsLocation" xml:space="preserve">
     <value>Make as operations location</value>
   </data>
@@ -1014,7 +1011,7 @@
   <data name="NewOwner" xml:space="preserve">
     <value>New owner</value>
   </data>
-  <data name="NewPersonOwner" xml:space="preserve">
+  <data name="NewPersonalOwner" xml:space="preserve">
     <value>New personal owner</value>
   </data>
   <data name="NHMCode" xml:space="preserve">

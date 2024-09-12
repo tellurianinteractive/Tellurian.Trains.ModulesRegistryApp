@@ -52,8 +52,8 @@ else
 
         <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
             <Inputs>
-                <AppInputSelectNullable Width="3" Label="NewPersonalOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" ShowNoneOption=true />
-                <AppInputSelectNullable Width="3" Label="NewGroupOwner" Items="Groups" @bind-Value="NewOwnership.GroupId" ShowNoneOption=true />
+                <AppInputSelectNullable Width="3" Label="NewPersonalOwner" Items="Persons" @bind-Value="NewOwnership.PersonId" ShowNoneOption=true IsDisabled="@IsGroupOwnerSelected(NewOwnership)"/>
+                <AppInputSelectNullable Width="3" Label="NewGroupOwner" Items="Groups" @bind-Value="NewOwnership.GroupId" ShowNoneOption=true IsDisabled="@IsPersonalOwnerSelected(NewOwnership)"/>
                 <AppInputSelect Width="2" Label="TransferredShare" Items="TransferSharesItems(OwnershipToTransfer)" @bind-Value="SelectedTransferShare" />
             </Inputs>
         </EditTemplate>
@@ -136,7 +136,7 @@ else
             if (result.Entity is not null) Module = result.Entity;
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
-         StateHasChanged();
+        StateHasChanged();
     }
 
     async Task RemoveAssistant(ModuleOwnership ownership)
@@ -157,4 +157,8 @@ else
 
     int SelectedTransferShare;
     static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0 / 3.0), (4, 0.25), (5, 0.20), (6, 0) };
+
+    bool IsPersonalOwnerSelected(ModuleOwnership ownership) => ownership.PersonId.HasValue;
+    bool IsGroupOwnerSelected(ModuleOwnership ownership) => ownership.GroupId.HasValue;
+
 }

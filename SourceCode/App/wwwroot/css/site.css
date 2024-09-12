@@ -57,6 +57,14 @@ a, .btn-link {
     .noprint {
         display: none;
     }
+    .onlyprint {
+        display: block;
+    }
+}
+@media screen {
+    .onlyprint {
+        display: none;
+    }
 }
 
 .image {

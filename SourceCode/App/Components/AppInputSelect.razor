@@ -4,31 +4,33 @@
 @inherits AppInputBase<int>
 @inject IStringLocalizer<App> Localizer
 
-<div class="@BootstrapWrapperCss">
-    @if (!string.IsNullOrWhiteSpace(Label))
-    {
-        <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
-    }
-    <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
-        @if (ShowPleaseSelect)
+<span class="noprint">
+    <span class="@BootstrapWrapperCss">
+        @if (!string.IsNullOrWhiteSpace(Label))
         {
-            <option value="0">@PleaseSelectText</option>
+            <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
         }
-        @if (Items is not null)
-        {
-            foreach (var item in Items)
+        <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+            @if (ShowPleaseSelect)
             {
-                <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
+                <option value="0">@PleaseSelectText</option>
             }
+            @if (Items is not null)
+            {
+                foreach (var item in Items)
+                {
+                    <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
+                }
+            }
+        </select>
+        @if (ValidationFor is not null)
+        {
+            <div class="form-control-validation">
+                <ValidationMessage For="@ValidationFor" />
+            </div>
         }
-    </select>
-    @if (ValidationFor is not null)
-    {
-        <div class="form-control-validation">
-            <ValidationMessage For="@ValidationFor" />
-        </div>
-    }
-</div>
+    </span>
+</span>
 
 @code {
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }

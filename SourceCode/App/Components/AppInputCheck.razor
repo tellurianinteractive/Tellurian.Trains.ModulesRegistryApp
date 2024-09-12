@@ -5,23 +5,32 @@
 
 @if (IsVisible)
 {
-    <span class="@WidthCss">
-        @if (AlignWithFields)
-        {
-            <br />
-        }
-        <span class="form-check">
-            <input disabled="@IsDisabled" type="checkbox" class="form-check-input @CssClass" id="@Label" @bind="@CurrentValue" />
-            @if (!string.IsNullOrWhiteSpace(Label))
+    <span class="noprint">
+        <span class="@WidthCss">
+            @if (AlignWithFields)
             {
-                <label class="form-check-label" for="@Label">@LabelText(Localizer)</label>
+                <br />
             }
+            <span class="form-check">
+                <input disabled="@IsDisabled" type="checkbox" class="form-check-input @CssClass" id="@Label" @bind="@CurrentValue" />
+                @if (!string.IsNullOrWhiteSpace(Label))
+                {
+                    <label class="form-check-label" for="@Label">@LabelText(Localizer)</label>
+                }
+            </span>
         </span>
     </span>
 }
-
+@if (ShowLabelWhenPrinting)
+{
+    <span class="onlyprint">
+        @LabelText(Localizer)
+    </span>
+}
 @code {
     [Parameter] public bool AlignWithFields { get; set; }
+    [Parameter] public bool ShowLabelWhenPrinting { get; set; }
+
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         result = value is not null && (value.Equals("1") || value.Equals("true", StringComparison.OrdinalIgnoreCase));

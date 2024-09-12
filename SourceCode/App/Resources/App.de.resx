@@ -1008,7 +1008,7 @@
   <data name="NewOwner" xml:space="preserve">
     <value>Neue Bezitser</value>
   </data>
-  <data name="NewPersonOwner" xml:space="preserve">
+  <data name="NewPersonalOwner" xml:space="preserve">
     <value>Neuer persönlicher Besitzer</value>
   </data>
   <data name="NHMCode" xml:space="preserve">

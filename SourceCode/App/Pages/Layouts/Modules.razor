@@ -21,15 +21,13 @@ else if (LayoutParticipants.Count() == 0)
 else
 {
     <h4>
-        @string.Format(Localizer["NumberParticipantsRegistered"], LayoutParticipants.Count()),
-        @string.Format(Localizer["NumberModulesRegistered"], LayoutParticipants.Sum(lp => lp.LayoutModules.Count())).
+        @string.Format(Localizer["NumberParticipantsRegistered"], FilteredParticipants!.Count()),
+        @string.Format(Localizer["NumberModulesRegistered"], FilteredParticipants!.Sum(lp => lp.LayoutModules.Count())).
     </h4>
     @if (IsOrganiser)
     {
-        <span class="noprint">
-            <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" w />
-            <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" />
-        </span>
+        <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" ShowLabelWhenPrinting="OnlyThoseWithModules" />
+        <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" ShowLabelWhenPrinting="OnlyThoseWithOperationsPlaces" />
 
         <div style="padding: 10px 0px">
             <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" Label="@SendMailLabel" />
