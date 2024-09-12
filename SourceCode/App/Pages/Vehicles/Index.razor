@@ -13,7 +13,7 @@
 
 <PageHeading Label="Vehicles" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=CountryId />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=CountryId LocalStorageKey="Country" />
 <hr />
 <VehiclesList Vehicles="Vehicles" MayEdit="true" ShowOwner="true" AddHrefFunc="AddHref" EditHrefFunc="EditHref" FilterName="AdminVehicleFilter" />
 @code {

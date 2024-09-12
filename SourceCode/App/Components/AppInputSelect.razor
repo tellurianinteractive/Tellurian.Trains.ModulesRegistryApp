@@ -4,8 +4,8 @@
 @inherits AppInputBase<int>
 @inject IStringLocalizer<App> Localizer
 
-<span class="noprint">
-    <span class="@BootstrapWrapperCss">
+<span class="@BootstrapWrapperCss">
+    <span class="noprint">
         @if (!string.IsNullOrWhiteSpace(Label))
         {
             <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>

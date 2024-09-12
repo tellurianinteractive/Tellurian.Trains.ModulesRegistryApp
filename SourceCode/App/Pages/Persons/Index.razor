@@ -16,7 +16,7 @@
 
 <PageHeading ObjectName="Persons" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
 
 @if (CountryId > 0)
 {

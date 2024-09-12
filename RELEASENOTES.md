@@ -7,6 +7,7 @@ Release date 2024-09-12
 - **Layout participants** list now also show subset selection when printing.
 - **Module ownership** transfer to person or group now made mutually exclusive.
 - **Person edit** form cleaned up.
+- **Selecting country** know remembers it in all pages and to next session.
 ## Release 1.11.11
 Release date 2024-09-05
 - **Meeting and layout** participants pages now easier to navigate between.

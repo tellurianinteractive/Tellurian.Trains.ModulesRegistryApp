@@ -34,7 +34,7 @@ else
             {
                 <div class="noprint">
                     <h3>@Localizer["SelectPersonToRegister"]</h3>
-                    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" />
+                    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Register"/>
                     <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
                 </div>
             }

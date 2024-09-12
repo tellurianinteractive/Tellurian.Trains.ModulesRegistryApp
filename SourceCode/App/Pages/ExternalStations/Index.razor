@@ -16,7 +16,7 @@
 
 <PageHeading ObjectName="ExternalStations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="false" />
 
-<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" SelectedId="CountryId" />
+<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" SelectedId="CountryId" LocalStorageKey="Country" />
 
 @if (DeleteDialogOpen)
 {

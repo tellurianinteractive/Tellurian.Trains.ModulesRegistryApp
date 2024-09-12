@@ -1,10 +1,11 @@
 ﻿@inject IStringLocalizer<App> Localizer
+@inject ILocalStorageService LocalStorage
 
 @if (IsVisible && Items is not null)
 {
 
     <div class="form-group" style="padding-right: @PaddingRight">
-        <select class="form-control-sm " id="countryid" @bind="Id" @onselect="OnSelectedItem">
+        <select class="form-control-sm " id="selectid" @bind="Id" @onselect="OnSelectedItem">
             <option value="0">@Label</option>
             @foreach (var item in Items)
             {
@@ -29,17 +30,29 @@
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public int SelectedId { get; set; }
     [Parameter] public bool Inline { get; set; }
+    [Parameter] public string? LocalStorageKey { get; set; }
 
     int Id { get; set; }
+    string? StoredId = null;
 
-    protected override void OnParametersSet()
+    protected override async void OnParametersSet()
     {
         Id = SelectedId;
+        if (LocalStorageKey.HasValue())
+        {
+            StoredId = await LocalStorage.GetItemAsStringAsync(LocalStorageKey);
+            if (StoredId.HasValue()) 
+                if (int.TryParse(StoredId, out int id)) Id = id;
+        }
     }
 
     private async Task OnSelectedItem()
     {
         SelectedId = Id;
+        if (LocalStorageKey.HasValue())
+        {
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKey, Id.ToString());
+        }
         await OnSelected.InvokeAsync(Id);
     }
 
