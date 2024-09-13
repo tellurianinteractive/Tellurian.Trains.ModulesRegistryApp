@@ -60,6 +60,9 @@ a, .btn-link {
     .onlyprint {
         display: block;
     }
+    .print50percent {
+        zoom: 50%
+    }
 }
 @media screen {
     .onlyprint {

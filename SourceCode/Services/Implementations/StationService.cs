@@ -41,7 +41,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return null;
     }
 
-    public async Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownershipRef)
+    public async Task<Station?> FindByIdAsync(ClaimsPrincipal? principal, int stationId, ModuleOwnershipRef ownershipRef)
     {
         if (principal.IsAuthenticated())
         {
@@ -49,7 +49,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             using var dbContext = Factory.CreateDbContext();
             var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
             return await dbContext.Stations.AsNoTracking()
-                 .Where(s => s.Id == id && s.Modules.Any(m => (m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
+                 .Where(s => s.Id == stationId && s.Modules.Any(m => (m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
                  .Include(m => m.StationTracks)
                  .Include(m => m.Modules)
                  .Include(m => m.Region)
@@ -59,7 +59,24 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return null;
     }
 
-
+    public async Task<Station?> FindFullInfoAsync(ClaimsPrincipal? principal, int stationId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Stations.AsNoTracking()
+                .Where(s => s.Id == stationId)
+                .Include(s => s.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships.Where(mo => mo.OwnedShare>0)).ThenInclude(mo => mo.Person)
+                .Include(s => s.PrimaryModule).ThenInclude(m => m.Standard)
+                .Include(s => s.PrimaryModule).ThenInclude(m => m.Scale)
+                .Include(s => s.StationTracks)
+                .Include(s => s.StationCustomers).ThenInclude(sc => sc.Cargos).ThenInclude(c => c.Cargo)
+                .Include(s => s.StationCustomers).ThenInclude(sc => sc.Cargos).ThenInclude(c => c.Direction)
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
+        }
+        return null;
+    }
 
     public Task<IEnumerable<Station>> GetAllAsync(ClaimsPrincipal? principal) => GetAllAsync(principal, ModuleOwnershipRef.None);
 

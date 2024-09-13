@@ -39,6 +39,7 @@
             <DocumentLink DocumentId="station.PdfInstructionId" FileExtension="pdf" />
         </td>
         <td>
+            <AppButton Label="View" Href="@StationViewHref(station.Id)" />
             <AppButton Label="Edit" Href="@StationEditHref(station.Id)" IsHidden="@(!MayEdit)" />
             <AppButton Label="Delete" Href="@StationDeleteHref(station.Id)" IsHidden="@(!MayEdit)" />
             @if (station.HasCargoCustomers)
@@ -64,6 +65,7 @@
         OwnershipRef = ModuleOwnershipRef.Any(null, OwningPersonId, OwningGroupId);
     }
 
+    string StationViewHref(int id) => $"Stations/{id}/View";
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string StationDeleteHref(int id) => $"Stations/{id}/Delete";
     string CargoCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");

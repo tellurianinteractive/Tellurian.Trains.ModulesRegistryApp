@@ -27,7 +27,7 @@ else
         }
     </div>
 
-    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="ItemStyle">
+    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="RowStyle">
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>
@@ -47,7 +47,7 @@ else
             <td width="6%" align="center">@item.OperatingDays(OperatingDayItems)</td>
             <td width="6%" align="center">@item.CargoDirection(DirectionItems)</td>
             <td width="12%">@item.Quantity @item.QuantityUnit(QuantityUnitItems)</td>
-            <td width="20%">@ReadyLoadingOrUnloading(item)</td>
+            <td width="20%">@item.ReadyLoadingOrUnloading(Localizer, ReadyTimeItems)</td>
             <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
         </RowTemplate>
     </TableTemplate>
@@ -66,18 +66,10 @@ else
     [Parameter] public bool MayEdit { get; set; }
 
 
-    string ReadyLoadingOrUnloading(StationCustomerCargo it) => it is null ?
-        string.Empty :
-        it.IsReadyTimeUnspecified() ? "-" :
-        it.IsLoading() ? $"{Localizer["LoadingReady"]} {it.ReadyTime(ReadyTimeItems).ToLowerInvariant()}" :
-        it.IsUnloading() ? $"{Localizer["UnloadingReady"]} {it.ReadyTime(ReadyTimeItems).ToLowerInvariant()}" :
-        string.Empty;
-
     string FreightCustomerHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Edit";
     string FreightCustomerWaybillsHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Waybills";
 
-    string ItemStyle(StationCustomerCargo item) =>
-        item is null ? string.Empty :
-        item.IsLoading() ? "background-color: lightyellow" : "background-color: white";
+    string RowStyle(StationCustomerCargo item) => item.RowStyle();
+    
 }
 

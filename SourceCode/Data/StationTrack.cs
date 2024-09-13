@@ -34,7 +34,17 @@ public static class StationTrackExtensions
     public static string SpeedLimitText(this StationTrack track) => track.SpeedLimit > 0 ? $"{track.SpeedLimit}km/h" : Undefined;
     public static string MainOrSidingText(this StationTrack track) => track.IsSiding ? SidingTrack : MainTrack;
 
-    public static StationTrack CreateTrack(this Station station) => 
+    public static string BackgroundColor(this StationTrack? track) =>
+        track is null ? string.Empty :
+        (StationTrackDirection)track.DirectionId switch
+        {
+            StationTrackDirection.NotScheduled => "#ffcccc",
+            StationTrackDirection.Bidirectional => "#ccffcc",
+            _ => "#ffffb3"
+        };
+
+
+    public static StationTrack CreateTrack(this Station station) =>
         station.StationTracks.Count == 0 ? station.CreateNew() : station.CreateClone(station.StationTracks.Last());
 
     private static StationTrack CreateClone(this Station station, StationTrack track) => new()

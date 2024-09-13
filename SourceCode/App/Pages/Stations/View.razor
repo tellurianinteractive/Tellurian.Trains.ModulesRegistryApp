@@ -1,0 +1,118 @@
+﻿@page "/Stations/{Id:int}/View"
+
+@inject IStringLocalizer<App> Localizer
+@inject StationService StationService
+@inject CargoService CargoService
+@inject OperatingDayService OperatingDayService
+
+<div class="print50percent">
+    <PageHeading ObjectName="OperationLocation" Context="Station" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
+
+    @if (Station is not null)
+    {
+        <h2>@Localizer["Owners"]: @Station.PrimaryModule.ModuleOwnerships.OwnerNames()</h2>
+
+        <h2>@Localizer["Module"]</h2>
+
+        <span>@Localizer["Scale"]: <strong>@Station.PrimaryModule.Scale.Display()</strong>, </span>
+        <span>@Localizer["Standard"]: <strong>@Station.PrimaryModule.Standard.ShortName, </strong></span>
+        @if (Station.PrimaryModule.Theme.HasValue())
+        {
+            <span>@Localizer["Theme"]: <strong>@Station.PrimaryModule.Theme</strong>, </span>
+        }
+        <span>@Localizer["Lenght"]: <strong>@Station.PrimaryModule.Length mm</strong>, </span>
+        <span>@Localizer["IsShadowStation"]: <strong>@Station.IsShadow.AsYesOrNo()</strong>, </span>
+        <span>@Localizer["IsTerminus"]: <strong>@Station.IsTerminus.AsYesOrNo()</strong>.</span>
+
+        <h2>@Localizer["Tracks"]</h2>
+
+        <TableTemplate Items="@Station.StationTracks.OrderBy(t => t.DisplayOrder)" RowStyle="TrackRowStyle">
+            <TableHeader>
+                <th width="10%" style="text-align: center;">@Localizer["TrackNumber"]</th>
+                <th>@Localizer["Direction"]</th>
+                <th>@Localizer["MaxTrainLength"]</th>
+                <th>@Localizer["PlatformLength"]</th>
+                <th>@Localizer["SpeedLimit"]</th>
+                <th>@Localizer["Usage"]</th>
+            </TableHeader>
+            <RowTemplate Context="track">
+                <td align="center">@track.Designation</td>
+                <td>@track.DirectionText(TrackDirectionItems)</td>
+                <td>@track.MaxTrainLengthText()</td>
+                <td>@track.PlatformLengthText()</td>
+                <td>@track.SpeedLimitText()</td>
+                <td>@track.UsageNote</td>
+            </RowTemplate>
+        </TableTemplate>
+
+        @if (Station.HasCargoCustomers && Station.StationCustomers.Count > 0)
+        {
+            <h2>@Localizer["FreightCustomers"]</h2>
+
+            @foreach (var customer in Station.StationCustomers.OrderBy(sc => sc.CustomerName))
+            {
+                <h4>@customer.CustomerName</h4>
+                <TableTemplate Items="@customer.Cargos.OrderBy(c => c.DirectionId)" RowStyle="CustomerRowStyle">
+                    <TableHeader>
+                        <th>@Localizer["CargoType"]</th>
+                        <th>@Localizer["PackagingUnit"]</th>
+                        <th align="center">@Localizer["Class"]</th>
+                        <th align="center">@Localizer["Place"]</th>
+                        <th align="center">@Localizer["Days"]</th>
+                        <th align="center">@Localizer["Direction"]</th>
+                        <th>@Localizer["Quantity"]</th>
+                        <th>@Localizer["Finished"]</th>
+                        <th>@Localizer["OperatingPeriod"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td width="15%">@item.CargoTypeName(CargoTypeItems)</td>
+                        <td width="10%">@item.PackagingUnit(PackagingUnitItems)</td>
+                        <td width="10%">@item.WagonClasses()</td>
+                        <td width="6%" align="center" style="color: @item.TrackOrAreaForeColor(); background-color: @item.TrackOrAreaBackColour()">@item.TrackOrArea()</td>
+                        <td width="6%" align="center">@item.OperatingDays(OperatingDayItems)</td>
+                        <td width="6%" align="center">@item.CargoDirection(DirectionItems)</td>
+                        <td width="12%">@item.Quantity @item.QuantityUnit(QuantityUnitItems)</td>
+                        <td width="20%">@item.ReadyLoadingOrUnloading(Localizer, ReadyTimeItems)</td>
+                        <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
+        }
+    }
+</div>
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    private ClaimsPrincipal? Principal;
+    private Station? Station;
+    private IEnumerable<ListboxItem> TrackDirectionItems = [];
+    private IEnumerable<ListboxItem> DirectionItems = [];
+    private IEnumerable<ListboxItem> CargoTypeItems = [];
+    private IEnumerable<ListboxItem> OperatingDayItems = [];
+    private IEnumerable<ListboxItem> QuantityUnitItems = [];
+    private IEnumerable<ListboxItem> ReadyTimeItems = [];
+    private IEnumerable<ListboxItem> PackagingUnitItems = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        TrackDirectionItems = EnumExtensions.StationTrackDirectionListboxItems();
+        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal, includeDefaultClasses: false);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Station = await StationService.FindFullInfoAsync(Principal, Id);
+    }
+
+    string CustomerRowStyle(StationCustomerCargo item) => item.RowStyle();
+    string TrackRowStyle(StationTrack item) => $"background-color: {item.BackgroundColor()}";
+
+}

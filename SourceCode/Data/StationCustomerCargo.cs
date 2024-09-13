@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace ModulesRegistry.Data;
 
@@ -90,6 +91,8 @@ public static class StationCustomerCargoExtensions
         me.DirectionId > 0 &&
         me.QuantityUnitId > 0 &&
         me.OperatingDayId > 0;
+
+    
 
 }
 

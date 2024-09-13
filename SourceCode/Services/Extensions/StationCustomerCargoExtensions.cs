@@ -51,4 +51,14 @@ public static class StationCustomerCargoExtensions
     public static string QuantityUnit(this StationCustomerCargo? cargo, IEnumerable<ListboxItem>? quantityUnitItems) =>
         cargo is not null && quantityUnitItems is not null ? quantityUnitItems.SingleOrDefault(i => i.Id == cargo.QuantityUnitId)?.Description ?? Unspecified : string.Empty;
 
+    public static string ReadyLoadingOrUnloading(this StationCustomerCargo cargo, IStringLocalizer localizer, IEnumerable<ListboxItem>? readyTimeItems) =>
+        cargo is null || readyTimeItems is null ? string.Empty :
+        cargo.IsReadyTimeUnspecified() ? "-" :
+        cargo.IsLoading() ? $"{localizer["LoadingReady"]} {cargo.ReadyTime(readyTimeItems).ToLowerInvariant()}" :
+        cargo.IsUnloading() ? $"{localizer["UnloadingReady"]} {cargo.ReadyTime(readyTimeItems).ToLowerInvariant()}" :
+        string.Empty;
+
+    public static string RowStyle(this StationCustomerCargo cargo) =>
+        cargo is null ? string.Empty :
+        cargo.IsLoading() ? "background-color: lightyellow" : "background-color: white";
 }

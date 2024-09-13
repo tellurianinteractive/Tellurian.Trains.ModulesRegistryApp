@@ -4,6 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.11.13
 Release date 2024-09-13
+- **Operation location** summary intended for printing data about your station/operation location (issue #186).
 - **Bug fix** of *meeting organiser* not have rights to add/remove participants or modules after registration closes.
 ## Release 1.11.12
 Release date 2024-09-12
