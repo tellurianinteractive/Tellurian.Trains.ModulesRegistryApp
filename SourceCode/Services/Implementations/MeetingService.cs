@@ -34,17 +34,18 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
-            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsGroupAdministrator || gm.IsDataAdministrator || gm.PersonId == principal.PersonId()))
+            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator ))
             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
+            .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator))
             .ToReadOnlyListAsync();
 
-        return meetings.Where(m => principal.IsCountryOrGlobalAdministrator() || !m.IsOrganiserInternal || m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == principal.PersonId()))
-            .Select(m =>
+        return meetings
+            .Select(meeting =>
             (
                 principal.IsGlobalAdministrator() ||
-                principal.IsCountryAdministratorInCountry(m.OrganiserGroup.CountryId) ||
-                m.OrganiserGroup.GroupMembers.Any(gm => (gm.IsGroupAdministrator || gm.IsDataAdministrator) && gm.PersonId == principal.PersonId())
-            , m)
+                principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId) ||
+                meeting.HasMeetingAdministrator(principal.PersonId())
+            , meeting)
         );
     }
 
@@ -214,23 +215,22 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return principal.NotAuthorized<Meeting>();
     }
 
-    public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting meeting)
+    public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting? meeting)
     {
+        if (meeting is null || principal is null) return false;
         var countryId = meeting.OrganiserGroup?.CountryId ?? principal.CountryId();
-        if (principal.IsCountryAdministratorInCountry(countryId)) return true;
-        using var dbContext = Factory.CreateDbContext();
-        return await IsMeetingOrganiser(dbContext, principal, meeting)
-            .ConfigureAwait(false);
+        if (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(countryId)) return true;
+        if (meeting.HasMeetingAdministrator(principal.PersonId())) return true; // Shortcut if data is available.
+        return await IsMeetingOrganiser2( principal, meeting); // Fallback ask the database querying a tailored view.
     }
 
-    private static async Task<bool> IsMeetingOrganiser(ModulesDbContext dbContext, ClaimsPrincipal? principal, Meeting meeting)
+    private async Task<bool> IsMeetingOrganiser2(ClaimsPrincipal? principal, Meeting meeting)
     {
+        using var dbContext = Factory.CreateDbContext();
         return await dbContext.MeetingAdministrators.AsNoTracking()
             .AnyAsync(ma => ma.MeetingId == meeting.Id && ma.PersonId == principal.PersonId())
             .ConfigureAwait(false);
     }
-
-    
 
     #region Meeting Participant
 
@@ -270,8 +270,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         {
             using var dbContext = Factory.CreateDbContext();
             var isSelf = entity.PersonId == principal.PersonId();
-            var isOrganiser = await IsMeetingOrganiser(dbContext, principal, meeting)
-                .ConfigureAwait(false);
+            var isOrganiser = await IsMeetingOrganiser(principal, meeting);
             if (isOrganiser || isSelf)
             {
                 var existing = await dbContext.MeetingParticipants

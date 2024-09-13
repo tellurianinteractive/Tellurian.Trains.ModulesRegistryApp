@@ -113,6 +113,7 @@ public static class MeetingExtensions
         meeting.PermitsRegistrations() &&
             (principal.IsGlobalAdministrator() ||
             principal.IsCountryAdministratorInCountry(meeting.OrganiserGroup.CountryId) ||
+            meeting.HasMeetingAdministrator(principal.PersonId()) ||
             meeting.IsOpenForRegistration(at));
 
 
@@ -127,8 +128,13 @@ public static class MeetingExtensions
         new(meeting.EndDate.ToString("d"));
 
     public static string Duration(this Meeting meeting) =>
-        meeting.ShowTime() ?$"{meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
+        meeting.ShowTime() ? $"{meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
         $"{meeting.StartOrEventDate()} - {meeting.EndDateOrTimes()}";
+
+    public static bool HasMeetingAdministrator(this Meeting meeting, int personId) =>
+        meeting.OrganiserGroup is null || meeting.Layouts is null ? false :
+        meeting.OrganiserGroup.GroupMembers.Any(gm => gm.IsMeetingAdministrator && gm.PersonId == personId) ||
+        meeting.Layouts.Any(l => l.OrganisingGroup?.GroupMembers is not null &&  l.OrganisingGroup.GroupMembers.Any(gm => gm.IsMeetingAdministrator && gm.PersonId == personId));
 }
 
 public static class MeetingMapping

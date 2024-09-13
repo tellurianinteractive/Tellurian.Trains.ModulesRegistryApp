@@ -133,8 +133,9 @@ else
             MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
             if (MeetingParticipant is not null)
             {
-                MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider);
                 Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
+                MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider);
+                if (!MayRemove) MayRemove = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
                 if (Meeting is not null && LayoutId > 0)
                 {
                     Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);
