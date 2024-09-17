@@ -25,7 +25,7 @@ else
 {
     <EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
         <Inputs>
-            <AppInputSelect Width="3" Label="Standard-Scale" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+            <AppInputSelect Width="3" Label="Standard&Scale" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
             <AppInputText Width="4" Label="Name" @bind-Value="Module.FullName" />
             <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue()" />
             <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />

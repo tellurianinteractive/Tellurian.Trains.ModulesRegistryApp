@@ -694,7 +694,7 @@
     <value>Ist eingeladen?</value>
   </data>
   <data name="IsJunction" xml:space="preserve">
-    <value>Ist Niederlassung?</value>
+    <value>Ist Verzweigung?</value>
   </data>
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Ist ein Schlüssel erforderlich?</value>

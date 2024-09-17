@@ -232,6 +232,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Junction.
+        /// </summary>
+        public static string Junction {
+            get {
+                return ResourceManager.GetString("Junction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kilowatt.
         /// </summary>
         public static string Kilowatt {
@@ -453,6 +462,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Removable {
             get {
                 return ResourceManager.GetString("Removable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shadow station.
+        /// </summary>
+        public static string ShadowStation {
+            get {
+                return ResourceManager.GetString("ShadowStation", resourceCulture);
             }
         }
         

@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.14
+Release date 2024-09-17
+- **Module list** now have module descriptions that are displayed in the selected language.
+- **Operation locations** now can be marked as *junction*.
+- **Fix** of label *Standard & scale* in module edit form.
 ## Release 1.11.13
 Release date 2024-09-13
 - **Operation location** summary intended for printing data about your station/operation location (issue #186).

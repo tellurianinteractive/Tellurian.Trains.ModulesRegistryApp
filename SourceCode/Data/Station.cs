@@ -20,6 +20,7 @@ public partial class Station
     public bool IsShadow { get; set; }
     public bool IsTerminus { get; set; }
     public bool IsHarbour { get; set; }
+    public bool IsJunction { get; set; }
     public bool IsKeyRequired { get; set; }
     public bool HasCargoCustomers { get; set; } = true;
     public int? RegionId { get; set; }

@@ -88,7 +88,7 @@ public static class ModuleExtensions
             text.Append(Straight);
             text.Append(' ');
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Length / 1000:F2}m");
+            text.Append($" {me.Length}mm");
         }
         else if (me.IsOperationsPlace())
         {
@@ -96,7 +96,9 @@ public static class ModuleExtensions
             text.Append(OperationsPlace);
             text.Append(' ');
             text.Append(tracksCount == 0 ? "": $"{tracksCount} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Length / 1000:F2}m");
+            text.Append($" {me.Length}mm");
+            if (me.Station.IsShadow) text.Append($", {ShadowStation}");
+            if (me.Station.IsJunction) text.Append($", {Junction}");
         }
         return new(text.ToString());
     }

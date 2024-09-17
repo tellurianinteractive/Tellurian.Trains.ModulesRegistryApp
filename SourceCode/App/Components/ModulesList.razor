@@ -20,7 +20,7 @@
         {
             <th>@Localizer["FremoName"]</th>
         }
-        <th>@Localizer["Standard"]</th>
+        <th>@Localizer["Info"]</th>
         <th style="text-align: center">@Localizer["OwnedPercent"]</th>
         <th style="text-align: center">@Localizer["Status"]</th>
         <th>@Localizer["Documents"]</th>
@@ -32,7 +32,7 @@
         {
             <td>@module.FremoName()</td>
         }
-        <td>@module.Standard.ShortName</td>
+        <td>@module.Info()</td>
         <td align="center">@module.ModuleOwnership(OwnershipRef).OwnedShareAndPercentage(Localizer)</td>
         <td align="center">@module.StatusIcon()</td>
         <td>

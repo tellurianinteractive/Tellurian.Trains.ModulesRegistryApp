@@ -38,7 +38,7 @@
     [Parameter] public Action<int>? OnSelected { get; set; }
     [Parameter] public int ItemHeight { get; set; }
 
-    string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
+    string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int result, [NotNullWhen(false)] out string? validationErrorMessage)

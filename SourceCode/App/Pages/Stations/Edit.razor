@@ -29,6 +29,7 @@
             <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
             <AppInputFill Width="3" />
             <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Station.HasCargoCustomers" />
+            <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Station.IsJunction" />
             <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
             <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
             <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Station.IsHarbour" />
@@ -98,6 +99,7 @@
     {
         if (Station is not null)
         {
+            if (Station.IsJunction) Station.HasCargoCustomers = false;
             var result = await StationService.SaveAsync(Principal, Station, OwnershipRef, ModuleId);
             if (result.Entity is not null) Station = result.Entity;
             if (Station is not null && Station.Modules.Any()) ModuleId = Station.Modules.First().Id;
