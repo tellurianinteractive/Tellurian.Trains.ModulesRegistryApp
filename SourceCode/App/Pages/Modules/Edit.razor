@@ -31,7 +31,7 @@ else
             <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue()" />
             <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
             <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
-            <br />
+
             <AppInputSelect Width="2" Label="Visibility" @bind-Value="Module.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
             <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
             <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
@@ -40,9 +40,9 @@ else
             <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
 
             <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
-            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
             <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
             <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
+            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
 
             <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" OnChangedValue="UpdateLength" />
             <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" Step=".1" OnChangedValue="UpdateLength" />
