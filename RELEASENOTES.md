@@ -6,7 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2024-09-18
 - **Meeting participant** can now only register modules if their arrival time is less that or equal to the meetings *latest arrival time with modules* and
 their departure time is greather than or equal with the meetings *earliest departure time with modules*.
-It this critera is not fulfilled, the participants is noted about that they are tot present long time enough to register modules.
+It this critera is not fulfilled, the participants is noted about that they are not present long time enough to register modules.
 - **Operation location** (e.g. station) print view now also contains the *operating instructions*.
 ## Release 1.11.14
 Release date 2024-09-17
