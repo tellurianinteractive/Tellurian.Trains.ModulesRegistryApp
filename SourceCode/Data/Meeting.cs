@@ -26,6 +26,8 @@ public class Meeting
     public string Name { get; set; }
     public DateTime StartDate { get; set; } = DateTime.Today.AddYears(1);
     public DateTime EndDate { get; set; } = DateTime.Today.AddYears(1).AddDays(4);
+    public TimeOnly? LatestArrivalTimeWithModules { get; set; }
+    public TimeOnly? EarliestDepartureTimeWithModules { get; set; }
     public int Status { get; set; }
     public int MeetingType { get; set; }
     public string Details { get; set; }
@@ -50,6 +52,14 @@ public enum MeetingType
 
 public static class MeetingExtensions
 {
+    public static DateTime LatestArrivalDateTimeWithModules(this Meeting meeting) =>
+        meeting.LatestArrivalTimeWithModules.HasValue ? meeting.StartDate.Add(meeting.LatestArrivalTimeWithModules.Value.ToTimeSpan()) :
+        meeting.StartDate.AddHours(18);
+
+    public static DateTime EarliestDepartureDateTimeWithModules(this Meeting meeting) =>
+    meeting.EarliestDepartureTimeWithModules.HasValue ? meeting.EndDate.Add(meeting.EarliestDepartureTimeWithModules.Value.ToTimeSpan()) :
+    meeting.EndDate.AddHours(12);
+
     public static bool ShowTime(this Meeting? meeting) =>
         meeting?.MeetingType != (int)MeetingType.ModuleMeeting;
     public static string Day(this Meeting meeting, int day) =>

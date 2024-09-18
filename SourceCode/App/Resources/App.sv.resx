@@ -393,6 +393,9 @@
   <data name="EarliestDepartureTime" xml:space="preserve">
     <value>Avresa tidigast</value>
   </data>
+  <data name="EarliestDepartureTimeWithModules" xml:space="preserve">
+    <value>Tidigaste avresetid med moduler</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Ändra</value>
   </data>
@@ -782,6 +785,9 @@
   </data>
   <data name="LatestArrivalTime" xml:space="preserve">
     <value>Senaste ankomsttid</value>
+  </data>
+  <data name="LatestArrivalTimeWithModules" xml:space="preserve">
+    <value>Senaste ankomsttid med moduler</value>
   </data>
   <data name="Layout" xml:space="preserve">
     <value>Bana</value>
@@ -1619,6 +1625,9 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
+  </data>
+  <data name="You are not present long enough to be able to register modules" xml:space="preserve">
+    <value>Du är inte närvarande länge nog att kunna registrera moduler</value>
   </data>
   <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
     <value>Du är för närvarande inte registrerad på något kommande träff</value>

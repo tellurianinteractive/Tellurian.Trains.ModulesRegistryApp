@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using System.Security;
 
 namespace ModulesRegistry.Data;
 
@@ -52,4 +53,41 @@ public static class MeetingParticipantMapping
                 .HasForeignKey(d => d.MeetingParticipantId);
         });
 }
+
+#nullable enable
+
+public static class MeetingParticipantExtensions
+{
+    public static DateTime FirstParticpationDate(this MeetingParticipant participant) =>
+        participant.ParticipateDay1 ? participant.Meeting.StartDate :
+        participant.ParticipateDay2 ? participant.Meeting.StartDate.AddDays(1) :
+        participant.ParticipateDay3 ? participant.Meeting.StartDate.AddDays(2) :
+        participant.ParticipateDay4 ? participant.Meeting.StartDate.AddDays(3) :
+        participant.ParticipateDay5 ? participant.Meeting.StartDate.AddDays(4) :
+        participant.Meeting.StartDate.AddDays(5);
+
+    public static DateTime LastParticpationDate(this MeetingParticipant participant) =>
+        participant.ParticipateDay6 ? participant.Meeting.StartDate.AddDays(5) :
+        participant.ParticipateDay5 ? participant.Meeting.StartDate.AddDays(4) :
+        participant.ParticipateDay4 ? participant.Meeting.StartDate.AddDays(3) :
+        participant.ParticipateDay3 ? participant.Meeting.StartDate.AddDays(2) :
+        participant.ParticipateDay2 ? participant.Meeting.StartDate.AddDays(1) :
+        participant.Meeting.StartDate;
+
+    public static bool MayRegisterModules(this MeetingParticipant? participant) =>
+        participant is not null && 
+        participant.Meeting is not null && 
+        participant.ArrivalDateTime() <=  participant.Meeting.LatestArrivalDateTimeWithModules() &&
+        participant.DepartureDateTime() >= participant.Meeting.EarliestDepartureDateTimeWithModules();
+
+    public static DateTime ArrivalDateTime(this MeetingParticipant participant) =>
+        participant.LatestArrivalTime.HasValue ? participant.FirstParticpationDate().Add(participant.LatestArrivalTime.Value.ToTimeSpan()) :
+        participant.FirstParticpationDate();
+
+    public static DateTime DepartureDateTime(this MeetingParticipant participant) =>
+        participant.EarliestDepartureTime.HasValue ? participant.LastParticpationDate().Add(participant.EarliestDepartureTime.Value.ToTimeSpan()) :
+        participant.LastParticpationDate();
+
+}
+
 

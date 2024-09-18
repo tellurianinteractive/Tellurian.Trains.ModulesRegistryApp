@@ -22,12 +22,14 @@
 }
 else
 {
+    @if (MeetingParticipant.MayRegisterModules()) { 
     <div style="margin-top: 12pt">
         @if (Layout is not null)
         {
             <div style="background-color: lightgoldenrodyellow">
                 <h3>@Localizer["RegisteredModules"]</h3>
 
+                
                 <TableTemplate Items="ParticipantsRegisteredModules">
                     <TableHeader>
                         <th>@Localizer["Package"]</th>
@@ -73,7 +75,7 @@ else
                         <td>@item.OwnerName</td>
                         <td>@item.ToString()</td>
                         <td>
-                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                         </td>
                     </RowTemplate>
                 </TableTemplate>
@@ -93,13 +95,18 @@ else
                         <td>@item.OwnerName</td>
                         <td>@item.ToString()</td>
                         <td>
-                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="false" />
+                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                         </td>
                     </RowTemplate>
                 </TableTemplate>
             }
         }
-    </div>
+        </div>
+    }
+    else
+    {
+        <ActionMessage AlertType="Warning" Label="You are not present long enough to be able to register modules" />
+    }
 }
 
 @code {

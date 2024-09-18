@@ -24,6 +24,11 @@
         <span>@Localizer["IsShadowStation"]: <strong>@Station.IsShadow.AsYesOrNo()</strong>, </span>
         <span>@Localizer["IsTerminus"]: <strong>@Station.IsTerminus.AsYesOrNo()</strong>.</span>
 
+        @if(Station.OperationInstructionsMarkdown.HasValue())
+        {
+            <MarkdownView Label="OperatingInstructions" Markdown="@Station.OperationInstructionsMarkdown" BackgroundColor="#f2f2f2" />
+        }
+
         <h2>@Localizer["Tracks"]</h2>
 
         <TableTemplate Items="@Station.StationTracks.OrderBy(t => t.DisplayOrder)" RowStyle="TrackRowStyle">
