@@ -50,6 +50,10 @@ public static class LayoutExtensions
         me.PrimaryModuleStandard.Scale is null ? me.PrimaryModuleStandard.ShortName :
         me.PrimaryModuleStandard.Scale.ShortName;
 
+    public static string DescriptionWithName(this Layout? me) =>
+        me is null ? string.Empty :
+        $"{me.Description()} {me.ShortName}";
+
     public static string DescriptionWithTheme(this Layout? me) =>
         me is null  ? string.Empty : 
         me.Theme.HasValue() ? $"{me.Meeting.Name} {me.Description()}-{me.Theme}" :

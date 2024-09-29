@@ -50,7 +50,7 @@ else
 
                     @foreach(var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted ))
                     {
-                        <AppButton Href="@($"layouts/{layout.Id}/modules")" ObjectName="@(layout.Description())" Label="Participants" IconName="@FontAwesome.Layout" />
+                        <AppButton Href="@($"layouts/{layout.Id}/modules")" ObjectName="@(layout.DescriptionWithName())" Label="Participants" IconName="@FontAwesome.Layout" />
                     }
                 </div>
 

@@ -23,12 +23,13 @@
 
         <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
         <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
-        <AppInputDate Width="1" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="@Meeting.ShowTime()" />
-        <AppInputDate Width="1" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="@Meeting.ShowTime()" />
+        <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
+        <AppInputFill Width="2" />
+        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="@Meeting.ShowTime()" />
+        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="@Meeting.ShowTime()" />
         <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Meeting.LatestArrivalTimeWithModules"/>
         <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Meeting.EarliestDepartureTimeWithModules" />
 
-        <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
 
         <AppInputText Width="12" Label="ExternalLink" @bind-Value="Meeting.ExternalLink"/>
 

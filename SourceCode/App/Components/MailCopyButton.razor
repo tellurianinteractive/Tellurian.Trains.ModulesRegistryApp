@@ -5,7 +5,7 @@
 
 @code {
     [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
-    [Parameter] public string? Label { get; set; } = "CopyAllMailadresses";
+    [Parameter] public string? Label { get; set; } = "CopyAllMailAddresses";
 
     private async Task CopyToClipboard()
     {

@@ -13,7 +13,7 @@
     @if (MayEdit)
     {
         <div>
-            <AppButton Label="Add"  Href="@LayoutHref(0)" />
+            <AppButton Label="Add" Href="@LayoutHref(0)" />
         </div>
     }
     <TableTemplate Items="Meeting.Layouts" HideNoRecordsToDisplay="true">
@@ -21,19 +21,24 @@
             <th>@Localizer["Name"]</th>
             <th>@Localizer["ResponsibleGroup"]</th>
             <th>@Localizer["OperatingPeriod"]</th>
+            <th>@Localizer["IsRegistrationPermitted"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="meetingLayout">
-            <td>@meetingLayout.Description()</td>
+            <td>@meetingLayout.DescriptionWithName()</td>
             <td>@meetingLayout.OrganisingGroup.FullName</td>
             <td>@OperatingPeriod(meetingLayout)</td>
+            <td>@meetingLayout.IsRegistrationPermitted.AsYesOrNo()</td>
             <td>
                 @if (MayEdit)
                 {
                     <AppButton Label="Edit" Href="@LayoutHref(meetingLayout.Id)" />
-                    <AppButton Label="Modules" Title="RegisteredModules" Href="@LayoutModulesHref(meetingLayout.Id)" />
-                    <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(meetingLayout.Id)" />
-                    <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
+                    @if (meetingLayout.IsRegistrationPermitted)
+                    {
+                        <AppButton Label="Modules" Title="RegisteredModules" Href="@LayoutModulesHref(meetingLayout.Id)" />
+                        <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(meetingLayout.Id)" />
+                        <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
+                    }
                 }
             </td>
         </RowTemplate>

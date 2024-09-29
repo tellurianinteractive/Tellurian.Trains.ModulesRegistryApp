@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.16
+Release date 2024-09-29
+- **Layout description** now also contains layout name. This solves the problem with several layouts in the same scale at the same meeting.
 ## Release 1.11.15
 Release date 2024-09-18
 - **Meeting participant** can now only register modules if their arrival time is less that or equal to the meetings *latest arrival time with modules* and
