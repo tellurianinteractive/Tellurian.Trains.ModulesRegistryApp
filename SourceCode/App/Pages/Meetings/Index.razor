@@ -37,8 +37,8 @@
         <td align="center">@item.meeting.StartOrEventDate()</td>
         <td align="center">@item.meeting.EndDateOrTimes()</td>
         <td class="noprint">
-            <AppButton IconName="Register" Label="Register" Href="@MeetingHref(item.meeting, "register")" IsHidden="@(!item.meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
             <AppButton Label="Edit" Href="@MeetingHref(item.meeting, "edit")" IsHidden="@(!item.MayEdit)" />
+            <AppButton Label="Register" Href="@MeetingHref(item.meeting, "register")" IsHidden="@(!item.meeting.MayRegister(Principal, TimeProvider.Now.DateTime))" />
         </td>
     </RowTemplate>
 </TableTemplate>

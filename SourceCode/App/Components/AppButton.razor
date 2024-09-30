@@ -44,10 +44,7 @@
 
     protected override void OnParametersSet()
     {
-        if (string.IsNullOrWhiteSpace(IconName))
-        {
-            IconName = Label ?? "info";
-        }
+        IconName = IconName.HasValue() ? IconName : Label.HasValueExcept("Button") ? Label : "Info";
     }
 
     async Task NavigateToNewTab()
@@ -61,7 +58,6 @@
         "add" => "primary",
         "edit" => "primary",
         "ok" => "primary",
-        "register" => "primary",
         "upload" => "primary",
         "delete" => "danger",
         "confirmdelete" => "danger",
@@ -79,10 +75,10 @@
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
-    string IconClass => 
-        FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] : 
-        FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label]:
-        IconName.HasValue()? $"fa fa-{IconName}" : "fa fa-info";
+    string IconClass =>
+        FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
+        FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
+        IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
     string ObjectNameLocalized
     {
         get
