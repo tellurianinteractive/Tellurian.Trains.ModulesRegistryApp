@@ -88,6 +88,9 @@ public static class MeetingParticipantExtensions
         participant.EarliestDepartureTime.HasValue ? participant.LastParticpationDate().Add(participant.EarliestDepartureTime.Value.ToTimeSpan()) :
         participant.LastParticpationDate();
 
+    public static string NameWithCity(this MeetingParticipant participant) =>
+        participant.Person is not null ? participant.Person.NameWithCity() : string.Empty;
+
 }
 
 

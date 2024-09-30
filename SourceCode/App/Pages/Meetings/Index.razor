@@ -15,7 +15,7 @@
     <AppButton Label="Add" Href="Meetings/0/edit"></AppButton>
 }
 
-<TableTemplate Items="Meetings">
+<TableTemplate Items="Meetings" RowStyle="RowStyle" RowDividerHeading="RowDividerHeading">
     <TableHeader>
         <th>@Localizer["Country"]</th>
         <th colspan="2">@Localizer["Meeting"]</th>
@@ -66,7 +66,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Meetings = await MeetingService.GetAllAsync(Principal, CountryId);
+        Meetings = await MeetingService.GetAllAsync(Principal, CountryId, 90);
     }
 
     string MeetingTypeIcon(Meeting meeting) => meeting.MeetingType switch
@@ -76,4 +76,29 @@
         2 => FontAwesome.Market,
         _ => "",
     };
+
+    string RowStyle((bool mayEdit, Meeting meeting) item) =>
+        item.meeting.EndDate < TimeProvider.LocalTime ? "background-color: lightgray": "";
+
+    DateTime previousMeetingsDate = DateTime.MinValue;
+    int currentMeetingYear = 0;
+    string RowDividerHeading((bool mayEdit, Meeting meeting) item)
+    {
+        var result = string.Empty;
+        if (item.meeting.EndDate > previousMeetingsDate && item.meeting.EndDate < TimeProvider.LocalTime)
+        {
+            if (previousMeetingsDate == DateTime.MinValue)
+            {
+                previousMeetingsDate = item.meeting.EndDate;
+                result = Localizer["RecentlyPastMeetings"];
+            }
+        }
+        else if (item.meeting.EndDate.Year > currentMeetingYear)
+        {
+            result = currentMeetingYear == 0 ? $"{Localizer["UpcomingMeetings"]} {item.meeting.EndDate.Year}" : item.meeting.EndDate.Year.ToString();
+            currentMeetingYear = item.meeting.EndDate.Year;
+        }        
+        return result;
+    }
+
 }

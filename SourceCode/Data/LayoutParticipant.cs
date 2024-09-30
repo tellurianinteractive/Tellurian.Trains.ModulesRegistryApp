@@ -26,6 +26,7 @@ public class LayoutParticipant
 
 }
 
+# nullable enable
 public static class LayoutParticipantExtensions
 {
     public static bool IsValid(this LayoutParticipant me) =>
@@ -37,6 +38,10 @@ public static class LayoutParticipantExtensions
             return layoutParticipant.LayoutModules;
         return layoutModules.Where(lm => lm.Module.ModuleOwnerships.Any(mo => mo.PersonId == layoutParticipant.PersonId));
     }
+
+    public static string NameWithCity(this LayoutParticipant? layoutParticipant) =>
+        layoutParticipant is null || layoutParticipant.Person is null ? string.Empty :
+        layoutParticipant.Person.NameWithCity();
 
 }
 

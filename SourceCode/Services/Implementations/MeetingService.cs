@@ -27,11 +27,11 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             .ToReadOnlyListAsync();
     }
 
-    public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
+    public async Task<IEnumerable<(bool MayEdit, Meeting Value)>> GetAllAsync(ClaimsPrincipal? principal, int countryId, int daysBack = 0)
     {
         using var dbContext = Factory.CreateDbContext();
         var meetings = await dbContext.Meetings.AsNoTracking()
-            .Where(m => m.EndDate > TimeProvider.Now && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
+            .Where(m => m.EndDate > TimeProvider.LocalTime.AddDays(-daysBack) && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator ))
@@ -58,8 +58,8 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
              .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
-             .Include(m => m.Participants).ThenInclude(p => p.Person)
-             .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard)
+             .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
+             .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard).ThenInclude(pms=>pms.Scale)
             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 

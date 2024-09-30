@@ -28,6 +28,13 @@ else
             {
                 @foreach (var item in Items)
                 {
+                    var rowHeader = RowDividerHeading?.Invoke(item);
+                    @if(rowHeader.HasValue())
+                    {
+                        <tr>
+                            <td colspan="5"><h3>@rowHeader</h3></td>
+                        </tr>
+                    }
                     @if (!IsEditItem(item) || ShowRowTemplateWhenEditing)
                     {
                         <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
@@ -72,6 +79,7 @@ else
     [Parameter] public bool HideNoRecordsToDisplay { get; set; }
     [Parameter] public Func<TItem, string>? Key { get; set; }
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
+    [Parameter] public Func<TItem, string>? RowDividerHeading { get; set; }
     [Parameter] public int EditColspan { get; set; } = 2;
     [Parameter] public bool MayEdit { get; set; } = true;
     [Parameter] public bool ShowRowTemplateWhenEditing { get; set; }

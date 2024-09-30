@@ -1284,6 +1284,9 @@
   <data name="Radius" xml:space="preserve">
     <value>Radius</value>
   </data>
+  <data name="RecentlyPastMeetings" xml:space="preserve">
+    <value>Nylig tdligere treff</value>
+  </data>
   <data name="Regions" xml:space="preserve">
     <value>Regioner</value>
   </data>
@@ -1508,6 +1511,9 @@
   </data>
   <data name="Unregister" xml:space="preserve">
     <value>Avregistrer</value>
+  </data>
+  <data name="UpcomingMeetings" xml:space="preserve">
+    <value>Kommende treff</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Oppdater</value>

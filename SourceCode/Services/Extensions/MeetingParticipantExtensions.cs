@@ -4,6 +4,10 @@ using ModulesRegistry.Services.Implementations;
 namespace ModulesRegistry.Services.Extensions;
 public static class MeetingParticipantExtensions
 {
+    public static string NameWithCityAndCountry(this MeetingParticipant? participant) =>
+        participant is null || participant.Person is null ? string.Empty :
+        participant.Person.NameWithCityAndCountry();
+
     public static string Participates(this MeetingParticipant? participant, IStringLocalizer localizer) =>
         participant is null ? string.Empty :
         participant.CancellationTime.HasValue ? localizer["Canceled"] :
@@ -12,7 +16,7 @@ public static class MeetingParticipantExtensions
     public static string ParticipatesInLayouts(this MeetingParticipant participant, IStringLocalizer localizer) =>
         participant is null ? string.Empty :
         participant.CancellationTime.HasValue ? localizer["Canceled"] :
-        string.Join(',', participant.LayoutParticipations.Select(lm => lm.Layout.Description()));
+        string.Join(", ", participant.LayoutParticipations.Select(lm => lm.Layout.DescriptionWithName()));
 
     public static string FirstParticipationDay(this MeetingParticipant? participant) =>
         participant is null || participant.Meeting is null ? string.Empty :

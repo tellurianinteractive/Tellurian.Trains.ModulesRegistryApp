@@ -21,7 +21,7 @@ else
     @foreach (var item in Meeting.Layouts)
     {
         <div style="padding-top: 10pt; padding-bottom: 6px;">
-            @Display("Layout", item.Description(), "h3")
+            @Display("Layout", item.DescriptionWithName(), "h3")
             @Display("Scale", $"{item.PrimaryModuleStandard.Scale.ShortName} (1:{item.PrimaryModuleStandard.Scale.Denominator})")
             @Display("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
             @Display("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))

@@ -16,7 +16,7 @@
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.ModuleOwnerships)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Standard)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Station).ThenInclude(x => x.StationTracks)
-                    .Include(x => x.Person)
+                    .Include(x => x.Person).ThenInclude(p => p.Country)
                     .Include(x => x.MeetingParticipant).ThenInclude(x => x.Meeting)
                     .Where(x => x.LayoutId == layoutId && x.MeetingParticipant.CancellationTime == null)
                     .ToListAsync().ConfigureAwait(false);

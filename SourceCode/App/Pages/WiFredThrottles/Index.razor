@@ -37,7 +37,7 @@
         <PropertyColumn Property="@(c => c.BarcodeId())" Title="@Localizer["BarcodeId"]" Align="Align.Center" />
         @if (!OnlyMyThrottles)
         {
-            <PropertyColumn Property="@(c => c.OwningPerson.NameCityAndCountry())" Title="@Localizer["Owner"]">
+            <PropertyColumn Property="@(c => c.OwningPerson.NameWithCityAndCountry())" Title="@Localizer["Owner"]">
                 <ColumnOptions>
                     <div class="search-box">
                         <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />

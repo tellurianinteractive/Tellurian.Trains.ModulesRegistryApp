@@ -58,6 +58,10 @@ else
                     <TableHeader>
                         <th>@Localizer["Participant"]</th>
                         <th>@Localizer["City"]</th>
+                        @if (IsInternationalMeeting)
+                        {
+                            <th>@Localizer["Country"]</th>
+                        }
                         <th>@Localizer["Participates"]</th>
                         <th>@Localizer["Layouts"]</th>
                         <th class="noprint">@Localizer["Actions"]</th>
@@ -65,6 +69,10 @@ else
                     <RowTemplate Context="item">
                         <td style="@ParticipantStatusStyle(item)">@item.Person.Name()</td>
                         <td>@item.Person.CityName</td>
+                        @if (IsInternationalMeeting)
+                        {
+                            <td><img src="@item.Person.Country.FlagSrc()"> @item.Person.Country.EnglishName.AsLocalized()</td>
+                        }
                         <td>@item.Participates(Localizer)</td>
                         <td>@item.ParticipatesInLayouts(Localizer)</td>
                         <td class="noprint">
@@ -142,7 +150,7 @@ else
                                     <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                                 }
                             </td>
-                            <td>@item.Layout.Description()</td>
+                            <td>@item.Layout.DescriptionWithName()</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                         </RowTemplate>
                     </TableTemplate>
@@ -167,6 +175,8 @@ else
 
     IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
     bool IsMeetingOrganiser;
+    bool IsInternationalMeeting;
+
     bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
         Principal.IsCountryOrGlobalAdministrator() ||
         IsMeetingOrganiser ||
@@ -180,6 +190,7 @@ else
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
+                IsInternationalMeeting = Meeting.HasParticipantsFromSeveralCountries();
                 if (PersonId > 0 && (Principal.IsCountryOrGlobalAdministrator() || PersonId == Principal.PersonId()))
                 {
                     await OnSelectedPerson(PersonId);

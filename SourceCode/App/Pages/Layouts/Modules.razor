@@ -44,7 +44,7 @@ else
         {
             <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
-                    <th width="30%">@participant.Person.Name(), @participant.Person.CityName</th>
+                    <th width="30%">@ParticipantNameAndMore(participant)</th>
                     <th width="50%">@participant.MeetingParticipant.Participates(Localizer)</th>
                     <th width="120px">@Localizer["RegistrationTime"]</th>
                     <th class="noprint">@Localizer["Actions"] </th>
@@ -64,9 +64,24 @@ else
         }
         else
         {
-            <div style="margin: 10px 0px; padding: 4px">
-                <span style="font-weight: bold; ">@participant.Person.Name(), @participant.Person.CityName</span>: @Localizer["NoModulesRegistered"]
-            </div>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th width="30%">@ParticipantNameAndMore(participant)</th>
+                        <th width="50%">@participant.MeetingParticipant.Participates(Localizer)</th>
+                        <th width="120px">@Localizer["RegistrationTime"]</th>
+                        <th class="noprint">@Localizer["Actions"] </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="1">@Localizer["NoModulesRegistered"]</td>
+                        <td>-</td>
+                        <td width="120px">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
         }
     }
 }
@@ -89,6 +104,7 @@ else
     bool IsOrganiser;
     bool OnlyThoseWithModules;
     bool OnlyThoseWithOperationsPlaces;
+    bool HasParticipantsFromDifferentCountries;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -104,9 +120,10 @@ else
                 LayoutModules = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutModules).ToList();
                 LayoutStations = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
             }
+            HasParticipantsFromDifferentCountries = LayoutParticipants!.Select(lp => lp.Person.CountryId).Distinct().Count() > 1;
         }
     }
-    string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithTheme()}";
+    string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithMeetingAndLayoutName()}";
 
     string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
 
@@ -117,14 +134,17 @@ else
         await JSRuntime.InvokeAsync<object>("open", WaybillsHref(it), "_blank");
     }
 
+    MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(
+        HasParticipantsFromDifferentCountries ? $"""<img src="{participant.Person.Country.FlagSrc()}"> {participant.NameWithCityAndCountry()}""" : participant.NameWithCity());
+
     string SendMailLabel =>
         OnlyThoseWithOperationsPlaces ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :
         OnlyThoseWithModules ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithModules"].ToString().ToLowerInvariant()) :
         "SendMailToAll";
 
     string CopyMailLabel =>
-    OnlyThoseWithOperationsPlaces ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :
-    OnlyThoseWithModules ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithModules"].ToString().ToLowerInvariant()) :
-    "CopyAllMailAddresses";
+        OnlyThoseWithOperationsPlaces ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :
+        OnlyThoseWithModules ? string.Format(Localizer["CopyMailAdressesTo"], Localizer["OnlyThoseWithModules"].ToString().ToLowerInvariant()) :
+        "CopyAllMailAddresses";
 
 }

@@ -3,6 +3,7 @@
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Data.Resources;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace ModulesRegistry.Data;
 
@@ -38,7 +39,11 @@ public partial class Person
 public static class PersonExtensions
 {
     public static string Name(this Person? person) =>
-    person is not null ? $"{person.FirstName} {person.MiddleName} {person.LastName}" : string.Empty;
+        person is not null ? $"{person.FirstName} {person.MiddleName} {person.LastName}" : string.Empty;
+
+    public static string NameWithCity(this Person? person) =>
+        person is not null ? $"{person.Name()}, {person.CityName}" : string.Empty;
+
 
     public static bool HasEmail([NotNullWhen(true)] this Person? person) =>
        !string.IsNullOrWhiteSpace(person.PrimaryEmail());

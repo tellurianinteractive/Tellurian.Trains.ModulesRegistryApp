@@ -17,7 +17,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory)
                 .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.GroupId == excludeGroupId && gm.PersonId == p.Id)))
                 .ToListAsync();
             return items
-                .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))
+                .Select(p => new ListboxItem(p.Id, p.NameWithCityAndCountry()))
                 .OrderBy(li => li.Description)
                 .ToList();
         }
@@ -36,7 +36,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory)
                 .Where(p => (personId == 0 || p.Id == personId) && (countryId == 0 || p.CountryId == countryId))
                 .ToReadOnlyListAsync();
             return items
-                .Select(p => new ListboxItem(p.Id, p.NameCityAndCountry()))
+                .Select(p => new ListboxItem(p.Id, p.NameWithCityAndCountry()))
                 .OrderBy(li => li.Description)
                 .ToList();
         }

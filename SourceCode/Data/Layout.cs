@@ -38,24 +38,29 @@ public class Layout
 
 public static class LayoutExtensions
 {
-   
+
     public static string RegistrationOpensDate(this Layout layout) => layout.RegistrationOpeningDate.ToShortDateString();
     public static string RegistrationClosesDate(this Layout layout) => layout.RegistrationClosingDate.ToShortDateString();
     public static string RegistrationOfModulesClosesDate(this Layout layout) => (layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate).ToShortDateString();
     public static DateTime ModuleRegistrationClosingDate(this Layout layout) => layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate;
 
     public static string Description(this Layout? me) =>
-        me is null ? string.Empty :
-        me.PrimaryModuleStandard is null ? me.ShortName :
+        me is null || me.PrimaryModuleStandard is null ? string.Empty :
         me.PrimaryModuleStandard.Scale is null ? me.PrimaryModuleStandard.ShortName :
         me.PrimaryModuleStandard.Scale.ShortName;
 
     public static string DescriptionWithName(this Layout? me) =>
         me is null ? string.Empty :
         $"{me.Description()} {me.ShortName}";
+ 
+
+    public static string DescriptionWithMeetingAndLayoutName(this Layout? me) =>
+        me is null ? string.Empty :
+        me.Meeting is null ? $"{me.Description()} {me.ShortName}" :
+        $"{me.Meeting.Name}, {me.Description()} {me.ShortName}";
 
     public static string DescriptionWithTheme(this Layout? me) =>
-        me is null  ? string.Empty : 
+        me is null ? string.Empty :
         me.Theme.HasValue() ? $"{me.Meeting.Name} {me.Description()}-{me.Theme}" :
         me.Meeting is not null ? $"{me.Meeting.Name} {me.Description()} - {me.Theme}" :
         $"{me.Description} {me.Theme}";

@@ -65,7 +65,7 @@ else
         }
         else if (Throttle?.Id > 0 == true)
         {
-            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameCityAndCountry()) };
+            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameWithCityAndCountry()) };
         }
         else if (Id == 0)
         {

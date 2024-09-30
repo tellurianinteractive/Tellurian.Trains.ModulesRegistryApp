@@ -73,6 +73,9 @@ public static class MeetingExtensions
         meeting.GroupDomainId.HasValue ? $"{meeting.OrganiserGroup.FullName}/{meeting.GroupDomain?.Name}" :
         $"{meeting.OrganiserGroup.FullName}";
 
+    public static bool HasParticipantsFromSeveralCountries(this Meeting? meeting) =>
+        meeting is not null && meeting.Participants.Select(p => p.Person.CountryId).Distinct().Count() > 1;
+
     public static DateTime? RegistrationOpensDate(this Meeting? meeting) =>
      meeting is null || meeting.IsNotPermittingRegistrations() ? null :
      meeting.Layouts.Where(l => l.IsRegistrationPermitted).Min(l => l.RegistrationOpeningDate);

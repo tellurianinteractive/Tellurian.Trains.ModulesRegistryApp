@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.17
+Release date 2024-09-30
+- **Meeting and layout** participant listings now recognises if there are participants from different countries.
+If thatis the case, the participants country name and flag is also displayed.
+- **Meeting calender** now displays past meetings for 90 days back and is also divided per year.
 ## Release 1.11.16
 Release date 2024-09-29
 - **Layout description** now also contains layout name. This solves the problem with several layouts in the same scale at the same meeting.
