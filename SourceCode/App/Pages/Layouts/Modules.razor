@@ -78,7 +78,7 @@ else
                         <td colspan="1">@Localizer["NoModulesRegistered"]</td>
                         <td>-</td>
                         <td width="120px">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
-                        
+                        <td class="noprint"></td>
                     </tr>
                 </tbody>
             </table>
@@ -135,7 +135,7 @@ else
     }
 
     MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(
-        HasParticipantsFromDifferentCountries ? $"""<img src="{participant.Person.Country.FlagSrc()}"> {participant.NameWithCityAndCountry()}""" : participant.NameWithCity());
+        HasParticipantsFromDifferentCountries ? $"""<img src="{participant.Person.Country.FlagSrc()}"> {participant.NameWithCityAndCountry()} {participant.Person.EmailIcon()}""" : $"""{participant.NameWithCity()} {participant.Person.EmailIcon()}""");
 
     string SendMailLabel =>
         OnlyThoseWithOperationsPlaces ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :

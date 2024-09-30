@@ -67,7 +67,7 @@ else
                         <th class="noprint">@Localizer["Actions"]</th>
                     </TableHeader>
                     <RowTemplate Context="item">
-                        <td style="@ParticipantStatusStyle(item)">@item.Person.Name()</td>
+                        <td style="@ParticipantStatusStyle(item)">@item.Person.Name() @item.Person.EmailIcon()</td>
                         <td>@item.Person.CityName</td>
                         @if (IsInternationalMeeting)
                         {

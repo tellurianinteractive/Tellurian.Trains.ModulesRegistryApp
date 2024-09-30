@@ -30,6 +30,11 @@ public static class MarkupStringExtensions
         person.UserId.HasValue ? "user-check" :
         "user-slash";
 
+    public static MarkupString EmailIcon(this Person? person) =>
+        person is null || person.EmailAddresses.HasNoValue() ? new MarkupString() :
+        new MarkupString($"""<span class="fa fa-envelope"/>""");
+
+
     public static MarkupString ImageIcon(this Vehicle vehicle) =>
         (vehicle.HasImage() ? $"""<a target="_blank" href="{vehicle.PrototypeImageHref}"><span class="{FontAwesome.Image}"/></a>""" : "").AsMarkup();
 }

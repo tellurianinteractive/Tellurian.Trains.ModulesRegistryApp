@@ -5,7 +5,8 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.11.17
 Release date 2024-09-30
 - **Meeting and layout** participant listings now recognises if there are participants from different countries.
-If thatis the case, the participants country name and flag is also displayed.
+If that is the case, the participants country name and flag is also displayed.
+- **Meeting and layout** participant listings now indicates which particpants that have a registered email address.
 - **Meeting calender** now displays past meetings for 90 days back and is also divided per year.
 ## Release 1.11.16
 Release date 2024-09-29
