@@ -10,7 +10,7 @@
         @if (MeetingParticipant.LayoutParticipations.Any())
         {
             <div>
-                @Localizer["LayoutsYouAreParticipatingIn"]: <span class="layout">@string.Join(", ", MeetingParticipant.LayoutParticipations.Select(l => l.Layout.PrimaryModuleStandard.ShortName))</span>
+                @Localizer["LayoutsYouAreParticipatingIn"]: <span class="layout">@string.Join(", ", MeetingParticipant.LayoutParticipations.Select(l => l.Layout.DescriptionWithName()))</span>
             </div>
         }
         @if (MayEdit)

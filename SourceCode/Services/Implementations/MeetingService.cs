@@ -90,7 +90,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
                 .Include(mp => mp.Meeting).ThenInclude(m => m.OrganiserGroup)
-                .Include(mp => mp.LayoutParticipations).ThenInclude(m => m.Layout).ThenInclude(l => l.PrimaryModuleStandard)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(m => m.Layout).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
                 .Where(mp => mp.PersonId == personId && mp.Meeting.EndDate > TimeProvider.Now && (groupId == 0 || mp.Meeting.OrganiserGroup.Id == groupId && mp.Meeting.OrganiserGroup.GroupMembers.Any(og => og.PersonId == personId)))
                 .ToReadOnlyListAsync();
         }
