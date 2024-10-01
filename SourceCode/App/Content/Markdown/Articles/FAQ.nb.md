@@ -16,9 +16,9 @@ Hvis du av en eller annen grunn ikke kan logge på, er her noen råd:
 4. Du kan prøve å opprette et nytt passord. Du finner det under **Innstillinger**.
 
 ### Jeg vil lage fraktsedler mellom stasjoner
-Det korte svaret er at du ikke kan.
-Fraktsedlene lages ved å matche sende- og mottakskunder,
-med tanke på:
+Bare klikk *Oppdater* for fraktkunden du vil ha fraktsedler for.
+Fraktsedlene lages ved å matche sende- og mottakskunder med andre moduler i samme skala og tema og også fraktkunder på eksterne stasjoner,
+vurderet:
 1) Det er samme type last,
 1) Lastekundene eksisterer i samme år,
 1) Lasttypen er relevant for kundens virksomhetsår.

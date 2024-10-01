@@ -16,9 +16,9 @@ Wenn Sie sich aus irgendeinem Grund nicht anmelden können, finden Sie hier eini
 4. Sie können versuchen, ein neues Passwort zu erstellen. Das findest du unter **Einstellungen**.
 
 ### Ich möchte Frachtbriefe zwischen Stationen erstellen
-Die kurze Antwort ist, dass Sie es nicht können.
-Die Frachtbriefe werden erstellt, indem sendende und empfangende Frachtkunden abgeglichen werden,
-in Anbetracht:
+Klicken Sie einfach auf *Aktualisieren* für den Frachtkunden, für den Sie Frachtbriefe wünschen.
+Die Frachtbriefe werden erstellt, indem sendende und empfangende Frachtkunden mit anderen Modulen im gleichen Maßstab und Thema sowie auch Frachtkunden an externen Stationen abgeglichen werden,
+unter Berücksichtigung von:
 1) Es ist die gleiche Art von Fracht,
 1) Die Frachtkunden bestehen in denselben Jahren,
 1) Die Art der Ladung ist relevant für die Betriebsjahre des Kunden.

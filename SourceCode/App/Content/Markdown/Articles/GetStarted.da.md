@@ -56,8 +56,8 @@ din brugerkonto. Så kan du logge ind og begynde at bruge modulregistret.
 ### Begynd at indtaste dine moduler
 Hvis du ejer moduler, kan du begynde at indtaste data om dem under *Mine moduler*.
 Klik på **?** øverst til højre på siden for at se hjælpeinstruktioner.
-Hvis du har et stationsmodul, går du først ind i moduldelen, og laver derefter en *station* der
-henviser til dette modul. Ethvert modul med en eller anden funktion betragtes normalt som en *station*.
+Hvis du har et stationsmodul/driftssted, går du først ind i moduldelen, og laver derefter en *driftssted* der
+henviser til dette modul. Ethvert modul med en eller anden funktion eller tidsangivelse i kkøreplanen betragtes normalt som en *driftssted*.
 
 Du kan uploade tegninger i DWG-format til dit modul og en driftsdokumentation af din station.
 Dokumentationen skal være et supplement til de data, du indtaster, så undgå at skrive ting, du kan indtaste som data.
@@ -66,12 +66,12 @@ Mange elementer er rullemenuer med foruddefinerede værdier, andre er afkrydsnin
 
 ### Tilføjelse af fragtkunder
 Fragt er en vital del af at køre tog på et modultræf. Fragt er beskrevet med fragtbreve,
-og for at oprette fragtbreve kan du tilføje fragtkunder på din station.
+og for at oprette fragtbreve kan du tilføje fragtkunder på dit driftssted.
 For hver fragtkunde kan du angive, hvilke varer de sender og/eller modtager, og i hvilke mængder.
-De data, du indtaster, bruges derefter til at oprette matchende fragtbreve med fragtkunder på andre stationer.
+De data, du indtaster, bruges derefter til at oprette matchende fragtbreve med fragtkunder på andre driftssteder.
 
 ### Tilmeld dig et modultræf
 Du kan vælge et modultræf og tilmelde din deltagelse, og eventuelt også tilmelde nogle eller alle
-af dine moduler til et banelayout, som mødearrangøren forventer at bygge.
-Du kan også oprette fragtbreve, der er specifikke for layoutet.
+af dine moduler til et bane, som mødearrangøren forventer at bygge.
+Du kan også oprette fragtbreve, der er specifikke for banen.
 Disse fragtbreve er kun intern fragt og kan være et supplement til dine andre fragtsedler.

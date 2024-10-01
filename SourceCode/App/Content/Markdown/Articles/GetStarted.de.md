@@ -56,8 +56,9 @@ Ihr Benutzerkonto. Dann können Sie sich anmelden und die Modulregistrierung ver
 ### Beginnen Sie mit der Eingabe Ihrer Module
 Wenn Sie Module besitzen, können Sie unter *Meine Module* mit der Eingabe von Daten beginnen.
 Klicken Sie auf das **?** oben rechts auf der Seite, um Hilfeanweisungen anzuzeigen.
-Wenn Sie ein Stationsmodul haben, geben Sie zuerst den Modulteil ein und erstellen dann eine *Station*
-bezieht sich auf dieses Modul. Jedes Modul mit irgendeiner Funktion wird normalerweise als *Station* betrachtet.
+Wenn Sie ein Stations- oder  Betriebsstandortmodul haben, geben Sie zuerst den Modulteil ein und erstellen dann ein *Betriebsstandort*
+bezieht sich auf dieses Modul. 
+Als *Betriebsstandort* wird im Allgemeinen jedes Modul angesehen, das eine Funktion hat oder in dem die Zeit registriert wird.
 
 Sie können Zeichnungen im DWG-Format für Ihr Modul und eine Betriebsdokumentation Ihrer Station hochladen.
 Die Dokumentation sollte eine Ergänzung zu den von Ihnen eingegebenen Daten sein, also vermeiden Sie es, Dinge zu schreiben, die Sie als Daten eingeben können.
@@ -66,7 +67,7 @@ Viele Elemente sind Dropdowns mit vordefinierten Werten, andere sind Kontrollkä
 
 ### Frachtkunden hinzufügen
 Frachten sind ein wesentlicher Bestandteil des Fahrbetriebs von Zügen bei einer Modultreffen. Frachten werden mit Frachtbriefen beschrieben,
-und um Frachtbriefe zu erstellen, können Sie Frachtkunden an Ihrem Bahnhof hinzufügen.
+und um Frachtbriefe zu erstellen, können Sie Frachtkunden an Ihrem Bahnhof/Betriebsstandort hinzufügen.
 Für jeden Frachtkunden können Sie angeben, welche Waren er versendet und/oder empfängt und in welchen Mengen.
 Die von Ihnen eingegebenen Daten werden dann verwendet, um passende Frachtbriefe mit Frachtkunden an anderen Bahnhöfen zu erstellen.
 

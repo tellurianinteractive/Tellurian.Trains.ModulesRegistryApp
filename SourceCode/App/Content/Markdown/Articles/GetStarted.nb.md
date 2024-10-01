@@ -56,8 +56,8 @@ brukerkontoen din. Deretter kan du logge inn og begynne å bruke modulregisteret
 ### Begynn å legge inn modulene dine
 Hvis du eier moduler, kan du begynne å legge inn data om dem under *Mine moduler*.
 Klikk på **?** øverst til høyre på siden for å se hjelpeinstruksjoner.
-Har du en stasjonsmodul går du først inn i moduldelen, deretter lager du en *stasjon* som
-refererer til den modulen. Enhver modul med en eller annen funksjon blir vanligvis sett på som en *stasjon*.
+Har du en stasjonsmodul/driftsplass går du først inn i moduldelen, deretter lager du en *driftplass* som
+refererer til den modulen. Enhver modul med en eller annen funksjon eller som skal vøre med i kjøreplanen blir vanligvis sett på som en *driftplass*.
 
 Du kan laste opp tegninger i DWG-format for din modul, og en driftsdokumentasjon av stasjonen din.
 Dokumentasjonen skal være et supplement til dataene du legger inn, så unngå å skrive ting du kan legge inn som data.
@@ -66,9 +66,9 @@ Mange elementer er rullegardiner med forhåndsdefinerte verdier, andre er avmerk
 
 ### Legger til fraktkunder
 Gods er en viktig del av å kjøre tog på et modultreff. Frakt er beskrevet med fraktsedler,
-og for å lage fraktsedler kan du legge til fraktkunder på stasjonen din.
+og for å lage fraktsedler kan du legge til fraktkunder på driftplassen din.
 For hver fraktkunde kan du spesifisere hvilke varer de sender og/eller mottar, og i hvilke mengder.
-Dataene du legger inn blir så brukt til å lage matchende fraktsedler med fraktkunde på andre stasjoner.
+Dataene du legger inn blir så brukt til å lage matchende fraktsedler med fraktkunde på andre driftplasser.
 
 ### Registrer deg til et modultreff
 Du kan velge et modultreff og registrere din deltakelse og eventuelt også registrere noen eller alle

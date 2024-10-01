@@ -43,8 +43,8 @@ and now fully supports English, German, Danish, Norwegian and Swedish.
 Partial support for Polish, Dutch, French, and Italian.
 - **The Documentation** is extensive to assist your usage. 
 Help texts are available on most forms, mostly of them in all fully supported languages.
-There is also an English onlt WIKI with more general content. 
-All documentation and appication code is *open source*.
+There is also an English only WIKI with more general content. 
+All documentation and application code is *open source*.
 
 ### Get a User Account
 To be able to login, you need a user account. You cannot register as a user your self. 
@@ -56,17 +56,17 @@ your user account. Then you can login and start using the Module Registry.
 ### Start Entering Your Modules
 If you own modules, you can start entering data about them under *My modules*.
 Click on the **?** in top right of the page to see help instructions.
-If you have a station module, you first enter the module part, then create a *station* that
-refers to that module. Any module with some function is usually regarded as a *station*.
+If you have a station or operation location module, including junctions, you first enter the module part, then create a *operation location* that
+refers to that module. Any module with some function or where time is registered is usually regarded as a *operation location*.
 
-You can upload drawings in DWG-format for your module, and an operations documentation of your station.
-The documetation should be a complement to the data you enter, so avoud writing things that you can enter as data.
+You can upload drawings in DWG-format for your module, a PDF document with operations documentation of your station.
+The documetation should be a complement to the data you enter, so avoid writing things that you can enter as data.
 During entering of your modules and stations, you will learn about all the data that is possible to enter.
 Many items are drop-downs with predefined values, others are checkboxes and a few entries are free text. 
 
 ### Adding Freight Customers
 Freights is a vital part of running trains at a module meeting. Freights are described with waybills, 
-and in order to create waybills, you can add freight customers at your station.
+and in order to create waybills, you must add freight customers at your operation location.
 For each freight customer, you can specify what goods they send and/or receive, and in what quantities.
 The data you enter is then used to create matching waybills with freight customer at other stations.
 
@@ -74,7 +74,7 @@ The data you enter is then used to create matching waybills with freight custome
 You can select a module meeting and register your participation and optionally also register some or all
 of your modules to a layout that the meeting organiser expect to build.
 You can also create waybills specific for the layout. 
-These waybills are internal freights only, and can be a supplement for your other waybills.
+These waybills are meeting specific internal freights only, and can be a supplement for your other waybills.
 
 
 

@@ -16,9 +16,9 @@ Hvis du af en eller anden grund ikke kan logge ind, er her nogle råd:
 4. Du kan prøve at oprette en ny adgangskode. Det finder du under **Indstillinger**.
 
 ## Jeg vil oprette fragtbreve mellem stationer
-Det korte svar er, at du ikke kan.
-Fragtbrevene oprettes ved at matche afsendende og modtagende fragtkunder,
-Overvejer:
+Bare klik på *Opdater* for den fragtkunde, du ønsker fragtbreve for.
+Fragtbrevene skabes ved at matche afsendende og modtagende fragtkunder med andre moduler i samme skala og tema og også fragtkunde på eksterne stationer,
+i betragtning af:
 1) Det er den samme type last,
 1) Fragtkunderne eksisterer i samme år,
 1) Godstypen er relevant for fragtkundens forretningsår.

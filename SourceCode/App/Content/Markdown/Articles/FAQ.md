@@ -16,14 +16,16 @@ If you for some reason cannot login, here are some advices:
 4. You can try to create a new password. You find that under **Settings**.
 
 ### I want to create waybills between stations
-The short answer is you can't. 
-The waybills are created by matching sending and receving cargo customers,
+Just click *Update* for the freigth customer you want waybills for.
+The waybills are created by matching sending and receving cargo customers with other modules in the same scale and theme and also freight customer at external stations,
 considering:
 1) It is the same type of cargo, 
 1) The cargo customers exists during the same years,
 1) The type of cargo is relevant for the years of the customer.
 1) If its sending/receiving or export/import.
-1) The country of the cargo customers, only export/import matches foreign customers,
+1) The country of the cargo customers, only export/import matches foreign customers.
+
+
 
 
 

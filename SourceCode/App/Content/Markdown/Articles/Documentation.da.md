@@ -14,6 +14,9 @@ at holde data konsistente og med høj kvalitet.
 - [**Stationer og moduler**](Content/articles-modulesandstations) guider dig til at indtaste data om modul og stationer.
 - [**Fragtkunder og fragter**](Content/articles-CustomersAndFreights) guider dig hvordan du opretter frakgtbreve.
 
+## Retningslinjer for administration af modultræf
+- [**Administrer modultræf**](Content/articles-managemodulemeetings) guider dig til, hvordan du administrerer modultræf ved hjælp af Modulregistret.
+
 ## Hjælpetekster
 På mange sider, hvor du indtaster data, kan du klikke på <span class="fa fa-question-circle"></span> i øverste højre hjørne for at få hjælp.
 

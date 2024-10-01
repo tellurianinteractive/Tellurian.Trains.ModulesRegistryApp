@@ -1,6 +1,6 @@
 ﻿## Help - Register Modules
 
-You can register your own modules and group owned modules that the group administrator perimtsbyou to borrow.
+You can register your own modules and group owned modules that the group administrator permits you to borrow.
 
 **Avaliable modules** are the *module packages* that are available but not yet registered for the track layout.
 The list is populated with *module packages* that have the same *scale* as the track layout.

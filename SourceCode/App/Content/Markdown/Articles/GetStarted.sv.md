@@ -56,8 +56,8 @@ ditt användarkonto. Sedan kan du logga in och börja använda modulregistret.
 ### Börja lägga in dina moduler
 Om du äger moduler kan du börja lägga in data om dem under *Mina moduler*.
 Klicka på **?** längst upp till höger på sidan för att se hjälpinstruktioner.
-Om du har en stationsmodul lägger du först in som en modul, och skapar sedan en *station* som
-hänvisar till den modulen. Varje modul med någon funktion betraktas vanligtvis som en *station*.
+Om du har en stationsmodul lägger du först in som en modul, och skapar sedan en *driftplats* som
+hänvisar till den modulen. Varje modul med någon funktion eller där passertider behövs betraktas vanligtvis som en *driftplats*.
 
 Du kan ladda upp ritningar i DWG-format för din modul, och en driftdokumentation av din station.
 Dokumentationen ska vara ett komplement till den data du anger, så undvik att skriva saker som du kan ange som data.
@@ -66,12 +66,12 @@ Många objekt är rullgardinsmenyer med fördefinierade värden, andra är kryss
 
 ### Lägger till fraktkunder
 Gods är en viktig del av att köra tåg på en modulträff. Frakter beskrivs med fraktsedlar,
-och för att skapa fraktsedlar kan du lägga till fraktkunder på din station.
+och för att skapa fraktsedlar måste du lägga till fraktkunder på din station.
 För varje fraktkund kan du ange vilka varor de skickar och/eller tar emot och i vilka kvantiteter.
 Uppgifterna du anger används sedan för att skapa matchande fraktsedlar med fraktkund på andra stationer.
 
 ### Registrera dig till en modulträff
 Du kan välja en modulträff och anmäla ditt deltagande och valfritt även registrera några eller alla
 av dina moduler till en bana som mötesarrangören förväntar sig att bygga.
-Du kan också skapa fraktsedlar specifika för layouten.
-Dessa fraktsedlar är endast internfrakter och kan vara ett komplement till dina andra fraktsedlar.
+Du kan också skapa fraktsedlar specifika för banan.
+Dessa fraktsedlar är endast internfrakter specifika för träffeb och kan vara ett komplement till dina andra fraktsedlar.

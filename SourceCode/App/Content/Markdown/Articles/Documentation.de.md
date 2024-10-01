@@ -14,6 +14,9 @@ um Daten konsistent und in hoher Qualität zu halten.
 - [**Stationen und Module**](Content/articles-modulesandstations) führt Sie durch die Eingabe von Daten über Module und Stationen.
 - [**Frachtkunden und Frachten**](Content/articles-CustomersAndFreights) führt Sie durch die Erstellung von Frachtbriefen.
 
+## Richtlinien zum Verwalten von Modultreffen
+- [**Modultreffen verwalten**](Content/articles-managemodulemeetings) führt Sie durch die Verwaltung von Modultreffen mithilfe des Modulregisters.
+
 ## Hilfetexte
 Auf vielen Seiten, auf denen Sie Daten eingeben, können Sie oben rechts auf <span class="fa fa-question-circle"></span> klicken, um Hilfe zu erhalten.
 

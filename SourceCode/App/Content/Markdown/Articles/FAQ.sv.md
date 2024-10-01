@@ -16,8 +16,8 @@ Om du av någon anledning inte kan logga in, här är några råd:
 4. Du kan försöka skapa ett nytt lösenord. Du hittar det under **Inställningar**.
 
 ### Jag vill skapa fraktsedlar mellan stationer
-Det korta svaret är att du inte kan.
-Fraktsedlarna skapas genom att matcha sändande och mottagande godskunder,
+Klicka bara på *Uppdatera* för fraktkunden du vill ha fraktsedlar för.
+Fraktsedlarna skapas genom att matcha avsändande och mottagande godskunder med andra moduler i samma skala och tema samt fraktkunder vid externa stationer,
 med tanke på:
 1) Det är samma typ av last,
 1) Godskunderna finns under samma år,

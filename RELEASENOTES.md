@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.18
+Release date 2024-10-01
+- **Module meeting** administration guide added in documentation. The help text for the meeting edit page is also updated.
+- **FAQ page** is updated.
+- **Get Started page** is updated.
 ## Release 1.11.17
 Release date 2024-09-30
 - **Meeting and layout** participant listings now recognises if there are participants from different countries.
