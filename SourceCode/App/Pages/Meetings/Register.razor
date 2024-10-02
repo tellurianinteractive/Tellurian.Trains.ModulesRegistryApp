@@ -57,8 +57,12 @@ else
                 <TableTemplate Items="Meeting.Participants.OrderBy(p => p.Person.FirstName).ThenBy(p => p.Person.LastName)">
                     <TableHeader>
                         <th>@Localizer["Participant"]</th>
+                        @if (Meeting.IsFremo())
+                        {
+                            <th>@Localizer["Member"]</th>
+                        }
                         <th>@Localizer["City"]</th>
-                        @if (IsInternationalMeeting)
+                        @if (HasParticipantsFromSeveralCountries)
                         {
                             <th>@Localizer["Country"]</th>
                         }
@@ -68,8 +72,12 @@ else
                     </TableHeader>
                     <RowTemplate Context="item">
                         <td style="@ParticipantStatusStyle(item)">@item.Person.Name() @item.Person.EmailIcon()</td>
+                        @if (Meeting.IsFremo())
+                        {
+                            <td>@item.Person.FremoNumber()</td>
+                        }
                         <td>@item.Person.CityName</td>
-                        @if (IsInternationalMeeting)
+                        @if (HasParticipantsFromSeveralCountries)
                         {
                             <td><img src="@item.Person.Country.FlagSrc()"> @item.Person.Country.EnglishName.AsLocalized()</td>
                         }
@@ -175,7 +183,7 @@ else
 
     IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
     bool IsMeetingOrganiser;
-    bool IsInternationalMeeting;
+    bool HasParticipantsFromSeveralCountries;
 
     bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
         Principal.IsCountryOrGlobalAdministrator() ||
@@ -190,7 +198,7 @@ else
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             if (Meeting is not null)
             {
-                IsInternationalMeeting = Meeting.HasParticipantsFromSeveralCountries();
+                HasParticipantsFromSeveralCountries = Meeting.HasParticipantsFromSeveralCountries();
                 if (PersonId > 0 && (Principal.IsCountryOrGlobalAdministrator() || PersonId == Principal.PersonId()))
                 {
                     await OnSelectedPerson(PersonId);

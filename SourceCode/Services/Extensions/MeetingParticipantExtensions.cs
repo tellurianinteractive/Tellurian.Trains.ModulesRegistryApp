@@ -11,6 +11,8 @@ public static class MeetingParticipantExtensions
     public static string Participates(this MeetingParticipant? participant, IStringLocalizer localizer) =>
         participant is null ? string.Empty :
         participant.CancellationTime.HasValue ? localizer["Canceled"] :
+        participant.FirstParticpationDate() == participant.LastParticpationDate() ?
+        $"{participant.FirstParticipationDay()} {participant.LatestArrivalTime:t} - {participant.EarliestDepartureTime:t}" :
         $"{participant.FirstParticipationDay()} {participant.LatestArrivalTime:t} - {participant.LastParticipationDay()} {participant.EarliestDepartureTime:t}";
 
     public static string ParticipatesInLayouts(this MeetingParticipant participant, IStringLocalizer localizer) =>
@@ -27,7 +29,7 @@ public static class MeetingParticipantExtensions
     public static string LastParticipationDay(this MeetingParticipant? participant) =>
         participant is null || participant.Meeting is null ? string.Empty :
         participant.LastParticpationDate().DayOfWeek.ToString().Localized();
- 
+
 
 
     public static string[] Days(this MeetingParticipant mp, Meeting? m = null)

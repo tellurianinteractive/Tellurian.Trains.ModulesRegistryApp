@@ -6,7 +6,7 @@ public static class AvaliableModuleExtensions
 {
     public static IEnumerable<ModulePackage> AsModulePackages(this IEnumerable<AvailableModule> availableModules)
     {
-        if (availableModules is null) return Array.Empty<ModulePackage>();
+        if (availableModules is null) return [];
         var packages = new Dictionary<string, List<(AvailableModule Module, int ScaleId, ModulePackageType type)>>(availableModules.Count());
         var scales = availableModules.GroupBy(m => m.ScaleId);
         foreach (var scale in scales)
@@ -19,7 +19,8 @@ public static class AvaliableModuleExtensions
                     if (!packages.ContainsKey(key)) packages.Add(key, new List<(AvailableModule, int, ModulePackageType)>());
                     packages[key].Add((module, scale.Key, ModulePackageType.Package));
                 }
-                else if (module.ConfigurationLabel.HasValue()) { 
+                else if (module.ConfigurationLabel.HasValue())
+                {
                     var key = module.FullName;
                     if (!packages.ContainsKey(key)) packages.Add(key, new List<(AvailableModule, int, ModulePackageType)>());
                     packages[key].Add((module, scale.Key, ModulePackageType.Variants));
@@ -29,9 +30,12 @@ public static class AvaliableModuleExtensions
                 {
                     try
                     {
-                        packages.Add(module.FullName, new List<(AvailableModule, int, ModulePackageType)>() { (module, scale.Key, ModulePackageType.SingleModule) });
+                        if (!packages.ContainsKey(module.FullName))
+                        {
+                            packages.Add(module.FullName, new List<(AvailableModule, int, ModulePackageType)>() { (module, scale.Key, ModulePackageType.SingleModule) });
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Debugger.Break();
                         throw;
@@ -53,13 +57,13 @@ public static class AvaliableModuleExtensions
             items.First().Module.OwnerName();
 
         static int[] OwnersPersonId(IEnumerable<(AvailableModule Module, int Scale, ModulePackageType Type)> items) =>
-            new[] { items.First().Module.OwnerPersonId ?? 0};
+            new[] { items.First().Module.OwnerPersonId ?? 0 };
 
     }
 
     internal static string OwnerName(this AvailableModule module) =>
         module.OwnerGroupId > 0 ? module.OwnerGroupName ?? string.Empty :
-        module.OwnerPersonId > 0 ? $"{module.OwnerFirstName} {module.OwnerLastName}" ?? string.Empty : 
+        module.OwnerPersonId > 0 ? $"{module.OwnerFirstName} {module.OwnerLastName}" ?? string.Empty :
         string.Empty;
 
     public static AvailableModule MapAvailableModule(this IDataRecord record) =>
