@@ -65,7 +65,7 @@ public static class LayoutExtensions
         me.Meeting is not null ? $"{me.Meeting.Name} {me.Description()} - {me.Theme}" :
         $"{me.Description} {me.Theme}";
 
-    internal static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
+    public static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
        layout.IsRegistrationPermitted &&
        layout.RegistrationOpeningDate <= at &&
        layout.RegistrationClosingDate.AddDays(1) >= at;

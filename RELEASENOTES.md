@@ -2,6 +2,17 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.19
+Release date 2024-10-04
+- **Module administration assistans** cannot longer be delegated to groups, because this is enabled by default for group members
+that are permitted to administrer group members modules.
+- **Module ownership** now has to be either one person, shared between persons or a single group. It is not possible to share ownerships between persons and a group. 
+- **Bug fix** of issue #203 Modules appears twice when joint owned by persons and group.
+- **Bug fix** of issue #207 Listing group's modules causes error.
+- **Bug fix** of issue #208 Registered group modules does not appear in layout list.
+- **Added** option to *cancel* participation in a specific layout. This option is open when
+the layout is open for registration and eventually registerend modules are removed.
+When the registration of modules is closed, the meeting organiser must be contacted to do this.
 ## Release 1.11.18
 Release date 2024-10-01
 - **Module meeting** administration guide added in documentation. The help text for the meeting edit page is also updated.

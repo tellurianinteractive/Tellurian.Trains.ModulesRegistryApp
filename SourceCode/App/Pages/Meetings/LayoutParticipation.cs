@@ -6,9 +6,7 @@ public class LayoutParticipation(Layout layout, MeetingParticipant participant)
 {
     public Layout Layout { get; } = layout;
     public MeetingParticipant Participant { get; } = participant;
-    public bool IsParticipating { get; set; }
-
-    public LayoutParticipant? AsLayoutParticipant =>
-        Layout is null || Participant is null || !IsParticipating ? null :
-        new LayoutParticipant { Layout = Layout, MeetingParticipant = Participant };
+    public bool IsParticipating => LayoutParticipant is not null;
+    public LayoutParticipant? LayoutParticipant => Participant.LayoutParticipations.SingleOrDefault(lp => lp.LayoutId == Layout.Id);
+       
 }

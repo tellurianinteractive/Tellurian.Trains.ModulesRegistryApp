@@ -73,7 +73,7 @@ public static class ModuleOwnershipExtensionsk
         ownership is not null && (ownership.PersonId.HasValue || ownership.GroupId.HasValue);
 
     public static bool IsAssistantOnly([NotNullWhen(true)] this ModuleOwnership? ownership) =>
-        ownership is not null && ownership.OwnedShare == 0;
+        ownership is not null && ownership.OwnedShare == 0 && ownership.PersonId > 0;
 
     public static string OwnerNames(this IEnumerable<ModuleOwnership> us) =>
         string.Join(", ", us.First().Module.ModuleOwnerships.Select(mo => mo.OwnerName()));

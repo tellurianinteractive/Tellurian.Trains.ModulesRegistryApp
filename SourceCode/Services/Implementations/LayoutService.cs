@@ -184,7 +184,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.Module).ThenInclude(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
                 .Include(lp => lp.LayoutParticipant).ThenInclude(mp => mp.MeetingParticipant).ThenInclude(mp => mp.Person)
-                .Where(lm => lm.LayoutParticipant.LayoutId == layoutId && lm.LayoutParticipant.MeetingParticipant.PersonId == personId)
+                .Where(lm => lm.LayoutParticipant.LayoutId == layoutId && lm.LayoutParticipant.PersonId == personId && lm.LayoutParticipant.LayoutModules.Any(lm => lm.Module.ModuleOwnerships.Any(mo => mo.PersonId == personId || mo.GroupId > 0)))
                 .ToListAsync();
         }
         return [];

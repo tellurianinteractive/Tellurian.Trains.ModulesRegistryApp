@@ -107,7 +107,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             if (ownershipRef.IsGroup)
             {
                 return modules
-                     .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && m.ModuleOwnerships.Any(mo => principal.IsMemberOfGroupSpecificGroupDomainOrNone(mo.Group.GroupDomainId)));
+                     .Where(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && m.ModuleOwnerships.Any(mo => mo.Group is not null && principal.IsMemberOfGroupSpecificGroupDomainOrNone(mo.Group.GroupDomainId)));
             }
             else if (ownershipRef.IsPersonInGroup)
             {

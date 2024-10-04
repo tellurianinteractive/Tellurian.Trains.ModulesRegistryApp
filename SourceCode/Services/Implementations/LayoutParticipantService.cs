@@ -24,7 +24,7 @@
             return [];
         }
 
-        public async Task<LayoutParticipant?> GetByIdAsync(ClaimsPrincipal? principal,int meetingPartictipantId, int layoutId)
+        public async Task<LayoutParticipant?> GetByIdAsync(ClaimsPrincipal? principal, int meetingPartictipantId, int layoutId)
         {
             if (principal.IsAuthenticated())
             {
@@ -73,6 +73,24 @@
                 }
             }
             return principal.SaveNotAuthorised<LayoutParticipant>();
+        }
+
+        public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int? layputParticipantId)
+        {
+            if (principal.IsAuthenticated() && layputParticipantId.HasValue)
+            {
+                var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.LayoutParticipants.FindAsync(layputParticipantId).ConfigureAwait(false);
+                if (existing is not null)
+                {
+                    if (existing.LayoutModules.Count > 0) { return (-1, "RemoveRegisteredModulesFirst"); }
+                    dbContext.LayoutParticipants.Remove(existing);
+                    var result = await dbContext.SaveChangesAsync();
+                    return result.DeleteResult();
+                }
+                return principal.NotFound();
+            }
+            return principal.NotAuthorized<LayoutParticipant>();
         }
     }
 }

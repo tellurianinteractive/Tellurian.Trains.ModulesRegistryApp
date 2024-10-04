@@ -125,13 +125,13 @@ else
     }
     string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithMeetingAndLayoutName()}";
 
-    string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{LayoutStation(it.LayoutStationId)?.StationId}";
+    string WaybillsHref(LayoutModule layoutModule) => $"reports/waybills/layout/{layoutModule.LayoutParticipant.LayoutId}/station/{LayoutStation(layoutModule.LayoutStationId)?.StationId}";
 
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 
-    async Task NavigateToNewTab(LayoutModule it)
+    async Task NavigateToNewTab(LayoutModule layoutModule)
     {
-        await JSRuntime.InvokeAsync<object>("open", WaybillsHref(it), "_blank");
+        await JSRuntime.InvokeAsync<object>("open", WaybillsHref(layoutModule), "_blank");
     }
 
     MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(

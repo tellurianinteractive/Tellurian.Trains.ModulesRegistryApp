@@ -1170,6 +1170,9 @@
   <data name="Owner" xml:space="preserve">
     <value>Owner</value>
   </data>
+  <data name="OwnerMustBeEitherAPersonOrAGroup" xml:space="preserve">
+    <value>Owner must be either a person or a group</value>
+  </data>
   <data name="Owners" xml:space="preserve">
     <value>Owners</value>
   </data>
@@ -1325,6 +1328,9 @@
   </data>
   <data name="RemoveFiltering" xml:space="preserve">
     <value>Remove filtering</value>
+  </data>
+  <data name="RemoveRegisteredModulesFirst" xml:space="preserve">
+    <value>Remove registered modules first</value>
   </data>
   <data name="RepresentativeStation" xml:space="preserve">
     <value>Representative station</value>

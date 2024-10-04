@@ -6,6 +6,7 @@
 @inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
+@inject LayoutParticipantService LayoutParticipantService
 @inject CountryService CountryService
 @inject GroupService GroupService
 @inject PersonService PersonService
@@ -31,13 +32,13 @@ else
         {
             <h4>
                 @string.Format(Localizer["NumberParticipantsRegistered"], Meeting.Participants.Count(p => !p.CancellationTime.HasValue)).
-            </h4> 
+            </h4>
             <hr />
             @if (IsMeetingOrganiser)
             {
                 <div class="noprint">
                     <h3>@Localizer["SelectPersonToRegister"]</h3>
-                    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Register"/>
+                    <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Register" />
                     <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
                 </div>
             }
@@ -48,7 +49,7 @@ else
                     <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal.Sender()" Subject="@Meeting.Name" />
                     <MailCopyButton Recipients="Meeting.ParticipantsMails()" />
 
-                    @foreach(var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted ))
+                    @foreach (var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted))
                     {
                         <AppButton Href="@($"layouts/{layout.Id}/modules")" ObjectName="@(layout.DescriptionWithName())" Label="Participants" IconName="@FontAwesome.Layout" />
                     }
@@ -135,7 +136,7 @@ else
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
                         <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
                         <AppInputFill Width="@(12-Meeting.DaysCount())" />
-                        <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)"/>
+                        <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)" />
                         <AppInputTimeOnly Width="2" @bind-Value="Participant.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel(Participant)" />
                     </Inputs>
                 </EditTemplate>
@@ -147,8 +148,9 @@ else
                     }
                     <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
                         <TableHeader>
-                            <th width="100px">@Localizer["Actions"]</th>
+                            <th width="200px">@Localizer["Actions"]</th>
                             <th width="15%">@Localizer["Layout"]</th>
+                            <th>@Localizer["Organiser"]</th>
                             <th>@Localizer["Details"]</th>
                         </TableHeader>
                         <RowTemplate Context="item">
@@ -157,8 +159,13 @@ else
                                 {
                                     <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                                 }
+                                @if (item.IsParticipating && item.Layout?.IsOpenForRegistration(TimeProvider.LocalTime) == true)
+                                {
+                                    <AppButton  Label="Cancel" Type="Danger" OnClickCallback="@(async () => await OnCancelLayoutParticipation(item))" />
+                                }
                             </td>
                             <td>@item.Layout.DescriptionWithName()</td>
+                            <td>@item.Layout?.OrganisingGroup?.FullName</td>
                             <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                         </RowTemplate>
                     </TableTemplate>
@@ -259,6 +266,14 @@ else
         }
     }
 
+    async Task OnCancelLayoutParticipation(LayoutParticipation? participant)
+    {
+        if (participant is null) return;
+        var result = await LayoutParticipantService.DeleteAsync(Principal, participant.LayoutParticipant?.Id);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        await OnSelectedPerson(participant.Participant.PersonId);
+    }
+
 
     async Task OnValidSubmit()
     {
@@ -281,12 +296,12 @@ else
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
-    async Task OnReRegister(int particpantId)
+    async Task OnReRegister(int participantId)
     {
-        if (MeetingId > 0 && particpantId > 0)
+        if (MeetingId > 0 && participantId > 0)
         {
-            var result = await MeetingService.ReRegisterMeetingParticipaction(Principal, particpantId);
-            Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
+            var result = await MeetingService.ReRegisterMeetingParticipaction(Principal, participantId);
+            Participant = await MeetingService.FindParticipantAsync(Principal, participantId);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
@@ -315,15 +330,8 @@ else
 
     static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
     {
-        if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return Enumerable.Empty<LayoutParticipation>();
-        var personsLayoutParticipations = meetingLayouts.Select(ml => new LayoutParticipation(ml, participant)).ToList();
-        //if (participant?.Layouts is null || participant.Layouts.Count() == 0) return personsLayoutParticipations;
-        foreach (var participantLayout in participant.LayoutParticipations)
-        {
-            var p = personsLayoutParticipations.SingleOrDefault(x => x.Layout?.Id == participantLayout.LayoutId);
-            if (p is not null) p.IsParticipating = true;
-        }
-        return personsLayoutParticipations;
+        if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return [];
+        return  meetingLayouts.Select(ml => new LayoutParticipation(ml, participant)).ToList();
     }
 
 

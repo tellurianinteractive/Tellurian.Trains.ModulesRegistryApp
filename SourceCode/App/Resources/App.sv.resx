@@ -1167,6 +1167,9 @@
   <data name="Owner" xml:space="preserve">
     <value>Ägare</value>
   </data>
+  <data name="OwnerMustBeEitherAPersonOrAGroup" xml:space="preserve">
+    <value>Ägare måste vara antingen en person eller en grupp</value>
+  </data>
   <data name="Owners" xml:space="preserve">
     <value>Ägare</value>
   </data>
@@ -1322,6 +1325,9 @@
   </data>
   <data name="RemoveFiltering" xml:space="preserve">
     <value>Rensa filtrering</value>
+  </data>
+  <data name="RemoveRegisteredModulesFirst" xml:space="preserve">
+    <value>Ta bort registrerade moduler först</value>
   </data>
   <data name="RepresentativeStation" xml:space="preserve">
     <value>Representativ station</value>
