@@ -1,6 +1,8 @@
 ﻿CREATE VIEW [dbo].[LayoutCustomerCargo] AS 	
 SELECT -- Internal station customer cargo
 	LP.LayoutId,
+	M.Theme,
+	MP.MeetingId,
 	SCC.Id,
 	SCC.StationCustomerId,
 	SCC.OperatingDayId,
@@ -43,7 +45,8 @@ FROM
 	[CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId INNER JOIN 
 	[LayoutStation] AS LS ON LS.StationId = S.Id INNER JOIN 
 	[LayoutParticipant] LP ON LS.LayoutParticipantId = LP.Id INNER JOIN
-	[MeetingParticipant] MP ON LP.MeetingParticipantId = MP.Id
+	[MeetingParticipant] MP ON LP.MeetingParticipantId = MP.Id INNER JOIN
+	[Module] AS M ON M.Id = S.PrimaryModuleId
 WHERE
 	MP.CancellationTime IS NULL AND
 	S.HasCargoCustomers <> 0

@@ -1,8 +1,24 @@
-﻿CREATE PROCEDURE [dbo].[GetLayoutWaybills]
+﻿-- Fetches waybills across all layouts that has the same theme and scale as the layout given as parameter.
+CREATE PROCEDURE [dbo].[GetLayoutWaybills2]
 	@LayoutId INT,
 	@StationId INT = NULL
 AS
-BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @MeetingId INT, @MainThemeId INT, @ScaleId INT 
+
+	SELECT TOP 1 
+		@MeetingId = L.MeetingId, 
+		@MainThemeId = MS.MainThemeId, 
+		@ScaleId = MS.ScaleId
+	FROM 
+		Layout AS L INNER JOIN 
+		LayoutParticipant AS LP ON LP.LayoutId = L.Id INNER JOIN 
+		LayoutModule AS LM ON LM.LayoutParticipantId = LP.Id  INNER JOIN 
+		Module AS M ON M.Id = LM.ModuleId INNER JOIN 
+		ModuleStandard AS MS ON MS.Id = PrimaryModuleStandardId 
+	WHERE L.Id = @LayoutId
+
 	SET NOCOUNT ON;
 	SELECT
 		CCC.Id,
@@ -95,14 +111,14 @@ BEGIN
 		Layout AS L ON L.Id = CCC.LayoutId
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
-		--C.NHMCode > 0 AND
+		ISNULL(C.NHMCode,0) > 0 AND
 		(CCS.FromYear IS NULL OR CCS.FromYear <= ISNULL(L.LastYear, 9999)) AND
 		(CCS.UptoYear IS NULL OR CCS.UptoYear >= ISNULL(L.FirstYear, 0)) AND
 		(CCC.FromYear IS NULL OR CCC.FromYear <= ISNULL(L.LastYear, 9999)) AND
 		(CCC.UptoYear IS NULL OR CCC.UptoYear >= ISNULL(L.FirstYear, 0)) AND
 		CCS.IsSupply <> 0 AND CCC.IsSupply = 0 AND
 		CCS.StationId <> CCC.StationId AND 
-		CCS.LayoutId = @LayoutId AND 
+		CCS.LayoutId IN ( SELECT Id FROM GetSimilarLayoutsAtMeeting(@MeetingId, @MainThemeId, @ScaleId) ) AND 
 		CCC.LayoutId = @LayoutId AND
 		(@StationId IS NULL OR CCC.StationId = @StationId)
 	ORDER BY
@@ -111,5 +127,4 @@ BEGIN
 		CCS.StationName,
 		CCS.CustomerName
 
-	RETURN 0
-END
+RETURN 0

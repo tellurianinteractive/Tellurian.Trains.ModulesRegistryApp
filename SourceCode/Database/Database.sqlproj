@@ -180,6 +180,8 @@
     <Build Include="dbo\Procedures\ChangeAdministratorPrivilege.sql" />
     <Build Include="dbo\Procedures\Procedure1.sql" />
     <Build Include="dbo\Views\MeetingAdministrator.sql" />
+    <Build Include="dbo\Views\GetSimilarLayoutsAtMeeting.sql" />
+    <Build Include="dbo\Procedures\GetLayoutWaybills2.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

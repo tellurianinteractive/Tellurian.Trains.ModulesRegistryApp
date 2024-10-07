@@ -162,7 +162,7 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
             {
-                var command = new SqlCommand("GetLayoutWaybills", connection)
+                var command = new SqlCommand("GetLayoutWaybills2", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };

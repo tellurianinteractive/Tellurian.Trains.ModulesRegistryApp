@@ -47,9 +47,10 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Groups.AsNoTracking()
-                .Where(g => (g.CountryId == countryId) /*|| (g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value)) */)
+                .Where(g => principal.IsCountryAdministratorInCountry(g.CountryId) || principal.IsGlobalAdministrator() || g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value))
                 .Include(g => g.GroupDomain)
                 .Include(g => g.Country)
+                .Include(g => g.GroupMembers)
                 .OrderBy(g => g.FullName)
                 .ToListAsync();
             return items.Select(i => (i, true));

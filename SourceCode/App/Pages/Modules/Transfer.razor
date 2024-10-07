@@ -33,7 +33,7 @@ else
             <td>@item.OwnerName()</td>
             <td>@item.OwnedShareAndPercentage(Localizer)</td>
             <td>
-                @if (item.IsOwningPerson(OwningPersonId))
+                @if (item.ISOwnedByPerson(OwningPersonId) || item.IsOwnedByGroup(OwningGroupId))
                 {
                     <AppButton Label="Transfer" OnClickCallback="(() => TransferOwnership(item))" />
                 }
@@ -110,7 +110,7 @@ else
     }
 
     ModuleOwnershipRef GetOwnershipRef =>
-    OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
+        OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
         OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) :
         Principal.OwnerRef();
 

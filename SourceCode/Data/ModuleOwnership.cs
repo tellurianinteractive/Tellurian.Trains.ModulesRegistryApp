@@ -58,7 +58,8 @@ public static class ModuleOwnershipTransferExtensions
 
 public static class ModuleOwnershipExtensionsk
 {
-    public static bool IsOwningPerson(this ModuleOwnership ownership,int personId) => ownership.OwnedShare > 0 && ownership.PersonId == personId;
+    public static bool ISOwnedByPerson(this ModuleOwnership ownership,int personId) => ownership.OwnedShare > 0 && ownership.PersonId == personId;
+    public static bool IsOwnedByGroup(this ModuleOwnership ownership,int groupId) => ownership.OwnedShare > 0 && ownership.GroupId == groupId;
     public static ModuleOwnership WithNewOwner(this ModuleOwnership original, ModuleOwnershipRef newOwnerRef) =>
         new()
         {
