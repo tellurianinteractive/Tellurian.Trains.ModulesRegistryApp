@@ -22,54 +22,69 @@ else
 {
     @if (Principal.IsCountryAdministratorInCountry(CountryId))
     {
-        <AppButton Label="Add" Href="@EditHref(0)" />
+        <span class="col-12" style="margin-top: 10px">
+            <AppButton Label="Add" Href="@EditHref(0)" />
+        </span>
     }
-    <table class="table table-striped table-responsive-sm">
-        <thead>
-            <tr>
-                <th>@Localizer["ShortName"]</th>
-                <th>@Localizer["FullName"]</th>
-                <th>@Localizer["CityName"]</th>
-                <th>@Localizer["Domain"]</th>
-                <th>@Localizer["Category"]</th>
-                <th>@Localizer["Actions"]</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Groups)
+    @if (Filter.HasFilter)
+    {
+        <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
+        <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase" /></span>
+    }
+    <hr />
+    <QuickGrid Items="@Filter.Groups(Groups, Principal, Localizer)" Virtualize="true">
+        <PropertyColumn Property="@(p => p.Value.ShortName)" Sortable="true" Title="@Localizer["ShortName"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="Filter.ShortName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["ShortName"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Value.FullName)" Sortable="true" Title="@Localizer["FullName"]">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="Filter.FullName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["FullName"]" />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => CityName(p.Value))" Sortable="true" Title="@Localizer["CityName"]" />
+        @if (HasGroupsFromSeveralCountries)
+        {
+            <PropertyColumn Property="@(p => p.Value.Country.EnglishName.GetLocalizedString(null))" Sortable="true" Title="@Localizer["Country"]">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <input type="search" autofocus @bind="Filter.CountryName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Country"]" />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+        }
+        <PropertyColumn Property="@(p => GroupDomain(p.Value))" Sortable="true" Title="@Localizer["Domain"]" />
+        <PropertyColumn Property="@(p => Localizer[p.Value.Category])" Sortable="true" Title="@Localizer["Category"]" />
+        <TemplateColumn Title="@Localizer["Actions"]">
+            <AppButton Label="Members" Href="@MembersHref(context.Value.Id)" IconName="@FontAwesome.User"></AppButton>
+            <AppButton Label="Modules" Href="@ModulesHref(context.Value.Id)" IconName="@FontAwesome.Modules"></AppButton>
+            <AppButton Label="Stations" Href="@StationsHref(context.Value.Id)" IconName="@FontAwesome.Stations"></AppButton>
+            @if (context.MayEdit)
             {
-                <tr>
-                    <td>@item.value.ShortName</td>
-                    <td>@item.value.FullName</td>
-                    <td>@CityName(item.value)</td>
-                    <td>@item.value.GroupDomain?.Name</td>
-                    <td>@Localizer[item.value.Category]</td>
-                    <td style="white-space: nowrap !important;">
-                        <AppButton Label="Members" Href="@MembersHref(item.value.Id)" IconName="@FontAwesome.User"></AppButton>
-                        <AppButton Label="Modules" Href="@ModulesHref(item.value.Id)" IconName="@FontAwesome.Modules"></AppButton>
-                        <AppButton Label="Stations" Href="@StationsHref(item.value.Id)" IconName="@FontAwesome.Stations"></AppButton>
-                        @*<a class="btn btn-sm btn-warning" href="groups/@item.Id/delete"><span class="fa fa-trash" />@Localizer["Delete"]</a>*@
-                        @if (item.mayEdit)
-                        {
-                            <AppButton Label="Edit" Href="@EditHref(item.value.Id)"></AppButton>
-                            <AppButton Label="NewMeeting" Href="@CreateMeetingHref(item.value.Id)" IconName="@FontAwesome.Meeting"></AppButton>
-                        }
-
-                    </td>
-                </tr>
+                <AppButton Label="Edit" Href="@EditHref(context.Value.Id)"></AppButton>
+                <AppButton Label="NewMeeting" Href="@CreateMeetingHref(context.Value.Id)" IconName="@FontAwesome.Meeting"></AppButton>
             }
-        </tbody>
-    </table>
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="PaginationState" />
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
 
     ClaimsPrincipal? Principal;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
+    GroupFilter Filter = new();
     IEnumerable<(Group value, bool mayEdit)>? Groups;
     IEnumerable<ListboxItem>? Countries;
     CountryFilter FilterCountry = new();
     int DefaultCountryId => CountryId > 0 ? CountryId : FilterCountry.CountryId > 0 ? FilterCountry.CountryId : Principal.CountryId();
+    bool HasGroupsFromSeveralCountries;
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,6 +95,7 @@ else
     protected async override Task OnParametersSetAsync()
     {
         FilterCountry = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? FilterCountry;
+        Filter = await LocalStorage.GetItemAsync<GroupFilter>(nameof(GroupFilter)) ?? Filter;
         await GetGroups(DefaultCountryId);
     }
 
@@ -100,15 +116,61 @@ else
             Groups = null;
             StateHasChanged();
             Groups = await GroupService.GetAllAsync(Principal, countryId);
+            HasGroupsFromSeveralCountries = Groups.Select(g => g.value.CountryId).Distinct().Count() > 1;
         }
+    }
+
+    void OnFilterChanged()
+    {
+        LocalStorage.SetItemAsync(nameof(GroupFilter), Filter);
+    }
+
+    void OnClearFilter()
+    {
+        Filter.Clear();
+        OnFilterChanged();
     }
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
     string CityName(Group? group) => group is null ? string.Empty : group.CountryId == CountryId ? group.CityName : $"{group.CityName} ({group.Country.DomainSuffix.ToUpperInvariant()})";
+    string GroupDomain(Group? group) => group?.GroupDomain is not null ? group.GroupDomain.Name : string.Empty;
     string EditHref(int groupId) => $"groups/{groupId}/edit";
     string MembersHref(int groupId) => $"groups/{groupId}/members";
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
+
+    internal class GroupFilter
+    {
+        public string? ShortName { get; set; }
+        public string? FullName { get; set; }
+        public string? CountryName { get; set; }
+        public bool HideForeignGroups { get; set; }
+
+        public void Clear()
+        {
+            ShortName = null;
+            FullName = null;
+            CountryName = null;
+            HideForeignGroups = false;
+        }
+
+        public bool HasFilter =>
+    ShortName.HasValue() ||
+    FullName.HasValue() ||
+    CountryName.HasValue() ||
+    HideForeignGroups;
+
+        public IQueryable<(Group Value, bool MayEdit)> Groups(IEnumerable<(Group value, bool)> groups, ClaimsPrincipal? principal, IStringLocalizer<App> localizer)
+        {
+            return groups?
+        .Where(g =>
+            (ShortName is null || g.value.ShortName.ContainsCaseInsensitive(ShortName)) &&
+            (FullName is null || g.value.FullName.ContainsCaseInsensitive(FullName)) &&
+            (CountryName is null || (localizer[g.value.Country.EnglishName].ToString()).ContainsCaseInsensitive(CountryName)) &&
+            (!HideForeignGroups || HideForeignGroups && g.value.CountryId == principal.CountryId()))
+        .AsQueryable<(Group, bool)>() ?? new List<(Group, bool)>().AsQueryable();
+        }
+    }
 }

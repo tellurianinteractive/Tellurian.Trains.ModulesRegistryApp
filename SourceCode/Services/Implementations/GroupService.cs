@@ -43,11 +43,11 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<IEnumerable<(Group Group, bool MayEdit)>> GetAllAsync(ClaimsPrincipal? principal, int countryId)
     {
-        if (principal.IsCountryAdministratorInCountry(countryId))
+        if (principal.IsGlobalAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Groups.AsNoTracking()
-                .Where(g => principal.IsCountryAdministratorInCountry(g.CountryId) || principal.IsGlobalAdministrator() || g.GroupDomainId > 0 && principal.GroupDomainIds().Contains(g.GroupDomainId.Value))
+                .Where(g => g.CountryId == countryId)
                 .Include(g => g.GroupDomain)
                 .Include(g => g.Country)
                 .Include(g => g.GroupMembers)
@@ -65,7 +65,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
                 .Include(g => g.GroupMembers)
                 .OrderBy(g => g.FullName)
                 .ToListAsync();
-            return items.Select(i => (i, i.GroupMembers.Any(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())));
+            return items.Select(i => (i, principal.IsCountryAdministratorInCountry(i.CountryId) || i.GroupMembers.Any(gm => (gm.IsDataAdministrator || gm.IsGroupAdministrator) && gm.PersonId == principal.PersonId())));
         }
     }
 
