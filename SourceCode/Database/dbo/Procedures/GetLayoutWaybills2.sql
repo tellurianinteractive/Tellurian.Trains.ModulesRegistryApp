@@ -118,7 +118,7 @@ AS
 		(CCC.UptoYear IS NULL OR CCC.UptoYear >= ISNULL(L.FirstYear, 0)) AND
 		CCS.IsSupply <> 0 AND CCC.IsSupply = 0 AND
 		CCS.StationId <> CCC.StationId AND 
-		CCS.LayoutId IN ( SELECT Id FROM GetSimilarLayoutsAtMeeting(@MeetingId, @MainThemeId, @ScaleId) ) AND 
+		CCS.LayoutId IN (SELECT Id FROM GetSimilarLayoutsAtMeeting(@MeetingId, @MainThemeId, @ScaleId) ) AND 
 		CCC.LayoutId = @LayoutId AND
 		(@StationId IS NULL OR CCC.StationId = @StationId)
 	ORDER BY

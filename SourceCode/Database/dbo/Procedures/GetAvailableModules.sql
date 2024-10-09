@@ -3,8 +3,7 @@
 	@PersonId INT NULL
 AS
 	SET NOCOUNT ON;
-	SELECT
-		LP.LayoutId,
+	SELECT DISTINCT
 		M.Id AS ModuleId,
 		M.FullName AS ModuleName,
 		M.ScaleId,
@@ -41,13 +40,12 @@ AS
 		LayoutParticipant AS LP ON LP.Id = LM.LayoutParticipantId
 
 	WHERE
-		LP.LayoutId IS NULL  AND
+		(LP.LayoutId IS NULL OR (SELECT COUNT(*) FROM LayoutModule AS LM INNER JOIN LayoutParticipant AS LP ON LM.LayoutParticipantId = LP.Id WHERE LP.LayoutId = @LayoutId AND LM.ModuleId = M.Id) = 0)  AND
 		ISNULL(M.FunctionalState,0) > 3 AND -- See public enum ModuleFunctionalState
-		--LM.Id IS NULL AND -- Module is not registered by any
 		(
 			ISNULL(MO.PersonId,0) = @PersonId OR 
-			ISNULL(MO.GroupId,0) IN (SELECT DISTINCT G.Id FROM [Group] AS G INNER JOIN GroupMember AS GM ON GM.GroupId = G.Id WHERE G.Id = MO.GroupId AND GM.PersonId = @PersonId AND GM.MayBorrowGroupsModules <> 0) OR
-			ISNULL(MO.ModuleId,0) IN (SELECT DISTINCT M.Id FROM [Group] AS G INNER JOIN GroupMember AS GM ON GM.GroupId = G.Id INNER JOIN ModuleOwnership AS MOX ON MOX.GroupId = G.Id INNER JOIN Module AS M ON M.Id = MOX.ModuleId WHERE G.Id = MO.GroupId AND GM.MemberMayBorrowMyModules <> 0)
+			ISNULL(MO.GroupId,0) IN (SELECT DISTINCT G.Id FROM [Group] AS G INNER JOIN GroupMember AS GM ON GM.GroupId = G.Id WHERE G.Id = ISNULL(MO.GroupId,0) AND GM.PersonId = @PersonId AND GM.MayBorrowGroupsModules <> 0) OR
+			ISNULL(MO.ModuleId,0) IN (SELECT DISTINCT M.Id FROM [Group] AS G INNER JOIN GroupMember AS GM ON GM.GroupId = G.Id INNER JOIN ModuleOwnership AS MOX ON MOX.GroupId = G.Id INNER JOIN Module AS M ON M.Id = MOX.ModuleId WHERE G.Id = ISNULL(MO.GroupId,0) AND GM.MemberMayBorrowMyModules <> 0)
 		)
 	
 	

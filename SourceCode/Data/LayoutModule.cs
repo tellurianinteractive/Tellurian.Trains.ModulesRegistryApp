@@ -37,6 +37,7 @@ public static class LayoutModuleExtensions
     }
     public static bool HasLayoutStationId(this LayoutModule it) => it.LayoutStationId.HasValue;
     public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStation is not null;
+    public static bool HasCargoCustomers(this LayoutModule it) => it.LayoutStation?.Station is not null && it.LayoutStation.Station.HasCargoCustomers;
 }
 
 

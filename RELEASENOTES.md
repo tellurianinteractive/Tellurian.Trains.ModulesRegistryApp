@@ -2,12 +2,17 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.21
+Release date 2024-10-09
+- **Fixed** an issue where the *Waybill* button should not be visible for operation locations that has unchecked the *has cargo customers* checkbox.
+- **Fixed** issue where not all *available modules* to register for a meeting layout where visible in the participants module list.
+- **Added** more content in the automatically generated module/station descriptions in various lists, including the *note* content.
+- **Component update** to latest versions of external components.
 ## Release 1.11.20
 Release date 2024-10-07
 - **Internal waybills** between stations/operation locations in similar layouts in same meeting now works.
 - **Bug fix** of issue #211 administrators cannot see all FREMO-groups, but users can.
 - **Bug fix** of issue #212 cannot transfer ownership of group owned modules.
-- 
 ## Release 1.11.19
 Release date 2024-10-04
 - **Module administration assistans** cannot longer be delegated to groups, because this is enabled by default for group members

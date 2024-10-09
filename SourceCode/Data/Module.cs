@@ -95,10 +95,23 @@ public static class ModuleExtensions
             var tracksCount = me.Station.StationTracks.Count;
             text.Append(OperationsPlace);
             text.Append(' ');
-            text.Append(tracksCount == 0 ? "": $"{tracksCount} {Tracks.ToLowerInvariant()}");
+            text.Append(tracksCount == 0 ? "" : $"{tracksCount} {Tracks.ToLowerInvariant()}");
             text.Append($" {me.Length}mm");
             if (me.Station.IsShadow) text.Append($", {ShadowStation}");
             if (me.Station.IsJunction) text.Append($", {Junction}");
+        }
+        if (me.Is2R && me.Is3R)
+        {
+            text.Append(", 2R/3R");
+        }
+        else if (me.Is3R)
+        {
+            text.Append(", 3R");
+        }
+        if (me.Note.HasValue())
+        {
+            text.Append(", ");
+            text.Append(me.Note);
         }
         return new(text.ToString());
     }

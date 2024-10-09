@@ -16,13 +16,13 @@ As a test user you use the application and report back with:
 You can improve a translations in an already supported language, 
 or if you want the application in yet another language, you can make a new complete translation.
 
-> The easiest way to work with translations is using [Visual Studio](https://visualstudio.microsoft.com/downloads/) with and these extensions:
+> The preferred way is to create *pull requests* with translations is using [Visual Studio](https://visualstudio.microsoft.com/downloads/) with and these extensions:
 > - **ResX Manager** makes it very easy to edit RESX-files for existing languages and adding new ones.
 > - **Markdown Editor** makes is easy to edit *markdown* files, there is a preview pane for viewing the result.
 
 ### Improving the translation to an already supported language
 Follow the instructions below. The only thing you don't need to do is adding new files.
-Change files of the existing langauge and create a pull request.
+Change files of the existing langauge and create a *pull request*.
 
 ### Adding the new language to the app
 There are two main ways to add your translation to the app:
@@ -31,12 +31,12 @@ You need to now the [basics of GitHub](https://lab.github.com/githubtraining/int
 You can *check-out* the repository, add a translation and then submit a *pull-request*.
 - Or just send translated files in a ZIP-file. 
 
-#### Files to translate
+### Files to translate
 Below a description of what files to translate. There are two types of files:
 - **Markdown texts** (.md) are text files using the simple [*markdown* syntax](https://www.markdownguide.org/).
 - **Resource files** (.resx) are text files using XML syntax.
 
-##### Markdown texts
+#### Markdown texts
 Markdown texts are longer texts with formatting. They are located [here](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Content/Markdown). 
 1. Make a copy of the *English version*. These are the one without a language code in the file name, example *About.md*.
 2. Rename your copied files to use your language's two letter language code, example *About.hu.md* for Hungarian.
@@ -47,7 +47,7 @@ After translation with Google, you can refine the translation if necessary.
 
 > NOTE: Do not translate the file *TermsOfUse.md*.
 
-##### Resource files
+#### Resource files
 Resource files are XML-files with shorter texts or single words. However, the content is very noisy, and its important to not
 change anything but the translated words/sentences. The files are located in three places:
 * App.xx.resx [App/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Resources),
@@ -61,7 +61,7 @@ Where *xx* is the two-letter language code for the translated language.
 3. Translate the texts and save. It is important to preserve the placeholders like {0} {1} etc.
 4. Add the translated files to your local repository.
 
-##### When the Translation Is Ready
+### When the Translation Is Ready
 If you are working with GitHub, commit locally and comment it as *Translated to x* where x is the name of the langauge. 
 Create a pull-request and push it to the remote repository.
 Otherwise; send an email with the translated files.

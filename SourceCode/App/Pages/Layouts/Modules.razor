@@ -54,7 +54,7 @@ else
                     <td>@item.Module.Info()</td>
                     <td width="120px">@item.RegisteredTime.ToString("d")</td>
                     <td class="noprint">
-                        @if (item.HasLayoutStationId())
+                        @if (item.HasCargoCustomers())
                         {
                             <AppButton Label="InternalFreights" Href="@WaybillsHref(item)" />
                         }
@@ -119,6 +119,10 @@ else
             {
                 LayoutModules = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutModules).ToList();
                 LayoutStations = LayoutParticipants is null ? [] : LayoutParticipants.SelectMany(lp => lp.LayoutStations).ToList();
+                foreach (var layoutModule in LayoutModules)
+                {
+                    layoutModule.LayoutStation = LayoutStations.SingleOrDefault(ls => ls.Station.PrimaryModuleId == layoutModule.ModuleId);
+                }
             }
             HasParticipantsFromDifferentCountries = LayoutParticipants!.Select(lp => lp.Person.CountryId).Distinct().Count() > 1;
         }
