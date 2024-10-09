@@ -8,6 +8,7 @@ Release date 2024-10-09
 - **Fixed** issue where not all *available modules* to register for a meeting layout where visible in the participants module list.
 - **Added** more content in the automatically generated module/station descriptions in various lists, including the *note* content.
 - **Component update** to latest versions of external components.
+- **Deleting person/user** now marks the record as *deleted*. A deletion can be undone.
 ## Release 1.11.20
 Release date 2024-10-07
 - **Internal waybills** between stations/operation locations in similar layouts in same meeting now works.

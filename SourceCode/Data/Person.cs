@@ -27,6 +27,7 @@ public partial class Person
     public string FremoOwnerSignature { get; set; }
     public string FremoReservedAdresses { get; set; }
     public int? FremoMemberNumber { get; set; }
+    public DateTimeOffset? DeletedTimestamp { get; set; }
 
     public virtual Country Country { get; set; }
     public virtual User User { get; set; }

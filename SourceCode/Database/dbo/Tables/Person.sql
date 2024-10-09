@@ -10,14 +10,15 @@
     [FremoOwnerSignature]   NVARCHAR (10) NULL,
     [FremoReservedAdresses] NVARCHAR(200) NULL,
     [FremoMemberNumber]     INT NULL, 
+    [DeletedTimestamp] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Person_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id]),
     CONSTRAINT [FK_Person_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id]) ON DELETE SET NULL
 );
+
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Person_UserId]
     ON [dbo].[Person]([UserId] ASC) WHERE ([UserId] IS NOT NULL);
-
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Person_CountryId]

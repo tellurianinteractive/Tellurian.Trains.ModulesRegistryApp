@@ -18,12 +18,9 @@
     [MayUploadSkpDrawing]              BIT                DEFAULT ((0)) NOT NULL, 
     [MayManageWiFreds]                 BIT                DEFAULT ((0)) NOT NULL,     
     
+    [DeletedTimestamp] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
 GO
 
 

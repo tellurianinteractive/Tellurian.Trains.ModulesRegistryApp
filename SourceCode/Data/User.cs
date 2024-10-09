@@ -24,4 +24,6 @@ public partial class User
     public int FailedLoginAttempts { get; set; }
     public bool MayUploadSkpDrawing { get; set; }
     public bool MayManageWiFreds { get; set; }
+    public DateTimeOffset? DeletedTimestamp { get; set; }
+
 }

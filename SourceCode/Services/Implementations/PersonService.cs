@@ -1,11 +1,11 @@
-﻿using ModulesRegistry.Data;
-using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Services.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory)
+public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeprovider)
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ITimeProvider TimeProvider = timeprovider;
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int countryId, int excludeGroupId = 0)
     {
@@ -104,34 +104,33 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory)
                 entity.User!.EmailAddress = entity.EmailAddresses.FirstItem(delimiter: ';');
             }
             dbContext.Entry(entity).State = entity.Id.GetState();
-            if (entity.User is not null)  dbContext.Entry(entity.User).State = entity.User.Id.GetState();
+            if (entity.User is not null) dbContext.Entry(entity.User).State = entity.User.Id.GetState();
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(entity);
         }
         return principal.SaveNotAuthorised<Person>();
     }
 
-    
+
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.MayDelete(principal.OwnerRef()))
         {
             using var dbContext = Factory.CreateDbContext();
-            var isUser = await dbContext.Users.AnyAsync(u => u.Person.Id == id);
-            var hasModules = dbContext.ModuleOwnerships.Any(mo => mo.PersonId == id);
-            if (isUser || hasModules) return (0, Strings.MayNotBeDeleted);
-
-            var person = await dbContext.People.Include(p => p.GroupMembers).SingleOrDefaultAsync(p => p.Id == id);
+            var person = await dbContext.People
+                .Include(p => p.User)
+                .SingleOrDefaultAsync(p => p.Id == id);
             if (person is null) return (0, Strings.NothingToDelete);
+            // Add check rules before any delete here
+            if (dbContext.MeetingParticipants.Any(mp => mp.CancellationTime.HasValue == false && mp.Meeting.EndDate >= TimeProvider.LocalTime)) return (0, Strings.MayNotBeDeleted);
+            if (dbContext.Meetings.Any(m => m.EndDate >= TimeProvider.LocalTime && m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == id))) return (0, Strings.MayNotBeDeleted);
+
+
             if (principal.IsAuthorisedInCountry(person.CountryId))
             {
-                foreach (var membership in person.GroupMembers)
-                {
-                    dbContext.Remove(membership);
-                }
-                //await dbContext.SaveChangesAsync();
-                dbContext.Remove(person);
+                person.DeletedTimestamp = TimeProvider.Now;
+                if (person.User is not null) person.User.DeletedTimestamp = TimeProvider.Now;
                 var count = await dbContext.SaveChangesAsync();
                 return count.DeleteResult();
             }

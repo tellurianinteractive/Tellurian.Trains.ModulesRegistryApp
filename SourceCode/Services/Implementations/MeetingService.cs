@@ -66,7 +66,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     public async Task<Meeting?> FindByIdWithLayoutsAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Meetings
+        return await dbContext.Meetings.AsNoTracking()
             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
@@ -141,7 +141,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
         static async Task<(int Count, string Message, Meeting? Entity)> AddOrUpdate(ModulesDbContext dbContext, Meeting entity)
         {
-            var existing = await dbContext.Meetings
+            var existing = await dbContext.Meetings.AsNoTracking()
                 .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup)
                 .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
                 .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
