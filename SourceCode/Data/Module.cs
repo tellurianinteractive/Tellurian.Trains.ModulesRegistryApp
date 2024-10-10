@@ -75,10 +75,20 @@ public static class ModuleExtensions
     {
         var text = new StringBuilder(100);
         text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}: ");
-        if (me.IsCurve())
+        if (me.IsCurve() && me.IsStraight())
+        {
+            text.Append(Straight);
+            text.Append('/');
+            text.Append(Curve);
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
+            text.Append($" {me.Length}mm");
+            text.Append($" {me.Angle!.Value}&deg;");
+            text.Append($" r={me.Radius!.Value}mm");
+        }
+        else if (me.IsCurve())
         {
             text.Append(Curve);
-            text.Append(' ');
+            text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
             text.Append($" {me.Angle!.Value}&deg;");
             text.Append($" r={me.Radius!.Value}mm");
@@ -86,19 +96,9 @@ public static class ModuleExtensions
         else if (me.IsStraight())
         {
             text.Append(Straight);
-            text.Append(' ');
+            text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
             text.Append($" {me.Length}mm");
-        }
-        else if (me.IsOperationsPlace())
-        {
-            var tracksCount = me.Station.StationTracks.Count;
-            text.Append(OperationsPlace);
-            text.Append(' ');
-            text.Append(tracksCount == 0 ? "" : $"{tracksCount} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Length}mm");
-            if (me.Station.IsShadow) text.Append($", {ShadowStation}");
-            if (me.Station.IsJunction) text.Append($", {Junction}");
         }
         if (me.Is2R && me.Is3R)
         {
@@ -108,6 +108,21 @@ public static class ModuleExtensions
         {
             text.Append(", 3R");
         }
+        if (!me.IsStandAlone)
+        {
+            text.Append(", ");
+            text.Append(NotStandalone);
+        }
+        if (me.IsOperationsPlace())
+        {
+            var tracksCount = me.Station.StationTracks.Count;
+            text.Append(OperationsPlace);
+            text.Append(", ");
+            text.Append(tracksCount == 0 ? "" : $"{tracksCount} {Tracks.ToLowerInvariant()}");
+            if (me.Station.IsShadow) text.Append($", {ShadowStation}");
+            if (me.Station.IsJunction) text.Append($", {Junction}");
+        }
+
         if (me.Note.HasValue())
         {
             text.Append(", ");

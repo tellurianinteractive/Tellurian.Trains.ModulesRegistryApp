@@ -312,4 +312,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="NotStandalone" xml:space="preserve">
+    <value>Ikke frit stående</value>
+  </data>
 </root>

@@ -367,6 +367,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not standalone.
+        /// </summary>
+        public static string NotStandalone {
+            get {
+                return ResourceManager.GetString("NotStandalone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only posts.
         /// </summary>
         public static string OnlyPosts {
