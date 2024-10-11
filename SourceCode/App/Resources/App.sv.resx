@@ -1476,6 +1476,9 @@
   <data name="Tools" xml:space="preserve">
     <value>Verktyg</value>
   </data>
+  <data name="TotalTrackMeters" xml:space="preserve">
+    <value>Total längd {0:F0}m</value>
+  </data>
   <data name="Track" xml:space="preserve">
     <value>Spår</value>
   </data>

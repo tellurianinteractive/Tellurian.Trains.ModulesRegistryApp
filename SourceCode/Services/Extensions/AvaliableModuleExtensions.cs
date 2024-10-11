@@ -35,7 +35,7 @@ public static class AvaliableModuleExtensions
                             packages.Add(module.FullName, new List<(AvailableModule, int, ModulePackageType)>() { (module, scale.Key, ModulePackageType.SingleModule) });
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         Debugger.Break();
                         throw;

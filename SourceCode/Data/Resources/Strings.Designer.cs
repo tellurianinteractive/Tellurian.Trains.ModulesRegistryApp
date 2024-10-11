@@ -547,6 +547,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tracks through.
+        /// </summary>
+        public static string ThroughTracks {
+            get {
+                return ResourceManager.GetString("ThroughTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tracks.
         /// </summary>
         public static string Tracks {

@@ -83,8 +83,8 @@ public static class ModuleExtensions
             text.Append(Straight);
             text.Append('/');
             text.Append(Curve);
-            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Length}mm");
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
+            text.Append($", {me.TotalLength()}mm");
             if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
             if (me.Radius.HasValue) text.Append($" r={me.Radius!.Value}mm");
         }
@@ -93,7 +93,8 @@ public static class ModuleExtensions
             text.Append(", "); 
             text.Append(Curve);
             text.Append(", ");
-            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
+            text.Append($", {me.TotalLength()}mm");
             if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
             if (me.Radius.HasValue) text.Append($" r={me.Radius.Value}mm");
         }
@@ -102,8 +103,8 @@ public static class ModuleExtensions
             text.Append(", "); 
             text.Append(Straight);
             text.Append(", ");
-            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Length}mm");
+            text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
+            text.Append($", {me.TotalLength()}mm");
         }
         if (me.Is2R && me.Is3R)
         {
@@ -123,7 +124,7 @@ public static class ModuleExtensions
             var tracksCount = me.Station.StationTracks.Count;
             text.Append(", ");
             text.Append(OperationsPlace);
-            text.Append(tracksCount == 0 ? "" : $", {tracksCount} {Tracks.ToLowerInvariant()}");
+            if (me.Station.StationTracks.Count > 0) text.Append($", {me.Station.StationTracks.Count} {Tracks.ToLowerInvariant()}");
             if (me.Station.IsShadow) text.Append($", {ShadowStation}");
             if (me.Station.IsJunction) text.Append($", {Junction}");
         }
@@ -211,7 +212,7 @@ public static class ModuleExtensions
         if (me.SkpDrawingId.HasValue) yield return me.SkpDrawingId.Value;
     }
 
-    public static double CalculateLength(this Module me)
+    public static double TotalLength(this Module me)
     {
         double? curveLength = me.Angle.HasValue && me.Radius.HasValue ? Math.Round(Math.PI * me.Angle.Value * me.Radius.Value / 180.0, 0) : null;
         if (curveLength.HasValue && me.Straight.HasValue) return curveLength.Value + me.Straight.Value;

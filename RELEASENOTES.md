@@ -7,7 +7,7 @@ Release date 2024-1011
 - **Bug fix** of not able to save *meeting*.
 - **Bug fix** or *latest arrival* and *earliest departure* times for meeting 
 should only be required when type of meeting is *module meeting*.
-- **Module list** for meeting layout improved when printing.
+- **Module list** for meeting layout improved when printing, and also contains total meters of track.
 - **Meeting edit** page restructured to be easier to use.
 ## Release 1.11.21
 Release date 2024-10-09

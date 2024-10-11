@@ -219,6 +219,9 @@
   <data name="NotScheduled" xml:space="preserve">
     <value>Ikke planlagt</value>
   </data>
+  <data name="NotStandalone" xml:space="preserve">
+    <value>Ikke frittstående</value>
+  </data>
   <data name="OnlyPosts" xml:space="preserve">
     <value>Bare stolper</value>
   </data>
@@ -276,6 +279,9 @@
   <data name="Tested" xml:space="preserve">
     <value>Testet</value>
   </data>
+  <data name="ThroughTracks" xml:space="preserve">
+    <value>Spor gjennom</value>
+  </data>
   <data name="Tracks" xml:space="preserve">
     <value>Spor</value>
   </data>
@@ -311,8 +317,5 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
-  </data>
-  <data name="NotStandalone" xml:space="preserve">
-    <value>Ikke frittstående</value>
   </data>
 </root>

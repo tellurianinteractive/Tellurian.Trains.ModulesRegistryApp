@@ -23,6 +23,7 @@ else
     <h4>
         @string.Format(Localizer["NumberParticipantsRegistered"], FilteredParticipants!.Count()),
         @string.Format(Localizer["NumberModulesRegistered"], FilteredParticipants!.Sum(lp => lp.LayoutModules.Count())).
+        @string.Format(Localizer["TotalTrackMeters"], FilteredParticipants!.Sum(lp => lp.LayoutModules.TotalLength())) / 1000);
     </h4>
     @if (IsOrganiser)
     {

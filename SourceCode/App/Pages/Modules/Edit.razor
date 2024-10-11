@@ -132,7 +132,7 @@ else
     {
         if (Module is not null)
         {
-            Module.Length = Module.CalculateLength();
+            Module.Length = Module.TotalLength();
             Module.ModuleExits = Module.ModuleExits.Where(mg => mg.EndProfileId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnershipRef);
             Module = result.Entity;
@@ -147,7 +147,7 @@ else
 
     void UpdateLength()
     {
-        if (Module is not null) Module.Length = Module.CalculateLength();
+        if (Module is not null) Module.Length = Module.TotalLength();
     }
 
     object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;

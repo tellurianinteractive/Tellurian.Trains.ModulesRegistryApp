@@ -219,6 +219,9 @@
   <data name="NotScheduled" xml:space="preserve">
     <value>Not scheduled</value>
   </data>
+  <data name="NotStandalone" xml:space="preserve">
+    <value>Not standalone</value>
+  </data>
   <data name="OnlyPosts" xml:space="preserve">
     <value>Only posts</value>
   </data>
@@ -276,6 +279,9 @@
   <data name="Tested" xml:space="preserve">
     <value>Tested</value>
   </data>
+  <data name="ThroughTracks" xml:space="preserve">
+    <value>Tracks through</value>
+  </data>
   <data name="Tracks" xml:space="preserve">
     <value>Tracks</value>
   </data>
@@ -311,8 +317,5 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
-  </data>
-  <data name="NotStandalone" xml:space="preserve">
-    <value>Not standalone</value>
   </data>
 </root>

@@ -195,7 +195,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
     public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
     {
         ownerRef = principal.UpdateFrom(ownerRef);
-        entity.Length = entity.CalculateLength();
+        entity.Length = entity.TotalLength();
         using var dbContext = Factory.CreateDbContext();
         entity.ScaleId = await dbContext.ModuleStandards // This statement replaces the need to enter this in the user interface.
             .Where(ms => ms.Id == entity.StandardId)

@@ -1479,6 +1479,9 @@
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
   </data>
+  <data name="TotalTrackMeters" xml:space="preserve">
+    <value>Total length {0:F0}m</value>
+  </data>
   <data name="Track" xml:space="preserve">
     <value>Track</value>
   </data>
