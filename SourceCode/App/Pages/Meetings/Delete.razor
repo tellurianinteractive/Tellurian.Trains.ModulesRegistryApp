@@ -5,6 +5,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject ITimeProvider TimeProvider
+@inject NavigationManager Navigator
 
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
@@ -25,7 +26,6 @@ else
     <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
 }
 
-
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
@@ -37,19 +37,17 @@ else
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? new Meeting() : new Meeting();
-        if (Meeting is not null)
-        {
-
-        }
+        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) : null;
     }
 
     private async Task OnDelete()
     {
-        if (Meeting is not null && Meeting.Id > 0)
+        if (Meeting is not null)
         {
-            var result = await MeetingService.DeleteAllAsync(Principal, Meeting);
+            var result = await MeetingService.DeleteAsync(Principal, Meeting);
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(2000);
+            Navigator.NavigateTo("/Meetings/Index");
         }
     }
 }

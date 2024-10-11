@@ -44,19 +44,19 @@ else
         {
             <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
                 <TableHeader>
-                    <th width="30%">@ParticipantNameAndMore(participant)</th>
-                    <th width="50%">@participant.MeetingParticipant.Participates(Localizer)</th>
-                    <th width="120px">@Localizer["RegistrationTime"]</th>
-                    <th class="noprint">@Localizer["Actions"] </th>
+                    <th width="40%">@ParticipantNameAndMore(participant)</th>
+                    <th width="40%">@participant.MeetingParticipant.Participates(Localizer)</th>
+                    <th class="noprint" width="120px">@Localizer["RegistrationTime"]</th>
+                    <th class="noprint" min-width="120px">@Localizer["Actions"] </th>
                 </TableHeader>
                 <RowTemplate Context="item">
                     <td>@item.Module.FullName</td>
                     <td>@item.Module.Info()</td>
-                    <td width="120px">@item.RegisteredTime.ToString("d")</td>
+                    <td class="noprint" width="120px">@item.RegisteredTime.ToString("d")</td>
                     <td class="noprint">
                         @if (item.HasCargoCustomers())
                         {
-                            <AppButton Label="InternalFreights" Href="@WaybillsHref(item)" />
+                            <AppButton IconName="@FontAwesome.Waybills" Label="InternalFreights" Href="@WaybillsHref(item)" />
                         }
                     </td>
                 </RowTemplate>
@@ -67,17 +67,17 @@ else
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th width="30%">@ParticipantNameAndMore(participant)</th>
-                        <th width="50%">@participant.MeetingParticipant.Participates(Localizer)</th>
-                        <th width="120px">@Localizer["RegistrationTime"]</th>
-                        <th class="noprint">@Localizer["Actions"] </th>
+                        <th width="40%">@ParticipantNameAndMore(participant)</th>
+                        <th width="40%">@participant.MeetingParticipant.Participates(Localizer)</th>
+                        <th class="noprint" width="120px">@Localizer["RegistrationTime"]</th>
+                        <th class="noprint" min-width="120px">@Localizer["Actions"] </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td colspan="1">@Localizer["NoModulesRegistered"]</td>
                         <td>-</td>
-                        <td width="120px">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
+                        <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
                         <td class="noprint"></td>
                     </tr>
                 </tbody>

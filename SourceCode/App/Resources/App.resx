@@ -555,6 +555,9 @@
   <data name="GameSettings" xml:space="preserve">
     <value>Game settings</value>
   </data>
+  <data name="GeneralMeetingInformation" xml:space="preserve">
+    <value>General information about the meeting</value>
+  </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
   </data>

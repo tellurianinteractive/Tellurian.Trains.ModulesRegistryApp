@@ -34,7 +34,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             .Where(m => m.EndDate > TimeProvider.LocalTime.AddDays(-daysBack) && (countryId == 0 || m.OrganiserGroup.CountryId == countryId))
             .OrderBy(m => m.StartDate)
             .Include(m => m.OrganiserGroup).ThenInclude(og => og.Country)
-            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator ))
+            .Include(m => m.OrganiserGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator))
             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
             .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(og => og.GroupMembers.Where(gm => gm.IsMeetingAdministrator))
             .ToReadOnlyListAsync();
@@ -59,7 +59,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
              .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
-             .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard).ThenInclude(pms=>pms.Scale)
+             .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
 
@@ -131,7 +131,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         if (principal is not null)
         {
             using var dbContext = Factory.CreateDbContext();
-            var isMeetingOrganizer = await IsMeetingOrganiser( principal, entity).ConfigureAwait(false);
+            var isMeetingOrganizer = await IsMeetingOrganiser(principal, entity).ConfigureAwait(false);
             if (isMeetingOrganizer)
             {
                 return await AddOrUpdate(dbContext, entity).ConfigureAwait(false);
@@ -141,10 +141,8 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
         static async Task<(int Count, string Message, Meeting? Entity)> AddOrUpdate(ModulesDbContext dbContext, Meeting entity)
         {
-            var existing = await dbContext.Meetings.AsNoTracking()
-                .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup)
-                .Include(m => m.Layouts).ThenInclude(ms => ms.PrimaryModuleStandard)
-                .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
+            var existing = await dbContext.Meetings
+                .Include(m => m.Layouts)
                 .SingleOrDefaultAsync(m => m.Id == entity.Id)
                 .ConfigureAwait(false);
 
@@ -173,16 +171,19 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             foreach (var layout in entity.Layouts)
             {
                 layout.RegistrationClosingDate = layout.RegistrationClosingDate.Date.AddMinutes(1439);
-                var existingLayout = existing.Layouts.AsQueryable().FirstOrDefault(g => g.Id == layout.Id);
+                var existingLayout = existing.Layouts.FirstOrDefault(g => g.Id == layout.Id);
                 if (existingLayout is null) existing.Layouts.Add(layout);
                 else dbContext.Entry(existingLayout).CurrentValues.SetValues(layout);
             }
-            foreach (var layout in existing.Layouts) if (!entity.Layouts.Any(mg => mg.Id == layout.Id)) dbContext.Remove(layout);
+            foreach (var layout in existing.Layouts)
+            {
+                if (!entity.Layouts.Any(mg => mg.Id == layout.Id)) dbContext.Remove(layout);
+            }
         }
 
         static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>
                 dbContext.Entry(entity).State == EntityState.Unchanged &&
-                entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged);
+                (entity.Layouts.Count == 0 || entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged));
     }
 
     public async Task<(int Count, string? Message)> DeleteLayoutAsync(ClaimsPrincipal? principal, int meetingId, int layoutId)
@@ -194,12 +195,13 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             if (existing is null) return (-1).DeleteResult();
             dbContext.Layouts.Remove(existing);
             var result = await dbContext.SaveChangesAsync();
+            
             return result.DeleteResult();
         }
         return principal.NotAuthorized<Layout>();
     }
 
-    public async Task<(int Count, string? Message)> DeleteAllAsync(ClaimsPrincipal? principal, Meeting meeting)
+    public async Task<(int Count, string? Message)> DeleteAsync(ClaimsPrincipal? principal, Meeting meeting)
     {
         if (principal is not null && principal.IsCountryOrGlobalAdministrator())
         {
@@ -217,14 +219,15 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting? meeting)
     {
-        if (meeting is null || principal is null) return false;
+        if (principal is null || meeting is null) return false;
+        if (principal.IsGlobalAdministrator()) return true;
         var countryId = meeting.OrganiserGroup?.CountryId ?? principal.CountryId();
-        if (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(countryId)) return true;
+        if (principal.IsCountryAdministratorInCountry(countryId)) return true;
         if (meeting.HasMeetingAdministrator(principal.PersonId())) return true; // Shortcut if data is available.
-        return await IsMeetingOrganiser2( principal, meeting); // Fallback ask the database querying a tailored view.
+        return await IsMeetingOrLatoutAdministrator(principal, meeting); // Fallback ask the database querying a tailored view.
     }
 
-    private async Task<bool> IsMeetingOrganiser2(ClaimsPrincipal? principal, Meeting meeting)
+    private async Task<bool> IsMeetingOrLatoutAdministrator(ClaimsPrincipal? principal, Meeting meeting)
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.MeetingAdministrators.AsNoTracking()

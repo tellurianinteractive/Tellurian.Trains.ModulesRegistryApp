@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public partial class OperatingDay
@@ -31,4 +33,23 @@ public partial class OperatingDay
 
     public virtual ICollection<OperatingBasicDay> OperatingBasicDayBasicDays { get; set; }
     public virtual ICollection<OperatingBasicDay> OperatingBasicDayOperatingDays { get; set; }
+}
+
+public static class OperationDayMapper
+{
+    internal static void MapOperationDay(this ModelBuilder modelBuilder) =>
+         modelBuilder.Entity<OperatingDay>(entity =>
+         {
+             entity.ToTable("OperatingDay");
+
+             entity.Property(e => e.Id).ValueGeneratedNever();
+
+             entity.Property(e => e.FullName)
+                 .IsRequired()
+                 .HasMaxLength(50);
+
+             entity.Property(e => e.ShortName)
+                 .IsRequired()
+                 .HasMaxLength(10);
+         });
 }

@@ -46,10 +46,10 @@ public class MeetingValidator : AbstractValidator<Meeting>
             .GreaterThanOrEqualTo(m => m.StartDate)
             .WithName(n => localizer[nameof(n.EndDate)]);
         RuleFor(m => m.LatestArrivalTimeWithModules)
-            .NotNull()
+            .NotNull().When(m => m.MeetingType == (int)MeetingType.ModuleMeeting)
             .WithName(n => localizer[nameof(n.LatestArrivalTimeWithModules)]);
         RuleFor(m => m.EarliestDepartureTimeWithModules)
-            .NotNull()
+            .NotNull().When(m => m.MeetingType == (int)MeetingType.ModuleMeeting)
             .WithName(n => localizer[nameof(n.EarliestDepartureTimeWithModules)]);
         RuleFor(m => m.Status)
             .MustBeSelected(localizer)

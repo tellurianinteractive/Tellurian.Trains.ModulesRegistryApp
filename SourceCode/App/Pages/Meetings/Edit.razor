@@ -30,13 +30,7 @@
         <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Meeting.LatestArrivalTimeWithModules"/>
         <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Meeting.EarliestDepartureTimeWithModules" />
 
-
         <AppInputText Width="12" Label="ExternalLink" @bind-Value="Meeting.ExternalLink"/>
-
-        <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
-        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.DetailsMaxLength" />
-        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.AccomodationMaxLenght" />
-        <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
     </Inputs>
     <Buttons>
         @if(Meeting.Id > 0)
@@ -45,6 +39,13 @@
         }
        
     </Buttons>
+    <InputsBelowButtons>
+        <h2 style="margin-top: 20px">@Localizer["GeneralMeetingInformation"]</h2>
+        <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
+        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.DetailsMaxLength" />
+        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.AccomodationMaxLenght" />
+        <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
+    </InputsBelowButtons>
 </EditTemplate>
 
 @code {

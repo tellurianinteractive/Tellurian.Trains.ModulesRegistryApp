@@ -29,6 +29,7 @@ else
                     <AppButton Label="Delete" IsSubmit="false" Href="@DeleteHref" />
                 }
             }
+            @InputsBelowButtons
         </div>
         <hr/>
         @SubInputs
@@ -40,6 +41,7 @@ else
     [Parameter] public TItem? Item { get; set; }
     [Parameter] public RenderFragment? Inputs { get; set; }
     [Parameter] public RenderFragment? Buttons { get; set; }
+    [Parameter] public RenderFragment? InputsBelowButtons { get; set; }
     [Parameter] public RenderFragment? SubInputs { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
     [Parameter] public EventCallback OnDeleteCallback { get; set; }

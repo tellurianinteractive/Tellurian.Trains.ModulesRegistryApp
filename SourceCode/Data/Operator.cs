@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public partial class Operator
@@ -17,4 +19,25 @@ public partial class Operator
     public bool IsAuthority { get; set; }
 
     public virtual Country PrimaryOperatingCountry { get; set; }
+}
+
+public static class OperatorMapper
+{
+    internal static void MapOperator(this ModelBuilder modelBuilder) =>
+         modelBuilder.Entity<Operator>(entity =>
+         {
+             entity.ToTable("Operator");
+
+             entity.Property(e => e.FullName)
+                 .IsRequired()
+                 .HasMaxLength(50);
+
+             entity.Property(e => e.Signature)
+                 .IsRequired()
+                 .HasMaxLength(6);
+
+             entity.HasOne(c => c.PrimaryOperatingCountry)
+                 .WithMany()
+                 .HasForeignKey(e => e.PrimaryOperatingCountryId);
+         });
 }

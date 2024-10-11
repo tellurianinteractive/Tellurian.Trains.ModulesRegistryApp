@@ -2,6 +2,13 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.22
+Release date 2024-1011
+- **Bug fix** of not able to save *meeting*.
+- **Bug fix** or *latest arrival* and *earliest departure* times for meeting 
+should only be required when type of meeting is *module meeting*.
+- **Module list** for meeting layout improved when printing.
+- **Meeting edit** page restructured to be easier to use.
 ## Release 1.11.21
 Release date 2024-10-09
 - **Fixed** an issue where the *Waybill* button should not be visible for operation locations that has unchecked the *has cargo customers* checkbox.

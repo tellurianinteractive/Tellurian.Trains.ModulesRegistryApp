@@ -105,12 +105,16 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapModuleExit();
         modelBuilder.MapModuleOwnership();
         modelBuilder.MapModuleStandard();
-        modelBuilder.MapWiFredThrottle();
+        modelBuilder.MapNHM();
+        modelBuilder.MapOperatingBasicDay();
+        modelBuilder.MapOperationDay();
+        modelBuilder.MapOperator();
 
         modelBuilder.MapVehicle();
         modelBuilder.MapVehicleFeature();
         modelBuilder.MapVehicleInteroperability();
         modelBuilder.MapVehicleOperator();
+        modelBuilder.MapWiFredThrottle();
 
 
 
@@ -122,57 +126,11 @@ public partial class ModulesDbContext : DbContext
 
         
 
-        modelBuilder.Entity<NHM>(entity => entity.ToTable("NHM"));
+        
 
-        modelBuilder.Entity<OperatingBasicDay>(entity =>
-        {
-            entity.HasKey(e => new { e.OperatingDayId, e.BasicDayId });
+       
 
-            entity.ToTable("OperatingBasicDay");
-
-            entity.HasOne(d => d.BasicDay)
-                .WithMany(p => p.OperatingBasicDayBasicDays)
-                .HasForeignKey(d => d.BasicDayId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.OperatingDay)
-                .WithMany(p => p.OperatingBasicDayOperatingDays)
-                .HasForeignKey(d => d.OperatingDayId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<OperatingDay>(entity =>
-        {
-            entity.ToTable("OperatingDay");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.ShortName)
-                .IsRequired()
-                .HasMaxLength(10);
-        });
-
-        modelBuilder.Entity<Operator>(entity =>
-        {
-            entity.ToTable("Operator");
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Signature)
-                .IsRequired()
-                .HasMaxLength(6);
-
-            entity.HasOne(c => c.PrimaryOperatingCountry)
-                .WithMany()
-                .HasForeignKey(e => e.PrimaryOperatingCountryId);
-        });
-
+       
         modelBuilder.Entity<Person>(entity =>
         {
             entity.ToTable("Person");
@@ -330,19 +288,6 @@ public partial class ModulesDbContext : DbContext
         {
             entity.ToTable("User");
             entity.HasQueryFilter(u => u.DeletedTimestamp.HasValue == false);
-
-            entity.HasIndex(e => e.EmailAddress, "IX_User_EmailAddress")
-                .IsUnique();
-
-            entity.Property(e => e.EmailAddress)
-                .IsRequired()
-                .HasMaxLength(255);
-
-            entity.Property(e => e.HashedPassword)
-                .HasMaxLength(255);
-
-            entity.Property(e => e.RegistrationTime)
-                .HasDefaultValueSql("(getdate())");
         });
 
         OnModelCreatingPartial(modelBuilder);

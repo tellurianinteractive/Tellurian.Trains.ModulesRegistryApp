@@ -74,27 +74,32 @@ public static class ModuleExtensions
     public static MarkupString Info(this Module me)
     {
         var text = new StringBuilder(100);
-        text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}: ");
+        text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}");
+        
+
         if (me.IsCurve() && me.IsStraight())
         {
+            text.Append(", "); 
             text.Append(Straight);
             text.Append('/');
             text.Append(Curve);
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
             text.Append($" {me.Length}mm");
-            text.Append($" {me.Angle!.Value}&deg;");
-            text.Append($" r={me.Radius!.Value}mm");
+            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
+            if (me.Radius.HasValue) text.Append($" r={me.Radius!.Value}mm");
         }
         else if (me.IsCurve())
         {
+            text.Append(", "); 
             text.Append(Curve);
             text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
-            text.Append($" {me.Angle!.Value}&deg;");
-            text.Append($" r={me.Radius!.Value}mm");
+            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
+            if (me.Radius.HasValue) text.Append($" r={me.Radius.Value}mm");
         }
         else if (me.IsStraight())
         {
+            text.Append(", "); 
             text.Append(Straight);
             text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {Tracks.ToLowerInvariant()}");
@@ -111,14 +116,14 @@ public static class ModuleExtensions
         if (!me.IsStandAlone)
         {
             text.Append(", ");
-            text.Append(NotStandalone);
+            text.Append($"""<span style="color: red">{NotStandalone}</span>""");
         }
         if (me.IsOperationsPlace())
         {
             var tracksCount = me.Station.StationTracks.Count;
-            text.Append(OperationsPlace);
             text.Append(", ");
-            text.Append(tracksCount == 0 ? "" : $"{tracksCount} {Tracks.ToLowerInvariant()}");
+            text.Append(OperationsPlace);
+            text.Append(tracksCount == 0 ? "" : $", {tracksCount} {Tracks.ToLowerInvariant()}");
             if (me.Station.IsShadow) text.Append($", {ShadowStation}");
             if (me.Station.IsJunction) text.Append($", {Junction}");
         }
@@ -131,8 +136,8 @@ public static class ModuleExtensions
         return new(text.ToString());
     }
 
-    private static bool IsCurve(this Module me) => !me.IsOperationsPlace() && me.Angle.HasValue;
-    private static bool IsStraight(this Module me) => !me.IsOperationsPlace() && !me.Angle.HasValue;
+    private static bool IsCurve(this Module me) =>  me.Angle.HasValue;
+    private static bool IsStraight(this Module me) => !me.Angle.HasValue;
     private static bool IsOperationsPlace(this Module me) => me.Station is not null;
 
     public static Module Clone(this Module me) =>

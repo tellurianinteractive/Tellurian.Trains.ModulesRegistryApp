@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ModulesRegistry.Data;
 
 public class NHM
 {
@@ -11,4 +13,10 @@ public class NHM
     public string? NL { get; set; }
     public string? PL { get; set; }
     public string? SV { get; set; }
+}
+
+public static class NHM_Mapper
+{
+    internal static void MapNHM(this ModelBuilder modelBuilder) =>
+        modelBuilder.Entity<NHM>(entity => entity.ToTable("NHM"));
 }

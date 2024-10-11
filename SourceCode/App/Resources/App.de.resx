@@ -552,6 +552,9 @@
   <data name="GameSettings" xml:space="preserve">
     <value>Spieleinstellungen</value>
   </data>
+  <data name="GeneralMeetingInformation" xml:space="preserve">
+    <value>Allgemeine Informationen zum Treffen</value>
+  </data>
   <data name="Generate" xml:space="preserve">
     <value>Erstellen</value>
   </data>
