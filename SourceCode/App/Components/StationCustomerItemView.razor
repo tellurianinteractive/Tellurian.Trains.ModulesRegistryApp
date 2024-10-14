@@ -27,7 +27,7 @@ else
         }
     </div>
 
-    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="RowStyle">
+    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="RowStyle" >
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>

@@ -153,6 +153,9 @@
   <data name="EmptyWagonForCargo" xml:space="preserve">
     <value>Leerer Wagen für {0}</value>
   </data>
+  <data name="EndOfLine" xml:space="preserve">
+    <value>Endmodul</value>
+  </data>
   <data name="Fixed" xml:space="preserve">
     <value>Fest</value>
   </data>
@@ -261,6 +264,9 @@
   <data name="SidingTrack" xml:space="preserve">
     <value>Abstellgleis</value>
   </data>
+  <data name="SignalModule" xml:space="preserve">
+    <value>Signalmodul</value>
+  </data>
   <data name="SingleTrack" xml:space="preserve">
     <value>Einspurig</value>
   </data>
@@ -284,6 +290,9 @@
   </data>
   <data name="Tracks" xml:space="preserve">
     <value>Spuren</value>
+  </data>
+  <data name="Turntable" xml:space="preserve">
+    <value>Drehscheibe </value>
   </data>
   <data name="Undefined" xml:space="preserve">
     <value>Nicht definiert</value>

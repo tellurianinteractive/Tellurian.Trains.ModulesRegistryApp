@@ -31,17 +31,17 @@ public static class LayoutModuleExtensions
     {
         if (station is not null) 
             it.Module.Station = it.LayoutStation.Station;
-        return it.Module.Info();
+        return it.Module.Description();
     }
     public static bool HasLayoutStationId(this LayoutModule it) => it.LayoutStationId.HasValue;
     public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStation is not null;
     public static bool HasCargoCustomers(this LayoutModule it) => it.LayoutStation?.Station is not null && it.LayoutStation.Station.HasCargoCustomers;
     public static double TotalLength(this LayoutModule it) => it.Module?.TotalLength() ?? 0.0;
-    public static double TotalLength(this IEnumerable<LayoutModule> modules)
+    public static double TotalLengthMeters(this IEnumerable<LayoutModule> modules)
     {
         double sum = 0.0;
         foreach (var module in modules) sum += module.TotalLength();
-        return sum;
+        return sum/1000;
     }
 }
 

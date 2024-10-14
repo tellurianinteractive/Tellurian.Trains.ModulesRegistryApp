@@ -3,7 +3,7 @@
 
 @if (UseTableLayout)
 {
-    <TableTemplate Items="LayoutModules">
+    <TableTemplate Items="LayoutModules" TItem="LayoutModule" TSubItem="object">
         <TableHeader>
             <th>@Localizer["Package"]</th>
             <th>@Localizer["Module"]</th>

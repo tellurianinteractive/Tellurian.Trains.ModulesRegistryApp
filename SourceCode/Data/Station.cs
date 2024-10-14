@@ -22,6 +22,7 @@ public partial class Station
     public bool IsHarbour { get; set; }
     public bool IsJunction { get; set; }
     public bool IsKeyRequired { get; set; }
+    public bool HasTurntable { get; set; }
     public bool HasCargoCustomers { get; set; } = true;
     public int? RegionId { get; set; }
     public int? PdfInstructionId { get; set; }

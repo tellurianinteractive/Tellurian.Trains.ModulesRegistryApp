@@ -13,7 +13,7 @@
     </div>
 }
 
-<TableTemplate Items="Modules?.OrderBy(m => m.FullName).ThenBy(m => m.ConfigurationLabel)">
+<TableTemplate Items="Modules?.OrderBy(m => m.FullName).ThenBy(m => m.ConfigurationLabel)" >
     <TableHeader>
         <th>@Localizer["Name"]</th>
         @if (AnyHasFremoName)
@@ -32,7 +32,7 @@
         {
             <td>@module.FremoName()</td>
         }
-        <td>@module.Info()</td>
+        <td>@module.Description()</td>
         <td align="center">@module.ModuleOwnership(OwnershipRef).OwnedShareAndPercentage(Localizer)</td>
         <td align="center">@module.StatusIcon()</td>
         <td>
@@ -51,10 +51,10 @@
                 }
             }
             <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
-            @if (module.StationId.HasValue)
+            @if (module.IsPrimaryStationModule())
             {
-                <AppButton Label="OperationLocation" IconName="@FontAwesome.Station" Href="@StationEditHref(module.StationId.Value)" />
-                @if (module.Station?.HasCargoCustomers == true)
+                <AppButton Label="OperationLocation" IconName="@FontAwesome.Station" Href="@StationEditHref(module.StationId!.Value)" />
+                @if (module.HasCargoCustomers())
                 {
                     <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
                 }

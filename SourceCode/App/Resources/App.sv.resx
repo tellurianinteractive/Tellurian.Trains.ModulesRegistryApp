@@ -606,6 +606,9 @@
   <data name="HasSound" xml:space="preserve">
     <value>Har ljud?</value>
   </data>
+  <data name="HasTurntable" xml:space="preserve">
+    <value>Har vändskiva?</value>
+  </data>
   <data name="HaveFreightFlow" xml:space="preserve">
     <value>Har godsflöde?</value>
   </data>
@@ -681,6 +684,9 @@
   <data name="IsDuckunder" xml:space="preserve">
     <value>Är duckunder?</value>
   </data>
+  <data name="IsEndOfLine" xml:space="preserve">
+    <value>Är ände på spåret?</value>
+  </data>
   <data name="IsExpress" xml:space="preserve">
     <value>Ekspressgods?</value>
   </data>
@@ -731,6 +737,9 @@
   </data>
   <data name="IsSiding" xml:space="preserve">
     <value>Är sidospår?</value>
+  </data>
+  <data name="IsSignalModule" xml:space="preserve">
+    <value>Är signalmodul?</value>
   </data>
   <data name="IsStandAlone" xml:space="preserve">
     <value>Är fristående?</value>

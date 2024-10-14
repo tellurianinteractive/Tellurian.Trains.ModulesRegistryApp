@@ -13,7 +13,7 @@ else
     <div class="col-12">
         <AppButton Label="Add" ObjectName="Track" OnClickCallback="AddAsync" />
     </div>
-    <TableTemplate Items="Tracks.OrderBy(st => st.DisplayOrder)" SaveAsync="SaveAsync" DeleteAsync="DeleteAsync" EditColspan="7" RowStyle="RowStyle">
+    <TableTemplate Items="Tracks.OrderBy(st => st.DisplayOrder)" SaveAsync="SaveAsync" DeleteAsync="DeleteAsync" EditColspan="7" RowStyle="RowStyle" >
         <TableHeader>
             <th>@Localizer["TrackNumber"]</th>
             <th>@Localizer["Direction"]</th>
@@ -28,7 +28,7 @@ else
             <td>@item.MaxTrainLengthText()</td>
             <td>@item.PlatformLengthText()</td>
             <td>@item.SpeedLimitText()</td>
-            <td>@item.UsageNote</td>
+            <td>@item.UsageText()</td>
         </RowTemplate>
         <RowEditTemplate Context="track">
             <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">

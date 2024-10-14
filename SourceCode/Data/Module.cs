@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -39,6 +40,8 @@ public partial class Module
     public bool IsTurntable { get; set; }
     public bool IsDuckunder { get; set; }
     public bool IsStandAlone { get; set; }
+    public bool IsEndOfLine { get; set; }
+    public bool IsSignalModule { get; set; }
     public bool IsUnavailable { get; set; }
     public bool HasIntegratedLocoNet { get; set; }
     public int ObjectVisibilityId { get; set; }
@@ -71,11 +74,10 @@ public partial class Module
 # nullable enable
 public static class ModuleExtensions
 {
-    public static MarkupString Info(this Module me)
+    public static MarkupString Description(this Module me)
     {
         var text = new StringBuilder(100);
         text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}");
-        
 
         if (me.IsCurve() && me.IsStraight())
         {
@@ -124,9 +126,19 @@ public static class ModuleExtensions
             var tracksCount = me.Station.StationTracks.Count;
             text.Append(", ");
             text.Append(OperationsPlace);
-            if (me.Station.StationTracks.Count > 0) text.Append($", {me.Station.StationTracks.Count} {Tracks.ToLowerInvariant()}");
+            if (me.Station.StationTracks.Count > 0) text.Append($", {me.NumberOfTimetabledTracks()} {Tracks.ToLowerInvariant()}");
+            if (me.Station.HasTurntable) text.Append($", {Turntable}");
             if (me.Station.IsShadow) text.Append($", {ShadowStation}");
             if (me.Station.IsJunction) text.Append($", {Junction}");
+        }
+        if (me.IsSignalModule)
+        {
+            text.Append($", {SignalModule}");
+        }
+
+        if (me.IsEndOfLine)
+        {
+            text.Append($", {EndOfLine}");
         }
 
         if (me.Note.HasValue())
@@ -155,6 +167,7 @@ public static class ModuleExtensions
             Is3R = me.Is3R,
             IsDuckunder = me.IsDuckunder,
             IsStandAlone = me.IsStandAlone,
+            IsEndOfLine = me.IsEndOfLine,
             IsTurntable = me.IsTurntable,
             IsUnavailable = me.IsUnavailable,
             LandscapeSeason = me.LandscapeSeason,
@@ -190,6 +203,7 @@ public static class ModuleExtensions
             Width = me.Width,
         };
 
+    public static string FullNameAndConfiguration(this Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} {module.ConfigurationLabel.ToLowerInvariant()}" : module.FullName;
     public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
     public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) =>
         module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);
@@ -203,8 +217,10 @@ public static class ModuleExtensions
         return $"{module.FullName[..(50 - appended.Length)]}{appended}";
     }
 
-    public static bool IsPartOfStation([NotNullWhen(true)] this Module me) => me.StationId.HasValue;
-
+    public static bool IsPrimaryStationModule([NotNullWhen(true)] this Module? me) => me is not null && me.Station is not null && me.Id == me.Station.PrimaryModuleId;
+    public static bool HasCargoCustomers([NotNullWhen(true)] this Module? me) => me.IsPrimaryStationModule() && me.Station.HasCargoCustomers;
+    public static int NumberOfTimetabledTracks(this Module? me) =>
+        me is not null && me.Station is not null ? me.Station.StationTracks.Count(st => st.DirectionId > 0) : 1;
     public static IEnumerable<int> DocumentIds(this Module me)
     {
         if (me.PdfDocumentationId.HasValue) yield return me.PdfDocumentationId.Value;

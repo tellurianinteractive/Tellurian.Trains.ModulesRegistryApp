@@ -7,6 +7,7 @@
     [IsHarbour]          BIT           NOT NULL DEFAULT(0),
     [IsJunction]         BIT           NOT NULL DEFAULT(0),
     [IsKeyRequired]      BIT           NOT NULL DEFAULT(0),
+    [HasTurntable]       BIT           NOT NULL DEFAULT(0),
     [HasCargoCustomers]  BIT           NOT NULL DEFAULT(1), 
     [RegionId]           INT           NULL,
     [PdfInstructionId]   INT           NULL,

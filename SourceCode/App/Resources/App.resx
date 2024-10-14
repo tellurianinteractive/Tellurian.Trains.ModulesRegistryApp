@@ -609,6 +609,9 @@
   <data name="HasSound" xml:space="preserve">
     <value>Has sound?</value>
   </data>
+  <data name="HasTurntable" xml:space="preserve">
+    <value>Has turntable?</value>
+  </data>
   <data name="HaveFreightFlow" xml:space="preserve">
     <value>Have freight flow?</value>
   </data>
@@ -684,6 +687,9 @@
   <data name="IsDuckunder" xml:space="preserve">
     <value>Is duckunder?</value>
   </data>
+  <data name="IsEndOfLine" xml:space="preserve">
+    <value>Is ending track?</value>
+  </data>
   <data name="IsExpress" xml:space="preserve">
     <value>Express goods?</value>
   </data>
@@ -734,6 +740,9 @@
   </data>
   <data name="IsSiding" xml:space="preserve">
     <value>Is siding?</value>
+  </data>
+  <data name="IsSignalModule" xml:space="preserve">
+    <value>Is signal module?</value>
   </data>
   <data name="IsStandAlone" xml:space="preserve">
     <value>Is stand-alone?</value>

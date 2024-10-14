@@ -169,6 +169,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of line.
+        /// </summary>
+        public static string EndOfLine {
+            get {
+                return ResourceManager.GetString("EndOfLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
         public static string Fixed {
@@ -493,6 +502,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Signal module.
+        /// </summary>
+        public static string SignalModule {
+            get {
+                return ResourceManager.GetString("SignalModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Single track.
         /// </summary>
         public static string SingleTrack {
@@ -561,6 +579,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Tracks {
             get {
                 return ResourceManager.GetString("Tracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turntable.
+        /// </summary>
+        public static string Turntable {
+            get {
+                return ResourceManager.GetString("Turntable", resourceCulture);
             }
         }
         

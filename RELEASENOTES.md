@@ -2,8 +2,15 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.23
+Release date 2024-10-13
+- **My modules** now displays buttons for *operations location* and *cargo customers* when the module is the primary operations location module.
+- **Fixed** formatting issues with the meeting layout participants list.
+- **Tracks** listing for operation locations now also displays *main/siding* information.
+- **Module** can now also be checked as *end of line* and *signal module*.
+- **Operation location** can now also be checked having a *locomotive turntable*.
 ## Release 1.11.22
-Release date 2024-1011
+Release date 2024-10-11
 - **Bug fix** of not able to save *meeting*.
 - **Bug fix** or *latest arrival* and *earliest departure* times for meeting 
 should only be required when type of meeting is *module meeting*.

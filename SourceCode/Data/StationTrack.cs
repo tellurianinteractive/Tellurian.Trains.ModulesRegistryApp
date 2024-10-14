@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using ModulesRegistry.Data.Extensions;
 using static ModulesRegistry.Data.Resources.Strings;
 
 namespace ModulesRegistry.Data;
@@ -33,6 +34,7 @@ public static class StationTrackExtensions
     public static string PlatformLengthText(this StationTrack track) => track.PlatformLength.HasValue && track.PlatformLength.Value > 0 ? $"{track.PlatformLength.Value:F1}m" : None;
     public static string SpeedLimitText(this StationTrack track) => track.SpeedLimit > 0 ? $"{track.SpeedLimit}km/h" : Undefined;
     public static string MainOrSidingText(this StationTrack track) => track.IsSiding ? SidingTrack : MainTrack;
+    public static string UsageText(this StationTrack track) => track.UsageNote.HasValue() ? $"{track.MainOrSidingText()}, {track.UsageNote}" : track.MainOrSidingText();
 
     public static string BackgroundColor(this StationTrack? track) =>
         track is null ? string.Empty :

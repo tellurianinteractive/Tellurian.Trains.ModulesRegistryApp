@@ -23,7 +23,7 @@ else
     <h4>
         @string.Format(Localizer["NumberParticipantsRegistered"], FilteredParticipants!.Count()),
         @string.Format(Localizer["NumberModulesRegistered"], FilteredParticipants!.Sum(lp => lp.LayoutModules.Count())).
-        @string.Format(Localizer["TotalTrackMeters"], FilteredParticipants!.Sum(lp => lp.LayoutModules.TotalLength())) / 1000);
+        @string.Format(Localizer["TotalTrackMeters"], FilteredParticipants!.Sum(lp => lp.LayoutModules.TotalLengthMeters())).
     </h4>
     @if (IsOrganiser)
     {
@@ -39,53 +39,48 @@ else
             }
         </div>
     }
-    @foreach (var participant in FilteredParticipants!.OrderBy(mp => mp.Person.Name()))
-    {
-        @if (participant.AllLayoutModules(LayoutModules).Any())
-        {
-            <TableTemplate Items="participant.AllLayoutModules(LayoutModules).OrderBy(lm => lm.Module.FullName)" HideNoRecordsToDisplay="true">
-                <TableHeader>
-                    <th width="40%">@ParticipantNameAndMore(participant)</th>
-                    <th width="40%">@participant.MeetingParticipant.Participates(Localizer)</th>
-                    <th class="noprint" width="120px">@Localizer["RegistrationTime"]</th>
-                    <th class="noprint" min-width="120px">@Localizer["Actions"] </th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.Module.FullName</td>
-                    <td>@item.Module.Info()</td>
-                    <td class="noprint" width="120px">@item.RegisteredTime.ToString("d")</td>
-                    <td class="noprint">
-                        @if (item.HasCargoCustomers())
-                        {
-                            <AppButton IconName="@FontAwesome.Waybills" Label="InternalFreights" Href="@WaybillsHref(item)" />
-                        }
-                    </td>
-                </RowTemplate>
-            </TableTemplate>
-        }
-        else
-        {
-            <table class="table table-sm">
-                <thead>
+
+    <TableTemplate TItem="LayoutParticipant" Items="FilteredParticipants!.OrderBy(mp => mp.Person.Name())" HideNoRecordsToDisplay="true" RowStyle="RowStyle">
+        <TableHeader>
+            <th width="35%">@Localizer["Name"]</th>
+            <th>@Localizer["Participates"]/@Localizer["Modules"]</th>
+            <th class="noprint">@Localizer["RegistrationTime"]</th>
+            <th class="noprint">@Localizer["Actions"] </th>
+        </TableHeader>
+        <RowTemplate Context="participant">
+            <td style="white-space: nowrap;">@ParticipantNameAndMore(participant)</td>
+            <td>@participant.MeetingParticipant.Participates(Localizer)</td>
+            <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
+            <td class="noprint"> </td>
+        </RowTemplate>
+        <SubRowsTemplate Context="participant">
+            @if (participant.LayoutModules.Any())
+            {
+                @foreach (var layoutModule in participant.LayoutModules.OrderBy(lm=>lm.Module.FullName))
+                {
                     <tr>
-                        <th width="40%">@ParticipantNameAndMore(participant)</th>
-                        <th width="40%">@participant.MeetingParticipant.Participates(Localizer)</th>
-                        <th class="noprint" width="120px">@Localizer["RegistrationTime"]</th>
-                        <th class="noprint" min-width="120px">@Localizer["Actions"] </th>
+                        <td>@layoutModule.Module.FullNameAndConfiguration()</td>
+                        <td>@layoutModule.Module.Description()</td>
+                        <td class="noprint">@layoutModule.RegisteredTime.ToString("d")</td>
+                        <td class="noprint">
+                            @if (layoutModule.HasCargoCustomers())
+                            {
+                                <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@WaybillsHref(layoutModule)" />
+                            }
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="1">@Localizer["NoModulesRegistered"]</td>
-                        <td>-</td>
-                        <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
-                        <td class="noprint"></td>
-                    </tr>
-                </tbody>
-            </table>
-        }
-    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">@Localizer["NoModulesRegistered"]</td>
+                </tr>
+            }
+        </SubRowsTemplate>
+    </TableTemplate>
 }
+
 
 
 @code {
@@ -129,8 +124,10 @@ else
         }
     }
     string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithMeetingAndLayoutName()}";
+    IEnumerable<object> SubItems(LayoutParticipant participant) => participant.LayoutModules.OrderBy(lm => lm.Module.FullName);
 
     string WaybillsHref(LayoutModule layoutModule) => $"reports/waybills/layout/{layoutModule.LayoutParticipant.LayoutId}/station/{LayoutStation(layoutModule.LayoutStationId)?.StationId}";
+    string RowStyle(LayoutParticipant participant) => "font-weight: bold;";
 
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 
@@ -140,7 +137,9 @@ else
     }
 
     MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(
-        HasParticipantsFromDifferentCountries ? $"""<img src="{participant.Person.Country.FlagSrc()}"> {participant.NameWithCityAndCountry()} {participant.Person.EmailIcon()}""" : $"""{participant.NameWithCity()} {participant.Person.EmailIcon()}""");
+        HasParticipantsFromDifferentCountries ? 
+            $""" <img src="{participant.Person.Country.FlagSrc()}">  {participant.NameWithCityAndCountry()}, {participant.Person.FremoNumber()} {participant.Person.EmailIcon()}""" :
+            $"""{participant.NameWithCity()}, {participant.Person.FremoNumber()} {participant.Person.EmailIcon()}""");
 
     string SendMailLabel =>
         OnlyThoseWithOperationsPlaces ? string.Format(Localizer["SendMailTo"], Localizer["OnlyThoseWithOperationsPlaces"].ToString().ToLowerInvariant()) :

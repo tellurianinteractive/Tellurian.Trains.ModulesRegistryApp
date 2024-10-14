@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<App> Localizer
 
 <h3>@Localizer["Participants"]</h3>
-<TableTemplate Items="Participants">
+<TableTemplate Items="Participants" TItem="Participant" TSubItem="object">
     <TableHeader>
         <th>@Localizer["Name"]</th>
         <th>@Localizer["CityName"]</th>
