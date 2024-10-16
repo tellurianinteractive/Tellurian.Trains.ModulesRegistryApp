@@ -29,7 +29,7 @@ else
     {
     }
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
-    @Item("Duration", Meeting.Duration())
+    @Item("Duration", Meeting.DurationText())
     @Item("Organiser", Meeting.Organiser())
     @if (!Meeting.IsCancelled())
     {

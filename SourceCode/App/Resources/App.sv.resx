@@ -894,6 +894,9 @@
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Mötesarrangören tar inte emot anmälningar här.</value>
   </data>
+  <data name="MeetingIsClosedForRegistration" xml:space="preserve">
+    <value>Träffen är stängd för anmälan</value>
+  </data>
   <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
     <value>Träffen är ännu inte öppen för registrering</value>
   </data>

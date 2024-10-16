@@ -70,7 +70,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsCountryOrGlobalAdministrator())
+        if (principal.IsGlobalOrCountryAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ExternalStations

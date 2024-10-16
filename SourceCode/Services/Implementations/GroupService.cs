@@ -9,7 +9,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId, int? onlyGroupId = null)
     {
         using var dbContext = Factory.CreateDbContext();
-        var id = principal.IsCountryOrGlobalAdministrator() ? 0 : countryId ?? principal.CountryId();
+        var id = principal.IsGlobalOrCountryAdministrator() ? 0 : countryId ?? principal.CountryId();
         return await dbContext.Groups
             .Where(g =>  (g.CountryId == id || id == 0) && (!onlyGroupId.HasValue || onlyGroupId==0 || onlyGroupId > 0 && g.Id == onlyGroupId.Value))
             .OrderBy(g => g.FullName)

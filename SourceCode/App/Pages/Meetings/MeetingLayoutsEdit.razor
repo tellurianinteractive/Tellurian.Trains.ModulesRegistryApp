@@ -61,7 +61,7 @@
         Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? new Meeting() : new Meeting();
         if (Meeting is not null)
         {
-            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
+            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting));
         }
     }
 

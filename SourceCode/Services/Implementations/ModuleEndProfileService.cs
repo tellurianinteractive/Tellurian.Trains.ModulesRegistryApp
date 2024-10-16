@@ -25,7 +25,7 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
 
     public async Task<ModuleEndProfile?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsCountryOrGlobalAdministrator())
+        if (principal.IsGlobalOrCountryAdministrator())
         {
             var dbContext = Factory.CreateDbContext();
             return await dbContext.ModuleEndProfiles.FindAsync(id).ConfigureAwait(false);
@@ -35,7 +35,7 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
 
     public async Task<(int Count, string Message, ModuleEndProfile? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleEndProfile entity)
     {
-        if (principal.IsCountryOrGlobalAdministrator())
+        if (principal.IsGlobalOrCountryAdministrator())
         {
             var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ModuleEndProfiles.FindAsync(entity.Id).ConfigureAwait(false);

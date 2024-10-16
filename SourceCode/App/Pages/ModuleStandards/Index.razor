@@ -7,7 +7,7 @@
 
 <PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List"/>
 
-@if (Principal.IsCountryOrGlobalAdministrator() && ModuleStandards is not null)
+@if (Principal.IsGlobalOrCountryAdministrator() && ModuleStandards is not null)
 {
     <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
 }
@@ -20,7 +20,7 @@
         <th>@Localizer["TrackSystem"]</th>
         <th>@Localizer["ElectricSystem"]</th>
         <th>@Localizer["Couplings"]</th>
-        @if (Principal.IsCountryOrGlobalAdministrator())
+        @if (Principal.IsGlobalOrCountryAdministrator())
         {
             <th>@Localizer["Actions"]</th>
 
@@ -33,7 +33,7 @@
         <td>@standard.TrackSystem</td>
         <td>@standard.Electricity</td>
         <td>@standard.Couplings</td>
-        @if (Principal.IsCountryOrGlobalAdministrator())
+        @if (Principal.IsGlobalOrCountryAdministrator())
         {
             <td>
                 <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>

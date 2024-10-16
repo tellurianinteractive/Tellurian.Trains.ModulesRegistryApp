@@ -319,7 +319,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             {
                 if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
                 if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
-                if (!principal.IsCountryOrGlobalAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
+                if (!principal.IsGlobalOrCountryAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
                 var documents = await dbContext.Documents.Where(d => entity.DocumentIds().Contains(d.Id)).ToListAsync();
                 foreach (var document in documents) dbContext.Remove(document);
                 foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);

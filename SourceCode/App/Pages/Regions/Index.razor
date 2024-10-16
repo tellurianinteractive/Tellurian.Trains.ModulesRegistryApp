@@ -16,7 +16,7 @@
 <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
 
 
-@if (Principal.IsCountryOrGlobalAdministrator())
+@if (Principal.IsGlobalOrCountryAdministrator())
 {
     <AppButton Label="Add" Href="@EditHref(0)" />
 }

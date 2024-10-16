@@ -22,90 +22,98 @@
 }
 else
 {
-    @if (MeetingParticipant.MayRegisterModules()) { 
-    <div style="margin-top: 12pt">
-        @if (Layout is not null)
-        {
-            <div style="background-color: lightgoldenrodyellow">
-                <h3>@Localizer["RegisteredModules"]</h3>
-
-                
-                <TableTemplate Items="ParticipantsRegisteredModules">
-                    <TableHeader>
-                        <th>@Localizer["Package"]</th>
-                        <th>@Localizer["Module"]</th>
-                        <th>@Localizer["Owner"]</th>
-                        <th>@Localizer["RegistrationTime"]</th>
-                        <th>@Localizer["Actions"]</th>
-                    </TableHeader>
-                    <RowTemplate Context="item">
-                        <td>@item.Module.PackageName()</td>
-                        <td>@item.Module.FullName</td>
-                        <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
-                        <td>@item.RegisteredTime.ToString("g")</td>
-                        <td>
-                            @if (MayRemove)
-                            {
-                                <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
-                            }
-                            @if (item.HasCargoCustomers())
-                            {
-                                <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
-                            }
-                        </td>
-                    </RowTemplate>
-                </TableTemplate>
-            </div>
-            <h3>@Localizer["MyAvailableModules"]</h3>
-            @if (AvailablePackages?.Any() == false)
-            {
-                <ActionMessage Label="NoModulesAvailable" AlertType="Info" />
-            }
-            else
-            {
-                <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true>
-                    <TableHeader>
-                        <th>@Localizer["Package"]</th>
-                        <th>@Localizer["Owner"]</th>
-                        <th>@Localizer["Modules"]</th>
-                        <th>@Localizer["Actions"]</th>
-                    </TableHeader>
-                    <RowTemplate Context="item">
-                        <td>@item.Name</td>
-                        <td>@item.OwnerName</td>
-                        <td>@item.ToString()</td>
-                        <td>
-                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
-                        </td>
-                    </RowTemplate>
-                </TableTemplate>
-            }
-            @if (BorrowablePackages?.Any() == true)
-            {
-                <h3>@Localizer["OtherAvailableModules"]</h3>
-                <TableTemplate Items="BorrowablePackages" Key="Key" HideNoRecordsToDisplay=true>
-                    <TableHeader>
-                        <th>@Localizer["Package"]</th>
-                        <th>@Localizer["Owner"]</th>
-                        <th>@Localizer["Modules"]</th>
-                        <th>@Localizer["Actions"]</th>
-                    </TableHeader>
-                    <RowTemplate Context="item">
-                        <td>@item.Name</td>
-                        <td>@item.OwnerName</td>
-                        <td>@item.ToString()</td>
-                        <td>
-                            <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
-                        </td>
-                    </RowTemplate>
-                </TableTemplate>
-            }
-        }
-        </div>
-    }
-    else
+    @if (IsAdministratorOrMeetingOrganiser || LayoutParticipant.Layout.IsOpenForRegistration(TimeProvider.LocalTime))
     {
-        <ActionMessage AlertType="Warning" Label="You are not present long enough to be able to register modules" />
+        @if (MeetingParticipant.MayRegisterModules())
+        {
+            <div style="margin-top: 12pt">
+                @if (Layout is not null)
+                {
+                    <div style="background-color: lightgoldenrodyellow">
+                        <h3>@Localizer["RegisteredModules"]</h3>
+
+
+                        <TableTemplate Items="ParticipantsRegisteredModules">
+                            <TableHeader>
+                                <th>@Localizer["Package"]</th>
+                                <th>@Localizer["Module"]</th>
+                                <th>@Localizer["Owner"]</th>
+                                <th>@Localizer["RegistrationTime"]</th>
+                                <th>@Localizer["Actions"]</th>
+                            </TableHeader>
+                            <RowTemplate Context="item">
+                                <td>@item.Module.PackageName()</td>
+                                <td>@item.Module.FullName</td>
+                                <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
+                                <td>@item.RegisteredTime.ToString("g")</td>
+                                <td>
+                                    @if (MayRemove)
+                                    {
+                                        <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
+                                    }
+                                    @if (item.HasCargoCustomers())
+                                    {
+                                        <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
+                                    }
+                                </td>
+                            </RowTemplate>
+                        </TableTemplate>
+                    </div>
+                    <h3>@Localizer["MyAvailableModules"]</h3>
+                    @if (AvailablePackages?.Any() == false)
+                    {
+                        <ActionMessage Label="NoModulesAvailable" AlertType="Info" />
+                    }
+                    else
+                    {
+                        <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true>
+                            <TableHeader>
+                                <th>@Localizer["Package"]</th>
+                                <th>@Localizer["Owner"]</th>
+                                <th>@Localizer["Modules"]</th>
+                                <th>@Localizer["Actions"]</th>
+                            </TableHeader>
+                            <RowTemplate Context="item">
+                                <td>@item.Name</td>
+                                <td>@item.OwnerName</td>
+                                <td>@item.ToString()</td>
+                                <td>
+                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
+                                </td>
+                            </RowTemplate>
+                        </TableTemplate>
+                    }
+                    @if (BorrowablePackages?.Any() == true)
+                    {
+                        <h3>@Localizer["OtherAvailableModules"]</h3>
+                        <TableTemplate Items="BorrowablePackages" Key="Key" HideNoRecordsToDisplay=true>
+                            <TableHeader>
+                                <th>@Localizer["Package"]</th>
+                                <th>@Localizer["Owner"]</th>
+                                <th>@Localizer["Modules"]</th>
+                                <th>@Localizer["Actions"]</th>
+                            </TableHeader>
+                            <RowTemplate Context="item">
+                                <td>@item.Name</td>
+                                <td>@item.OwnerName</td>
+                                <td>@item.ToString()</td>
+                                <td>
+                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
+                                </td>
+                            </RowTemplate>
+                        </TableTemplate>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <ActionMessage AlertType="Warning" Label="You are not present long enough to be able to register modules" />
+        }
+    }
+    else if (Layout.IsClosedForRegistration(TimeProvider.LocalTime))
+    {
+        <ActionMessage AlertType="Warning" Label="MeetingIsClosedForRegistration" />
     }
 }
 
@@ -131,6 +139,7 @@ else
     IEnumerable<ModulePackage>? BorrowablePackages = Array.Empty<ModulePackage>();
 
     bool MayRemove;
+    bool IsAdministratorOrMeetingOrganiser;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -142,7 +151,8 @@ else
             {
                 Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
                 MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider);
-                if (!MayRemove) MayRemove = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+                IsAdministratorOrMeetingOrganiser = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
+                if (!MayRemove) MayRemove = IsAdministratorOrMeetingOrganiser;
                 if (Meeting is not null && LayoutId > 0)
                 {
                     Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);

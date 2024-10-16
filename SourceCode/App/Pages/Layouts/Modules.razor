@@ -109,7 +109,7 @@ else
         if (Layout is not null)
         {
             Meeting = Layout.Meeting;
-            IsOrganiser = await MeetingService.IsMeetingOrganiser(Principal, Meeting);
+            IsOrganiser = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
             LayoutParticipants = await LayoutParticipantService.GetAllForLayout(Principal, Id);
             if (LayoutParticipants.Any())
             {

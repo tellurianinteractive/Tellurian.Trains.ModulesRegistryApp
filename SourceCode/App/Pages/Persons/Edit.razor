@@ -42,7 +42,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
 
             }
             <hr/>
-            @if (Principal.IsCountryOrGlobalAdministrator() && Person.User is not null)
+            @if (Principal.IsGlobalOrCountryAdministrator() && Person.User is not null)
             {
                 <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
                 <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />

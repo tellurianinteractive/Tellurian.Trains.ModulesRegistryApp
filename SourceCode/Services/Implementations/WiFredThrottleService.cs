@@ -27,7 +27,7 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
     public async Task<IEnumerable<WiFredThrottle>> GetThrottles(ClaimsPrincipal? principal, bool onlyMyThrottles = false)
     {
         if (onlyMyThrottles) return await GetOwnersThrottles(principal, principal.PersonId());
-        if (principal.MayManageWiFreds() || principal.IsCountryOrGlobalAdministrator()) return await GetAllThrottles(principal);
+        if (principal.MayManageWiFreds() || principal.IsGlobalOrCountryAdministrator()) return await GetAllThrottles(principal);
         return await GetOwnersThrottles(principal, principal.PersonId());
     }
 
@@ -46,7 +46,7 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
 
     public async Task<IEnumerable<WiFredThrottle>> GetAllThrottles(ClaimsPrincipal? principal)
     {
-        if (principal.MayManageWiFreds() || principal.IsCountryOrGlobalAdministrator())
+        if (principal.MayManageWiFreds() || principal.IsGlobalOrCountryAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.WiFredThrottles

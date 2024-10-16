@@ -7,7 +7,7 @@
 
 <PageHeading Label="ModuleEndProfiles" IconClass="@FontAwesome.Standard" PageAction="PageAction.List" />
 
-@if (Principal.IsCountryOrGlobalAdministrator())
+@if (Principal.IsGlobalOrCountryAdministrator())
 {
     <AppButton Label="Add" Href="@EndProfileEditLink(0)" IsDisabled="MayNotEdit" />
 }
@@ -24,7 +24,7 @@
         <td>@item.Scale.Display()</td>
         <td>@item.Designation</td>
         <td>
-            @if (Principal.IsCountryOrGlobalAdministrator())
+            @if (Principal.IsGlobalOrCountryAdministrator())
             {
                 <AppButton Label="Edit" Href="@EndProfileEditLink(item.Id)" IsDisabled="MayNotEdit" />
             }
@@ -47,6 +47,6 @@
     }
 
     string EndProfileEditLink(int id) => $"ModuleStandards/EndProfiles/{id}/Edit";
-    bool MayNotEdit => !Principal.IsCountryOrGlobalAdministrator();
+    bool MayNotEdit => !Principal.IsGlobalOrCountryAdministrator();
 
 }

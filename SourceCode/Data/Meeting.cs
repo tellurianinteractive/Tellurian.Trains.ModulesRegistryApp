@@ -123,7 +123,7 @@ public static class MeetingExtensions
         meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
 
     public static bool MayDelete(this Meeting meeting, ClaimsPrincipal? principal) =>
-        principal.IsCountryOrGlobalAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+        principal.IsGlobalOrCountryAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
 
     public static bool MayRegister(this Meeting meeting, ClaimsPrincipal? principal, DateTime at) =>
         meeting.PermitsRegistrations() &&
@@ -143,14 +143,17 @@ public static class MeetingExtensions
         meeting.ShowTime() && meeting.EndDate.Date == meeting.StartDate.Date ? new($"""<i>{meeting.StartDate:t}-{meeting.EndDate:t}</i>""") :
         new(meeting.EndDate.ToString("d"));
 
-    public static string Duration(this Meeting meeting) =>
+    public static string DurationText(this Meeting meeting) =>
         meeting.ShowTime() ? $"{meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
         $"{meeting.StartOrEventDate()} - {meeting.EndDateOrTimes()}";
+    public static int DurationDays(this Meeting meeting) =>
+       (meeting.EndDate.Date - meeting.StartDate.Date).Days + 1;
 
     public static bool HasMeetingAdministrator(this Meeting meeting, int personId) =>
         meeting.OrganiserGroup is null || meeting.Layouts is null ? false :
         meeting.OrganiserGroup.GroupMembers.Any(gm => gm.IsMeetingAdministrator && gm.PersonId == personId) ||
         meeting.Layouts.Any(l => l.OrganisingGroup?.GroupMembers is not null &&  l.OrganisingGroup.GroupMembers.Any(gm => gm.IsMeetingAdministrator && gm.PersonId == personId));
+    public static int CountryId(this Meeting? meeting) => meeting?.OrganiserGroup?.CountryId ?? 0;
 }
 
 public static class MeetingMapping

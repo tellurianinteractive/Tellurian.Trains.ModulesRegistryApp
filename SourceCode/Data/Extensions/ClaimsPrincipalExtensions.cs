@@ -66,8 +66,8 @@ public static class ClaimsPrincipalExtensions
 
     #region Administrator scope
 
-    public static bool IsCountryOrGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) =>
-        principal is not null && (principal.IsGlobalAdministrator() || principal.IsCountryAdministrator());
+    public static bool IsGlobalOrCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, int countryId = 0) =>
+        principal is not null && (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(countryId));
 
     public static bool IsAnyGroupAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, Group? group) =>
         principal is not null && group is not null &&
@@ -121,7 +121,7 @@ public static class ClaimsPrincipalExtensions
          principal?.IsReadOnly() == false && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == principal.PersonId()) || (principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator()));
 
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting) =>
-        principal is not null && principal.IsCountryOrGlobalAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
+        principal is not null && principal.IsGlobalOrCountryAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
 
     [Obsolete("Use MeetingParticipant.MayUnregisterModules")]
     public static bool MayRemove([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting, LayoutModule? module) =>
@@ -147,7 +147,7 @@ public static class ClaimsPrincipalExtensions
 
     public static int MinimumObjectVisibility(this ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool isMemberInGroupsInSameDomain) =>
         principal is null ? (int)ObjectVisibility.Public :
-        principal.IsCountryOrGlobalAdministrator() || ownerRef.PersonId == principal.PersonId() ? (int)ObjectVisibility.Private :
+        principal.IsGlobalOrCountryAdministrator() || ownerRef.PersonId == principal.PersonId() ? (int)ObjectVisibility.Private :
         ownerRef.IsPersonInGroup ? (int)ObjectVisibility.GroupMembers :
         ownerRef.IsPerson && isMemberInGroupsInSameDomain ? (int)ObjectVisibility.DomainMembers :
         ownerRef.GroupId > 0 ? (int)ObjectVisibility.GroupMembers : (int)ObjectVisibility.Private;

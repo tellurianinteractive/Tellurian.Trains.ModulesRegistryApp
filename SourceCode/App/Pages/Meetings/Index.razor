@@ -10,7 +10,7 @@
 
 <PageHeading ObjectName="Meetings" IconClass="@FontAwesome.Meeting" PageAction="PageAction.List" />
 
-@if (Principal.IsCountryOrGlobalAdministrator())
+@if (Principal.IsGlobalOrCountryAdministrator())
 {
     <AppButton Label="Add" Href="Meetings/0/edit"></AppButton>
 }

@@ -95,7 +95,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal is null) return null;
         using var dbContext = Factory.CreateDbContext();
-        if (principal.IsCountryOrGlobalAdministrator()) return await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
+        if (principal.IsGlobalOrCountryAdministrator()) return await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         return null;
     }
 

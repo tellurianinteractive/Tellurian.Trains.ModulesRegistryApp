@@ -52,7 +52,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     public async Task<Meeting?> FindByIdAsync(int id)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Meetings.AsNoTracking()
+        return await dbContext.Meetings
              .Include(m => m.Layouts).ThenInclude(l => l.OrganisingGroup).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator || gm.IsGroupAdministrator))
              .Include(m => m.Layouts).ThenInclude(l => l.ContactPerson)
              .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
@@ -131,7 +131,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         if (principal is not null)
         {
             using var dbContext = Factory.CreateDbContext();
-            var isMeetingOrganizer = await IsMeetingOrganiser(principal, entity).ConfigureAwait(false);
+            var isMeetingOrganizer = await IsAdministratorOrMeetingOrganiser(principal, entity).ConfigureAwait(false);
             if (isMeetingOrganizer)
             {
                 return await AddOrUpdate(dbContext, entity).ConfigureAwait(false);
@@ -203,7 +203,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<(int Count, string? Message)> DeleteAsync(ClaimsPrincipal? principal, Meeting meeting)
     {
-        if (principal is not null && principal.IsCountryOrGlobalAdministrator())
+        if (principal is not null && principal.IsGlobalOrCountryAdministrator())
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Meetings
@@ -217,7 +217,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return principal.NotAuthorized<Meeting>();
     }
 
-    public async Task<bool> IsMeetingOrganiser(ClaimsPrincipal? principal, Meeting? meeting)
+    public async Task<bool> IsAdministratorOrMeetingOrganiser(ClaimsPrincipal? principal, Meeting? meeting)
     {
         if (principal is null || meeting is null) return false;
         if (principal.IsGlobalAdministrator()) return true;
@@ -257,10 +257,11 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.MeetingParticipants.AsNoTracking()
+            return await dbContext.MeetingParticipants
                 .Include(mp => mp.Meeting).ThenInclude(m => m.Layouts)
                 .Include(mp => mp.Person)
                 .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(l => l.PrimaryModuleStandard)
+                .AsNoTracking()
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
                 .ConfigureAwait(false);
         }
@@ -273,16 +274,18 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         {
             using var dbContext = Factory.CreateDbContext();
             var isSelf = entity.PersonId == principal.PersonId();
-            var isOrganiser = await IsMeetingOrganiser(principal, meeting);
+            var isOrganiser = await IsAdministratorOrMeetingOrganiser(principal, meeting);
             if (isOrganiser || isSelf)
             {
                 var existing = await dbContext.MeetingParticipants
+                    //.Include(mp=> mp.LayoutParticipations).ThenInclude(lp => lp.Layout)
                     .SingleOrDefaultAsync(mp => mp.Id == entity.Id)
                     .ConfigureAwait(false);
                 if (existing is null)
                 {
                     entity.RegistrationTime = TimeProvider.Now;
                     dbContext.MeetingParticipants.Add(entity);
+                    
                 }
                 else
                 {

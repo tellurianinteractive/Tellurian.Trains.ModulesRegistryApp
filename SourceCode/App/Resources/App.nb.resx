@@ -894,6 +894,9 @@
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Møtearrangør tar ikke imot påmeldinger her.</value>
   </data>
+  <data name="MeetingIsClosedForRegistration" xml:space="preserve">
+    <value>Treffet er stengt for påmelding</value>
+  </data>
   <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
     <value>Treffen er ennå ikke åpen for påmelding</value>
   </data>

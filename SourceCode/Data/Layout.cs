@@ -73,7 +73,10 @@ public static class LayoutExtensions
     internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
         layout.IsRegistrationPermitted &&
         layout.RegistrationOpeningDate > at;
-
+    public static bool IsClosedForRegistration(this Layout? layout, DateTime at) =>
+        layout is not null && 
+        layout.IsRegistrationPermitted &&
+        layout.RegistrationClosingDate < at;
 
 }
 

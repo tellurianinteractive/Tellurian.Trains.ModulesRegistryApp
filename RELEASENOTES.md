@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.24
+Release date 2024-10-16
+- **Participant registration** for meeting, layouts and modules are cleaned up. 
+Users are now presented that the meeting is closed for registration.
+Only the meeting organiser and administrators can still make changes.
 ## Release 1.11.23
 Release date 2024-10-13
 - **My modules** now displays buttons for *operations location* and *cargo customers* when the module is the primary operations location module.

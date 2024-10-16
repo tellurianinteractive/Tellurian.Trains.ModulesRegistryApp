@@ -119,7 +119,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             {
                 using var dbContext = Factory.CreateDbContext();
                 var isDataAdministrator = await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownershipRef.GroupId && gm.PersonId == principal.PersonId()).ConfigureAwait(false);
-                if (isDataAdministrator || principal.IsCountryOrGlobalAdministrator())
+                if (isDataAdministrator || principal.IsGlobalOrCountryAdministrator())
                 {
                     return await AddOrUpdate(dbContext, principal, entity, moduleId).ConfigureAwait(false);
                 }

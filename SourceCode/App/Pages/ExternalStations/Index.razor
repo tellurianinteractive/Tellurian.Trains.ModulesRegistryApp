@@ -62,7 +62,7 @@
             {
                 <AppButton Label="Edit" Href="@EditHref(station)" />
             }
-            @if (Principal.IsCountryOrGlobalAdministrator())
+            @if (Principal.IsGlobalOrCountryAdministrator())
             {
                 <AppButton Label="Delete" OnClickCallback="() => OpenDeleteDialog(station.Id)" />
             }

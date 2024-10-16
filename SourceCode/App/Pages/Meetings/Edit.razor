@@ -67,7 +67,7 @@
         if (Meeting is not null)
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId, OrganiserGroupId);
-            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsMeetingOrganiser(Principal, Meeting));
+            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting));
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
             GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
         }

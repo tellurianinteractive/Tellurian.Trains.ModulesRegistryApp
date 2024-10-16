@@ -894,6 +894,9 @@
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
     <value>Der Organisator des Meetings akzeptiert hier keine Anmeldungen.</value>
   </data>
+  <data name="MeetingIsClosedForRegistration" xml:space="preserve">
+    <value>Das Treffen ist wegen Registrierung geschlossen</value>
+  </data>
   <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
     <value>Das Treffen ist noch nicht zur Anmeldung geöffnet</value>
   </data>
