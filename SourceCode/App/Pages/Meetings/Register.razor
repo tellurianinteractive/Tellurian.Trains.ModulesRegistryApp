@@ -41,10 +41,10 @@ else
             </div>
         }
 
-        @if (IsAdministratorOrMeetingOrganiser && Participant is null && Principal is not null)
+        @if (IsAdministratorOrMeetingOrganiser && Participant is null)
         {
             <div style="padding: 10px 0px">
-                <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal.Sender()" Subject="@Meeting.Name" />
+                <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Meeting.Name" />
                 <MailCopyButton Recipients="Meeting.ParticipantsMails()" />
 
                 @foreach (var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted))
@@ -138,12 +138,12 @@ else
                 </Inputs>
             </EditTemplate>
         }
-        @if (Participant?.Id > 0 && (Principal.IsGlobalOrCountryAdministrator(Meeting.CountryId()) || Meeting.PermitsRegistrations() && Meeting.IsOpenForRegistration(TimeProvider.LocalTime)))
+    @if (IsAdministratorOrMeetingOrganiser || (Participant?.Id > 0 && Meeting.PermitsRegistrations() && Meeting.IsOpenForRegistration(TimeProvider.LocalTime)))
         {
             <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
             <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
                 <TableHeader>
-                    <th width="200px">@Localizer["Actions"]</th>
+                    <th width="400px">@Localizer["Actions"]</th>
                     <th width="15%">@Localizer["Layout"]</th>
                     <th>@Localizer["Organiser"]</th>
                     <th>@Localizer["Details"]</th>
