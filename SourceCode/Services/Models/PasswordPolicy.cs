@@ -7,7 +7,7 @@ public class PasswordPolicy : ValidationAttribute
     public static int MinimumLength { get; set; } = 10;
     public static (int Minimum, string Characters) Letters { get; set; } = (4, "ABCDEFGHIJKLMNOPQRSTUÜVWXYZÅÄÆÖØabcdefghijklmnopqrstuüvwxyzåäæöø");
     public static (int Minimum, string Characters) Digits { get; set; } = (1, "0123456789");
-    public static (int Minimum, string Characters) Special { get; set; } = (1, "!#¤%&?§()[]+*_");
+    public static (int Minimum, string Characters) Special { get; set; } = (1, "@!#¤%&?§()[]+*_");
 
     public override bool IsValid(object? value)
     {
