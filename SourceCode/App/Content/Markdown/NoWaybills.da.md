@@ -6,14 +6,14 @@ Fragtbreve kan oprettes på to måder:
 Der kan være flere årsager til, at der ikke vises fragtbreve til udskrivning for stationen:
 
 ## Mødelayout fragtbreve
-YTræf fragtbreve er interne fragter mellem moduler, der er til stede i banen:
-- Stationen skal registreres på træffet på den rigtige bane.
-- Stationen skal have fragtkunder, som *modtager* varer, som andre stationer i banen sender. Bemærk at du ikke får fragtbreve for varer du *sender*.
+Træf interne fragtbreve er fragter mellem moduler, der er til stede i banen:
 - Stationen skal tildeles en *region*.
+- Stationen skal registreres på træffet og på den aktuelle bane.
+- Stationen skal have fragtkunder, som *modtager* varer, som andre stationer i banen sender. Bemærk at du ikke får fragtbreve for varer du *sender*.
 - Hvis varekunderne og/eller varestrømmen har start- og/eller slutdato, skal gyldigheden falde inden for træffets tidsperiode.
 
 ## Genanvendelige fragtbreve
 Dette er fragtbrevet, du opretter til din station, og som kan genbruges til flere træf:
-- Stationen skal have fragtkunder, der *sender* eller *modtager* varer, som andre modulstationer eller eksterne stationer sender.
 - Stationen skal tildeles en *region*.
+- Stationen skal have fragtkunder, der *sender* eller *modtager* varer, som andre modulstationer eller eksterne stationer sender.
 - Hvis varekunderne og/eller varestrømmen har start- og/eller slutdato, skal gyldigheden falde inden for godstypens gyldighedsperiode. Nogle lasttyper har gyldighed af historisk grund.

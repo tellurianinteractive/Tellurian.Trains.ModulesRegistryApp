@@ -33,7 +33,7 @@ public static class LayoutStationExtensions
         me is null ? string.Empty :
         me.OtherName ?? me.Station?.FullName ?? $"Name missing for {me.Id}";
 
-    public static string SignatireInLayout(this LayoutStation? me) =>
+    public static string SignatureInLayout(this LayoutStation? me) =>
          me is null ? string.Empty :
          me.OtherSignature ?? me.Station?.Signature ?? $"Signature missing for {me.Id}";
 

@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Services.Extensions;
-public static  class ClaimsPrincipalExtentions
+public static class ClaimsPrincipalExtentions
 {
     public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef, GroupService groupService)
     {

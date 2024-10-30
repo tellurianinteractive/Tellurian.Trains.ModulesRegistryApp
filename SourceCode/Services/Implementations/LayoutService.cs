@@ -56,7 +56,19 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             return await dbContext.LayoutStations.AsNoTracking().FirstOrDefaultAsync(ls => ls.StationId == stationId);
         }
         return null;
+    }
 
+    public async Task<IEnumerable<LayoutStation>> GetParticipantsLayoutStations(ClaimsPrincipal? principal, int layoutId, int personId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.LayoutStations
+                .Include(ls => ls.Station).ThenInclude(s => s.PrimaryModule)
+                .Where(ls => ls.LayoutParticipant.LayoutId == layoutId && ls.LayoutParticipant.PersonId == personId)
+                .ToReadOnlyListAsync();
+        }
+        return [];
     }
 
     public async Task<IEnumerable<LayoutVehicle>> GetLayoutVehicles(int layoutId, bool onlyTractionUnits = false)

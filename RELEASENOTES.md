@@ -3,7 +3,9 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.11.26
-Release date 2024-10-28
+Release date 2024-10-30
+- **Meeting internal waybills** can now be viewed and printed even if meeting is closed for registration.
+- **No waybills?** page with documentation of reasons why a station does not show any waybills is updated.
 - **Password** can now also contain @.
 ## Release 1.11.25
 Release date 2024-10-23

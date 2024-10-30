@@ -138,27 +138,37 @@ else
                 </Inputs>
             </EditTemplate>
         }
-    @if (IsAdministratorOrMeetingOrganiser || (Participant?.Id > 0 && Meeting.PermitsRegistrations() && Meeting.IsOpenForRegistration(TimeProvider.LocalTime)))
+    @if (IsAdministratorOrMeetingOrganiser || (Participant?.Id > 0 && Meeting.PermitsRegistrations()))
         {
             <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
             <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
                 <TableHeader>
-                    <th width="400px">@Localizer["Actions"]</th>
                     <th width="15%">@Localizer["Layout"]</th>
                     <th>@Localizer["Organiser"]</th>
-                    <th>@Localizer["Details"]</th>
+                    <th>@Localizer["Note"]</th>
+                    <th width="400px">@Localizer["Actions"]</th>
                 </TableHeader>
                 <RowTemplate Context="item">
+                    <td>@item.Layout.DescriptionWithName()</td>
+                    <td>@item.Layout.OrganisingGroup?.FullName</td>
+                    <td>
+                        @if (item.Layout.IsClosedForRegistration(TimeProvider.LocalTime))
+                        {
+                            <span style="color:red;">@Localizer["RegistrationClosed"]</span>
+                        }
+                    </td>
                     <td>
                         @if (IsAdministratorOrMeetingOrganiser || item.Layout?.IsOpenForRegistration(TimeProvider.LocalTime) == true)
                         {
                             <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                             <AppButton Label="Unregister" IconName="@FontAwesome.Cancel" Type="Danger" OnClickCallback="@(async () => await OnCancelLayoutParticipation(item))" />
                         }
+                        
+                        @if (item.LayoutParticipant?.LayoutStations.Any() == true)
+                        {
+                            <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@($"layouts/{item.Layout?.Id}/waybills/{item.Participant.PersonId}")" />
+                        }
                     </td>
-                    <td>@item.Layout.DescriptionWithName()</td>
-                    <td>@item.Layout?.OrganisingGroup?.FullName</td>
-                    <td><MarkdownView Markdown="@item.Layout?.Details" /></td>
                 </RowTemplate>
             </TableTemplate>
         }

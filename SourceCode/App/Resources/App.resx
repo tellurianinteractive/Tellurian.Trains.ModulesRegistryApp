@@ -1329,6 +1329,9 @@
   <data name="Registration" xml:space="preserve">
     <value>Registration</value>
   </data>
+  <data name="RegistrationClosed" xml:space="preserve">
+    <value>Registration closed.</value>
+  </data>
   <data name="RegistrationCloses" xml:space="preserve">
     <value>Registration closes</value>
   </data>

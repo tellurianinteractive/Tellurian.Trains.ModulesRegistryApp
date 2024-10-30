@@ -68,7 +68,8 @@ public static class ModuleOwnershipExtensionsk
             GroupId = newOwnerRef.GroupId > 0 ? newOwnerRef.GroupId: null,
             OwnedShare = 0
         };
-    public static ModuleOwnershipRef AsModuleOwnershipRef(this ModuleOwnership ownership) =>
+    public static ModuleOwnershipRef AsModuleOwnershipRef(this ModuleOwnership? ownership) =>
+        ownership is null ? ModuleOwnershipRef.None :
         ModuleOwnershipRef.PersonAndOrGroup(ownership.PersonId ?? 0, ownership.GroupId ?? 0);
     public static bool HasPersonOrGroupOwner([NotNullWhen(true)] this ModuleOwnership? ownership) =>
         ownership is not null && (ownership.PersonId.HasValue || ownership.GroupId.HasValue);

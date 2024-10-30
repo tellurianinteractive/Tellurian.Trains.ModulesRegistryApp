@@ -7,19 +7,19 @@
 else
 {
     <div style="display:flex; flex-direction:row; justify-content: space-between; align-items:end">
+        <div style="font-size:18pt; font-weight: bold">
+            @Customer.CustomerName
+            @if (Customer.Comment.HasValue())
+            {
+                <span style="font-size:12pt; font-weight: normal">
+                    ,
+                    @Customer.Comment
+                </span>
+            }
+
+        </div>
         @if (MayEdit)
         {
-            <div style="font-size:18pt; font-weight: bold">
-                @Customer.CustomerName
-                @if (Customer.Comment.HasValue())
-                {
-                    <span style="font-size:12pt; font-weight: normal">
-                        ,
-                        @Customer.Comment
-                    </span>
-                }
-
-            </div>
             <div style="padding-left: 20pt">
                 <AppButton Label="ManageCargoFlow" Href="@FreightCustomerHref(Customer)" IconName="@FontAwesome.Cargo" AlwaysShowLabel=true />
                 <AppButton Label="ManageWaybills" Href="@FreightCustomerWaybillsHref(Customer)" IconName="@FontAwesome.Waybills" AlwaysShowLabel=true />
@@ -27,7 +27,7 @@ else
         }
     </div>
 
-    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="RowStyle" >
+    <TableTemplate Items="Customer.Cargos.OrderBy(scc => scc.DirectionId)" RowStyle="RowStyle">
         <TableHeader>
             <th>@Localizer["CargoType"]</th>
             <th>@Localizer["PackagingUnit"]</th>
@@ -70,6 +70,6 @@ else
     string FreightCustomerWaybillsHref(StationCustomer? it) => it is null ? string.Empty : $"/Stations/{it.StationId}/Customers/{it.Id}/Waybills";
 
     string RowStyle(StationCustomerCargo item) => item.RowStyle();
-    
+
 }
 

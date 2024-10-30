@@ -1,0 +1,60 @@
+﻿@page "/layouts/{LayoutId:int}/waybills/{PersonId:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject IStringLocalizer<App> Localizer
+@inject LayoutService LayoutService
+
+<PageHeading Label="InternalWaybills" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
+@if (LayoutStations is null)
+{
+    <ActionMessage Label="FetchingData" />
+
+}
+else if (LayoutStations.Count() == 0)
+{
+    <ActionMessage Label="NoLayoutStationsRegistered" AlertType="Warning" />
+}
+else
+{
+    <TableTemplate Items="LayoutStations">
+        <TableHeader>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["NameInLayout"]</th>
+            <th>@Localizer["HasCargoCustomers"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="item">
+            <td>@item.Station.FullName</td>
+            <td>@item.NameInLayout()</td>
+            <td>@item.Station.HasCargoCustomers.AsYesOrNo()</td>
+            <td>
+                @if (item.Station.HasCargoCustomers)
+                {
+                    <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@($"/reports/waybills/layout/{LayoutId}/station/{item.StationId}")" />
+                    <AppButton Label="Edit-CargoCustomers" Href="@($"Stations/{item.StationId}/Customers")" />
+                }
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int LayoutId { get; set; }
+    [Parameter] public int PersonId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<LayoutStation>? LayoutStations;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        LayoutStations = await LayoutService.GetParticipantsLayoutStations(Principal, LayoutId, PersonId);
+    }
+}

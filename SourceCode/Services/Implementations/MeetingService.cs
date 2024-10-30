@@ -258,9 +258,10 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.MeetingParticipants
-                .Include(mp => mp.Meeting).ThenInclude(m => m.Layouts)
+                .Include(mp => mp.Meeting)
                 .Include(mp => mp.Person)
                 .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(l => l.PrimaryModuleStandard)
+                .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.LayoutStations)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(mp => mp.MeetingId == meetingId && mp.PersonId == personId)
                 .ConfigureAwait(false);

@@ -15,6 +15,7 @@
 @inject OperatingDayService OperatingDayService
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
+@inject ModuleOwnershipService ModuleOwnershipService
 
 <PageHeading Label="FreightCustomers" Context="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
@@ -54,6 +55,7 @@
     ClaimsPrincipal? Principal;
     Station? Station;
     IEnumerable<StationCustomer>? StationCustomers;
+    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
     bool MayEdit;
 
     protected override async Task OnInitializedAsync()
@@ -72,10 +74,15 @@
     {
         if (StationId > 0)
         {
-            var ownershipRef = ModuleOwnershipRef.PersonAndOrGroup(OwningPersonId, OwningGroupId);
-            Station = await StationService.FindByIdWithVisibilityAsync(Principal, StationId, ownershipRef);
-            StationCustomers = await StationCustomerService.AllAsync(Principal, StationId, CustomerId);
-            MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
+            Station = await StationService.FindByIdAsync(Principal, StationId);
+            if (Station is not null)
+            {
+                StationCustomers = await StationCustomerService.AllAsync(Principal, StationId, CustomerId);
+                var ownership = await ModuleOwnershipService.GetModuleOwnershipAsync(Principal, Station.PrimaryModuleId, OwningPersonId, OwningGroupId);
+                OwnershipRef = ownership.AsModuleOwnershipRef();
+                MayEdit = await Principal.MayEdit(OwnershipRef, GroupService);
+
+            }
         }
     }
 
