@@ -78,7 +78,7 @@ else
                                 <td>@item.OwnerName</td>
                                 <td>@item.ToString()</td>
                                 <td>
-                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
+                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterOwnedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                                 </td>
                             </RowTemplate>
                         </TableTemplate>
@@ -98,7 +98,7 @@ else
                                 <td>@item.OwnerName</td>
                                 <td>@item.ToString()</td>
                                 <td>
-                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
+                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterBorrowedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                                 </td>
                             </RowTemplate>
                         </TableTemplate>
@@ -182,10 +182,20 @@ else
         }
     }
 
-    async Task OnRegisterPackage(int packageId)
+    async Task OnRegisterOwnedPackage(int packageId)
     {
         var package = AvailablePackages?.SingleOrDefault(p => p.Id == packageId);
-        if (package is null) package = BorrowablePackages?.SingleOrDefault(p => p.Id == packageId);
+        if (package is not null && Layout is not null && LayoutParticipant is not null)
+        {
+            var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Update();
+        }
+    }
+
+    async Task OnRegisterBorrowedPackage(int packageId)
+    {
+        var package = BorrowablePackages?.SingleOrDefault(p => p.Id == packageId);
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);

@@ -52,6 +52,21 @@
 		<None Update="Content\Markdown\Articles\CustomersAndFreights.sv.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Content\Markdown\Articles\ManageModuleMeetings.da.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ManageModuleMeetings.de.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ManageModuleMeetings.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ManageModuleMeetings.nb.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Articles\ManageModuleMeetings.sv.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Help\ExternalStation.da.md">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

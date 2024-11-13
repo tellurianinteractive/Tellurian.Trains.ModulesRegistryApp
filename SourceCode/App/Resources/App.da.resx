@@ -1404,6 +1404,9 @@
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail til alle</value>
   </data>
+  <data name="SendMailToAllUsersIn" xml:space="preserve">
+    <value>Send mail til alle brugere i {0}</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Indstillinger</value>
   </data>
@@ -1556,6 +1559,9 @@
   </data>
   <data name="Usage" xml:space="preserve">
     <value>Anvendelse</value>
+  </data>
+  <data name="UserAdministration" xml:space="preserve">
+    <value>Brugeradministration</value>
   </data>
   <data name="UserConfirmationFailed" xml:space="preserve">
     <value>Brugerbekræftelse mislykkedes!</value>

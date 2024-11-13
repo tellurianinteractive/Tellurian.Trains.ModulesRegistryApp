@@ -2,11 +2,20 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.27
+Release date 2024-11-13
+- **Improvement** of *user administration* page (issue #201).
+- **Bug fix** of returning from edit vehicle to *my vehicles* list.
+- **Bug fix** of adding wrong module to meeting layout (issue #218). Thanks to Tore Urvik for reporting this.
+- **Bug fix** of displaying freight customers in some cases.
+- **Bug fix** of validation messages not containing valid min and max values (issue #216). Thanks to Alexander Ehn for reporting this.
+- **Bug fix** of help article about create and manage module meetings not visisble (issue #217). Thanks to Fredrik Pettersson for reporting this. 
+
 ## Release 1.11.26
 Release date 2024-10-30
 - **Meeting internal waybills** can now be viewed and printed even if meeting is closed for registration.
 - **No waybills?** page with documentation of reasons why a station does not show any waybills is updated.
-- **Password** can now also contain @.
+- **Password** can now also contain @, with regards to Leif Haldeberg.
 ## Release 1.11.25
 Release date 2024-10-23
 - **Bug fix** of meeting organiser could not access layout participation page.

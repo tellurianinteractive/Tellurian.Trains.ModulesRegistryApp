@@ -9,17 +9,20 @@
 @inject UserService UserService
 @inject AppService AppService
 
-<PageHeading IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
+<PageHeading Label="UserAdministration" IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId />
 
-@if (Principal is not null && Users is not null)
+@if (Users?.Any() == true)
 {
-    @foreach (var group in Users.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+    <h2>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
+    @if (Principal is not null && Users is not null)
     {
-        <AppButton Href="@group.Href" Label="@group.Subset"  IconName="@FontAwesome.Mail"/>
+        @foreach (var group in Users.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+        {
+            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" />
+        }
     }
-
 }
 
 @code {

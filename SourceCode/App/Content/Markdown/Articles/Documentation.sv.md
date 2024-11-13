@@ -15,7 +15,7 @@ att hålla data konsekvent och med hög kvalitet.
 - [**Godskunder og frakter**](Content/articles-CustomersAndFreights) guidar dig hur du framställer fraktsedlar.
 
 ## Riktlinjer för att administrera modulträffar
-- [**Administrera modulträffar**](Content/articles-managemodulemeetings) guidar dig till hur du skapar och administrerar modulträffar i Modulregistret.
+- [**Administrera modulträffar**](Content/articles-ManageModuleMeetings) guidar dig till hur du skapar och administrerar modulträffar i Modulregistret.
 
 ## Hjälptexter
 På många sidor där du anger data kan du klicka på <span class="fa fa-question-circle"></span> i det övre högra hörnet för att få hjälp.

@@ -63,21 +63,26 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<ModuleOwnership?> GetModuleOwnershipAsync(ClaimsPrincipal? principal, int? moduleId, int personId, int groupId)
     {
-        if (moduleId is null) return null;
+        if (moduleId is null) return default;
         if (principal.IsAuthenticated())
         {
             if (personId == 0 && groupId == 0) personId = principal.PersonId();
             using var dbContext = Factory.CreateDbContext();
-            var result = await dbContext.ModuleOwnerships
-                .Include(mo => mo.Group).ThenInclude(g => g.GroupMembers.Where(gm => gm.IsDataAdministrator))
-                .Where(mo => mo.ModuleId == moduleId.Value)
-                .ToReadOnlyListAsync();
-            if (result.Count == 1) return result[0];
-            return result 
-                .Where(mo => mo.ModuleId == moduleId.Value && (personId > 0 && mo.PersonId == personId) || (groupId > 0 && mo.GroupId == groupId) || mo.Group.GroupMembers.Any(gm => gm.IsDataAdministrator && gm.PersonId == personId))
-                .SingleOrDefault();
+            List<ModuleOwnership> ownerships = [];
+            if (groupId > 0)
+            {
+                ownerships = await dbContext.ModuleOwnerships
+                    .Where(mo => mo.GroupId == groupId)
+                    .ToReadOnlyListAsync();
+            }
+            else if (personId > 0) {
+                ownerships = await dbContext.ModuleOwnerships
+                    .Where (mo => mo.PersonId == personId)
+                    .ToReadOnlyListAsync();
+            }
+            return ownerships.Count > 0 ? ownerships[0] : default;
         }
-        return null;
+        return default;
     }
 
     private async Task<Module?> GetModule(int moduleId)
