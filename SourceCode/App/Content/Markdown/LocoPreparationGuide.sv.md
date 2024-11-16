@@ -44,15 +44,15 @@ Det rekommenderas att loket och manövervagnen i andra änden av tåget har synk
 Det betyder att de måste ha samma DCC-adress och samma strålkastar- och bakgrundsbelysningsfunktioner. Dessa inställningar ändras i dekoderns inställningar.
 
 #### Förberedelse av FRED
-FRED-körhandtaget är det enda som används vid FREMO-möten.
-- Se till att din FRED har märkts med operatör, littera och fordonsnummer, exempel **DB MZ 1456**. Detta hjälper människor att hitta rätt FRED.
-- Det rekommenderas också att ange viktiga lokfunktioner på FRED-dekalen. Minst ljusfunktioner, signalhorn och motor bör dokumenteras.
+FRED-körhandtaget är oftast det enda som används vid FREMO-träffar.
+- Se till att din FRED har märkts med tågoperatör, littera och fordonsnummer, exempel **DB MZ 1456**. Detta hjälper människor att hitta rätt FRED.
+- Det rekommenderas också att ange viktiga lokfunktioner på FRED-insticket. Minst ljusfunktioner, signalhorn och motor bör dokumenteras.
 - Observera att funktioner ovanför F8 ibland inte fungerar vid FREMO-träffar, på grund av begränsningar i den digitala centralen som används. 
 Så gör alla viktiga funktioner tillgängliga på F1-F8.
 - Även om du inte har en egen FRED till dina lok så förbered en FRED-dekal att använda i en lånad FRED.
 
 #### Förberedelse av lokkort
-- Alla lok som kör linjetåg brukar ha lokkort. 
+- Alla lok som kör tåg brukar ha lokkort, men sällan växellok.
 - Ett lokkort måste ha en genomskinlig inpackad kreditkortsstorlek, där lokets omloppsplan sätts.
 - Lokkort kan du t.ex. tillverka med [Lok- och vagnkortsappen](https://wagoncardapp.azurewebsites.net/).
 

@@ -90,7 +90,8 @@ AS
 		C.IsExpress,
 		C.IsCoolingRequired,
 		CASE
-			WHEN CU.IsBearer <> 0 THEN CCC.Quantity
+			WHEN CU.IsBearer <> 0 THEN 
+				CASE WHEN CCC.Quantity < CCS.Quantity THEN CCC.Quantity ELSE CCS.Quantity END
 			ELSE 1
 		END AS PrintCount,
 		CAST (0 AS BIT) AS PrintPerOperatingDay,
@@ -111,7 +112,11 @@ AS
 		Layout AS L ON L.Id = CCC.LayoutId
 	WHERE
 		CCS.CargoId = CCC.CargoId AND
-		ISNULL(C.NHMCode,0) > 0 AND
+		(
+			(ISNULL(C.NHMCode,0) = 0 AND CCC.CountryId <> CCS.CountryId AND CCC.IsInternational <> 0 AND CCS.IsInternational <> 0) 
+			OR 
+			(ISNULL(C.NHMCode,0) > 0 AND CCC.IsInternational = 0 AND CCS.IsInternational = 0)
+		) AND
 		(CCS.FromYear IS NULL OR CCS.FromYear <= ISNULL(L.LastYear, 9999)) AND
 		(CCS.UptoYear IS NULL OR CCS.UptoYear >= ISNULL(L.FirstYear, 0)) AND
 		(CCC.FromYear IS NULL OR CCC.FromYear <= ISNULL(L.LastYear, 9999)) AND

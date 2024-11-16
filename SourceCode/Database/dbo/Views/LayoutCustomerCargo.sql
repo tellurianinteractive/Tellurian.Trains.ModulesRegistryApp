@@ -13,7 +13,7 @@ SELECT -- Internal station customer cargo
 	CD.IsSupply,
 	CD.IsInternational,
 	CAST (1 AS BIT) AS IsInternal,
-	CAST (0 AS BIT) AS IsShadowYard,
+	S.IsShadow AS IsShadowYard,
 	C.DefaultClasses,
 	COALESCE(LS.OtherCountryId, R.CountryId) AS CountryId,
 	'#FFFFFF' AS BackColor,
