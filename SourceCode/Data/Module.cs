@@ -69,6 +69,7 @@ public partial class Module
     public virtual Station Station { get; set; }
     public virtual ICollection<ModuleExit> ModuleExits { get; set; }
     public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
+    public virtual ICollection<GroupLayoutModule> GroupLayoutModules { get; set; }
 }
 
 # nullable enable
@@ -304,6 +305,11 @@ public static class ModuleMapping
                   .WithMany(p => p.Modules)
                   .HasForeignKey(d => d.StationId)
                   .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasMany(d => d.GroupLayoutModules)
+                .WithOne(d => d.Module)
+                .HasForeignKey(d => d.ModuleId);
+            
         });
 }
 

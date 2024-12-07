@@ -196,4 +196,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="rliestDepartureTime" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3ea8f61f-865e-4a3e-819d-d8200fa373aa" ChangeDateTime="12/07/2024 17:38:22">
+    <Property Name="ElementName" Value="[dbo].[GroupLayoutModule].[GroupId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GroupLayoutModule]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GroupMemberId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9411324d-7c0e-4d9c-9484-016f2a30107f" ChangeDateTime="12/07/2024 17:40:00">
+    <Property Name="ElementName" Value="[dbo].[GroupLayoutModule].[GroupMemberId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GroupLayoutModule]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GroupId" />
+  </Operation>
 </Operations>

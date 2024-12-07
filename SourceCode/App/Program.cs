@@ -88,6 +88,7 @@ builder.Services.AddScoped<DocumentService>();
 builder.Services.AddScoped<EmptyWagonOrderService>();
 builder.Services.AddScoped<ExternalStationService>();
 builder.Services.AddScoped<GroupCategoryService>();
+builder.Services.AddScoped<GroupLayoutModuleService>();
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<LayoutService>();
 builder.Services.AddScoped<LayoutParticipantService>();

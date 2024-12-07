@@ -7,6 +7,7 @@
 
 @inject NavigationManager Navigator
 @inject GroupService GroupService
+@inject GroupLayoutModuleService GroupLayoutModuleService
 
 <PageHeading ObjectName="Member" Context="GroupMember?.Person" IconClass="@FontAwesome.Group" PageAction="PageAction.Edit" />
 
@@ -25,6 +26,33 @@ else
             <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="GroupMember.MemberMayBorrowMyModules" />
         </Inputs>
     </EditTemplate>
+
+    <h2>@Localizer["LayoutModules"]</h2>
+    <TableTemplate Items="GroupLayoutModules">
+        <RowHeaderTemplate>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Actions"]</th>
+        </RowHeaderTemplate>
+        <RowTemplate Context="item">
+            <td>@item.Module.Name()</td>
+            <td>
+                <AppButton Label="Remove" OnClickCallback="RemoveGroupLayoutModule" OnClickParameter="@item.ModuleId"/>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+    <h2>@Localizer["AvailableModules"]</h2>
+    <TableTemplate Items="PossibleModules">
+        <RowHeaderTemplate>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Actions"]</th>
+        </RowHeaderTemplate>
+        <RowTemplate Context="item">
+            <td>@item.Name()</td>
+            <td>
+                <AppButton Label="Add" OnClickCallback="AddGroupLayoutModule" OnClickParameter="@item.Id" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
 }
 
 @code {
@@ -33,12 +61,15 @@ else
     [Parameter] public int MemberId { get; set; }
 
     private ClaimsPrincipal? Principal;
-    private GroupMember? GroupMember;
+    private GroupMember? GroupMember; 
+    private IEnumerable<GroupLayoutModule>? GroupLayoutModules;
+    private IEnumerable<Module>? PossibleModules;
 
     protected override async Task OnParametersSetAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         GroupMember = await GroupService.FindMemberByIdAsync(Principal, MemberId);
+        await UpdateModules();
     }
     private async Task OnValidSubmit()
     {
@@ -47,5 +78,25 @@ else
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
+    }
+
+    private async Task AddGroupLayoutModule(int moduleId)
+    {
+        var result = await GroupLayoutModuleService.AddModule(Principal, GroupId, moduleId, MemberId);
+        await UpdateModules();
+        ToastService.ShowSuccessOrFailure(Localizer, result, "Add");
+    }
+
+    private async Task RemoveGroupLayoutModule(int moduleId)
+    {
+        var result = await GroupLayoutModuleService.RemoveModule(Principal, GroupId, moduleId);
+        await UpdateModules();
+        ToastService.ShowSuccessOrFailure(Localizer, result, "Remove");
+    }
+
+    private async Task UpdateModules()
+    {
+        GroupLayoutModules = await GroupLayoutModuleService.GetGroupMembersLayoutModulesAsync(Principal, MemberId);
+        PossibleModules = await GroupLayoutModuleService.GetGroupMemberModulesAsync(Principal, MemberId);
     }
 }

@@ -2,6 +2,7 @@
 @page "/reports/waybills/layout/{layoutId:int}/station/{stationId:int}"
 @page "/reports/waybills/station/{stationId:int}"
 @page "/reports/waybills/station/{stationId:int}/customer/{customerId:int}"
+@page "/reports/waybills/group/{groupId:int}"
 
 @layout PrintLayout
 @inject IStringLocalizer<App> Localizer
@@ -36,6 +37,7 @@ else
     [Parameter] public int? CustomerId { get; set; }
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int? LayoutStationId { get; set; }
+    [Parameter] public int? GroupId { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Waybill>? Waybills { get; set; }
@@ -50,14 +52,17 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (LayoutId > 0)
             {
-                //var station = await LayoutService.GetLayoutStationAsync(Principal, StationId);
-                //if (station is null) return;
-                var items = await WaybillService.GetLayoutWaybills(Principal, LayoutId, StationId);
+                var items = await WaybillService.GetLayoutWaybillsAsync(Principal, LayoutId, StationId);
                 Waybills = items.AsPrintableWaybills();
             }
             else if (StationId > 0)
             {
-                var items = await WaybillService.GetStationCustomerWaybills(Principal, StationId.Value, CustomerId, true, true);
+                var items = await WaybillService.GetStationCustomerWaybillsAsync(Principal, StationId.Value, CustomerId, true, true);
+                Waybills = items.AsPrintableWaybills();
+            }
+            else if (GroupId > 0)
+            {
+                var items = await WaybillService.GetGroupWaybillsAsync(Principal, GroupId.Value);
                 Waybills = items.AsPrintableWaybills();
             }
         }

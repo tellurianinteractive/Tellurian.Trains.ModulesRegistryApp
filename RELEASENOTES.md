@@ -2,6 +2,16 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+
+## Release 1.11.29
+- **Group waybills** makes it possible to print waybills for internal freights between modules owned by a group
+and its group members. Group owned modules are enabled by default, but modules owned by group members
+must be added to the layout. Do that in the group member edit page.
+- **Bug fix** of meeting list headers.
+## Release 1.11.28
+- **Meeting layout waybill creation** is now changed. The number of waybills printed is the minimum of wagons 
+for sending and receiving freight customer flow. Waybills for non NHM cargo is created when sender and receiver 
+are in different counties.
 ## Release 1.11.27
 Release date 2024-11-13
 - **Improvement** of *user administration* page (issue #201).
@@ -10,7 +20,6 @@ Release date 2024-11-13
 - **Bug fix** of displaying freight customers in some cases.
 - **Bug fix** of validation messages not containing valid min and max values (issue #216). Thanks to Alexander Ehn for reporting this.
 - **Bug fix** of help article about create and manage module meetings not visisble (issue #217). Thanks to Fredrik Pettersson for reporting this. 
-
 ## Release 1.11.26
 Release date 2024-10-30
 - **Meeting internal waybills** can now be viewed and printed even if meeting is closed for registration.

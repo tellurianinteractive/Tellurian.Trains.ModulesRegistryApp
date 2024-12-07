@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Platform>AnyCPU</Platform>
-		<Version>1.11.27</Version>
+		<Version>1.11.29</Version>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<NeutralLanguage>en-150</NeutralLanguage>
 	</PropertyGroup>

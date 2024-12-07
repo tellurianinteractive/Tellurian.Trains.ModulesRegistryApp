@@ -66,7 +66,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Meetings = await MeetingService.GetAllAsync(Principal, CountryId, 90);
+        Meetings = await MeetingService.GetAllAsync(Principal, CountryId, 31);
     }
 
     string MeetingTypeIcon(Meeting meeting) => meeting.MeetingType switch
@@ -80,22 +80,21 @@
     string RowStyle((bool mayEdit, Meeting meeting) item) =>
         item.meeting.EndDate < TimeProvider.LocalTime ? "background-color: lightgray": "";
 
-    DateTime previousMeetingsDate = DateTime.MinValue;
     int currentMeetingYear = 0;
+
+    bool showRecentHeader = true;
+
     string RowDividerHeading((bool mayEdit, Meeting meeting) item)
     {
         var result = string.Empty;
-        if (item.meeting.EndDate > previousMeetingsDate && item.meeting.EndDate < TimeProvider.LocalTime)
+        if (item.meeting.EndDate < TimeProvider.LocalTime)
         {
-            if (previousMeetingsDate == DateTime.MinValue)
-            {
-                previousMeetingsDate = item.meeting.EndDate;
-                result = Localizer["RecentlyPastMeetings"];
-            }
+            if (showRecentHeader) result = Localizer["RecentlyPastMeetings"];
+            showRecentHeader = false;
         }
         else if (item.meeting.EndDate.Year > currentMeetingYear)
         {
-            result = currentMeetingYear == 0 ? $"{Localizer["UpcomingMeetings"]} {item.meeting.EndDate.Year}" : item.meeting.EndDate.Year.ToString();
+            result = currentMeetingYear == 0 ? $"{Localizer["UpcomingMeetings"]} {item.meeting.EndDate.Year}" : $"{Localizer["Meetings"]} {item.meeting.EndDate.Year}";
             currentMeetingYear = item.meeting.EndDate.Year;
         }        
         return result;

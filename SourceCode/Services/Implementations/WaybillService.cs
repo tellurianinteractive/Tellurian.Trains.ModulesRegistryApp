@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using ModulesRegistry.Data;
 using ModulesRegistry.Services.Models;
 using System.Data;
 using System.Resources;
@@ -42,12 +43,51 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
         return string.Empty;
     }
 
-    public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
+    public async Task<IEnumerable<Waybill>> GetGroupWaybillsAsync(ClaimsPrincipal? principal, int groupId)
     {
         List<Waybill> waybills = new List<Waybill>(200);
-        var ownerNames = await GetStationOwnerNames(principal, stationId);
         if (principal.IsAuthenticated())
         {
+            var dbContext = Factory.CreateDbContext();
+            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
+            if (connection is not null)
+            {
+                var command = new SqlCommand("GetGroupWaybills", connection)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 120
+                };
+                command.Parameters.AddWithValue("@GroupId", groupId);
+                try
+                {
+                    connection.Open();
+                    var reader = await command.ExecuteReaderAsync();
+                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
+                    while (await reader.ReadAsync())
+                    {
+                        var stationId = reader.GetInt("DestinationStationId");
+                        var ownerNames = await GetStationOwnerNames(principal, stationId);
+
+                        waybills.Add(reader.MapWaybill(stationId));
+                        waybills.Last().OwnerNames = ownerNames;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
+                    throw;
+                }
+            }
+        }
+        return waybills;
+    }
+
+    public async Task<IEnumerable<Waybill>> GetStationCustomerWaybillsAsync(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
+    {
+        List<Waybill> waybills = new List<Waybill>(200);
+        if (principal.IsAuthenticated())
+        {
+            var ownerNames = await GetStationOwnerNames(principal, stationId);
             var dbContext = Factory.CreateDbContext();
             using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
             if (connection is not null)
@@ -153,7 +193,7 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 WHERE SYCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId )
             """;
     }
-    public async Task<IEnumerable<Waybill>> GetLayoutWaybills(ClaimsPrincipal? principal, int layoutId, int? stationId)
+    public async Task<IEnumerable<Waybill>> GetLayoutWaybillsAsync(ClaimsPrincipal? principal, int layoutId, int? stationId)
     {
         List<Waybill> waybills = new List<Waybill>(200);
         if (principal.IsAuthenticated())

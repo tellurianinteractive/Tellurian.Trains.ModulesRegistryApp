@@ -64,6 +64,7 @@ else
             <AppButton Label="Members" Href="@MembersHref(context.Value.Id)" IconName="@FontAwesome.User"></AppButton>
             <AppButton Label="Modules" Href="@ModulesHref(context.Value.Id)" IconName="@FontAwesome.Modules"></AppButton>
             <AppButton Label="Stations" Href="@StationsHref(context.Value.Id)" IconName="@FontAwesome.Stations"></AppButton>
+            <AppButton Label="Waybills" Href="@WaybillsHref(context.Value.Id)" IconName="@FontAwesome.Waybills"></AppButton>
             @if (context.MayEdit)
             {
                 <AppButton Label="Edit" Href="@EditHref(context.Value.Id)"></AppButton>
@@ -140,6 +141,7 @@ else
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
+    string WaybillsHref(int groupId) => $"reports/waybills/group/{groupId}";
 
     internal class GroupFilter
     {

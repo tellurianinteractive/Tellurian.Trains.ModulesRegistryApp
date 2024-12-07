@@ -27,6 +27,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
     public virtual DbSet<Group> Groups { get; set; }
     public virtual DbSet<GroupDomain> GroupDomains { get; set; }
+    public virtual DbSet<GroupLayoutModule> GroupLayoutModules { get; set; }
     public virtual DbSet<GroupMember> GroupMembers { get; set; }
     public virtual DbSet<Layout> Layouts { get; set; }
     public virtual DbSet<LayoutModule> LayoutModules { get; set; }
@@ -92,6 +93,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapExternalStationCustomerCargo();
         modelBuilder.MapGroup();
         modelBuilder.MapGroupDomain();
+        modelBuilder.MapGroupLayoutModule();
         modelBuilder.MapGroupMember();
         modelBuilder.MapLayout();
         modelBuilder.MapLayoutModule();

@@ -807,6 +807,9 @@
   <data name="Layout" xml:space="preserve">
     <value>Layout</value>
   </data>
+  <data name="LayoutModules" xml:space="preserve">
+    <value>Modules in layout</value>
+  </data>
   <data name="Layouts" xml:space="preserve">
     <value>Layouts</value>
   </data>

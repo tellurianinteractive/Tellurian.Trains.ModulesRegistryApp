@@ -804,6 +804,9 @@
   <data name="Layout" xml:space="preserve">
     <value>Bane</value>
   </data>
+  <data name="LayoutModules" xml:space="preserve">
+    <value>Moduler i banen</value>
+  </data>
   <data name="Layouts" xml:space="preserve">
     <value>Baner</value>
   </data>

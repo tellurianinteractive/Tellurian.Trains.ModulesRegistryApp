@@ -804,6 +804,9 @@
   <data name="Layout" xml:space="preserve">
     <value>Bahn</value>
   </data>
+  <data name="LayoutModules" xml:space="preserve">
+    <value>Module im Anlage</value>
+  </data>
   <data name="Layouts" xml:space="preserve">
     <value>Bahnen</value>
   </data>
