@@ -76,10 +76,12 @@ else
                 <tr>
                     <td colspan="4">
                         @if (participant.BringsModulesAfterAgreement) {
-                            <span style="color: red">@Localizer["BringsModulesAfterAgreement"]</span>
+                            <span style="color: red">@Localizer["BringsModulesAfterAgreement"]. </span>
                         }
-                        else
-                            @Localizer["NoModulesRegistered"]
+                        else {
+                            <span>@Localizer["NoModulesRegistered"]. </span>
+                        }
+                        <span>@participant.NoteToOrganiserMarkdown</span>
                     </td>
                 </tr>
             }

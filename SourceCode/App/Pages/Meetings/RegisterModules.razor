@@ -24,15 +24,18 @@ else
 {
     @if (IsAdministratorOrMeetingOrganiser || LayoutParticipant.Layout.IsOpenForRegistration(TimeProvider.LocalTime))
     {
+        <EditTemplate Item="LayoutParticipant" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
+            <Inputs>
+                @if (MeetingParticipant.MayRegisterModules())
+                {
+                    <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="@LayoutParticipant.BringsModulesAfterAgreement" AlignWithFields="true" />
+                }
+                <AppInputText Label="Comment" @bind-Value="@LayoutParticipant.NoteToOrganiserMarkdown" />
+            </Inputs>
+        </EditTemplate>
         @if (MeetingParticipant.MayRegisterModules())
         {
             <div style="margin-top: 12pt">
-                <EditTemplate Item="LayoutParticipant" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
-                    <Inputs>
-                        <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="@LayoutParticipant.BringsModulesAfterAgreement" AlignWithFields="true" />
-                        <AppInputText Label="Comment" @bind-Value="@LayoutParticipant.NoteToOrganiserMarkdown" />
-                    </Inputs>
-                </EditTemplate>
                 @if (Layout is not null)
                 {
                     <div style="background-color: lightgoldenrodyellow">
@@ -191,7 +194,8 @@ else
         if (LayoutParticipant is not null) await SaveAsync(LayoutParticipant);
     }
 
-    async Task SaveAsync(LayoutParticipant participant) {
+    async Task SaveAsync(LayoutParticipant participant)
+    {
         var result = await LayoutParticipantService.SaveAsync(Principal, participant);
         LayoutParticipant = result.Entity;
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);

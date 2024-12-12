@@ -4,7 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.11.30
 Release date 2024-12-12
-- **Layout participation** added checkbox fpr *brings modules after agreement* and field for *comment*.
+- **Layout participation** added checkbox for *brings modules after agreement* and field for *comment*.
 ## Release 1.11.29
 Release date 2024-12-07
 - **Group waybills** makes it possible to print waybills for internal freights between modules owned by a group
