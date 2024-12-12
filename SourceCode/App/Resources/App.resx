@@ -195,6 +195,9 @@
   <data name="BarcodeId" xml:space="preserve">
     <value>Barcode-ID</value>
   </data>
+  <data name="BringsModulesAfterAgreement" xml:space="preserve">
+    <value>Brings modules after agreement</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>

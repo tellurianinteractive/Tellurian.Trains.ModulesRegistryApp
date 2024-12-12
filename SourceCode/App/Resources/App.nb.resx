@@ -192,6 +192,9 @@
   <data name="BarcodeId" xml:space="preserve">
     <value>Strekkode-ID</value>
   </data>
+  <data name="BringsModulesAfterAgreement" xml:space="preserve">
+    <value>Tar med moduler etter avtale</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Avbryt</value>
   </data>

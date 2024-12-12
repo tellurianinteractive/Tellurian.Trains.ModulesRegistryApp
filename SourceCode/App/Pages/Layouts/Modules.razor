@@ -56,7 +56,7 @@ else
         <SubRowsTemplate Context="participant">
             @if (participant.LayoutModules.Any())
             {
-                @foreach (var layoutModule in participant.LayoutModules.OrderBy(lm=>lm.Module.FullName))
+                @foreach (var layoutModule in participant.LayoutModules.OrderBy(lm => lm.Module.FullName))
                 {
                     <tr>
                         <td>@layoutModule.Module.FullNameAndConfiguration()</td>
@@ -74,7 +74,13 @@ else
             else
             {
                 <tr>
-                    <td colspan="4">@Localizer["NoModulesRegistered"]</td>
+                    <td colspan="4">
+                        @if (participant.BringsModulesAfterAgreement) {
+                            <span style="color: red">@Localizer["BringsModulesAfterAgreement"]</span>
+                        }
+                        else
+                            @Localizer["NoModulesRegistered"]
+                    </td>
                 </tr>
             }
         </SubRowsTemplate>
@@ -137,7 +143,7 @@ else
     }
 
     MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(
-        HasParticipantsFromDifferentCountries ? 
+        HasParticipantsFromDifferentCountries ?
             $""" <img src="{participant.Person.Country.FlagSrc()}">  {participant.NameWithCityAndCountry()}, {participant.Person.FremoNumber()} {participant.Person.EmailIcon()}""" :
             $"""{participant.NameWithCity()}, {participant.Person.FremoNumber()} {participant.Person.EmailIcon()}""");
 

@@ -2,13 +2,17 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
-
+## Release 1.11.30
+Release date 2024-12-12
+- **Layout participation** added checkbox fpr *brings modules after agreement* and field for *comment*.
 ## Release 1.11.29
+Release date 2024-12-07
 - **Group waybills** makes it possible to print waybills for internal freights between modules owned by a group
 and its group members. Group owned modules are enabled by default, but modules owned by group members
 must be added to the layout. Do that in the group member edit page.
 - **Bug fix** of meeting list headers.
 ## Release 1.11.28
+Release date 2024-11-16
 - **Meeting layout waybill creation** is now changed. The number of waybills printed is the minimum of wagons 
 for sending and receiving freight customer flow. Waybills for non NHM cargo is created when sender and receiver 
 are in different counties.
