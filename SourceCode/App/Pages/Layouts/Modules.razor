@@ -56,6 +56,13 @@ else
         <SubRowsTemplate Context="participant">
             @if (participant.LayoutModules.Any())
             {
+                @if (participant.NoteToOrganiserMarkdown.HasValue()) {
+                    <tr>
+                        <td colspan="4">
+                            <span style="color: red">@participant.NoteToOrganiserMarkdown</span>
+                        </td>
+                    </tr>
+                }
                 @foreach (var layoutModule in participant.LayoutModules.OrderBy(lm => lm.Module.FullName))
                 {
                     <tr>

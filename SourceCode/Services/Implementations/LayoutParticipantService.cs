@@ -58,8 +58,6 @@
                     if (existing is not null)
                     {
                         dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                        existing.LayoutModules = entity.LayoutModules;
-                        existing.LayoutStations = entity.LayoutStations;
                         var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                         return result.SaveResult(existing);
                     }

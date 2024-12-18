@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.11.31
+Release date 2024-12-18
+- **Bug fix** of layout participant adding comment to layout planner.
 ## Release 1.11.30
 Release date 2024-12-12
 - **Layout participation** added checkbox for *brings modules after agreement* and field for *comment*.
