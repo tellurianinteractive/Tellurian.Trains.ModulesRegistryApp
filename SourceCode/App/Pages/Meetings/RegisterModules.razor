@@ -75,18 +75,18 @@ else
                     }
                     else
                     {
-                        <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true>
+                        <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true >
                             <TableHeader>
                                 <th>@Localizer["Package"]</th>
                                 <th>@Localizer["Owner"]</th>
                                 <th>@Localizer["Modules"]</th>
-                                <th>@Localizer["Actions"]</th>
+                                <th style="width: 120px">@Localizer["Actions"]</th>
                             </TableHeader>
                             <RowTemplate Context="item">
-                                <td>@item.Name</td>
-                                <td>@item.OwnerName</td>
+                                <td style="white-space: nowrap">@item.Name</td>
+                                <td style="white-space: nowrap">@item.OwnerName</td>
                                 <td>@item.ToString()</td>
-                                <td>
+                                <td align="right">
                                     <AppButton Label="Add" OnClickCallback="@(() => OnRegisterOwnedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                                 </td>
                             </RowTemplate>
@@ -100,13 +100,13 @@ else
                                 <th>@Localizer["Package"]</th>
                                 <th>@Localizer["Owner"]</th>
                                 <th>@Localizer["Modules"]</th>
-                                <th>@Localizer["Actions"]</th>
+                                <th style="width: 120px">@Localizer["Actions"]</th>
                             </TableHeader>
                             <RowTemplate Context="item">
-                                <td>@item.Name</td>
-                                <td>@item.OwnerName</td>
+                                <td style="white-space: nowrap">@item.Name</td>
+                                <td style="white-space: nowrap">@item.OwnerName</td>
                                 <td>@item.ToString()</td>
-                                <td>
+                                <td align="right">
                                     <AppButton Label="Add" OnClickCallback="@(() => OnRegisterBorrowedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
                                 </td>
                             </RowTemplate>
