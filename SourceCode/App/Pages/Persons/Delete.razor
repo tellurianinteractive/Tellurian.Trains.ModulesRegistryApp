@@ -2,6 +2,7 @@
 
 @attribute [Authorize(Policy = "Admin")]
 
+@inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
 @inject PersonService PersonService
@@ -44,6 +45,6 @@ else
         var result = await PersonService.DeleteAsync(Principal, Id.Value);
         ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
-        if (PageHistory.CanNavigateBack) PageHistory.NavigateBack();
+        Navigator.NavigateTo("/Persons");
     }
 }

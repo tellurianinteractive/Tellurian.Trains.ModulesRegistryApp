@@ -5,6 +5,7 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.11.31
 Release date 2024-12-18
 - **Bug fix** of layout participant adding comment to layout planner.
+- **Bug fix** of deleting a person.
 ## Release 1.11.30
 Release date 2024-12-12
 - **Layout participation** added checkbox for *brings modules after agreement* and field for *comment*.

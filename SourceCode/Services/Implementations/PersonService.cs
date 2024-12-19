@@ -123,7 +123,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
                 .SingleOrDefaultAsync(p => p.Id == id);
             if (person is null) return (0, Strings.NothingToDelete);
             // Add check rules before any delete here
-            if (dbContext.MeetingParticipants.Any(mp => mp.CancellationTime.HasValue == false && mp.Meeting.EndDate >= TimeProvider.LocalTime)) return (0, Strings.MayNotBeDeleted);
+            if (dbContext.MeetingParticipants.Any(mp => mp.PersonId == person.Id && mp.CancellationTime.HasValue == false && mp.Meeting.EndDate >= TimeProvider.LocalTime)) return (0, Strings.MayNotBeDeleted);
             if (dbContext.Meetings.Any(m => m.EndDate >= TimeProvider.LocalTime && m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == id))) return (0, Strings.MayNotBeDeleted);
 
 

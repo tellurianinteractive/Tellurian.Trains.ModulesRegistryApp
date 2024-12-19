@@ -1,8 +1,8 @@
 # .NET-utveckling
-*Av [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, november 2023*
+*Av [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, december 2024*
 
 Den här artikeln syftar till att beskriva teknikval vid utveckling av mjukvara i modernt .NET. 
-I skrivande stund novenber 2023 bör all ny .NET-utveckling använda .NET 8 eller senare.
+I skrivande stund bör all ny .NET-utveckling använda .NET 9 eller senare.
 
 ## Nuvarande .NET
 Nuvarande .NET är gratis och öppen källkod; rambiblioteken, exekveringsmotorerna och kompilatorerna. 
@@ -60,7 +60,7 @@ Den fungerar med både lokala databaser och molndatabaser. Den kommer att install
 För det första har du liknande tillgång till databasen som med SQL Server Management Studio, 
 och för det andra finns det en speciell databasprojekttyp, 
 som du kan underhålla din SQL-kod med versionskontroll och distribuera uppdateringar och 
-migrering till din befintliga databas eller skapa nya. .
+migrering till din befintliga databas eller skapa nya.
 - **Entity Framework Core** har också bra stöd för databasdefinitioner och inkrementella databasuppgraderingar. 
 Den stöder de vanligaste databaserna.
 
@@ -87,6 +87,9 @@ Du kan interagera med JavaScript och vilken kod som helst som kan kompileras til
   - i en plattformsoberoende MAUI-applikation.
   - Med den kommande .NET 8 kommer du även att kunna blanda renderingslägen i samma applikation. Detta gör Blazor-komponenter till de mest återställbara användargränssnittskomponenterna i .NET.
 - **Multiplatform Application User Interface** förkortat MAUI är den senaste teknologin som syftar till att göra det enklare att skapa appar som körs inbyggt på iOS, Android, macOs och Windows med det inbyggda användargränssnittet för var och en av dessa plattformar. MAUI är en utveckling av Xmamarin Forms. Du kan också bädda in Blazor-komponenter i en MAUI-applikation, eller skriva en MAUI-applikation enbart med Blazor-komponenter.
+- **UNO Plattformen** är avsedd för att bygga en enda kodbas för
+mobil-, webb-, skrivbords- och inbäddade appar med antingen XAML eller C# Markup.
+UNO-projektet drivs som öppen källkod.
 
 ## Datalagring
 Det finns flera typer av sätt att lagra data och komma åt den. De viktigaste typerna av databaser är:
@@ -136,6 +139,7 @@ Det enklaste sättet att distribuera till ett molnmiljö kallas mjukvara som en tj
 
 Stödet för *ahead of time (AOT)* kompilering stöds för konsolapplikationer och WEB API. 
 Innebär mindre exekverbara filer och har kortare uppstartstid.
+Microsoft håller på med att anpassa fler typer av .NET applikationer för *ahead of time* kompilering.
 
 ## IoT-utveckling
 Du kan bygga IoT-appar med C# och .NET som körs på Raspberry Pi, HummingBoard, BeagleBoard, Pine A64 och mer. Det finns tre vanliga tillvägagångssätt:
@@ -151,6 +155,7 @@ Stöd för GitHub är inbyggt i Visual Studio, vilket gör GitHub till ett rekommend
 .NET-applikationer kan ha hög prestanda, även jämfört med andra tekniker. 
 Ett exempel på oberoende prestandatester finns på [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22).
 Prestanda är i fokus, och .NET har många prestandaförbättringar med varje utgåva.
+Du får prestandaförbättringar bara genom att uppdatera din app till senaste .NET-versionen.
 
 Du måste fråga dig själv: Hur kritisk är min applikation? Att skriva din kod lätt att förstå är att föredra. Optimering bör endast tillämpas vid flaskhalsar och endast när resultatet kan mätas.
 För att mäta prestandan för din kod och effekten på kodändringar du gör, använd [BenchMark .NET](https://github.com/dotnet/BenchmarkDotNet).

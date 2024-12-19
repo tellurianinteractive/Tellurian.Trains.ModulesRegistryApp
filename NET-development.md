@@ -1,8 +1,8 @@
 # .NET Development
-*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, June 2024*
+*By [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sweden, December 2024*
 
 This article aim to describe technology choices, when developing software in modern .NET.
-At the time of writing, all new .NET development should use .NET 8.
+At the time of writing, all new .NET development should use .NET 9.
 
 ## Modern .NET
 Modern .NET is free and fully open source; the framework libraries, the runtime, and the compilers.
@@ -52,7 +52,6 @@ Customisation is made by installing diffrerent plugins for a certain language or
 - **Visual Studio** has a *community edition* that is free and very capable for development .NET applications.
 Customisation is made by choosing to install one or several *workloads*. 
 There are also many useful free plugins to install from the Visual Studio Markeplace.
-Visual Studio is a Windows only application.
 - **SQL Server** has a free *developer edition* that is a full featured version with some limitations. 
 There is also a free *express edition* ideal for smaller applications. 
 SQL Server also has a cloud version but no free tier, the smallest SQL Server cloud database
@@ -63,9 +62,8 @@ It works with both local databases and cloud databases. It will be installed wit
 Firstly, you have similar access to the database as with *Sql Server Management Studio*, and 
 secondly, there is a special *Database* project type, which you can maintain your SQL code
 with version control and deploy updates and migrations to your existing database or create new ones.
-- **Entity Framework Core** also have great support for database definitions and incremental database upgrades.
-It supports the most common databases.
-
+- **Entity Framework Core** is a database access technology that also have great support for database definitions and incremental database upgrades.
+It supports the most common databases, also document databases.
 
 ## User interfaces
 There are a lot of ways to create applications with a user interface with .NET. 
@@ -89,7 +87,7 @@ The components written in Blazor can be rendered in several environments:
   - running the component on web assembly in the browser, and
   - in a cross platform MAUI application.
 
-  In.NET 8, you will also be able to mix rendering modes in the same application.
+  From .NET 8, you will also be able to mix rendering modes in the same application.
   This makes Blazor components the most highly resuable user interface components in .NET.
 - **ASP.NET** is a framework for creating web applications.
 ASP.NET applications can be hosted and run on all platforms supported by .NET, including cloud platforms.
@@ -101,7 +99,6 @@ You can also embed *Blazor* components in a MAUI application,
 or  write a MAUI applications only using Blazor components.
 - **UNO Platform** is an Open-source .NET platform for building single codebase 
 native mobile, web, desktop and embedded apps quickly with either XAML or C# Markup.
-
 
 ## Data storage
 There are several types of ways to store data and access it.
@@ -115,9 +112,9 @@ Examples of databases are *Mongo DB*, and *Azure Cosmos DB*.
 
 Databases adds complexity to your application. 
 If the demand for data storage and querying is limited, simply storing the application data on disk 
-in a single file or several files is definitley an option.
+in files on disk or blop storage in the cloud is definitley an option.
 
-With the built-in *JSON and XML serialization* technologies, writing and reading data to/from files on disk can be robust and geared for 
+With the built-in *JSON and XML serialization* technologies, writing and reading data to/from files on disk/blob storage can be robust and geared for 
 changes in your data structures.
 
 ### Data access technologies
@@ -166,13 +163,15 @@ the management of the underlying infrastucture is managed by the cloud provider.
 to deploy containers to orchestration services such as Kubernetes.
 
 You can also deploy *ahead of time (AOT)* compiled console and WEB API applications, 
-which makes binarys smallar and with faster startup time.
+which makes binarys smallar and with faster startup time. 
+Microsoft is working on making *ahead of time compilation* work for a wider range of apllication types.
 
 ## Performance
 .NET applications can be very performant, also compared with other technologies.
 An example of independent performance tests are available at [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22)
 
 Performance is in focus, and .NET have a lot of performance improvements with every release.
+By upgrade to next .NET version, your app will benefit from these performance improvements.
 
 It is also possible to compile .NET to native code before deployment.
 This gives smaller executables and faster startup.
