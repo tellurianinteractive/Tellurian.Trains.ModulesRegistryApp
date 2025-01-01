@@ -23,6 +23,7 @@ SELECT -- Internal station customer cargo
 	COALESCE(SCC.UptoYear, SC.ClosedYear) AS UptoYear,
 	SCC.Quantity,
 	SCC.QuantityUnitId,
+	CU.IsBearer AS QuantityIsBearer,
 	SCC.PackageUnitId,
 	SCC.SpecificWagonClass,
 	SCC.SpecialCargoName,
@@ -43,6 +44,7 @@ FROM
 	[Cargo] AS C ON SCC.CargoId = C.Id INNER JOIN 
 	[CargoDirection] AS CD ON SCC.DirectionId = CD.Id INNER JOIN 
 	[CargoReadyTime] AS CRT ON CRT.Id = SCC.ReadyTimeId INNER JOIN 
+	[CargoUnit] AS CU ON CU.Id = SCC.QuantityUnitId INNER JOIN
 	[LayoutStation] AS LS ON LS.StationId = S.Id INNER JOIN 
 	[LayoutParticipant] LP ON LS.LayoutParticipantId = LP.Id INNER JOIN
 	[MeetingParticipant] MP ON LP.MeetingParticipantId = MP.Id INNER JOIN

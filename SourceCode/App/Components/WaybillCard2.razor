@@ -77,14 +77,42 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="item">
-                                    <span class="icon"><i class="fas fa-ruler"></i></span>
-                                    <span>@Item.DestinationQuantity()</span>
-                                </div>
-                            </td>
-                        </tr>
+                        @if (Item.QuantityIsBearer)
+                        {
+                            @if (Item.Destination.HasPackagingUnit()) {
+                            <tr>
+                                <td colspan="2">
+                                    <div class="item">
+                                        <span class="icon"><i class="fas fa-ruler"></i></span>
+                                        <span>@Item.Destination.PackagingUnit()</span>
+                                    </div>
+                                </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="2">
+                                    <div class="item">
+                                        <span class="icon"><i class="fas fa-truck-loading"></i></span>
+                                        <span>@Item.DestinationQuantity()</span>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">
+                                    <div class="item">
+                                        <span class="icon"><i class="fas fa-ruler"></i></span>
+                                        <span>@Item.DestinationQuantity()</span>
+                                        <span>@Item.Destination.PackagingUnitWithPreposition()</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
                         @if (Item.Destination.DisplayReadyTime && Item.Destination.ReadyTimeResourceKey.HasValue())
                         {
                             <tr>

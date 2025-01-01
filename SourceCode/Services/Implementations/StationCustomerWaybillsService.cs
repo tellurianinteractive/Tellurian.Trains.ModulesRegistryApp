@@ -13,6 +13,8 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
                 .Include(w => w.StationCustomer)
                 .Include(w => w.StationCustomerCargo).ThenInclude(c => c.Direction)
                 .Include(w => w.StationCustomerCargo).ThenInclude(c => c.Cargo)
+                .Include(w => w.StationCustomerCargo).ThenInclude(c => c.QuantityUnit)
+                .Include(w => w.StationCustomerCargo).ThenInclude(c => c.PackageUnit)
                 .Include(w => w.OperatingDay)
                 .Include(w => w.OtherStationCustomerCargo).ThenInclude(c => c.StationCustomer).ThenInclude(c => c.Station)
                 .Include(w => w.OtherExternalCustomerCargo).ThenInclude(c => c.ExternalStationCustomer).ThenInclude(c => c.ExternalStation)

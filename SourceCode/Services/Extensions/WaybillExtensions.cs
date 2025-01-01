@@ -5,23 +5,24 @@ using System.Diagnostics.CodeAnalysis;
 namespace ModulesRegistry.Services.Extensions;
 public static class WaybillExtensions
 {
-    public static IEnumerable<Waybill> AsPrintableWaybills(this IEnumerable<Waybill> items)
+    public static IEnumerable<Waybill> AsPrintableWaybills(this IEnumerable<Waybill> waybills)
     {
         var result = new List<Waybill>();
+       waybills = waybills.ApplyAdditionalRules();
+
         // All waybills that prints double items prints first to place them evenly on a page.
-        foreach (var item in items.OrderByDescending(i => i.HasEmptyReturn).ThenBy(i => i.Destination.StationName))
+        foreach (var waybill in waybills.OrderByDescending(i => i.HasEmptyReturn).ThenBy(i => i.Destination.StationName))
         {
-            item.OperatingDayFlag = item.WaybillSendingDaysFlags();
-            for (var i = 0; i < item.PrintCount; i++)
+            for (var i = 0; i < waybill.PrintCount; i++)
             {
-                if (item.PrintPerOperatingDay)
+                if (waybill.PrintPerOperatingDay)
                 {
-                    var operationDays = (byte)(item.Destination!.OperationDaysFlags & item.Origin!.OperationDaysFlags);
+                    var operationDays = (byte)(waybill.Destination!.OperationDaysFlags & waybill.Origin!.OperationDaysFlags);
                     if (operationDays > 0)
                     {
-                        foreach (var day in item.OperatingDayFlag.GetDays(false, true))
+                        foreach (var day in waybill.OperatingDayFlag.GetDays(false, true))
                         {
-                            var clone = item.Clone;
+                            var clone = waybill.Clone;
                             clone.OperatingDayFlag = day.Flag;
 
                             result.Add(clone);
@@ -31,12 +32,31 @@ public static class WaybillExtensions
                 }
                 else
                 {
-                    result.Add(item);
-                    if (item.HasReturn()) result.Add(item.Return());
+                    result.Add(waybill);
+                    if (waybill.HasReturn()) result.Add(waybill.Return());
                 }
             }
         }
+
         return result;
+    }
+
+    private static IEnumerable<Waybill> ApplyAdditionalRules(this IEnumerable<Waybill> items)
+    {
+        foreach (var item in items)
+        {
+            item.OperatingDayFlag = item.WaybillSendingDaysFlags();
+            if (item.QuantityIsBearer)
+            {
+                item.PrintCount = item.Quantity * item.PrintCount;
+                item.Quantity = 1;
+            }
+            else
+            {
+                item.HasEmptyReturn = false;
+            }
+        }
+        return items;
     }
 
     private static byte WaybillSendingDaysFlags(this Waybill it)
@@ -47,14 +67,14 @@ public static class WaybillExtensions
 
     private static Waybill Return(this Waybill waybill)
     {
-        if (waybill.Destination.CargoName=="Expressgods")  Debugger.Break();
+        if (waybill.Destination.CargoName == "Expressgods") Debugger.Break();
         var returnWaybill = waybill.Clone;
         var newOrigin = returnWaybill.Destination;
         var newDestination = returnWaybill.Origin;
         returnWaybill.Origin = newOrigin;
         returnWaybill.Origin!.IsOrigin = true;
 
-        returnWaybill.Origin!.CargoName = waybill.HasSameCargoReturn ? newOrigin.CargoName : 
+        returnWaybill.Origin!.CargoName = waybill.HasSameCargoReturn ? newOrigin.CargoName :
             LanguageExtensions.GetLocalizedString("Empty", returnWaybill.Origin.Language());
 
         if (returnWaybill.HasEmptyReturn)
@@ -66,7 +86,7 @@ public static class WaybillExtensions
         }
         returnWaybill.Destination = newDestination;
         returnWaybill.Destination!.IsOrigin = false;
-        returnWaybill.Destination!.CargoName =             waybill.HasSameCargoReturn ? newDestination.CargoName : 
+        returnWaybill.Destination!.CargoName = waybill.HasSameCargoReturn ? newDestination.CargoName :
             LanguageExtensions.GetLocalizedString("Empty", returnWaybill.Destination.Language());
 
         if (returnWaybill.HasEmptyReturn)
@@ -81,9 +101,9 @@ public static class WaybillExtensions
 
     public static string DestinationQuantity(this Waybill waybill) =>
         waybill is null || waybill.Destination is null ? string.Empty :
-        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.DestinationWagonQuantity() :
-        waybill.Destination.QuantityUnitResourceKey.StartsWith("Wagon") ? waybill.DestinationWagonQuantity() :
-        waybill.QuantityUnitId == 3 && waybill.Quantity > 0 ? $"{waybill.Quantity} {waybill.Destination.PackagingUnit()}" :
+        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.HasValue("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
+        waybill.Destination.QuantityUnitResourceKey.HasValue("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
+        waybill.Destination.QuantityUnitResourceKey.HasValue("Piece", "Pieces") ? $"{waybill.Quantity} " :
         $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}";
 
     public static string OriginQuantity(this Waybill waybill) =>
@@ -156,9 +176,19 @@ public static class CargoCustomerExtensions
 
     public static string CargoName(this CargoCustomer? me) =>
          me is null ? string.Empty :
-         me.PackagingUnitResourceKey.HasValueExcept("NotApplicable") ?
-             $"{me.CargoName.GetLocalizedString(me.Language())} {me.PackagingPrepositionResourceCode.GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
-             me.CargoName.GetLocalizedString(me.Language());
+         me.CargoName.GetLocalizedString(me.Language());
+
+    public static bool HasPackagingUnit([NotNullWhen(true)] this CargoCustomer? me) =>
+        me is not null && me.PackagingUnitResourceKey.HasValueExcept("NotApplicable");
+
+    public static string PackagingUnit(this CargoCustomer? me) =>
+         me is null || me.PackagingUnitResourceKey.HasValue("NotApplicable") ? string.Empty :
+         $"{me.PackagingUnitResourceKey.GetLocalizedString(me.Language())}";
+
+    public static string PackagingUnitWithPreposition(this CargoCustomer? me) =>
+         me is null || me.PackagingUnitResourceKey.HasValue("NotApplicable") ? string.Empty :
+         me.QuantityUnitResourceKey.HasValue("Piece", "Pieces") ? $"{me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
+            $"{me.PackagingPrepositionResourceCode.GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}";
 
     public static string CustomerName(this CargoCustomer? me) =>
         me is null ? string.Empty :

@@ -25,11 +25,13 @@ SELECT
 	CRT.ShortName AS ReadyTime,
 	CASE
 		WHEN SCC.Quantity <=1 OR CU.IsBearer <> 0 THEN CU.SingularResourceCode
+		WHEN SCC.QuantityUnitId = 3 THEN CU.SingularResourceCode
 		ELSE CU.PluralResourceCode
 	END AS QuantityUnitResourceCode,	
 	CU.Designation AS QuantityShortUnit,
 	CASE
-		WHEN CPU.Id=3 AND SCC.Quantity <=1 THEN CPU.SingularResourceCode
+		WHEN SCC.QuantityUnitId = 3 THEN CPU.SingularResourceCode
+		WHEN SCC.Quantity <= 1 THEN CPU.SingularResourceCode
 		ELSE CPU.PluralResourceCode
 	END AS PackagingUnit,
 	CPU.PrepositionResourceCode AS PackagingPrepositionResourceCode,

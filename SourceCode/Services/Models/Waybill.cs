@@ -22,6 +22,7 @@ public class Waybill
     public int Quantity { get; set; }
     public int QuantityUnitId { get; set; }
     public string QuantityShortUnit { get; set; } = string.Empty;
+    public bool QuantityIsBearer { get; set; }
     public bool HasEmptyReturn { get; set; }
     public bool HasSameCargoReturn { get; set; }
     public bool IsExpress {  get; set; }

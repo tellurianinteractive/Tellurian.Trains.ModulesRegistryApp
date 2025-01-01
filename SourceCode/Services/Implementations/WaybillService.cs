@@ -242,7 +242,9 @@ internal static class WaybillMapper
             Id = record.GetInt("Id"),
             OwnerStationId = stationId,
             Quantity = GetQuantity(record),
+            QuantityUnitId = record.GetInt("QuantityUnitId"),
             QuantityShortUnit = record.GetString("QuantityShortUnit"),
+            QuantityIsBearer = record.GetBool("QuantityIsBearer"),
             OperatorName = string.Empty, // To be supported
             DefaultWagonClass = record.GetString("DefaultClasses"),
             SpecialWagonClass = record.GetString("SpecificWagonClass"),

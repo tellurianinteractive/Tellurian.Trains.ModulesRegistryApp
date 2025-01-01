@@ -1300,7 +1300,7 @@
     <value>Info om förebilden</value>
   </data>
   <data name="Quantity" xml:space="preserve">
-    <value>Antal</value>
+    <value>Mängd</value>
   </data>
   <data name="QuantityUnit" xml:space="preserve">
     <value>Mängdenhet</value>

@@ -5,10 +5,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId) AS
+	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId, PrintCount, QuantityUnitId, Quantity) AS
 	(
 		SELECT 
-			SCW.Id, ME.OperatingDayId, OTHER.RegionId
+			SCW.Id, ME.OperatingDayId, OTHER.RegionId, SCW.PrintCount, ME.QuantityUnitId, ME.Quantity
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
 			ModuleCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
@@ -20,7 +20,12 @@ BEGIN
 	UPDATE StationCustomerWaybill 
 		SET 
 			OperatingDayId = UW.OperatingDayId,
-			OtherRegionId = UW.RegionId
+			OtherRegionId = UW.RegionId,
+			PrintCount = CASE 
+				WHEN (UW.PrintCount > 1) THEN UW.PrintCount
+				WHEN (UW.QuantityUnitId = 3) THEN 1
+				ELSE 1
+			END
 		FROM 
 			UpdatedableWaybill UW
 		WHERE
@@ -43,7 +48,10 @@ BEGIN
 		0 AS [HideLoadingTimes],
 		0 AS [HideUnloadingTimes],
 		0 AS [PrintPerOperatingDay],
-		1 AS [PrintCount],
+		CASE
+			WHEN (ME.QuantityUnitId = 3) THEN ME.Quantity
+			ELSE 1
+		END AS PrintCount,
 		0 AS [SequenceNumber]
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN

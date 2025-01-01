@@ -45,6 +45,7 @@ else
             <th>@Localizer["Station"]</th>
             <th>@Localizer["FreightCustomer"]</th>
             <th>@Localizer["Cargo"]</th>
+            <th>@Localizer["Quantity"]</th>
             <th>@Localizer["Days"]</th>
             <th>@Localizer["PrintPerOperatingDay"]</th>
             <th>@Localizer["HasEmptyReturn"]</th>
@@ -62,9 +63,10 @@ else
             <td>
                 @item.CargoName()
             </td>
+            <td>@item.QuantityAndUnit()</td>
             <td>@item.OperatingDay.ShortNameLocalized()</td>
             <td align="center">@item.PrintPerOperatingDay.AsYesOrNo()</td>
-            <td align="center">@item.HasEmptyReturn.AsYesOrNo()</td>
+            <td align="center">@item.HasEmptyReturn()</td>
             <td align="center">@item.PrintCount</td>
         </RowTemplate>
         <RowEditTemplate Context="item">

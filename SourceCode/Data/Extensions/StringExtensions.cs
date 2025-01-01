@@ -17,6 +17,9 @@ public static class StringExtensions
     public static bool HasValue([NotNullWhen(true)] this string? value) =>
         !string.IsNullOrWhiteSpace(value);
 
+    public static bool HasValue(this string? value, params string[] any) =>
+        any is not null && !string.IsNullOrEmpty(value) && any.Contains(value, StringComparer.OrdinalIgnoreCase);
+
     public static bool HasValueExcept([NotNullWhen(true)] this string? value, params string[] except) =>
         except is not null ? !string.IsNullOrEmpty(value) && !except.Contains(value, StringComparer.OrdinalIgnoreCase) :
         !string.IsNullOrWhiteSpace(value);

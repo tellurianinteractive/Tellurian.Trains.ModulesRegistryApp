@@ -75,6 +75,7 @@ AS
 				CASE WHEN CCC.Quantity < CCS.Quantity THEN CCC.Quantity ELSE CCS.Quantity END
 			ELSE 1
 		END AS PrintCount,
+		CU.IsBearer AS QuantityIsBearer,
 		CAST (0 AS BIT) AS PrintPerOperatingDay,
 		CAST (0 AS BIT) AS HasEmptyReturn,
 		CAST (0 AS BIT) AS HasSameCargoReturn,

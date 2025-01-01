@@ -2,6 +2,19 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.0
+- **Waybill** improvements: you can now use any unit of cargo and it will be printed correctly on the waybill. 
+Printing waybills now distinguishes between *bearers of cargo* and *non-bearer cargo*.
+The changes means that several non-bearer cargo can be placed in the same wagon pocket, 
+as long as the load capacity of the wagon is not exceeded. It also means that a wagon can travel to several
+destinations, unloading some of its cargo at each destination.
+  - for cargo in *bearers* the given *quantity* number of waybills are printed, 
+  for example 5 containers will print a waybill for each container with the given cargo. 
+  - for *non-bearer* cargo one waybill is printed with the given *quantity*, 
+  for example 5 cubic meters are printed as one waybill.
+  - if the unit of cargo is *pieces*, the waybill will use the *package type* on the waybill and print one waybill,
+  for example 5 boxes of some cargo.
+
 ## Release 1.11.31
 Release date 2024-12-18
 - **Bug fix** of layout participant adding comment to layout planner.
