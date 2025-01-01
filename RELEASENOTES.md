@@ -3,6 +3,8 @@
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
 ## Release 1.12.0
+Release date 2025-01-01
+- **Upgrade** from .NET 8.0 to .NET 9.0.
 - **Waybill** improvements: you can now use any unit of cargo and it will be printed correctly on the waybill. 
 Printing waybills now distinguishes between *bearers of cargo* and *non-bearer cargo*.
 The changes means that several non-bearer cargo can be placed in the same wagon pocket, 

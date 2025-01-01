@@ -1,38 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<AssemblyName>ModulesRegistry.Services.Tests</AssemblyName>
-		<RootNamespace>ModulesRegistry.Services.Tests</RootNamespace>
-		<IsPackable>false</IsPackable>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.1" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-		<PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
-		<PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
-		<PackageReference Include="coverlet.collector" Version="6.0.2">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\SourceCode\App\App.csproj" />
-		<ProjectReference Include="..\..\SourceCode\Data\Data.csproj" />
-		<ProjectReference Include="..\..\SourceCode\Services\Services.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Test data\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Test data\LokExportModulregistret.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
+  <PropertyGroup>
+    <AssemblyName>ModulesRegistry.Services.Tests</AssemblyName>
+    <RootNamespace>ModulesRegistry.Services.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SourceCode\App\App.csproj" />
+    <ProjectReference Include="..\..\SourceCode\Data\Data.csproj" />
+    <ProjectReference Include="..\..\SourceCode\Services\Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Test data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Test data\LokExportModulregistret.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
