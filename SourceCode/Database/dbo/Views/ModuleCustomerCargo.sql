@@ -56,7 +56,8 @@ SELECT
 	CO.NHMCode
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId AND S.HasCargoCustomers <> 0
-	INNER JOIN [StationStandard] SS ON SS.Id = S.Id 
+	INNER JOIN [Module] AS M ON M.Id = S.PrimaryModuleId AND M.StationId = S.Id
+	INNER JOIN [StationStandard] SS ON SS.Id = S.Id AND SS.StandardId = M.StandardId	
 	INNER JOIN [Country] AS C ON C.Id = R.CountryId
 	INNER JOIN [StationCustomer] AS SC ON SC.StationId = S.Id
 	INNER JOIN [StationCustomerCargo] AS SCC ON SCC.StationCustomerId = SC.Id

@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.1
+Release date 2025-01-06
+- **Bug fix** of issue with creating waybills when an operation location consists of modules with different module standards.
+- **Bug fix** of issue displaying all modules as an operation location, when only the primary module should be displayed as such.
 ## Release 1.12.0
 Release date 2025-01-01
 - **Upgrade** from .NET 8.0 to .NET 9.0.
@@ -16,7 +20,6 @@ destinations, unloading some of its cargo at each destination.
   for example 5 cubic meters are printed as one waybill.
   - if the unit of cargo is *pieces*, the waybill will use the *package type* on the waybill and print one waybill,
   for example 5 boxes of some cargo.
-
 ## Release 1.11.31
 Release date 2024-12-18
 - **Bug fix** of layout participant adding comment to layout planner.

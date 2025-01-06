@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ModulesRegistry.Data.Extensions;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static ModulesRegistry.Data.Resources.Strings;
@@ -122,9 +123,10 @@ public static class ModuleExtensions
             text.Append(", ");
             text.Append($"""<span style="color: red">{NotStandalone}</span>""");
         }
+        if (me.FullName.StartsWith("Elisabeth")) Debugger.Break();
+
         if (me.IsOperationsPlace())
         {
-            var tracksCount = me.Station.StationTracks.Count;
             text.Append(", ");
             text.Append(OperationsPlace);
             if (me.Station.StationTracks.Count > 0) text.Append($", {me.NumberOfTimetabledTracks()} {Tracks.ToLowerInvariant()}");
@@ -152,7 +154,7 @@ public static class ModuleExtensions
 
     private static bool IsCurve(this Module me) =>  me.Angle.HasValue;
     private static bool IsStraight(this Module me) => !me.Angle.HasValue;
-    private static bool IsOperationsPlace(this Module me) => me.Station is not null;
+    private static bool IsOperationsPlace(this Module me) => me.Station is not null && me.Station.PrimaryModuleId == me.Id;
 
     public static Module Clone(this Module me) =>
         new()
