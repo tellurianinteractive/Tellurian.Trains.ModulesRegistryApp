@@ -32,7 +32,18 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
 
             }
         }
-        return Array.Empty<ListboxItem>();
+        return [];
+    }
+
+    public async Task<IEnumerable<CargoDirection>> GetCargoDirectionsAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.CargoDirections.ToReadOnlyListAsync();
+        }
+        return [];
+
     }
 
     public async Task<IEnumerable<ListboxItem>> CargoDirectionsListboxItemsAsync(ClaimsPrincipal? principal)
@@ -45,7 +56,18 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
             return items
                 .OrderBy(l => l.Description).ToList();
         }
-        return Array.Empty<ListboxItem>();
+        return [];
+    }
+
+    public async Task<IEnumerable<CargoQuantityUnit>> GetQuantityUnitsAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.CargoUnits.ToReadOnlyListAsync();
+        }
+        return [];
+
     }
 
     public async Task<IEnumerable<ListboxItem>> CargoQuantityListboxItemsAsync(ClaimsPrincipal? principal)
@@ -57,7 +79,18 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
                 .Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).ToReadOnlyListAsync();
             return items.OrderBy(l => l.Description).ToList();
         }
-        return Array.Empty<ListboxItem>();
+        return [];
+    }
+
+    public async Task<IEnumerable<CargoReadyTime>> GetReadyTimesAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.CargoReadyTimes.ToReadOnlyListAsync();                
+        }
+        return [];
+
     }
 
     public async Task<IEnumerable<ListboxItem>> ReadyTimeListboxItemsAsync(ClaimsPrincipal? principal)
@@ -69,9 +102,18 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
                 .Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).ToReadOnlyListAsync();
             return items.OrderBy(l => l.Id).ToList();
         }
-        return Array.Empty<ListboxItem>();
+        return [];
     }
+    public async Task<IEnumerable<CargoPackagingUnit>> GetPackagingUnitsAsync(ClaimsPrincipal? principal)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.CargoPackagingUnits.ToReadOnlyListAsync();
+        }
+        return [];
 
+    }
     public async Task<IEnumerable<ListboxItem>> CargoPackagingUnitListboxItemsAsync(ClaimsPrincipal? principal)
     {
         if (principal.IsAuthenticated())
@@ -81,7 +123,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
                 .Select(cpu => new ListboxItem(cpu.Id, cpu.PluralResourceCode.AsLocalized()) { DisplayOrder = cpu.DisplayOrder }).ToReadOnlyListAsync();
             return items.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Description);
         }
-        return Array.Empty<ListboxItem>();
+        return [];
 
     }
 

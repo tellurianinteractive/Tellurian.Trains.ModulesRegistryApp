@@ -16,6 +16,10 @@ static public class ModuleExtensions
         module is null || module.Station is null ? string.Empty :
         module.Station.FullName;
 
+    public static string StationNameWithSignature(this Module? module) =>
+        module is null || module.Station is null ? string.Empty :
+        $"{module.Station.FullName}: {module.Station.Signature}";
+
     public static bool IsGroupOwned([NotNullWhen(true)] this Module? module) =>
         module is not null && module.ModuleOwnerships is not null && module.ModuleOwnerships.Any(mo => mo.GroupId > 0);
     public static bool IsPersonOwned([NotNullWhen(true)] this Module? module) =>

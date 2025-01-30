@@ -40,7 +40,7 @@
         <TemplateColumn Context="module" Title="@Localizer["Status"]" Align="Align.Center">
             <span>@module.StatusIcon()</span>
         </TemplateColumn>
-        <PropertyColumn Title="@Localizer["IsPartOfStation"]" Property="p => p.StationName()" Sortable="true"></PropertyColumn>
+        <PropertyColumn Title="@Localizer["IsPartOfStation"]" Property="p => p.StationNameWithSignature()" Sortable="true"></PropertyColumn>
         <PropertyColumn Title="@Localizer["Standard"]" Property="p => p.Standard.ShortName" Sortable="true"></PropertyColumn>
         <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
             <ColumnOptions>

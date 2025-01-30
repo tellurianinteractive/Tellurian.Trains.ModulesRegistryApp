@@ -2,6 +2,15 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.3
+Release date 2025-01-30
+- **Modules list** now also displays *station signature* for modules that are operation locations. Thanks to Benny Tjäder for this suggestion.
+- **Fix** of the number of waybills printed when quantity type is *pieces*.
+## Release 1.12.2
+Release date 2025-01-15
+- **Container** bearer type now limits package units to different types of containers. 
+For all other types of cargo units, container package units is not available any longer.
+- **Empty wagon order** will not be available for NHM-codes 8600-8699, it is rolling stock: locomotives and wagons.
 ## Release 1.12.1
 Release date 2025-01-06
 - **Bug fix** of issue with creating waybills when an operation location consists of modules with different module standards.

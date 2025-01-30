@@ -9,6 +9,7 @@
     [NL]          NVARCHAR (2000) NOT NULL,
     [PL]          NVARCHAR (2000) NOT NULL,
     [SV]          NVARCHAR (2000) NOT NULL,
+    [HasEmptyWagonOrder] BIT NOT NULL DEFAULT 1, 
     CONSTRAINT [PK_NHM] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

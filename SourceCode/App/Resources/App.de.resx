@@ -1125,6 +1125,9 @@
   <data name="of" xml:space="preserve">
     <value>von</value>
   </data>
+  <data name="Change below only if it differs from the customer above" xml:space="preserve">
+    <value>Ändern Sie unten nur, wenn es vom Kunden oben abweicht</value>
+  </data>
   <data name="OnlyThoseWithModules" xml:space="preserve">
     <value>Nur diejenigen mit Modulen</value>
   </data>

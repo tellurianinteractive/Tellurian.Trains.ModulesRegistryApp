@@ -38,7 +38,7 @@
         }
     </Buttons>
     <SubInputs>
-        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems" DirectionItems="DirectionItems" OperatingDayItems="OperatingDayItems" QuantityUnitItems="QuantityUnitItems" ReadyTimeItems="ReadyTimeItems" PackagingUnitItems="PackagingUnitItems" />
+        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems"  OperatingDayItems="OperatingDayItems"  />
     </SubInputs>
 </EditTemplate>
 
@@ -52,10 +52,6 @@
     StationCustomer StationCustomer = new StationCustomer();
     IEnumerable<ListboxItem>? OperatingDayItems;
     IEnumerable<ListboxItem>? CargoTypeItems;
-    IEnumerable<ListboxItem>? DirectionItems;
-    IEnumerable<ListboxItem>? QuantityUnitItems;
-    IEnumerable<ListboxItem>? ReadyTimeItems;
-    IEnumerable<ListboxItem>? PackagingUnitItems;
 
     bool DeleteDialogOpen { get; set; }
     int DeletedId;
@@ -65,11 +61,7 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
-        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
         OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
-        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
-        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
-        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
     }
 
     protected override async Task OnParametersSetAsync()

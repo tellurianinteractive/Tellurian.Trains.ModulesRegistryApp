@@ -104,6 +104,7 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
             {
                 foreach (var cargo in entity.Cargos)
                 {
+                    cargo.Id = cargo.Id < 0 ? 0 : cargo.Id;
                     cargo.TrackOrArea = cargo.TrackOrArea.ValueOrNull();
                     cargo.SpecialCargoName = cargo.SpecialCargoName.ValueOrNull();
                     cargo.SpecificWagonClass = cargo.SpecificWagonClass.ValueOrNull();

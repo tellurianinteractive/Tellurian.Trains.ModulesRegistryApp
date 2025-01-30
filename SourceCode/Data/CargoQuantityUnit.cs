@@ -20,6 +20,11 @@ public partial class CargoQuantityUnit
 
 #nullable enable
 
+public static class CargoQuantityUnitExtensions
+{
+    public static bool IsContainer(this CargoQuantityUnit? it) => it is not null && it.FullName == "Containers";
+}
+
 internal static class QuantityUnitMapper
 {
     public static void MapCargoQuantityUnit(this ModelBuilder builder) =>

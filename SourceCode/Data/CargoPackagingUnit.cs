@@ -11,6 +11,7 @@ public class CargoPackagingUnit
     public string PluralResourceCode { get; set; }
     public int DisplayOrder { get; set; }
     public string PrepositionResourceCode { get; set; }
+    public bool IsContainer { get; set; }
 }
 
 #nullable enable

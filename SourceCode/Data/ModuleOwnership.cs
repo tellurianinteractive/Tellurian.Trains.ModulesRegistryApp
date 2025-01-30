@@ -78,7 +78,7 @@ public static class ModuleOwnershipExtensionsk
         ownership is not null && ownership.OwnedShare == 0 && ownership.PersonId > 0;
 
     public static string OwnerNames(this IEnumerable<ModuleOwnership> us) =>
-        string.Join(", ", us.First().Module.ModuleOwnerships.Select(mo => mo.OwnerName()));
+        string.Join(", ", us.First().Module.ModuleOwnerships.Where(mo => mo.OwnedShare>0).Select(mo => mo.OwnerName()));
 
     public static string OwnerName(this ModuleOwnership? me) =>
         me is null ? string.Empty :

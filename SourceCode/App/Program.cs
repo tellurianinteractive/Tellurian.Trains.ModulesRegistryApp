@@ -65,10 +65,12 @@ builder.Services.AddScoped<HttpClient>();
 builder.Services.AddAuthorizationPolicies();
 builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
-        options =>
-            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
-        .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
+    options =>
+    {
+        options.CommandTimeout(60);
+        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+    }).EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
 
 });
 builder.Services.AddBlazoredToast();

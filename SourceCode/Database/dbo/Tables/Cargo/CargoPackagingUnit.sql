@@ -4,5 +4,6 @@
 	[SingularResourceCode] NVARCHAR(50) NOT NULL, 
 	[PluralResourceCode] NVARCHAR(50) NOT NULL, 
 	[DisplayOrder] INT NOT NULL, 
-    [PrepositionResourceCode] NVARCHAR(4) NULL
+    [PrepositionResourceCode] NVARCHAR(4) NULL, 
+    [IsContainer] BIT NOT NULL DEFAULT 0
 )

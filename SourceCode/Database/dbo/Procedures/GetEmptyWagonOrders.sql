@@ -23,8 +23,10 @@ AS
 	C.*
 FROM 
 	ModuleCustomerCargo AS MCC INNER JOIN 
-	Cargo AS C ON C.Id = MCC.CargoId
+	Cargo AS C ON C.Id = MCC.CargoId LEFT JOIN
+	NHM ON NHM.Id = C.NHMCode
 WHERE 
+	NHM.HasEmptyWagonOrder <> 0 AND
 	MCC.IsSupply <> 0 AND
 	MCC.StationId = @StationId AND
 	(@CustomerId IS NULL OR MCC.CustomerId = @CustomerId)

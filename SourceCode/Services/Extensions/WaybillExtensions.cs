@@ -30,6 +30,17 @@ public static class WaybillExtensions
                         }
                     }
                 }
+                if (waybill.QuantityUnitId==3)
+                {
+                    var printCount = waybill.Quantity;
+                    waybill.Quantity = 1;
+                    for(var j = 0; j < printCount; j++)
+                    {
+                        var clone = waybill.Clone;
+                        result.Add(clone);
+                        if (clone.HasReturn()) result.Add(clone.Return());
+                    }
+                }
                 else
                 {
                     result.Add(waybill);
@@ -67,7 +78,6 @@ public static class WaybillExtensions
 
     private static Waybill Return(this Waybill waybill)
     {
-        if (waybill.Destination.CargoName == "Expressgods") Debugger.Break();
         var returnWaybill = waybill.Clone;
         var newOrigin = returnWaybill.Destination;
         var newDestination = returnWaybill.Origin;

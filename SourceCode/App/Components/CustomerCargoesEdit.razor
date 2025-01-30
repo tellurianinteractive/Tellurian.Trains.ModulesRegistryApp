@@ -11,26 +11,26 @@ else
 {
     <h3 class="mt-3">@Localizer["CargoFlow"]</h3>
     <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-        <AppButton Label="@AddButtonText" OnClickCallback="AddCargoFlow" IconName="@FontAwesome.Add" Type="secondary"/>
-   </div>
+        <AppButton Label="@AddButtonText" OnClickCallback="AddCargoFlow" IconName="@FontAwesome.Add" Type="secondary" />
+    </div>
     @foreach (var cargo in Customer.Cargos)
     {
         <div class="row g-3" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-            <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
-            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="PackagingUnitItems" />
-            <AppInputFill Width="6" />
-
             <AppInputSelect Width="2" @bind-Value="cargo.OperatingDayId" Label="Days" ShowPleaseSelect="true" Items="OperatingDayItems" />
             <AppInputSelect Width="2" @bind-Value="cargo.DirectionId" Label="Direction" ShowPleaseSelect="true" Items="DirectionItems" />
-            <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" />
+            <AppInputSelect Width="2" @bind-Value="cargo.QuantityUnitId" Label="QuantityUnit" ShowPleaseSelect="true" Items="QuantityUnitItems" Context="cargo" OnSelected="@((i, o) => OnSelectedQuantityUnit(i, o))" />
             <AppInputNumber Width="2" @bind-Value="cargo.Quantity" Label="Quantity" />
-            <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
             <AppInputSelect Width="2" @bind-Value="cargo.ReadyTimeId" Label="@cargo.ReadyTimeLabel()" ShowPleaseSelect="true" Items="ReadyTimeItems" />
+            <AppInputNumber Width="2" @bind-Value="cargo.MaxTrainsetLength" Label="MaxTrainsetLength" />
 
+            <AppInputSelect Width="3" @bind-Value="cargo.CargoId" Label="CargoType" ShowPleaseSelect="true" Items="CargoTypeItems" />
             <AppInputText Width="2" @bind-Value="cargo.SpecificWagonClass" Label="OtherWagonClass" />
-            <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />
-            <AppInputText Width="3" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@cargo.TrackOrAreaBackColour()" TextColor="@cargo.TrackOrAreaForeColor()" />
-            <AppInputColor Width="2" @bind-Value="cargo.TrackOrAreaColor" Label="OtherColor" />
+            <AppInputSelect Width="3" @bind-Value="cargo.PackageUnitId" Label="PackagingUnit" ShowPleaseSelect="false" Items="@PackagingUnitItems(cargo.Id)" />
+            <AppInputFill Width="4" />
+            <h3>@Localizer["Change below only if it differs from the customer above"]</h3>
+            @*          <AppInputText Width="3" @bind-Value="cargo.SpecialCargoName" Label="OtherName" />  *@            
+            <AppInputText Width="2" @bind-Value="cargo.TrackOrArea" Label="OtherTrackOrArea" BackColor="@cargo.TrackOrAreaBackColour()" TextColor="@cargo.TrackOrAreaForeColor()" />
+            <AppInputColor Width="1" @bind-Value="cargo.TrackOrAreaColor" Label="OtherColor" />
             <AppInputNumber Width="1" @bind-Value="cargo.FromYear" Label="OtherFromYear" />
             <AppInputNumber Width="1" @bind-Value="cargo.UptoYear" Label="OtherUptoYear" />
 
@@ -52,21 +52,70 @@ else
 }
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
     [Parameter] public StationCustomer? Customer { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? CargoTypeItems { get; set; }
-    [Parameter] public IEnumerable<ListboxItem>? DirectionItems { get; set; }
-    [Parameter] public IEnumerable<ListboxItem>? QuantityUnitItems { get; set; }
     [Parameter] public IEnumerable<ListboxItem>? OperatingDayItems { get; set; }
-    [Parameter] public IEnumerable<ListboxItem>? ReadyTimeItems { get; set; }
-    [Parameter] public IEnumerable<ListboxItem>? PackagingUnitItems { get; set; }
+
+    IEnumerable<ListboxItem> DirectionItems => CargoDirections.Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized()));
+    IEnumerable<ListboxItem>? QuantityUnitItems => QuantityUnits.Select(qu => new ListboxItem(qu.Id, qu.FullName.AsLocalized()));
+    IEnumerable<ListboxItem>? ReadyTimeItems => ReadyTimes.Select(rt => new ListboxItem(rt.Id, rt.FullName.AsLocalized()));
+    Dictionary<int, IEnumerable<ListboxItem>> PackagingUnitItemsDictionary =[];
+    IEnumerable<ListboxItem> PackagingUnitItems(int id) => PackagingUnitItemsDictionary.ContainsKey(id) ? PackagingUnitItemsDictionary[id] : [];
+    ClaimsPrincipal? Principal;
+
+    IEnumerable<CargoDirection> CargoDirections = [];
+    IEnumerable<CargoPackagingUnit> PackagingUnits = [];
+    IEnumerable<CargoReadyTime> ReadyTimes = [];
+    IEnumerable<CargoQuantityUnit> QuantityUnits = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CargoDirections = await CargoService.GetCargoDirectionsAsync(Principal);
+        PackagingUnits = await CargoService.GetPackagingUnitsAsync(Principal);
+        QuantityUnits = await CargoService.GetQuantityUnitsAsync(Principal);
+        ReadyTimes = await CargoService.GetReadyTimesAsync(Principal);
+        PackagingUnitItemsDictionary = [];
+        UpdatePackagingUnitsDictionary();
+
+    }
+
+    void UpdatePackagingUnitsDictionary(){
+        var keysToRemove = PackagingUnitItemsDictionary.Keys.Where(k => k <= 0);
+        foreach(var key in keysToRemove) PackagingUnitItemsDictionary.Remove(key);
+        foreach (var cargo in Customer!.Cargos)
+        {
+            if (PackagingUnitItemsDictionary.ContainsKey(cargo.Id)) continue;
+            var quantityUnit = QuantityUnits.SingleOrDefault(qu => qu.Id == cargo.QuantityUnitId);
+            var listboxItems = PackagingUnits.Where(pu => pu.Id ==0 || pu.IsContainer == quantityUnit.IsContainer()).Select(pu => new ListboxItem(pu.Id, pu.PluralResourceCode.AsLocalized()));
+            PackagingUnitItemsDictionary.Add(cargo.Id, listboxItems);
+        }
+    }
+
+    void OnSelectedQuantityUnit(int id, object? context)
+    {
+        var cargo = context as StationCustomerCargo;
+        if (cargo is null) return;
+        var quantityUnit = QuantityUnits.SingleOrDefault(qu => qu.Id == id);
+        PackagingUnitItemsDictionary[cargo.Id] = PackagingUnits.Where(pu => pu.IsContainer == quantityUnit.IsContainer()).Select(pu => new ListboxItem(pu.Id, pu.PluralResourceCode.AsLocalized()));
+    }
+
+    int NextId => Customer?.Cargos.Any(c => c.Id <= 0) == true ? Customer?.Cargos.Where(c => c.Id <= 0).Min(c => c.Id) - 1 ?? -1 : -1;
 
     void AddCargoFlow()
     {
         if (Customer is not null)
         {
-            Customer.Cargos.Add(StationCustomerCargo.Default(Customer.Id));
+            var cargo = StationCustomerCargo.Default(Customer.Id);
+            cargo.Id = NextId;
+            Customer.Cargos.Add(cargo);
+
+            UpdatePackagingUnitsDictionary();
         }
     }
+
 
     void Clone(int id)
     {
@@ -76,7 +125,9 @@ else
             if (existing is not null)
             {
                 var cloned = existing.Clone();
+                cloned.Id = NextId;
                 Customer.Cargos.Add(cloned);
+                UpdatePackagingUnitsDictionary();
             }
         }
     }
@@ -86,7 +137,11 @@ else
         if (Customer is not null && id > 0)
         {
             var item = Customer.Cargos.SingleOrDefault(scc => scc.Id == id);
-            if (item is not null) Customer.Cargos.Remove(item);
+            if (item is not null)
+            {
+                Customer.Cargos.Remove(item);
+                PackagingUnitItemsDictionary.Remove(id);
+            }
         }
     }
 
