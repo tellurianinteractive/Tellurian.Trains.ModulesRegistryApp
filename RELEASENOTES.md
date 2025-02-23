@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2025-02-23
 - **Modules** list now have buttons fpr direct edit of module, station and customers.
 - **My modules list** now also displays *station signature* for modules that are operation locations.
+- **Meeting registration** accessed before registration opens now show date for when registration opens. 
 - **Help texts** got some improvements.
 - **Bug fix** of deleting *external station*.
 ## Release 1.12.3

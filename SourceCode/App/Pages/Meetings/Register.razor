@@ -23,7 +23,7 @@ else if (Meeting.IsNotPermittingRegistrations())
 }
 else if (Meeting.IsNotYetOpenForRegistration(TimeProvider.LocalTime))
 {
-    <ActionMessage AlertType="Warning" Label="MeetingIsNotYetOpenForRegistration" />
+    <ActionMessage AlertType="Warning" Label="@MeetingOpensForRegistration(Meeting)" />
 }
 else
 {
@@ -110,7 +110,7 @@ else
                 <li>@Localizer["Participates"]: <strong>@Participant.Participates(Localizer)</strong> </li>
             </ul>
         }
-       @*  else if (Meeting.Id > 0 && PersonId > 0)
+        @*  else if (Meeting.Id > 0 && PersonId > 0)
         {
             if (IsAdministratorOrMeetingOrganiser || Principal.IsGlobalOrCountryAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
             {
@@ -138,7 +138,7 @@ else
                 </Inputs>
             </EditTemplate>
         }
-    @if (IsAdministratorOrMeetingOrganiser || (Participant?.Id > 0 && Meeting.PermitsRegistrations()))
+        @if (Participant?.Id > 0 && (IsAdministratorOrMeetingOrganiser || Meeting.PermitsRegistrations()))
         {
             <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
             <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
@@ -163,7 +163,7 @@ else
                             <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                             <AppButton Label="Unregister" IconName="@FontAwesome.Cancel" Type="Danger" OnClickCallback="@(async () => await OnCancelLayoutParticipation(item))" />
                         }
-                        
+
                         @if (item.LayoutParticipant?.LayoutStations.Any() == true)
                         {
                             <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@($"layouts/{item.Layout?.Id}/waybills/{item.Participant.PersonId}")" />
@@ -177,26 +177,26 @@ else
 
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int MeetingId { get; set; }
-    [Parameter] public int PersonId { get; set; }
+        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+        [Parameter] public int MeetingId { get; set; }
+        [Parameter] public int PersonId { get; set; }
 
-    ClaimsPrincipal? Principal;
+        ClaimsPrincipal? Principal;
 
-    int CountryId;
-    MeetingParticipant? Participant;
-    Meeting? Meeting;
-    IEnumerable<ListboxItem>? CountryItems;
-    IEnumerable<ListboxItem>? PeopleItems;
+        int CountryId;
+        MeetingParticipant? Participant;
+        Meeting? Meeting;
+        IEnumerable<ListboxItem>? CountryItems;
+        IEnumerable<ListboxItem>? PeopleItems;
 
-    IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
-    bool IsAdministratorOrMeetingOrganiser;
-    bool HasParticipantsFromSeveralCountries;
+        IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
+        bool IsAdministratorOrMeetingOrganiser;
+        bool HasParticipantsFromSeveralCountries;
 
-    bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
-        Principal.IsGlobalOrCountryAdministrator() ||
-        IsAdministratorOrMeetingOrganiser ||
-        (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
+        bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
+            Principal.IsGlobalOrCountryAdministrator() ||
+            IsAdministratorOrMeetingOrganiser ||
+            (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
     protected override async Task OnParametersSetAsync()
     {
@@ -346,5 +346,8 @@ else
 
     string LatestArrivalTimeLabel(MeetingParticipant? it) => $"LatestArrivalTime-{it.FirstParticipationDay()}";
     string EarliestDepartureTimeLabel(MeetingParticipant? it) => $"EarliestDepartureTime-{it.LastParticipationDay()}";
+    string MeetingOpensForRegistration(Meeting? it) =>
+        it is null ? string.Empty :
+        string.Format(Localizer["MeetingOpensForRegistrationAtDate"], it.RegistrationOpensDate());
 
 }

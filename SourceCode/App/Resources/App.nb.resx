@@ -219,6 +219,9 @@
   <data name="Category" xml:space="preserve">
     <value>Kategori</value>
   </data>
+  <data name="Change below only if it differs from the customer above" xml:space="preserve">
+    <value>Endre kun nedenfor hvis forskjellig fra kunden ovenfor</value>
+  </data>
   <data name="Characters" xml:space="preserve">
     <value>Tegn</value>
   </data>
@@ -906,6 +909,9 @@
   <data name="MeetingIsNotYetOpenForRegistration" xml:space="preserve">
     <value>Treffen er ennå ikke åpen for påmelding</value>
   </data>
+  <data name="MeetingOpensForRegistrationAtDate" xml:space="preserve">
+    <value>Treffet åpner for registrering {0:d}</value>
+  </data>
   <data name="Meetings" xml:space="preserve">
     <value>Treff</value>
   </data>
@@ -1124,9 +1130,6 @@
   </data>
   <data name="of" xml:space="preserve">
     <value>av</value>
-  </data>
-  <data name="Change below only if it differs from the customer above" xml:space="preserve">
-    <value>Endre kun nedenfor hvis forskjellig fra kunden ovenfor</value>
   </data>
   <data name="OnlyThoseWithModules" xml:space="preserve">
     <value>Bare de med moduler</value>
