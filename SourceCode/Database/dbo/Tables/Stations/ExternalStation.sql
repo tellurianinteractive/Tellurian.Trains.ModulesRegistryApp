@@ -12,8 +12,17 @@
 );
 
 GO
+CREATE TRIGGER [dbo].[DeleteExternalStation] ON [ExternalStation] INSTEAD OF DELETE
+AS
+BEGIN
+    DELETE FROM [ExternalStationCustomer] WHERE ExternalStationId IN (SELECT Id FROM DELETED)
+    DELETE FROM [ExternalStation] WHERE Id IN (SELECT Id FROM DELETED)
+END
+
+GO
 CREATE NONCLUSTERED INDEX [IX_ExternalStation_RegionId]
     ON [dbo].[ExternalStation]([RegionId] ASC);
+
 
 
 

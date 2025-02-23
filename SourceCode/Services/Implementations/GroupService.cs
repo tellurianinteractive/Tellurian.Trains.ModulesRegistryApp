@@ -106,7 +106,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
                 .AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == pricipal.PersonId() && gm.IsDataAdministrator);
         }
     }
-    public async Task<bool> IsGroupMemberAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
+    public async ValueTask<bool> IsGroupMemberAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
     {
         if (pricipal.IsCountryAdministratorInCountry(countryId)) return true;
         else
@@ -117,7 +117,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         }
     }
 
-    public async Task<bool> IsDataAdministratorInSameGroupAsMember(ClaimsPrincipal? pricipal, int memberPersonId)
+    public async ValueTask<bool> IsDataAdministratorInSameGroupAsMember(ClaimsPrincipal? pricipal, int memberPersonId)
     {
         if (pricipal.IsGlobalAdministrator()) return true;
         else if (pricipal.IsCountryAdministrator())

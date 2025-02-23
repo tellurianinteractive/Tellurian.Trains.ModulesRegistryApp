@@ -703,7 +703,7 @@
     <value>Ukjent</value>
   </data>
   <data name="Unload" xml:space="preserve">
-    <value>Last ut</value>
+    <value>Last av</value>
   </data>
   <data name="UnloadingReadyTime" xml:space="preserve">
     <value>Utlasting klar</value>

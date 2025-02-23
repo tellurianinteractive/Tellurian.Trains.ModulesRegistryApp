@@ -49,10 +49,18 @@
                 </div>
             </ColumnOptions>
         </PropertyColumn>
-        @if (Principal.IsGlobalOrCountryAdministrator())
+        @if (Principal.IsGlobalOrCountryAdministrator(CountryId))
         {
             <TemplateColumn Context="module" Title="@Localizer["Actions"]">
-                <AppButton Label="Edit" Href="@EditHref(module)" IsDisabled="(!MayEdit(module))" />
+                <AppButton Label="Edit" IconName="@FontAwesome.Module" Href="@EditModuleHref(module)" IsDisabled="(!MayEdit(module))" />
+                @if (module.IsPrimaryStationModule())
+                {
+                    <AppButton Label="Edit" IconName="@FontAwesome.Station" Href="@EditStationHref(module)" IsDisabled="(!MayEdit(module))" />
+                    @if (module.Station.HasCargoCustomers == true)
+                    {
+                        <AppButton Label="Edit" IconName="@FontAwesome.Customer" Href="@EditStationCustomersHref(module)" IsDisabled="(!MayEdit(module))" />
+                    }
+                }
             </TemplateColumn>
         }
     </QuickGrid>
@@ -116,9 +124,22 @@
             m.OwnerNames().ContainsCaseInsensitive(Filter.OwnerName)
         );
 
-    string EditHref(Module? module) =>
+    string EditModuleHref(Module? module) =>
         module is null ? string.Empty :
         module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
         $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
+
+    string EditStationHref(Module? module) =>
+        module is null || module.StationId < 1 ? string.Empty :
+        module.IsGroupOwned() ? $"/Stations/{module.StationId}/Edit/GroupOwned/{module.OwningGroupId()}" :
+        $"/Stations/{module.StationId}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
+
+    string EditStationCustomersHref(Module? module) =>
+    module is null || module.StationId < 1 ? string.Empty :
+    module.IsGroupOwned() ? $"/Stations/{module.StationId}/Customers/GroupOwned/{module.OwningGroupId()}" :
+    $"/Stations/{module.StationId}/Customers/PersonOwned/{module.OwningPersonsIds()[0]}";
+
+
+
 
 }

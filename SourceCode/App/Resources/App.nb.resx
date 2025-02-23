@@ -613,7 +613,7 @@
     <value>Har dreieskive?</value>
   </data>
   <data name="HaveFreightFlow" xml:space="preserve">
-    <value>Har godstrøm?</value>
+    <value>Har gods inn/ut?</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>Hei</value>

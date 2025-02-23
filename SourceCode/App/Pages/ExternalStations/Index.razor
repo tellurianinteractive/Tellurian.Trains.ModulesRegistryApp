@@ -64,7 +64,7 @@
             }
             @if (Principal.IsGlobalOrCountryAdministrator())
             {
-                <AppButton Label="Delete" OnClickCallback="() => OpenDeleteDialog(station.Id)" />
+                <AppButton Label="Delete" OnClickCallback="@(() => OpenDeleteDialog(station.Id))" />
             }
         </TemplateColumn>
     </QuickGrid>

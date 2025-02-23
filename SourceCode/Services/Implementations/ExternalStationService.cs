@@ -74,11 +74,9 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ExternalStations
-                .Include(es => es.ExternalStationCustomers)
-                .ThenInclude(esc => esc.ExternalStationCustomerCargos)
                 .SingleOrDefaultAsync(es => es.Id == id);
             if (existing is null) { return (0, Resources.Strings.NothingToDelete); }
-            dbContext.ExternalStations.Remove(existing);
+            dbContext.Remove(existing);
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();
         }

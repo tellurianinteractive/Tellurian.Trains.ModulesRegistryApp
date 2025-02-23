@@ -73,9 +73,10 @@
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+        var countryId = CountryId < 1 ? Principal.CountryId() : CountryId;
         if (CountryId < 1)
         {
-            Navigator.NavigateTo($"/FreightCustomers/{Principal.CountryId()}");
+            Navigator.NavigateTo($"/FreightCustomers/{countryId}");
         }
     }
 

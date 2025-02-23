@@ -48,9 +48,9 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        Id = PreventUserFromEditOtherUser();
         if (Principal.IsAuthenticated())
         {
+            Id = PreventUserFromEditOtherUser();
             User = await UserService.FindByIdAsync(Id);
             if (User is not null)
             {
@@ -60,7 +60,8 @@ else
         }
     }
 
-    private int PreventUserFromEditOtherUser() => Principal.IsCountryAdministrator() ? Id : Principal.UserId();
+    private int PreventUserFromEditOtherUser() => 
+        Principal.IsCountryAdministrator() ? Id : Principal.UserId();
 
     async Task OnValidSubmit()
     {

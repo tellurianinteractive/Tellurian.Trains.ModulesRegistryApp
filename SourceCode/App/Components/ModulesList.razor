@@ -27,7 +27,7 @@
         <th>@Localizer["Actions"]</th>
     </TableHeader>
     <RowTemplate Context="module">
-        <td>@module.Name()</td>
+        <td>@module.NameOrStationNameWithSignature()</td>
         @if (AnyHasFremoName)
         {
             <td>@module.FremoName()</td>

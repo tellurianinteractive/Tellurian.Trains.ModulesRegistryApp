@@ -76,9 +76,10 @@
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
     string IconClass =>
+        IconName.HasValue() ? $"fa fa-{IconName}" :
         FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
         FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
-        IconName.HasValue() ? $"fa fa-{IconName}" : "fa fa-info";
+        "fa fa-info";
     string ObjectNameLocalized
     {
         get

@@ -106,7 +106,7 @@
     }
 
     bool DatesIsLocked(Meeting meeting) =>
-        !Principal.IsCountryAdministrator() &&
+        !Principal.IsCountryAdministratorInCountry(meeting.CountryId()) &&
         (meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
           RegisteredModulesCount > 0);
 

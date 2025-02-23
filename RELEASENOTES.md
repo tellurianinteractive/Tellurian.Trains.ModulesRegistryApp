@@ -2,6 +2,12 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.4
+Release date 2025-02-23
+- **Modules** list now have buttons fpr direct edit of module, station and customers.
+- **My modules list** now also displays *station signature* for modules that are operation locations.
+- **Help texts** got some improvements.
+- **Bug fix** of deleting *external station*.
 ## Release 1.12.3
 Release date 2025-01-30
 - **Modules list** now also displays *station signature* for modules that are operation locations. Thanks to Benny Tjäder for this suggestion.
