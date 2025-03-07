@@ -34,7 +34,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
                  .Where(s => s.Id == id && s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && (ownershipRef.IsNone || m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId))))
                  .Include(m => m.StationTracks)
                  .Include(m => m.Modules)
-                 .Include( m => m.Region)
+                 .Include(m => m.Region)
                  .SingleOrDefaultAsync()
                  .ConfigureAwait(false);
         }
@@ -66,7 +66,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Stations.AsNoTracking()
                 .Where(s => s.Id == stationId)
-                .Include(s => s.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships.Where(mo => mo.OwnedShare>0)).ThenInclude(mo => mo.Person)
+                .Include(s => s.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships.Where(mo => mo.OwnedShare > 0)).ThenInclude(mo => mo.Person)
                 .Include(s => s.PrimaryModule).ThenInclude(m => m.Standard)
                 .Include(s => s.PrimaryModule).ThenInclude(m => m.Scale)
                 .Include(s => s.StationTracks)
@@ -86,28 +86,31 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         {
             ownershipRef = principal.UpdateFrom(ownershipRef);
             using var dbContext = Factory.CreateDbContext();
-            var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
-            var stations = await dbContext.Stations.AsNoTracking()
-                .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId || mo.GroupId == ownershipRef.GroupId)))
-                .Include(s => s.Modules).ThenInclude(m => m.ModuleOwnerships)
-                .Include(s => s.StationTracks)
-                .Include(m => m.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships)
-                .ToListAsync()
-                .ConfigureAwait(false);
-            if (ownershipRef.IsPersonInGroup)
+            if (ownershipRef.IsPerson || ownershipRef.IsPersonInGroup)
             {
-                var group = await dbContext.Groups.FindAsync(ownershipRef.GroupId).ConfigureAwait(false);
-                if (group is not null)
-                {
-                    return stations.Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain) && principal.IsMemberOfGroupSpecificGroupDomainOrNone(group.GroupDomainId)));
-                }
+                return await dbContext.Stations.AsNoTracking()
+                    .Include(s => s.Modules).ThenInclude(m => m.ModuleOwnerships)
+                    .Include(s => s.StationTracks)
+                    .Include(m => m.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships)
+                    .Where(s => s.PrimaryModule.ModuleOwnerships.Any(mo => mo.PersonId == ownershipRef.PersonId))
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
             }
-            else
+            else if (ownershipRef.IsGroup)
             {
-                return stations.Where(s => s.Modules.Any(m => m.ObjectVisibilityId >= principal.MinimumObjectVisibility(ownershipRef, isMemberInGroupsInSameDomain)));
+                var isMemberInGroupsInSameDomain = GroupService.IsMemberInGroupsInSameDomain(dbContext, principal, ownershipRef);
+                return await dbContext.Stations.AsNoTracking()
+                    .Where(s => s.Modules.Any(m => m.ModuleOwnerships.Any(mo => mo.GroupId == ownershipRef.GroupId)))
+                    .Include(s => s.Modules).ThenInclude(m => m.ModuleOwnerships)
+                    .Include(s => s.StationTracks)
+                    .Include(m => m.PrimaryModule).ThenInclude(pm => pm.ModuleOwnerships)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
             }
         }
-        return Array.Empty<Station>();
+        return [];
     }
 
     public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownershipRef, int moduleId)

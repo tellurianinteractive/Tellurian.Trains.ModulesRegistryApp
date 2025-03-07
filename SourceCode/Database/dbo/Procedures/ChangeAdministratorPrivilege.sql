@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[ChangeAdministratorPrivilege]
-	@value bit = 0,
+	@global bit = 0,
+	@Country bit = 1,
 	@userId int = 1
 AS
-	UPDATE [User] SET IsGlobalAdministrator = @value, IsCountryAdministrator = @value WHERE Id = @userId
+	UPDATE [User] SET IsGlobalAdministrator = @global, IsCountryAdministrator = @country WHERE Id = @userId
 RETURN 0

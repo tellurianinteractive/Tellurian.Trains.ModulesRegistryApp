@@ -42,12 +42,7 @@
     [Parameter] public bool AlwaysShowLabel { get; set; }
     [Parameter] public string? Title { get; set; }
 
-    protected override void OnParametersSet()
-    {
-        IconName = IconName.HasValue() ? IconName : Label.HasValueExcept("Button") ? Label : "Info";
-    }
-
-    async Task NavigateToNewTab()
+        async Task NavigateToNewTab()
     {
         await JSRuntime.InvokeAsync<object>("open", Href, "_blank");
     }
@@ -75,11 +70,13 @@
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
+
     string IconClass =>
-        IconName.HasValue() ? $"fa fa-{IconName}" :
-        FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
+        IconName.HasValue() ? IconName.StartsWith("fa ") ? IconName : $"fa fa-{IconName}" :
         FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
-        "fa fa-info";
+        FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
+        FontAwesome.Info;
+
     string ObjectNameLocalized
     {
         get

@@ -17,6 +17,7 @@ public static class FontAwesome
     public const string Global = "fa fa-globe-europe";
     public const string Group = "fa fa-users";
     public const string Image = "fa fa-image";
+    public const string Info = "fa fa-info";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
     public const string Mail = "fa fa-mail-bulk";
@@ -27,12 +28,15 @@ public static class FontAwesome
     public const string Modules = "fa fa-box";
     public const string Note = "fa fa-exclamation";
     public const string Ok = "fa fa-check-circle";
+    public const string OperationLocation = "fa fa-school";
+    public const string OperationLocations = "fa fa-school";
     public const string People = "fa fa-user-friends";
     public const string Preview = "fa fa-print";
     public const string Print = "fa fa-print";
     public const string Question = "fa fa-question-circle";
     public const string Region = "fa fa-shield-alt";
     public const string Register = "fa fa-user-plus";
+    public const string Remove = "fa fa-trash-alt";
     public const string Save = "fa fa-save";
     public const string SaveAll = "fa fa-save";
     public const string Settings = "fa fa-user-cog";
@@ -73,6 +77,7 @@ public static class FontAwesome
             {nameof(Global), Global },
             {nameof(Group), Group },
             {nameof(Image), Image },
+            {nameof(Info), Info },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
             {nameof(Mail), Mail },
@@ -83,12 +88,15 @@ public static class FontAwesome
             {nameof(Modules), Modules },
             {nameof(Note), Note },
             {nameof(Ok), Ok },
+            {nameof(OperationLocation), OperationLocation },
+            {nameof(OperationLocations), OperationLocations },
             {nameof(People), People },
             {nameof(Print), Print },
             {nameof(Preview), Preview },
             {nameof(Question), Question },
             {nameof(Region), Region },
             {nameof(Register), Register },
+            {nameof(Remove), Remove },
             {nameof(Save), Save },
             {nameof(SaveAll), SaveAll },
             {nameof(Settings), Settings },

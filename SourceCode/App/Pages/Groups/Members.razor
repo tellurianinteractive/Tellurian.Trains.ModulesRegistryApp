@@ -41,15 +41,15 @@
         <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
         <td align="center">@member.Person.StatusIcon()</td>
         <td style="white-space: nowrap !important;">
-            <AppButton Label="Modules" Href="@ModulesHref(member)" IconName="Modules" />
-            <AppButton Label="Stations" Href="@StationsHref(member)" IconName="Station" />
+            <AppButton Label="Modules" Href="@ModulesHref(member)"  />
+            <AppButton Label="Stations" Href="@StationsHref(member)" />
             @if (IsGroupAdministrator)
             {
                 <AppButton Label="Edit" Href="@MemberEditHref(member)" />
-                <AppButton Label="Remove" OnClickCallback="(async () => await RemoveMember(member.Id))" IconName="Delete"/>
+                <AppButton Label="Remove" OnClickCallback="(async () => await RemoveMember(member.Id))" />
                 @if (member.Person.MayBeInvited())
                 {
-                    <AppButton Label="Invite" Href="@InviteHref(member)" IconName="Invite" />
+                    <AppButton Label="Invite" Href="@InviteHref(member)"  />
                 }
             }
         </td>

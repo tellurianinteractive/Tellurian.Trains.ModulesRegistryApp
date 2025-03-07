@@ -9,7 +9,7 @@
 {
     <div>
         <AppButton Label="Add" Href="@ModuleEditHref(0)" />
-        <AppButton Label="OperationLocations" IconName="@FontAwesome.Stations" Href="@StationsHref()" />
+        <AppButton Label="OperationLocations" Href="@StationsHref()" />
     </div>
 }
 
@@ -53,10 +53,10 @@
             <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
             @if (module.IsPrimaryStationModule())
             {
-                <AppButton Label="OperationLocation" IconName="@FontAwesome.Station" Href="@StationEditHref(module.StationId!.Value)" />
+                <AppButton Label="OperationLocation" Href="@StationEditHref(module.StationId!.Value)" />
                 @if (module.HasCargoCustomers())
                 {
-                    <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="Customer" />
+                    <AppButton Label="FreightCustomers" Href="@StationCustomersHref(module.StationId.Value)" IconName="@FontAwesome.Customer" />
                 }
             }
         </td>

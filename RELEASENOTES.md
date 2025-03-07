@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.5
+Release date 2025-03-07
+- **Bug fix** of some button icons not visible.
+- **Bug fix** of listing operation locations for group member. Now only the owner's personal oes are listed.
+- **Bug fix** of country administrator not permitted to edit modules, operation locations and freight customers.
 ## Release 1.12.4
 Release date 2025-02-23
 - **Modules** list now have buttons fpr direct edit of module, station and customers.
