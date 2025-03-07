@@ -72,7 +72,7 @@
     string ButtonClass => $"btn btn-sm btn-{ButtonClassType}";
 
     string IconClass =>
-        IconName.HasValue() ? IconName.StartsWith("fa ") ? IconName : $"fa fa-{IconName}" :
+        IconName.StartsWith("fa ") ? IconName : 
         FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
         FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
         FontAwesome.Info;

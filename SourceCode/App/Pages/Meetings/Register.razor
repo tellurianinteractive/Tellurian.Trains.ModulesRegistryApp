@@ -340,7 +340,7 @@ else
     string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Description}";
     string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
     string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
-    string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? "Edit" : "Register";
+    string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? FontAwesome.Edit : FontAwesome.Register;
 
     string ParticipantStatusStyle(MeetingParticipant? it) => it is null ? string.Empty : it.CancellationTime.HasValue ? "color: red; text-decoration: line-through;" : string.Empty;
 
