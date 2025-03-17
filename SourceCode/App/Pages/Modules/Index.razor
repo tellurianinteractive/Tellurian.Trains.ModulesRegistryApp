@@ -49,7 +49,7 @@
                 </div>
             </ColumnOptions>
         </PropertyColumn>
-        @if (Principal.IsGlobalOrCountryAdministrator(CountryId))
+        @if (Principal.IsGlobalOrCountryAdministrator(CountryOrDefaultId))
         {
             <TemplateColumn Context="module" Title="@Localizer["Actions"]">
                 <AppButton Label="Edit" IconName="@FontAwesome.Module" Href="@EditModuleHref(module)" IsDisabled="(!MayEdit(module))" />

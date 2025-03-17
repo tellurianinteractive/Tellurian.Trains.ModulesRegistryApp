@@ -10,7 +10,7 @@
 
 <PageHeading ObjectName="Meetings" IconClass="@FontAwesome.Meeting" PageAction="PageAction.List" />
 
-@if (Principal.IsGlobalOrCountryAdministrator())
+@if (Principal.IsGlobalOrCountryAdministrator(DefaultCountryId))
 {
     <AppButton Label="Add" Href="Meetings/0/edit"></AppButton>
 }
@@ -51,6 +51,7 @@
     ClaimsPrincipal? Principal;
     IEnumerable<(bool MayEdit, Meeting meeting)>? Meetings;
 
+    private int DefaultCountryId => CountryId > 0 ? CountryId : Principal.CountryId();
 
     string MeetingHref(Meeting meeting, string? function) =>
         meeting.ExternalLink.HasValue() && function=="view" ? meeting.ExternalLink :

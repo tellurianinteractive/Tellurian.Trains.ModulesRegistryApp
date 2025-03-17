@@ -20,7 +20,7 @@
 }
 else
 {
-    @if (Principal.IsCountryAdministratorInCountry(CountryId))
+    @if (Principal.IsCountryAdministratorInCountry(DefaultCountryId))
     {
         <span class="col-12" style="margin-top: 10px">
             <AppButton Label="Add" Href="@EditHref(0)" />
