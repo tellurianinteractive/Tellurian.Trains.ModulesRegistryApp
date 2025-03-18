@@ -72,11 +72,13 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
             if (groupId > 0)
             {
                 ownerships = await dbContext.ModuleOwnerships
+                    .Include(mo => mo.Group)
                     .Where(mo => mo.GroupId == groupId)
                     .ToReadOnlyListAsync();
             }
             else if (personId > 0) {
                 ownerships = await dbContext.ModuleOwnerships
+                    .Include(mo => mo.Person)
                     .Where (mo => mo.PersonId == personId)
                     .ToReadOnlyListAsync();
             }

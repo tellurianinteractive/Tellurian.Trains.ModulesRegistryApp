@@ -90,7 +90,7 @@
     }
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
-    private bool MayEdit(Module module) => Principal.IsGlobalAdministrator() || module.OwningPersonsIds().Contains(Principal.PersonId());
+    private bool MayEdit(Module module) => Principal.IsGlobalOrCountryAdministrator(CountryOrDefaultId) || module.OwningPersonsIds().Contains(Principal.PersonId());
 
 
     protected async override Task OnInitializedAsync()

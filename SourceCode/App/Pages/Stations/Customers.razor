@@ -79,8 +79,13 @@
             {
                 StationCustomers = await StationCustomerService.AllAsync(Principal, StationId, CustomerId);
                 var ownership = await ModuleOwnershipService.GetModuleOwnershipAsync(Principal, Station.PrimaryModuleId, OwningPersonId, OwningGroupId);
-                OwnershipRef = ownership.AsModuleOwnershipRef();
-                MayEdit = await Principal.MayEdit(OwnershipRef, GroupService);
+                if (ownership is not null)
+                {
+                    var countryId = ownership.Group is not null ? ownership.Group.CountryId : ownership.Person is not null ? ownership.Person.CountryId : 0;
+                    OwnershipRef = ownership.AsModuleOwnershipRef();
+                MayEdit = await Principal.MayEdit(OwnershipRef, GroupService, countryId);
+                    
+                }
 
             }
         }

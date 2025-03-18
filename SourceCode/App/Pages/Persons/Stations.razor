@@ -35,7 +35,7 @@
         else
         {
             var ownershipRef = ModuleOwnershipRef.PersonInGroup(Owner.Id, GroupId);
-            MayEdit = await Principal.MayEdit(ownershipRef, GroupService);
+            MayEdit = await Principal.MayEdit(ownershipRef, GroupService, Owner.CountryId);
             OwnedStations = await StationService.GetAllAsync(Principal, ownershipRef);
         }
     }

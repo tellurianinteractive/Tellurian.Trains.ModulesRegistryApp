@@ -4,9 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 namespace ModulesRegistry.Services.Extensions;
 public static class ClaimsPrincipalExtentions
 {
-    public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef, GroupService groupService)
+    public static async ValueTask<bool> MayEdit([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownershipRef, GroupService groupService, int moduleCountryId)
     {
         if (principal is null) return false;
+        if (principal.IsGlobalOrCountryAdministrator(moduleCountryId)) return true;
         if (ownershipRef.IsPerson || ownershipRef.IsPersonInGroup)
         {
             if (ownershipRef.PersonId == principal.PersonId()) return true;
