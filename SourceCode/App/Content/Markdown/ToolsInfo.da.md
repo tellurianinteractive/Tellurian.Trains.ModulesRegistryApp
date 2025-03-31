@@ -26,7 +26,7 @@ Når en vogn ikke opfylder de krævede standarder, tages vognen ofte ud af drift
 Ejeren af ​​vognen kan få besked ved et *fejlkort* lagt i vognkortets lomme.
 
 Her kan du printe sådanne *fejlkort* i to varianter:
-- [Sort tekst på hvid baggrund](/værktøjer/vognfejlkort/true), velegnet til udskrivning på rødt eller pink farvet papir.
+- [Sort tekst på hvid baggrund](/tools/wagonerrorcards/true), velegnet til udskrivning på rødt eller pink farvet papir.
 - [Hvid tekst på rød baggrund](/tools/wagonerrorcards), velegnet til udskrivning på hvidt papir. Bruger mere blæk eller toner.
 
 

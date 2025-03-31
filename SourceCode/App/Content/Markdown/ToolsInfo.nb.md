@@ -27,6 +27,6 @@ Når en vogn ikke oppfyller de påkrevde standardene, tas vognen ofte ut av drif
 Eieren av vognen kan bli varslet ved et *feilkort* lagt i fraktseddelen/rutelommen.
 
 Her kan du skrive ut slike *feilkort* i to varianter:
-- [Svart tekst i hvit bakgrunn](/verktøy/vognfeilkort/true), egnet for utskrift på rødt eller rosa farget papir.
+- [Svart tekst i hvit bakgrunn](/tools/wagonerrorcards/true), egnet for utskrift på rødt eller rosa farget papir.
 - [Hvit tekst på rød bakgrunn](/tools/wagonerrorcards), egnet for utskrift på hvitt papir. Bruker mer blekk eller toner.
 

@@ -8,7 +8,7 @@ public static class ModuleOwnershipRefExtensions
             ownershipRef.IsPerson ? $"/Persons/{ownershipRef.PersonId}/{objectName}" :
             ownershipRef.IsGroup ? $"/Groups/{ownershipRef.GroupId}/{objectName}" : "" :
         ownershipRef.IsPersonInGroup ?
-        $"/{objectName}/{objectId}/{ActionName}/PersonOwned/{ownershipRef.PersonId}/InGroup/{ownershipRef.GroupId}" :
+        $"/{objectName}/{objectId}/{ActionName}/PersonOwned/{ownershipRef.PersonId}" :
         ownershipRef.IsGroup ?
         $"/{objectName}/{objectId}/{ActionName}/GroupOwned/{ownershipRef.GroupId}" :
         $"/{objectName}/{objectId}/{ActionName}/PersonOwned/{ownershipRef.PersonId}";

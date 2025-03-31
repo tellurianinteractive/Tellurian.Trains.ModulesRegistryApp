@@ -7,7 +7,7 @@ Fragterne kan styres på to måder:
 ### Fragtbreve
 I **Modulregistret** kan fragtbreve fremstilles på to måder:
 - Fragtbreve, der kan genbruges fra møde til møde.
-- Fragtbreve for fragt mellem godsstationerne, der er i et bestemt mødelayout.
+- Fragtbreve for fragt mellem godsstationerne, der er i et bestemt træfanlæg.
 
 **Modulregistret** har grundlæggende de samme funktioner som *De Gule Sider*, men med nogle forskelle.
 

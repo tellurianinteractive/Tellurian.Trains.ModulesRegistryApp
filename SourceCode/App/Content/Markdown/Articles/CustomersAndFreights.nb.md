@@ -1,13 +1,13 @@
 ﻿## Fraktkunder og frakter
 En viktig del av ett trafikspil er frakt.
 Fraktene kan styres på to måter:
-– Vogne i fast turnus, hvor de kjører på ruteplan.
+- Vogne i fast turnus, hvor de kjører på ruteplan.
 - Vognlast styret av fraktbrev.
 
 ### Fraktbrev
 I **Modulregisteret** kan fraktbrev produseres på to måter:
 - Fraktbrev som kan gjenbrukes fra treff til treff.
-- Fraktbrev for frakt mellom godsstasjonene som er i et bestemt møteoppsett.
+- Fraktbrev for frakt mellom godsstasjonene som er i et bestemt treffanlegg.
 
 **Modulregisteret** har i utgangspunktet de samme funksjonene som *Gule sider*, men med noen forskjeller.
 
