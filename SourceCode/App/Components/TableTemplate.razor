@@ -42,36 +42,44 @@ else
                             </tr>
                         }
                     }
-                    @if (!IsEditItem(item) || ShowRowTemplateWhenEditing)
+                    @if (IsEditItem(item))
+                    {
+                        @if (ShowEditTemplate)
+                        {
+                            <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
+                                <td colspan="@EditColspan">
+                                    @RowEditTemplate(item)
+                                    <br />
+                                    @if (SaveAsync is not null)
+                                    {
+                                        <AppButton Label="Save" OnClickCallback="@(async() => await TrySaveAsync(item))" />
+                                    }
+                                    <AppButton Label="Close" OnClickCallback="OnClose" />
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
                             @RowTemplate(item)
-                            <td>
-                                @if (RowEditTemplate is not null)
-                                {
-                                    <AppButton Label="Edit" OnClickCallback="(() => Edit(item))" IsDisabled="IsReadOnly" />
-                                }
-                                @if (ShowDeleteButton)
-                                {
-                                    <AppButton Label="Delete" OnClickCallback="(async () => await TryDeleteAsync(item))" IsDisabled="IsReadOnly" />
-                                }
-                            </td>
+                            @if (ShowEditTemplateAndButtoms)
+                            {
+                                <td>
+                                    @if (ShowEditTemplate)
+                                    {
+                                        <AppButton Label="Edit" OnClickCallback="(() => Edit(item))" IsDisabled="IsReadOnly" />
+                                    }
+                                    @if (ShowDeleteButton)
+                                    {
+                                        <AppButton Label="Delete" OnClickCallback="(async () => await TryDeleteAsync(item))" IsDisabled="IsReadOnly" />
+                                    }
+                                </td>
+                            }
                         </tr>
+
                     }
-                    @if (RowEditTemplate is not null && IsEditItem(item))
-                    {
-                        <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
-                            <td colspan="@EditColspan">
-                                @RowEditTemplate(item)
-                                <br />
-                                @if (SaveAsync is not null)
-                                {
-                                    <AppButton Label="Save" OnClickCallback="@(async() => await TrySaveAsync(item))" />
-                                }
-                                <AppButton Label="Close" OnClickCallback="OnClose" />
-                            </td>
-                        </tr>
-                    }
+                   
                     @if (SubRowsTemplate is not null)
                     {
                         @SubRowsTemplate(item)
@@ -99,7 +107,8 @@ else
     [Parameter] public Func<TItem, Task>? SaveAsync { get; set; }
     [Parameter] public RenderFragment<TItem>? SubRowsTemplate { get; set; }
 
-
+    bool ShowEditTemplateAndButtoms => ShowDeleteButton || ShowEditTemplate || ShowRowTemplateWhenEditing;
+    [MemberNotNullWhen(true, nameof(RowEditTemplate))] bool ShowEditTemplate => RowEditTemplate is not null;
     bool ShowDeleteButton => DeleteAsync is not null;
     bool IsReadOnly => !MayEdit;
     bool CanSave => MayEdit;

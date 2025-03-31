@@ -12,12 +12,13 @@ else
 {
     <TableTemplate Items="CountryStatistics.OrderByDescending(cs => cs.ModulesCount)">
         <TableHeader>
-            <th colspan="2">@Localizer["Country"] </th>
-            <th style="text-align: center">@Localizer["Modules"] </th>
-            <th style="text-align: center">@Localizer["Stations"] </th>
-            <th style="text-align: center">@Localizer["CargoCustomers"] </th>
-            <th style="text-align: center">@Localizer["ExternalStations"] </th>
-            <th style="text-align: center">@Localizer["ExternalFreightCustomers"] </th>
+            <th>@Localizer["Country"] </th>
+            <th></th>
+            <th >@Localizer["Modules"] </th>
+            <th >@Localizer["Stations"] </th>
+            <th >@Localizer["CargoCustomers"] </th>
+            <th >@Localizer["ExternalStations"] </th>
+            <th >@Localizer["ExternalFreightCustomers"] </th>
         </TableHeader>
         <RowTemplate Context="item">
             <td width="5%"><img src="@FlagSrc(item)" /></td>

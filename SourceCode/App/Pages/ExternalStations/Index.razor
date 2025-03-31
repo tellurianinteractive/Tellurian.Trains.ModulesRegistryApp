@@ -68,6 +68,9 @@
             }
         </TemplateColumn>
     </QuickGrid>
+    <Paginator State="@PaginationState">
+    </Paginator>
+
 }
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -75,6 +78,7 @@
     [Parameter] public int CountryId { get; set; }
 
     ClaimsPrincipal? Principal;
+
     IEnumerable<ExternalStation>? ExternalStations;
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
     ExternalStationsFilter Filter = new();

@@ -1,7 +1,7 @@
 ﻿Denne side indeholder nogle nyttige links til dokument og værktøjer til forberedelse af modultræf.
 
-#### Loco-forberedelsesvejledning
-Denne [guide](/tools/locopreparationguide) fortæller, hvordan du forbereder dine lokomotiver derhjemme eller i klubben, inden du rejser til træfet.
+#### Bejledning til forberedelse av lokomotiv
+Denne [guiden](/tools/locopreparationguide) fortæller, hvordan du forbereder dine lokomotiver derhjemme eller i klubben, inden du rejser til træfet.
 
 #### Lav vogn- og lokokort online
 Der er flere ressourcer og måder at lave vogn- og lokokort på.
@@ -11,7 +11,7 @@ Kortene indeholder grundlæggende informationer om et køretøj, der passer til 
 Kort kan udskrives på flere sprog.
 
 #### Hurtig-ur i skyen
-Dette er det [hurtig ur](https://telluriantrainsclocksappserver.azurewebsites.net/)
+Dette er et [hurtig ur](https://telluriantrainsclocksappserver.azurewebsites.net/)
 som altid er tilgængelig og ikke kræver lokal installation.
 Det understøtter de fleste europæiske sprog og har flere nyttige funktioner end noget andet hurtigt ur. Lær mere:
 - Læs [ofte stillede spørgsmål](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/Frequently-Asked-Questions).

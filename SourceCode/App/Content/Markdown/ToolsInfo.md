@@ -12,7 +12,7 @@ The cards contains basic information about a vehicle, suitable for most module m
 Cards can be printed in several languages.
 
 #### Fast Clock in the Cloud
-This is the [fast clock](https://telluriantrainsclocksappserver.azurewebsites.net/) 
+This is a [fast clock](https://telluriantrainsclocksappserver.azurewebsites.net/) 
 that always is avaliable and don't require local installation.
 It supports most European languages, and has more useful features than any other fast clock. Learn more:
 - Read the [frequently asked questions](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/Frequently-Asked-Questions)

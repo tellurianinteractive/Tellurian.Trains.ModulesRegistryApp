@@ -49,6 +49,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ExternalStations
+                .Include(es => es.Region)
                 .Include(es => es.ExternalStationCustomers)
                 .SingleOrDefaultAsync(es => es.Id == entity.Id);
             if (existing is null)
@@ -59,8 +60,10 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
             }
             else
             {
+                var countryId = existing.Region.CountryId;
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                if (existing.Region.CountryId != countryId) { return (0, Resources.Strings.NotAuthorized, entity); }
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
             }
