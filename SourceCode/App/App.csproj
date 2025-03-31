@@ -63,6 +63,21 @@
     <None Update="Content\Markdown\Articles\ManageModuleMeetings.sv.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Markdown\ExternalStationNote.da.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\ExternalStationNote.de.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\ExternalStationNote.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\ExternalStationNote.nb.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Markdown\ExternalStationNote.sv.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Markdown\Help\ExternalStation.da.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

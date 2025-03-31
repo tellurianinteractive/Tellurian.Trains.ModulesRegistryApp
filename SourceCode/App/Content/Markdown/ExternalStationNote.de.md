@@ -1,4 +1,4 @@
-Bitte beachten:
-- Externe Bahnhöfe **müssen** einen realen Bahnhof darstellen, reale Frachtkunden haben und tatsächliche Fracht, die diese Kunden empfangen oder versendet haben.
-- Externe Bahnhöfe, ihre Frachtkunden und Fracht müssen zudem auf den Zeitraum beschränkt sein, in dem sie existierten.
-- Ein externer Bahnhof **muss** mit der Region und dem Land verknüpft sein, in dem er sich tatsächlich befindet. Die Region kann nach dem Speichern des Bahnhofs nicht mehr geändert werden.
+ï»¿Bitte beachten:
+- Externe BahnhÃ¶fe **mÃ¼ssen** einen realen Bahnhof darstellen, reale Frachtkunden haben und tatsÃ¤chliche Fracht, die diese Kunden empfangen oder versendet haben.
+- Externe BahnhÃ¶fe, ihre Frachtkunden und Fracht mÃ¼ssen zudem auf den Zeitraum beschrÃ¤nkt sein, in dem sie existierten.
+- Ein externer Bahnhof **muss** mit der Region und dem Land verknÃ¼pft sein, in dem er sich tatsÃ¤chlich befindet. Die Region kann nach dem Speichern des Bahnhofs nicht mehr geÃ¤ndert werden.

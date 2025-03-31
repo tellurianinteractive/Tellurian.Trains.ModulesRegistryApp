@@ -8,7 +8,7 @@
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStation" Context="@Station.Region" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false"/>
+<PageHeading ObjectName="ExternalStation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false"/>
 <ContentView ContentName="ExternalStationNote"/>
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">

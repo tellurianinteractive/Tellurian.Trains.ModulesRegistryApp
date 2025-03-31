@@ -1,4 +1,4 @@
-Observera:
-- Externa stationer **måste** representera en riktig station, ha riktiga fraktkunder och faktisk frakt som dessa kunder tagit emot eller skickat.
-– Externa stationer, deras godskunder och gods ska också begränsas till den tidsperiod de funnits.
-- En extern station **måste** vara associerad med regionen och landet där den faktiskt finns. Regionen kan inte ändras efter att stationen har sparats.
+ï»¿Observera:
+- Externa stationer **mÃ¥ste** representera en riktig station, ha riktiga fraktkunder och faktisk frakt som dessa kunder tagit emot eller skickat.
+â€“ Externa stationer, deras godskunder och gods ska ocksÃ¥ begrÃ¤nsas till den tidsperiod de funnits.
+- En extern station **mÃ¥ste** vara associerad med regionen och landet dÃ¤r den faktiskt finns. Regionen kan inte Ã¤ndras efter att stationen har sparats.

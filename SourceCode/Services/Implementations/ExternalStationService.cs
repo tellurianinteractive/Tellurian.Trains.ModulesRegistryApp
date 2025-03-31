@@ -8,23 +8,24 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal, int? countryId, int? regionId)
     {
-        if (principal is null ) return Enumerable.Empty<ListboxItem>();
-        var actualCountryId = principal.CountryId(countryId);
+        if (principal is null) return [];
+        var actualCountryId = principal.CountryOrDefaultId(countryId);
         var sql = string.Empty;
-        if (regionId.HasValue) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {regionId.Value}";
-        else if (countryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {actualCountryId}";
+        if (regionId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {regionId.Value}";
+        else if (actualCountryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {actualCountryId}";
         else sql = $"SELECT * FROM ListExternalStation";
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.ListboxItems.FromSqlRaw(sql).OrderBy(l => l.Description).ToListAsync();
     }
 
-    public async Task<IEnumerable<ExternalStation>> GetAsync(ClaimsPrincipal? principal, int countryId = 0, int regionId =0)
+    public async Task<IEnumerable<ExternalStation>> GetAsync(ClaimsPrincipal? principal, int countryId = 0, int regionId = 0)
     {
         if (principal.IsAuthenticated())
         {
+            countryId = countryId > 0 ? countryId : principal.CountryId();
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.ExternalStations.AsNoTracking()
-                .Where(es => countryId ==0 || es.Region.CountryId == countryId && regionId==0 || (countryId == 0 && es.RegionId==regionId))
+                .Where(es => countryId == 0 || es.Region.CountryId == countryId && regionId == 0 || (countryId == 0 && es.RegionId == regionId))
                 .Include(es => es.ExternalStationCustomers)
                 .OrderBy(es => es.FullName)
                 .ToListAsync();
@@ -37,6 +38,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.ExternalStations.AsNoTracking()
+                .Include(es => es.Region)
                 .Include(es => es.ExternalStationCustomers).ThenInclude(esc => esc.ExternalStationCustomerCargos)
                 .SingleOrDefaultAsync(es => es.Id == id);
         }
@@ -62,7 +64,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
             {
                 var regionId = existing.RegionId;
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                if (!principal.IsSuperUser() && dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
                 if (existing.RegionId != regionId) { return (0, Resources.Strings.NotAuthorized, entity); }
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
@@ -128,7 +130,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
             return await dbContext.ExternalStationCustomers.AsNoTracking()
                 .Include(esc => esc.ExternalStation)
                 .Include(esc => esc.ExternalStationCustomerCargos)
-                .Where(esc => esc.ExternalStationId == stationId && (customerId==0 || esc.Id == customerId))
+                .Where(esc => esc.ExternalStationId == stationId && (customerId == 0 || esc.Id == customerId))
                 .ToListAsync();
         }
         return Array.Empty<ExternalStationCustomer>();
@@ -173,6 +175,22 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
         }
         return principal.SaveNotAuthorised<ExternalStationCustomer>();
+    }
+
+    public async Task<(int Count, string Message)> MoveCustomerAsync(ClaimsPrincipal? principal, ExternalStationCustomer? customer, int toStationId)
+    {
+        if (principal.IsSuperUser())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            var toStation = await dbContext.ExternalStations.FindAsync(toStationId);
+            if (toStation is null) return principal.NotFoundResult<ExternalStationCustomer>();
+            customer = await dbContext.ExternalStationCustomers.FindAsync(customer?.Id);
+            if (customer is null) return principal.NotFoundResult<ExternalStationCustomer>();
+            customer.ExternalStationId = toStationId;
+            var result = await dbContext.SaveChangesAsync();
+            return result.UpdateResult();
+        }
+        return principal.NotAuthorized<ExternalStationCustomer>();
     }
     #endregion
 }

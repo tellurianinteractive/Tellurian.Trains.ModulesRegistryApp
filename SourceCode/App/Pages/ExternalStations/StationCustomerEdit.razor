@@ -4,12 +4,19 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject IToastService ToastService
+@inject NavigationManager Navigator
 
 @inject ExternalStationService ExternalStationService
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
 <PageHeading Label="FreightCustomer" Context="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStationCustomer" ShowHelpInitially="false" />
+
+@if(Principal.IsSuperUser())
+{
+    <h3>@Localizer["MoveCustomerToOtherStation"]</h3>
+    <ListboxSelector  Items="ExternalStationItems"  ItemType="ExternalStation" SelectedId="@SelectedExternalStationId" OnSelected="OnMoveCustomerToOtherStation" IsVisible=true  />
+}
 
 <EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
@@ -37,6 +44,9 @@
     IEnumerable<ListboxItem>? DirectionItems;
     IEnumerable<ListboxItem>? QuantityUnitItems;
     IEnumerable<ListboxItem>? PackageUnitItems;
+    IEnumerable<ListboxItem>? ExternalStationItems;
+
+    int SelectedExternalStationId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,6 +66,7 @@
             if (Station is not null)
             {
                 StationCustomer = Id > 0 ? await ExternalStationService.FindCustomerByIdAsync(Principal, Id) ?? Default(Station.Id) : Default(Station.Id);
+                ExternalStationItems = await ExternalStationService.ListboxItemsAsync(Principal, Station.Region.CountryId, null);
             }
         }
     }
@@ -71,4 +82,22 @@
             ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
+
+    async Task OnMoveCustomerToOtherStation(int id)
+    {
+        if (id > 0 && id != Station?.Id)
+        {
+            SelectedExternalStationId = id;
+            var result = await ExternalStationService.MoveCustomerAsync(Principal, StationCustomer, id);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            await Task.Delay(2000);
+            if (result.Count > 0)
+            {
+                Navigator.NavigateTo($"ExternalStations/{id}/edit");
+            }
+        }
+
+    }
+
+
 }

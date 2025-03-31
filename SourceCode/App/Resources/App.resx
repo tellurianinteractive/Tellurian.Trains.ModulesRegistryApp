@@ -978,6 +978,9 @@
   <data name="More" xml:space="preserve">
     <value>More...</value>
   </data>
+  <data name="MoveCustomerToOtherStation" xml:space="preserve">
+    <value>Move customer to other station?</value>
+  </data>
   <data name="MustBeAColor" xml:space="preserve">
     <value>Must be a colour</value>
   </data>

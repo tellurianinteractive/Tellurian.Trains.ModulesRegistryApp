@@ -13,6 +13,7 @@ public static class AppPolicyNames
 
 public static class AppClaimTypes
 {
+    public const string SuperUser = nameof(SuperUser);
     public const string GlobalAdministrator = nameof(GlobalAdministrator);
     public const string CountryAdministrator = nameof(CountryAdministrator);
     public const string PersonId = nameof(PersonId);
@@ -37,7 +38,7 @@ public static class ClaimsPrincipalExtensions
     public static int UserId(this ClaimsPrincipal? principal) => principal.GetInt32(AppClaimTypes.UserId);
     public static int PersonId(this ClaimsPrincipal? principal) => principal.GetInt32(AppClaimTypes.PersonId);
     public static int CountryId(this ClaimsPrincipal? principal) => principal.GetInt32(AppClaimTypes.CountryId);
-    public static int CountryId(this ClaimsPrincipal? principal, int? maybeCountryId) => maybeCountryId ?? (principal.IsGlobalAdministrator() ? 0 : principal.CountryId());
+    public static int CountryOrDefaultId(this ClaimsPrincipal? principal, int? maybeCountryId) => maybeCountryId ?? (principal.IsGlobalAdministrator() ? 0 : principal.CountryId());
     public static bool IsDemo(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.Demo);
     public static bool IsReadOnly(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.ReadOnly);
     public static bool IsLockedOut(this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.IsLockedOut);
@@ -66,6 +67,7 @@ public static class ClaimsPrincipalExtensions
 
     #region Administrator scope
 
+    public static bool IsSuperUser(this ClaimsPrincipal? principal) => principal.UserId() == 1; // TODO: Implement property in database.
     public static bool IsGlobalOrCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, int countryId = 0) =>
         principal is not null && (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(countryId));
 

@@ -8,7 +8,7 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal is not null)
         {
-            var countryId = principal.CountryId(maybeCountryId);
+            var countryId = principal.CountryOrDefaultId(maybeCountryId);
             using var dbContext = Factory.CreateDbContext();
             var items = await dbContext.Regions
                 .Where(r => countryId == 0 || r.CountryId == countryId)
@@ -29,7 +29,7 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal is not null)
         {
-            var countryId = principal.CountryId(maybeCountryId);
+            var countryId = principal.CountryOrDefaultId(maybeCountryId);
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Regions
                 .Where(r => countryId == 0 || r.CountryId == countryId)
