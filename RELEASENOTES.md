@@ -7,7 +7,7 @@ Release date 2025-03-31
 - **Links** in Tools page corrected.
 - **Bug fix** of issue #226: link to module ownership transfer page. Thanks to Tore Urvik for reporting this.
 - **Minor corrections** of documentation.
-- **External station** change of country blocked once created. Note added with rules for createing *external stations*.
+- **External station** change of region/country blocked once created. Note added with rules for createing *external stations*.
 ## Release 1.12.6
 Release date 2025-03-17
 - **Bug fix** of *country administrator* rights to modules page.

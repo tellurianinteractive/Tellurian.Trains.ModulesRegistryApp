@@ -60,10 +60,10 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
             }
             else
             {
-                var countryId = existing.Region.CountryId;
+                var regionId = existing.RegionId;
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
-                if (existing.Region.CountryId != countryId) { return (0, Resources.Strings.NotAuthorized, entity); }
+                if (existing.RegionId != regionId) { return (0, Resources.Strings.NotAuthorized, entity); }
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
             }
