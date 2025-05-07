@@ -10,9 +10,9 @@
     public class SystemTimeProvider(TimeZoneInfo? timeZoneInfo = null) : ITimeProvider
     {
         public DateTimeOffset Now => DateTimeOffset.Now;
-        public DateOnly Today => DateOnly.FromDateTime(Now.Date);
+        public DateOnly Today => DateOnly.FromDateTime(LocalTime);
         public DateTime LocalTime => TimeZoneInfo.ConvertTimeFromUtc(Now.UtcDateTime, TimeZoneInfo);
 
-        private readonly TimeZoneInfo TimeZoneInfo = timeZoneInfo ?? TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        private readonly TimeZoneInfo TimeZoneInfo = timeZoneInfo ?? TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
     }
 }

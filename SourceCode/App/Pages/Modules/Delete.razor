@@ -55,7 +55,7 @@ else
         if (Module is not null)
         {
             IsReferringStation = ModuleService.IsReferringStation(Module);
-            IsFullOwner = !ModuleService.IsNotFullOwner(Module, ownershipRef);
+            IsFullOwner = ModuleService.IsFullOwner(Module, ownershipRef);
             IsRegisteredInUpcomingMeeting = await ModuleService.IsSubmittedToUpcomingMeeting(Module);
         }
     }

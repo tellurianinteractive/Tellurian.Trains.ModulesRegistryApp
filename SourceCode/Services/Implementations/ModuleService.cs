@@ -65,8 +65,8 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Modules.AsNoTracking()
-                .Where(m => 
-                    (scaleId == 0 || m.ScaleId == scaleId) && 
+                .Where(m =>
+                    (scaleId == 0 || m.ScaleId == scaleId) &&
                     (themeId == 0 || m.Standard.MainThemeId == themeId) &&
                     m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId)
                  )
@@ -314,12 +314,12 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         if (principal.MayDelete(ownershipRef))
         {
             using var dbContext = Factory.CreateDbContext();
-            var entity = await dbContext.Modules.Include(m => m.ModuleOwnerships).Include(m => m.ModuleExits).SingleOrDefaultAsync(m => m.Id == moduleId);
+            var entity = await dbContext.Modules.Include(m => m.ModuleOwnerships.Where(mo => mo.OwnedShare > 0)).Include(m => m.ModuleExits).SingleOrDefaultAsync(m => m.Id == moduleId);
             if (entity is not null)
             {
                 if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
                 if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
-                if (!principal.IsGlobalOrCountryAdministrator() && IsNotFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
+                if (!principal.IsGlobalOrCountryAdministrator() && !IsFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
                 var documents = await dbContext.Documents.Where(d => entity.DocumentIds().Contains(d.Id)).ToListAsync();
                 foreach (var document in documents) dbContext.Remove(document);
                 foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);
@@ -334,8 +334,14 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
 
     public static bool IsReferringStation(Module? module) => module is not null && module.StationId.HasValue;
 
-    public static bool IsNotFullOwner(Module existing, ModuleOwnershipRef ownershipRef) =>
-        false == existing.ModuleOwnerships.Any(mo => mo.OwnedShare == 1 && (ownershipRef.IsPerson && mo.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && mo.GroupId == ownershipRef.GroupId));
+
+
+    public static bool IsFullOwner(Module existing, ModuleOwnershipRef ownershipRef)
+    {
+        var ownership = existing.ModuleOwnerships.SingleOrDefault(mo => mo.OwnedShare == 1);
+        if (ownership is null) return false;
+        return ownershipRef.IsPerson && ownership.PersonId == ownershipRef.PersonId || ownershipRef.IsGroup && ownership.GroupId == ownershipRef.GroupId;
+    }
 
     public async Task<bool> IsSubmittedToUpcomingMeeting(Module module)
     {
@@ -467,7 +473,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         command.Parameters.AddWithValue("@ModuleId", ownership.ModuleId);
         command.Parameters.AddWithValue("@OwnedShare", 0);
         connection.Open();
-        var result = await command.ExecuteNonQueryAsync(  );
+        var result = await command.ExecuteNonQueryAsync();
         connection.Close();
         return result;
     }

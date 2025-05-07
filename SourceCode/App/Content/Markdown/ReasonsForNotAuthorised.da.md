@@ -1,6 +1,18 @@
-﻿## Årsager til ikke autoriseret
+﻿## Ikke autoriseret
+Du er ikke autoriseret til at se denne side. Denne side kræver yderligere rettigheder, som du ikke har.
 
-### Login mislykkedes
+### Administratorroller
+- **Administrer gruppemedlemmer og deres rettigheder** kræver *gruppeadministratorrettigheder* for den specifikke gruppe.
+- **Administrer grupper og gruppemedlemsmoduler** kræver *dataadministratorrettigheder* for den specifikke gruppe.
+- **Administrer træf**, som gruppen arrangerer, kræver *mødeadministratorrettigheder* for den specifikke gruppe.
+- **Administrer personer/brugere** kræver *landeadministratorrettigheder* eller *globale administratorrettigheder*.
+- **API-dataadgang** kræver særlig adgang og en *API-nøgle*.
+- **Verifikation af WiFreds** kræver særlig adgang.
+- **Upload af modultegninger i SketchUP-format** kræver særlig adgang.
+
+### Andre årsager til manglende autorisation
+
+#### Login mislykkedes
 Af en eller anden grund mislykkedes dit login. Den primære årsag er, at du har angivet forkert bruger-e-mail og/eller adgangskode.
 Du kan også blive låst ude efter dit login mislykkedes tre gange.
 Af sikkerhedsmæssige årsager er der ingen feedback på mislykkede logins.
@@ -11,7 +23,7 @@ Bemærk, at du skal acceptere *cookies* fra *moduleregistry.azurewebsites.net*, 
 Normalt er dette aktiveret som standard, men nogle gange kan cookies blive afvist.
 
 
-### Du er logget ind
+#### Du er logget ind
 Selvom du er logget ind,
 du kan nogle gange opleve, at du **ikke er autoriseret** til at se en side.
 Her er nogle almindelige årsager:

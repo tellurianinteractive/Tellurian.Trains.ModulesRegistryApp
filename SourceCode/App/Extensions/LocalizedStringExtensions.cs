@@ -89,10 +89,10 @@ public static class LocalizedStringExtensions
         {
             Person p => p.Name(),
             Group g => g.FullName,
-            Station s => s.FullName,
-            ExternalStation es => es.FullName,
+            Station s => $"{s.FullName} ({s.Signature})",
+            ExternalStation es => $"{es.FullName} ({es.Signature})",
             Meeting m => $"{m.Name} {m.CityName}, {m.StartDate:MMMM yyyy}",
-            Module mo => mo.FullName,
+            Module mo => mo.Station is not null ? $"{mo.FullName} ({mo.Station.Signature})": mo.FullName,
             Region r => r.LocalName,
             Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",
             StationCustomer sc => $"{sc.CustomerName}",

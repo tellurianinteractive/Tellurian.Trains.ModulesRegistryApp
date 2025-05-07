@@ -67,17 +67,19 @@ public static class LayoutExtensions
 
     public static bool IsOpenForRegistration(this Layout layout, DateTime at) =>
        layout.IsRegistrationPermitted &&
-       layout.RegistrationOpeningDate <= at &&
-       layout.RegistrationClosingDate.AddDays(1) >= at;
+       layout.RegistrationOpeningDate <= at.ToLocalTime() &&
+       at <= layout.RegistrationClosingDate.AddDays(1);
 
     internal static bool IsNotYetOpenForRegistration(this Layout layout, DateTime at) =>
         layout.IsRegistrationPermitted &&
         layout.RegistrationOpeningDate > at;
+
     public static bool IsClosedForRegistration(this Layout? layout, DateTime at) =>
         layout is not null && 
         layout.IsRegistrationPermitted &&
-        layout.RegistrationClosingDate < at;
+        at > layout.RegistrationClosingDate.AddDays(1);
 
+    private static TimeZoneInfo CET => TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
 }
 
 public static class LayoutMapping
