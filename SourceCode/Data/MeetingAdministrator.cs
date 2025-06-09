@@ -5,6 +5,7 @@ public class MeetingAdministrator
 {
     public int PersonId { get; set; }
     public int MeetingId { get; set; }
+    public int GroupId { get; set; }
 }
 
 internal static class MeetingAdministratorMapper

@@ -28,10 +28,10 @@ public static class MailHolderExtensions
         new(principal.GivenName() ?? principal.EmailAddess(), principal.EmailAddess());
 
     public static IEnumerable<MailHolder> ParticipantsMails(this Meeting? meeting) =>
-        meeting?.Participants.Select(p => new MailHolder(p.Person.FirstName, p.Person.EmailAddresses)) ?? Array.Empty<MailHolder>();
+        meeting?.Participants.Where(mp => !mp.IsCancelled()).Select(p => new MailHolder(p.Person.FirstName, p.Person.EmailAddresses)) ?? Array.Empty<MailHolder>();
 
     public static IEnumerable<MailHolder> ParticipantsMails(this IEnumerable<LayoutParticipant>? participants) =>
-        participants is not null ? participants.Select(lp => new MailHolder(lp.Person.FirstName, lp.Person.EmailAddresses)) : [];
+        participants is not null ? participants.Where(lp => lp.IsParticipating()).Select(lp => new MailHolder(lp.Person.FirstName, lp.Person.EmailAddresses)) : [];
 
     public static IEnumerable<MailHolder> MailHolders(this IEnumerable<GroupMember>? groupMembers) =>
         groupMembers is not null ? groupMembers.Select(gm => new MailHolder(gm.Person.FirstName, gm.Person.EmailAddresses)) : [];

@@ -224,14 +224,14 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         var countryId = meeting.OrganiserGroup?.CountryId ?? principal.CountryId();
         if (principal.IsCountryAdministratorInCountry(countryId)) return true;
         if (meeting.HasMeetingAdministrator(principal.PersonId())) return true; // Shortcut if data is available.
-        return await IsMeetingOrLatoutAdministrator(principal, meeting); // Fallback ask the database querying a tailored view.
+        return await IsMeetingOrLayoutAdministrator(principal, meeting); // Fallback ask the database querying a tailored view.
     }
 
-    private async Task<bool> IsMeetingOrLatoutAdministrator(ClaimsPrincipal? principal, Meeting meeting)
+    private async Task<bool> IsMeetingOrLayoutAdministrator(ClaimsPrincipal? principal, Meeting meeting)
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.MeetingAdministrators.AsNoTracking()
-            .AnyAsync(ma => ma.MeetingId == meeting.Id && ma.PersonId == principal.PersonId())
+            .AnyAsync(ma =>  ma.PersonId == principal.PersonId() && (ma.MeetingId == meeting.Id || ma.GroupId == meeting.OrganiserGroupId))
             .ConfigureAwait(false);
     }
 

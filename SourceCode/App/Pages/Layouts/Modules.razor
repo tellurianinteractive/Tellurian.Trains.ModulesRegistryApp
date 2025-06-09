@@ -107,8 +107,8 @@ else
     Layout? Layout;
     IEnumerable<LayoutParticipant>? LayoutParticipants;
     IEnumerable<LayoutParticipant>? FilteredParticipants =>
-        OnlyThoseWithOperationsPlaces ? LayoutParticipants?.Where(lp => lp.LayoutStations.Count > 0) :
-        OnlyThoseWithModules ? LayoutParticipants?.Where(lp => lp.LayoutModules.Count > 0) :
+        OnlyThoseWithOperationsPlaces ? LayoutParticipants?.Where(lp=> lp.LayoutStations.Count > 0) :
+        OnlyThoseWithModules ? LayoutParticipants?.Where(lp =>  lp.LayoutModules.Count > 0) :
         LayoutParticipants;
     IEnumerable<LayoutStation>? LayoutStations;
     IEnumerable<LayoutModule>? LayoutModules;

@@ -41,6 +41,9 @@ public static class LayoutParticipantExtensions
         layoutParticipant is null || layoutParticipant.Person is null ? string.Empty :
         layoutParticipant.Person.NameWithCity();
 
+    public static bool IsParticipating(this LayoutParticipant? layoutParticipant) =>
+        layoutParticipant?.MeetingParticipant?.IsCancelled() == false;
+
 }
 
 internal static class LayoutParticipantMapping

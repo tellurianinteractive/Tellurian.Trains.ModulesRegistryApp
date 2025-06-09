@@ -2,6 +2,10 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.9
+Release date 2025-06-09
+- **Bug fix** mailing meeting and layout participants. Now cancelled participants don't receive emails.
+- **Bug fix** of group member with *meeting administrator rights* cannot save ner meeting.
 ## Release 1.12.8
 Release date 2025-05-07
 - **Bug fix** of registration closes one day earlier than announced, issue #227. Thanks to Benny Tjäder.

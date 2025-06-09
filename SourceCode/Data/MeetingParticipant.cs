@@ -56,6 +56,7 @@ public static class MeetingParticipantMapping
 
 public static class MeetingParticipantExtensions
 {
+    public static bool IsCancelled(this MeetingParticipant participant) => participant.CancellationTime.HasValue;
     public static DateTime FirstParticpationDate(this MeetingParticipant participant) =>
         participant.ParticipateDay1 ? participant.Meeting.StartDate :
         participant.ParticipateDay2 ? participant.Meeting.StartDate.AddDays(1) :
