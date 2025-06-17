@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.10
+Release date 2025-06-17
+- **Modules list** now contains description of module based on module data.
 ## Release 1.12.9
 Release date 2025-06-09
 - **Bug fix** mailing meeting and layout participants. Now cancelled participants don't receive emails.

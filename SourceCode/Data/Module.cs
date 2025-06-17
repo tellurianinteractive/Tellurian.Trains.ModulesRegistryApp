@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using ModulesRegistry.Data.Extensions;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -76,35 +75,35 @@ public partial class Module
 # nullable enable
 public static class ModuleExtensions
 {
-    public static MarkupString Description(this Module me)
+    public static MarkupString Description(this Module me, bool compact = false)
     {
         var text = new StringBuilder(100);
         text.Append(me.Standard is null ? "" : $"{me.Standard.ShortName}");
 
         if (me.IsCurve() && me.IsStraight())
         {
-            text.Append(", "); 
+            text.Append(", ");
             text.Append(Straight);
             text.Append('/');
             text.Append(Curve);
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
             text.Append($", {me.TotalLength()}mm");
-            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
+            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}º");
             if (me.Radius.HasValue) text.Append($" r={me.Radius!.Value}mm");
         }
         else if (me.IsCurve())
         {
-            text.Append(", "); 
+            text.Append(", ");
             text.Append(Curve);
             text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
             text.Append($", {me.TotalLength()}mm");
-            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}&deg;");
+            if (me.Angle.HasValue) text.Append($" {me.Angle.Value}º");
             if (me.Radius.HasValue) text.Append($" r={me.Radius.Value}mm");
         }
         else if (me.IsStraight())
         {
-            text.Append(", "); 
+            text.Append(", ");
             text.Append(Straight);
             text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
@@ -123,12 +122,10 @@ public static class ModuleExtensions
             text.Append(", ");
             text.Append($"""<span style="color: red">{NotStandalone}</span>""");
         }
-        if (me.FullName.StartsWith("Elisabeth")) Debugger.Break();
 
         if (me.IsOperationsPlace())
         {
-            text.Append(", ");
-            text.Append(OperationsPlace);
+            text.Append($""", <span style="font-weight: bold;"">{OperationsPlace}</span>""");
             if (me.Station.StationTracks.Count > 0) text.Append($", {me.NumberOfTimetabledTracks()} {Tracks.ToLowerInvariant()}");
             if (me.Station.HasTurntable) text.Append($", {Turntable}");
             if (me.Station.IsShadow) text.Append($", {ShadowStation}");
@@ -144,7 +141,7 @@ public static class ModuleExtensions
             text.Append($", {EndOfLine}");
         }
 
-        if (me.Note.HasValue())
+        if (!compact && me.Note.HasValue())
         {
             text.Append(", ");
             text.Append(me.Note);
@@ -152,7 +149,7 @@ public static class ModuleExtensions
         return new(text.ToString());
     }
 
-    private static bool IsCurve(this Module me) =>  me.Angle.HasValue;
+    private static bool IsCurve(this Module me) => me.Angle.HasValue;
     private static bool IsStraight(this Module me) => !me.Angle.HasValue;
     private static bool IsOperationsPlace(this Module me) => me.Station is not null && me.Station.PrimaryModuleId == me.Id;
 
@@ -311,7 +308,7 @@ public static class ModuleMapping
             entity.HasMany(d => d.GroupLayoutModules)
                 .WithOne(d => d.Module)
                 .HasForeignKey(d => d.ModuleId);
-            
+
         });
 }
 

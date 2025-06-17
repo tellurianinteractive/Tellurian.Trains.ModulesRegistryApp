@@ -30,18 +30,19 @@
                 </div>
             </ColumnOptions>
         </PropertyColumn>
-        <PropertyColumn Title="@Localizer["Name"]" Property="p => p.FullName" Sortable="true">
+        <PropertyColumn Title="@Localizer["Name"]" Property="p => p.NameOrStationNameWithSignature()" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
                     <input type="search" autofocus @bind="Filter.ModuleName" @bind:event="oninput" placeholder="@Localizer["Name"]" />
                 </div>
             </ColumnOptions>
         </PropertyColumn>
+        <TemplateColumn Context="module" Title="@Localizer["Description"]"> 
+            <span>@module.Description(true)</span>
+        </TemplateColumn>
         <TemplateColumn Context="module" Title="@Localizer["Status"]" Align="Align.Center">
             <span>@module.StatusIcon()</span>
         </TemplateColumn>
-        <PropertyColumn Title="@Localizer["IsPartOfStation"]" Property="p => p.StationNameWithSignature()" Sortable="true"></PropertyColumn>
-        <PropertyColumn Title="@Localizer["Standard"]" Property="p => p.Standard.ShortName" Sortable="true"></PropertyColumn>
         <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
