@@ -107,7 +107,7 @@ public static class ModuleExtensions
             text.Append(Straight);
             text.Append(", ");
             text.Append(me.NumberOfThroughTracks == 0 ? "" : me.NumberOfThroughTracks == 1 ? SingleTrack : me.NumberOfThroughTracks == 2 ? DoubleTrack : $"{me.NumberOfThroughTracks} {ThroughTracks.ToLowerInvariant()}");
-            text.Append($", {me.TotalLength()}mm");
+            text.Append(me.TotalLength() == 0 ? """<span style="color: red">, 0mm</span>""" : $", {me.TotalLength()}mm");
         }
         if (me.Is2R && me.Is3R)
         {

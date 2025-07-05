@@ -45,6 +45,28 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         return id.ToString();
     }
 
+    public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int documentId)
+    {
+        var count = -1;
+        if (principal.IsAuthenticated())
+        {
+            count = 0;
+            using var dbContext = Factory.CreateDbContext();
+            var document = await dbContext.Documents.FindAsync(documentId);
+            if (document is not null)
+            {
+                count += await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfDocumentationId, (int?)null));
+                count += await dbContext.Modules.Where(m => m.DwgDrawingId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.DwgDrawingId, (int?)null));
+                count += await dbContext.Modules.Where(m => m.SkpDrawingId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.SkpDrawingId, (int?)null));
+                count += await dbContext.Stations.Where(m => m.PdfInstructionId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfInstructionId, (int?)null));
+                count += await dbContext.ModuleEndProfiles.Where(m => m.PdfDocumentId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfDocumentId, (int?)null));
+                if (count > 0) { dbContext.Documents.Remove(document); }
+                count = await dbContext.SaveChangesAsync();
+            }
+        }
+        return count.DeleteResult();
+
+    }
 
     public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize)
     {
@@ -68,12 +90,8 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
 
             if (count > 0)
             {
-                count = await UpdateDocumentReference(dbContext, document, documentedObject);
-                if (count > 0)
-                {
-
-                    return count.SaveResult(document);
-                }
+                await UpdateDocumentReference(dbContext, document, documentedObject);
+                return count.SaveResult(document);
             }
             return (0, "UploadFailed", null);
 

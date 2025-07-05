@@ -85,11 +85,11 @@ else
     {
         <DocumentsUpload DocumentedObject="Module">
             <Uploads>
-                <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
-                <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
+                <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
+                <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
                 @if (Principal.MayUploadSkpDrawing())
                 {
-                    <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="2500" OnUpdatedAsync="OnDocumentUpdated" />
+                    <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
                 }
             </Uploads>
         </DocumentsUpload>

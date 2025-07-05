@@ -477,6 +477,9 @@
   <data name="FetchingData" xml:space="preserve">
     <value>Hämtar data...</value>
   </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>Filen raderad</value>
+  </data>
   <data name="FileExceedsMaxSizeOf" xml:space="preserve">
     <value>Filen överstiger den maximala storleken på {0} kB</value>
   </data>
@@ -1568,6 +1571,9 @@
   </data>
   <data name="UploadDocuments" xml:space="preserve">
     <value>Ladda upp dokument</value>
+  </data>
+  <data name="UploadOfFile" xml:space="preserve">
+    <value>Uppladdning av fil {0}</value>
   </data>
   <data name="UptoYear" xml:space="preserve">
     <value>Upp till år</value>

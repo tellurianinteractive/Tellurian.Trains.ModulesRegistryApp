@@ -22,7 +22,7 @@ static public class DbContextExtensions
         (0, $"{Strings.ResourceManager.GetString(typeof(T).Name)} {Strings.NotFound.ToLowerInvariant()}", default);
 
     public static (int Count, string Message) DeleteResult(this int count) =>
-        (count, count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
+        (count, count < 0 ? Strings.NotAuthorized: count > 0 ? Strings.DeletedSuccessfully : Strings.DeleteFailed);
 
     public static (int Count, string Message) UpdateResult(this int count) =>
          (count, count > 0 ? Strings.UpdatedSuccessfully : Strings.UpdateFailed);

@@ -9,10 +9,15 @@
         <div class="col-md-3">
             <img src="@IconImageSrc" class="icon" /> @Heading
         </div>
-        <div class="col-md-1">
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="@FontAwesome.Upload" /> @Localizer["SelectFile"]</button>
+        <div class="col-md-2">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('@InputFileId').click()"><span class="@FontAwesome.Upload" /><span class="sm-hide">@Localizer["SelectFile"]</span> </button>
             <InputFile Id="@InputFileId" OnChange="SaveFileAsync" accept="@Accept" hidden />
+            @if (DocumentId.HasValue)
+            {
+                <AppButton Label="Delete" OnClickCallback="DeleteFileAsync" OnClickParameter="DocumentId.Value" />
+            }
         </div>
+       
         <div class="col-md-4">
             @MaxSizeText
         </div>
@@ -26,13 +31,15 @@
     [Parameter] public int? MaxFileSizeKb { get; set; }
     [Parameter] public Func<Task>? OnUpdatedAsync { get; set; }
 
+    ClaimsPrincipal? Principal; 
     int? DocumentId;
     long MaxFileSize => (MaxFileSizeKb ?? 1024) * 1024;
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         var owningObject = DocumentService.DocumentedObject(DocumentedObject, FileExtension);
         DocumentId = owningObject.DocumentId;
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
     }
 
     async Task SaveFileAsync(InputFileChangeEventArgs e)
@@ -43,12 +50,19 @@
             var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
             DocumentId = result.Entity?.Id;
             if (OnUpdatedAsync is not null) await OnUpdatedAsync();
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, $"Upload of {e.File.Name}");
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, string.Format(Localizer["UploadOfFile"], e.File.Name));
         }
         else
         {
             ToastService.ShowWarning(string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize));
         }
+    }
+
+    async Task DeleteFileAsync(int documentId)
+    {
+        var result = await DocumentService.DeleteAsync(Principal, documentId);
+        ToastService.ShowSuccessOrFailure(Localizer, result.Count, Localizer["FileDeleted"]);
+        StateHasChanged();
     }
 
     string IconImageSrc => $"/images/{FileExtension}.png";

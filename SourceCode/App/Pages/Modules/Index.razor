@@ -43,6 +43,13 @@
         <TemplateColumn Context="module" Title="@Localizer["Status"]" Align="Align.Center">
             <span>@module.StatusIcon()</span>
         </TemplateColumn>
+        <TemplateColumn Context="module">
+            <span>
+                <DocumentLink DocumentId="module.PdfDocumentationId" FileExtension="pdf" />
+                <DocumentLink DocumentId="module.DwgDrawingId" FileExtension="dwg" />
+                <DocumentLink DocumentId="module.SkpDrawingId" FileExtension="skp" />
+            </span>
+        </TemplateColumn>
         <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">

@@ -52,6 +52,11 @@ a, .btn-link {
 .blazored-toast-container {
     margin-top: 30px;
 }
+@media (max-width: 2000px) {
+    .sm-hide {
+        display: none
+    }
+}
 
 @media print {
     .noprint {

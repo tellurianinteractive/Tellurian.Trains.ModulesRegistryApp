@@ -477,6 +477,9 @@
   <data name="FetchingData" xml:space="preserve">
     <value>Daten werden abgerufen...</value>
   </data>
+  <data name="FileDeleted" xml:space="preserve">
+    <value>Datei gelöscht</value>
+  </data>
   <data name="FileExceedsMaxSizeOf" xml:space="preserve">
     <value>Die Datei überschreitet die maximale Größe von {0} kB</value>
   </data>
@@ -1568,6 +1571,9 @@
   </data>
   <data name="UploadDocuments" xml:space="preserve">
     <value>Dokumente hochladen</value>
+  </data>
+  <data name="UploadOfFile" xml:space="preserve">
+    <value>Hochladen der Datei {0}</value>
   </data>
   <data name="UptoYear" xml:space="preserve">
     <value>Bis zum Jahr</value>
