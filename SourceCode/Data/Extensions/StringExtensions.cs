@@ -35,10 +35,18 @@ public static class StringExtensions
         string.IsNullOrWhiteSpace(value) ? string.Empty :
         value.Length == 1 ? value.ToLowerInvariant() :
         string.Concat(value[0].ToString().ToLowerInvariant(), value.AsSpan(1));
+
     public static string ToFirstUpperInvariant(this string? value) =>
          string.IsNullOrWhiteSpace(value) ? string.Empty :
          value.Length == 1 ? value.ToUpperInvariant() :
          string.Concat(value[0].ToString().ToUpperInvariant(), value.AsSpan(1));
+
+    public static string ToFirstUpperInvariant(this string[]? values) =>
+    
+        values is null || values.Length == 0 ? string.Empty :
+        values.Length == 1 ? values[0] :
+        $"{values[0]} {string.Join(' ',values.Skip(1)).ToLowerInvariant()}";
+    
 
     public static string[] Items(this string? value, char separator = ';') =>
         string.IsNullOrWhiteSpace(value) ? [] :

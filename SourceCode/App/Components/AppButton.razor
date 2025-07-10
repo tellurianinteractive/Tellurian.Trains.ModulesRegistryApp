@@ -1,4 +1,5 @@
-﻿@inject IStringLocalizer<App> Localizer
+﻿@using System.Diagnostics
+@inject IStringLocalizer<App> Localizer
 @inject IJSRuntime JSRuntime
 
 <span class="noprint">
@@ -8,7 +9,7 @@
         {
             @if (OpenInNewTab)
             {
-                <button type="button " class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+                <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
             }
             else
             {
@@ -42,28 +43,36 @@
     [Parameter] public bool AlwaysShowLabel { get; set; }
     [Parameter] public string? Title { get; set; }
 
-        async Task NavigateToNewTab()
+    async Task NavigateToNewTab()
     {
         await JSRuntime.InvokeAsync<object>("open", Href, "_blank");
     }
 
 
-    string ButtonClassType => Type.HasValue() ? Type.ToLowerInvariant() : Labels?.First().ToLowerInvariant() switch
+    string ButtonClassType
     {
-        "add" => "primary",
-        "edit" => "primary",
-        "ok" => "primary",
-        "upload" => "primary",
-        "delete" => "danger",
-        "confirmdelete" => "danger",
-        "remove" => "danger",
-        "save" => "primary",
-        "saveall" => "primary",
-        "update" => "primary",
-        "manage" => "primary",
-        _ => "info"
-    };
-    string LabelText => Labels is not null ? String.Join(' ', Labels.Select(l => Localizer[l])) : string.Empty;
+        get
+        {
+            //if (Type.HasValue()) Debugger.Break();
+            return (Type.HasValue() ? Type.ToLowerInvariant() : Labels?.First().ToLowerInvariant()) switch
+            {
+                "add" => "primary",
+                "edit" => "primary",
+                "ok" => "primary",
+                "upload" => "primary",
+                "delete" => "danger",
+                "confirmdelete" => "danger",
+                "remove" => "danger",
+                "save" => "primary",
+                "saveall" => "primary",
+                "update" => "primary",
+                "manage" => "primary",
+                _ => "info"
+            };
+        }
+    }
+
+    string LabelText => Labels is not null ? Labels.Select(l => Localizer[l].Value).ToArray().ToFirstUpperInvariant() : string.Empty;
     string TitleText => Title.HasValue() ? Localizer[Title] : LabelText;
     string[]? Labels => Label.HasValue() ? Label.Split("-") : Type.HasValue() ? Type.AsArray() : "Button".AsArray();
     string LabelOrType => Label ?? Type ?? "Button";
@@ -73,6 +82,7 @@
 
     string IconClass =>
         IconName.StartsWith("fa ") ? IconName : 
+        Type.HasValue() && FontAwesome.ButtonIcons.ContainsKey(Type) ? FontAwesome.ButtonIcons[Type] :
         FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
         FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
         FontAwesome.Info;

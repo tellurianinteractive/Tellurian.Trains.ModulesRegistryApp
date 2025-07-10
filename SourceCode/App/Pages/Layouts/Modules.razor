@@ -50,8 +50,8 @@ else
         <RowTemplate Context="participant">
             <td style="white-space: nowrap;">@ParticipantNameAndMore(participant)</td>
             <td>@participant.MeetingParticipant.Participates(Localizer)</td>
-            <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
-            <td class="noprint"> </td>
+            <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("g")</td>
+            <td><AppButton Type="Edit" Label="@(participant.LayoutModules.Any() ? "Edit-Modules": "Register-Modules")" Href="@($"MeetingParticipants/{participant.MeetingParticipant.Id}/Layouts/{Layout?.Id}/RegisterModules")"/> </td>
         </RowTemplate>
         <SubRowsTemplate Context="participant">
             @if (participant.LayoutModules.Any())

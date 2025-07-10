@@ -2,6 +2,11 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.12
+Release date 2025-07-10
+- **Layout modules** per participant can now be added or edited in the layout participant list.
+- **Meeting participant** list now contains registration time.
+- **Participation duration** now uses abbreviated day names to save space.
 ## Release 1.12.11
 Release date 2025-07-05
 - **Upload size** for DWG-drawings and PDF-documents increased to 500 kB. SKP-drawings limited to 500kB. Note that upload of SKP-files requires special permission.

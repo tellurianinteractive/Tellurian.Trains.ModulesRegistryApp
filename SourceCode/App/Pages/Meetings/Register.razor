@@ -65,6 +65,7 @@ else
                     {
                         <th>@Localizer["Country"]</th>
                     }
+                    <th>@Localizer["Registered"]</th>
                     <th>@Localizer["Participates"]</th>
                     <th>@Localizer["Layouts"]</th>
                     <th class="noprint">@Localizer["Actions"]</th>
@@ -80,6 +81,7 @@ else
                     {
                         <td><img src="@item.Person.Country.FlagSrc()"> @item.Person.Country.EnglishName.AsLocalized()</td>
                     }
+                    <td>@item.RegistrationTime.ToString("g")</td>
                     <td>@item.Participates(Localizer)</td>
                     <td>@item.ParticipatesInLayouts(Localizer)</td>
                     <td class="noprint">

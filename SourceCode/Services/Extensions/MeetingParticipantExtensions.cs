@@ -22,15 +22,13 @@ public static class MeetingParticipantExtensions
 
     public static string FirstParticipationDay(this MeetingParticipant? participant) =>
         participant is null || participant.Meeting is null ? string.Empty :
-        participant.FirstParticpationDate().DayOfWeek.ToString().Localized();
+        participant.FirstParticpationDate().ToString("ddd").Localized().ToFirstUpperInvariant();
 
 
 
     public static string LastParticipationDay(this MeetingParticipant? participant) =>
         participant is null || participant.Meeting is null ? string.Empty :
-        participant.LastParticpationDate().DayOfWeek.ToString().Localized();
-
-
+        participant.LastParticpationDate().ToString("ddd").Localized().ToFirstUpperInvariant();
 
     public static string[] Days(this MeetingParticipant mp, Meeting? m = null)
     {
