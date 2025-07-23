@@ -1,5 +1,0 @@
-SMTP serversmtp-relay.brevo.com
-Port 587
-Login 928809001@smtp-brevo.com
-Password akEh2NxdrAqw3f8T
-API key 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
