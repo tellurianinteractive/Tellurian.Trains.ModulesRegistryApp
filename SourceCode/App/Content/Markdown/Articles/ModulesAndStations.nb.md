@@ -20,6 +20,9 @@ Kanskje kan rekkefølgen på de interne seksjonene endres, eller noen seksjoner 
 Modulregisteret støtter modulvarianter. Du kan bruke samme modulnavn for alle varianter,
 men oppgi egne data, dokumentasjon og tegninger for hver variant.
 
+Når det gjelder fraktkunder, registrer disse kun i den største eller fullstendige varianten av modulen din. 
+Når du bruker en mindre variant, må du rett og slett ikke bruke fraktbrev som ikke gjelder.
+
 ### Når er en modul også en driftsplass?
 Alle moduler som har en *trafikkoperativ funksjon* bør også oppføres som en *driftsplass* i modulregisteret.
 Driftsegenskaper er ting som påvirker togstyring og ruteplanlegging.

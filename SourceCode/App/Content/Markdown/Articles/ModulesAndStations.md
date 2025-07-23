@@ -20,6 +20,9 @@ Perhaps the order of the internal sections can be changed, or some sections can 
 The module register supports module variants. You can use the same module name for all variants,
 but provide separate data, documentation and drawings for each variant.
 
+Regarding cargo customers, only register these in the largest or full variant of your module. 
+When you use a smaller variant, simply do not use waybills that don't apply.
+
 ### When is a module also a an operation location?
 All modules that have a *traffic operational function* should also be listed as an *operation location* in the module register.
 Operation characteristics are things that affect train control and scheduling.

@@ -20,6 +20,9 @@ Vielleicht kann die Reihenfolge der internen Abschnitte geändert werden, oder e
 Das Modulregister unterstützt Modulvarianten. Sie können für alle Varianten denselben Modulnamen verwenden,
 sondern stellen Sie für jede Variante separate Daten, Dokumentationen und Zeichnungen zur Verfügung.
 
+Bei Frachtkunden erfassen Sie diese bitte nur in der größten bzw. Vollvariante Ihres Moduls.
+Bei der kleineren Variante verzichten Sie bitte auf die Verwendung nicht zutreffender Frachtbriefe.
+
 ### Wann ist ein Modul auch ein Betriebsstandort?
 Alle Module, die eine *verkehrsbetriebliche Funktion* haben, sollten auch als *Betriebsstandort* im Modulverzeichnis aufgeführt werden.
 Betriebsmerkmale sind Dinge, die die Zugsteuerung und -planung beeinflussen.
