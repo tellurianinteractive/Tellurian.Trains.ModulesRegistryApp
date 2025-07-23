@@ -112,16 +112,6 @@ else
                 <li>@Localizer["Participates"]: <strong>@Participant.Participates(Localizer)</strong> </li>
             </ul>
         }
-        @*  else if (Meeting.Id > 0 && PersonId > 0)
-        {
-            if (IsAdministratorOrMeetingOrganiser || Principal.IsGlobalOrCountryAdministrator() || Meeting.IsOpenForRegistration(TimeProvider.LocalTime))
-            {
-                <div style="margin: 10px 0px;">
-                    <AppButton Label="Register" OnClickCallback="OnValidSubmit" />
-
-                </div>
-            }
-        } *@
 
         @if (Participant is not null)
         {
@@ -179,26 +169,26 @@ else
 
 
 @code {
-        [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-        [Parameter] public int MeetingId { get; set; }
-        [Parameter] public int PersonId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int MeetingId { get; set; }
+    [Parameter] public int PersonId { get; set; }
 
-        ClaimsPrincipal? Principal;
+    ClaimsPrincipal? Principal;
 
-        int CountryId;
-        MeetingParticipant? Participant;
-        Meeting? Meeting;
-        IEnumerable<ListboxItem>? CountryItems;
-        IEnumerable<ListboxItem>? PeopleItems;
+    int CountryId;
+    MeetingParticipant? Participant;
+    Meeting? Meeting;
+    IEnumerable<ListboxItem>? CountryItems;
+    IEnumerable<ListboxItem>? PeopleItems;
 
-        IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
-        bool IsAdministratorOrMeetingOrganiser;
-        bool HasParticipantsFromSeveralCountries;
+    IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
+    bool IsAdministratorOrMeetingOrganiser;
+    bool HasParticipantsFromSeveralCountries;
 
-        bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
-            Principal.IsGlobalOrCountryAdministrator() ||
-            IsAdministratorOrMeetingOrganiser ||
-            (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
+    bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
+        Principal.IsGlobalOrCountryAdministrator() ||
+        IsAdministratorOrMeetingOrganiser ||
+        (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
     protected override async Task OnParametersSetAsync()
     {
@@ -332,11 +322,8 @@ else
     static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
     {
         if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return [];
-        return meetingLayouts.Select(ml => new LayoutParticipation(ml, participant)).ToList();
+        return meetingLayouts.Select(meetingLayout => new LayoutParticipation(meetingLayout, participant)).ToList();
     }
-
-
-
 
     string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Description}";
     string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Description}";

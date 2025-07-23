@@ -32,7 +32,7 @@ public static class MarkupStringExtensions
 
     public static MarkupString EmailIcon(this Person? person) =>
         person is null || person.EmailAddresses.HasNoValue() ? new MarkupString() :
-        new MarkupString($"""<span class="fa fa-envelope"/>""");
+        new MarkupString($"""<a class="fa fa-envelope" href="mailto:{person.EmailAddresses}"></a>""");
 
 
     public static MarkupString ImageIcon(this Vehicle vehicle) =>

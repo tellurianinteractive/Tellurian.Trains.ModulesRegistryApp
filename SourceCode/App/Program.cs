@@ -21,7 +21,7 @@ if (builder.Environment.IsProduction())
 }
 
 builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
-builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("SendGrid"));
+builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("Brevo"));
 builder.Services.AddScoped<AppService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 if (builder.Environment.IsDevelopment())
@@ -82,7 +82,7 @@ builder.Services.AddScoped<PageHistory>();
 if (builder.Environment.IsProduction())
     builder.Services.AddScoped<IMailSender, CloudMailSender>();
 if (builder.Environment.IsDevelopment())
-    builder.Services.AddScoped<IMailSender, LoggingOnlyMailSender>();
+    builder.Services.AddScoped<IMailSender, CloudMailSender>();
 builder.Services.AddScoped<CargoService>();
 builder.Services.AddScoped<ContentService>();
 builder.Services.AddScoped<CountryService>();

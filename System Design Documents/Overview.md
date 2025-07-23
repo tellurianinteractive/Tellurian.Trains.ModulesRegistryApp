@@ -1,7 +1,5 @@
 # System Design Overview
 
-> WORK IN PROGRESS
-
 This document describes the overall system design of the *Module Registry*.
 It is intended as an introduction to a developer
 that want to learn about the principles for how 
@@ -13,6 +11,10 @@ The source code can be edited in other tools, but Visual Studio is the simplest 
 
 The requires skills, and what you need to develop the application is described in 
 [contribution guidelines](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/blob/master/CONTRIBUTING.md).
+
+## Code Management
+All code is open source and stored in [GitHub](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp). 
+You need to know how to create a [*pull request*](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) in order to contribute with translations, code- and database improvements etc.
 
 ## Runtime Environment
 The web application is developed using *.NET* and *Blazor* server-side rendering of the user interface.

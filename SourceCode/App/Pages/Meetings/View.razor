@@ -31,44 +31,52 @@ else
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
     @Item("Duration", Meeting.DurationText())
     @Item("Organiser", Meeting.Organiser())
+    @Item("Status", Meeting.Status.MeetingStatus())
     @if (!Meeting.IsCancelled())
     {
-        @Item("Status", Meeting.Status.MeetingStatus())
-        @if (Meeting.MayRegister(Principal, TimeProvider.Now.DateTime))
+        @if (Meeting.ExternalLink.HasValue())
         {
-            <div style="padding: 5px 0px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
-                <h4>@Localizer["RegisterOrModifyParticipation"]</h4>
-                <AppButton IconName="Register" Label="Register-Participation" Href="@MeetingHref(Meeting, "register")" IsHidden="false" />
-            </div>
+          <AppButton Label="Details" Href="@Meeting.ExternalLink" AlwaysShowLabel=true />
         }
-        @if (Meeting.Layouts.Any())
+        else
         {
-            <TableTemplate Items="@Meeting.Layouts">
-                <TableHeader>
-                    <th>@Localizer["Layout"]</th>
-                    <th>@Localizer["RegistrationOpens"]</th>
-                    <th>@Localizer["ModuleRegistrationCloses"]</th>
-                    <th>@Localizer["RegistrationCloses"]</th>
-                    <th>@Localizer["More"]</th>
-                </TableHeader>
-                <RowTemplate Context="item">
-                    <td>@item.DescriptionWithName()</td>
-                    <td>@item.RegistrationOpensDate()</td>
-                    <td>@item.RegistrationOfModulesClosesDate()</td>
-                    <td>@item.RegistrationClosesDate()</td>
-                    <td>
-                        <AppButton Label="Details" IconName="Layout" Href="@LayoutsHref(Id)" />
 
-                    </td>
+            @if (Meeting.MayRegister(Principal, TimeProvider.Now.DateTime))
+            {
+                <div style="padding: 5px 0px; border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+                    <h4>@Localizer["RegisterOrModifyParticipation"]</h4>
+                    <AppButton IconName="Register" Label="Register-Participation" Href="@MeetingHref(Meeting, "register")" IsHidden="false" />
+                </div>
+            }
+            @if (Meeting.Layouts.Any())
+            {
+                <TableTemplate Items="@Meeting.Layouts">
+                    <TableHeader>
+                        <th>@Localizer["Layout"]</th>
+                        <th>@Localizer["RegistrationOpens"]</th>
+                        <th>@Localizer["ModuleRegistrationCloses"]</th>
+                        <th>@Localizer["RegistrationCloses"]</th>
+                        <th>@Localizer["More"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.DescriptionWithName()</td>
+                        <td>@item.RegistrationOpensDate()</td>
+                        <td>@item.RegistrationOfModulesClosesDate()</td>
+                        <td>@item.RegistrationClosesDate()</td>
+                        <td>
+                            <AppButton Label="Details" IconName="Layout" Href="@LayoutsHref(Id)" />
 
-                </RowTemplate>
-            </TableTemplate>
+                        </td>
+
+                    </RowTemplate>
+                </TableTemplate>
+            }
+
+
+            <MarkdownView Label="Details" Markdown="@Meeting.Details" />
+            <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
+            <MarkdownView Label="Food" Markdown="@Meeting.Food" />
         }
-
-
-        <MarkdownView Label="Details" Markdown="@Meeting.Details" />
-        <MarkdownView Label="Accomodation" Markdown="@Meeting.Accomodation" />
-        <MarkdownView Label="Food" Markdown="@Meeting.Food" />
     }
 
 }

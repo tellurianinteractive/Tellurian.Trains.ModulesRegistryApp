@@ -1,13 +1,16 @@
 ﻿@page "/admin/users"
 @page "/admin/users/country/{CountryId:int}"
+@using System.Net.Mail
 
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
 @inject NavigationManager Navigator
 @inject CountryService CountryService
 @inject UserService UserService
 @inject AppService AppService
+@inject IMailSender MailSender
 
 <PageHeading Label="UserAdministration" IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
 
@@ -20,9 +23,11 @@
     {
         @foreach (var group in Users.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
         {
-            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" />
+            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
         }
     }
+    <h2>@Localizer["SendTestMail"]</h2>
+    <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
 }
 
 @code {
@@ -33,6 +38,18 @@
     private IEnumerable<ListboxItem>? CountryListItems;
     private IEnumerable<User>? Users;
     private Country? CurrentCountry;
+
+    private async Task SendTestMail()
+    {
+        var message = new MailMessage(new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"]), new MailAddress(Principal!.EmailAddess(), Principal!.GivenName()))
+        {
+            Subject = "Test",
+            Body = "This is a test message.",
+            Sender = new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"])
+        };
+        var result = await MailSender.SendMailMessageAsync(message);
+        ToastService.ShowSuccessOrFailure(Localizer, result, "TestMail");
+    }
 
     protected override async Task OnInitializedAsync()
     {

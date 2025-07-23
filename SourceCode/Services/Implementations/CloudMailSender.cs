@@ -29,14 +29,24 @@ public sealed class CloudMailSender(IOptions<CloudMailSenderSettings> options) :
         new(Settings.SenderMailAddress, Resources.Strings.AppName);
 
     private SmtpClient Client =>
-        new("smtp.sendgrid.net", 587) { Credentials = NetworkCredential };
-
+        new(Settings.SmtpServerName, Settings.SmtpServerPortNumber) { Credentials = NetworkCredential };
+    // TODO: Remove ApiKey after Brevo version is deployed.
     private NetworkCredential NetworkCredential =>
-        new("apikey", Settings.ApiKey);
+        new(Settings.UserName ?? "api-key", Settings.Password ?? Settings.ApiKey);
 }
 
+/// <summary>
+/// TODO: When change to Brevo SMTP mail service is deployed and tested,
+/// The <see cref="ApiKey"/> field can be removed.
+/// </summary>
 public class CloudMailSenderSettings
 {
-    public string ApiKey { get; set; } = string.Empty;
-    public string SenderMailAddress { get; set; } = string.Empty;
+    public required string SenderMailAddress { get; set; }
+    public required string SmtpServerName { get; set; }
+    public int SmtpServerPortNumber { get; set; }
+    public string? UserName { get; set; }
+    public string? Password { get; set; }
+    public  string? ApiKey { get; set; }
 }
+
+

@@ -144,8 +144,9 @@ public static class MeetingExtensions
         new(meeting.EndDate.ToString("d"));
 
     public static string DurationText(this Meeting meeting) =>
-        meeting.ShowTime() ? $"{meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
-        $"{meeting.StartOrEventDate()} - {meeting.EndDateOrTimes()}";
+        meeting.ShowTime() ? $"{meeting.StartDate:ddd} {meeting.StartOrEventDate()} {meeting.EndDateOrTimes()}" :
+        $"{meeting.StartDate:ddd} {meeting.StartOrEventDate()} - {meeting.EndDate:ddd} {meeting.EndDateOrTimes()}";
+
     public static int DurationDays(this Meeting meeting) =>
        (meeting.EndDate.Date - meeting.StartDate.Date).Days + 1;
 

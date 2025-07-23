@@ -80,7 +80,8 @@
 .item {
     font-weight: bold;
     font-size: 10pt;
-    min-height: 12pt;
+    min-height: 10pt;
+    max-height: 12pt;
     max-width: 46mm;
     white-space: nowrap;
     overflow: hidden;
@@ -100,6 +101,11 @@
 
 .flagimage {
     border: 1px solid lightgray;
+}
+.footer {
+   position: absolute; 
+   top: 76mm;
+   border-top: 1px solid black;
 }
 
 .daysandclass {

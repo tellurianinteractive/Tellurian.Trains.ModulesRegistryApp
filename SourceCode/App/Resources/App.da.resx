@@ -1425,6 +1425,9 @@
   <data name="SendMailToAllUsersIn" xml:space="preserve">
     <value>Send mail til alle brugere i {0}</value>
   </data>
+  <data name="SendTestMail" xml:space="preserve">
+    <value>Send en testmail til dig selv</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Indstillinger</value>
   </data>
@@ -1490,6 +1493,9 @@
   </data>
   <data name="TermsOfUse" xml:space="preserve">
     <value>Betingelser for brug</value>
+  </data>
+  <data name="TestMail" xml:space="preserve">
+    <value>Test e-mail</value>
   </data>
   <data name="TextColor" xml:space="preserve">
     <value>Tekstfarve</value>

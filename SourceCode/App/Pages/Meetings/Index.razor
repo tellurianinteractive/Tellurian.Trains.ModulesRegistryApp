@@ -4,6 +4,7 @@
 @inject IStringLocalizer<App> Localizer
 @inject ITimeProvider TimeProvider
 @inject IToastService ToastService
+@inject NavigationManager Navigator
 
 @inject MeetingService MeetingService
 @inject GroupService GroupService
@@ -29,7 +30,7 @@
     <RowTemplate Context="item">
         <td><img src="@item.meeting.OrganiserGroup.Country.FlagSrc()" /></td>
         <td><span class="@MeetingTypeIcon(item.meeting)" title="@(item.meeting.MeetingType.ToEnumLocalized<MeetingType>())"></span></td>
-        <td><a target="@MeetingLinkTarget(item.meeting)" href="@MeetingHref(item.meeting, "view")">@item.meeting.Name</a></td>
+        <td><a href="@MeetingHref(item.meeting, "view")">@item.meeting.Name</a></td>
         <td>@item.meeting.Scales()</td>
         <td align="center">@item.meeting.DisplayedStatus(TimeProvider.LocalTime)</td>
         <td>@item.meeting.VenueName</td>
@@ -54,8 +55,8 @@
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal.CountryId();
 
     string MeetingHref(Meeting meeting, string? function) =>
-        meeting.ExternalLink.HasValue() && function=="view" ? meeting.ExternalLink :
-        function.HasNoValue() ? $"meetings/{meeting.Id}" : $"meetings/{meeting.Id}/{function}";
+        //meeting.ExternalLink.HasValue() && function=="view" ? meeting.ExternalLink :
+        function.HasNoValue() ? $"meetings/{meeting.Id}/view" : $"meetings/{meeting.Id}/{function}";
 
     string MeetingLinkTarget(Meeting meeting) => meeting.ExternalLink.HasValue() ? "_blank" : "_self";
 
