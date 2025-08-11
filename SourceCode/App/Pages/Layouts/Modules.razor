@@ -51,12 +51,13 @@ else
             <td style="white-space: nowrap;">@ParticipantNameAndMore(participant)</td>
             <td>@participant.MeetingParticipant.Participates(Localizer)</td>
             <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("g")</td>
-            <td><AppButton Type="Edit" Label="@(participant.LayoutModules.Any() ? "Edit-Modules": "Register-Modules")" Href="@($"MeetingParticipants/{participant.MeetingParticipant.Id}/Layouts/{Layout?.Id}/RegisterModules")"/> </td>
+            <td><AppButton Type="Edit" Label="@(participant.LayoutModules.Any() ? "Edit-Modules" : "Register-Modules")" Href="@($"MeetingParticipants/{participant.MeetingParticipant.Id}/Layouts/{Layout?.Id}/RegisterModules")" /> </td>
         </RowTemplate>
         <SubRowsTemplate Context="participant">
             @if (participant.LayoutModules.Any())
             {
-                @if (participant.NoteToOrganiserMarkdown.HasValue()) {
+                @if (participant.NoteToOrganiserMarkdown.HasValue())
+                {
                     <tr>
                         <td colspan="4">
                             <span style="color: red">@participant.NoteToOrganiserMarkdown</span>
@@ -66,7 +67,13 @@ else
                 @foreach (var layoutModule in participant.LayoutModules.OrderBy(lm => lm.Module.FullName))
                 {
                     <tr>
-                        <td>@layoutModule.Module.FullNameAndConfiguration()</td>
+                        <td>
+                            @layoutModule.Module.FullNameAndConfiguration()
+                            <span >
+                                <DocumentLink DocumentId="layoutModule.Module.DwgDrawingId" FileExtension="dwg" />
+                                <DocumentLink DocumentId="layoutModule.Module.SkpDrawingId" FileExtension="skp" />
+                            </span>
+                        </td>
                         <td>@layoutModule.Module.Description()</td>
                         <td class="noprint">@layoutModule.RegisteredTime.ToString("d")</td>
                         <td class="noprint">
@@ -82,10 +89,12 @@ else
             {
                 <tr>
                     <td colspan="4">
-                        @if (participant.BringsModulesAfterAgreement) {
+                        @if (participant.BringsModulesAfterAgreement)
+                        {
                             <span style="color: red">@Localizer["BringsModulesAfterAgreement"]. </span>
                         }
-                        else {
+                        else
+                        {
                             <span>@Localizer["NoModulesRegistered"]. </span>
                         }
                         <span>@participant.NoteToOrganiserMarkdown</span>
@@ -107,8 +116,8 @@ else
     Layout? Layout;
     IEnumerable<LayoutParticipant>? LayoutParticipants;
     IEnumerable<LayoutParticipant>? FilteredParticipants =>
-        OnlyThoseWithOperationsPlaces ? LayoutParticipants?.Where(lp=> lp.LayoutStations.Count > 0) :
-        OnlyThoseWithModules ? LayoutParticipants?.Where(lp =>  lp.LayoutModules.Count > 0) :
+        OnlyThoseWithOperationsPlaces ? LayoutParticipants?.Where(lp => lp.LayoutStations.Count > 0) :
+        OnlyThoseWithModules ? LayoutParticipants?.Where(lp => lp.LayoutModules.Count > 0) :
         LayoutParticipants;
     IEnumerable<LayoutStation>? LayoutStations;
     IEnumerable<LayoutModule>? LayoutModules;

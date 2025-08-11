@@ -141,6 +141,10 @@ public static class ModuleExtensions
             text.Append($", {EndOfLine}");
         }
 
+        if (me.IsDuckunder) {
+            text.Append($", {Duckunder}");
+        }
+
         if (!compact && me.Note.HasValue())
         {
             text.Append(", ");

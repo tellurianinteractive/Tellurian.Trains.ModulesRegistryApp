@@ -36,6 +36,8 @@ public static class LayoutModuleExtensions
     public static bool HasLayoutStationId(this LayoutModule it) => it.LayoutStationId.HasValue;
     public static bool HasLayoutStation(this LayoutModule it) => it.LayoutStation is not null;
     public static bool HasCargoCustomers(this LayoutModule it) => it.LayoutStation?.Station is not null && it.LayoutStation.Station.HasCargoCustomers;
+    public static bool HasDwgDrawing(this LayoutModule it) => it.Module.DwgDrawing.Id > 0;
+    public static bool HasSkpDrawing(this LayoutModule it) => it.Module.SkpDrawing.Id > 0;
     public static double TotalLength(this LayoutModule it) => it.Module?.TotalLength() ?? 0.0;
     public static double TotalLengthMeters(this IEnumerable<LayoutModule> modules)
     {

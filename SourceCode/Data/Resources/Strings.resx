@@ -144,6 +144,9 @@
   <data name="DoubleTrack" xml:space="preserve">
     <value>Double track</value>
   </data>
+  <data name="Duckunder" xml:space="preserve">
+    <value>Duckunder</value>
+  </data>
   <data name="Eastwards" xml:space="preserve">
     <value>Eastwards</value>
   </data>

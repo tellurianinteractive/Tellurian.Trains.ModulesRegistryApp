@@ -142,6 +142,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duckunder.
+        /// </summary>
+        public static string Duckunder {
+            get {
+                return ResourceManager.GetString("Duckunder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eastwards.
         /// </summary>
         public static string Eastwards {
