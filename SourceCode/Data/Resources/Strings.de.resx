@@ -126,6 +126,9 @@
   <data name="Bidirectional" xml:space="preserve">
     <value>Bidirektional</value>
   </data>
+  <data name="BorrowedFrom" xml:space="preserve">
+    <value>Ausgeliehen von {0}</value>
+  </data>
   <data name="Canceled" xml:space="preserve">
     <value>Abgesagt</value>
   </data>

@@ -88,6 +88,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Borrowed from {0}.
+        /// </summary>
+        public static string BorrowedFrom {
+            get {
+                return ResourceManager.GetString("BorrowedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Canceled.
         /// </summary>
         public static string Canceled {

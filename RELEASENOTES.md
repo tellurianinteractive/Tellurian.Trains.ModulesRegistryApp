@@ -6,6 +6,7 @@ There is maximum one release per date, but this can be performed as one or sever
 Release date 2025-08-11
 - **Duckunder** now included in description text for modules.
 - **Drawings** can now be downloaded in the layout participation list.
+- **Borrowed modules** now displays *borrowed from owner's name*.
 ## Release 1.12.13
 Reselase date 2025-07-23
 - **Waybill format** fine tuned to remove text overflow. 

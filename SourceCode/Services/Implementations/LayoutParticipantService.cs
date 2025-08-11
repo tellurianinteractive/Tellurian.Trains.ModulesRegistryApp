@@ -13,7 +13,7 @@
                 return await dbContect.LayoutParticipants.AsNoTracking()
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
                     .Include(x => x.LayoutStations).ThenInclude(ls => ls.Station)
-                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.ModuleOwnerships)
+                    .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.ModuleOwnerships).ThenInclude(x=> x.Person)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Standard)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Station).ThenInclude(x => x.StationTracks)
                     .Include(x => x.Person).ThenInclude(p => p.Country)
