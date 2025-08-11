@@ -5,13 +5,12 @@ There is maximum one release per date, but this can be performed as one or sever
 ## Release 1.12.14
 Release date 2025-08-11
 - **Duckunder** now included in description text for modules.
-- 
 ## Release 1.12.13
 Reselase date 2025-07-23
 - **Waybill format** fine tuned to remove text overflow. 
 - **Meeting duration and participation** now also shows weekdays.
-- **Mailing** individual meeting or layout participants by clicking the email icon in the lists. Only avauilable for meeting and layout administrators.
-- **Mailing server** changed to [Brevo](https://brevo.com) due to SendGrid has no longer a free plan and to improve fewer mails ends up in the recipient's spam folder. NOTE: This only affect *password reset* and *invitation* e-mails. 
+- **Mailing** individual meeting or layout participants by clicking the email icon in the lists. Only available for meeting- and layout administrators.
+- **Mailing server** changed to [Brevo](https://brevo.com) due to SendGrid has no longer a free plan and to improve fewer mails ends up in the recipient's spam folder. NOTE: This only affects *password reset* and *invitation* e-mails. 
 - **Documentation** added that recommends entering freight customers only for the largest/full variant of module.
 - **Security update** with latest component versions.
 ## Release 1.12.12
