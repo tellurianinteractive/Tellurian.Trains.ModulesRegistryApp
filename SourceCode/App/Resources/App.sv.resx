@@ -546,6 +546,9 @@
   <data name="FrequentlyAskedQuestions" xml:space="preserve">
     <value>Vanliga frågor</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>Från</value>
+  </data>
   <data name="FromYear" xml:space="preserve">
     <value>Från år</value>
   </data>
@@ -695,6 +698,9 @@
   </data>
   <data name="IsEndOfLine" xml:space="preserve">
     <value>Är ände på spåret?</value>
+  </data>
+  <data name="IsEndProfileSwitcher" xml:space="preserve">
+    <value>Är ändevändare?</value>
   </data>
   <data name="IsExpress" xml:space="preserve">
     <value>Ekspressgods?</value>
@@ -1131,9 +1137,6 @@
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Genomgående spår</value>
   </data>
-  <data name="NumberParticipantsRegistered" xml:space="preserve">
-    <value>{0} deltagare registrerade</value>
-  </data>
   <data name="of" xml:space="preserve">
     <value>av</value>
   </data>
@@ -1386,6 +1389,9 @@
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Rullar trögt</value>
   </data>
+  <data name="RoundTrip" xml:space="preserve">
+    <value>Tur och retur</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Spara</value>
   </data>
@@ -1514,6 +1520,15 @@
   </data>
   <data name="Throttles" xml:space="preserve">
     <value>Körhandtag</value>
+  </data>
+  <data name="Ticket" xml:space="preserve">
+    <value>Biljett</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Biljetter</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Till</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Verktyg</value>

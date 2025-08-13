@@ -196,6 +196,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End profile switcher.
+        /// </summary>
+        public static string EndProfileSwitcher {
+            get {
+                return ResourceManager.GetString("EndProfileSwitcher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed.
         /// </summary>
         public static string Fixed {
@@ -291,6 +300,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Market {
             get {
                 return ResourceManager.GetString("Market", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max number of participants.
+        /// </summary>
+        public static string MaxNumberOfParticipants {
+            get {
+                return ResourceManager.GetString("MaxNumberOfParticipants", resourceCulture);
             }
         }
         
@@ -399,6 +417,24 @@ namespace ModulesRegistry.Data.Resources {
         public static string NotStandalone {
             get {
                 return ResourceManager.GetString("NotStandalone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} participants registered.
+        /// </summary>
+        public static string NumberParticipantsRegistered {
+            get {
+                return ResourceManager.GetString("NumberParticipantsRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} participants registered of max {1}.
+        /// </summary>
+        public static string NumberParticipantsRegisteredOfMax {
+            get {
+                return ResourceManager.GetString("NumberParticipantsRegisteredOfMax", resourceCulture);
             }
         }
         
@@ -588,6 +624,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string ThroughTracks {
             get {
                 return ResourceManager.GetString("ThroughTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ticket is valid to {0}.
+        /// </summary>
+        public static string TicketIsValidTo {
+            get {
+                return ResourceManager.GetString("TicketIsValidTo", resourceCulture);
             }
         }
         

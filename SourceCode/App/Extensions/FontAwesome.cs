@@ -47,6 +47,7 @@ public static class FontAwesome
     public const string Stations = "fa fa-school";
     public const string Standard = "fa fa-pencil-ruler";
     public const string Sync = "fa fa-sync";
+    public const string Ticket = "fa fa-train";
     public const string Train = "fa fa-train";
     public const string Tools = "fa fa-tools";
     public const string Transfer = "fa fa-people-carry";
@@ -107,6 +108,7 @@ public static class FontAwesome
             {nameof(Stations), Stations },
             {nameof(Standard), Standard },
             {nameof(Sync), Sync },
+            {nameof(Ticket), Ticket },
             {nameof(Train), Train },
             {nameof(Tools), Tools },
             {nameof(Transfer), Transfer },

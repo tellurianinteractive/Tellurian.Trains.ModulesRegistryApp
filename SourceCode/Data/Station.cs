@@ -44,7 +44,7 @@ public static class StationExtensions
 {
     public static bool HasConfigurationLabel(this Station? me) => me is not null && me.Modules.Any(m => m.ConfigurationLabel.HasValue());
     public static bool HasPackageLabel(this Station? me) => me is not null && me.Modules.Any(m => m.PackageLabel.HasValue());
-    public static bool HasPassengerTraffic(this Station? me) => me is not null && me.StationTracks.Any(t => t.PlatformLength.HasValue);
+    public static bool HasPassengerTraffic(this Station? me) => me is not null && me.StationTracks.Any(t => t.PlatformLength.HasValue && t.PlatformLength.Value > 0);
     public static string ConfigurationLabel(this Station? me) => me is null ? string.Empty : me.Modules.Where(m => m.ConfigurationLabel.HasValue()).Select(m => m.ConfigurationLabel).FirstOrDefault() ?? string.Empty;
     public static string PackageLabel(this Station? me) => me is null ? string.Empty : me.Modules.Where(m => m.PackageLabel.HasValue()).Select(m => m.PackageLabel).FirstOrDefault() ?? string.Empty;
 }

@@ -37,6 +37,7 @@
                     {
                         <AppButton Label="Modules" Title="RegisteredModules" Href="@LayoutModulesHref(meetingLayout.Id)" />
                         <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(meetingLayout.Id)" />
+                        <AppButton Label="Tickets" Title="Tickets" Href="@TicketsHref(meetingLayout.Id)" IconName="@FontAwesome.Ticket"/>
                         <AppButton Label="Delete" OnClickCallback=@(() => DeleteLayout(meetingLayout.Id)) />
                     }
                 }
@@ -53,6 +54,7 @@
     string LayoutHref(int id) => Meeting is null ? string.Empty : $"Meetings/{Meeting.Id}/Layouts/{id}";
     string LayoutModulesHref(int id) => $"layouts/{id}/modules";
     string WaybillsHref(int id) => $"reports/waybills/layout/{id}";
+    string TicketsHref(int id) => $"reports/tickets/layout/{id}";
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue && layout.LastYear.HasValue ? $"{layout.FirstYear}-{layout.LastYear}" : string.Empty;
 
     protected override async Task OnParametersSetAsync()

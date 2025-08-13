@@ -1,0 +1,30 @@
+﻿.ticket {
+    font-weight: 600;
+    font-family: 'Bahnschrift','Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: white;
+    height: 92mm;
+    width: 48mm;
+    padding: 5px 5px;
+}
+
+.heading {
+    text-align: center;
+    font-size: 18pt;
+}
+
+.from {
+    display: block;
+}
+
+    .from.label {
+        font-size: 8pt;
+    }
+
+    .from.name {
+        font-size: 12pt;
+    }
+
+.validity {
+    margin-top: 1cm;
+    font-size: 8pt;
+}

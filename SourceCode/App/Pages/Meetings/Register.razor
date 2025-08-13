@@ -29,7 +29,7 @@ else
 {
     <PrincipalContentView Principal="Principal" NotAuthenticatedContent="AttendToMeeting">
         <h4>
-            @string.Format(Localizer["NumberParticipantsRegistered"], Meeting.Participants.Count(p => !p.CancellationTime.HasValue)).
+            @Meeting.ParticipationSummary()
         </h4>
         <hr />
         @if (IsAdministratorOrMeetingOrganiser)
@@ -113,7 +113,7 @@ else
             </ul>
         }
 
-        @if (Participant is not null)
+        @if (Participant is not null && !Meeting.IsFullyRegistered())
         {
             <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
                 <Inputs>
@@ -144,13 +144,13 @@ else
                     <td>@item.Layout.DescriptionWithName()</td>
                     <td>@item.Layout.OrganisingGroup?.FullName</td>
                     <td>
-                        @if (item.Layout.IsClosedForRegistration(TimeProvider.LocalTime))
+                        @if (item.Layout.IsClosedForRegistration(TimeProvider.LocalTime) || item.Layout.IsFullyRegistered())
                         {
                             <span style="color:red;">@Localizer["RegistrationClosed"]</span>
                         }
                     </td>
                     <td>
-                        @if (IsAdministratorOrMeetingOrganiser || item.Layout?.IsOpenForRegistration(TimeProvider.LocalTime) == true)
+                        @if (IsAdministratorOrMeetingOrganiser || (item.Layout?.IsOpenForRegistration(TimeProvider.LocalTime) == true) && !item.Layout.IsFullyRegistered())
                         {
                             <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
                             <AppButton Label="Unregister" IconName="@FontAwesome.Cancel" Type="Danger" OnClickCallback="@(async () => await OnCancelLayoutParticipation(item))" />

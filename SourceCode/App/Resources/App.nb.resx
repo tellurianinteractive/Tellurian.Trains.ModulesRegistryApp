@@ -546,6 +546,9 @@
   <data name="FrequentlyAskedQuestions" xml:space="preserve">
     <value>Ofte stilte spørsmål</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>Fra</value>
+  </data>
   <data name="FromYear" xml:space="preserve">
     <value>Fra år</value>
   </data>
@@ -695,6 +698,9 @@
   </data>
   <data name="IsEndOfLine" xml:space="preserve">
     <value>Er slutt på sporet?</value>
+  </data>
+  <data name="IsEndProfileSwitcher" xml:space="preserve">
+    <value>Er endevender?</value>
   </data>
   <data name="IsExpress" xml:space="preserve">
     <value>Ekspressgods?</value>
@@ -1131,9 +1137,6 @@
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Gjennomgående spor</value>
   </data>
-  <data name="NumberParticipantsRegistered" xml:space="preserve">
-    <value>{0} deltakere registrert</value>
-  </data>
   <data name="of" xml:space="preserve">
     <value>av</value>
   </data>
@@ -1386,6 +1389,9 @@
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Ruller tregt</value>
   </data>
+  <data name="RoundTrip" xml:space="preserve">
+    <value>Tur-Retur</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Lagre</value>
   </data>
@@ -1514,6 +1520,15 @@
   </data>
   <data name="Throttles" xml:space="preserve">
     <value>Håndkontroller</value>
+  </data>
+  <data name="Ticket" xml:space="preserve">
+    <value>Billett</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Billetter</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Til</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Verktøy</value>

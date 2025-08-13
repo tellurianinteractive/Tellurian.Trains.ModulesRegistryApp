@@ -549,6 +549,9 @@
   <data name="FrequentlyAskedQuestions" xml:space="preserve">
     <value>Frequently Asked Questions</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
   <data name="FromYear" xml:space="preserve">
     <value>From year</value>
   </data>
@@ -698,6 +701,9 @@
   </data>
   <data name="IsEndOfLine" xml:space="preserve">
     <value>Is ending track?</value>
+  </data>
+  <data name="IsEndProfileSwitcher" xml:space="preserve">
+    <value>Is end profile switcher?</value>
   </data>
   <data name="IsExpress" xml:space="preserve">
     <value>Express goods?</value>
@@ -1134,9 +1140,6 @@
   <data name="NumberOfThroughTracks" xml:space="preserve">
     <value>Through tracks</value>
   </data>
-  <data name="NumberParticipantsRegistered" xml:space="preserve">
-    <value>{0} participants registered</value>
-  </data>
   <data name="of" xml:space="preserve">
     <value>of</value>
   </data>
@@ -1389,6 +1392,9 @@
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Rolls sluggishly</value>
   </data>
+  <data name="RoundTrip" xml:space="preserve">
+    <value>Round trip</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
@@ -1517,6 +1523,15 @@
   </data>
   <data name="Throttles" xml:space="preserve">
     <value>Throttles</value>
+  </data>
+  <data name="Ticket" xml:space="preserve">
+    <value>Ticket</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>

@@ -25,6 +25,7 @@ public class Layout
     public string Details { get; set; }
     public short? FirstYear { get; set; }
     public short? LastYear { get; set; }
+    public int? MaxNumberOfParticipants { get; set; }
 
     public virtual Meeting Meeting { get; set; }
     public virtual Group OrganisingGroup { get; set; }
@@ -38,7 +39,14 @@ public class Layout
 
 public static class LayoutExtensions
 {
+    public static string ParticipationSummary(this Layout layout, int numberOfParticipants) =>
+         layout.MaxNumberOfParticipants.HasValue ?
+             string.Format(Resources.Strings.NumberParticipantsRegisteredOfMax, numberOfParticipants, layout.MaxNumberOfParticipants.Value):
+             string.Format(Resources.Strings.NumberParticipantsRegistered, numberOfParticipants);
+ 
+    
 
+    
     public static string RegistrationOpensDate(this Layout layout) => layout.RegistrationOpeningDate.ToShortDateString();
     public static string RegistrationClosesDate(this Layout layout) => layout.RegistrationClosingDate.ToShortDateString();
     public static string RegistrationOfModulesClosesDate(this Layout layout) => (layout.ModuleRegistrationClosingDate ?? layout.RegistrationClosingDate).ToShortDateString();
@@ -78,6 +86,12 @@ public static class LayoutExtensions
         layout is not null && 
         layout.IsRegistrationPermitted &&
         at > layout.RegistrationClosingDate.AddDays(1);
+
+    public static bool IsFullyRegistered(this Layout? layout)
+    {
+        var numberOfParticipants = layout?.LayoutParticipants.Count(lp => lp.IsParticipating()) ?? 0;
+        return layout?.IsRegistrationPermitted == true && numberOfParticipants>0 && layout.MaxNumberOfParticipants >= numberOfParticipants;
+    }
 
     private static TimeZoneInfo CET => TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
 }

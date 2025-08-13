@@ -162,6 +162,9 @@
   <data name="EndOfLine" xml:space="preserve">
     <value>Ender sporet</value>
   </data>
+  <data name="EndProfileSwitcher" xml:space="preserve">
+    <value>Jokermodul</value>
+  </data>
   <data name="Fixed" xml:space="preserve">
     <value>Fast</value>
   </data>
@@ -194,6 +197,9 @@
   </data>
   <data name="Market" xml:space="preserve">
     <value>Marked</value>
+  </data>
+  <data name="MaxNumberOfParticipants" xml:space="preserve">
+    <value>Maks antal deltagere</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
     <value>Modulet er registreret til det kommende møde</value>
@@ -230,6 +236,12 @@
   </data>
   <data name="NotStandalone" xml:space="preserve">
     <value>Ikke frit stående</value>
+  </data>
+  <data name="NumberParticipantsRegistered" xml:space="preserve">
+    <value>{0} deltagere tilmeldt</value>
+  </data>
+  <data name="NumberParticipantsRegisteredOfMax" xml:space="preserve">
+    <value>{0} deltagere registreret af maks. {1}</value>
   </data>
   <data name="OnlyPosts" xml:space="preserve">
     <value>Kun stolper</value>
@@ -293,6 +305,9 @@
   </data>
   <data name="ThroughTracks" xml:space="preserve">
     <value>Spor igennem</value>
+  </data>
+  <data name="TicketIsValidTo" xml:space="preserve">
+    <value>Billetten er gyldig til {0}</value>
   </data>
   <data name="Tracks" xml:space="preserve">
     <value>Spor</value>

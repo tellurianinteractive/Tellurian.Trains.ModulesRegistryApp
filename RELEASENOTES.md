@@ -2,11 +2,21 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.12.15
+Release date 2025-08-12
+- **Passenger tickets** can now be created between all layout stations with passenger traffic.
+- **Module** can now be classified as *end profile swicher* aka *endevender*.
+- **Layout** can now have a maximum number of participants.
+- **Layout participants** list now show max number of participats if it is specified.
+- **Meeting participants** list now show max number of participants, but only of all layouts have a maximum specified.
+- **Registration** to meeting and layouts are now disabled when maximum participants is reached.
+- **Bug fix** of deleting module fails when registered to old meeting layout.
 ## Release 1.12.14
 Release date 2025-08-11
 - **Duckunder** now included in description text for modules.
 - **Drawings** can now be downloaded in the layout participation list.
 - **Borrowed modules** now displays *borrowed from owner's name*.
+- **Component update** of all external components.
 ## Release 1.12.13
 Reselase date 2025-07-23
 - **Waybill format** fine tuned to remove text overflow. 

@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using FluentValidation.Validators;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
@@ -72,6 +73,23 @@ public static class MeetingExtensions
         meeting is null ? string.Empty :
         meeting.GroupDomainId.HasValue ? $"{meeting.OrganiserGroup.FullName}/{meeting.GroupDomain?.Name}" :
         $"{meeting.OrganiserGroup.FullName}";
+
+    public static string ParticipationSummary(this Meeting meeting)
+    {
+        var max = meeting.MaxNumberOfParticipants();
+        if (max.HasValue)
+        {
+            return string.Format(Resources.Strings.NumberParticipantsRegisteredOfMax, meeting.Participants.Count(p => p.IsParticipating()), max.Value);
+        }
+        else
+        {
+            return string.Format(Resources.Strings.NumberParticipantsRegistered, meeting.Participants.Count(p => p.IsParticipating()));
+        }
+    }
+
+    public static int? MaxNumberOfParticipants(this Meeting meeting) => meeting.Layouts.Any() && meeting.Layouts.All(l => l.MaxNumberOfParticipants.HasValue) ? meeting.Layouts.Sum(layout => layout.MaxNumberOfParticipants!.Value) : null ;
+
+    public static bool IsFullyRegistered(this Meeting meeting) => meeting.Layouts.All(l => l.IsFullyRegistered());
 
     public static bool HasParticipantsFromSeveralCountries(this Meeting? meeting) =>
         meeting is not null && meeting.Participants.Select(p => p.Person.CountryId).Distinct().Count() > 1;

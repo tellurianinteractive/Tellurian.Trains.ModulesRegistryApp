@@ -42,7 +42,9 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.LayoutStations.AsNoTracking()
-                .Where(ls => ls.LayoutParticipantId == layoutId)
+                .Include(ls => ls.LayoutParticipant).ThenInclude(lp => lp.MeetingParticipant).ThenInclude(mp => mp.Meeting)
+                .Include(ls => ls.Station).ThenInclude(s => s.StationTracks)
+                .Where(ls => ls.LayoutParticipant.LayoutId == layoutId)
                 .ToListAsync();
         }
         return [];

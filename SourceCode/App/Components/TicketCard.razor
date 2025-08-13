@@ -1,0 +1,38 @@
+﻿@inject IStringLocalizer<App> Localizer
+
+@if (Item is not null)
+{
+    <Pocket>
+        <div class="ticket">
+            <div class="heading">@Localizer["Ticket"]</div>
+            <div class="heading">@Localizer["RoundTrip"]</div>
+
+            <div class="from">
+                <span class="from label">@Localizer["From"]</span>
+                <span class="from name" style="font-size: @StationNameTextSize(Item.From.NameInLayout())">@Item.From.NameInLayout()</span>
+            </div>
+            <div class="from">
+                <span class="from label">@Localizer["To"]</span>
+                <span class="from name" style="font-size: @StationNameTextSize(Item.To.NameInLayout())">@Item.To.NameInLayout()</span>
+            </div>
+            <div class="validity">
+                @Item.Validity()
+            </div>
+        </div>
+    </Pocket>
+}
+
+@code {
+    [Parameter] public Ticket? Item { get; set; }
+
+    string StationNameTextSize(string? text, bool hasFlag = false) =>
+        string.IsNullOrWhiteSpace(text) ? Large :
+        hasFlag && text.Length < 15 ? Large :
+        hasFlag ? Small :
+        text.Length < 18 ? Large : Small;
+
+    const string Large = "14pt";
+    const string Small = "12pt";
+
+
+}

@@ -20,6 +20,7 @@
     [FontFamily]                     NVARCHAR(50)   NULL, 
     [GeneralInstructionsMarkdown]    NVARCHAR(2000) NULL,
 
+    [MaxNumberOfParticipants] INT NULL, 
     CONSTRAINT [PK_Layout] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Layout_OrganisingGroup] FOREIGN KEY ([OrganisingGroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Layout_ResponsiblePerson] FOREIGN KEY ([ContactPersonId]) REFERENCES [dbo].[Person] ([Id]),

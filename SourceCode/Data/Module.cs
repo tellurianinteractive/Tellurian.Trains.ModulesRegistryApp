@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static ModulesRegistry.Data.Resources.Strings;
@@ -41,6 +40,7 @@ public partial class Module
     public bool IsDuckunder { get; set; }
     public bool IsStandAlone { get; set; }
     public bool IsEndOfLine { get; set; }
+    public bool IsEndProfileSwitcher { get; set; }
     public bool IsSignalModule { get; set; }
     public bool IsUnavailable { get; set; }
     public bool HasIntegratedLocoNet { get; set; }
@@ -135,16 +135,18 @@ public static class ModuleExtensions
         {
             text.Append($", {SignalModule}");
         }
-
+        if (me.IsEndProfileSwitcher)
+        {
+            text.Append($", {EndProfileSwitcher}");
+        }
         if (me.IsEndOfLine)
         {
             text.Append($", {EndOfLine}");
         }
-
-        if (me.IsDuckunder) {
+        if (me.IsDuckunder)
+        {
             text.Append($", {Duckunder}");
         }
-
         if (!compact && me.Note.HasValue())
         {
             text.Append(", ");
@@ -207,7 +209,10 @@ public static class ModuleExtensions
             Width = me.Width,
         };
 
-    public static string FullNameAndConfiguration(this Module module) => module.ConfigurationLabel.HasValue() ? $"{module.FullName} {module.ConfigurationLabel.ToLowerInvariant()}" : module.FullName;
+    public static string FullNameAndConfiguration(this Module module) =>
+        module.FremoNumber.HasValue && module.IsOperationsPlace() ? $"{module?.FremoName()} {module?.Station.FullName}" :
+        module.FremoNumber.HasValue ? module?.FremoName() ?? string.Empty :
+        module.ConfigurationLabel.HasValue() ? $"{module.FullName} {module.ConfigurationLabel.ToLowerInvariant()}" : module.FullName;
     public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
     public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) =>
         module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);

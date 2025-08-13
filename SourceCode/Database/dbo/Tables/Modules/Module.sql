@@ -21,6 +21,7 @@
     [IsStandAlone]          BIT            DEFAULT ((1)) NOT NULL,
     [IsEndOfLine]           BIT            DEFAULT ((0)) NOT NULL,
     [IsSignalModule]        BIT            DEFAULT ((0)) NOT NULL,
+    [IsEndProfileSwitcher]  BIT            DEFAULT ((0)) NOT NULL,
     [FunctionalState]       INT            DEFAULT ((0)) NOT NULL,
     [LandscapeState]        INT            DEFAULT ((0)) NOT NULL,
     [LandscapeSeason]       INT            DEFAULT ((0)) NOT NULL,
@@ -46,8 +47,15 @@
     CONSTRAINT [FK_Module_ModuleStandard] FOREIGN KEY ([StandardId]) REFERENCES [dbo].[ModuleStandard] ([Id]),
     CONSTRAINT [FK_Module_PdfDocument] FOREIGN KEY ([PdfDocumentationId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
-    CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id])
 );
 GO
 CREATE INDEX [IX_Module_StationId] ON [Module] ([StationId]);
 GO
+CREATE TRIGGER [DeleteModule] ON [Module] INSTEAD OF DELETE 
+AS
+BEGIN
+    DELETE FROM [Station] WHERE [Id] IN (SELECT [StationId] FROM DELETED)
+    DELETE FROM [LayoutModule] WHERE [ModuleId] IN  (SELECT [Id] FROM DELETED)
+    DELETE FROM [Module] WHERE [Id] IN (SELECT [Id] FROM DELETED)
+END

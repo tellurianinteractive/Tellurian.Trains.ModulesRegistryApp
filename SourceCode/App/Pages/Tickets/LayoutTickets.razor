@@ -1,0 +1,32 @@
+﻿@page "/reports/tickets/layout/{layoutId:int}"
+
+@layout PrintLayout
+@inject IStringLocalizer<App> Localizer
+@inject ILanguageService LanguageService
+@inject LayoutService LayoutService
+
+@foreach (var itemsPerPage in Tickets.ItemsPerPage(Ticket.ItemsPerPage))
+{
+    <div>
+        @foreach (var item in itemsPerPage)
+        {
+            <TicketCard Item="@item"></TicketCard>
+        }
+    </div>
+}
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int LayoutId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<LayoutStation>? Stations;
+    IEnumerable<Ticket> Tickets = Enumerable.Empty<Ticket>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Stations = await LayoutService.GetStationsAsync(Principal, LayoutId);
+        Tickets = Stations.Where(ls => ls.Station.HasPassengerTraffic()).CreateTickets();
+
+    }
+}

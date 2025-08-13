@@ -29,6 +29,10 @@
             <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
             <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
             <AppInputCheck Width="3" Label="IsRegistrationPermitted" @bind-Value="Layout.IsRegistrationPermitted" AlignWithFields=true />
+            @if(Layout.IsRegistrationPermitted)
+            {
+                <AppInputNumber Width="2" @bind-Value="Layout.MaxNumberOfParticipants" Label="MaxNumberOfParticipants" />
+            }
             <h4>@Localizer["GameSettings"]</h4>
             <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
             <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />

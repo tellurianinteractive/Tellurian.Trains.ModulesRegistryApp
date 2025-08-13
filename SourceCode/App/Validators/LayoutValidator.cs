@@ -40,5 +40,8 @@ public class LayoutValidator : AbstractValidator<Layout>
         RuleFor(m => m.LastYear)
             .MustBeValidYear(localizer)
             .WithName(n => localizer[nameof(n.LastYear)]);
+        RuleFor(m => m.MaxNumberOfParticipants)
+            .Empty().When(m => m.MaxNumberOfParticipants is null)
+            .InclusiveBetween(1, 200);
     }
 }
