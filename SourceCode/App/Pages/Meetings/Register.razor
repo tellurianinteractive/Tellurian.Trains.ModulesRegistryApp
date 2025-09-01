@@ -71,7 +71,7 @@ else
                     <th class="noprint">@Localizer["Actions"]</th>
                 </TableHeader>
                 <RowTemplate Context="item">
-                    <td style="@ParticipantStatusStyle(item)">@item.Person.Name() @item.Person.EmailIcon()</td>
+                    <td style="@ParticipantStatusStyle(item)">@item.Person.Name() @item.Person.EmailIcon() @item.ApprovedIcon()</td>
                     @if (Meeting.IsFremo())
                     {
                         <td>@item.Person.FremoNumber()</td>

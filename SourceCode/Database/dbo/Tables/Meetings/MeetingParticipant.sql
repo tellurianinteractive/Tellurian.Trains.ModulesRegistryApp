@@ -13,6 +13,8 @@
     [ParticipateDay6]           BIT                NOT NULL DEFAULT 0,
     [EarliestDepartureTime]     TIME(0) NULL, 
     [LatestArrivalTime]         TIME(0) NULL, 
+    [LastModifiedDateTime] DATETIMEOFFSET NULL, 
+    [ApprovedDateTime] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_MeetingParticipant] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_MeetingParticipant_Meeting] FOREIGN KEY ([MeetingId]) REFERENCES [dbo].[Meeting] ([Id]),
     CONSTRAINT [FK_MeetingParticipant_Person] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id])
@@ -26,3 +28,4 @@ BEGIN
     DELETE FROM [LayoutParticipant] WHERE [MeetingParticipantId] IN (SELECT Id FROM DELETED)
     DELETE FROM [MeetingParticipant] WHERE Id IN (SELECT Id FROM DELETED)
 END
+

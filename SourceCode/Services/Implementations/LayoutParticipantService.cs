@@ -1,8 +1,9 @@
 ﻿namespace ModulesRegistry.Services.Implementations
 {
-    public sealed class LayoutParticipantService(IDbContextFactory<ModulesDbContext> factory)
+    public sealed class LayoutParticipantService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
     {
         private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+        private readonly ITimeProvider TimeProvider = timeProvider;
 
         public async Task<IEnumerable<LayoutParticipant>> GetAllForLayout(ClaimsPrincipal? principal, int layoutId)
         {
@@ -59,6 +60,8 @@
                     if (existing is not null)
                     {
                         dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+                        existing.LastModifiedDateTime = TimeProvider.Now;
                         var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                         return result.SaveResult(existing);
                     }
@@ -66,6 +69,7 @@
                 }
                 else
                 {
+                    entity.LastModifiedDateTime = TimeProvider.Now;
                     dbContext.LayoutParticipants.Add(entity);
                     var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
                     return result.SaveResult(entity);

@@ -9,6 +9,7 @@
 @inject NavigationManager Navigator
 @inject CountryService CountryService
 @inject UserService UserService
+@inject PersonService PersonService
 @inject AppService AppService
 @inject IMailSender MailSender
 
@@ -18,18 +19,31 @@
 
 @if (Users?.Any() == true)
 {
-    <h2>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
-    @if (Principal is not null && Users is not null)
-    {
-        @foreach (var group in Users.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+    <div style="padding: 5px 0px;">
+        <h2>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
+        @if (Principal is not null && People is not null)
         {
-            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+            @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+            {
+                <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+            }
         }
-    }
-    <h2>@Localizer["SendTestMail"]</h2>
-    <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+    </div>
+    <div style="padding: 5px 0px;">
+        <h2>@(string.Format(Localizer["SendMailToAllWithEmail"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
+        @if (Principal is not null && People is not null)
+        {
+            @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+            {
+                <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+            }
+        }
+    </div>
+    <div style="padding: 5px 0px;">
+        <h2>@Localizer["SendTestMail"]</h2>
+        <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+    </div>
 }
-
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
@@ -37,6 +51,9 @@
     private ClaimsPrincipal? Principal;
     private IEnumerable<ListboxItem>? CountryListItems;
     private IEnumerable<User>? Users;
+    private IEnumerable<Person>? People;
+    private IEnumerable<Person> PeopleWithEmail => People?.Where(p => p.EmailAddresses.HasValue()) ?? [];
+    private IEnumerable<Person> PeopleWithUserAccount => People?.Where(p => p.IsActiveUser()) ?? [];
     private Country? CurrentCountry;
 
     private async Task SendTestMail()
@@ -62,7 +79,8 @@
         if (CountryId == 0) CountryId = Principal.CountryId();
         CurrentCountry = await CountryService.FindById(CountryId);
         if (CurrentCountry is null) return;
-        Users = await UserService.GetActiveUsersAsync(Principal, CountryId);
+        People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
+
     }
 
     private void OnSelectedCountry(int id)

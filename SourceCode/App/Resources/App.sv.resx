@@ -1431,6 +1431,9 @@
   <data name="SendMailToAllUsersIn" xml:space="preserve">
     <value>Skicka e-post till alla användare i {0}</value>
   </data>
+  <data name="SendMailToAllWithEmailIn" xml:space="preserve">
+    <value>Skicka e-post till alla med e-postadress i {0}</value>
+  </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Skicka testmejl till dig själv</value>
   </data>

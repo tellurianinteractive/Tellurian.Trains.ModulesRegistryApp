@@ -25,5 +25,9 @@ public partial class User
     public bool MayUploadSkpDrawing { get; set; }
     public bool MayManageWiFreds { get; set; }
     public DateTimeOffset? DeletedTimestamp { get; set; }
+}
 
+public static class UserExtensions
+{
+    public static bool IsActiveUser(this User user) => user.LastSignInTime.HasValue && user.LastTermsOfUseAcceptTime.HasValue;
 }

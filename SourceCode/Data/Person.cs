@@ -65,11 +65,14 @@ public static class PersonExtensions
     public static string? UserStatus(this Person person) =>
         person.User is null ? Strings.No :
         string.IsNullOrWhiteSpace(person.User.HashedPassword) ? Strings.Invited :
-        person.User.LastSignInTime.HasValue ? string.Format(System.Threading.Thread.CurrentThread.CurrentCulture, "{0:g}", person.User.LastSignInTime) :
+        person.User.LastSignInTime.HasValue ? string.Format(Thread.CurrentThread.CurrentCulture, "{0:g}", person.User.LastSignInTime) :
         Strings.Yes;
 
     public static bool IsNeverLoggedIn(this Person? person) =>
-    person is null || person.User is null || person.User.LastSignInTime is null;
+        person is null || person.User is null || person.User.LastSignInTime is null;
+
+    public static bool IsActiveUser(this Person? person) =>
+        person?.User?.IsActiveUser() == true;
 
     public static string FremoNumber(this Person? person) =>
         person is null || !person.FremoMemberNumber.HasValue ? string.Empty :

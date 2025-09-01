@@ -244,6 +244,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                             }
                         }
                     }
+                    participant.LastModifiedDateTime = TimeProvider.Now;
                     dbContext.LayoutModules.Add(layoutModule);
                     await dbContext.SaveChangesAsync();
                 }
@@ -264,7 +265,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.LayoutModules
-                .Include(lm => lm.LayoutStation).ThenInclude(ls => ls.LayoutModules)
+                .Include(lm => lm.LayoutStation).ThenInclude(ls => ls.LayoutModules).ThenInclude(lm=> lm.LayoutParticipant)
                 .SingleOrDefaultAsync(lm => lm.Id == layoutModuleId);
 
             if (existing is null) return (-1, Resources.Strings.NoModification);
@@ -276,6 +277,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             //    dbContext.LayoutStations.Remove(existing.LayoutStation);
             //    var stationRemoved = await dbContext.SaveChangesAsync();
             //}
+            existing.LayoutParticipant.LastModifiedDateTime = TimeProvider.Now;
             dbContext.LayoutModules.Remove(existing); // If there is a layout station associated with this module, all modules referring that layout station are removed. See database table LayoutModule trigger.
             var result = await dbContext.SaveChangesAsync();
             return result.DeleteResult();

@@ -5,4 +5,8 @@ public static class PersonExtensions
         me is null ? string.Empty :
         me.Country is null ? $"{me.Name()}, {me.CityName}" :
         $"{me.Name()}, {me.CityName}, {me.Country.EnglishName.Localized()}";
+
+    public static IEnumerable<MailHolder> MailHolders(this IEnumerable<Person> person) =>
+        person.Select(p => new MailHolder(p.FirstName, p.EmailAddresses));
+
 }

@@ -42,15 +42,15 @@ else
 
     <TableTemplate TItem="LayoutParticipant" Items="FilteredParticipants!.OrderBy(mp => mp.Person.Name())" HideNoRecordsToDisplay="true" RowStyle="RowStyle">
         <TableHeader>
-            <th width="35%">@Localizer["Name"]</th>
-            <th>@Localizer["Participates"]/@Localizer["Modules"]</th>
+            <th width="35%">@Localizer["Name"]/@Localizer["Modules"]</th>
+            <th>@Localizer["Participates"]/@Localizer["Description"]</th>
             <th class="noprint">@Localizer["RegistrationTime"]</th>
             <th class="noprint">@Localizer["Actions"] </th>
         </TableHeader>
         <RowTemplate Context="participant">
             <td style="white-space: nowrap;">@ParticipantNameAndMore(participant)</td>
             <td>@participant.MeetingParticipant.Participates(Localizer)</td>
-            <td class="noprint">@participant.MeetingParticipant.RegistrationTime.ToString("g")</td>
+            <td class="noprint" style="white-space: nowrap;">@participant.MeetingParticipant.RegistrationTime.ToString("d")</td>
             <td><AppButton Type="Edit" Label="@(participant.LayoutModules.Any() ? "Edit-Modules" : "Register-Modules")" Href="@($"MeetingParticipants/{participant.MeetingParticipant.Id}/Layouts/{Layout?.Id}/RegisterModules")" /> </td>
         </RowTemplate>
         <SubRowsTemplate Context="participant">

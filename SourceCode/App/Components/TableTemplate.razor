@@ -13,7 +13,7 @@ else if (Items.Count() == 0 && !HideNoRecordsToDisplay)
 }
 else
 {
-    <table class="table table-sm">
+    <table class="table table-sm" >
         <thead>
             <tr>
                 @TableHeader
@@ -118,7 +118,10 @@ else
 
 
     string? EditedKey = null;
-    bool IsEditItem(TItem item) => EditItemKey(item) == EditedKey;
+    bool IsEditItem(TItem item) {
+        var key = EditItemKey(item);
+
+        return key == EditedKey; }
 
     void Edit(TItem item)
     {

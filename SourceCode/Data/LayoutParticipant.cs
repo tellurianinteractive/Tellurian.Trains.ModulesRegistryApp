@@ -17,6 +17,7 @@ public class LayoutParticipant
     public int PersonId { get; set; }
     public string NoteToOrganiserMarkdown { get; set; }
     public bool BringsModulesAfterAgreement { get; set; }
+    public DateTimeOffset? LastModifiedDateTime { get; set; }
     public virtual MeetingParticipant MeetingParticipant { get; set; }
     public virtual Layout Layout { get; set; }
     public virtual Person Person { get; set; }

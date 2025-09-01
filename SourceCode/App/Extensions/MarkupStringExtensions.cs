@@ -37,4 +37,7 @@ public static class MarkupStringExtensions
 
     public static MarkupString ImageIcon(this Vehicle vehicle) =>
         (vehicle.HasImage() ? $"""<a target="_blank" href="{vehicle.PrototypeImageHref}"><span class="{FontAwesome.Image}"/></a>""" : "").AsMarkup();
+
+    public static MarkupString ApprovedIcon(this MeetingParticipant participant) =>
+        (participant.IsApproved() ? """<span class="fa fa-check-circle""/>""" : string.Empty).AsMarkup();
 }

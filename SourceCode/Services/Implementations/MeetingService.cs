@@ -195,7 +195,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             if (existing is null) return (-1).DeleteResult();
             dbContext.Layouts.Remove(existing);
             var result = await dbContext.SaveChangesAsync();
-            
+
             return result.DeleteResult();
         }
         return principal.NotAuthorized<Layout>();
@@ -231,7 +231,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.MeetingAdministrators.AsNoTracking()
-            .AnyAsync(ma =>  ma.PersonId == principal.PersonId() && (ma.MeetingId == meeting.Id || ma.GroupId == meeting.OrganiserGroupId))
+            .AnyAsync(ma => ma.PersonId == principal.PersonId() && (ma.MeetingId == meeting.Id || ma.GroupId == meeting.OrganiserGroupId))
             .ConfigureAwait(false);
     }
 
@@ -284,14 +284,16 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
                     .ConfigureAwait(false);
                 if (existing is null)
                 {
+                    entity.LastModifiedDateTime = TimeProvider.Now;
                     entity.RegistrationTime = TimeProvider.Now;
                     dbContext.MeetingParticipants.Add(entity);
-                    
+
                 }
                 else
                 {
                     dbContext.Entry(existing).CurrentValues.SetValues(entity);
                     if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+                    existing.LastModifiedDateTime = TimeProvider.Now;
                 }
                 var result = await dbContext
                     .SaveChangesAsync()
@@ -317,6 +319,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
                 .ConfigureAwait(false);
             if (existing is null) return Resources.Strings.NotFound.DeleteResult();
             if (existing.LayoutParticipations.Sum(lp => lp.LayoutModules.Count) > 0) return Resources.Strings.ParticipantHasRegisteredModules.DeleteResult();
+            existing.LastModifiedDateTime = TimeProvider.Now;
             existing.CancellationTime = TimeProvider.Now;
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();
@@ -334,6 +337,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
                 .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)
                 .ConfigureAwait(false);
             if (existing is null) return Resources.Strings.NotFound.SaveResult<MeetingParticipant>();
+            existing.LastModifiedDateTime = TimeProvider.Now;
             existing.CancellationTime = null;
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.SaveResult(existing);

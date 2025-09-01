@@ -25,6 +25,8 @@ public class MeetingParticipant
 
     public DateTimeOffset RegistrationTime { get; set; }
     public DateTimeOffset? CancellationTime { get; set; }
+    public DateTimeOffset? ApprovedDateTime { get; set; }
+    public DateTimeOffset? LastModifiedDateTime { get; set; }
 
     public virtual Person Person { get; set; }
     public virtual Meeting Meeting { get; set; }
@@ -57,6 +59,17 @@ public static class MeetingParticipantMapping
 public static class MeetingParticipantExtensions
 {
     public static bool IsCancelled(this MeetingParticipant participant) => participant.CancellationTime.HasValue;
+    public static bool IsApproved(this MeetingParticipant participant) =>
+        participant.IsCancelled() == false && 
+        participant.ApprovedDateTime > participant.LastModifiedDateTimeIncludingLayouts();
+
+    private static DateTimeOffset? LastModifiedDateTimeIncludingLayouts(this MeetingParticipant participant)
+    {
+        var values = new List<DateTimeOffset>();
+        if (participant.LastModifiedDateTime.HasValue) { values.Add(participant.LastModifiedDateTime.Value); }
+        values.AddRange(participant.LayoutParticipations.Where(lp => lp.LastModifiedDateTime.HasValue).Select(lp => lp.LastModifiedDateTime!.Value));
+        return values.Count != 0 ? values.Max() : null;
+    }
 
     public static bool IsParticipating(this MeetingParticipant participant) => !participant.IsCancelled();
     public static DateTime FirstParticpationDate(this MeetingParticipant participant) =>

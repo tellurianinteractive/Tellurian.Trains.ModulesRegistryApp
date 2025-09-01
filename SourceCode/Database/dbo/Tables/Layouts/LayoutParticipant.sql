@@ -5,6 +5,7 @@
     [LayoutId]              INT                NOT NULL,
     [NoteToOrganiserMarkdown] NVARCHAR(MAX) NULL, 
     [BringsModulesAfterAgreement] BIT NOT NULL DEFAULT 0, 
+    [LastModifiedDateTime] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_LayoutParticipant] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_LayoutParticipant_MeetingParticipant] FOREIGN KEY ([MeetingParticipantId]) REFERENCES [dbo].[MeetingParticipant] ([Id]),
     CONSTRAINT [FK_LayoutParticipant_Person] FOREIGN KEY ([PersonId]) REFERENCES [dbo].[Person] ([Id]),

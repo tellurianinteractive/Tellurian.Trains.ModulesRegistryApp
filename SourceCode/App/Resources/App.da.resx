@@ -1431,6 +1431,9 @@
   <data name="SendMailToAllUsersIn" xml:space="preserve">
     <value>Send mail til alle brugere i {0}</value>
   </data>
+  <data name="SendMailToAllWithEmailIn" xml:space="preserve">
+    <value>Send mail til alle med e-mailadresse i {0}</value>
+  </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Send en testmail til dig selv</value>
   </data>
@@ -1594,7 +1597,7 @@
     <value>Upload dokumenter</value>
   </data>
   <data name="UploadOfFile" xml:space="preserve">
-    <value>Upload af fil {0} </value>
+    <value>Upload af fil {0}</value>
   </data>
   <data name="UptoYear" xml:space="preserve">
     <value>Op til år</value>

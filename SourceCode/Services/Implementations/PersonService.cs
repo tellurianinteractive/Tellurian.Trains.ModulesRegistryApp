@@ -58,7 +58,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.People
-                  .Where(p => p.CountryId == countryId && p.Id == principal.PersonId())
+                  .Where(p => p.CountryId == countryId && p.Id == principal.PersonId())  // Limits access to current user.
                   .Include(p => p.User)
                   .OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
                   .ToListAsync();
