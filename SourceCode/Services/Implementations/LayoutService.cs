@@ -44,6 +44,8 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             return await dbContext.LayoutStations.AsNoTracking()
                 .Include(ls => ls.LayoutParticipant).ThenInclude(lp => lp.MeetingParticipant).ThenInclude(mp => mp.Meeting)
                 .Include(ls => ls.Station).ThenInclude(s => s.StationTracks)
+                .Include(ls => ls.OtherCountry)
+                .Include(ls => ls.Station).ThenInclude(s => s.Region).ThenInclude(s => s.Country)
                 .Where(ls => ls.LayoutParticipant.LayoutId == layoutId)
                 .ToListAsync();
         }

@@ -745,6 +745,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to from.
+        /// </summary>
+        internal static string From {
+            get {
+                return ResourceManager.GetString("From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Germany.
         /// </summary>
         internal static string Germany {
@@ -1465,6 +1474,15 @@ namespace ModulesRegistry.Services.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Round trip.
+        /// </summary>
+        internal static string RoundTrip {
+            get {
+                return ResourceManager.GetString("RoundTrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sack.
         /// </summary>
         internal static string Sack {
@@ -1551,6 +1569,15 @@ namespace ModulesRegistry.Services.Resources {
         internal static string Slovakia {
             get {
                 return ResourceManager.GetString("Slovakia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sold by {0} in {1}.
+        /// </summary>
+        internal static string SoldBy {
+            get {
+                return ResourceManager.GetString("SoldBy", resourceCulture);
             }
         }
         
@@ -1677,6 +1704,24 @@ namespace ModulesRegistry.Services.Resources {
         internal static string ThursdayShort {
             get {
                 return ResourceManager.GetString("ThursdayShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ticket.
+        /// </summary>
+        internal static string Ticket {
+            get {
+                return ResourceManager.GetString("Ticket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ticket is valid to {0:d}.
+        /// </summary>
+        internal static string TicketIsValidTo {
+            get {
+                return ResourceManager.GetString("TicketIsValidTo", resourceCulture);
             }
         }
         

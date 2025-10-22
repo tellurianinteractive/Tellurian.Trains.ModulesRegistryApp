@@ -126,9 +126,6 @@
   <data name="Accomodation" xml:space="preserve">
     <value>Accomodation</value>
   </data>
-  <data name="Accomodation2" xml:space="preserve">
-    <value>Accomodation</value>
-  </data>
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
@@ -1050,6 +1047,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NameBadges" xml:space="preserve">
+    <value>Name badges</value>
+  </data>
   <data name="NarrowGauge" xml:space="preserve">
     <value>Narrow gauge</value>
   </data>
@@ -1269,6 +1269,9 @@
   <data name="PasswordResetMailSent" xml:space="preserve">
     <value>Password reset mail sent</value>
   </data>
+  <data name="PeopleWithoutEmailAddressIn" xml:space="preserve">
+    <value>People without email address in {0}</value>
+  </data>
   <data name="PeriodInThisVersion" xml:space="preserve">
     <value>Period in this version</value>
   </data>
@@ -1391,9 +1394,6 @@
   </data>
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Rolls sluggishly</value>
-  </data>
-  <data name="RoundTrip" xml:space="preserve">
-    <value>Round trip</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -1527,9 +1527,6 @@
   <data name="Throttles" xml:space="preserve">
     <value>Throttles</value>
   </data>
-  <data name="Ticket" xml:space="preserve">
-    <value>Ticket</value>
-  </data>
   <data name="Tickets" xml:space="preserve">
     <value>Tickets</value>
   </data>
@@ -1538,6 +1535,9 @@
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
+  </data>
+  <data name="TotalCount" xml:space="preserve">
+    <value>Total {0}</value>
   </data>
   <data name="TotalTrackMeters" xml:space="preserve">
     <value>Total length {0:F0}m</value>

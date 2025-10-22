@@ -6,6 +6,9 @@
     width: 48mm;
     padding: 5px 5px;
 }
+.logo {
+    height: 0.6cm;
+}
 
 .heading {
     text-align: center;
@@ -25,6 +28,10 @@
     }
 
 .validity {
-    margin-top: 1cm;
+    margin-top: 5mm;
+    font-size: 8pt;
+}
+
+.note {
     font-size: 8pt;
 }

@@ -1,0 +1,16 @@
+﻿@if (Meeting is not null && Participant is not null)
+{
+    <Pocket >
+        <div style="width: 52mm; height: 92mm; writing-mode: vertical-rl; vertical-align: middle; text-align: center; font-weight: bold; padding: 0px">
+            <h2>@Meeting.Name</h2>
+            <h1>@Participant.Person.Name()</h1>
+            <h3>@Participant.Person.CityName, @Participant.Person.Country.EnglishName</h3>
+        </div>
+    </Pocket>
+}
+
+@code {
+    [Parameter] public Meeting? Meeting { get; set; }
+
+    [Parameter] public MeetingParticipant? Participant {get;set;}
+}

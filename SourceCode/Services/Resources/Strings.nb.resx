@@ -345,6 +345,9 @@
   <data name="FridayShort" xml:space="preserve">
     <value>F</value>
   </data>
+  <data name="From" xml:space="preserve">
+    <value>fra</value>
+  </data>
   <data name="Germany" xml:space="preserve">
     <value>Tyskland</value>
   </data>
@@ -582,6 +585,9 @@
   <data name="Rolls" xml:space="preserve">
     <value>Ruller</value>
   </data>
+  <data name="RoundTrip" xml:space="preserve">
+    <value>Tur-Retur</value>
+  </data>
   <data name="Sack" xml:space="preserve">
     <value>Sekk</value>
   </data>
@@ -611,6 +617,9 @@
   </data>
   <data name="Slovakia" xml:space="preserve">
     <value>Slovakia</value>
+  </data>
+  <data name="SoldBy" xml:space="preserve">
+    <value>Solgt av {0} i {1}</value>
   </data>
   <data name="Southwards" xml:space="preserve">
     <value>Sørover</value>
@@ -653,6 +662,12 @@
   </data>
   <data name="ThursdayShort" xml:space="preserve">
     <value>To</value>
+  </data>
+  <data name="Ticket" xml:space="preserve">
+    <value>Billett</value>
+  </data>
+  <data name="TicketIsValidTo" xml:space="preserve">
+    <value>Billetten er gyldig til {0:d}</value>
   </data>
   <data name="To" xml:space="preserve">
     <value>til</value>

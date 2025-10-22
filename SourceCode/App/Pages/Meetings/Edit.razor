@@ -36,6 +36,7 @@
         @if(Meeting.Id > 0)
         {
             <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
+            <AppButton Label="NameBadges" Href="@NameBadgesHref(Id)" IconName="Badge" />
         }
        
     </Buttons>
@@ -114,6 +115,7 @@
 
 
     string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
+    string NameBadgesHref(int meetingId) => $"meetings/{meetingId}/namebadges";
     string MeetingHref(int meetingId, string? function) => function.HasNoValue() ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";
 
 }

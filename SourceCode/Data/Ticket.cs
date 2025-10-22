@@ -1,8 +1,8 @@
 ﻿namespace ModulesRegistry.Data;
-public record Ticket(LayoutStation From, LayoutStation To)
+public record Ticket(LayoutStation From, LayoutStation To, LayoutStation Seller)
 {
     public const int ItemsPerPage = 12;
-
+    public Country? Country => Seller.Country();
 }
 
 public static class TicketBuilder
@@ -15,13 +15,12 @@ public static class TicketBuilder
             {
                 if (fromStation.Id != toStation.Id)
                 {
-                    yield return new Ticket(fromStation, toStation);
-                    yield return new Ticket(toStation, fromStation);
+                    yield return new Ticket(fromStation, toStation, fromStation);
+                    yield return new Ticket(toStation, fromStation, fromStation);
                 }
             }
         }
     }
 
-    public static string Validity(this Ticket ticket) =>
-        string.Format(Resources.Strings.TicketIsValidTo, ticket.From.LayoutParticipant.MeetingParticipant.Meeting.EndDateOrTimes());
+    
 }

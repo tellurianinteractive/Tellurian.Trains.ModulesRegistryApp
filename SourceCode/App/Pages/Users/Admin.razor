@@ -17,43 +17,52 @@
 
 <ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId />
 
-@if (Users?.Any() == true)
+
+@if (PeopleWithUserAccount.Any())
 {
     <div style="padding: 5px 0px;">
-        <h2>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
-        @if (Principal is not null && People is not null)
+        <h3>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
+        @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
         {
-            @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
-            {
-                <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
-            }
+            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
         }
-    </div>
-    <div style="padding: 5px 0px;">
-        <h2>@(string.Format(Localizer["SendMailToAllWithEmail"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h2>
-        @if (Principal is not null && People is not null)
-        {
-            @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
-            {
-                <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
-            }
-        }
-    </div>
-    <div style="padding: 5px 0px;">
-        <h2>@Localizer["SendTestMail"]</h2>
-        <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+        <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], PeopleWithUserAccount.Count())</span>
     </div>
 }
+@if (PeopleWithEmail.Any())
+{
+    <div style="padding: 5px 0px;">
+        <h3>@(string.Format(Localizer["SendMailToAllWithEmailIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
+        @foreach (var group in PeopleWithEmail.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
+        {
+            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+        }
+        <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], PeopleWithEmail.Count())</span>
+    </div>
+}
+@if (PeopleWithoutMail.Any())
+{
+    <h3>@(string.Format(Localizer["PeopleWithoutEmailAddressIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
+    <div>
+        @string.Join(", ", PeopleWithoutMail.Select(p => p.Name()))
+    </div>
+
+}
+<div style="padding: 5px 0px;">
+    <h3>@Localizer["SendTestMail"]</h3>
+    <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+</div>
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<ListboxItem>? CountryListItems;
-    private IEnumerable<User>? Users;
     private IEnumerable<Person>? People;
-    private IEnumerable<Person> PeopleWithEmail => People?.Where(p => p.EmailAddresses.HasValue()) ?? [];
-    private IEnumerable<Person> PeopleWithUserAccount => People?.Where(p => p.IsActiveUser()) ?? [];
+    private IEnumerable<Person> PeopleWithEmail = [];
+    private IEnumerable<Person> PeopleWithoutMail = [];
+    private IEnumerable<Person> PeopleWithUserAccount = [];
     private Country? CurrentCountry;
 
     private async Task SendTestMail()
@@ -80,7 +89,9 @@
         CurrentCountry = await CountryService.FindById(CountryId);
         if (CurrentCountry is null) return;
         People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
-
+        PeopleWithEmail = People?.Where(p => p.EmailAddresses.HasValue()) ?? [];
+        PeopleWithoutMail = People?.Where(p => p.EmailAddresses.HasNoValue()) ?? [];
+        PeopleWithUserAccount = People?.Where(p => p.IsActiveUser()) ?? [];
     }
 
     private void OnSelectedCountry(int id)

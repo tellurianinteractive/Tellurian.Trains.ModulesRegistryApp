@@ -1047,6 +1047,9 @@
   <data name="Name" xml:space="preserve">
     <value>Namn</value>
   </data>
+  <data name="NameBadges" xml:space="preserve">
+    <value>Namnskyltar</value>
+  </data>
   <data name="NarrowGauge" xml:space="preserve">
     <value>Smalspår</value>
   </data>
@@ -1266,6 +1269,9 @@
   <data name="PasswordResetMailSent" xml:space="preserve">
     <value>E -postmeddelande för återställning av lösenord har skickats</value>
   </data>
+  <data name="PeopleWithoutEmailAddressIn" xml:space="preserve">
+    <value>Personer utan e-postadress i {0}</value>
+  </data>
   <data name="PeriodInThisVersion" xml:space="preserve">
     <value>Period i detta utförande </value>
   </data>
@@ -1388,9 +1394,6 @@
   </data>
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Rullar trögt</value>
-  </data>
-  <data name="RoundTrip" xml:space="preserve">
-    <value>Tur och retur</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Spara</value>
@@ -1524,9 +1527,6 @@
   <data name="Throttles" xml:space="preserve">
     <value>Körhandtag</value>
   </data>
-  <data name="Ticket" xml:space="preserve">
-    <value>Biljett</value>
-  </data>
   <data name="Tickets" xml:space="preserve">
     <value>Biljetter</value>
   </data>
@@ -1535,6 +1535,9 @@
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Verktyg</value>
+  </data>
+  <data name="TotalCount" xml:space="preserve">
+    <value>Totalt {0}</value>
   </data>
   <data name="TotalTrackMeters" xml:space="preserve">
     <value>Total längd {0:F0}m</value>

@@ -4,19 +4,23 @@
 {
     <Pocket>
         <div class="ticket">
-            <div class="heading">@Localizer["Ticket"]</div>
-            <div class="heading">@Localizer["RoundTrip"]</div>
+            <div class="logo"><img class="logo" src="@OperatorLogoUrl(Item)" /></div>
+            <div class="heading">@("Ticket".GetLocalizedString(TicketLanguageCode(Item)))</div>
+            <div class="heading">@("RoundTrip".GetLocalizedString(TicketLanguageCode(Item)))</div>
 
             <div class="from">
-                <span class="from label">@Localizer["From"]</span>
+                <span class="from label">@("From".GetLocalizedString(TicketLanguageCode(Item)))</span>
                 <span class="from name" style="font-size: @StationNameTextSize(Item.From.NameInLayout())">@Item.From.NameInLayout()</span>
             </div>
             <div class="from">
-                <span class="from label">@Localizer["To"]</span>
+                <span class="from label">@("To".GetLocalizedString(TicketLanguageCode(Item)))</span>
                 <span class="from name" style="font-size: @StationNameTextSize(Item.To.NameInLayout())">@Item.To.NameInLayout().ToUpperInvariant()</span>
             </div>
             <div class="validity">
-                @Item.Validity()
+                @Validity(Item)
+            </div>
+            <div class="note">
+                <span>@string.Format("SoldBy".GetLocalizedString(TicketLanguageCode(Item)), OperatorSignature(Item), Item.Seller.NameInLayout())</span>
             </div>
         </div>
     </Pocket>
@@ -34,5 +38,27 @@
     const string Large = "14pt";
     const string Small = "12pt";
 
+    static string Validity(Ticket ticket) =>
+        string.Format("TicketIsValidTo".GetLocalizedString(TicketLanguageCode(ticket)), ticket.From.LayoutParticipant.MeetingParticipant.Meeting.EndDateOrTimes());
+
+    static string TicketLanguageCode(Ticket ticket) => ticket.Country?.Languages.FirstItem() ?? "en";
+
+    //TODO: This is a hack, shoud be configured in datbase.
+    static string OperatorLogoUrl(Ticket ticket) => ticket.Country?.DomainSuffix switch
+    {
+        "se" when ticket.Seller.NameInLayout() == "Tosselilla" => "/images/TGOJ.jpg",
+        "se" => "/images/SJ 1970 logo.jpg",
+        "no" => "/images/NSB.png",
+        _ => string.Empty,
+    };
+
+    //TODO: This is a hack, shoud be configured in datbase.
+    static string OperatorSignature(Ticket ticket) => ticket.Country?.DomainSuffix switch
+    {
+        "se" when ticket.Seller.NameInLayout() == "Tosselilla" => "TGOJ",
+        "se" => "SJ",
+        "no" => "NSB",
+        _ => string.Empty,
+    };
 
 }

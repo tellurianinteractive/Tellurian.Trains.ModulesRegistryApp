@@ -3,6 +3,7 @@
 public static class FontAwesome
 {
     public const string Add = "fa fa-plus-square";
+    public const string Badge = "fa fa-id-badge";
     public const string Cancel = "fa fa-user-slash";
     public const string Cargo = "fa fa-box-open";
     public const string Clone = "fa fa-clone";
@@ -65,6 +66,7 @@ public static class FontAwesome
     public readonly static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
         {
             {nameof(Add), Add },
+            {nameof(Badge), Badge },
             {nameof(Cancel), Cancel },
             {nameof(Cargo), Cargo },
             {nameof(Clone), Clone },

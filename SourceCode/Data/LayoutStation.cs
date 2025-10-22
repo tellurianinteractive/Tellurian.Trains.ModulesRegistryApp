@@ -37,9 +37,10 @@ public static class LayoutStationExtensions
          me is null ? string.Empty :
          me.OtherSignature ?? me.Station?.Signature ?? $"Signature missing for {me.Id}";
 
-    public static string CountryEnglishName(this LayoutStation? me) =>
-        me is null ? string.Empty :
-        me.OtherCountry?.EnglishName ?? me.Station?.Region?.Country?.EnglishName ?? string.Empty;
+    public static Country? Country(this LayoutStation? me) =>
+        me is null ? null:
+        me.OtherCountry is not null ? me.OtherCountry :
+        me.Station?.Region?.Country;
 
 }
 

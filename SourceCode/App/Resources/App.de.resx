@@ -1047,6 +1047,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NameBadges" xml:space="preserve">
+    <value>Namensschilder</value>
+  </data>
   <data name="NarrowGauge" xml:space="preserve">
     <value>Schmalspur</value>
   </data>
@@ -1266,6 +1269,9 @@
   <data name="PasswordResetMailSent" xml:space="preserve">
     <value>E-Mail zum Zurücksetzen des Passworts gesendet</value>
   </data>
+  <data name="PeopleWithoutEmailAddressIn" xml:space="preserve">
+    <value>Personen ohne E-Mail-Adresse in {0}</value>
+  </data>
   <data name="PeriodInThisVersion" xml:space="preserve">
     <value>Zeitraum in dieser Version</value>
   </data>
@@ -1388,9 +1394,6 @@
   </data>
   <data name="RollsSluggishly" xml:space="preserve">
     <value>Rollt träge</value>
-  </data>
-  <data name="RoundTrip" xml:space="preserve">
-    <value>Hin- und Rückfahrt</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Speichern</value>
@@ -1524,9 +1527,6 @@
   <data name="Throttles" xml:space="preserve">
     <value>Handregler</value>
   </data>
-  <data name="Ticket" xml:space="preserve">
-    <value>Fahrschein</value>
-  </data>
   <data name="Tickets" xml:space="preserve">
     <value>Fahrscheinen</value>
   </data>
@@ -1535,6 +1535,9 @@
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Werkzeug</value>
+  </data>
+  <data name="TotalCount" xml:space="preserve">
+    <value>Gesamt {0}</value>
   </data>
   <data name="TotalTrackMeters" xml:space="preserve">
     <value>Gesamtlänge {0:F0}m</value>

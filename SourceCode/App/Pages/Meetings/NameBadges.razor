@@ -1,0 +1,44 @@
+﻿@page "/Meetings/{MeetingId:int}/NameBadges"
+
+@attribute [Authorize(Policy = "User")]
+
+@layout PrintLayout
+
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject MeetingService MeetingService
+
+@if (Meeting is not null)
+{
+
+    @foreach (var itemsPerPage in Meeting.Participants.Where(p => p.IsParticipating()).OrderBy(p => p.Person.Name()).ItemsPerPage(ItemsPerPage))
+    {
+        <div>
+            @foreach (var participant in itemsPerPage)
+            {
+                <NameBadge Meeting="Meeting" Participant="participant" />
+            }
+        </div>
+    }
+}
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int MeetingId { get; set; }
+    ClaimsPrincipal? Principal;
+    Meeting? Meeting;
+    bool MayPrint;
+    const int ItemsPerPage = 12;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Meeting = await MeetingService.FindByIdWithParticipantsAsync(Principal, MeetingId);
+        if (Meeting is not null)
+        {
+            MayPrint = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
+        }
+    }
+}
