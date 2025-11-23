@@ -22,7 +22,7 @@ public class VehicleImporterTests
         var importer = app.Services.GetService<VehiclesImporter>();
         var result = await importer!.ImportFromCsv("Test data\\LokExportModulregistret.txt", cancellationSource.Token);
  
-        Assert.IsTrue(result.Count() > 0);
+        Assert.IsGreaterThan(0, result.Count());
     }
 
     [TestMethod]
@@ -34,7 +34,7 @@ public class VehicleImporterTests
 
         var importer = app.Services.GetService<VehiclesImporter>();
         var result = await importer!.ImportLocos("Test data\\LokExportModulregistret.txt", cancellationSource.Token);
-        Assert.IsTrue(result > 0);
+        Assert.IsGreaterThan(0, result);
     }
 
     [TestMethod]
@@ -46,7 +46,7 @@ public class VehicleImporterTests
 
         var importer = app.Services.GetService<VehiclesImporter>();
         var result = await importer!.UpdateLocos("Test data\\LokExportModulregistret.txt", cancellationSource.Token);
-        Assert.IsTrue(result > 0);
+        Assert.IsGreaterThan(0, result);
 
     }
 }

@@ -18,7 +18,7 @@
 <ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId />
 
 
-@if (PeopleWithUserAccount.Any())
+@if (PeopleWithUserAccount.Any() && Principal is not null)
 {
     <div style="padding: 5px 0px;">
         <h3>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
@@ -29,7 +29,7 @@
         <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], PeopleWithUserAccount.Count())</span>
     </div>
 }
-@if (PeopleWithEmail.Any())
+@if (PeopleWithEmail.Any() && Principal is not null)
 {
     <div style="padding: 5px 0px;">
         <h3>@(string.Format(Localizer["SendMailToAllWithEmailIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>

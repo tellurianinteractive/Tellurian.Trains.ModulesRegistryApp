@@ -267,7 +267,8 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.LayoutModules
-                .Include(lm => lm.LayoutStation).ThenInclude(ls => ls.LayoutModules).ThenInclude(lm=> lm.LayoutParticipant)
+                .Include(lm => lm.LayoutStation).ThenInclude(ls => ls.LayoutModules)
+                .Include(lm => lm.LayoutParticipant)
                 .SingleOrDefaultAsync(lm => lm.Id == layoutModuleId);
 
             if (existing is null) return (-1, Resources.Strings.NoModification);

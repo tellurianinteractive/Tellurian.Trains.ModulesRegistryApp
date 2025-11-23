@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Data;
 using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Api;
 
+[ProducesResponseType(typeof(IEnumerable<Meeting>), 200)]
 [Route("api/meetings")]
+[ApiController]
 public class MeetingController(MeetingService meetingService) : ControllerBase
 {
     private readonly MeetingService MeetingService = meetingService;

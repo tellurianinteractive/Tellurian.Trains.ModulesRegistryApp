@@ -24,7 +24,7 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
         var objectId = principal.ObjectId();
         if (objectId is null) return principal;
         var objectGuid = Guid.Parse(objectId);
-        var user = await db.Users.Where(u => u.ObjectId == objectGuid).SingleOrDefaultAsync().ConfigureAwait(false);
+        var user = await db.Users.SingleOrDefaultAsync(u => objectGuid == u.ObjectId).ConfigureAwait(false);
         if (user is null) return principal;
 
         foreach (var claim in await GetUserClaimsAsync(user).ConfigureAwait(false))

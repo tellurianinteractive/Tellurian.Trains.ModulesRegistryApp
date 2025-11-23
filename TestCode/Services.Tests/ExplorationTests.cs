@@ -1,10 +1,10 @@
-using Azure.Messaging.EventGrid.SystemEvents;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModulesRegistry.Data;
 using ModulesRegistry.Security;
+
+[assembly: Parallelize]
 
 #pragma warning disable IDE0051 // Remove unused private members
 

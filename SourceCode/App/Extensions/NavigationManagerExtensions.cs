@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace ModulesRegistry.Extensions;
 
@@ -31,4 +33,17 @@ public static class NavigationManagerExtensions
         value = default!;
         return false;
     }
+
+    public static NameValueCollection QueryString(this NavigationManager navigationManager)
+    {
+        return HttpUtility.ParseQueryString(new Uri(navigationManager.Uri.ToLowerInvariant()).Query);
+    }
+
+    // get single querystring value with specified key
+    public static string? QueryString(this NavigationManager navigationManager, string key)
+    {
+        return navigationManager.QueryString()[key.ToLowerInvariant()];
+    }
 }
+
+

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ModulesRegistry.Data.Api;
 using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Api;
 
+[ProducesResponseType(typeof(IEnumerable<CargoType>), 200)]
 [Route("api/cargoes")]
 [ApiController]
 public class CargoController(CargoService cargoService) : ControllerBase

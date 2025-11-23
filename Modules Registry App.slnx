@@ -1,0 +1,41 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="NET-development.md" />
+    <File Path="NET-development.sv.md" />
+    <File Path="README.md" />
+    <File Path="RELEASENOTES.md" />
+  </Folder>
+  <Folder Name="/Solution Items/System design documents/">
+    <File Path="Security.md" />
+    <File Path="System Design Documents/Creations of waybills.md" />
+    <File Path="System Design Documents/Overview.md" />
+    <File Path="System Design Documents/WiFredThrottles.md" />
+  </Folder>
+  <Project Path="SourceCode/App/App.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="SourceCode/Data.Api/Data.Api.csproj" />
+  <Project Path="SourceCode/Data/Data.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="SourceCode/Database/Database.sqlproj" Id="4a4992f4-a2fe-42ac-a2a8-8218900c5966">
+    <Platform Project="AnyCPU" />
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="SourceCode/Services/Services.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="TestCode/Data.Tests/Data.Tests.csproj" />
+  <Project Path="TestCode/Services.Tests/Services.Tests.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>

@@ -83,8 +83,8 @@ public class ModuleOwnershipTestsKD
 
     private static void AssertModuleId((ModuleOwnership from, ModuleOwnership to) transfer)
     {
-        Assert.IsFalse(transfer.from.ModuleId == 0);
-        Assert.IsTrue(transfer.to.ModuleId == transfer.from.ModuleId);
+        Assert.AreNotEqual(0, transfer.from.ModuleId);
+        Assert.AreEqual(transfer.from.ModuleId, transfer.to.ModuleId);
 
     }
 

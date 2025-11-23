@@ -4,13 +4,14 @@ using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using ModulesRegistry;
 using ModulesRegistry.Data;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ if (builder.Environment.IsProduction())
 builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
 builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("Brevo"));
 builder.Services.AddScoped<AppService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 if (builder.Environment.IsDevelopment())
 {
@@ -37,27 +39,60 @@ else
 {
     builder.Services.AddSingleton(new DefaultUser());
 }
+
 builder.Services.AddRazorPages();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.AllowTrailingCommas = true;
     options.JsonSerializerOptions.WriteIndented = true;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.MaxDepth = 200;
 });
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Modules Registry API", Version = "v1" }));
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Info.Version = "1.0";
+        document.Info.Title = "Module Registry API";
+        document.Info.Description = "API for accessing some data from the Module Registry.";
+        document.Info.TermsOfService = new Uri("https://github.com/tellurianinteractive/Tellurian.Trains.ModuleRegistryApp/wiki/Terms-of-Use");
+        document.Info.Contact = new OpenApiContact
+        {
+            Name = "Stefan Fjällemark",
+            Email = "stefan@tellurian.se",
+            Url = new Uri("https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp")
+        };
+        document.Info.License = new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT")
+        };
+        return Task.CompletedTask;
+    });
+});
+
+
 builder.Services.AddServerSideBlazor()
     .AddCircuitOptions(options =>
     {
         options.DetailedErrors = true;
         options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(20);
     });
+
 if (builder.Environment.IsProduction())
+{
     builder.Services.AddSignalR(options =>
     {
-        options.KeepAliveInterval = TimeSpan.FromSeconds(10);
-        options.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
+        options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+        options.ClientTimeoutInterval = TimeSpan.FromMinutes(3);
         options.HandshakeTimeout = TimeSpan.FromMinutes(1);
     }
-    ).AddAzureSignalR(options => options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required);
+    ).AddAzureSignalR(options =>
+    {
+        options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required;
+    }
+    );
+}
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContextAccessor>();
 builder.Services.AddHttpClient();
@@ -65,24 +100,27 @@ builder.Services.AddScoped<HttpClient>();
 builder.Services.AddAuthorizationPolicies();
 builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
 {
-options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
-    options =>
-    {
-        options.CommandTimeout(60);
-        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-    }).EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
+        options =>
+        {
+            options.CommandTimeout(60);
+            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+        }).EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
 
 });
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredLocalStorage();
+
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 builder.Services.AddScoped<ILanguageService, LanguageService>();
 builder.Services.AddScoped<ITimeProvider, SystemTimeProvider>();
+
 builder.Services.AddScoped<PageHistory>();
 if (builder.Environment.IsProduction())
     builder.Services.AddScoped<IMailSender, CloudMailSender>();
 if (builder.Environment.IsDevelopment())
     builder.Services.AddScoped<IMailSender, CloudMailSender>();
+
 builder.Services.AddScoped<CargoService>();
 builder.Services.AddScoped<ContentService>();
 builder.Services.AddScoped<CountryService>();
@@ -113,7 +151,6 @@ builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 
-
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 var app = builder.Build();
@@ -121,8 +158,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 else app.UseExceptionHandler("/Error");
 app.UseSecurityHeaders(SecurityHeadersPolicy.CreateSecurityHeaderCollection(app.Environment));
-app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Modules Registry API"));
+
+app.MapOpenApi("openapi/{document}/openapi.json");
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("openapi/v1/openapi.json", "Version 1 documentation");
+    c.DocumentTitle = "Tellurian Module Registry App Open API";
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

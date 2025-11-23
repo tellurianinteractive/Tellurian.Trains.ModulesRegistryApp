@@ -1,5 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+[assembly: Parallelize]
 namespace ModulesRegistry.Data.Tests;
 
 [TestClass]

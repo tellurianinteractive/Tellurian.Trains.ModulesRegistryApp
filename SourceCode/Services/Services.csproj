@@ -2,17 +2,16 @@
   <PropertyGroup>
     <AssemblyName>ModulesRegistry.Services</AssemblyName>
     <RootNamespace>ModulesRegistry.Services</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.15.0" />
-    <PackageReference Include="Markdig" Version="0.41.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="Markdig" Version="0.43.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data.Api\Data.Api.csproj" />

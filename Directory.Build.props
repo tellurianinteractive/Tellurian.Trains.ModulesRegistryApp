@@ -1,8 +1,9 @@
 <Project>
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Platform>AnyCPU</Platform>
-		<Version>1.12.16</Version>
+		<Version>1.13.0</Version>
+		<AssemblyVersion>1.13.0</AssemblyVersion>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<NeutralLanguage>en-150</NeutralLanguage>
 	</PropertyGroup>

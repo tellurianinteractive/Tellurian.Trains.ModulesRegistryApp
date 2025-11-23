@@ -38,7 +38,7 @@ public class OperatingDayTests
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         const byte flags = 0b_1111_1111;
         var days = flags.GetDays(true);
-        Assert.AreEqual(1, days.Length);
+        Assert.HasCount(1, days);
         Assert.AreEqual(0, days[0].Number);
         Assert.AreEqual("On demand", flags.OperationDays(true).ShortName);
     }
@@ -48,7 +48,7 @@ public class OperatingDayTests
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         const byte flags = 0b_0111_1111;
         var days = flags.GetDays(false, true);
-        Assert.AreEqual(7, days.Length);
+        Assert.HasCount(7, days);
         Assert.AreEqual((byte)0b_0000_0001, days[0].Flag);  
 
     }

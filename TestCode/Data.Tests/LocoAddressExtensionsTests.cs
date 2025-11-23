@@ -11,7 +11,7 @@ public class LocoAddressExtensionsTests
         string? input = null;
         var result = input.TryParseLocoAdresses(out var addresses);
         Assert.IsTrue(result);
-        Assert.AreEqual(0, addresses.Length);
+        Assert.IsEmpty(addresses);
     }
 
     [TestMethod]
@@ -20,7 +20,7 @@ public class LocoAddressExtensionsTests
         string? input = "x";
         var result = input.TryParseLocoAdresses(out var addresses);
         Assert.IsFalse(result);
-        Assert.AreEqual(0, addresses.Length);
+        Assert.IsEmpty(addresses);
     }
 
     [TestMethod]
@@ -29,7 +29,7 @@ public class LocoAddressExtensionsTests
         string? input = "128, 4343, 8583, 222, 2,";
         var result = input.TryParseLocoAdresses(out var addresses);
         Assert.IsTrue(result);
-        Assert.AreEqual(5, addresses.Length);
+        Assert.HasCount(5, addresses);
     }
 
     [TestMethod]
@@ -37,8 +37,7 @@ public class LocoAddressExtensionsTests
     {
         string? input = "4300-4309, 8600-8699, 222, 2,";
         var result = input.TryParseLocoAdresses(out var addresses);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(112, addresses.Length);
+        Assert.HasCount(112, addresses);
     }
 
     [TestMethod]
