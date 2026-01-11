@@ -82,6 +82,36 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             .Where(lv => lv.LayoutId == layoutId && (onlyTractionUnits == false || lv.IsTractionUnit == true))
             .ToReadOnlyListAsync();
     }
+
+    public async Task<LayoutStation?> GetLayoutStationAsync(ClaimsPrincipal? principal, int id)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.LayoutStations
+                .Include(ls => ls.Station)
+                .Include(ls => ls.LayoutParticipant).ThenInclude(lp => lp.Layout).ThenInclude(l => l.Meeting)
+                .FirstAsync(s => s.Id == id);
+        }
+        return null;
+    }
+
+    public async Task<(int Count, string Message, LayoutStation? Entity)> UpdateAsync(ClaimsPrincipal? principal, LayoutStation entity)
+    {
+        if (principal.IsAuthenticated())
+        {
+            entity = entity.WithDataRulesApplied();
+            using var dbContext = Factory.CreateDbContext();
+            var existing = await dbContext.LayoutStations.SingleOrDefaultAsync(l => l.Id == entity.Id);
+            if (existing is null) return (-1).SaveResult(entity);
+
+            dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            if (dbContext.Entry(entity).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+            var result = await dbContext.SaveChangesAsync();
+            return result.SaveResult(entity);
+        }
+        return (0, Resources.Strings.NotAuthorized, entity);
+    }
     public async Task<(int Count, string Message, Layout? Entity)> SaveAsync(ClaimsPrincipal? principal, Layout entity)
     {
         if (principal.IsAuthenticated())
@@ -141,7 +171,8 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, "Failed {storedProcedureName} for layout id={layoutId} and person id = {personId}", storedProcedureName, layoutId, personId);
+                    if (Logger.IsEnabled(LogLevel.Critical))
+                        Logger.LogCritical(ex, "Failed {storedProcedureName} for layout id={layoutId} and person id = {personId}", storedProcedureName, layoutId, personId);
                     throw;
                 }
             }

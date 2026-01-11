@@ -1,206 +1,207 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>Database</Name>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{4a4992f4-a2fe-42ac-a2a8-8218900c5966}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
-    <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
-    <RootNamespace>Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
-    <ModelCollation>1035,CI</ModelCollation>
-    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
-    <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetLanguage>CS</TargetLanguage>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <SqlServerVerification>False</SqlServerVerification>
-    <IncludeCompositeObjects>True</IncludeCompositeObjects>
-    <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultCollation>Finnish_Swedish_CI_AS</DefaultCollation>
-    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
-    <SqlCodeAnalysisRules>-Microsoft.Rules.Data.SR0001</SqlCodeAnalysisRules>
-  </PropertyGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
-    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
-    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
-  </PropertyGroup>
-  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
-  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
-  <ItemGroup>
-    <Folder Include="Properties" />
-    <Folder Include="dbo\" />
-    <Folder Include="dbo\Tables\" />
-    <Folder Include="dbo\Views\" />
-    <Folder Include="dbo\Scripts" />
-    <Folder Include="dbo\Scripts\Initial data" />
-    <Folder Include="dbo\Listboxes" />
-    <Folder Include="dbo\Procedures" />
-    <Folder Include="dbo\Tables\Timetabling" />
-    <Folder Include="dbo\Tables\Cargo" />
-    <Folder Include="dbo\Tables\Stations" />
-    <Folder Include="dbo\Tables\Modules" />
-    <Folder Include="dbo\Tables\Layouts" />
-    <Folder Include="dbo\Tables\Meetings" />
-    <Folder Include="dbo\Tables\Vehicles" />
-    <Folder Include="dbo\Tables\Groups" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="dbo\Tables\OperatingDay.sql" />
-    <Build Include="dbo\Tables\Property.sql" />
-    <Build Include="dbo\Tables\OperatingBasicDay.sql" />
-    <Build Include="dbo\Tables\User.sql" />
-    <Build Include="dbo\Tables\Person.sql" />
-    <Build Include="dbo\Tables\Country.sql" />
-    <Build Include="dbo\Tables\Document.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.CargoUnit.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.Country.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.GroupDomain.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.NHM.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.OperatingDay.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.Scale.Table.sql" />
-    <Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
-    <Build Include="dbo\Views\CountryStatistics.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.CargoPackagingUnit.Table.sql" />
-    <None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
-    <Build Include="dbo\Views\ModuleCustomerCargo.sql" />
-    <Build Include="dbo\Views\ExternalCustomerCargo.sql" />
-    <Build Include="dbo\Views\LayoutCustomerCargo.sql" />
-    <Build Include="dbo\Procedures\AddGeneratedModuleWaybills.sql" />
-    <Build Include="dbo\Views\SupplierCustomerCargo.sql" />
-    <Build Include="dbo\Views\ConsumerCustomerCargo.sql" />
-    <Build Include="dbo\Procedures\AddGeneratedExternalWaybills.sql" />
-    <Build Include="dbo\Views\ModuleConsumerWaybill.sql" />
-    <Build Include="dbo\Views\ExternalConsumerWaybill.sql" />
-    <Build Include="dbo\Views\ModuleSupplierWaybill.sql" />
-    <Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
-    <Build Include="dbo\Views\StationScale.sql" />
-    <Build Include="dbo\Procedures\GetStationCustomerWaybills.sql" />
-    <Build Include="dbo\Procedures\NullifyRedundantStationCustomerTrackOrArea.sql" />
-    <Build Include="dbo\Procedures\AddGeneratedShadowYardWaybills.sql" />
-    <Build Include="dbo\Views\ShadowYardCustomerCargo.sql" />
-    <Build Include="dbo\Views\ShadowYardSupplierWaybill.sql" />
-    <Build Include="dbo\Views\ShadowYardConsumerWaybill.sql" />
-    <Build Include="dbo\Views\BorrowableGroupModule.sql" />
-    <Build Include="dbo\Views\RegisteredModules.sql" />
-    <Build Include="dbo\Procedures\GetRegisteredModules.sql" />
-    <Build Include="dbo\Procedures\GetBorrowableModules.sql" />
-    <Build Include="dbo\Views\LayoutParticipantsAvailableModule.sql" />
-    <Build Include="dbo\Procedures\GetAvailableModules.sql" />
-    <Build Include="dbo\Procedures\GetLayoutParticipantEmail.sql" />
-    <Build Include="dbo\Procedures\GetLayoutWaybills.sql" />
-    <Build Include="dbo\Tables\WiFredThrottle.sql" />
-    <Build Include="dbo\Tables\Cargo\Cargo.sql" />
-    <Build Include="dbo\Tables\Cargo\CargoDirection.sql" />
-    <Build Include="dbo\Tables\Cargo\CargoPackagingUnit.sql" />
-    <Build Include="dbo\Tables\Cargo\CargoReadyTime.sql" />
-    <Build Include="dbo\Tables\Cargo\CargoUnit.sql" />
-    <Build Include="dbo\Tables\Timetabling\DriverDuty.sql" />
-    <Build Include="dbo\Tables\Timetabling\DriverDutyScheduleLocoPart.sql" />
-    <Build Include="dbo\Tables\Timetabling\Timetable.sql" />
-    <Build Include="dbo\Tables\Timetabling\Schedule.sql" />
-    <Build Include="dbo\Tables\Timetabling\ScheduleTrainPart.sql" />
-    <Build Include="dbo\Tables\Timetabling\LayoutStationRegion.sql" />
-    <Build Include="dbo\Tables\Timetabling\LayoutStationTrack.sql" />
-    <Build Include="dbo\Tables\Timetabling\TimetableStretch.sql" />
-    <Build Include="dbo\Tables\Timetabling\TimetableStretchTrackStretch.sql" />
-    <Build Include="dbo\Tables\Timetabling\TrackStretch.sql" />
-    <Build Include="dbo\Tables\Timetabling\TimetabledVehicle.sql" />
-    <Build Include="dbo\Tables\Timetabling\VehicleProvider.sql" />
-    <Build Include="dbo\Tables\Timetabling\VehicleSchedule.sql" />
-    <Build Include="dbo\Tables\Stations\ExternalStation.sql" />
-    <Build Include="dbo\Tables\Stations\ExternalStationCustomer.sql" />
-    <Build Include="dbo\Tables\Stations\ExternalStationCustomerCargo.sql" />
-    <Build Include="dbo\Tables\Stations\Station.sql" />
-    <Build Include="dbo\Tables\Stations\StationCustomer.sql" />
-    <Build Include="dbo\Tables\Stations\StationCustomerCargo.sql" />
-    <Build Include="dbo\Tables\Stations\StationCustomerWaybill.sql" />
-    <Build Include="dbo\Tables\Stations\StationTrack.sql" />
-    <Build Include="dbo\Tables\Modules\ModuleOwnership.sql" />
-    <Build Include="dbo\Tables\Modules\ModuleStandard.sql" />
-    <Build Include="dbo\Tables\Modules\ModuleExit.sql" />
-    <Build Include="dbo\Tables\Modules\ModuleEndProfile.sql" />
-    <Build Include="dbo\Tables\Modules\Module.sql" />
-    <Build Include="dbo\Tables\Timetabling\TrainCategory.sql" />
-    <Build Include="dbo\Tables\Timetabling\Train.sql" />
-    <Build Include="dbo\Tables\Timetabling\TrainStationCall.sql" />
-    <Build Include="dbo\Tables\Layouts\Layout.sql" />
-    <Build Include="dbo\Tables\Layouts\LayoutModule.sql" />
-    <Build Include="dbo\Tables\Layouts\LayoutParticipant.sql" />
-    <Build Include="dbo\Tables\Layouts\LayoutStation.sql" />
-    <Build Include="dbo\Tables\Meetings\Meeting.sql" />
-    <Build Include="dbo\Tables\Meetings\MeetingParticipant.sql" />
-    <Build Include="dbo\Tables\Layouts\ModuleOnTimetableTrackStretch.sql" />
-    <Build Include="dbo\Tables\Cargo\NHM.sql" />
-    <Build Include="dbo\Tables\Modules\Scale.sql" />
-    <Build Include="dbo\Tables\Vehicles\Vehicle.sql" />
-    <Build Include="dbo\Tables\Vehicles\VehicleFeature.sql" />
-    <Build Include="dbo\Tables\Vehicles\VehicleInteroperability.sql" />
-    <Build Include="dbo\Tables\Vehicles\VehicleOperator.sql" />
-    <Build Include="dbo\Tables\Groups\Group.sql" />
-    <Build Include="dbo\Tables\Groups\GroupDomain.sql" />
-    <Build Include="dbo\Tables\Groups\GroupMember.sql" />
-    <Build Include="dbo\Tables\Stations\Region.sql" />
-    <Build Include="dbo\Views\ModuleOwnerNames.sql" />
-    <Build Include="dbo\Procedures\GetEmptyWagonOrders.sql" />
-    <Build Include="dbo\Procedures\ChangeAdministratorPrivilege.sql" />
-    <Build Include="dbo\Procedures\GetMeetingAdministrators.sql" />
-    <Build Include="dbo\Views\MeetingAdministrator.sql" />
-    <Build Include="dbo\Views\GetSimilarLayoutsAtMeeting.sql" />
-    <Build Include="dbo\Procedures\GetLayoutWaybills2.sql" />
-    <Build Include="dbo\Views\GroupCustomerCargo.sql" />
-    <Build Include="dbo\Procedures\GetGroupWaybills.sql" />
-    <Build Include="dbo\Tables\Groups\GroupLayoutModule.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Database.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="dbo\Tables\Meetings\MeetingParticipantPurchasedItem.sql" />
-    <Build Include="dbo\Tables\Meetings\MeetingPurchaseableItem.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="StaticCodeAnalysis.SuppressMessages.xml" />
-    <None Include="dbo\Scripts\Initial data\dbo.VehicleFeature.Table.sql" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>v4.8</TargetFrameworks>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<Name>Database</Name>
+		<SchemaVersion>2.0</SchemaVersion>
+		<ProjectVersion>4.1</ProjectVersion>
+		<ProjectGuid>{4a4992f4-a2fe-42ac-a2a8-8218900c5966}</ProjectGuid>
+		<DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+		<OutputType>Database</OutputType>
+		<RootPath>
+		</RootPath>
+		<RootNamespace>Database</RootNamespace>
+		<AssemblyName>Database</AssemblyName>
+		<ModelCollation>1035,CI</ModelCollation>
+		<DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+		<DeployToDatabase>True</DeployToDatabase>
+		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+		<TargetLanguage>CS</TargetLanguage>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<SqlServerVerification>False</SqlServerVerification>
+		<IncludeCompositeObjects>True</IncludeCompositeObjects>
+		<TargetDatabaseSet>True</TargetDatabaseSet>
+		<DefaultCollation>Finnish_Swedish_CI_AS</DefaultCollation>
+		<DefaultFilegroup>PRIMARY</DefaultFilegroup>
+		<TargetFrameworkProfile />
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<OutputPath>bin\Release\</OutputPath>
+		<BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+		<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<DefineDebug>false</DefineDebug>
+		<DefineTrace>true</DefineTrace>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>bin\Debug\</OutputPath>
+		<BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<DefineDebug>true</DefineDebug>
+		<DefineTrace>true</DefineTrace>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+		<RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+		<SqlCodeAnalysisRules>-Microsoft.Rules.Data.SR0001</SqlCodeAnalysisRules>
+	</PropertyGroup>
+	<PropertyGroup>
+		<VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+		<!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+		<SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+		<VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+	</PropertyGroup>
+	<Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+	<Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+	<ItemGroup>
+		<Folder Include="Properties" />
+		<Folder Include="dbo\" />
+		<Folder Include="dbo\Tables\" />
+		<Folder Include="dbo\Views\" />
+		<Folder Include="dbo\Scripts" />
+		<Folder Include="dbo\Scripts\Initial data" />
+		<Folder Include="dbo\Listboxes" />
+		<Folder Include="dbo\Procedures" />
+		<Folder Include="dbo\Tables\Timetabling" />
+		<Folder Include="dbo\Tables\Cargo" />
+		<Folder Include="dbo\Tables\Stations" />
+		<Folder Include="dbo\Tables\Modules" />
+		<Folder Include="dbo\Tables\Layouts" />
+		<Folder Include="dbo\Tables\Meetings" />
+		<Folder Include="dbo\Tables\Vehicles" />
+		<Folder Include="dbo\Tables\Groups" />
+	</ItemGroup>
+	<ItemGroup>
+		<Build Include="dbo\Tables\OperatingDay.sql" />
+		<Build Include="dbo\Tables\Property.sql" />
+		<Build Include="dbo\Tables\OperatingBasicDay.sql" />
+		<Build Include="dbo\Tables\User.sql" />
+		<Build Include="dbo\Tables\Person.sql" />
+		<Build Include="dbo\Tables\Country.sql" />
+		<Build Include="dbo\Tables\Document.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.CargoUnit.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.Country.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.GroupDomain.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.NHM.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.OperatingDay.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.Scale.Table.sql" />
+		<Build Include="dbo\Procedures\RemoveUnreferencedDocuments.sql" />
+		<Build Include="dbo\Views\CountryStatistics.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.CargoPackagingUnit.Table.sql" />
+		<None Include="dbo\Scripts\Initial data\dbo.OperatingBasicDay.Table.sql" />
+		<Build Include="dbo\Views\ModuleCustomerCargo.sql" />
+		<Build Include="dbo\Views\ExternalCustomerCargo.sql" />
+		<Build Include="dbo\Views\LayoutCustomerCargo.sql" />
+		<Build Include="dbo\Procedures\AddGeneratedModuleWaybills.sql" />
+		<Build Include="dbo\Views\SupplierCustomerCargo.sql" />
+		<Build Include="dbo\Views\ConsumerCustomerCargo.sql" />
+		<Build Include="dbo\Procedures\AddGeneratedExternalWaybills.sql" />
+		<Build Include="dbo\Views\ModuleConsumerWaybill.sql" />
+		<Build Include="dbo\Views\ExternalConsumerWaybill.sql" />
+		<Build Include="dbo\Views\ModuleSupplierWaybill.sql" />
+		<Build Include="dbo\Views\ExternalSupplierWaybill.sql" />
+		<Build Include="dbo\Views\StationScale.sql" />
+		<Build Include="dbo\Procedures\GetStationCustomerWaybills.sql" />
+		<Build Include="dbo\Procedures\NullifyRedundantStationCustomerTrackOrArea.sql" />
+		<Build Include="dbo\Procedures\AddGeneratedShadowYardWaybills.sql" />
+		<Build Include="dbo\Views\ShadowYardCustomerCargo.sql" />
+		<Build Include="dbo\Views\ShadowYardSupplierWaybill.sql" />
+		<Build Include="dbo\Views\ShadowYardConsumerWaybill.sql" />
+		<Build Include="dbo\Views\BorrowableGroupModule.sql" />
+		<Build Include="dbo\Views\RegisteredModules.sql" />
+		<Build Include="dbo\Procedures\GetRegisteredModules.sql" />
+		<Build Include="dbo\Procedures\GetBorrowableModules.sql" />
+		<Build Include="dbo\Views\LayoutParticipantsAvailableModule.sql" />
+		<Build Include="dbo\Procedures\GetAvailableModules.sql" />
+		<Build Include="dbo\Procedures\GetLayoutParticipantEmail.sql" />
+		<Build Include="dbo\Procedures\GetLayoutWaybills.sql" />
+		<Build Include="dbo\Tables\WiFredThrottle.sql" />
+		<Build Include="dbo\Tables\Cargo\Cargo.sql" />
+		<Build Include="dbo\Tables\Cargo\CargoDirection.sql" />
+		<Build Include="dbo\Tables\Cargo\CargoPackagingUnit.sql" />
+		<Build Include="dbo\Tables\Cargo\CargoReadyTime.sql" />
+		<Build Include="dbo\Tables\Cargo\CargoUnit.sql" />
+		<Build Include="dbo\Tables\Timetabling\DriverDuty.sql" />
+		<Build Include="dbo\Tables\Timetabling\DriverDutyScheduleLocoPart.sql" />
+		<Build Include="dbo\Tables\Timetabling\Timetable.sql" />
+		<Build Include="dbo\Tables\Timetabling\Schedule.sql" />
+		<Build Include="dbo\Tables\Timetabling\ScheduleTrainPart.sql" />
+		<Build Include="dbo\Tables\Timetabling\LayoutStationRegion.sql" />
+		<Build Include="dbo\Tables\Timetabling\LayoutStationTrack.sql" />
+		<Build Include="dbo\Tables\Timetabling\TimetableStretch.sql" />
+		<Build Include="dbo\Tables\Timetabling\TimetableStretchTrackStretch.sql" />
+		<Build Include="dbo\Tables\Timetabling\TrackStretch.sql" />
+		<Build Include="dbo\Tables\Timetabling\TimetabledVehicle.sql" />
+		<Build Include="dbo\Tables\Timetabling\VehicleProvider.sql" />
+		<Build Include="dbo\Tables\Timetabling\VehicleSchedule.sql" />
+		<Build Include="dbo\Tables\Stations\ExternalStation.sql" />
+		<Build Include="dbo\Tables\Stations\ExternalStationCustomer.sql" />
+		<Build Include="dbo\Tables\Stations\ExternalStationCustomerCargo.sql" />
+		<Build Include="dbo\Tables\Stations\Station.sql" />
+		<Build Include="dbo\Tables\Stations\StationCustomer.sql" />
+		<Build Include="dbo\Tables\Stations\StationCustomerCargo.sql" />
+		<Build Include="dbo\Tables\Stations\StationCustomerWaybill.sql" />
+		<Build Include="dbo\Tables\Stations\StationTrack.sql" />
+		<Build Include="dbo\Tables\Modules\ModuleOwnership.sql" />
+		<Build Include="dbo\Tables\Modules\ModuleStandard.sql" />
+		<Build Include="dbo\Tables\Modules\ModuleExit.sql" />
+		<Build Include="dbo\Tables\Modules\ModuleEndProfile.sql" />
+		<Build Include="dbo\Tables\Modules\Module.sql" />
+		<Build Include="dbo\Tables\Timetabling\TrainCategory.sql" />
+		<Build Include="dbo\Tables\Timetabling\Train.sql" />
+		<Build Include="dbo\Tables\Timetabling\TrainStationCall.sql" />
+		<Build Include="dbo\Tables\Layouts\Layout.sql" />
+		<Build Include="dbo\Tables\Layouts\LayoutModule.sql" />
+		<Build Include="dbo\Tables\Layouts\LayoutParticipant.sql" />
+		<Build Include="dbo\Tables\Layouts\LayoutStation.sql" />
+		<Build Include="dbo\Tables\Meetings\Meeting.sql" />
+		<Build Include="dbo\Tables\Meetings\MeetingParticipant.sql" />
+		<Build Include="dbo\Tables\Layouts\ModuleOnTimetableTrackStretch.sql" />
+		<Build Include="dbo\Tables\Cargo\NHM.sql" />
+		<Build Include="dbo\Tables\Modules\Scale.sql" />
+		<Build Include="dbo\Tables\Vehicles\Vehicle.sql" />
+		<Build Include="dbo\Tables\Vehicles\VehicleFeature.sql" />
+		<Build Include="dbo\Tables\Vehicles\VehicleInteroperability.sql" />
+		<Build Include="dbo\Tables\Vehicles\VehicleOperator.sql" />
+		<Build Include="dbo\Tables\Groups\Group.sql" />
+		<Build Include="dbo\Tables\Groups\GroupDomain.sql" />
+		<Build Include="dbo\Tables\Groups\GroupMember.sql" />
+		<Build Include="dbo\Tables\Stations\Region.sql" />
+		<Build Include="dbo\Views\ModuleOwnerNames.sql" />
+		<Build Include="dbo\Procedures\GetEmptyWagonOrders.sql" />
+		<Build Include="dbo\Procedures\ChangeAdministratorPrivilege.sql" />
+		<Build Include="dbo\Procedures\GetMeetingAdministrators.sql" />
+		<Build Include="dbo\Views\MeetingAdministrator.sql" />
+		<Build Include="dbo\Views\GetSimilarLayoutsAtMeeting.sql" />
+		<Build Include="dbo\Procedures\GetLayoutWaybills2.sql" />
+		<Build Include="dbo\Views\GroupCustomerCargo.sql" />
+		<Build Include="dbo\Procedures\GetGroupWaybills.sql" />
+		<Build Include="dbo\Tables\Groups\GroupLayoutModule.sql" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Properties\AssemblyInfo.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<RefactorLog Include="Database.refactorlog" />
+	</ItemGroup>
+	<ItemGroup>
+		<Build Include="dbo\Tables\Meetings\MeetingParticipantPurchasedItem.sql" />
+		<Build Include="dbo\Tables\Meetings\MeetingPurchaseableItem.sql" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="StaticCodeAnalysis.SuppressMessages.xml" />
+		<None Include="dbo\Scripts\Initial data\dbo.VehicleFeature.Table.sql" />
+	</ItemGroup>
 </Project>

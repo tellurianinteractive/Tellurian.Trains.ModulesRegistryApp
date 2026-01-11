@@ -19,7 +19,7 @@ namespace ModulesRegistry.Data.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -61,6 +61,15 @@ namespace ModulesRegistry.Data.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        public static string Advanced {
+            get {
+                return ResourceManager.GetString("Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved.
         /// </summary>
         public static string Approved {
@@ -75,6 +84,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string Autumn {
             get {
                 return ResourceManager.GetString("Autumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beginner.
+        /// </summary>
+        public static string Beginner {
+            get {
+                return ResourceManager.GetString("Beginner", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace ModulesRegistry.Data.Resources {
         public static string EndProfileSwitcher {
             get {
                 return ResourceManager.GetString("EndProfileSwitcher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experienced.
+        /// </summary>
+        public static string Experienced {
+            get {
+                return ResourceManager.GetString("Experienced", resourceCulture);
             }
         }
         

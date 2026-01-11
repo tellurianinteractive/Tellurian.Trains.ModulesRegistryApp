@@ -2,6 +2,7 @@
 
 @attribute [Authorize(Policy = "User")]
 
+@inject PageHistory PageHistory
 @inject IStringLocalizer<App> Localizer
 @inject IJSRuntime JSRuntime
 
@@ -69,7 +70,7 @@ else
                     <tr>
                         <td>
                             @layoutModule.FullNameAndConfiguration()
-                            <span >
+                            <span>
                                 <DocumentLink DocumentId="layoutModule.Module.DwgDrawingId" FileExtension="dwg" />
                                 <DocumentLink DocumentId="layoutModule.Module.SkpDrawingId" FileExtension="skp" />
                             </span>
@@ -77,6 +78,10 @@ else
                         <td>@layoutModule.Module.Description()</td>
                         <td class="noprint">@layoutModule.RegisteredTime.ToString("d")</td>
                         <td class="noprint">
+                            @if (layoutModule.HasLayoutStation())
+                            {
+                                <AppButton Label="Edit" Href="@LayoutStationHref(layoutModule)" />
+                            }
                             @if (layoutModule.HasCargoCustomers())
                             {
                                 <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@WaybillsHref(layoutModule)" />
@@ -152,6 +157,7 @@ else
 
     string WaybillsHref(LayoutModule layoutModule) => $"reports/waybills/layout/{layoutModule.LayoutParticipant.LayoutId}/station/{LayoutStation(layoutModule.LayoutStationId)?.StationId}";
     string RowStyle(LayoutParticipant participant) => "font-weight: bold;";
+    string LayoutStationHref(LayoutModule layoutModule) => $"LayoutStations/{layoutModule.LayoutStationId}";
 
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
 

@@ -1,0 +1,61 @@
+﻿@page "/LayoutStations/{id:int}"
+
+@attribute [Authorize(Policy = "User")]
+
+@inject PageHistory PageHistory
+@inject IStringLocalizer<App> Localizer
+@inject IToastService ToastService
+
+@inject CountryService CountryService
+@inject LayoutService LayoutService
+
+@if (LayoutStation is not null)
+{
+    <PageHeading Context="LayoutStation" IconClass="@FontAwesome.Layout" PageAction="PageAction.Edit" HelpContext="Layout" ShowHelpInitially=false />
+    <EditTemplate Item="LayoutStation" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+        <Inputs>
+            <AppInputCheck Width="3" Label="IsManned" @bind-Value="LayoutStation.IsManned" AlignWithFields=true />
+            <AppInputCheck Width="3" Label="HidePassingTrains" @bind-Value="LayoutStation.HidePassingTrains" AlignWithFields=true />
+            <AppInputCheck Width="3" Label="HideMeetingTrains" @bind-Value="LayoutStation.HideMeetingTrains" AlignWithFields=true IsDisabled="LayoutStation.HidePassingTrains" />
+            <AppInputCheck Width="3" Label="PrintTrainStartLabels" @bind-Value="LayoutStation.PrintTrainStartLabels" AlignWithFields=true IsDisabled="!LayoutStation.IsManned" />
+            <AppInputCheck Width="3" Label="PrintOnlyFirstTrainStartLabel" @bind-Value="LayoutStation.PrintOnlyFirstTrainStartLabel" AlignWithFields=true IsDisabled="!LayoutStation.PrintTrainStartLabels" />
+            <AppInputSelect Width="3" @bind-Value="LayoutStation.Difficulty" Label="DifficultyLevel" Items="DifficultyLevelItems" IsDisabled="!LayoutStation.IsManned" />
+            <h4>@Localizer["OtherNameOrCountry"]</h4>
+            <AppInputText Width="4" @bind-Value="LayoutStation.OtherName" Label="OtherName" />
+            <AppInputText Width="3" @bind-Value="LayoutStation.OtherSignature" Label="OtherSignature" />
+            <AppInputSelectNullable Width="3" @bind-Value="LayoutStation.OtherCountryId" Label="OtherCountry" Items="CountryItems" />
+        </Inputs>
+    </EditTemplate>
+
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    ClaimsPrincipal? Principal;
+    LayoutStation? LayoutStation;
+    IEnumerable<ListboxItem> CountryItems = [];
+    IEnumerable<ListboxItem> DifficultyLevelItems = EnumExtensions.LayoutStationDifficultyLevel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (Id > 0)
+        {
+            CountryItems = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
+            LayoutStation = await LayoutService.GetLayoutStationAsync(Principal, Id);
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (LayoutStation is not null)
+        {
+            var result = await LayoutService.UpdateAsync(Principal, LayoutStation);
+            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            PageHistory.NavigateBack();
+        }
+    }
+
+}

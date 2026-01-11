@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
   <data name="Approved" xml:space="preserve">
     <value>Approved</value>
   </data>
   <data name="Autumn" xml:space="preserve">
     <value>Autumn</value>
+  </data>
+  <data name="Beginner" xml:space="preserve">
+    <value>Beginner</value>
   </data>
   <data name="Bidirectional" xml:space="preserve">
     <value>Bidirectional</value>
@@ -164,6 +170,9 @@
   </data>
   <data name="EndProfileSwitcher" xml:space="preserve">
     <value>End profile switcher</value>
+  </data>
+  <data name="Experienced" xml:space="preserve">
+    <value>Experienced</value>
   </data>
   <data name="Fixed" xml:space="preserve">
     <value>Fixed</value>

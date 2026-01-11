@@ -363,6 +363,9 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="DifficultyLevel" xml:space="preserve">
+    <value>Difficulty level</value>
+  </data>
   <data name="Digits" xml:space="preserve">
     <value>Digits</value>
   </data>
@@ -630,6 +633,12 @@
   <data name="HideLoadingTimes" xml:space="preserve">
     <value>Hide loading times?</value>
   </data>
+  <data name="HideMeetingTrains" xml:space="preserve">
+    <value>Hide meeting trains?</value>
+  </data>
+  <data name="HidePassingTrains" xml:space="preserve">
+    <value>Hide passing trains?</value>
+  </data>
   <data name="HideUnloadingTimes" xml:space="preserve">
     <value>Hide unloading times?</value>
   </data>
@@ -725,6 +734,9 @@
   </data>
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Is key required?</value>
+  </data>
+  <data name="IsManned" xml:space="preserve">
+    <value>Is manned?</value>
   </data>
   <data name="IsMeetingAdministrator" xml:space="preserve">
     <value>Is meeting administrator</value>
@@ -1176,14 +1188,23 @@
   <data name="OtherColor" xml:space="preserve">
     <value>Other colour</value>
   </data>
+  <data name="OtherCountry" xml:space="preserve">
+    <value>Other country</value>
+  </data>
   <data name="OtherFromYear" xml:space="preserve">
     <value>Other from year</value>
   </data>
   <data name="OtherName" xml:space="preserve">
     <value>Other name</value>
   </data>
+  <data name="OtherNameOrCountry" xml:space="preserve">
+    <value>Other name and/or country</value>
+  </data>
   <data name="OtherPleaseSpecify" xml:space="preserve">
     <value>Other, please specify</value>
+  </data>
+  <data name="OtherSignature" xml:space="preserve">
+    <value>Other signature</value>
   </data>
   <data name="OtherTrackOrArea" xml:space="preserve">
     <value>Other track no. or loading area</value>
@@ -1308,8 +1329,14 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Number of prints</value>
   </data>
+  <data name="PrintOnlyFirstTrainStartLabel" xml:space="preserve">
+    <value>Print only first trains labels?</value>
+  </data>
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Print per operating day</value>
+  </data>
+  <data name="PrintTrainStartLabels" xml:space="preserve">
+    <value>Print train start labels?</value>
   </data>
   <data name="Prototype" xml:space="preserve">
     <value>Prototype</value>

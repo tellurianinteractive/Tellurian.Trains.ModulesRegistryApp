@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Platform>AnyCPU</Platform>
-		<Version>1.13.0</Version>
-		<AssemblyVersion>1.13.0</AssemblyVersion>
+		<Version>1.13.1</Version>
+		<AssemblyVersion>1.13.1</AssemblyVersion>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<NeutralLanguage>en-150</NeutralLanguage>
 	</PropertyGroup>

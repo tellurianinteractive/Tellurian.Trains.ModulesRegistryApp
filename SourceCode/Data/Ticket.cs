@@ -1,10 +1,11 @@
 ﻿using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
+
 public record Ticket(LayoutStation From, LayoutStation To, LayoutStation Seller)
 {
     public const int ItemsPerPage = 12;
-    public Country? Country => Seller.Country();
+    public Country? Country => Seller.Country;
 }
 
 public static class TicketBuilder
@@ -39,5 +40,5 @@ public static class TicketBuilder
         }
     }
 
-    
+
 }

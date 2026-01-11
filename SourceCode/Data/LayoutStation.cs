@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data;
 
@@ -17,6 +18,12 @@ public class LayoutStation
     public string OtherName { get; set; }
     public string OtherSignature { get; set; }
     public int? OtherCountryId { get; set; }
+    public int Difficulty { get; set; }
+    public bool IsManned { get; set; }
+    public bool HideMeetingTrains { get; set; }
+    public bool HidePassingTrains { get; set; }
+    public bool PrintTrainStartLabels { get; set; }
+    public bool PrintOnlyFirstTrainStartLabel { get; set; }
 
     public virtual LayoutParticipant LayoutParticipant { get; set; }
     public virtual Station Station { get; set; }
@@ -25,23 +32,46 @@ public class LayoutStation
     public virtual ICollection<Region> Regions { get; set; }
     public override string ToString() => $"{Station?.FullName}";
 }
-
 # nullable enable
+
+public enum DifficultyLevel
+{
+    Undefined = 0,
+    Beginner = 1,
+    Experienced = 2,
+    Advanced = 3,
+}
+
 public static class LayoutStationExtensions
 {
-        public static string NameInLayout(this LayoutStation? me) =>
-        me is null ? string.Empty :
-        me.OtherName ?? me.Station?.FullName ?? $"Name missing for {me.Id}";
+    extension([NotNull] LayoutStation layoutStation)
+    {
+        public LayoutStation WithDataRulesApplied()
+        {
+            if (!layoutStation.IsManned) layoutStation.Difficulty = (int)DifficultyLevel.Undefined;
+            if (layoutStation.HidePassingTrains) layoutStation.HideMeetingTrains = true;
+            if (!layoutStation.PrintTrainStartLabels) layoutStation.PrintOnlyFirstTrainStartLabel = false;
 
-    public static string SignatureInLayout(this LayoutStation? me) =>
-         me is null ? string.Empty :
-         me.OtherSignature ?? me.Station?.Signature ?? $"Signature missing for {me.Id}";
+            return layoutStation;
+        }
+    }
+    extension(LayoutStation? layoutStation)
+    {
+        public string LayoutName => layoutStation?.LayoutParticipant?.Layout?.DescriptionWithMeetingAndLayoutName() ?? "";
 
-    public static Country? Country(this LayoutStation? me) =>
-        me is null ? null:
-        me.OtherCountry is not null ? me.OtherCountry :
-        me.Station?.Region?.Country;
+        public string NameInLayout =>
+            layoutStation is null ? string.Empty :
+            layoutStation.OtherName ?? layoutStation.Station?.FullName ?? $"Name missing for {layoutStation.Id}";
 
+        public string SignatureInLayout =>
+            layoutStation is null ? string.Empty :
+            layoutStation.OtherSignature ?? layoutStation.Station?.Signature ?? $"Signature missing for {layoutStation.Id}";
+
+        public Country? Country =>
+            layoutStation is null ? null :
+            layoutStation.OtherCountry is not null ? layoutStation.OtherCountry :
+            layoutStation.Station?.Region?.Country;
+    }
 }
 
 internal static class LayoutStationMapping
@@ -55,7 +85,7 @@ internal static class LayoutStationMapping
                  .HasMaxLength(50);
 
             entity.Property(e => e.OtherSignature)
-                  .HasMaxLength(5);
+                  .HasMaxLength(6);
 
             entity.HasOne(e => e.LayoutParticipant)
                  .WithMany(e => e.LayoutStations)

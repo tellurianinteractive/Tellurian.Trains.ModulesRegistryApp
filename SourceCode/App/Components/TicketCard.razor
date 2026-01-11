@@ -10,17 +10,17 @@
 
             <div class="from">
                 <span class="from label">@("From".GetLocalizedString(TicketLanguageCode(Item)))</span>
-                <span class="from name" style="font-size: @StationNameTextSize(Item.From.NameInLayout())">@Item.From.NameInLayout()</span>
+                <span class="from name" style="font-size: @StationNameTextSize(Item.From.NameInLayout)">@Item.From.NameInLayout</span>
             </div>
             <div class="from">
                 <span class="from label">@("To".GetLocalizedString(TicketLanguageCode(Item)))</span>
-                <span class="from name" style="font-size: @StationNameTextSize(Item.To.NameInLayout())">@Item.To.NameInLayout().ToUpperInvariant()</span>
+                <span class="from name" style="font-size: @StationNameTextSize(Item.To.NameInLayout)">@Item.To.NameInLayout.ToUpperInvariant()</span>
             </div>
             <div class="validity">
                 @Validity(Item)
             </div>
             <div class="note">
-                <span>@string.Format("SoldBy".GetLocalizedString(TicketLanguageCode(Item)), OperatorSignature(Item), Item.Seller.NameInLayout())</span>
+                <span>@string.Format("SoldBy".GetLocalizedString(TicketLanguageCode(Item)), OperatorSignature(Item), Item.Seller.NameInLayout)</span>
             </div>
         </div>
     </Pocket>
@@ -46,18 +46,22 @@
     //TODO: This is a hack, shoud be configured in datbase.
     static string OperatorLogoUrl(Ticket ticket) => ticket.Country?.DomainSuffix switch
     {
-        "se" when ticket.Seller.NameInLayout() == "Tosselilla" => "/images/TGOJ.jpg",
+        "se" when ticket.Seller.NameInLayout == "Tosselilla" => "/images/TGOJ.jpg",
         "se" => "/images/SJ 1970 logo.jpg",
         "no" => "/images/NSB.png",
+        "dk" => "/images/DSB.jpg",
+        "de" => "/images/DB.png",
         _ => string.Empty,
     };
 
     //TODO: This is a hack, shoud be configured in datbase.
     static string OperatorSignature(Ticket ticket) => ticket.Country?.DomainSuffix switch
     {
-        "se" when ticket.Seller.NameInLayout() == "Tosselilla" => "TGOJ",
+        "se" when ticket.Seller.NameInLayout == "Tosselilla" => "TGOJ",
         "se" => "SJ",
         "no" => "NSB",
+        "dk" => "DSB",
+        "de" => "DB",
         _ => string.Empty,
     };
 

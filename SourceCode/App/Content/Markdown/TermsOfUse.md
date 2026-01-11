@@ -3,6 +3,10 @@ In order to use this site - the *module registy web application* - you must acce
 also each time the terms are changed.
 This is required to conform to GDPR.
 
+#### 1.0 Latest Changes
+- **Under 2.4:** The mailservice *Twilo SendGrind* is replaced by *Brevo*.
+- **Under 2.5:** New section clarifying who can send emails and how.
+
 #### 1.1 What is GDPR?
 The *General Data Protection Regulation* (GDPR) is a regulation in EU law on data protection and privacy in the European Union (EU) and the European Economic Area (EEA). The GDPR's primary aim is to give individuals control over their personal data and to simplify the regulatory environment for international business by unifying the regulation within the EU. Read more about [GDPR on Wikipedia](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
@@ -35,7 +39,15 @@ The database is only direct accessible by the system administrator.
 #### 2.4 Transparency
 All application code for *the application* is *open source*. 
 The frameworks that the code is built on are used are also *open source*; *.NET*, *ASP.NET*, *Blazor* and *Entity Framework*.
-*The application* uses the following proprietary services: *Microsoft Azure App Services*, *Microsoft Azure Sql Server*, and *Twilio SendGrid*.
+*The application* uses the following proprietary services: *Microsoft Azure App Services*, *Microsoft Azure Sql Server*, and *Brevo*.
+
+#### 2.5 Emails
+The application uses a mail service (currently *Brevo*) to send password reset emails and invitation emails.
+
+All other mail buttons to send emails uses opens the user's own mail application with email adressess filled 
+in as BCC (blind carbon copy) or 
+copies email adresses into the clip-board in order to paste in to web mail clients.
+Sending or copying emails using your own email application are only availabe for *administrators*.
 
 ### 3. Personal Data
 
@@ -65,7 +77,7 @@ In *the application* personal data is not available publicly.
 - Only *logged in users* have access to data according to the rights given.
 - Some users are promoted to *administrators*, and there are three levels of rights: *global*, *country* and *group*.
 - Only *administrators* have access to enter and modify personal data in the context they have rights.
-- Only *administrators*, *meeting organizer* and *module owners* can see any personal data and the modules owned by a person, and only in the context or their role.
+- Only *administrators*, *meeting organisers* and *module owners* can see any personal data and the modules owned by a person, and only in the context or their role.
 
 This means that the visibility of personal data, including owned modules are very restricted, without compromising flexibility. 
 - Any *user* can maintain their own modules.

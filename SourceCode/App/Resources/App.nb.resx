@@ -363,6 +363,9 @@
   <data name="Details" xml:space="preserve">
     <value>Detaljer</value>
   </data>
+  <data name="DifficultyLevel" xml:space="preserve">
+    <value>Vanskelighetsgrad</value>
+  </data>
   <data name="Digits" xml:space="preserve">
     <value>Sifre</value>
   </data>
@@ -630,6 +633,12 @@
   <data name="HideLoadingTimes" xml:space="preserve">
     <value>Skjul lastetider?</value>
   </data>
+  <data name="HideMeetingTrains" xml:space="preserve">
+    <value>Skjul kryssende tog?</value>
+  </data>
+  <data name="HidePassingTrains" xml:space="preserve">
+    <value>Skjul passerende tog?</value>
+  </data>
   <data name="HideUnloadingTimes" xml:space="preserve">
     <value>Skjule lossetider?</value>
   </data>
@@ -725,6 +734,9 @@
   </data>
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Er nøkkel nødvendig?</value>
+  </data>
+  <data name="IsManned" xml:space="preserve">
+    <value>Er bemannet?</value>
   </data>
   <data name="IsMeetingAdministrator" xml:space="preserve">
     <value>Er treffadministraør</value>
@@ -1176,14 +1188,23 @@
   <data name="OtherColor" xml:space="preserve">
     <value>Annen farge</value>
   </data>
+  <data name="OtherCountry" xml:space="preserve">
+    <value>Annet land</value>
+  </data>
   <data name="OtherFromYear" xml:space="preserve">
     <value>Annet fra-år</value>
   </data>
   <data name="OtherName" xml:space="preserve">
     <value>Annet navn</value>
   </data>
+  <data name="OtherNameOrCountry" xml:space="preserve">
+    <value>Annet navn og/eller land</value>
+  </data>
   <data name="OtherPleaseSpecify" xml:space="preserve">
     <value>Annet, spesifiser</value>
+  </data>
+  <data name="OtherSignature" xml:space="preserve">
+    <value>Annen signatur</value>
   </data>
   <data name="OtherTrackOrArea" xml:space="preserve">
     <value>Annet spor nr. eller lasteområde</value>
@@ -1308,8 +1329,14 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Antall utskrifter</value>
   </data>
+  <data name="PrintOnlyFirstTrainStartLabel" xml:space="preserve">
+    <value>Skrive bare ut etiketter for de første togene?</value>
+  </data>
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Skriv ut per driftsdag</value>
+  </data>
+  <data name="PrintTrainStartLabels" xml:space="preserve">
+    <value>Skrive ut startetiketter for tog?</value>
   </data>
   <data name="Prototype" xml:space="preserve">
     <value>Forbild</value>
@@ -1354,7 +1381,7 @@
     <value>Påmelding</value>
   </data>
   <data name="RegistrationClosed" xml:space="preserve">
-    <value>Påmeldingen stengt</value>
+    <value>Påmeldingen stengt.</value>
   </data>
   <data name="RegistrationCloses" xml:space="preserve">
     <value>Påmeldingen stenger</value>

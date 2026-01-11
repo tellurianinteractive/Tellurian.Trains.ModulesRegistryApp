@@ -4,7 +4,6 @@ using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Shared;
 using System.Globalization;
-using System.Reflection.Emit;
 using System.Text;
 
 namespace ModulesRegistry.Extensions;
@@ -38,7 +37,7 @@ public static class LocalizedStringExtensions
         }
         return text.ToString();
     }
-    
+
     public static string Select(this IStringLocalizer localizer, string objectName) =>
         $"{localizer["Select"]} {localizer[objectName].Value.ToLowerInvariant()}";
 
@@ -64,14 +63,14 @@ public static class LocalizedStringExtensions
 
     public static string Saved<T>(this IStringLocalizer localizer) => $"{localizer[typeof(T).Name]} {localizer["Saved"].Value.ToLowerInvariant()}";
 
-    public static string Value(this IStringLocalizer localizer, string key) => localizer[key].Value;    
-    
+    public static string Value(this IStringLocalizer localizer, string key) => localizer[key].Value;
+
     private static bool IsEmpty(this PageAction pageAction) => pageAction == PageAction.List || pageAction == PageAction.Unknown || pageAction == PageAction.Error;
 
     private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
         string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToFirstLowerInvariant() : localizer[objectName].ToString();
 
-    public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) => 
+    public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) =>
         localizer["_CASING"] == "_LOWER" ? localizer[resourceName].Value.ToLowerInvariant() : localizer[resourceName].Value;
 
     public static string FromParts(this IStringLocalizer localizer, string resourceName)
@@ -80,7 +79,7 @@ public static class LocalizedStringExtensions
         var parts = resourceName.Split(['-', '/', '=', ',', '&']);
         if (parts.Length == 1) return localizer[parts[0]];
         var localized = parts.Select(p => (localizer[p] ?? p).ToLowerInvariant());
-        var separator = resourceName.Contains('&')? " & " : resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : resourceName.Contains(',') ? ", ": " ";
+        var separator = resourceName.Contains('&') ? " & " : resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : resourceName.Contains(',') ? ", " : " ";
         return string.Join(separator, localized).ToFirstUpperInvariant();
     }
 
@@ -92,19 +91,20 @@ public static class LocalizedStringExtensions
             Station s => $"{s.FullName} ({s.Signature})",
             ExternalStation es => $"{es.FullName} ({es.Signature})",
             Meeting m => $"{m.Name} {m.CityName}, {m.StartDate:MMMM yyyy}",
-            Module mo => mo.Station is not null ? $"{mo.FullName} ({mo.Station.Signature})": mo.FullName,
+            Module mo => mo.Station is not null ? $"{mo.FullName} ({mo.Station.Signature})" : mo.FullName,
             Region r => r.LocalName,
             Layout l => $"{me["Layout"].ObjectNameToLower()} {l?.PrimaryModuleStandard?.ShortName}",
             StationCustomer sc => $"{sc.CustomerName}",
             Vehicle v => $"{v.DisplayInfo()}",
+            LayoutStation ls => $"{ls.Station?.FullName} @ {ls.LayoutName}",
             _ => string.Empty
         };
 
-   private static string ObjectNameToLower(this LocalizedString localizer) =>
-        CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
-        {
-            "de" => localizer.Value,
-            _ => localizer.Value.ToLowerInvariant()
-        };    
+    private static string ObjectNameToLower(this LocalizedString localizer) =>
+         CultureInfo.CurrentCulture.TwoLetterISOLanguageName switch
+         {
+             "de" => localizer.Value,
+             _ => localizer.Value.ToLowerInvariant()
+         };
 
 }

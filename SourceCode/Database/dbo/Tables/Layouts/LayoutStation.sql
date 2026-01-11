@@ -3,7 +3,7 @@
     [Id]						  INT NOT NULL PRIMARY KEY IDENTITY,
     [LayoutParticipantId]         INT NOT NULL,
     [StationId]					  INT NOT NULL,
-    [Difficulty]                  INT NOT NULL DEFAULT (1),
+    [Difficulty]                  INT NOT NULL DEFAULT (0),
     [OtherName]					  NVARCHAR(50) NULL,
     [OtherSignature]			  NVARCHAR(5) NULL,
     [OtherCountryId]			  INT NULL,

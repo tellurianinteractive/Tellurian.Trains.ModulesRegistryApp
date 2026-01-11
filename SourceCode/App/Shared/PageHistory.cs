@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace ModulesRegistry.Shared;
 
-public class PageHistory
+public class PageHistory : IDisposable
 {
     private const int MaxHistorySize = 32;
     private readonly NavigationManager Navigator;
@@ -21,7 +21,7 @@ public class PageHistory
 
     public bool CanNavigateBack => History.Count > 1;
 
-    public bool IsCurrentAlsoLast => History.Any() && Navigator.Uri.Equals(History.Last().Url, StringComparison.OrdinalIgnoreCase);
+    public bool IsCurrentAlsoLast => History.Count != 0 && Navigator.Uri.Equals(History.Last().Url, StringComparison.OrdinalIgnoreCase);
 
     public void NavigateBack()
     {
@@ -33,10 +33,10 @@ public class PageHistory
     }
     public bool IsShowningHelp
     {
-        get => History.Any() && History.Last().ShowHelp == true;
+        get => History.Count != 0 && History.Last().ShowHelp == true;
         set
         {
-            if (History.Any()) History.Last().ShowHelp = value;
+            if (History.Count != 0) History.Last().ShowHelp = value;
         }
     }
 
@@ -44,7 +44,7 @@ public class PageHistory
     {
         EnsureSize();
 
-        if (IsCurrentAlsoLast) return; 
+        if (IsCurrentAlsoLast) return;
         History.Add(new VisitedPage(e.Location));
     }
 
@@ -54,9 +54,24 @@ public class PageHistory
         History.RemoveRange(0, History.Count - MaxHistorySize);
     }
 
+    private bool disposedValue;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                Navigator.LocationChanged -= OnLocationChanged;
+            }
+            disposedValue = true;
+        }
+    }
+
     public void Dispose()
     {
-        Navigator.LocationChanged -= OnLocationChanged;
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
 

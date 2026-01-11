@@ -19,7 +19,7 @@
     <Authorized>
         @if (!Principal.IsLatestTermsOfUseAccepted())
         {
-        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" />           
+        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" AlwaysShowLabel="true" />           
         }
     </Authorized>
 </AuthorizeView>

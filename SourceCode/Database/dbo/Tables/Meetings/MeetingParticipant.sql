@@ -22,6 +22,7 @@
 GO
 CREATE INDEX [IX_MeetingParticipant_MeetingId] ON [MeetingParticipant] ([MeetingId])
 GO
+
 CREATE TRIGGER [DeleteMeetingParticipant] ON [MeetingParticipant] INSTEAD OF DELETE 
 AS
 BEGIN

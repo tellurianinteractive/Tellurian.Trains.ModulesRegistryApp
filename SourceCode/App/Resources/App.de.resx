@@ -363,6 +363,9 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="DifficultyLevel" xml:space="preserve">
+    <value>Schwierigkeitsgrad</value>
+  </data>
   <data name="Digits" xml:space="preserve">
     <value>Ziffern</value>
   </data>
@@ -630,6 +633,12 @@
   <data name="HideLoadingTimes" xml:space="preserve">
     <value>Ladezeiten verbergen?</value>
   </data>
+  <data name="HideMeetingTrains" xml:space="preserve">
+    <value>Treffen mit Zügen ausblenden?</value>
+  </data>
+  <data name="HidePassingTrains" xml:space="preserve">
+    <value>Vorbeifahrende Züge verstecken?</value>
+  </data>
   <data name="HideUnloadingTimes" xml:space="preserve">
     <value>Entladezeiten ausblenden?</value>
   </data>
@@ -725,6 +734,9 @@
   </data>
   <data name="IsKeyRequired" xml:space="preserve">
     <value>Ist ein Schlüssel erforderlich?</value>
+  </data>
+  <data name="IsManned" xml:space="preserve">
+    <value>Ist es bemannt?</value>
   </data>
   <data name="IsMeetingAdministrator" xml:space="preserve">
     <value>Ist Treffenadministrator</value>
@@ -1176,14 +1188,23 @@
   <data name="OtherColor" xml:space="preserve">
     <value>Andere Farbe</value>
   </data>
+  <data name="OtherCountry" xml:space="preserve">
+    <value>Anderes Land</value>
+  </data>
   <data name="OtherFromYear" xml:space="preserve">
     <value>Sonst. ab Jahr</value>
   </data>
   <data name="OtherName" xml:space="preserve">
     <value>Anderer Name</value>
   </data>
+  <data name="OtherNameOrCountry" xml:space="preserve">
+    <value>Anderer Name und/oder Land</value>
+  </data>
   <data name="OtherPleaseSpecify" xml:space="preserve">
     <value>Sonstiges, bitte angeben</value>
+  </data>
+  <data name="OtherSignature" xml:space="preserve">
+    <value>Anderer Signatur</value>
   </data>
   <data name="OtherTrackOrArea" xml:space="preserve">
     <value>Anderer Spür Nr. oder Ladefläche</value>
@@ -1308,8 +1329,14 @@
   <data name="PrintCount" xml:space="preserve">
     <value>Anzahl der Drucke</value>
   </data>
+  <data name="PrintOnlyFirstTrainStartLabel" xml:space="preserve">
+    <value>Nur Etiketten für die ersten Züge drucken?</value>
+  </data>
   <data name="PrintPerOperatingDay" xml:space="preserve">
     <value>Ausdruck pro Betriebstag</value>
+  </data>
+  <data name="PrintTrainStartLabels" xml:space="preserve">
+    <value>Zugstartetiketten drucken?</value>
   </data>
   <data name="Prototype" xml:space="preserve">
     <value>Vorbild</value>
@@ -1354,7 +1381,7 @@
     <value>Anmeldung</value>
   </data>
   <data name="RegistrationClosed" xml:space="preserve">
-    <value>Anmeldung geschlossen</value>
+    <value>Anmeldung geschlossen.</value>
   </data>
   <data name="RegistrationCloses" xml:space="preserve">
     <value>Anmeldung schließt</value>
