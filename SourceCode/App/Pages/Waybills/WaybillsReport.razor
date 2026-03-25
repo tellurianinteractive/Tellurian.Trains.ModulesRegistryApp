@@ -43,6 +43,7 @@ else
     IEnumerable<Waybill>? Waybills { get; set; }
     bool IsLoading = false;
 
+
     protected override async Task OnInitializedAsync()
     {
         Waybills = null;
@@ -52,7 +53,9 @@ else
             Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
             if (LayoutId > 0)
             {
+                bool useReturnWaybills = true;
                 var items = await WaybillService.GetLayoutWaybillsAsync(Principal, LayoutId, StationId);
+                foreach (var item in items) if(item.QuantityIsBearer) item.HasEmptyReturn = useReturnWaybills;
                 Waybills = items.AsPrintableWaybills();
             }
             else if (StationId > 0)
