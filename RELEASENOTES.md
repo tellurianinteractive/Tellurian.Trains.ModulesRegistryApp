@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.13.2
+Released 2026-03-25
+- **Component update** with latest versions of extenal dependencies.
 ## Release 1.13.1
 Released 2026-01-09
 - **Terms of Use** updated with details about how emails are handled.
