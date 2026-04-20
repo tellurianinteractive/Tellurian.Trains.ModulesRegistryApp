@@ -2,6 +2,14 @@
 
 public static class SecurityHeadersPolicy
 {
+    /// <summary>
+    /// Builds the application's security header policy.
+    /// </summary>
+    /// <remarks>
+    /// <c>script-src</c> is intentionally omitted: a strict <c>'self'</c> would break Swagger UI and inline helpers,
+    /// while the other directives (<c>object-src</c>, <c>frame-ancestors</c>, <c>form-action</c>, <c>base-uri</c>,
+    /// COOP/COEP, HSTS) already cut off practical exfiltration and embed paths.
+    /// </remarks>
     public static HeaderPolicyCollection CreateSecurityHeaderCollection(IWebHostEnvironment environment)
     {
         var policy = new HeaderPolicyCollection()

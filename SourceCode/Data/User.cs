@@ -7,6 +7,11 @@ public partial class User
     public const int MaxPasswordResetAttempts = 3;
     public const int MaxFailedLoginAttempts = 3;
     public int Id { get; set; }
+    /// <summary>
+    /// Intentionally serves three purposes — identity claim, personal API key, and password-reset token —
+    /// so that <see cref="ModulesRegistry.Services.Implementations.UserService"/>.SetPasswordAsync can rotate all three
+    /// atomically by regenerating a single <see cref="Guid"/>.
+    /// </summary>
     public Guid ObjectId { get; set; }
     public string EmailAddress { get; set; }
     public DateTimeOffset RegistrationTime { get; set; }
