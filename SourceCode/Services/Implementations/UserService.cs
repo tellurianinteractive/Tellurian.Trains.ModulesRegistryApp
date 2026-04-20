@@ -138,6 +138,16 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory)
         return count == 0 ? null : user;
     }
 
+    public async Task<User?> UpdateHashedPasswordAsync(int userId, string newHashedPassword)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var user = await dbContext.Users.FindAsync(userId);
+        if (user is null) return null;
+        user.HashedPassword = newHashedPassword;
+        var count = await dbContext.SaveChangesAsync();
+        return count == 0 ? null : user;
+    }
+
     public async Task<IEnumerable<User>> GetUsersAsync(ClaimsPrincipal? principal)
     {
         if (!principal.IsGlobalAdministrator()) return [];

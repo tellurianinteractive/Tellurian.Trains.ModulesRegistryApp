@@ -31,7 +31,7 @@ public static class AppClaimTypes
 
 public static class ClaimsPrincipalExtensions
 {
-    public static string EmailAddess(this ClaimsPrincipal principal) => principal.GetString(ClaimTypes.Email) ?? string.Empty;
+    public static string EmailAddress(this ClaimsPrincipal principal) => principal.GetString(ClaimTypes.Email) ?? string.Empty;
     public static string? ObjectId(this ClaimsPrincipal? principal) => principal?.GetString(AppClaimTypes.ObjectId);
     public static string? GivenName(this ClaimsPrincipal principal) => principal.GetString(ClaimTypes.GivenName);
     public static string? Surname(this ClaimsPrincipal principal) => principal.GetString(ClaimTypes.Surname);

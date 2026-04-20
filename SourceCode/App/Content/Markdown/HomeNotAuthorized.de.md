@@ -2,13 +2,13 @@
 Das Modulregister kann europaweit verwendet werden und ist in mehreren Sprachen verfügbar: Englisch, Deutsch, Dänisch, Schwedisch und Norwegisch.
 
 #### Neuer Benutzer?
-Du brauchst eine Einladung. Bitte wenden Sie sich an Ihren Länderadministrator.
-Sie finden sie auf der Seite [**Kontakt**](/Contact).
-Nachdem Sie eine Einladung erhalten haben, können Sie sich registrieren und anmelden.
+Du brauchst eine Einladung. Bitte wende Dich an Deinen Länderadministrator.
+Du findest sie auf der Seite [**Kontakt**](/Contact).
+Nachdem Du eine Einladung erhalten hast, kannst Du Dich registrieren und anmelden.
 
 #### Passwort vergessen?
-Um Ihr Passwort zurückzusetzen, klicken Sie im Menü auf [**Benutzereinstellungen**](/Benutzer/Einstellungen).
+Um Dein Passwort zurückzusetzen, klicke im Menü auf [**Benutzereinstellungen**](/Benutzer/Einstellungen).
 
 #### Funktioniert am besten auf einem großen Bildschirm
 Die Modulregistrierung funktioniert nicht gut auf kleinen Telefonbildschirmen.
-Verwenden Sie einen Computer oder ein Tablet.
+Verwende einen Computer oder ein Tablet.

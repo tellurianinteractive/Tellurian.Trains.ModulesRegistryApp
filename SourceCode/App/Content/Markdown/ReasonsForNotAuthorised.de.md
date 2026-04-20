@@ -1,5 +1,5 @@
 ﻿## Nicht autorisiert
-Sie sind nicht berechtigt, diese Seite anzuzeigen. Für diese Seite sind zusätzliche Rechte erforderlich, die Sie nicht besitzen.
+Du bist nicht berechtigt, diese Seite anzuzeigen. Für diese Seite sind zusätzliche Rechte erforderlich, die Du nicht besitzt.
 
 ### Administratorrollen
 - **Gruppenmitglieder und ihre Rechte verwalten** erfordert *Gruppenadministratorrechte* für die jeweilige Gruppe.
@@ -12,29 +12,29 @@ Sie sind nicht berechtigt, diese Seite anzuzeigen. Für diese Seite sind zusätz
 
 ### Weitere Gründe für fehlende Berechtigung
 #### Fehler bei der Anmeldung
-Aus irgendeinem Grund ist Ihre Anmeldung fehlgeschlagen. Der Hauptgrund ist, dass Sie eine falsche Benutzer-E-Mail-Adresse und/oder ein falsches Passwort angegeben haben.
-Sie können auch gesperrt werden, nachdem Ihr Login dreimal fehlgeschlagen ist.
+Aus irgendeinem Grund ist Deine Anmeldung fehlgeschlagen. Der Hauptgrund ist, dass Du eine falsche Benutzer-E-Mail-Adresse und/oder ein falsches Passwort angegeben hast.
+Du kannst auch gesperrt werden, nachdem Dein Login dreimal fehlgeschlagen ist.
 Aus Sicherheitsgründen werden keine Rückmeldungen zu fehlgeschlagenen Anmeldungen angezeigt.
 
-Die Anmeldung wird bestätigt, indem oben auf der Seite Ihr Anmeldename angezeigt wird.
-Wenn Ihr Name dort nicht aufgeführt ist, haben Sie keinen Zugriff.
-Beachten Sie, dass Sie *Cookies* von *moduleregistry.azurewebsites.net* akzeptieren müssen, andernfalls schlägt die Anmeldung fehl.
+Die Anmeldung wird bestätigt, indem oben auf der Seite Dein Anmeldename angezeigt wird.
+Wenn Dein Name dort nicht aufgeführt ist, hast Du keinen Zugriff.
+Beachte, dass Du *Cookies* von *moduleregistry.azurewebsites.net* akzeptieren musst, andernfalls schlägt die Anmeldung fehl.
 Normalerweise ist dies standardmäßig aktiviert, manchmal können Cookies jedoch abgelehnt werden.
 
 
 #### Du bist eingeloggt
-Auch wenn Sie eingeloggt sind,
-Möglicherweise stellen Sie manchmal fest, dass Sie **nicht berechtigt** sind, eine Seite anzuzeigen.
+Auch wenn Du eingeloggt bist,
+stellst Du möglicherweise manchmal fest, dass Du **nicht berechtigt** bist, eine Seite anzuzeigen.
 Hier sind einige häufige Gründe:
 
 - **Nutzungsbedingungen wurden nicht akzeptiert**.
-Möglicherweise haben Sie sie bei Ihrer ersten Anmeldung akzeptiert.
+Möglicherweise hast Du sie bei Deiner ersten Anmeldung akzeptiert.
 aber jedes Mal, wenn die *Nutzungsbedingungen* geändert werden,
-Sie werden aufgefordert, sie erneut zu genehmigen.
-Wenn Sie dies überspringen, haben Sie keinen Zugriff auf Ihre Seiten.
+wirst Du aufgefordert, sie erneut zu genehmigen.
+Wenn Du dies überspringst, hast Du keinen Zugriff auf Deine Seiten.
 
 - **Die Seite ist für normale Benutzer nicht zugänglich**.
 Einige Seiten sind nur für Administratoren zugänglich.
 
 
-**Wenn Sie weiterhin Probleme haben, zögern Sie nicht, uns zu kontaktieren.**
+**Wenn Du weiterhin Probleme hast, zögere nicht, uns zu kontaktieren.**

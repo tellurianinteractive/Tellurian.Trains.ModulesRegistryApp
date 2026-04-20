@@ -16,38 +16,30 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
 
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
-        using var db = Factory.CreateDbContext();
+        if (!Guid.TryParse(principal.ObjectId(), out var objectGuid)) return principal;
         var clonedPrincipal = principal.Clone();
-        if (clonedPrincipal is null) return principal;
-        var newIdentity = (ClaimsIdentity?)clonedPrincipal.Identity;
-        if (newIdentity is null) return principal;
-        var objectId = principal.ObjectId();
-        if (objectId is null) return principal;
-        var objectGuid = Guid.Parse(objectId);
-        var user = await db.Users.SingleOrDefaultAsync(u => objectGuid == u.ObjectId).ConfigureAwait(false);
+        if (clonedPrincipal.Identity is not ClaimsIdentity newIdentity) return principal;
+
+        await using var db = await Factory.CreateDbContextAsync().ConfigureAwait(false);
+        var user = await db.Users.AsNoTracking()
+            .SingleOrDefaultAsync(u => objectGuid == u.ObjectId).ConfigureAwait(false);
         if (user is null) return principal;
 
-        foreach (var claim in await GetUserClaimsAsync(user).ConfigureAwait(false))
+        foreach (var claim in await GetUserClaimsAsync(db, user).ConfigureAwait(false))
         {
             newIdentity.AddClaim(claim);
         }
         return clonedPrincipal;
     }
-    /// <summary>
-    /// This is the function that adds all local <see cref="Claim">claims</see>.
-    /// </summary>
-    /// <param name="user">The user to assign <see cref="Claim">claims</see> for.</param>
-    /// <returns></returns>
-    private async Task<IEnumerable<Claim>> GetUserClaimsAsync(User user)
-    {
-        using var db = Factory.CreateDbContext();
 
+    private async Task<IEnumerable<Claim>> GetUserClaimsAsync(ModulesDbContext db, User user)
+    {
         var result = new List<Claim>(20)
             {
                 Claim(AppClaimTypes.UserId, user.Id)
             };
         AddAdministratorClaims(user, result);
-        
+
         if (user.LastTermsOfUseAcceptTime is not null)
         {
             var lastTermsOfUseChanged = await ContentService.GetLastModifiedTimeOfTextContent("TermsOfUse").ConfigureAwait(false);
@@ -62,11 +54,12 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
         {
             AddPersonalClaims(person, result);
             AppService.LastCountryId = person.CountryId;
-            var groupDomainIds = db.GroupDomains.Where(gd => gd.Groups.Any(g => g.GroupMembers.Any(gm => gm.PersonId == person.Id))).Select(g => g.Id).Distinct();
-            if (groupDomainIds is not null)
-            {
-                foreach (var domainId in groupDomainIds) result.Add(Claim(AppClaimTypes.DomainId, domainId));
-            }
+            var domainIds = await db.GroupDomains.AsNoTracking()
+                .Where(gd => gd.Groups.Any(g => g.GroupMembers.Any(gm => gm.PersonId == person.Id)))
+                .Select(g => g.Id)
+                .Distinct()
+                .ToListAsync().ConfigureAwait(false);
+            foreach (var domainId in domainIds) result.Add(Claim(AppClaimTypes.DomainId, domainId));
         }
         return result;
 

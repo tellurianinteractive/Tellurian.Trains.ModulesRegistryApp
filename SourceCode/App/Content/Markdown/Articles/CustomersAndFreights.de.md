@@ -12,15 +12,15 @@ In der **Modulregistrierung** können Frachtbriefe auf zwei Arten erstellt werde
 Die **Module Registry** hat grundsätzlich die gleichen Funktionen wie die *Yellow Pages*, jedoch mit einigen Unterschieden.
 
 ### Frachtkunden
-Im **Modulregister** tragen Sie Frachtkunden und Frachtströme ein, für die Waren versendet und empfangen werden.
-Sie können Frachtkunden und Warenströme für Ihren eigenen Modulbahnhof erfassen,
+Im **Modulregister** trägst Du Frachtkunden und Frachtströme ein, für die Waren versendet und empfangen werden.
+Du kannst Frachtkunden und Warenströme für Deinen eigenen Modulbahnhof erfassen,
 sondern auch für *Externe Stationen*.
 
 Eine *Externe Station* ist eine reale Station, die mit historisch korrekten Daten eingegeben werden muss
 über den Bahnhof, seine Kunden und Güterströme.
 
 ### So entstehen Frachtbriefe
-Im Gegensatz zu den *Gelben Seiten* können Sie im **Modulregister** Frachtbriefe nicht manuell selbst erstellen.
+Im Gegensatz zu den *Gelben Seiten* kannst Du im **Modulregister** Frachtbriefe nicht manuell selbst erstellen.
 Stattdessen erstellt die Anwendung Frachtbriefe, indem sie den Frachtfluss der sendenden und empfangenden Frachtkunden abgleicht.
 Der Abgleich erfolgt anhand der folgenden Daten:
 - **Thema** für die sendende und empfangende Station muss übereinstimmen. Dies verhindert z.B. Amerikanische und europäische Themen sind gemischt.
@@ -32,7 +32,7 @@ Das bedeutet, dass Frachtbriefe historisch korrekt erstellt werden.
 ### Frachtbriefe anpassen und drucken
 Die erstellten Frachtbriefe können auf verschiedene Arten angepasst werden:
 - Nummer zum Ausdrucken.
-- Wenn Sie eine bestimmte Anzahl oder eine bestimmte Anzahl pro Betriebstag drucken möchten.
-- Wenn Sie einen Rückfrachtbrief für ein leeres Wagen wünschen.
+- Wenn Du eine bestimmte Anzahl oder eine bestimmte Anzahl pro Betriebstag drucken möchtest.
+- Wenn Du einen Rückfrachtbrief für ein leeres Wagen wünschst.
 
-Für abfahrende Waggonladungen können Sie auch Leerwagenbestellungen ausdrucken, die Sie am Schattenbahnhof aufgeben.
+Für abfahrende Waggonladungen kannst Du auch Leerwagenbestellungen ausdrucken, die Du am Schattenbahnhof aufgibst.

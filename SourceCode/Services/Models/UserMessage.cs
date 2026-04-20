@@ -54,6 +54,23 @@ public record UserInvitation(User Recipient, Person Inviter, string Subject, Tex
 
 }
 
+public record SecurityNotification(User Recipient, string Subject, TextContent Message) : UserMessage(Recipient, Subject, Message)
+{
+    public override string MessageHtml => GetMessageHtml(this);
+
+    static string GetMessageHtml(SecurityNotification notification)
+    {
+        if (!notification.IsValid) return string.Empty;
+        var preferredLanguage = notification.Recipient.PreferredLanguage();
+        var text = new StringBuilder(1000);
+        notification.AppendHelloPhrase(text);
+        text.AppendLine(notification.Message.AsHtml);
+        text.Append($"<p>{LanguageExtensions.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
+        text.Append($"<p>{LanguageExtensions.GetLocalizedString("AppName", preferredLanguage)}</p>");
+        return text.ToString();
+    }
+}
+
 public record PasswordResetRequest(User Recipient, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
 {
     public override string MessageHtml => GetMessageHtml(this);

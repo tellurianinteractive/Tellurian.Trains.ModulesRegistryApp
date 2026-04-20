@@ -1,5 +1,5 @@
 ﻿# Loslegen
-Dies ist eine kurze Anleitung, wie Sie mit der Modulregistrierung beginnen können.
+Dies ist eine kurze Anleitung, wie Du mit der Modulregistrierung beginnen kannst.
 
 ### Warum die Mühe?
 Es gibt viele Möglichkeiten, Daten und Zeichnungen zu Modulen zu verwalten:
@@ -41,38 +41,38 @@ usw.
 - **Viele Sprachen**, die Anwendung ist mehrsprachig angelegt
 und unterstützt jetzt vollständig Englisch, Deutsch, Dänisch, Norwegisch und Schwedisch.
 Teilweise Unterstützung für Polnisch, Niederländisch, Französisch und Italienisch.
-- **Die Dokumentation** ist umfangreich, um Ihre Nutzung zu unterstützen.
+- **Die Dokumentation** ist umfangreich, um Deine Nutzung zu unterstützen.
 Hilfetexte sind auf den meisten Formularen verfügbar, die meisten davon in allen vollständig unterstützten Sprachen.
 Es gibt auch ein englisches WIKI mit allgemeineren Inhalten.
 Die gesamte Dokumentation und der Anwendungscode sind *Open Source*.
 
-### Holen Sie sich ein Benutzerkonto
-Um sich anmelden zu können, benötigen Sie ein Benutzerkonto. Sie können sich nicht selbst als Benutzer registrieren.
-Stattdessen senden Sie eine Anfrage an einen Administrator in Ihrem Wohnsitzland.
-Ihre Namen finden Sie auf der Seite [Kontakt](/Contact).
-Wenn ein Administrator Ihre Bewerbung genehmigt, erhalten Sie eine E-Mail mit einem Link, wo Sie etwas erstellen können
-Ihr Benutzerkonto. Dann können Sie sich anmelden und die Modulregistrierung verwenden.
+### Hole Dir ein Benutzerkonto
+Um Dich anmelden zu können, benötigst Du ein Benutzerkonto. Du kannst Dich nicht selbst als Benutzer registrieren.
+Stattdessen sendest Du eine Anfrage an einen Administrator in Deinem Wohnsitzland.
+Deren Namen findest Du auf der Seite [Kontakt](/Contact).
+Wenn ein Administrator Deine Bewerbung genehmigt, erhältst Du eine E-Mail mit einem Link, wo Du
+Dein Benutzerkonto erstellen kannst. Dann kannst Du Dich anmelden und die Modulregistrierung verwenden.
 
-### Beginnen Sie mit der Eingabe Ihrer Module
-Wenn Sie Module besitzen, können Sie unter *Meine Module* mit der Eingabe von Daten beginnen.
-Klicken Sie auf das **?** oben rechts auf der Seite, um Hilfeanweisungen anzuzeigen.
-Wenn Sie ein Stations- oder  Betriebsstandortmodul haben, geben Sie zuerst den Modulteil ein und erstellen dann ein *Betriebsstandort*
+### Beginne mit der Eingabe Deiner Module
+Wenn Du Module besitzt, kannst Du unter *Meine Module* mit der Eingabe von Daten beginnen.
+Klicke auf das **?** oben rechts auf der Seite, um Hilfeanweisungen anzuzeigen.
+Wenn Du ein Stations- oder  Betriebsstandortmodul hast, gib zuerst den Modulteil ein und erstelle dann ein *Betriebsstandort*
 bezieht sich auf dieses Modul. 
 Als *Betriebsstandort* wird im Allgemeinen jedes Modul angesehen, das eine Funktion hat oder in dem die Zeit registriert wird.
 
-Sie können Zeichnungen im DWG-Format für Ihr Modul und eine Betriebsdokumentation Ihrer Station hochladen.
-Die Dokumentation sollte eine Ergänzung zu den von Ihnen eingegebenen Daten sein, also vermeiden Sie es, Dinge zu schreiben, die Sie als Daten eingeben können.
-Bei der Eingabe Ihrer Module und Stationen erfahren Sie alle Daten, die Sie eingeben können.
+Du kannst Zeichnungen im DWG-Format für Dein Modul und eine Betriebsdokumentation Deiner Station hochladen.
+Die Dokumentation sollte eine Ergänzung zu den von Dir eingegebenen Daten sein, also vermeide es, Dinge zu schreiben, die Du als Daten eingeben kannst.
+Bei der Eingabe Deiner Module und Stationen erfährst Du alle Daten, die Du eingeben kannst.
 Viele Elemente sind Dropdowns mit vordefinierten Werten, andere sind Kontrollkästchen und einige Einträge sind Freitext.
 
 ### Frachtkunden hinzufügen
 Frachten sind ein wesentlicher Bestandteil des Fahrbetriebs von Zügen bei einer Modultreffen. Frachten werden mit Frachtbriefen beschrieben,
-und um Frachtbriefe zu erstellen, können Sie Frachtkunden an Ihrem Bahnhof/Betriebsstandort hinzufügen.
-Für jeden Frachtkunden können Sie angeben, welche Waren er versendet und/oder empfängt und in welchen Mengen.
-Die von Ihnen eingegebenen Daten werden dann verwendet, um passende Frachtbriefe mit Frachtkunden an anderen Bahnhöfen zu erstellen.
+und um Frachtbriefe zu erstellen, kannst Du Frachtkunden an Deinem Bahnhof/Betriebsstandort hinzufügen.
+Für jeden Frachtkunden kannst Du angeben, welche Waren er versendet und/oder empfängt und in welchen Mengen.
+Die von Dir eingegebenen Daten werden dann verwendet, um passende Frachtbriefe mit Frachtkunden an anderen Bahnhöfen zu erstellen.
 
-### Melden Sie sich zu einem Modultreffen an
-Sie können ein Modultreffen auswählen und Ihre Teilnahme anmelden und optional auch einige oder alle anmelden
-Ihrer Module zu einem Layout, das der Meeting-Organisator zu bauen erwartet.
-Sie können auch layoutspezifische Frachtbriefe erstellen.
-Diese Frachtbriefe sind nur interne Frachten und können Ihre anderen Frachtbriefe ergänzen.
+### Melde Dich zu einem Modultreffen an
+Du kannst ein Modultreffen auswählen und Deine Teilnahme anmelden und optional auch einige oder alle
+Deiner Module zu einem Layout anmelden, das der Meeting-Organisator zu bauen erwartet.
+Du kannst auch layoutspezifische Frachtbriefe erstellen.
+Diese Frachtbriefe sind nur interne Frachten und können Deine anderen Frachtbriefe ergänzen.

@@ -25,7 +25,7 @@ public static class MailHolderExtensions
 
     private static string EmailWithName(this MailHolder holder) => $"{HttpUtility.UrlEncode(holder.Name)}%20<{holder.EmailAddresses}>";
     public static MailHolder Sender(this ClaimsPrincipal principal) =>
-        new(principal.GivenName() ?? principal.EmailAddess(), principal.EmailAddess());
+        new(principal.GivenName() ?? principal.EmailAddress(), principal.EmailAddress());
     public static string Mailto(this MailHolder holder) =>
         $"""mailto:"{holder.EmailWithName()}" """;
 
@@ -38,7 +38,7 @@ public static class MailHolderExtensions
     public static IEnumerable<MailHolder> MailHolders(this IEnumerable<GroupMember>? groupMembers) =>
         groupMembers is not null ? groupMembers.Select(gm => new MailHolder(gm.Person.FirstName, gm.Person.EmailAddresses)) : [];
 
-    public static MailHolder MailHolder(this ClaimsPrincipal principal) => new(principal.GivenName() ?? "Admin", principal.EmailAddess());
+    public static MailHolder MailHolder(this ClaimsPrincipal principal) => new(principal.GivenName() ?? "Admin", principal.EmailAddress());
 
     /// <summary>
     /// This function handle the fact that mailto hrefs cannot exceed a certain length.

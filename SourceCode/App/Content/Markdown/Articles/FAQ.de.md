@@ -9,14 +9,14 @@ Einige Funktionen, zum Beispiel die Frachtbriefe, werden von implementiert
 eine H0-Perspektive, passt aber auch in andere Maßstäbe, wenn die Verwendung ähnlich ist.
 
 ### Ich kann mich nicht anmelden
-Wenn Sie sich aus irgendeinem Grund nicht anmelden können, finden Sie hier einige Ratschläge:
-1. Zunächst müssen Sie eingeladen werden, um ein Konto erstellen und sich anmelden zu können.
-2. Sie müssen Cookies von https://moduleregistry.azurewebsites.net/ zulassen.
-3. Sie müssen das Passwort genau so eingeben, wie Sie es eingegeben haben, einschließlich Groß- und Kleinschreibung.
-4. Sie können versuchen, ein neues Passwort zu erstellen. Das findest du unter **Einstellungen**.
+Wenn Du Dich aus irgendeinem Grund nicht anmelden kannst, findest Du hier einige Ratschläge:
+1. Zunächst musst Du eingeladen werden, um ein Konto erstellen und Dich anmelden zu können.
+2. Du musst Cookies von https://moduleregistry.azurewebsites.net/ zulassen.
+3. Du musst das Passwort genau so eingeben, wie Du es eingegeben hast, einschließlich Groß- und Kleinschreibung.
+4. Du kannst versuchen, ein neues Passwort zu erstellen. Das findest du unter **Einstellungen**.
 
 ### Ich möchte Frachtbriefe zwischen Stationen erstellen
-Klicken Sie einfach auf *Aktualisieren* für den Frachtkunden, für den Sie Frachtbriefe wünschen.
+Klicke einfach auf *Aktualisieren* für den Frachtkunden, für den Du Frachtbriefe wünschst.
 Die Frachtbriefe werden erstellt, indem sendende und empfangende Frachtkunden mit anderen Modulen im gleichen Maßstab und Thema sowie auch Frachtkunden an externen Stationen abgeglichen werden,
 unter Berücksichtigung von:
 1) Es ist die gleiche Art von Fracht,

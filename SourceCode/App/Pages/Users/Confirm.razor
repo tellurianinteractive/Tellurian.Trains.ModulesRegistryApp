@@ -4,6 +4,8 @@
 @inject IToastService ToastService
 @inject NavigationManager Navigator
 @inject UserService UserService
+@inject IMailSender MailSender
+@inject ContentService ContentService
 
 @if (User is null)
 {
@@ -68,6 +70,10 @@ else if (User.IsLockedOut())
         {
             User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
             IsPasswordAssigned = User is not null;
+            if (IsPasswordAssigned)
+            {
+                await LoginLogoutHandler.SendSecurityNotification(User!, "PasswordChangedMail", "PasswordChangedMailSubject", MailSender, ContentService);
+            }
         }
         else
         {

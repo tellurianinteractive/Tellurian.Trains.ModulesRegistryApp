@@ -136,7 +136,7 @@
     <value>Mitglied hinzufügen in</value>
   </data>
   <data name="AddModuleFirst" xml:space="preserve">
-    <value>HINWEIS: Fügen Sie zuerst ein Modul hinzu, um es dann als Betriebsstandort hinzuzufügen!</value>
+    <value>HINWEIS: Füge zuerst ein Modul hinzu, um es dann als Betriebsstandort hinzuzufügen!</value>
   </data>
   <data name="AddNew" xml:space="preserve">
     <value>Neue hinzufügen</value>
@@ -220,7 +220,7 @@
     <value>Kategorie</value>
   </data>
   <data name="Change below only if it differs from the customer above" xml:space="preserve">
-    <value>Ändern Sie unten nur, wenn es vom Kunden oben abweicht</value>
+    <value>Ändere unten nur, wenn es vom Kunden oben abweicht</value>
   </data>
   <data name="Characters" xml:space="preserve">
     <value>Zeichen</value>
@@ -238,7 +238,7 @@
     <value>Filter löschen</value>
   </data>
   <data name="ClickOKToDelete" xml:space="preserve">
-    <value>Klicken Sie zum Löschen auf OK</value>
+    <value>Klicke zum Löschen auf OK</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Klon</value>
@@ -379,7 +379,7 @@
     <value>Angezeigte Reihenfolge</value>
   </data>
   <data name="DO NOT describe what applies to individual track layouts below" xml:space="preserve">
-    <value>Beschreiben Sie NICHT, was unten für einzelne Streckenlayouts gilt! Streckenlayouts hinzufügen.</value>
+    <value>Beschreibe NICHT, was unten für einzelne Streckenlayouts gilt! Streckenlayouts hinzufügen.</value>
   </data>
   <data name="Documentation" xml:space="preserve">
     <value>Dokumentation</value>
@@ -487,7 +487,7 @@
     <value>Die Datei überschreitet die maximale Größe von {0} kB</value>
   </data>
   <data name="FillOutNewTrackAndClickAddBeforeSaving" xml:space="preserve">
-    <value>Füllen Sie einen neuen Titel aus und klicken Sie vor dem Speichern auf Hinzufügen.</value>
+    <value>Fülle einen neuen Titel aus und klicke vor dem Speichern auf Hinzufügen.</value>
   </data>
   <data name="FinalDay" xml:space="preserve">
     <value>Letzter Tag</value>
@@ -583,7 +583,7 @@
     <value>Inhalte abrufen...</value>
   </data>
   <data name="GettingData" xml:space="preserve">
-    <value>Daten abrufen. Warten Sie mal...</value>
+    <value>Daten abrufen. Warte mal...</value>
   </data>
   <data name="GlobalAdministrator" xml:space="preserve">
     <value>Globaler Administrator</value>
@@ -1290,6 +1290,12 @@
   <data name="PasswordResetMailSent" xml:space="preserve">
     <value>E-Mail zum Zurücksetzen des Passworts gesendet</value>
   </data>
+  <data name="AccountLockedMailSubject" xml:space="preserve">
+    <value>Dein Konto wurde gesperrt</value>
+  </data>
+  <data name="PasswordChangedMailSubject" xml:space="preserve">
+    <value>Dein Passwort wurde geändert</value>
+  </data>
   <data name="PeopleWithoutEmailAddressIn" xml:space="preserve">
     <value>Personen ohne E-Mail-Adresse in {0}</value>
   </data>
@@ -1309,7 +1315,7 @@
     <value>Plattformlänge</value>
   </data>
   <data name="PleaseReadAndAccept" xml:space="preserve">
-    <value>Bitte lesen Sie es und scrollen Sie nach unten, um es zu akzeptieren. Dies ist für die Nutzung dieser Anwendung erforderlich.</value>
+    <value>Bitte lies es und scrolle nach unten, um es zu akzeptieren. Dies ist für die Nutzung dieser Anwendung erforderlich.</value>
   </data>
   <data name="Polish" xml:space="preserve">
     <value>Polnisch</value>
@@ -1399,7 +1405,7 @@
     <value>Filter entfernen</value>
   </data>
   <data name="RemoveRegisteredModulesFirst" xml:space="preserve">
-    <value>Entfernen Sie zuerst registrierte Module</value>
+    <value>Entferne zuerst registrierte Module</value>
   </data>
   <data name="RepresentativeStation" xml:space="preserve">
     <value>Repräsentative Station</value>
@@ -1447,7 +1453,7 @@
     <value>Teilnahme an der Bahnanlage auswählen oder ändern</value>
   </data>
   <data name="SelectPersonToRegister" xml:space="preserve">
-    <value>Wählen Sie die Person aus, die Sie registrieren möchten</value>
+    <value>Wähle die Person aus, die Du registrieren möchtest</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Senden</value>
@@ -1459,10 +1465,10 @@
     <value>Senden eine E-Mail an alle</value>
   </data>
   <data name="SendMailToAllUsersIn" xml:space="preserve">
-    <value>Senden Sie eine E-Mail an alle Benutzer in {0}</value>
+    <value>Sende eine E-Mail an alle Benutzer in {0}</value>
   </data>
   <data name="SendMailToAllWithEmailIn" xml:space="preserve">
-    <value>Senden Sie eine E-Mail an alle mit E-Mail-Adressen in {0}</value>
+    <value>Sende eine E-Mail an alle mit E-Mail-Adressen in {0}</value>
   </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Testmail an sich selbst senden</value>
@@ -1597,7 +1603,7 @@
     <value>Übertragener Anteil</value>
   </data>
   <data name="TypeMinimumCharachers" xml:space="preserve">
-    <value>Geben Sie mindestens {0} Zeichen ein</value>
+    <value>Gib mindestens {0} Zeichen ein</value>
   </data>
   <data name="Unavailable" xml:space="preserve">
     <value>Nicht verfügbar</value>
@@ -1741,16 +1747,16 @@
     <value>Ja</value>
   </data>
   <data name="You are not present long enough to be able to register modules" xml:space="preserve">
-    <value>Sie sind nicht lange genug anwesend, um Module anmelden zu können</value>
+    <value>Du bist nicht lange genug anwesend, um Module anmelden zu können</value>
   </data>
   <data name="YouAreCurrentlyNotRegisteredToAnyForthComingMeeting" xml:space="preserve">
-    <value>Sie sind derzeit für kein bevorstehendes Treffen angemeldet</value>
+    <value>Du bist derzeit für kein bevorstehendes Treffen angemeldet</value>
   </data>
   <data name="YouAreLockedOut" xml:space="preserve">
     <value>Du bist ausgesperrt!</value>
   </data>
   <data name="YouAreNotAuthorizedToViewThisPage" xml:space="preserve">
-    <value>Sie sind nicht berechtigt, diese Seite anzuzeigen.</value>
+    <value>Du bist nicht berechtigt, diese Seite anzuzeigen.</value>
   </data>
   <data name="YouCanUseMarkdown" xml:space="preserve">
     <value>Du kannst Markdown verwenden, um den Text zu formatieren</value>
@@ -1762,7 +1768,7 @@
     <value>Du nimmst teil</value>
   </data>
   <data name="YourArrivalTime" xml:space="preserve">
-    <value>Ihre Ankunftszeit am ersten Tag</value>
+    <value>Deine Ankunftszeit am ersten Tag</value>
   </data>
   <data name="_CASING" xml:space="preserve">
     <value>_UPPER</value>

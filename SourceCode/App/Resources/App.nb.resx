@@ -1290,6 +1290,12 @@
   <data name="PasswordResetMailSent" xml:space="preserve">
     <value>E -post for tilbakestilling av passord sendt</value>
   </data>
+  <data name="AccountLockedMailSubject" xml:space="preserve">
+    <value>Kontoen din er låst</value>
+  </data>
+  <data name="PasswordChangedMailSubject" xml:space="preserve">
+    <value>Passordet ditt er endret</value>
+  </data>
   <data name="PeopleWithoutEmailAddressIn" xml:space="preserve">
     <value>Personer uten e-postadresse i {0}</value>
   </data>

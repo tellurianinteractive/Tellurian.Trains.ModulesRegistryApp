@@ -4,15 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Services.Models;
 using System.Security.Claims;
 
 namespace ModulesRegistry.Security;
 
 internal static class LoginLogoutHandler
 {
-    public static async Task<IActionResult> LoginAsync(this PageModel model, UserService userService, string? username, string? password, string? returnUrl = null)
+    public static async Task<IActionResult> LoginAsync(this PageModel model, UserService userService, IMailSender mailSender, ContentService contentService, string? username, string? password, string? returnUrl = null)
     {
         string rootUrl = model.Url.Content("~/");
         if (returnUrl is null) returnUrl = rootUrl;
@@ -22,11 +24,19 @@ internal static class LoginLogoutHandler
         await SignOut();
 
         var user = await userService.FindByEmailAsync(username);
-        if (user is not null)
+        if (user is not null && !user.IsLockedOut())
         {
+            var verification = user.Person is not null
+                ? password.VerifyPassword(user.HashedPassword)
+                : default;
 
-            if (user.Person is not null && password.IsSamePasswordAs(user.HashedPassword))
+            if (verification.Matched)
             {
+                if (verification.NeedsRehash)
+                {
+                    try { _ = await userService.UpdateHashedPasswordAsync(user.Id, password.AsHashedPassword()); }
+                    catch { /* rehash is best-effort; user stays on legacy hash until next login */ }
+                }
                 var claims = new List<Claim>
                 {
                     new(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
@@ -36,7 +46,11 @@ internal static class LoginLogoutHandler
             }
             else
             {
-                _ = await userService.UpdateFailedLoginAttempts(user.Id);
+                var updated = await userService.UpdateFailedLoginAttempts(user.Id);
+                if (updated is not null && updated.IsLockedOut())
+                {
+                    await SendSecurityNotification(updated, "AccountLockedMail", "AccountLockedMailSubject", mailSender, contentService);
+                }
             }
         }
         return model.LocalRedirect(returnUrl);
@@ -77,6 +91,20 @@ internal static class LoginLogoutHandler
             }
             catch { }
         }
+    }
+
+    internal static async Task SendSecurityNotification(User recipient, string contentName, string subjectKey, IMailSender mailSender, ContentService contentService)
+    {
+        try
+        {
+            var language = recipient.PreferredLanguage();
+            var markdown = await contentService.GetTextContent(contentName, language);
+            var subject = LanguageExtensions.GetLocalizedString(subjectKey, language);
+            var notification = new SecurityNotification(recipient, subject, markdown);
+            var message = notification.MailMessage;
+            if (message is not null) _ = await mailSender.SendMailMessageAsync(message);
+        }
+        catch { /* security notifications are best-effort; never block the primary flow */ }
     }
 
     public static async Task<IActionResult> LogoutAsync(this PageModel model)

@@ -67,7 +67,7 @@
 
     private async Task SendTestMail()
     {
-        var message = new MailMessage(new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"]), new MailAddress(Principal!.EmailAddess(), Principal!.GivenName()))
+        var message = new MailMessage(new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"]), new MailAddress(Principal!.EmailAddress(), Principal!.GivenName()))
         {
             Subject = "Test",
             Body = "This is a test message.",

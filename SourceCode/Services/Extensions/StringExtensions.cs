@@ -120,36 +120,76 @@ public static partial class StringExtensions
 
     #region Password hashing
 
+    public readonly record struct PasswordVerification(bool Matched, bool NeedsRehash);
+
+    private const string V2Prefix = "v2$";
+    private const int V2IterationCount = 600_000;
+    private const int V1IterationCount = 10_000;
+    private const int SaltBytes = 16;
+    private const int HashBytes = 32;
+
     public static string AsHashedPassword(this string clearTextPassword)
     {
-        byte[] salt = new byte[128 / 8];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(salt);
-        }
-        return Hash(clearTextPassword, salt);
+        var salt = RandomNumberGenerator.GetBytes(SaltBytes);
+        var hash = HashV2(clearTextPassword, salt);
+        return $"{V2Prefix}{Convert.ToBase64String(salt)}${Convert.ToBase64String(hash)}";
     }
 
-    private static string Hash(string clearTextPassword, byte[] salt)
+    public static PasswordVerification VerifyPassword(this string clearTextPassword, string? storedHash)
     {
-        byte[] hashed = KeyDerivation.Pbkdf2(
+        if (string.IsNullOrWhiteSpace(clearTextPassword) || string.IsNullOrWhiteSpace(storedHash)) return default;
+
+        if (storedHash.StartsWith(V2Prefix, StringComparison.Ordinal))
+        {
+            if (!TryParse(storedHash.AsSpan(V2Prefix.Length), '$', out var salt, out var expected)) return default;
+            var computed = HashV2(clearTextPassword, salt);
+            return CryptographicOperations.FixedTimeEquals(computed, expected)
+                ? new PasswordVerification(Matched: true, NeedsRehash: false)
+                : default;
+        }
+        else
+        {
+            // Legacy v1 format: "<b64salt> <b64hash>" (PBKDF2-HMAC-SHA1, 10k iterations). Rehash on successful verify.
+            if (!TryParse(storedHash, ' ', out var salt, out var expected)) return default;
+            var computed = HashV1(clearTextPassword, salt);
+            return CryptographicOperations.FixedTimeEquals(computed, expected)
+                ? new PasswordVerification(Matched: true, NeedsRehash: true)
+                : default;
+        }
+    }
+
+    private static bool TryParse(ReadOnlySpan<char> payload, char delimiter, out byte[] salt, out byte[] hash)
+    {
+        salt = []; hash = [];
+        var delimIndex = payload.IndexOf(delimiter);
+        if (delimIndex < 0) return false;
+        try
+        {
+            salt = Convert.FromBase64String(payload[..delimIndex].ToString());
+            hash = Convert.FromBase64String(payload[(delimIndex + 1)..].ToString());
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+        return salt.Length == SaltBytes && hash.Length == HashBytes;
+    }
+
+    private static byte[] HashV2(string clearTextPassword, byte[] salt) =>
+        KeyDerivation.Pbkdf2(
+            password: clearTextPassword,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: V2IterationCount,
+            numBytesRequested: HashBytes);
+
+    private static byte[] HashV1(string clearTextPassword, byte[] salt) =>
+        KeyDerivation.Pbkdf2(
             password: clearTextPassword,
             salt: salt,
             prf: KeyDerivationPrf.HMACSHA1,
-            iterationCount: 10000,
-            numBytesRequested: 256 / 8);
-        return $"{Convert.ToBase64String(salt)} {Convert.ToBase64String(hashed)}";
-    }
-
-    public static bool IsSamePasswordAs(this string clearTextPassword, string? hashedPassword)
-    {
-        if (string.IsNullOrWhiteSpace(hashedPassword)) return false;
-        var hashedPasswordItems = hashedPassword.Items(' ');
-        if (hashedPasswordItems.Length != 2) return false;
-        var salt = Convert.FromBase64String(hashedPasswordItems[0]);
-        var hashedClearTextPassword = Hash(clearTextPassword, salt);
-        return hashedClearTextPassword.Equals(hashedPassword, StringComparison.Ordinal);
-    }
+            iterationCount: V1IterationCount,
+            numBytesRequested: HashBytes);
 
     #endregion
 

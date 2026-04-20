@@ -1,2 +1,2 @@
-﻿> **Haben Sie Probleme sich bei der Modulregistrierung anzumelden?**
-> In manchen Browsern scheint es, dass Sie die TAB-Taste *nach* der Eingabe Ihres Passworts drücken müssen, bevor Sie auf die **Anmelden**-Schaltfläche klicken.
+﻿> **Hast Du Probleme Dich bei der Modulregistrierung anzumelden?**
+> In manchen Browsern scheint es, dass Du die TAB-Taste *nach* der Eingabe Deines Passworts drücken musst, bevor Du auf die **Anmelden**-Schaltfläche klickst.

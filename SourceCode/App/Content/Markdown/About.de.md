@@ -16,12 +16,12 @@ innerhalb der Europäischen Union, Großbritannien, der Schweiz und Norwegen.
 
 #### Beitragen
 Die Anwendung wird als *Open Source* entwickelt.
-Sie können auf verschiedene Weise zur Verbesserung der *Module Registry* beitragen:
-- Geben Sie Feedback und schlagen Sie Verbesserungen oder neue Funktionen vor.
-- Verbessern Sie vorhandene Übersetzungen oder fügen Sie neue hinzu.
+Du kannst auf verschiedene Weise zur Verbesserung der *Module Registry* beitragen:
+- Gib Feedback und schlage Verbesserungen oder neue Funktionen vor.
+- Verbessere vorhandene Übersetzungen oder füge neue hinzu.
 - Als ein Entwickler.
 - Als Sponsor. Derzeit wird die App von der schwedischen Firma *Tellurian Interactive AB* gesponsert.
-Detaillierte Beitragsrichtlinien finden Sie in den folgenden Links.
+Detaillierte Beitragsrichtlinien findest Du in den folgenden Links.
 
 #### Technische Übersicht
 Code ist in C#, HTML, CSS und SQL geschrieben.

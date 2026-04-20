@@ -2,6 +2,15 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.13.3
+Released 2026-04-20
+- **API authentication** now accepts the API key via the `X-API-Key` HTTP header. The existing `?apiKey=` query string parameter still works but is deprecated and will be removed in a future release. Callers should move to the header; query strings are exposed in access logs, browser history, and referrer headers.
+- **Password hashing** upgraded to PBKDF2-HMAC-SHA256 with 600 000 iterations. Existing passwords are transparently rehashed on the next successful sign-in.
+- **Account lockout** is now actually enforced: a locked account cannot sign in even with the correct password, and a signed-in session that becomes locked loses access. The sign-in page shows no distinguishing message to avoid leaking account state.
+- **Security notifications** are sent by email when an account gets locked out due to too many failed sign-in attempts, and after a successful password change. Both arrive via the normal mail channel so the account owner learns of suspicious activity without revealing anything to a would-be attacker.
+- **Security mail translations** added for Swedish, German, Danish and Norwegian for the password reset, account locked and password changed emails (subject lines and message body).
+- **German translations** converted from formal *Sie*-form to informal *Du*-form across all help articles, UI help texts and resource strings, matching the informal tone already used for invitations and security mails.
+- **Component update** with latest versions of extenal dependencies.
 ## Release 1.13.2
 Released 2026-03-25
 - **Component update** with latest versions of extenal dependencies.

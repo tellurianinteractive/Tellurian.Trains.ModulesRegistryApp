@@ -1,9 +1,9 @@
-﻿Wenn Sie Ihr Passwort vergessen haben, können Sie es hier zurücksetzen.
-Geben Sie Ihre E-Mail-Adresse ein und klicken Sie auf *Senden*.
-Wir senden Ihnen eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.
-* Geben Sie die **gleiche E-Mail-Adresse** ein, mit der Sie sich anmelden.
-* **Aus Sicherheitsgründen** bestätigen wir nicht, dass Ihre E-Mail-Adresse gefunden wurde oder nicht.
-Stellen Sie daher sicher, dass Sie Ihre E-Mail-Adresse korrekt eingeben.
-* Sie haben nur eine **begrenzte Anzahl von Versuchen**, Ihr Passwort zurückzusetzen.
+﻿Wenn Du Dein Passwort vergessen hast, kannst Du es hier zurücksetzen.
+Gib Deine E-Mail-Adresse ein und klicke auf *Senden*.
+Wir senden Dir eine E-Mail mit einem Link zum Zurücksetzen Deines Passworts.
+* Gib die **gleiche E-Mail-Adresse** ein, mit der Du Dich anmeldest.
+* **Aus Sicherheitsgründen** bestätigen wir nicht, dass Deine E-Mail-Adresse gefunden wurde oder nicht.
+Stelle daher sicher, dass Du Deine E-Mail-Adresse korrekt eingibst.
+* Du hast nur eine **begrenzte Anzahl von Versuchen**, Dein Passwort zurückzusetzen.
 dann wirst du blockiert.
-* **Suchen Sie in Ihrem Spam-Ordner**, wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten.
+* **Suche in Deinem Spam-Ordner**, wenn Du die E-Mail nicht innerhalb weniger Minuten erhältst.
