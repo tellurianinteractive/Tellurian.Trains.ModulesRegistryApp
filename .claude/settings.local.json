@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -i \"App\\\\\\\\.\")"
+      "Bash(grep -i \"App\\\\\\\\.\")",
+      "Bash(claude mcp *)"
     ]
   }
 }
