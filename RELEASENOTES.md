@@ -3,8 +3,8 @@
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.14.0
 Released 2026-11-12
-- **Upgrade** to .NET 11.
-- **API documentation** (OpenAPI) works again and describes all endpoints.
+- **Upgrade** to .NET 11 and the latest versions of all components, including their security fixes.
+- **API**: the documentation (OpenAPI 3.2) works again and describes all endpoints, which now only accept read (GET) requests.
 ## Release 1.13.9
 Released 2026-11-12
 - **Person search** when adding group members and registering meeting participants shows suggestions while typing, with keyboard selection. Several words, like "kar eli", must all match.
