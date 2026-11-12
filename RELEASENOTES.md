@@ -3,7 +3,7 @@
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.13.8
 Released 2026-11-12
-- Maintenance update.
+- **Meeting registration**: organisers find the person to register by typing part of the name.
 ## Release 1.13.7
 Released 2026-11-12
 - Maintenance update.

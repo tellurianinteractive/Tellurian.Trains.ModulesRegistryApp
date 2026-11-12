@@ -9,7 +9,6 @@
 @inject LayoutParticipantService LayoutParticipantService
 @inject CountryService CountryService
 @inject GroupService GroupService
-@inject PersonService PersonService
 
 <PageHeading Label="Registration" Context="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
 
@@ -37,7 +36,12 @@ else
             <div class="noprint">
                 <h3>@Localizer["SelectPersonToRegister"]</h3>
                 <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Register" />
-                <ListboxSelector ItemType="Person" OnSelected="OnSelectedPerson" Items="PeopleItems" IsVisible=" true" SelectedId="PersonId" />
+                <div class="row g-3">
+                    <AppSearchPerson @bind-Value:get="SearchedPersonId" @bind-Value:set="OnSearchedPerson"
+                                     SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
+                                     MinimumSearchCharacters="MinimumSearchCharacters"
+                                     CountryId="CountryId" />
+                </div>
             </div>
         }
 
@@ -179,7 +183,8 @@ else
     MeetingParticipant? Participant;
     Meeting? Meeting;
     IEnumerable<ListboxItem>? CountryItems;
-    IEnumerable<ListboxItem>? PeopleItems;
+    int SearchedPersonId;
+    const int MinimumSearchCharacters = 3;
 
     IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
     bool IsAdministratorOrMeetingOrganiser;
@@ -219,14 +224,23 @@ else
         }
     }
 
-    async Task OnSelectedCountry(int countryId)
+    void OnSelectedCountry(int countryId)
     {
         if (MeetingId > 0 && countryId > 0)
         {
             CountryId = countryId;
             PersonId = 0;
-            PeopleItems = await PersonService.ListboxItemsAsync(Principal, countryId);
+            SearchedPersonId = 0;
         }
+    }
+
+    /// <summary>
+    /// Opens the person's existing registration, or a new registration if the person isn't a participant yet.
+    /// </summary>
+    async Task OnSearchedPerson(int personId)
+    {
+        SearchedPersonId = personId;
+        await OnSelectedPerson(personId);
     }
 
     async Task OnSelectedPerson(int personId)
