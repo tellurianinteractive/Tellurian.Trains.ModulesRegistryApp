@@ -81,17 +81,19 @@ jobs:
             echo "deploy=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # Every release has a section with its date in RELEASENOTES.md (bullets only for changes that affect users or security).
+      # Every release has a section with its date and at least one bullet in RELEASENOTES.md
+      # (changes that affect users or security, otherwise "- Maintenance update.").
       - name: Check release notes
         if: steps.version.outputs.deploy == 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           tr -d '' < RELEASENOTES.md | awk -v heading="## Release $VERSION" '
-            found { if ($0 ~ /^Released [0-9]{4}-[0-9]{2}-[0-9]{2}$/) ok = 1; exit }
+            found == 2 { if ($0 ~ /^- /) ok = 1; exit }
+            found == 1 { if ($0 ~ /^Released [0-9]{4}-[0-9]{2}-[0-9]{2}$/) found = 2; else exit; next }
             $0 == heading { found = 1 }
             END { exit ok ? 0 : 1 }
-          ' || { echo "::error::RELEASENOTES.md needs a section '## Release $VERSION' followed by 'Released yyyy-MM-dd'."; exit 1; }
+          ' || { echo "::error::RELEASENOTES.md needs a section '## Release $VERSION', then 'Released yyyy-MM-dd', then at least one bullet (e.g. '- Maintenance update.')."; exit 1; }
 
       - name: Publish
         if: steps.version.outputs.deploy == 'true'
@@ -164,13 +166,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # The release notes section for this version, if any (only changes that affect users or security have one).
+          # The bullets of this version's release notes section.
           awk -v heading="## Release $VERSION" '
             $0 == heading { found = 1; next }
             found && /^## / { exit }
             found && !/^Released / { print }
           ' <(tr -d '\r' < RELEASENOTES.md) > release-notes.md
-          if [ ! -s release-notes.md ]; then echo "No user-facing changes." > release-notes.md; fi
+          if [ ! -s release-notes.md ]; then echo "- Maintenance update." > release-notes.md; fi
           if gh release view "v$VERSION" > /dev/null 2>&1; then
             echo "Release v$VERSION already exists (forced redeploy)."
           else
