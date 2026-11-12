@@ -46,6 +46,7 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 2.1 | `net11.0` + 11.0.x packages + Swashbuckle/OpenAPI 3.x, nothing else. Check that Blazored.FluentValidation and Blazored.LocalStorage still work on .NET 11; if not, replace them earlier. | All tests green, OpenAPI document and Swagger UI work, smoke test, App Service runtime updated | 2.1, 2.4 |
+| 2.1B | Public API as minimal APIs in a separate class library `SourceCode/Api` (`MapPublicApi()`), still hosted by the app: route group `/api` with the API key as a group filter, `TypedResults` with `Data.Api` DTOs only (a DTO for `LayoutVehicle`). Remove `AddControllers`/`MapControllers` and the MVC JSON options. **Decide the JSON format first** (see 2.5). | Tests that compare each endpoint's JSON before and after; the OpenAPI document test; API key tests (401 without, 200 with) | 2.5 |
 | 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
 
 
@@ -81,6 +82,7 @@ All translations in one resource assembly, and the app's own localisation code r
 ### Stage 5: database logic to code (still SQL Server + DACPAC)
 | # | Step | Verification | Ref |
 |---|---|---|---|
+| 5.0 | Evaluate a disposable test database for integration tests: SQL Server in a container built from `Database.sqlproj`, started by Aspire (AppHost + ServiceDefaults) or by Testcontainers alone. Decide which, and whether it also runs in CI. Prerequisite for the golden-master tests in 5.1. | A test creates the database, inserts known data and runs a stored procedure; decision documented in section 8 | 8 |
 | 5.1 | Document the waybill rules (`System Design Documents/Waybills.md`) and add golden-master tests against the current procedures. No production change. | The tests run green against the current implementation | 4.5 |
 | 5.2 | `GetStationCustomerWaybills` → `WaybillGenerator` + LINQ (the old procedure is kept) | Golden master identical, unit tests, station waybills printed and compared in the browser | 4.5 |
 | 5.3 | Drop the six waybill views and `GetStationCustomerWaybills` in the database | Publish the DACPAC, smoke test | 4.5 |
@@ -234,6 +236,24 @@ The app still uses the .NET 5–7 style: `AddServerSideBlazor()`, `MapBlazorHub(
 - [x] Check that API consumers can handle OpenAPI 3.2, or pin `OpenApiVersion` to 3.1. Decided: OpenAPI 3.2.
 
 ---
+
+### 2.5 Public API as minimal APIs (step 2.1B)
+The public API (`/api/...`, API key) has four read-only GET endpoints in `App/Api` controllers. The app's own browser calls (`/app/...`) are already minimal APIs (`App/Endpoints`).
+
+**Why:**
+- `TypedResults` (for example `Results<Ok<IEnumerable<Data.Api.Meeting>>, NotFound>`) tie the documented type to the returned one. The OpenAPI document was broken because `[ProducesResponseType]` pointed at the EF entity `Data.Meeting` while the service returned the DTO.
+- The API key becomes a filter or policy on the `/api` route group, like the `User` policy on `/app`, instead of a middleware that checks paths.
+- One style for all endpoints, and less to maintain (no controllers or MVC JSON options).
+
+**Structure (no code duplication):**
+- A class library `SourceCode/Api` with the endpoints, `MapPublicApi()` and the API key filter (the API key check and `UserService` lookup move there or to Services). It references `Data.Api` and `Services`, like the app does.
+- The app calls `app.MapPublicApi()`. If the API ever needs its own App Service (independent deploys, availability, scaling), a small host project calls the same `MapPublicApi()` and the workflow gets one more deploy job. Duplication of entities or services only arises if the API leaves this solution, so it should stay here.
+- A separate app is not worth it today (four endpoints, Free plan).
+
+**To decide before the step:**
+- [ ] **JSON format.** The controllers use `ReferenceHandler.Preserve` and `WriteIndented`, so lists are returned as `{"$id":"1","$values":[...]}`. Minimal APIs use other JSON options, so a straight switch changes the format. Either configure the same options for the `/api` group (no change for consumers), or switch to plain arrays (cleaner; then announce it, preferably as `/api/v2/...`).
+- [ ] **Who uses the API** today, to judge what a format change would break.
+- [ ] Whether an empty result should stay `404 Not Found` (today) or become `200` with an empty list (a behaviour change, so a separate step).
 
 ## 3. Architecture: static SSR first, SignalR only where needed
 
@@ -630,4 +650,29 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [ ] The app's `ILanguageService` has the same name as the package's: replace it, don't keep both.
 - [ ] Whether the package supports everything `ContentService` does today (remote Markdown via `Href`, the `LastModified` line that the Terms of Use date depends on); otherwise extend the package first (via the local NuGet feed workflow) and use a published version here.
 - [ ] Adapt the two translation tests to the new location, and add a test that no key exists twice.
+
+---
+
+## 8. Local development and integration tests (Aspire or Testcontainers)
+
+### 8.1 Problem
+- Database tests are switched off (`[Ignore]`): they need personal secrets and run against a copy of production or production itself.
+- Stage 5 moves waybill generation from stored procedures to code and needs golden-master tests against a database with known content, preferably also in CI.
+- Developing against production data is risky, especially with the schema changes in stages 4 and 5.
+
+### 8.2 Options
+- **Testcontainers only:** each test run starts SQL Server in a container, publishes the schema (DACPAC from `Database.sqlproj`, later EF migrations), inserts test data and runs the tests. Small footprint: a NuGet package in the test projects and Docker or Podman on the machine (GitHub's Ubuntu runners have Docker).
+- **Aspire:** an AppHost project describes the app, the database container and later any separate API host; one start runs everything with connection strings wired up, plus a dashboard (logs, traces, metrics). ServiceDefaults adds OpenTelemetry, health checks and resilience. Aspire's test support can start the same setup in integration tests. A community integration publishes a SQL project into the container.
+- **Not in scope:** deploying with Aspire. Production stays on Windows App Service with the GitHub workflow; Aspire would only be used locally and in tests.
+
+### 8.3 Assessment
+- Aspire does not merge services into one app; it orchestrates several. With one app (the public API stays in it, 2.5), its orchestration adds little; the database container and the test support are what solve a real problem here.
+- Cost: two more projects (AppHost, ServiceDefaults) for Aspire, Docker/Podman for developers, and one more tool to keep updated.
+- Likely choice: start with **Testcontainers** for the integration tests in stage 5. Add **Aspire** when there is more than one runnable project, or if the local dashboard and OpenTelemetry (to Application Insights) are wanted.
+
+### 8.4 To decide in step 5.0
+- [ ] Testcontainers alone, or Aspire.
+- [ ] How the schema gets into the container now (DACPAC) and after stage 4 (EF migrations bundle).
+- [ ] Test data: a small hand-written set per golden-master scenario, not a copy of production (personal data).
+- [ ] Whether the integration tests run in CI on every push, or separately.
 
