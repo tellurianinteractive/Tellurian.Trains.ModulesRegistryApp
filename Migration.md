@@ -24,9 +24,22 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 ### Stage 1: dependency hygiene (still .NET 10)
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 1.1 | Update to the latest 10.0.x patches and third-party minor versions, `Microsoft.Azure.SignalR` 1.33.1, fix the transitive vulnerabilities, remove the unused Blazorise packages | `dotnet list package --vulnerable/--deprecated` clean (except Blazored), smoke test of all main pages | 1.4, 1.6, 1.7 |
+| 1.1 ✅ | Update to the latest 10.0.x patches and third-party minor versions, `Microsoft.Azure.SignalR` 1.33.1, fix the transitive vulnerabilities, remove the unused Blazorise packages | `dotnet list package --vulnerable/--deprecated` clean (except Blazored), smoke test of all main pages | 1.4, 1.6, 1.7 |
 | 1.2 | Create `TestCode/App.Tests`. Our own notification service and component replace Blazored.Toast. | Unit tests for the service, success/error messages shown on save in the browser | 1.1 |
 | 1.3 | Merge `AddMember` into `AppSearchPerson`, then our own person search with a search endpoint replaces Blazored.Typeahead | Endpoint tests (authorisation, minimum length, result limit), keyboard selection in the browser | 1.2 |
+
+Step 1.1 was deployed as release 1.13.4 (2026-11-12).
+
+### Stage 1B: automated build and deployment (GitHub Actions)
+Today the app is published by hand from Visual Studio (Web Deploy profile). The goal: **a push to `master` that steps up `<Version>` in `Directory.Build.props` builds, tests and publishes the app to Azure**. Every other push only builds and tests. Do this stage before 1.2, so the remaining steps are deployed by the pipeline.
+
+| # | Step | Verification | Ref |
+|---|---|---|---|
+| 1B.1 | CI workflow `.github/workflows/ci.yml`: on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
+| 1B.2 | Create the tag `v1.13.4` on the deployed commit. Deploy workflow `.github/workflows/deploy.yml`: on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: check that `RELEASENOTES.md` has a `## Release <Version>` heading, build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes. | A push without a version change doesn't deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
+| 1B.3 | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
+
+The database (DACPAC) is still published by hand. It moves into the pipeline in stage 4 (migration bundle).
 
 ### Stage 2: .NET 11, with no behaviour change
 | # | Step | Verification | Ref |
@@ -70,7 +83,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 ### Stage 6: PostgreSQL (optional, decided later)
 Only once stages 3 and 5 are done. See 4.3 phase C. This is planned as its own project with a rehearsed data migration.
 
-**Order between stages:** 1 → 2 must come first. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
+**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
 
 ---
 
@@ -530,3 +543,42 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 - [ ] Manual browser check: notifications, person search, validation messages on all four forms, list filters kept between visits, and QuickGrid paging and sorting.
 - [ ] Check every fully supported language (en, de, da, sv, nb).
 - [ ] Add `RELEASENOTES.md` entries.
+
+
+---
+
+## 6. Automated build and deployment
+
+### 6.1 CI: build and test on every push
+- Runner: `ubuntu-latest` with `actions/setup-dotnet` (SDK 10.0.x; `global.json` has no version pin). Framework-dependent output runs on the App Service no matter which OS built it.
+- Build and test the projects one by one. The `.slnx` includes `Database.sqlproj`, which `dotnet` can't restore.
+- No secrets are needed: the tests that need the database (`VehicleImporterTests`) are already marked `[Ignore]`.
+- `ContentServiceTests.ReadsMaxDate` compares with the file's last write time on disk. After a git checkout, that's the checkout time, so the test must be rewritten (for example, set the file time in the test, or test with a temporary file).
+
+### 6.2 Deploy when the version is stepped up
+**Trigger:** push to `master`. The job reads `<Version>` from `Directory.Build.props` and compares it with the git tags. It deploys only if the tag `v<Version>` doesn't exist. This makes the run idempotent: re-running it, or pushing documentation changes, never deploys twice. A manual `workflow_dispatch` trigger is useful for redeploying.
+
+**Steps in the job:**
+1. Read the version; stop (successfully) if the tag `v<Version>` already exists.
+2. Fail if `RELEASENOTES.md` has no `## Release <Version>` heading (definition of done, item 3).
+3. Build and run all tests.
+4. `dotnet publish SourceCode/App/App.csproj -c Release -o publish`.
+5. `azure/login` with OIDC (no stored password), then `azure/webapps-deploy` to `ModuleRegistry`.
+6. Create the tag `v<Version>` and a GitHub release with the release notes section as its body.
+
+The job runs in a GitHub environment called `production`. Then Azure only trusts this environment, and approval rules can be added if wanted.
+
+**Rollback:** run the deploy workflow manually for an earlier tag, or redeploy the previous build from the GitHub release.
+
+### 6.3 Setup outside the repository (done once)
+**In Azure:**
+- [x] User-assigned managed identity `id-moduleregistry-deploy` in resource group `Tellurian.Trains` (search the top bar for "Managed Identities").
+- [x] Federated credential `github-production`, issuer `https://token.actions.githubusercontent.com`, subject `repo:tellurianinteractive/Tellurian.Trains.ModulesRegistryApp:environment:production`. Note: the Portal suggests the immutable format with IDs (`tellurianinteractive@57481455/...@332267854`), but the repository uses GitHub's default subject format (`use_immutable_subject: false`), so the default format must be used.
+- [ ] Role **Website Contributor** for the identity on the `ModuleRegistry` web app only.
+
+**In GitHub** (repository Settings):
+- [ ] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
+- [ ] Environment secrets `AZURE_CLIENT_ID` (the identity's Client ID, not the Object ID), `AZURE_TENANT_ID` (same as the Directory ID) and `AZURE_SUBSCRIPTION_ID`.
+- [ ] *Actions → General*: Actions allowed (check the organisation settings too). The workflow requests `contents: write` (tags and releases) and `id-token: write` (OIDC) itself.
+- [ ] Optional: a branch protection rule (or ruleset) on `master` that requires the CI check to pass.
+- [x] Tag `v1.13.4` on the deployed commit `0aad653`.
