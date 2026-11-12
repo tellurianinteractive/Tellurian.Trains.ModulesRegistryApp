@@ -49,6 +49,17 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 | 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
 
 
+### Stage 2B: localisation in one place, with Tellurian.Localization
+All translations in one resource assembly, and the app's own localisation code replaced by the NuGet package **Tellurian.Localization**. Structural change: the texts users see stay the same. See section 7.
+
+| # | Step | Verification | Ref |
+|---|---|---|---|
+| 2B.1 | Inventory: all resource files and keys, duplicates and conflicts between them (same key, different texts), and the app's localisation code with its Tellurian.Localization counterpart. Decide the target project and the naming of keys. No production change. | Inventory and decisions documented in section 7 | 7 |
+| 2B.2 | Create the resource project and move all `.resx` files there, merged into one set per language. Resolve duplicates and conflicts. Point all `IStringLocalizer` users to it. | The translation tests (all texts translated, all used keys exist) run against the new location and pass; all languages checked in the browser | 7 |
+| 2B.3 | Replace the app's language selection and culture handling (`ILanguageService`/`LanguageService`, `LanguageExtensions`) with Tellurian.Localization, a few call sites per release | Unit tests for language selection and fallback; language switch in the browser | 7 |
+| 2B.4 | Replace the Markdown content loading (`ContentService`, `CultureInfoExtensions.GetMarkdownAsync`, including the `<!-- LastModified -->` line) with the package's Markdown provider, or extend the package where it lacks something | Content pages in all languages; the Terms of Use guard test still gives 2026-01-09 10:25:31 UTC | 7, 6.2 |
+| 2B.5 | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | 7 |
+
 ### Stage 3: SSR, page group by page group
 | # | Step | Verification | Ref |
 |---|---|---|---|
@@ -84,7 +95,7 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 ### Stage 6: PostgreSQL (optional, decided later)
 Only once stages 3 and 5 are done. See 4.3 phase C. This is planned as its own project with a rehearsed data migration.
 
-**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
+**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stage 2B should come before stage 3, so the new forms (3.4–3.6) get their texts from one place. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
 
 ---
 
@@ -591,3 +602,30 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [x] Ruleset *Protect release tags*: tags `v*` can't be deleted or moved (the deploy workflow decides by them); creating new ones still works.
 - [ ] Not now: requiring pull requests and a passing `build` job before merging. Add it (with admin bypass) if more people contribute code regularly.
 - [x] Tag `v1.13.4` on the deployed commit `0aad653`.
+
+---
+
+## 7. Localisation: one resource assembly and Tellurian.Localization
+
+### 7.1 Current state (2026-11-12)
+- **Resource files in three projects**, each with its own set of translations:
+  - `App/Resources/App.*.resx`: UI texts.
+  - `Data/Resources/Strings.*.resx` and `Validators.*.resx`: entity names and validation messages.
+  - `Services/Resources/Strings.*.resx`: service messages.
+- **The same key can exist in several places**, with different texts or translations. For example, `NotFound` existed only in the Services resources while the UI used it through `App.resx`, so the key was shown to users (fixed in 1.13.9).
+- **Own localisation code**: `Services/ILanguageService` + `LanguageService`, `Services/Extensions/LanguageExtensions` (fully supported languages, culture selection), `CultureInfoExtensions.GetMarkdownAsync` + `ContentService` (Markdown content per language, with the explicit `LastModified` line), and extensions in `Data/Extensions` that pick a language column on table rows (cargo and NHM names).
+- **Tests since 1.13.9**: every text in a master resx file exists in sv, de, da and nb; every literal `Localizer["Key"]` in the App project exists in `App.resx`.
+
+### 7.2 Goal
+- **One resource assembly** (for example `SourceCode/Resources`) with one set of `.resx` files per language, used by all projects. No duplicate keys, one place to translate.
+- **Tellurian.Localization** (NuGet, currently 1.5.0, `net10.0`) instead of the app's own code: RESX, Markdown and object (language column) resource providers, `ILanguageService`, and a fallback chain from specific culture to language to default language to key.
+- **Translators** keep working the same way (ResX Manager, `.xx.md` files); `CONTRIBUTING.md` is updated with the new location.
+
+### 7.3 Things to decide in step 2B.1
+- [ ] Name and place of the resource project, and whether entity and validation texts get key prefixes (for example `Validation.`) to avoid collisions when merged.
+- [ ] How conflicts are resolved when the same key has different texts in different files.
+- [ ] Whether `hu` and `pl` (partial translations) stay as they are.
+- [ ] The app's `ILanguageService` has the same name as the package's: replace it, don't keep both.
+- [ ] Whether the package supports everything `ContentService` does today (remote Markdown via `Href`, the `LastModified` line that the Terms of Use date depends on); otherwise extend the package first (via the local NuGet feed workflow) and use a published version here.
+- [ ] Adapt the two translation tests to the new location, and add a test that no key exists twice.
+
