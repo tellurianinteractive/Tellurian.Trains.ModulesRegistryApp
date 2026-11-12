@@ -540,6 +540,9 @@
 		<None Update="Content\Markdown\TermsOfUse.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Content\Markdown\UICWagonNumbering.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Contact.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

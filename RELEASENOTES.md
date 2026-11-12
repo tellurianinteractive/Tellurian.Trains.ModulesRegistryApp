@@ -2,6 +2,9 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 There is maximum one release per date, but this can be performed as one or several deployments during a day.
+## Release 1.13.6
+Released 2026-11-12
+- **UIC vehicle numbering** page shows its content again.
 ## Release 1.13.4
 Released 2026-11-12
 - **Component update** to latest .NET 10 patches and external dependencies.
