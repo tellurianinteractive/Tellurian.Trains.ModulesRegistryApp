@@ -37,6 +37,8 @@ dotnet test --project TestCode/Services.Tests/Services.Tests.csproj --filter "Fu
 dotnet run --project SourceCode/App/App.csproj
 ```
 
+CI (`.github/workflows/ci.yml`) runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
+
 The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Use Visual Studio or `msbuild SourceCode/Database/Database.sqlproj` to build/publish the schema.
 
 ## Local configuration & secrets
