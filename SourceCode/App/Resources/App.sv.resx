@@ -1776,4 +1776,52 @@
   <data name="NotFound" xml:space="preserve">
     <value>Hittades inte</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Features" xml:space="preserve">
+    <value>Egenskaper</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="InvitedPersonHasNoEmail" xml:space="preserve">
+    <value>Den inbjudna personen har ingen e-postadress.</value>
+  </data>
+  <data name="Markdown" xml:space="preserve">
+    <value>Markdown</value>
+  </data>
+  <data name="NameInLayout" xml:space="preserve">
+    <value>Namn på banan</value>
+  </data>
+  <data name="NotANumber" xml:space="preserve">
+    <value>Inte ett tal</value>
+  </data>
+  <data name="NotAValidDate" xml:space="preserve">
+    <value>Inte ett giltigt datum</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="RequiresCooling" xml:space="preserve">
+    <value>Kräver kylning</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>I dag</value>
+  </data>
+  <data name="TooManyPasswordResetAttempts" xml:space="preserve">
+    <value>Du har försökt återställa ditt lösenord för många gånger.</value>
+  </data>
+  <data name="UnsupportedValueType" xml:space="preserve">
+    <value>Värdetypen stöds inte</value>
+  </data>
+  <data name="ValueMayNotBeNull" xml:space="preserve">
+    <value>Ett värde krävs</value>
+  </data>
 </root>

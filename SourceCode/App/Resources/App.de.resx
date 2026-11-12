@@ -1776,4 +1776,52 @@
   <data name="NotFound" xml:space="preserve">
     <value>Nicht gefunden</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Features" xml:space="preserve">
+    <value>Eigenschaften</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="InvitedPersonHasNoEmail" xml:space="preserve">
+    <value>Die eingeladene Person hat keine E-Mail-Adresse.</value>
+  </data>
+  <data name="Markdown" xml:space="preserve">
+    <value>Markdown</value>
+  </data>
+  <data name="NameInLayout" xml:space="preserve">
+    <value>Name auf der Bahn</value>
+  </data>
+  <data name="NotANumber" xml:space="preserve">
+    <value>Keine Zahl</value>
+  </data>
+  <data name="NotAValidDate" xml:space="preserve">
+    <value>Kein gültiges Datum</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Zeitraum</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="RequiresCooling" xml:space="preserve">
+    <value>Kühlung erforderlich</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Heute</value>
+  </data>
+  <data name="TooManyPasswordResetAttempts" xml:space="preserve">
+    <value>Du hast zu oft versucht, dein Passwort zurückzusetzen.</value>
+  </data>
+  <data name="UnsupportedValueType" xml:space="preserve">
+    <value>Nicht unterstützter Werttyp</value>
+  </data>
+  <data name="ValueMayNotBeNull" xml:space="preserve">
+    <value>Ein Wert ist erforderlich</value>
+  </data>
 </root>

@@ -41,7 +41,7 @@ else if (User.IsPasswordReset() || User.IsNeverLoggedIn())
 else if (User.IsLockedOut())
 {
     <PageHeading Label="YouAreLockedOut" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
-    <p>@Localizer["You have tried to reset your password to many times."].</p>
+    <p>@Localizer["TooManyPasswordResetAttempts"]</p>
 }
 
 @code {
