@@ -40,7 +40,7 @@ dotnet run --project SourceCode/App/App.csproj
 
 CI/CD is one workflow, `.github/workflows/build-and-deploy.yml`. Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
 
-Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version (and add release notes if the change affects users or security), then push. Publishing from Visual Studio is not possible (basic authentication is turned off on the App Service); the release procedure is in `CONTRIBUTING.md`. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
+Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version, add its release notes section with the date (bullets only for changes that affect users or security), then push. Publishing from Visual Studio is not possible (basic authentication is turned off on the App Service); the release procedure is in `CONTRIBUTING.md`. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
 
 The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Use Visual Studio or `msbuild SourceCode/Database/Database.sqlproj` to build/publish the schema.
 
@@ -86,7 +86,7 @@ Markdown files referenced from razor components generally need `<CopyToOutputDir
 - Prefer `IDbContextFactory<ModulesDbContext>.CreateDbContextAsync()` over injecting `ModulesDbContext` directly (the factory is what's registered).
 - Front-end is Blazor Server with plain Bootstrap and FontAwesome (served from `wwwroot/css`), our own `App*` components, Blazored (Toast, LocalStorage, Typeahead, FluentValidation) and `Microsoft.AspNetCore.Components.QuickGrid`. No JS frameworks.
 - Authorisation policies are centralised in `App/Security/AuthorizationPolicyDefinitions.cs` and wired via `AddAuthorizationPolicies()`.
-- Release notes in `RELEASENOTES.md` are English only, with very short texts. **Only changes that affect the users or the app's security get an entry**; internal changes (refactoring, tests, CI, documentation, invisible fixes) don't. A release with no such changes has no release notes section.
+- Release notes in `RELEASENOTES.md` are English only, with very short texts. **Every release gets a section** (`## Release <Version>` and `Released <yyyy-MM-dd>`), but **only changes that affect the users or the app's security get a bullet**; internal changes (refactoring, tests, CI, documentation, invisible fixes) don't. A release with only internal changes has a section with just the date.
 
 ## Running the UI
 

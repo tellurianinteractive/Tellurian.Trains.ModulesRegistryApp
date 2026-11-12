@@ -118,8 +118,8 @@ Publishing from Visual Studio is not possible: password-based publishing (basic 
 
 To release:
 1. Step up `<Version>` and `<AssemblyVersion>` in `Directory.Build.props`.
-2. If the change affects the users or the app's security, add a very short entry under `## Release <Version>` in
-[`RELEASENOTES.md`](RELEASENOTES.md). Internal changes (refactoring, tests, documentation) get no entry.
+2. Add a section `## Release <Version>` with the line `Released <yyyy-MM-dd>` at the top of [`RELEASENOTES.md`](RELEASENOTES.md).
+If the change affects the users or the app's security, add a very short bullet. Internal changes (refactoring, tests, documentation) get no bullet.
 3. Push to `master`. The workflow builds, tests, publishes and deploys, checks that the deployed files match the build,
 and then creates the tag `v<Version>` and a GitHub release with the release notes.
 4. Check the site in a browser. The App Service runs on the Free plan, so the first page load after a deploy can be slow.

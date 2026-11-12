@@ -15,7 +15,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 - **Definition of done** before the next step:
   1. `dotnet build` and all test projects green, with **new tests** for what the step changes.
   2. Manual check in the browser of the affected pages (UI changes aren't caught by tests).
-  3. An entry in `RELEASENOTES.md`, but **only if the step affects the users or the app's security**. Internal changes get no entry.
+  3. A section in `RELEASENOTES.md` with the release date, with bullets **only for changes that affect the users or the app's security**. Internal changes get no bullet.
   4. Deployed to production and **observed** for a while (logs, errors, user feedback) without problems.
 - **Rollback must be possible** by redeploying the previous version. So database objects are never removed in the same release as the code stops using them; they're removed in the following release.
 - **No behaviour changes mixed with refactoring.** A step either changes structure (same behaviour) or changes behaviour, never both.
@@ -543,7 +543,7 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 - [ ] `dotnet build`, plus both test projects green.
 - [ ] Manual browser check: notifications, person search, validation messages on all four forms, list filters kept between visits, and QuickGrid paging and sorting.
 - [ ] Check every fully supported language (en, de, da, sv, nb).
-- [ ] Add `RELEASENOTES.md` entries for the changes that affect the users or the app's security.
+- [ ] Add a `RELEASENOTES.md` section with the date for each release, with bullets for the changes that affect the users or the app's security.
 
 
 ---
@@ -561,11 +561,11 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 
 **Steps in the job:**
 1. Read the version; stop (successfully) if the tag `v<Version>` already exists.
-2. Look for a `## Release <Version>` section in `RELEASENOTES.md`. It's optional: only releases with changes that affect the users or security have one (definition of done, item 3).
+2. Read the `## Release <Version>` section in `RELEASENOTES.md`. Every release has one with its date; only changes that affect the users or security have bullets (definition of done, item 3).
 3. Build and run all tests.
 4. `dotnet publish SourceCode/App/App.csproj -c Release -o publish`, then check that the published `TermsOfUse.md` starts with its `LastModified` line.
 5. `azure/login` with OIDC (no stored password), then `azure/webapps-deploy` to `ModuleRegistry`.
-6. Create the tag `v<Version>` and a GitHub release, with the release notes section as its body if there is one, otherwise a short "No user-facing changes" text.
+6. Create the tag `v<Version>` and a GitHub release, with the section's bullets as its body, or a short "No user-facing changes" text if it has none.
 
 The job runs in a GitHub environment called `production`. Then Azure only trusts this environment, and approval rules can be added if wanted.
 
