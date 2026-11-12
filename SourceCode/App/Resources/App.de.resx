@@ -1773,4 +1773,7 @@
   <data name="_CASING" xml:space="preserve">
     <value>_UPPER</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nicht gefunden</value>
+  </data>
 </root>

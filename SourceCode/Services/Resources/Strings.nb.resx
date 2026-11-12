@@ -768,4 +768,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="Hydrogen" xml:space="preserve">
+    <value>Hydrogen</value>
+  </data>
 </root>

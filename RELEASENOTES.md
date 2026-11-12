@@ -4,6 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 ## Release 1.13.9
 Released 2026-11-12
 - **Person search** when adding group members and registering meeting participants uses the browser's own suggestion list, with keyboard selection.
+- **"Not found"** messages are shown in the chosen language.
 ## Release 1.13.8
 Released 2026-11-12
 - **Meeting registration**: organisers find the person to register by typing part of the name.

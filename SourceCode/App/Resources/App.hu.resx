@@ -120,4 +120,7 @@
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Üres kocsi rendelés</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nem található</value>
+  </data>
 </root>
