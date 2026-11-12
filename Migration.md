@@ -587,5 +587,7 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [x] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
 - [x] Environment secrets `AZURE_CLIENT_ID` (the identity's Client ID, not the Object ID), `AZURE_TENANT_ID` (same as the Directory ID) and `AZURE_SUBSCRIPTION_ID`.
 - [x] *Actions → General*: Actions allowed (check the organisation settings too). The workflow requests `contents: write` (tags and releases) and `id-token: write` (OIDC) itself.
-- [ ] Optional: a branch protection rule (or ruleset) on `master` that requires the `build` job to pass.
+- [x] Ruleset *Protect master history*: no force pushes or deletion of `master`. Normal pushes are unaffected.
+- [x] Ruleset *Protect release tags*: tags `v*` can't be deleted or moved (the deploy workflow decides by them); creating new ones still works.
+- [ ] Not now: requiring pull requests and a passing `build` job before merging. Add it (with admin bypass) if more people contribute code regularly.
 - [x] Tag `v1.13.4` on the deployed commit `0aad653`.
