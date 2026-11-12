@@ -123,9 +123,9 @@ Options:
 
 Tasks:
 - [x] Make `AddMember.razor` reuse `AppSearchPerson.razor` instead of duplicating the markup, so only one component needs replacing. (`AppSearchPerson` was unused; it now has `@bind-Value`, reloads when `CountryId` changes, and shows the validation message. Released as 1.13.8.)
-- [ ] Add a person search endpoint with authorisation, since person data is personal information. Limit the number of results and require a minimum query length.
-- [ ] Replace the typeahead in `AppSearchPerson.razor`.
-- [ ] Remove the `blazored-typeahead.css` and `blazored-typeahead.js` includes from `_Host.cshtml`.
+- [x] Add a person search endpoint with authorisation, since person data is personal information. Limit the number of results and require a minimum query length. → `GET /app/persons/search` (max 10 results, at least 3 characters). Convention: `/app/...` endpoints are for the app's own browser calls (sign-in cookie, `User` policy, GET only, filtered to what the user may see); `/api/...` stays the public API with API keys.
+- [x] Replace the typeahead in `AppSearchPerson.razor`: `<input list>` + `<datalist>` filled by `wwwroot/js/person-search.js`; the selected id goes to a hidden input (Blazor handles its change event now, an SSR form will post it).
+- [x] Remove the `blazored-typeahead.css` and `blazored-typeahead.js` includes from `_Host.cshtml`. Package removed.
 - [ ] Check in the browser: keyboard selection, clearing, the minimum length and the dropdown style.
 
 ### 1.3 Blazored.FluentValidation (Legacy): 4 usages

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using ModulesRegistry;
 using ModulesRegistry.Data;
+using ModulesRegistry.Endpoints;
 using ModulesRegistry.Notifications;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
@@ -25,7 +26,19 @@ builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSi
 builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("Brevo"));
 builder.Services.AddScoped<AppService>();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    // Endpoints called from scripts get status codes instead of a redirect to a login page.
+    options.Events.OnRedirectToLogin = context => RedirectOrStatusCode(context, StatusCodes.Status401Unauthorized);
+    options.Events.OnRedirectToAccessDenied = context => RedirectOrStatusCode(context, StatusCodes.Status403Forbidden);
+
+    static Task RedirectOrStatusCode(RedirectContext<CookieAuthenticationOptions> context, int statusCode)
+    {
+        if (context.Request.Path.StartsWithSegments(AppEndpoints.Prefix)) context.Response.StatusCode = statusCode;
+        else context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    }
+});
 if (builder.Environment.IsDevelopment())
 {
     var s = new DefaultUser
@@ -140,6 +153,7 @@ builder.Services.AddScoped<ModuleEndProfileService>();
 builder.Services.AddScoped<ModuleStandardService>();
 builder.Services.AddScoped<OperatingDayService>();
 builder.Services.AddScoped<PersonService>();
+builder.Services.AddScoped<IPersonSearchSource, PersonSearchSource>();
 builder.Services.AddScoped<PropertyService>();
 builder.Services.AddScoped<RegionService>();
 builder.Services.AddScoped<StationService>();
@@ -184,6 +198,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapAppEndpoints();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

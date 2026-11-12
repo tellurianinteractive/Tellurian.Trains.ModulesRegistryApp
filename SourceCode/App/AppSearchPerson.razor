@@ -1,36 +1,28 @@
 ﻿@using System.Linq.Expressions
+@using ModulesRegistry.Endpoints
 @inject IStringLocalizer<App> Localizer
-@inject PersonService PersonService
 
 @*
     Search for a person by name, bound with @bind-Value to a person id.
-    The only component that uses Blazored.Typeahead, so it can be replaced in one place (Migration.md step 1.3).
+    Suggestions come from the /app/persons/search endpoint through wwwroot/js/person-search.js and are shown with the browser's
+    own <datalist>, so keyboard selection works natively. The selected id is written to a hidden input, whose change event is
+    handled here; in a static SSR form, the hidden input would be posted instead.
 *@
 
 <div class="col-md-4">
-    <label class="form-control-label" for="personid">@SearchLabel</label>
-    <BlazoredTypeahead TItem="ListboxItem" TValue="int" SearchMethod="SearchPersons" Value="Value" ValueChanged="OnValueChanged" ValueExpression="ValueExpression" ConvertMethod="ConvertPerson" MinimumLength="MinimumSearchCharacters" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
-        <SelectedTemplate Context="personId">
-            @{
-                var selectedPerson = SelectedPerson(personId);
-                <text>@selectedPerson?.Description</text>
-            }
-        </SelectedTemplate>
-        <ResultTemplate Context="person">
-            @person.Description
-        </ResultTemplate>
-        <NotFoundTemplate Context="NotFound">
-            <div>
-                <span>
-                    @Localizer["NotFound"]
-                    @if (AddPersonHref is not null)
-                    {
-                        <a class="btn btn-link" href="@AddPersonHref">@Localizer["Add"]</a>
-                    }
-                </span>
-            </div>
-        </NotFoundTemplate>
-    </BlazoredTypeahead>
+    <label class="form-control-label" for="@InputId">@SearchLabel</label>
+    <input @key="ResetKey" id="@InputId" class="form-control" type="search" autocomplete="off" spellcheck="false"
+           list="@ListId" data-person-search="@SearchUrl" data-min-length="@MinimumSearchCharacters"
+           data-value-input="@ValueInputId" data-not-found="@NotFoundId" />
+    <datalist id="@ListId"></datalist>
+    <input type="hidden" id="@ValueInputId" value="@Value" @onchange="OnValueInputChanged" />
+    <div id="@NotFoundId" class="form-text" hidden>
+        @Localizer["NotFound"]
+        @if (AddPersonHref is not null)
+        {
+            <a class="btn btn-link" href="@AddPersonHref">@Localizer["Add"]</a>
+        }
+    </div>
     @if (ValidationFor is not null)
     {
         <ValidationMessage For="ValidationFor" />
@@ -38,15 +30,15 @@
 </div>
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private EditContext? EditContext { get; set; }
 
     [Parameter] public int Value { get; set; }
     [Parameter] public EventCallback<int> ValueChanged { get; set; }
     [Parameter] public Expression<Func<int>>? ValueExpression { get; set; }
 
     [Parameter] public string? SearchLabel { get; set; }
-    [Parameter] public int MinimumSearchCharacters { get; set; } = 3;
-    /// <summary>Country to search persons in; 0 means the current user's country. Persons are reloaded when it changes.</summary>
+    [Parameter] public int MinimumSearchCharacters { get; set; } = PersonSearchEndpoint.MinimumQueryLength;
+    /// <summary>Country to search persons in; 0 means the current user's country.</summary>
     [Parameter] public int CountryId { get; set; }
     /// <summary>Persons that are already members of this group are not listed.</summary>
     [Parameter] public int? ExcludeGroupId { get; set; }
@@ -55,35 +47,32 @@
     /// <summary>Validation message shown below the search, for example for the entity's person property.</summary>
     [Parameter] public Expression<Func<object?>>? ValidationFor { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private IEnumerable<ListboxItem>? Persons;
-    private (int CountryId, int ExcludeGroupId)? LoadedFor;
+    private readonly string Id = Guid.NewGuid().ToString("N")[..8];
+    private int ResetKey;
+    private int PreviousValue;
+    private int PreviousCountryId;
 
-    protected override async Task OnInitializedAsync()
+    private string InputId => $"person-search-{Id}";
+    private string ListId => $"person-search-list-{Id}";
+    private string ValueInputId => $"person-search-value-{Id}";
+    private string NotFoundId => $"person-search-not-found-{Id}";
+    private string SearchUrl => $"{PersonSearchEndpoint.Url}?countryId={CountryId}&excludeGroupId={ExcludeGroupId ?? 0}";
+
+    protected override void OnParametersSet()
     {
-        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        // Clear the search text when the caller resets the selection or changes country.
+        if ((Value == 0 && PreviousValue != 0) || CountryId != PreviousCountryId) ResetKey++;
+        PreviousValue = Value;
+        PreviousCountryId = CountryId;
     }
 
-    protected override async Task OnParametersSetAsync()
+    private async Task OnValueInputChanged(ChangeEventArgs e)
     {
-        var countryId = CountryId == 0 ? Principal.CountryId() : CountryId;
-        var excludeGroupId = ExcludeGroupId ?? 0;
-        if (LoadedFor == (countryId, excludeGroupId)) return;
-        LoadedFor = (countryId, excludeGroupId);
-        Persons = await PersonService.ListboxItemsAsync(Principal, countryId, excludeGroupId);
-    }
-
-    private Task OnValueChanged(int personId)
-    {
+        var personId = int.TryParse(e.Value?.ToString(), out var id) ? id : 0;
+        if (personId == Value) return;
         Value = personId;
-        return ValueChanged.InvokeAsync(personId);
+        PreviousValue = personId;
+        await ValueChanged.InvokeAsync(personId);
+        if (EditContext is not null && ValueExpression is not null) EditContext.NotifyFieldChanged(FieldIdentifier.Create(ValueExpression));
     }
-
-    private Task<IEnumerable<ListboxItem>> SearchPersons(string searchText) =>
-        Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? [] :
-            Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(searchText.ToLowerInvariant())).ToList());
-
-    private ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
-
-    private static int ConvertPerson(ListboxItem person) => person.Id;
 }
