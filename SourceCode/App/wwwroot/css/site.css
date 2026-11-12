@@ -216,3 +216,23 @@ blockquote {
     .tooltip:hover .tooltiptext {
         visibility: visible;
     }
+
+/* Person search suggestions (AppSearchPerson.razor + js/person-search.js; list items are created by the script, so not scoped CSS). */
+.person-search {
+    position: relative;
+}
+
+.person-search-list {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 20rem;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+    .person-search-list .list-group-item {
+        cursor: pointer;
+    }

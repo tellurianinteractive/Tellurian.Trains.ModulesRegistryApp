@@ -4,17 +4,20 @@
 
 @*
     Search for a person by name, bound with @bind-Value to a person id.
-    Suggestions come from the /app/persons/search endpoint through wwwroot/js/person-search.js and are shown with the browser's
-    own <datalist>, so keyboard selection works natively. The selected id is written to a hidden input, whose change event is
-    handled here; in a static SSR form, the hidden input would be posted instead.
+    Suggestions come from the /app/persons/search endpoint through wwwroot/js/person-search.js, which shows them in a list
+    (ARIA combobox pattern: arrow keys, Enter, Escape, mouse). The selected id is written to a hidden input, whose change event
+    is handled here; in a static SSR form, the hidden input would be posted instead.
 *@
 
 <div class="col-md-4">
     <label class="form-control-label" for="@InputId">@SearchLabel</label>
-    <input @key="ResetKey" id="@InputId" class="form-control" type="search" autocomplete="off" spellcheck="false"
-           list="@ListId" data-person-search="@SearchUrl" data-min-length="@MinimumSearchCharacters"
-           data-value-input="@ValueInputId" data-not-found="@NotFoundId" data-searching="@SearchingId" />
-    <datalist id="@ListId"></datalist>
+    <div @key="ResetKey" class="person-search">
+        <input id="@InputId" class="form-control" type="text" autocomplete="off" spellcheck="false"
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="@ListId"
+               data-person-search="@SearchUrl" data-min-length="@MinimumSearchCharacters" data-list="@ListId"
+               data-value-input="@ValueInputId" data-not-found="@NotFoundId" data-searching="@SearchingId" />
+        <ul id="@ListId" class="person-search-list list-group" role="listbox" aria-label="@SearchLabel" hidden></ul>
+    </div>
     <input type="hidden" id="@ValueInputId" value="@Value" @onchange="OnValueInputChanged" />
     <div id="@SearchingId" class="form-text" role="status" hidden>
         <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>@Localizer["Searching"]
