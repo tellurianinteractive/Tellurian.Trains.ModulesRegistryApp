@@ -4,6 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 ## Release 1.13.8
 Released 2026-11-12
 - **Meeting registration**: organisers find the person to register by typing part of the name.
+- **Country selection** is remembered on all pages, and the country list always shows the country in use.
 ## Release 1.13.7
 Released 2026-11-12
 - Maintenance update.

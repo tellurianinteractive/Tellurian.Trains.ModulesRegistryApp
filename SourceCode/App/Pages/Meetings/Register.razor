@@ -35,7 +35,7 @@ else
         {
             <div class="noprint">
                 <h3>@Localizer["SelectPersonToRegister"]</h3>
-                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Register" />
+                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Country" />
                 <div class="row g-3">
                     <AppSearchPerson @bind-Value:get="SearchedPersonId" @bind-Value:set="OnSearchedPerson"
                                      SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
@@ -214,6 +214,7 @@ else
                     if (IsAdministratorOrMeetingOrganiser)
                     {
                         CountryItems = await CountryService.ListboxItemsAsync(Principal, IsAdministratorOrMeetingOrganiser);
+                        if (CountryId == 0) CountryId = Principal.CountryId();
                     }
                     else
                     {

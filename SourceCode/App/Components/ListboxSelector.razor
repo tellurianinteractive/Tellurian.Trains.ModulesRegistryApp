@@ -33,16 +33,23 @@
     [Parameter] public string? LocalStorageKey { get; set; }
 
     int Id { get; set; }
-    string? StoredId = null;
+    bool IsStoredSelectionApplied;
 
-    protected override async void OnParametersSet()
+    /// <summary>
+    /// Shows the page's <see cref="SelectedId"/>. With a <see cref="LocalStorageKey"/>, the stored selection
+    /// (shared by all pages using the same key) is applied once: the page is notified through <see cref="OnSelected"/>,
+    /// so the list shows the same item as the page uses.
+    /// </summary>
+    protected override async Task OnParametersSetAsync()
     {
         Id = SelectedId;
-        if (LocalStorageKey.HasValue())
+        if (IsStoredSelectionApplied || !LocalStorageKey.HasValue() || Items is null) return;
+        IsStoredSelectionApplied = true;
+        var stored = await LocalStorage.GetItemAsStringAsync(LocalStorageKey);
+        if (int.TryParse(stored, out var storedId) && storedId != SelectedId && Items.Any(item => item.Id == storedId))
         {
-            StoredId = await LocalStorage.GetItemAsStringAsync(LocalStorageKey);
-            if (StoredId.HasValue()) 
-                if (int.TryParse(StoredId, out int id)) Id = id;
+            Id = storedId;
+            await OnSelected.InvokeAsync(storedId);
         }
     }
 

@@ -48,7 +48,7 @@ else
 
     @if (NewOwnership is not null)
     {
-        <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=PersonsCountryId />
+        <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=PersonsCountryId LocalStorageKey="Country" />
 
         <EditTemplate Item="NewOwnership" OnValidSubmit="OnValidSubmit">
             <Inputs>

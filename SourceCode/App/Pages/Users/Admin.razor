@@ -15,7 +15,7 @@
 
 <PageHeading Label="UserAdministration" IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId />
+<ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId LocalStorageKey="Country" />
 
 
 @if (PeopleWithUserAccount.Any() && Principal is not null)

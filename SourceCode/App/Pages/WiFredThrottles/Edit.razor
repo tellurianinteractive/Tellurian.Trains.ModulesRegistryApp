@@ -20,7 +20,7 @@
 }
 else
 {
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId />
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
 
     <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
         <Inputs>

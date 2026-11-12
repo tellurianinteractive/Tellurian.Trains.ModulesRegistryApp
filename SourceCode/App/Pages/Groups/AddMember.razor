@@ -13,7 +13,7 @@
 
 @if (MayEdit)
 {
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId="@CountryId" />
+    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId="@CountryId" LocalStorageKey="Country" />
 
     <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <FluentValidationValidator />
@@ -23,7 +23,7 @@
             <AppSearchPerson @bind-Value="GroupMember.PersonId"
                              SearchLabel="@SearchLabel"
                              MinimumSearchCharacters="MinimumSearchCharacters"
-                             CountryId="SearchCountryId"
+                             CountryId="CountryId"
                              ExcludeGroupId="Group.Id"
                              AddPersonHref="@AddPersonHref(GroupId)"
                              ValidationFor="@(() => GroupMember.Person)" />
@@ -51,14 +51,12 @@ else
     GroupMember GroupMember = new GroupMember();
     IEnumerable<ListboxItem>? Countries;
     int CountryId;
-    int SearchCountryId;
     bool MayEdit;
     const int MinimumSearchCharacters = 3;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountryId = Principal.CountryId();
     }
 
     protected async override Task OnParametersSetAsync()
@@ -75,7 +73,7 @@ else
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
             if (Group is not null)
             {
-                if (SearchCountryId == 0) SearchCountryId = Group.CountryId;
+                if (CountryId == 0) CountryId = Group.CountryId;
                 GroupMember.GroupId = Group.Id;
             }
         }
@@ -92,7 +90,6 @@ else
     void OnSelectedCountry(int countryId)
     {
         CountryId = countryId;
-        SearchCountryId = countryId;
     }
 
     string AddPersonHref(int? groupId) => $"persons/0/editgroup/{groupId}";
