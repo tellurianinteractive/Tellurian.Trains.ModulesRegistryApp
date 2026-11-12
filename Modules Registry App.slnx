@@ -14,6 +14,7 @@
     <File Path="RELEASENOTES.md" />
   </Folder>
   <Folder Name="/Solution Items/System design documents/">
+    <File Path="Migration.md" />
     <File Path="Security.md" />
     <File Path="System Design Documents/Creations of waybills.md" />
     <File Path="System Design Documents/Overview.md" />

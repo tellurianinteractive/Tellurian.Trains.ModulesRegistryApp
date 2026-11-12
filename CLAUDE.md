@@ -79,7 +79,7 @@ Markdown files referenced from razor components generally need `<CopyToOutputDir
 - `.editorconfig` at repo root sets C# style. `dotnet_style_namespace_match_folder = true` is enforced. CRLF line endings, 4-space indents, no final newline.
 - Services are scoped and registered individually in `App/Program.cs` — when adding a new `XxxService`, add the corresponding `AddScoped` line there.
 - Prefer `IDbContextFactory<ModulesDbContext>.CreateDbContextAsync()` over injecting `ModulesDbContext` directly (the factory is what's registered).
-- Front-end is Blazor Server with Blazorise (Bootstrap + FontAwesome), Blazored (Toast, LocalStorage, Typeahead, FluentValidation) and `Microsoft.AspNetCore.Components.QuickGrid`. No JS frameworks.
+- Front-end is Blazor Server with plain Bootstrap and FontAwesome (served from `wwwroot/css`), our own `App*` components, Blazored (Toast, LocalStorage, Typeahead, FluentValidation) and `Microsoft.AspNetCore.Components.QuickGrid`. No JS frameworks.
 - Authorisation policies are centralised in `App/Security/AuthorizationPolicyDefinitions.cs` and wired via `AddAuthorizationPolicies()`.
 - Release notes in `RELEASENOTES.md` are English only; every user-visible change should get an entry under the current version.
 

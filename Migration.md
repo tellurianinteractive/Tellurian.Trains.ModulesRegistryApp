@@ -34,36 +34,38 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 | 2.1 | `net11.0` + 11.0.x packages + Swashbuckle/OpenAPI 3.x, nothing else. Check that Blazored.FluentValidation and Blazored.LocalStorage still work on .NET 11; if not, replace them earlier. | All tests green, OpenAPI document and Swagger UI work, smoke test, App Service runtime updated | 2.1, 2.4 |
 | 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
 
-### Stage 3: database logic to code (still SQL Server + DACPAC)
-| # | Step | Verification | Ref |
-|---|---|---|---|
-| 3.1 | Document the waybill rules (`System Design Documents/Waybills.md`) and add golden-master tests against the current procedures. No production change. | The tests run green against the current implementation | 4.5 |
-| 3.2 | `GetStationCustomerWaybills` → `WaybillGenerator` + LINQ (the old procedure is kept) | Golden master identical, unit tests, station waybills printed and compared in the browser | 4.5 |
-| 3.3 | Drop the six waybill views and `GetStationCustomerWaybills` in the database | Publish the DACPAC, smoke test | 4.5 |
-| 3.4 | `GetLayoutWaybills2` and `GetGroupWaybills` → code (then drop them in the next step) | Golden master, layout and group waybills in the browser | 4.5 |
-| 3.5 | `AddGenerated*Waybills` and `GetEmptyWagonOrders` → code (then drop them in the next step) | Golden master on the generated rows, empty-wagon orders in the browser | 4.5 |
-| 3.6 | Remaining `SqlCommand`/raw SQL (`ModuleService`, `ModuleOwnershipService`, `LayoutService`, `ExternalStationService`) → EF, a few per release | Tests per method, affected pages in the browser | 4.3 A |
-| 3.7 | Cascade triggers → explicit deletes in the services, **one aggregate per release** (then drop the trigger in the next step) | Tests that delete a parent and check its children | 4.3 A |
-| 3.8 | Remove the unused database objects | Publish, smoke test | 4.5 |
-| 3.9 | DATETIMEOFFSET analysis (read-only, can be done any time) | Conclusion documented in 4.4 | 4.4 |
 
-### Stage 4: SSR, page group by page group
+### Stage 3: SSR, page group by page group
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 4.1 | Switch to per-page render modes (all pages still `InteractiveServer`). Make the shared components (`AppButton`, `AppInput*`, `EditTemplate`, `Paginator`) work in both modes. | All pages behave as before | 3.1, 3.2 |
-| 4.2 | Read-only and content pages (Markdown, About, help) → static SSR, plus `CacheView` where it helps | Pages work with JavaScript turned off, all languages | 3.2 |
-| 4.3 | List pages → SSR: filters as GET forms in the query string, QuickGrid URL paging. **One list page per release.** Remove the page's LocalStorage use; the last one removes the package. | Shareable URLs, back button, filters | 1.5, 3.2 |
-| 4.4 | Forms pilot `Region`: form model + mapping extensions + DataAnnotations + localisation + SSR form handling | Mapping, round-trip and validation tests; client-side and server-side validation in all languages | 3.3, 3.4 |
-| 4.5 | Custom validation attributes + JS validators (`OrdinaryText`, `Capitalized`, `ValidYear`, …) | C# and JS tested against the same table of test values | 3.3 |
-| 4.6 | Remaining forms, **one aggregate per release**. The last one removes FluentValidation, Blazored.FluentValidation and `App/Validators`. | As in 4.4 | 3.3, 3.4 |
-| 4.7 | Remaining interactive islands + `AutoPause`. Evaluate the Azure SignalR Service. | Number of circuits and connections in Azure before/after | 3.5 |
+| 3.1 | Switch to per-page render modes (all pages still `InteractiveServer`). Make the shared components (`AppButton`, `AppInput*`, `EditTemplate`, `Paginator`) work in both modes. | All pages behave as before | 3.1, 3.2 |
+| 3.2 | Read-only and content pages (Markdown, About, help) → static SSR, plus `CacheView` where it helps | Pages work with JavaScript turned off, all languages | 3.2 |
+| 3.3 | List pages → SSR: filters as GET forms in the query string, QuickGrid URL paging. **One list page per release.** Remove the page's LocalStorage use; the last one removes the package. | Shareable URLs, back button, filters | 1.5, 3.2 |
+| 3.4 | Forms pilot `Region`: form model + mapping extensions + DataAnnotations + localisation + SSR form handling | Mapping, round-trip and validation tests; client-side and server-side validation in all languages | 3.3, 3.4 |
+| 3.5 | Custom validation attributes + JS validators (`OrdinaryText`, `Capitalized`, `ValidYear`, …) | C# and JS tested against the same table of test values | 3.3 |
+| 3.6 | Remaining forms, **one aggregate per release**. The last one removes FluentValidation, Blazored.FluentValidation and `App/Validators`. | As in 4.4 | 3.3, 3.4 |
+| 3.7 | Remaining interactive islands + `AutoPause`. Evaluate the Azure SignalR Service. | Number of circuits and connections in Azure before/after | 3.5 |
 
-### Stage 5: EF Core migrations
+### Stage 4 EF Core migrations
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 5.1 | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | 4.3 B |
-| 5.2 | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | 4.3 B |
-| 5.3 | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | 4.3 B |
+| 4.1 | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | 4.3 B |
+| 4.2 | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | 4.3 B |
+| 4.3 | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | 4.3 B |
+
+### Stage 5: database logic to code (still SQL Server + DACPAC)
+| # | Step | Verification | Ref |
+|---|---|---|---|
+| 5.1 | Document the waybill rules (`System Design Documents/Waybills.md`) and add golden-master tests against the current procedures. No production change. | The tests run green against the current implementation | 4.5 |
+| 5.2 | `GetStationCustomerWaybills` → `WaybillGenerator` + LINQ (the old procedure is kept) | Golden master identical, unit tests, station waybills printed and compared in the browser | 4.5 |
+| 5.3 | Drop the six waybill views and `GetStationCustomerWaybills` in the database | Publish the DACPAC, smoke test | 4.5 |
+| 5.4 | `GetLayoutWaybills2` and `GetGroupWaybills` → code (then drop them in the next step) | Golden master, layout and group waybills in the browser | 4.5 |
+| 5.5 | `AddGenerated*Waybills` and `GetEmptyWagonOrders` → code (then drop them in the next step) | Golden master on the generated rows, empty-wagon orders in the browser | 4.5 |
+| 5.6 | Remaining `SqlCommand`/raw SQL (`ModuleService`, `ModuleOwnershipService`, `LayoutService`, `ExternalStationService`) → EF, a few per release | Tests per method, affected pages in the browser | 4.3 A |
+| 5.7 | Cascade triggers → explicit deletes in the services, **one aggregate per release** (then drop the trigger in the next step) | Tests that delete a parent and check its children | 4.3 A |
+| 5.8 | Remove the unused database objects | Publish, smoke test | 4.5 |
+| 5.9 | DATETIMEOFFSET analysis (read-only, can be done any time) | Conclusion documented in 4.4 | 4.4 |
+
 
 ### Stage 6: PostgreSQL (optional, decided later)
 Only once stages 3 and 5 are done. See 4.3 phase C. This is planned as its own project with a rehearsed data migration.
@@ -137,7 +139,7 @@ Tasks (option A):
 
 ### 1.4 Microsoft.Azure.SignalR (Deprecated: "use >= 1.33.1")
 
-- [ ] Update to 1.33.1 or later. This is an in-place update, not a replacement.
+- [x] Update to 1.33.1 or later. This is an in-place update, not a replacement.
 
 ### 1.5 Blazored.LocalStorage (not flagged, but same unmaintained family): 19 calls in 9 files
 
@@ -151,13 +153,13 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 
 `Blazorise.Bootstrap`, `Blazorise.Components` and `Blazorise.Icons.FontAwesome` are referenced in `App.csproj`, but no `.razor`, `.cs` or `.cshtml` file uses them. The UI uses our own `App*` components on plain Bootstrap.
 
-- [ ] Remove the three package references and check that the FontAwesome CSS is loaded some other way.
-- [ ] Update CLAUDE.md (it says the front end uses Blazorise).
+- [x] Remove the three package references and check that the FontAwesome CSS is loaded some other way.
+- [x] Update CLAUDE.md (it says the front end uses Blazorise).
 
 ### 1.6 Security advisories in transitive packages
 
-- [ ] `Microsoft.OpenApi` 2.0.0 (GHSA-v5pm-xwqc-g5wc). This comes from `Microsoft.AspNetCore.OpenApi` and Swashbuckle. .NET 11 moves to `Microsoft.OpenApi` 3.x (see 2.4).
-- [ ] `System.Security.Cryptography.Pkcs` 9.0.13 (GHSA-846f-f764-76mx). Check whether package updates remove it, otherwise add a direct reference to the patched version.
+- [x] `Microsoft.OpenApi` 2.0.0 (GHSA-v5pm-xwqc-g5wc). Resolved in step 1.1: the 10.0.x packages now pull in 2.13.0. This comes from `Microsoft.AspNetCore.OpenApi` and Swashbuckle. .NET 11 moves to `Microsoft.OpenApi` 3.x (see 2.4).
+- [x] `System.Security.Cryptography.Pkcs` 9.0.13 (GHSA-846f-f764-76mx). Resolved in step 1.1 by package updates (now 10.0.13), no direct reference needed.
 
 ---
 
@@ -291,53 +293,65 @@ Consequences:
 - **Decoupling.** Renaming a database column doesn't affect form markup, and vice versa.
 
 **Conventions (proposal):**
-- Location: `App/Forms/<Aggregate>/`, for example `App/Forms/Regions/RegionForm.cs` and `App/Forms/Regions/RegionFormMappings.cs`. The namespace follows the folder (`.editorconfig` enforces this).
-- Name: `<Entity>Form`. Use a plain `class` with `{ get; set; }`, since model binding needs settable properties and a parameterless constructor.
+- Location: `App/Forms/<Aggregate>/`, for example `App/Forms/Regions/RegionFormData.cs` and `App/Forms/Regions/RegionFormExtensions.cs`. The namespace follows the folder (`.editorconfig` enforces this).
+- Name: `<Entity>FormData`. Use a plain `class` with `{ get; set; }`, since model binding needs settable properties and a parameterless constructor.
 - Keys (`Id`, parent ids) are kept as hidden fields **but** never trusted for authorisation. The service checks ownership and permissions using the loaded entity, as it does today.
-- One static `<Entity>FormMappings` class per form with three extension methods:
+- One `static class <Entity>FormExtensions` per form, written with the **C# 14 / .NET 10 extension syntax** (`extension(...)` blocks, not `this` parameters). It has at least two extension blocks:
+  - one extending the **entity** with `AsFormData()` (entity → form data);
+  - one extending the **form data** with `AsEntity(...)` (form data → entity).
+
+  More blocks can be added when needed, for example one extending `IEnumerable<Region>` for lists.
 
 ```csharp
 namespace ModulesRegistry.Forms.Regions;
 
-public static class RegionFormMappings
+public static class RegionFormExtensions
 {
-    // Entity → form (GET: populate the form)
-    public static RegionForm ToForm(this Region entity) => new()
+    extension(Region entity)
     {
-        Id = entity.Id,
-        LocalName = entity.LocalName,
-        EnglishName = entity.EnglishName,
-        CountryId = entity.CountryId,
-        // ...
-    };
-
-    // Form → existing entity (POST: edit). Only touches the fields the form owns.
-    public static Region ApplyTo(this RegionForm form, Region entity)
-    {
-        entity.LocalName = form.LocalName.Trim();
-        entity.EnglishName = form.EnglishName.NullIfEmpty();
-        entity.CountryId = form.CountryId!.Value;
-        // ...
-        return entity;
+        // Entity → form data (GET: populate the form)
+        public RegionFormData AsFormData() => new()
+        {
+            Id = entity.Id,
+            LocalName = entity.LocalName,
+            EnglishName = entity.EnglishName,
+            CountryId = entity.CountryId,
+            // ...
+        };
     }
 
-    // Form → new entity (POST: create)
-    public static Region ToNewEntity(this RegionForm form) => form.ApplyTo(new Region());
+    extension(RegionFormData form)
+    {
+        // Form data → entity.
+        // POST edit:   form.AsEntity(existing) only touches the fields the form owns.
+        // POST create: form.AsEntity() starts from a new entity.
+        public Region AsEntity(Region? existing = null)
+        {
+            var entity = existing ?? new Region();
+            entity.LocalName = form.LocalName.Trim();
+            entity.EnglishName = form.EnglishName.NullIfEmpty();
+            entity.CountryId = form.CountryId!.Value;
+            // ...
+            return entity;
+        }
+    }
 }
 ```
+
+The same extension syntax should be used for all **new** extension methods in the solution. Existing `this`-style extension classes can be converted when they're touched anyway; both styles are source- and binary-compatible for callers.
 
 **Important: the services' save pattern.** Today `SaveAsync` does `dbContext.Entry(existing).CurrentValues.SetValues(entity)`, which copies **every** scalar property from the incoming entity. If a page builds a new entity from the form with only the form's fields set, `SetValues` overwrites every field not on the form with default values (`null`, `0`, `false`). This would cause data loss.
 
 So the page has to work like this when saving an edit:
 1. Load the current entity (via the service's `GetAsync`/`FindAsync`).
-2. `form.ApplyTo(entity)`: only the form's fields change.
+2. `form.AsEntity(entity)`: only the form's fields change. Never call `form.AsEntity()` without the existing entity when editing.
 3. Call `SaveAsync(principal, entity)` as today. `SetValues` then copies an otherwise unchanged entity, which is safe.
 
 Alternative (a larger change): let the services take a delegate, `SaveAsync(principal, id, Action<Region> apply)`, and run `apply` on the entity loaded in their own `DbContext`. That avoids loading the entity twice, but it touches every service. Start with the pattern above and consider this later.
 
 - [ ] Go through every `SaveAsync` in `Services/Implementations` and note the entities that have properties the form doesn't own (owner, audit fields, timestamps, computed values). These are the most important cases to test.
 
-**Collections and child entities:** most child entities (station tracks, exits, customers, cargo) are already edited on their own pages and become their own form models. Only add a list of sub-form models where a form edits a collection at the same time. Mapping a list back to entities (adding, updating and removing children) is the hardest part, and is done explicitly in `ApplyTo`.
+**Collections and child entities:** most child entities (station tracks, exits, customers, cargo) are already edited on their own pages and become their own form models. Only add a list of sub-form models where a form edits a collection at the same time. Mapping a list back to entities (adding, updating and removing children) is the hardest part, and is done explicitly in `AsEntity`.
 
 **Select lists and lookup data** (countries, standards, owners) are **not** part of the form model. The page loads them separately on each request, including when re-rendering after a failed validation.
 
@@ -350,8 +364,8 @@ Alternative (a larger change): let the services take a delegate, `SaveAsync(prin
 **Testing:**
 - [ ] Create `TestCode/App.Tests` (MSTest v4, like the other test projects). App currently has no test project.
 - [ ] For each form, write tests that:
-  - check that `entity.ToForm().ApplyTo(copy)` changes no property;
-  - check that `ApplyTo` leaves properties outside the form unchanged;
+  - check that `entity.AsFormData().AsEntity(copy)` changes no property;
+  - check that `AsEntity(existing)` leaves properties outside the form unchanged;
   - run the validation (`Validator.TryValidateObject(form, …, validateAllProperties: true)`) with valid and invalid values;
   - run the C# side of each custom attribute against a shared table of test values, and keep that table in sync with the JS validator.
 - [ ] Optional: a reflection-based test that fails if an entity gets a new public property that is neither mapped nor explicitly excluded. This is a safety net against forgotten mappings.

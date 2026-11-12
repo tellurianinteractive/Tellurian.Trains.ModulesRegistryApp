@@ -57,3 +57,4 @@ internal static class CargoMapper
                 .HasForeignKey(e => e.NhmCode);
         });
 }
+
