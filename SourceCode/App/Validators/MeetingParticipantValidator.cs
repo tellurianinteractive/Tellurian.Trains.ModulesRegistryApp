@@ -14,6 +14,9 @@ namespace ModulesRegistry.Validators
             RuleFor(m => m.MeetingId)
                 .MustBeSelected(localizer)
                 .WithName(n => localizer["Meeting"]);
+            RuleFor(m => m.ParticipateDay1)
+                .Must((participant, _) => participant.FirstParticipationDayNumber() > 0)
+                .WithMessage(_ => localizer["SelectAtLeastOneDay"]);
             RuleFor(m => m.LatestArrivalTime)
                 .NotEmpty()
                 .WithName(n => localizer["LatestArrivalTime"]); ;

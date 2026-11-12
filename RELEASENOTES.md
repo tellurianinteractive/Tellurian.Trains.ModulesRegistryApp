@@ -5,7 +5,7 @@ The release notes are summaries of important changes and fixes in each release.
 Released 2026-11-12
 - **Person search** when adding group members and registering meeting participants shows suggestions while typing, with keyboard selection. Several words, like "kar eli", must all match.
 - **Country** for the person search applies as soon as it is selected, without an Ok button.
-- **Meeting registration days**: days between the first and last checked day are checked, an *All days* button, and the arrival and departure times show their day.
+- **Meeting registration days**: no days are checked for a new registration and at least one must be chosen, days between the first and last checked day are checked, an *All days* button, and the arrival and departure times show their day.
 - **Missing translations** added, for example "Not found", validation messages and some column headings.
 ## Release 1.13.8
 Released 2026-11-12

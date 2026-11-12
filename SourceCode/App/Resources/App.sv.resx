@@ -1830,4 +1830,7 @@
   <data name="AllDays" xml:space="preserve">
     <value>Alla dagar</value>
   </data>
+  <data name="SelectAtLeastOneDay" xml:space="preserve">
+    <value>Välj minst en dag.</value>
+  </data>
 </root>

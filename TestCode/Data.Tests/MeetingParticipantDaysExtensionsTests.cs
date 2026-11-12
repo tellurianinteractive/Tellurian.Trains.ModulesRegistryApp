@@ -69,6 +69,17 @@ public class MeetingParticipantDaysExtensionsTests
         Assert.IsFalse(target.ParticipatesDay(7));
     }
 
+    [TestMethod]
+    public void NewRegistrationHasNoDaysChecked()
+    {
+        var meeting = new Meeting { Id = 1, StartDate = new DateTime(2026, 5, 14), EndDate = new DateTime(2026, 5, 17) };
+
+        var target = meeting.DefaultParticipant(personId: 7);
+
+        Assert.AreEqual(0, target.FirstParticipationDayNumber());
+        Assert.AreEqual((1, 7), (target.MeetingId, target.PersonId));
+    }
+
     private static bool[] Days(MeetingParticipant participant) =>
         [.. Enumerable.Range(1, MeetingParticipantDaysExtensions.MaxDays).Select(participant.ParticipatesDay)];
 }

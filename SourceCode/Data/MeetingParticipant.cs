@@ -105,6 +105,10 @@ public static class MeetingParticipantExtensions
     public static string NameWithCity(this MeetingParticipant participant) =>
         participant.Person is not null ? participant.Person.NameWithCity() : string.Empty;
 
+    /// <summary>
+    /// A new registration with the meeting's default times. No days are checked: the participant chooses them
+    /// (the validator requires at least one).
+    /// </summary>
     public static MeetingParticipant DefaultParticipant(this Meeting meeting, int personId)
     {
         var participant = new MeetingParticipant
@@ -114,7 +118,6 @@ public static class MeetingParticipantExtensions
             LatestArrivalTime = meeting.LatestArrivalTimeWithModules,
             EarliestDepartureTime = meeting.EarliestDepartureTimeWithModules,
         };
-        participant.SetDefaultParticipationDays(meeting);
         if (meeting.Layouts.Count == 1)
         {
             participant.LayoutParticipations.Add(new LayoutParticipant() { LayoutId = meeting.Layouts.First().Id, PersonId = personId });
@@ -122,16 +125,6 @@ public static class MeetingParticipantExtensions
         return participant;
     }
 
-    private static void SetDefaultParticipationDays(this MeetingParticipant participant, Meeting meeting)
-    {
-        var days = meeting.DurationDays();
-        if (days > 0) participant.ParticipateDay1 = true;
-        if (days > 1) participant.ParticipateDay2 = true;
-        if (days > 2) participant.ParticipateDay3 = true;
-        if (days > 3) participant.ParticipateDay4 = true;
-        if (days > 4) participant.ParticipateDay5 = true;
-        if (days > 5) participant.ParticipateDay6 = true;
-    }
 
 }
 
