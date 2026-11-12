@@ -8,7 +8,6 @@
 		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />
 		<PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-		<PackageReference Include="Blazored.Toast" Version="4.2.1" />
 		<PackageReference Include="Blazored.Typeahead" Version="4.7.0" />
 		<PackageReference Include="Markdig" Version="1.6.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.15" />

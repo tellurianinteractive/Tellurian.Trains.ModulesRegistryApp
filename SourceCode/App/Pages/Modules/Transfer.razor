@@ -4,7 +4,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject ModuleService ModuleService
 @inject ModuleOwnershipService ModuleOwnershipService
@@ -124,7 +124,7 @@ else
     {
         if (NewOwnership is null) return;
         if (NewOwnership.PersonId > 0 && NewOwnership.GroupId > 0) { 
-            ToastService.ShowError(Localizer["OwnerMustBeEitherAPersonOrAGroup"]);
+            NotificationService.ShowError(Localizer["OwnerMustBeEitherAPersonOrAGroup"]);
             return;
         }
         NewOwnership.OwnedShare = TransferredShare.Percentage;
@@ -132,13 +132,13 @@ else
         {
             var result = await ModuleOwnershipService.AddAssistantAsync(Principal, NewOwnership);
             if (result.Entity is not null) Module = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
         else if (OwnershipToTransfer.HasPersonOrGroupOwner() && NewOwnership.HasPersonOrGroupOwner() && OwnershipRef is not null && SelectedTransferShare >= 0)
         {
             var result = await ModuleOwnershipService.TransferOwnershipAsync(Principal, OwnershipToTransfer, NewOwnership);
             if (result.Entity is not null) Module = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
         StateHasChanged();
     }

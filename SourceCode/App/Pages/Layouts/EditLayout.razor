@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
@@ -78,12 +78,12 @@
             }
             else
             {
-                ToastService.ShowNotFound<Meeting>(Localizer);
+                NotificationService.ShowNotFound<Meeting>(Localizer);
             }
         }
         else
         {
-            ToastService.ShowNotFound<Meeting>(Localizer);
+            NotificationService.ShowNotFound<Meeting>(Localizer);
         }
     }
 
@@ -97,7 +97,7 @@
             var result = await LayoutService.SaveAsync(Principal, Layout);
             Layout = result.Entity;
             ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Meeting.OrganiserGroupId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

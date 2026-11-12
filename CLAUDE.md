@@ -16,7 +16,7 @@ Projects:
 - `SourceCode/Data.Api` — Plain DTO contracts shared with API consumers (no dependencies).
 - `SourceCode/Services` — Business logic in `Implementations/` (one `XxxService` class per aggregate, all registered as scoped in `App/Program.cs`). Uses `IDbContextFactory<ModulesDbContext>` — services create their own short-lived context per operation rather than taking an injected `DbContext`.
 - `SourceCode/Database` — SQL Server database project (`Database.sqlproj`). Schema-as-code under `dbo/Tables`, `dbo/Views`, `dbo/Procedures`. **Entity Framework migrations are NOT used** — see "Database workflow" below.
-- `TestCode/Data.Tests`, `TestCode/Services.Tests` — MSTest v4.
+- `TestCode/App.Tests`, `TestCode/Data.Tests`, `TestCode/Services.Tests` — MSTest v4 (`App.Tests` uses `MSTest.Sdk`).
 
 ## Commands
 
@@ -27,6 +27,7 @@ Run these from the repo root. Paths contain a space, so quote the solution file.
 dotnet build "Modules Registry App.slnx"
 
 # Run all tests (per project — the solution includes Database.sqlproj which dotnet can't restore)
+dotnet test --project TestCode/App.Tests/App.Tests.csproj
 dotnet test --project TestCode/Services.Tests/Services.Tests.csproj
 dotnet test --project TestCode/Data.Tests/Data.Tests.csproj
 

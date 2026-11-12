@@ -1,16 +1,8 @@
-﻿@using Blazored.Toast.Configuration
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject IStringLocalizer<App> Localizer
 @using System.Web;
 
-<BlazoredToasts RemoveToastsOnNavigation="true"
-                Timeout="2"
-                IconType="IconType.FontAwesome"
-                InfoIcon="fa fa-info-circle"
-                SuccessIcon="fa fa-check-circle"
-                WarningIcon="fa fa-exclamation-triangle"
-                ErrorIcon="fa fa-exclamation-circle"
-                Position="Blazored.Toast.Configuration.ToastPosition.TopRight" />
+<NotificationArea />
 
 <div class="page">
     <div class="sidebar">

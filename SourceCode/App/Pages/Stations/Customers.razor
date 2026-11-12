@@ -8,7 +8,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject GroupService GroupService
 @inject CargoService CargoService
@@ -95,7 +95,7 @@
     {
 
         var result = await StationCustomerService.DeleteAsync(Principal, customerId);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
     }
 

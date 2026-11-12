@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
 @inject PersonService PersonService
@@ -82,7 +82,7 @@ else
         if (Principal is null || Throttle is null) return;
         var result = await ThrottleService.SaveAsync(Principal, Throttle);
         if (result.Count == 1) Throttle = result.Entity;
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     private async Task OnSelectedCountry(int id)

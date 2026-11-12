@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject PageHistory PageHistory
 
 @inject StationService StationService
@@ -55,7 +55,7 @@ else
         if (Station is not null)
         {
             var result = await StationService.DeleteAsync(Principal, Station.Id);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);
             PageHistory.NavigateBack();
         }

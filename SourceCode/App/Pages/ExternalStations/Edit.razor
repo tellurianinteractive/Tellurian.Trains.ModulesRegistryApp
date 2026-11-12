@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
  
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
@@ -55,7 +55,7 @@
         {
             var result = await ExternalStationService.SaveAsync(Principal, Station);
             if (result.Entity is not null) Station = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

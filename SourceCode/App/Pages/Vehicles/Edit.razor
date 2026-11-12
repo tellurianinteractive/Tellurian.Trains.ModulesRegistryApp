@@ -5,7 +5,7 @@
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject VehicleService VehicleService
 @inject ScaleService ScaleService
 @inject CountryService CountryService
@@ -139,7 +139,7 @@ else
     async Task OnValidSubmit()
     {
         var result = await VehicleService.SaveAsync(Principal, Vehicle!);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Vehicle = result.Entity;
         await Task.Delay(3000);
         if (Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase))

@@ -4,7 +4,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject GroupService GroupService
 @inject CargoService CargoService

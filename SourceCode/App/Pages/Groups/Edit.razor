@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject GroupService GroupService
 @inject CountryService CountryService
 @inject GroupCategoryService GroupCategoryService
@@ -76,7 +76,7 @@ else
         if (Group is null) return;
         var result = await GroupService.SaveAsync(Principal, Group);
         Group = result.Entity;
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     private async Task<Group> GetOrCreateAsync() =>

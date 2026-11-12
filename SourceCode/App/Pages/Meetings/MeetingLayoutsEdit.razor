@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject MeetingService MeetingService
 
@@ -73,7 +73,7 @@
         {
             var result = await MeetingService.DeleteLayoutAsync(Principal, Meeting.Id, layoutId);
             if (result.Count > 0) Meeting = await MeetingService.FindByIdAsync(Id) ?? new Meeting();
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

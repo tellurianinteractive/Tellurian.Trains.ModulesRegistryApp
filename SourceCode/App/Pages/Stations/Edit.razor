@@ -9,7 +9,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject ModuleService ModuleService
 @inject StationService StationService
@@ -102,7 +102,7 @@
             var result = await StationService.SaveAsync(Principal, Station, OwnershipRef, ModuleId);
             if (result.Entity is not null) Station = result.Entity;
             if (Station is not null && Station.Modules.Any()) ModuleId = Station.Modules.First().Id;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

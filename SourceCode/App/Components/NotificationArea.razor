@@ -1,0 +1,47 @@
+@implements IDisposable
+@inject INotificationService NotificationService
+@inject NavigationManager Navigator
+@inject IStringLocalizer<App> Localizer
+
+<div class="notification-area noprint" aria-live="polite">
+    @foreach (var notification in NotificationService.Notifications)
+    {
+        <div @key="notification.Id" class="notification @LevelClass(notification.Level)" role="@Role(notification.Level)">
+            <span class="notification-icon fa @Icon(notification.Level)" aria-hidden="true"></span>
+            <p class="notification-message">@notification.Message</p>
+            <button type="button" class="notification-close" title="@Localizer["Close"]" aria-label="@Localizer["Close"]" @onclick="() => NotificationService.Remove(notification.Id)">
+                <span class="fa fa-times" aria-hidden="true"></span>
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NotificationService.Changed += OnNotificationsChanged;
+        Navigator.LocationChanged += OnLocationChanged;
+    }
+
+    public void Dispose()
+    {
+        NotificationService.Changed -= OnNotificationsChanged;
+        Navigator.LocationChanged -= OnLocationChanged;
+    }
+
+    private void OnNotificationsChanged() => _ = InvokeAsync(StateHasChanged);
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e) => NotificationService.Clear();
+
+    private static string LevelClass(NotificationLevel level) => $"notification-{level.ToString().ToLowerInvariant()}";
+
+    private static string Role(NotificationLevel level) => level == NotificationLevel.Error ? "alert" : "status";
+
+    private static string Icon(NotificationLevel level) => level switch
+    {
+        NotificationLevel.Success => "fa-check-circle",
+        NotificationLevel.Warning => "fa-exclamation-triangle",
+        NotificationLevel.Error => "fa-exclamation-circle",
+        _ => "fa-info-circle"
+    };
+}

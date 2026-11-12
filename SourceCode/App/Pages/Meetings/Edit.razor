@@ -4,7 +4,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
@@ -86,7 +86,7 @@
                 Meeting = result.Entity;
                 Id = Meeting.Id;
             }
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

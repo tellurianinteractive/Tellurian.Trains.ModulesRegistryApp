@@ -1,12 +1,12 @@
 using Azure.Identity;
 using Blazored.LocalStorage;
-using Blazored.Toast;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using ModulesRegistry;
 using ModulesRegistry.Data;
+using ModulesRegistry.Notifications;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
@@ -108,7 +108,8 @@ builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
         }).EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
 
 });
-builder.Services.AddBlazoredToast();
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();

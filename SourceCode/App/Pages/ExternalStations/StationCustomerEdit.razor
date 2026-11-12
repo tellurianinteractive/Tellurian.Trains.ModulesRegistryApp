@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 
 @inject ExternalStationService ExternalStationService
@@ -79,7 +79,7 @@
             StationCustomer.ExternalStationCustomerCargos = StationCustomer.ExternalStationCustomerCargos.Where(escc => escc.CargoId > 0).ToList(); // Removes invalid items.
             var result = await ExternalStationService.SaveAsync(Principal, StationCustomer);
             if (result.Entity is not null) StationCustomer = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
@@ -89,7 +89,7 @@
         {
             SelectedExternalStationId = id;
             var result = await ExternalStationService.MoveCustomerAsync(Principal, StationCustomer, id);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(2000);
             if (result.Count > 0)
             {

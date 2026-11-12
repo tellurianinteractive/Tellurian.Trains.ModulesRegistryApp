@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject IMailSender MailSender
 @inject ITimeProvider TimeProvider
 @inject NavigationManager Navigator
@@ -90,7 +90,7 @@ else
             {
                 count = await MailSender.SendMailMessageAsync(message);
             }
-            ToastService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
+            NotificationService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
         }
     }
 }

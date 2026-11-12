@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
@@ -198,7 +198,7 @@ else
     {
         var result = await LayoutParticipantService.SaveAsync(Principal, participant);
         LayoutParticipant = result.Entity;
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     async Task OnRegisterOwnedPackage(int packageId)
@@ -207,7 +207,7 @@ else
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
     }
@@ -218,7 +218,7 @@ else
         if (package is not null && Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
     }
@@ -228,7 +228,7 @@ else
         if (Layout is not null && LayoutParticipant is not null)
         {
             var result = await LayoutService.RemoveModuleWithStationAsync(Principal, layoutModuleId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Update();
         }
     }

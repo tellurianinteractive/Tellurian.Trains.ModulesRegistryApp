@@ -1,0 +1,15 @@
+<Project Sdk="MSTest.Sdk/4.5.3">
+  <PropertyGroup>
+    <AssemblyName>ModulesRegistry.App.Tests</AssemblyName>
+    <RootNamespace>ModulesRegistry.AppTests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SourceCode\App\App.csproj" />
+  </ItemGroup>
+</Project>

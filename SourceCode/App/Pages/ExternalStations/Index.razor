@@ -7,7 +7,7 @@
 
 @inject IStringLocalizer<App> Localizer
 @inject ILocalStorageService LocalStorage
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 
 @inject ExternalStationService ExternalStationService
@@ -177,7 +177,7 @@
         {
             var result = await ExternalStationService.DeleteAsync(Principal, DeletedId);
             ExternalStations = await ExternalStationService.GetAsync(Principal, 0, RegionId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
         DeleteDialogOpen = false;
         StateHasChanged();

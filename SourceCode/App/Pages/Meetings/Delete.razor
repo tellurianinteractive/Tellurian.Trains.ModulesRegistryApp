@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject ITimeProvider TimeProvider
 @inject NavigationManager Navigator
 
@@ -45,7 +45,7 @@ else
         if (Meeting is not null)
         {
             var result = await MeetingService.DeleteAsync(Principal, Meeting);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(2000);
             Navigator.NavigateTo("/Meetings/Index");
         }

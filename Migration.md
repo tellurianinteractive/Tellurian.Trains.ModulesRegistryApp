@@ -107,10 +107,10 @@ Options:
 **Design for SSR (see section 3).** With static SSR there is no live connection to push a toast through. A message must survive the POST → redirect → GET cycle: it's written to TempData during the POST and shown on the next page. .NET 11 supports TempData in static SSR. Design the service so that it works this way in static SSR and shows the message directly in interactive components.
 
 Tasks:
-- [ ] Define `INotificationService` (`ShowSuccess`, `ShowError`, `ShowWarning`, `ShowInfo`) with a TempData-backed implementation for SSR.
-- [ ] Create the notification component. It renders pending messages on page load and auto-hides them with CSS or a small JS module, not through SignalR. Keep the 2 s timeout.
-- [ ] Re-point `ToastServiceExtensions` to the new service and rename it.
-- [ ] Remove the `Blazored.Toast` usings from `_Imports.razor` and the commented-out CSS link in `_Host.cshtml`.
+- [x] Define `INotificationService` (`ShowSuccess`, `ShowError`, `ShowWarning`, `ShowInfo`), in `App/Notifications`. Implemented for interactive pages (scoped per circuit, timer via `TimeProvider`). **The TempData-backed implementation for SSR is postponed to stage 3**, when the first page becomes static SSR; the interface is ready for it.
+- [x] Create the notification component `Components/NotificationArea.razor`: same look, position and 2 s timeout as before, cleared on navigation. (Auto-hide without SignalR comes with the SSR implementation in stage 3.)
+- [x] Re-point `ToastServiceExtensions` to the new service and rename it (`NotificationServiceExtensions`). All 48 pages and components inject `INotificationService`.
+- [x] Remove the `Blazored.Toast` usings from `_Imports.razor` and the commented-out CSS link in `_Host.cshtml`. Package removed.
 
 ### 1.2 Blazored.Typeahead (Legacy): 2 usages
 

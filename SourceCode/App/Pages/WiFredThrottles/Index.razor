@@ -4,7 +4,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
@@ -126,7 +126,7 @@
     {
         var result = await ThrottleService.SetVerified(Principal, throttleId);
         await GetThrottles();
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
 
     }
 
@@ -141,7 +141,7 @@
         {
             var result = await ThrottleService.DeleteAsync(Principal, throttleId);
             await GetThrottles();
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
         DeleteId = 0;
     }

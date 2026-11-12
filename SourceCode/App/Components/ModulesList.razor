@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject ModuleService ModuleService
 
@@ -81,7 +81,7 @@
     async Task Clone(int id)
     {
         var result = await ModuleService.CloneAsync(Principal, id, OwnershipRef);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Modules = await ModuleService.GetAllAsync(Principal, OwnershipRef);
     }
     bool AnyHasFremoName;

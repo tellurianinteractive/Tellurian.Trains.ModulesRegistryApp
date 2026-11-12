@@ -5,7 +5,7 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 @inject CountryService CountryService
 @inject UserService UserService
@@ -74,7 +74,7 @@
             Sender = new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"])
         };
         var result = await MailSender.SendMailMessageAsync(message);
-        ToastService.ShowSuccessOrFailure(Localizer, result, "TestMail");
+        NotificationService.ShowSuccessOrFailure(Localizer, result, "TestMail");
     }
 
     protected override async Task OnInitializedAsync()

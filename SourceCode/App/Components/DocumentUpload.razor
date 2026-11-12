@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject DocumentService DocumentService
 
@@ -50,18 +50,18 @@
             var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
             DocumentId = result.Entity?.Id;
             if (OnUpdatedAsync is not null) await OnUpdatedAsync();
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, string.Format(Localizer["UploadOfFile"], e.File.Name));
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, string.Format(Localizer["UploadOfFile"], e.File.Name));
         }
         else
         {
-            ToastService.ShowWarning(string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize));
+            NotificationService.ShowWarning(string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize));
         }
     }
 
     async Task DeleteFileAsync(int documentId)
     {
         var result = await DocumentService.DeleteAsync(Principal, documentId);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, Localizer["FileDeleted"]);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, Localizer["FileDeleted"]);
         StateHasChanged();
     }
 

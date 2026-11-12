@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject ModuleEndProfileService ModuleEndProfileService
 @inject ScaleService ScaleService
@@ -42,7 +42,7 @@
         {
             var result = await ModuleEndProfileService.SaveAsync(Principal, EndProfile);
             if (result.Entity is not null) EndProfile = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 }

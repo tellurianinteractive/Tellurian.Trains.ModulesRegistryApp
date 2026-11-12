@@ -45,8 +45,12 @@ jobs:
       - name: Build
         run: |
           dotnet build "SourceCode/App/App.csproj" --configuration Release
+          dotnet build "TestCode/App.Tests/App.Tests.csproj" --configuration Release
           dotnet build "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release
           dotnet build "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release
+
+      - name: Test App
+        run: dotnet test --project "TestCode/App.Tests/App.Tests.csproj" --configuration Release --no-build
 
       - name: Test Data
         run: dotnet test --project "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release --no-build

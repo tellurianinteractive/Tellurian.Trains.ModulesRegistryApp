@@ -49,9 +49,6 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-.blazored-toast-container {
-    margin-top: 30px;
-}
 @media (max-width: 2000px) {
     .sm-hide {
         display: none

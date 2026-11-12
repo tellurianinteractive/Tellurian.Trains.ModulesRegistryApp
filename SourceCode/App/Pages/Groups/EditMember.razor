@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject NavigationManager Navigator
 @inject GroupService GroupService
@@ -75,7 +75,7 @@ else
     {
         if (GroupMember is null) return;
         var result = await GroupService.SaveMemberAsync(Principal, GroupMember);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
@@ -84,14 +84,14 @@ else
     {
         var result = await GroupLayoutModuleService.AddModule(Principal, GroupId, moduleId, MemberId);
         await UpdateModules();
-        ToastService.ShowSuccessOrFailure(Localizer, result, "Add");
+        NotificationService.ShowSuccessOrFailure(Localizer, result, "Add");
     }
 
     private async Task RemoveGroupLayoutModule(int moduleId)
     {
         var result = await GroupLayoutModuleService.RemoveModule(Principal, GroupId, moduleId);
         await UpdateModules();
-        ToastService.ShowSuccessOrFailure(Localizer, result, "Remove");
+        NotificationService.ShowSuccessOrFailure(Localizer, result, "Remove");
     }
 
     private async Task UpdateModules()

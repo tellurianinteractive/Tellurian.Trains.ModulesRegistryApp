@@ -4,7 +4,7 @@
 
 @inject PageHistory PageHistory
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject CountryService CountryService
 @inject LayoutService LayoutService
@@ -53,7 +53,7 @@
         if (LayoutStation is not null)
         {
             var result = await LayoutService.UpdateAsync(Principal, LayoutStation);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             PageHistory.NavigateBack();
         }
     }

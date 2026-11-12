@@ -4,7 +4,7 @@
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject PersonService PersonService
 
 @inject PageHistory PageHistory
@@ -43,7 +43,7 @@ else
     {
         if (Id.IsNotSet()) return;
         var result = await PersonService.DeleteAsync(Principal, Id.Value);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
         Navigator.NavigateTo("/Persons");
     }

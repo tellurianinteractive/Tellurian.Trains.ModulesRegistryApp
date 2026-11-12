@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject UserService UserService
 @inject PersonService PersonService
 @inject CountryService CountryService
@@ -73,7 +73,7 @@ else
                 Person = result.Entity;
                 User = await UpdateUserEmailAddress(Person.PrimaryEmail());
             }
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

@@ -2,7 +2,7 @@
 @page "/Meetings/{MeetingId:int}/Edit/{PersonId:int}"
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 @inject ITimeProvider TimeProvider
 
 @inject MeetingService MeetingService
@@ -261,7 +261,7 @@ else
     {
         if (participant is null) return;
         var result = await LayoutParticipantService.DeleteAsync(Principal, participant.LayoutParticipant?.Id);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await OnSelectedPerson(participant.Participant.PersonId);
     }
 
@@ -276,7 +276,7 @@ else
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
@@ -284,7 +284,7 @@ else
     {
         var result = await MeetingService.CancelMeetingParticipaction(Principal, particpantId);
         Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
-        ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
     }
 
     async Task OnReRegister(int participantId)
@@ -293,7 +293,7 @@ else
         {
             var result = await MeetingService.ReRegisterMeetingParticipaction(Principal, participantId);
             Participant = await MeetingService.FindParticipantAsync(Principal, participantId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 

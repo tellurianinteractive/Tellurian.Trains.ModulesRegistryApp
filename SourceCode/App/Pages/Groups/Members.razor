@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject GroupService GroupService
 @inject CountryService CountryService
@@ -82,7 +82,7 @@
         if (membershipId > 0)
         {
             var result = await GroupService.RemoveMemberAsync(Principal, membershipId);
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
         }
     }

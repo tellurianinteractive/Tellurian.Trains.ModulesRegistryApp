@@ -6,7 +6,7 @@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<App> Localizer
-@inject IToastService ToastService
+@inject INotificationService NotificationService
 
 @inject PersonService PersonService
 @inject GroupService GroupService
@@ -138,7 +138,7 @@ else
             Module.ModuleExits = Module.ModuleExits.Where(mg => mg.EndProfileId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
             var result = await ModuleService.SaveAsync(Principal, Module, OwnershipRef);
             Module = result.Entity;
-            ToastService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
     }
 
