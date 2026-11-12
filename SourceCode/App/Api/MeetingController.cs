@@ -4,7 +4,7 @@ using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Api;
 
-[ProducesResponseType(typeof(IEnumerable<Meeting>), 200)]
+[ProducesResponseType(typeof(IEnumerable<Data.Api.Meeting>), 200)]
 [Route("api/meetings")]
 [ApiController]
 public class MeetingController(MeetingService meetingService) : ControllerBase
@@ -12,7 +12,7 @@ public class MeetingController(MeetingService meetingService) : ControllerBase
     private readonly MeetingService MeetingService = meetingService;
 
 
-    [Route("{countryId:int?}", Order = 1)]
+    [HttpGet("{countryId:int?}", Order = 1)]
     public async Task<IActionResult> Index(int? countryId, string? countries)
     {
         var meetings = await MeetingService.GetMeetingsAsync(countryId > 0 ? countryId : null, countries);

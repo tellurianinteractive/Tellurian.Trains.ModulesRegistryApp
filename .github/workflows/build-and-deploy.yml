@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       # Projects are built one by one: the .slnx also contains Database.sqlproj, which dotnet can't build.
       - name: Build

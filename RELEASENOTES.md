@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.0
+Released 2026-11-12
+- **Upgrade** to .NET 11.
+- **API documentation** (OpenAPI) works again and describes all endpoints.
 ## Release 1.13.9
 Released 2026-11-12
 - **Person search** when adding group members and registering meeting participants shows suggestions while typing, with keyboard selection. Several words, like "kar eli", must all match.

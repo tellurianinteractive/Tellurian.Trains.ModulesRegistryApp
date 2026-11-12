@@ -13,7 +13,7 @@ public class LayoutController(LayoutService layoutService) : Controller
     private LayoutService LayoutService { get; } = layoutService;
     public Task<AuthenticationState>? AuthenticationStateTask { get; }
 
-    [Route("{layoutId:int}/vehicles", Order = 1)]
+    [HttpGet("{layoutId:int}/vehicles", Order = 1)]
     public async Task<IActionResult> Index(int layoutId, [FromQuery] bool tractionOnly)
     {
         var layoutVehicles = await LayoutService.GetLayoutVehicles(layoutId, tractionOnly);

@@ -40,7 +40,7 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedModuleWaybills] @StationCustomerId={stationCustomerId}");
+            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedModuleWaybills] @StationCustomerId={stationCustomerId}");
         }
         return 0;
     }
@@ -50,7 +50,7 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedExternalWaybills] @StationCustomerId={stationCustomerId}");
+            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedExternalWaybills] @StationCustomerId={stationCustomerId}");
         }
         return 0;
     }
@@ -59,7 +59,7 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
+            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
         }
         return 0;
     }

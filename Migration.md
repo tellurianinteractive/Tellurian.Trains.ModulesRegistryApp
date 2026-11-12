@@ -191,12 +191,14 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 ## 2. Upgrade to .NET 11
 
 ### 2.1 Mechanics
-- [ ] `Directory.Build.props`: change `TargetFramework` to `net11.0`.
-- [ ] `global.json`: update the SDK version.
-- [ ] Update all `Microsoft.*` 10.0.x packages to 11.0.x (the full list is in the outdated-packages report).
-- [ ] Update the remaining third-party packages: Blazorise 2.1 → 2.4.x, Markdig, Swashbuckle 11, FluentValidation, QRCoder, Microsoft.Data.SqlClient, MSTest, coverlet.
-- [ ] Read through the official migration guide and the breaking changes: https://learn.microsoft.com/aspnet/core/migration/100-to-110
+- [x] `Directory.Build.props`: change `TargetFramework` to `net11.0`.
+- [x] `global.json`: no SDK pin (CI uses `dotnet-version: 11.0.x`).
+- [x] Update all `Microsoft.*` 10.0.x packages to 11.0.x (the full list is in the outdated-packages report).
+- [x] Update the remaining third-party packages: Swashbuckle 11 (the others were already current; Blazorise was removed in 1.1).
+- [ ] Read through the official migration guide and the breaking changes: https://learn.microsoft.com/aspnet/core/migration/100-to-110 (not done yet; build, tests and a local run work).
 - [ ] Update the Azure App Service runtime stack to .NET 11.
+
+- [ ] New .NET 11 Blazor analyser warnings (16), left for a separate step: BL0012 unnecessary `StateHasChanged` (12), BL0010/BL0016 JS interop should use `InvokeVoidAsync` and be wrapped in try/catch (4).
 
 ### 2.2 Move to the Blazor Web App hosting model (prerequisite for most new features)
 
@@ -228,8 +230,8 @@ The app still uses the .NET 5–7 style: `AddServerSideBlazor()`, `MapBlazorHub(
 | **`EnvironmentView` component** | Low | Could replace manual `IsDevelopment` checks in markup. |
 
 ### 2.4 OpenAPI (breaking)
-- [ ] `Microsoft.AspNetCore.OpenApi` 11 uses `Microsoft.OpenApi` 3.x (OpenAPI 3.2 by default), which has breaking API changes. Check the document transformers in `Program.cs` and that Swashbuckle UI 11 still works.
-- [ ] Check that API consumers can handle OpenAPI 3.2, or pin `OpenApiVersion` to 3.1.
+- [x] `Microsoft.AspNetCore.OpenApi` 11 uses `Microsoft.OpenApi` 3.x (OpenAPI 3.2 by default), which has breaking API changes. Check the document transformers in `Program.cs` and that Swashbuckle UI 11 still works. The transformer compiled unchanged. The document was **already broken in production (HTTP 500)**: `MeetingController` declared the EF entity `Data.Meeting` instead of the DTO `Data.Api.Meeting`, and three endpoints had no HTTP method attribute, so they were missing. Fixed, with a test that generates the document.
+- [x] Check that API consumers can handle OpenAPI 3.2, or pin `OpenApiVersion` to 3.1. Decided: OpenAPI 3.2.
 
 ---
 

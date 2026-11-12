@@ -8,7 +8,7 @@ Blazor Server web application (production at https://moduleregistry.azurewebsite
 
 ## Solution Layout
 
-The solution file is `Modules Registry App.slnx` (XML-based .slnx format — not .sln). Target framework, version and shared compiler settings live in `Directory.Build.props` at the repo root (currently `net10.0`, `Nullable=enable`, `ImplicitUsings=enable`, neutral language `en-150`).
+The solution file is `Modules Registry App.slnx` (XML-based .slnx format — not .sln). Target framework, version and shared compiler settings live in `Directory.Build.props` at the repo root (currently `net11.0`, `Nullable=enable`, `ImplicitUsings=enable`, neutral language `en-150`).
 
 Projects:
 - `SourceCode/App` — Blazor Server host (`AssemblyName=ModulesRegistry`, SDK `Microsoft.NET.Sdk.Web`). Contains `Pages/` (routable razor components, organised in feature subfolders), `Components/` (non-routable UI), `Api/` (REST controllers exposing `Data.Api` DTOs), `Security/` (cookie auth, API user middleware, `ApplicationClaimsTransformation`, security headers), `Content/Markdown/` (help texts, localised per-language via `.xx.md` suffix), `Resources/` (App.*.resx).
