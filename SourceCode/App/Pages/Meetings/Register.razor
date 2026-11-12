@@ -123,15 +123,15 @@ else
             <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
                 <Inputs>
                     <h3>@Localizer["Days"]</h3>
+                    <div class="col-md-2">
+                        <AppButton Label="AllDays" IconName="@FontAwesome.Verify" OnClickCallback="OnAllDays" />
+                    </div>
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
                     <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 5" />
-                    <div class="col-md-2">
-                        <AppButton Label="AllDays" IconName="@FontAwesome.Verify" OnClickCallback="OnAllDays" />
-                    </div>
                     <AppInputFill Width="@(Math.Max(0, 10 - Meeting.DaysCount()))" />
                     <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)" />
                     <AppInputTimeOnly Width="2" @bind-Value="Participant.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel(Participant)" />
