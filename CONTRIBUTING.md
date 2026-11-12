@@ -72,7 +72,7 @@ If you want to contribute to the development of the application, there are two m
 - As a **Database administrator**; analyse an optimize performance, suggest improvements of how queries are made using *Entity Framework*.
 - As a **DevOps specialist**; setting up an maintaining DevOps for application and database.
 
-> NOTE: Full development with deployment and testing against a database must be made with Visual Studio on a Windows or machine.
+> NOTE: Full development and testing against a database is easiest with Visual Studio on a Windows machine. Deployment is automated, see *Releasing a new version* below.
 > Changing source code can be made in any text editing tool on any platform, and the application can be build using the *dotnet* Command Line Interface,
 > which comes with the .NET SDK installation for your platform.
 
@@ -87,7 +87,7 @@ To contribute, you need some experience in the following fields:
 Visual Studio has excellent support for coding and publishing apps written in C#, HTML/CSS, and built in database design- and deployment tools. 
 There is a free version available.
 * Knowledge of version management in **GitHub**.
-* Setting up DevOps using GitHub actions and Azure DevOps deployment slots. This is not in place, and help is needed.
+* Using **GitHub Actions** for build, test and deployment, see *Releasing a new version* below.
 
 If you have experiences from writing web applications using HTML/CSS and JAVA, 
 you will propably get up to speed with *Blazor* and C# in relative short term.
@@ -107,6 +107,29 @@ It normally comes bundled with *.NET SDK* and *Git*-tooling, or you can opt-in d
 4. Fork the *Module Registry App* repository from GitHub. You can do that from within Visual Studio.
 5. Open the solution and verify that it compiles.
 6. You can now make modifications and pull-requests.
+
+#### Releasing a new version
+The app is built, tested and deployed by the GitHub Actions workflow [`build-and-deploy.yml`](.github/workflows/build-and-deploy.yml).
+Publishing from Visual Studio is not possible: password-based publishing (basic authentication and FTP) is turned off on the App Service.
+
+- **Every push and pull request** to `master` is built and tested.
+- **A push to `master` deploys** to production only when the version has been stepped up, that is, when `<Version>` in
+[`Directory.Build.props`](Directory.Build.props) has no matching git tag `v<Version>` yet.
+
+To release:
+1. Step up `<Version>` and `<AssemblyVersion>` in `Directory.Build.props`.
+2. If the change affects the users or the app's security, add a very short entry under `## Release <Version>` in
+[`RELEASENOTES.md`](RELEASENOTES.md). Internal changes (refactoring, tests, documentation) get no entry.
+3. Push to `master`. The workflow builds, tests, publishes and deploys, checks that the deployed files match the build,
+and then creates the tag `v<Version>` and a GitHub release with the release notes.
+4. Check the site in a browser. The App Service runs on the Free plan, so the first page load after a deploy can be slow.
+
+Other things to know:
+- **Redeploy** the current version: *Actions → Build and deploy → Run workflow* with *force* checked.
+- **Roll back**: revert the faulty commit, step up the version and push.
+- **Terms of Use**: `TermsOfUse.md` starts with a `<!-- LastModified: ... -->` line. This date decides whether users must accept
+the terms again, so change it only when the terms really change. File timestamps can't be used, since a checkout resets them.
+- **The database** is not deployed by the workflow. Schema changes are still published from Visual Studio (`Database.sqlproj`).
 
 #### Working with databases
 It is often better to work against a database with real data to see effects of changes and to catch real errors.

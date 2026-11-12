@@ -39,7 +39,7 @@ dotnet run --project SourceCode/App/App.csproj
 
 CI/CD is one workflow, `.github/workflows/build-and-deploy.yml`. Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
 
-Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version (and add release notes if the change affects users or security), then push. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
+Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version (and add release notes if the change affects users or security), then push. Publishing from Visual Studio is not possible (basic authentication is turned off on the App Service); the release procedure is in `CONTRIBUTING.md`. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
 
 The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Use Visual Studio or `msbuild SourceCode/Database/Database.sqlproj` to build/publish the schema.
 

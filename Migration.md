@@ -28,7 +28,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 | 1.2 | Create `TestCode/App.Tests`. Our own notification service and component replace Blazored.Toast. | Unit tests for the service, success/error messages shown on save in the browser | 1.1 |
 | 1.3 | Merge `AddMember` into `AppSearchPerson`, then our own person search with a search endpoint replaces Blazored.Typeahead | Endpoint tests (authorisation, minimum length, result limit), keyboard selection in the browser | 1.2 |
 
-Step 1.1 was deployed as release 1.13.4 (2026-11-12). Steps 1B.1–1B.3 done 2026-11-12: 1.13.5 (Terms of Use date) from Visual Studio, 1.13.6 (UIC page fix) as the first release deployed by the workflow.
+Step 1.1 was deployed as release 1.13.4 (2026-11-12). Stage 1B done 2026-11-12: 1.13.5 (Terms of Use date) from Visual Studio, 1.13.6 (UIC page fix) as the first release deployed by the workflow.
 
 ### Stage 1B: automated build and deployment (GitHub Actions)
 Today the app is published by hand from Visual Studio (Web Deploy profile). The goal: **a push to `master` that steps up `<Version>` in `Directory.Build.props` builds, tests and publishes the app to Azure**. Every other push only builds and tests. Do this stage before 1.2, so the remaining steps are deployed by the pipeline.
@@ -38,7 +38,7 @@ Today the app is published by hand from Visual Studio (Web Deploy profile). The 
 | 1B.1 ✅ | CI workflow (now the `build` job in `.github/workflows/build-and-deploy.yml`): on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
 | 1B.2 ✅ | Explicit last modified time for Markdown content: a first line `<!-- LastModified: 2026-01-09T10:25:31Z -->` takes precedence over the file timestamp, and is removed before rendering. Added to `TermsOfUse.md`. **Released from Visual Studio as before**, since a deploy from a fresh checkout would otherwise move the Terms of Use date to the deploy time and force every user to accept the terms again. | Unit tests, including a guard test that `TermsOfUse.md` gives 2026-01-09 10:25:31 UTC whatever its file timestamp. In production: the Terms of Use page still shows 2026-01-09 10:25, and signed-in users aren't asked to accept again. | 6.2 |
 | 1B.3 ✅ | Deploy job in the same workflow, `.github/workflows/build-and-deploy.yml` (one workflow: the build output that was tested is the one deployed): on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes, if it has any. | A push without a version change doesn't deploy. The Terms of Use date is unchanged after the first deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
-| 1B.4 | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
+| 1B.4 ✅ | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. (The profile was never in git, `*.pubxml` is ignored; only local copies remain and no longer work.) Also FTP turned off (`ftpsState: Disabled`). Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
 
 The database (DACPAC) is still published by hand. It moves into the pipeline in stage 4 (migration bundle).
 
@@ -571,7 +571,7 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 
 **Content dates:** a fresh checkout gives every file the checkout time as its timestamp. Markdown content whose modification time matters must have an explicit `<!-- LastModified: ... -->` first line (step 1B.2). Today this is only `TermsOfUse.md`, whose date decides whether users must accept the terms again. Update the line only when the terms really change.
 
-**Rollback:** the `production` environment only accepts `master`, so a rollback is a `git revert` of the faulty commit plus a new version number, pushed to `master`. Until step 1B.4, publishing from Visual Studio also still works.
+**Rollback:** the `production` environment only accepts `master`, so a rollback is a `git revert` of the faulty commit plus a new version number, pushed to `master`. Publishing from Visual Studio no longer works (step 1B.4).
 
 ### 6.3 Setup outside the repository (done once)
 **In Azure:**
@@ -579,12 +579,13 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [x] Federated credential `github-production`, issuer `https://token.actions.githubusercontent.com`, subject `repo:tellurianinteractive/Tellurian.Trains.ModulesRegistryApp:environment:production`. Note: the Portal suggests the immutable format with IDs (`tellurianinteractive@57481455/...@332267854`), but the repository uses GitHub's default subject format (`use_immutable_subject: false`), so the default format must be used.
 - [x] Role **Website Contributor** for the identity on the `ModuleRegistry` web app only.
 - [x] Remove the obsolete app setting `WEBSITE_NODE_DEFAULT_VERSION` (was `6.9.1`). With it, Kudu's deployment script crashed (`util.promisify is not a function`) and copied nothing, yet reported "Deployment successful". Visual Studio's Web Deploy doesn't use Kudu's script, so it never showed. The workflow now verifies that the deployed `ModulesRegistry.dll` matches the build output.
+- [x] Basic authentication for SCM and FTP turned off, FTP disabled (step 1B.4). Kudu still accepts Entra ID tokens, which the workflow uses.
 - [x] Minimum TLS version 1.2 for the deployment endpoint (`scmMinTlsVersion`, was 1.0). The site itself already required 1.2.
 - Note: the plan is **F1 (Free)**: no *Always On*, so the site sleeps when idle and starts slowly after a deploy or restart.
 
 **In GitHub** (repository Settings):
-- [ ] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
-- [ ] Environment secrets `AZURE_CLIENT_ID` (the identity's Client ID, not the Object ID), `AZURE_TENANT_ID` (same as the Directory ID) and `AZURE_SUBSCRIPTION_ID`.
-- [ ] *Actions → General*: Actions allowed (check the organisation settings too). The workflow requests `contents: write` (tags and releases) and `id-token: write` (OIDC) itself.
+- [x] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
+- [x] Environment secrets `AZURE_CLIENT_ID` (the identity's Client ID, not the Object ID), `AZURE_TENANT_ID` (same as the Directory ID) and `AZURE_SUBSCRIPTION_ID`.
+- [x] *Actions → General*: Actions allowed (check the organisation settings too). The workflow requests `contents: write` (tags and releases) and `id-token: write` (OIDC) itself.
 - [ ] Optional: a branch protection rule (or ruleset) on `master` that requires the `build` job to pass.
 - [x] Tag `v1.13.4` on the deployed commit `0aad653`.
