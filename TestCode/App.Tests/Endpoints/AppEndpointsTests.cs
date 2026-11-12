@@ -90,17 +90,38 @@ public sealed class AppEndpointsTests
     }
 
     [TestMethod]
-    public async Task ReturnsMatchingPersonsLimitedToMaximum()
+    public async Task ReturnsPersonsFromTheSource()
     {
-        _source.Persons = [.. Enumerable.Range(1, 25).Select(i => new ListboxItem(i, $"Andersson {i}")), new(99, "Berg")];
+        _source.Persons = [new(1, "Karl Eliasson, Göteborg, Sweden"), new(2, "Karla Elin, Lund, Sweden")];
 
-        var response = await GetAsync($"{PersonSearchEndpoint.Url}?q=and", "user");
+        var response = await GetAsync($"{PersonSearchEndpoint.Url}?q={Uri.EscapeDataString("kar eli")}", "user");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var persons = await response.Content.ReadFromJsonAsync<PersonSearchResult[]>();
         Assert.IsNotNull(persons);
+        CollectionAssert.AreEqual(new[] { new PersonSearchResult(1, "Karl Eliasson, Göteborg, Sweden"), new PersonSearchResult(2, "Karla Elin, Lund, Sweden") }, persons);
+        Assert.AreEqual("kar eli", _source.Text);
+    }
+
+    [TestMethod]
+    public async Task AsksForAndReturnsAtMostMaximumResults()
+    {
+        _source.Persons = [.. Enumerable.Range(1, 25).Select(i => new ListboxItem(i, $"Andersson {i}"))];
+
+        var response = await GetAsync($"{PersonSearchEndpoint.Url}?q=and", "user");
+
+        var persons = await response.Content.ReadFromJsonAsync<PersonSearchResult[]>();
+        Assert.IsNotNull(persons);
         Assert.HasCount(PersonSearchEndpoint.MaximumResults, persons);
-        Assert.IsTrue(persons.All(p => p.Name.StartsWith("Andersson")));
+        Assert.AreEqual(PersonSearchEndpoint.MaximumResults, _source.MaxResults);
+    }
+
+    [TestMethod]
+    public async Task SearchTextIsTrimmed()
+    {
+        await GetAsync($"{PersonSearchEndpoint.Url}?q={Uri.EscapeDataString("  kar eli  ")}", "user");
+
+        Assert.AreEqual("kar eli", _source.Text);
     }
 
     [TestMethod]
@@ -144,14 +165,16 @@ public sealed class AppEndpointsTests
 
     private sealed class FakePersonSearchSource : IPersonSearchSource
     {
-        public IEnumerable<ListboxItem> Persons { get; set; } = [];
+        public IReadOnlyList<ListboxItem> Persons { get; set; } = [];
         public bool WasCalled { get; private set; }
         public int CountryId { get; private set; }
         public int ExcludeGroupId { get; private set; }
+        public string? Text { get; private set; }
+        public int MaxResults { get; private set; }
 
-        public Task<IEnumerable<ListboxItem>> PersonsAsync(ClaimsPrincipal principal, int countryId, int excludeGroupId, CancellationToken cancellationToken = default)
+        public Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, CancellationToken cancellationToken = default)
         {
-            (WasCalled, CountryId, ExcludeGroupId) = (true, countryId, excludeGroupId);
+            (WasCalled, CountryId, ExcludeGroupId, Text, MaxResults) = (true, countryId, excludeGroupId, text, maxResults);
             return Task.FromResult(Persons);
         }
     }

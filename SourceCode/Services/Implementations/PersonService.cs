@@ -24,6 +24,25 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         return Array.Empty<ListboxItem>();
     }
 
+    /// <summary>
+    /// Persons in a country whose name or city contains every word in <paramref name="text"/>, filtered in the database.
+    /// Only countries the user is authorised in are searched, as in <see cref="ListboxItemsAsync"/>.
+    /// </summary>
+    public async Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal? principal, int countryId, string? text, int excludeGroupId = 0, int maxResults = 10, CancellationToken cancellationToken = default)
+    {
+        var words = PersonSearchExtensions.SearchWords(text);
+        if (words.Length == 0 || maxResults < 1 || !principal.IsAuthorisedInCountry(countryId)) return [];
+        using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        var persons = await dbContext.People.AsNoTracking()
+            .Include(p => p.Country)
+            .Where(p => (countryId == 0 || p.CountryId == countryId) && (excludeGroupId == 0 || !p.GroupMembers.Any(gm => gm.GroupId == excludeGroupId)))
+            .WhereNameOrCityContainsAllWords(words)
+            .OrderBy(p => p.FirstName).ThenBy(p => p.MiddleName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
+            .Take(maxResults)
+            .ToListAsync(cancellationToken);
+        return persons.Select(p => new ListboxItem(p.Id, p.NameWithCityAndCountry())).ToList();
+    }
+
     public async Task<IEnumerable<ListboxItem>> FremoMembersListboxItemsAsync(ClaimsPrincipal? principal, int countryId = 0, int personId = 0)
     {
         personId = principal.IsGlobalAdministrator() || principal.MayManageWiFreds() ? personId : principal.PersonId();

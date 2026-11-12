@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Endpoints;
@@ -8,8 +7,9 @@ namespace ModulesRegistry.Endpoints;
 /// Person search: <c>GET /app/persons/search?q=...&amp;countryId=...&amp;excludeGroupId=...</c>.
 /// </summary>
 /// <remarks>
-/// Part of <see cref="AppEndpoints"/> (signed in, read only). Only persons in countries the user is authorised in are returned,
-/// which <see cref="Services.Implementations.PersonService"/> checks.
+/// Part of <see cref="AppEndpoints"/> (signed in, read only). The search runs in the database
+/// (<see cref="Services.Implementations.PersonService.SearchAsync"/>): every word must match the name or city,
+/// and only persons in countries the user is authorised in are returned.
 /// </remarks>
 public static class PersonSearchEndpoint
 {
@@ -23,28 +23,14 @@ public static class PersonSearchEndpoint
         public RouteHandlerBuilder MapPersonSearch() => endpoints.MapGet(Route, SearchAsync);
     }
 
-    /// <summary>
-    /// Persons whose description (name, city and country) contains every word in <paramref name="query"/>, ignoring case and order:
-    /// "kar eli" matches "Karl Eliasson".
-    /// </summary>
-    public static IReadOnlyList<PersonSearchResult> Filter(IEnumerable<ListboxItem> persons, string query)
-    {
-        var words = query.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        return persons
-            .Where(p => !p.IsHidden && words.All(p.Description.ToLowerInvariant().Contains))
-            .Take(MaximumResults)
-            .Select(p => new PersonSearchResult(p.Id, p.Description))
-            .ToList();
-    }
-
     private static async Task<IResult> SearchAsync(string? q, int? countryId, int? excludeGroupId, ClaimsPrincipal user, IPersonSearchSource source, CancellationToken cancellationToken)
     {
         var query = q?.Trim() ?? string.Empty;
         if (query.Length < MinimumQueryLength)
             return Results.ValidationProblem(new Dictionary<string, string[]> { ["q"] = [$"The search text must have at least {MinimumQueryLength} characters."] });
 
-        var persons = await source.PersonsAsync(user, countryId is > 0 ? countryId.Value : user.CountryId(), excludeGroupId ?? 0, cancellationToken);
-        return Results.Ok(Filter(persons, query));
+        var persons = await source.SearchAsync(user, countryId is > 0 ? countryId.Value : user.CountryId(), query, excludeGroupId ?? 0, MaximumResults, cancellationToken);
+        return Results.Ok(persons.Take(MaximumResults).Select(p => new PersonSearchResult(p.Id, p.Description)).ToList());
     }
 }
 

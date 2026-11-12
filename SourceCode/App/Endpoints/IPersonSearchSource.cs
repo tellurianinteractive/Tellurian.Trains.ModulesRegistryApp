@@ -5,15 +5,15 @@ using ModulesRegistry.Services.Implementations;
 namespace ModulesRegistry.Endpoints;
 
 /// <summary>
-/// The persons a user may search among. Separated from <see cref="PersonSearchEndpoint"/> so the endpoint can be tested without a database.
+/// Searches the persons a user may see. Separated from <see cref="PersonSearchEndpoint"/> so the endpoint can be tested without a database.
 /// </summary>
 public interface IPersonSearchSource
 {
-    Task<IEnumerable<ListboxItem>> PersonsAsync(ClaimsPrincipal principal, int countryId, int excludeGroupId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, CancellationToken cancellationToken = default);
 }
 
 public sealed class PersonSearchSource(PersonService personService) : IPersonSearchSource
 {
-    public Task<IEnumerable<ListboxItem>> PersonsAsync(ClaimsPrincipal principal, int countryId, int excludeGroupId, CancellationToken cancellationToken = default) =>
-        personService.ListboxItemsAsync(principal, countryId, excludeGroupId);
+    public Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, CancellationToken cancellationToken = default) =>
+        personService.SearchAsync(principal, countryId, text, excludeGroupId, maxResults, cancellationToken);
 }
