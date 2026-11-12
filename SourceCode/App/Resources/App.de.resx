@@ -1827,4 +1827,7 @@
   <data name="Searching" xml:space="preserve">
     <value>Suche...</value>
   </data>
+  <data name="AllDays" xml:space="preserve">
+    <value>Alle Tage</value>
+  </data>
 </root>

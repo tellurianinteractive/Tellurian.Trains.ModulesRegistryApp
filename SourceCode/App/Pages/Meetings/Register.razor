@@ -123,13 +123,16 @@ else
             <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
                 <Inputs>
                     <h3>@Localizer["Days"]</h3>
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
-                    <AppInputFill Width="@(12-Meeting.DaysCount())" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
+                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 5" />
+                    <div class="col-md-2">
+                        <AppButton Label="AllDays" IconName="@FontAwesome.Verify" OnClickCallback="OnAllDays" />
+                    </div>
+                    <AppInputFill Width="@(Math.Max(0, 10 - Meeting.DaysCount()))" />
                     <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)" />
                     <AppInputTimeOnly Width="2" @bind-Value="Participant.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel(Participant)" />
                 </Inputs>
@@ -349,8 +352,22 @@ else
 
     string ParticipantStatusStyle(MeetingParticipant? it) => it is null ? string.Empty : it.CancellationTime.HasValue ? "color: red; text-decoration: line-through;" : string.Empty;
 
-    string LatestArrivalTimeLabel(MeetingParticipant? it) => $"LatestArrivalTime-{it.FirstParticipationDay()}";
-    string EarliestDepartureTimeLabel(MeetingParticipant? it) => $"EarliestDepartureTime-{it.LastParticipationDay()}";
+    /// <summary>Checks the days between the first and last checked day, so participation is continuous.</summary>
+    void OnParticipationDaysChanged() => Participant?.FillParticipationDaysBetween();
+
+    void OnAllDays()
+    {
+        if (Meeting is not null) Participant?.ParticipateAllDays(Meeting.DaysCount());
+    }
+
+    // The labels name the first and last checked day; built from the page's meeting, since a new participant has no Meeting yet.
+    string LatestArrivalTimeLabel(MeetingParticipant? it) => WithDay(Localizer["LatestArrivalTime"], it?.FirstParticipationDayNumber() ?? 0);
+    string EarliestDepartureTimeLabel(MeetingParticipant? it) => WithDay(Localizer["EarliestDepartureTime"], it?.LastParticipationDayNumber() ?? 0);
+    string WithDay(string label, int day) => Meeting is null || day == 0 ? label : $"{label} {DayInText(Meeting.Day(day).AsLocalized())}";
+
+    // Day names are written in lower case in running text in Swedish, Danish and Norwegian, but capitalised in English and German.
+    static string DayInText(string dayName) =>
+        LanguageExtensions.CurrentCulture.TwoLetterISOLanguageName is "sv" or "da" or "nb" ? dayName.ToLower(LanguageExtensions.CurrentCulture) : dayName;
     string MeetingOpensForRegistration(Meeting? it) =>
         it is null ? string.Empty :
         string.Format(Localizer["MeetingOpensForRegistrationAtDate"], it.RegistrationOpensDate());
