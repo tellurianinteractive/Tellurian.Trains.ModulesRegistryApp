@@ -5,14 +5,20 @@
 {
 
     <div class="form-group" style="padding-right: @PaddingRight">
-        <select class="form-control-sm " id="selectid" @bind="Id" @onselect="OnSelectedItem">
-            <option value="0">@Label</option>
+        <select class="form-control-sm " id="selectid" @bind="Id" @bind:after="OnChanged">
+            @if (!ApplyOnChange || Id == 0)
+            {
+                <option value="0">@Label</option>
+            }
             @foreach (var item in Items)
             {
                 <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
             }
         </select>
-        <AppButton Label="Ok" OnClickCallback="OnSelectedItem" />
+        @if (!ApplyOnChange)
+        {
+            <AppButton Label="Ok" OnClickCallback="OnSelectedItem" />
+        }
         @if (Inline)
         {
         }
@@ -31,6 +37,11 @@
     [Parameter] public int SelectedId { get; set; }
     [Parameter] public bool Inline { get; set; }
     [Parameter] public string? LocalStorageKey { get; set; }
+    /// <summary>
+    /// Applies the selection as soon as it changes, without the Ok button.
+    /// Leave it off where selecting performs an action, for example moving something.
+    /// </summary>
+    [Parameter] public bool ApplyOnChange { get; set; }
 
     int Id { get; set; }
     bool IsStoredSelectionApplied;
@@ -51,6 +62,11 @@
             Id = storedId;
             await OnSelected.InvokeAsync(storedId);
         }
+    }
+
+    private async Task OnChanged()
+    {
+        if (ApplyOnChange && Id > 0) await OnSelectedItem();
     }
 
     private async Task OnSelectedItem()

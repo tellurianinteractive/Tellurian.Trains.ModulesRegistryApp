@@ -4,6 +4,7 @@ The release notes are summaries of important changes and fixes in each release.
 ## Release 1.13.9
 Released 2026-11-12
 - **Person search** when adding group members and registering meeting participants shows suggestions while typing, with keyboard selection. Several words, like "kar eli", must all match.
+- **Country** for the person search applies as soon as it is selected, without an Ok button.
 - **Missing translations** added, for example "Not found", validation messages and some column headings.
 ## Release 1.13.8
 Released 2026-11-12

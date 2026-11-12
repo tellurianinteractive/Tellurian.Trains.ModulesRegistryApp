@@ -35,7 +35,7 @@ else
         {
             <div class="noprint">
                 <h3>@Localizer["SelectPersonToRegister"]</h3>
-                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Country" />
+                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Country" ApplyOnChange="true" />
                 <div class="row g-3">
                     <AppSearchPerson @bind-Value:get="SearchedPersonId" @bind-Value:set="OnSearchedPerson"
                                      SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
