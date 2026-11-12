@@ -23,11 +23,15 @@ public static class PersonSearchEndpoint
         public RouteHandlerBuilder MapPersonSearch() => endpoints.MapGet(Route, SearchAsync);
     }
 
+    /// <summary>
+    /// Persons whose description (name, city and country) contains every word in <paramref name="query"/>, ignoring case and order:
+    /// "kar eli" matches "Karl Eliasson".
+    /// </summary>
     public static IReadOnlyList<PersonSearchResult> Filter(IEnumerable<ListboxItem> persons, string query)
     {
-        var lowerQuery = query.ToLowerInvariant();
+        var words = query.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         return persons
-            .Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(lowerQuery))
+            .Where(p => !p.IsHidden && words.All(p.Description.ToLowerInvariant().Contains))
             .Take(MaximumResults)
             .Select(p => new PersonSearchResult(p.Id, p.Description))
             .ToList();

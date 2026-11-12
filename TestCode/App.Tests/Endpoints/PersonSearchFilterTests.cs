@@ -44,4 +44,27 @@ public sealed class PersonSearchFilterTests
 
         Assert.IsEmpty(PersonSearchEndpoint.Filter(persons, "xyz"));
     }
+
+    [TestMethod]
+    [DataRow("kar eli")]
+    [DataRow("eli kar")]
+    [DataRow("KAR  ELI")]
+    [DataRow(" kar eli ")]
+    [DataRow("karl göte")]
+    public void EveryWordMustMatchInAnyOrder(string query)
+    {
+        ListboxItem[] persons = [new(1, "Karl Eliasson, Göteborg, Sweden"), new(2, "Karl Andersson, Malmö, Sweden"), new(3, "Eli Berg, Lund, Sweden")];
+
+        var actual = PersonSearchEndpoint.Filter(persons, query);
+
+        Assert.AreEqual(1, actual.Single().Id);
+    }
+
+    [TestMethod]
+    public void OneWordMatchingIsNotEnough()
+    {
+        ListboxItem[] persons = [new(1, "Karl Andersson, Malmö, Sweden")];
+
+        Assert.IsEmpty(PersonSearchEndpoint.Filter(persons, "kar eli"));
+    }
 }
