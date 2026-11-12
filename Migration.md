@@ -25,7 +25,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 1.1 ✅ | Update to the latest 10.0.x patches and third-party minor versions, `Microsoft.Azure.SignalR` 1.33.1, fix the transitive vulnerabilities, remove the unused Blazorise packages | `dotnet list package --vulnerable/--deprecated` clean (except Blazored), smoke test of all main pages | 1.4, 1.6, 1.7 |
-| 1.2 | Create `TestCode/App.Tests`. Our own notification service and component replace Blazored.Toast. | Unit tests for the service, success/error messages shown on save in the browser | 1.1 |
+| 1.2 ✅ | Create `TestCode/App.Tests`. Our own notification service and component replace Blazored.Toast. | Unit tests for the service, success/error messages shown on save in the browser | 1.1 |
 | 1.3 | Merge `AddMember` into `AppSearchPerson`, then our own person search with a search endpoint replaces Blazored.Typeahead | Endpoint tests (authorisation, minimum length, result limit), keyboard selection in the browser | 1.2 |
 
 Step 1.1 was deployed as release 1.13.4 (2026-11-12). Stage 1B done 2026-11-12: 1.13.5 (Terms of Use date) from Visual Studio, 1.13.6 (UIC page fix) as the first release deployed by the workflow.
