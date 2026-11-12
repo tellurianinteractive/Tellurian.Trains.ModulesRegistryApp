@@ -6,7 +6,6 @@ There is maximum one release per date, but this can be performed as one or sever
 Released 2026-11-12
 - **Component update** to latest .NET 10 patches and external dependencies.
 - **Security fixes** in two indirect dependencies.
-- **Unused components** removed.
 ## Release 1.13.3
 Released 2026-04-20
 - **API authentication** now accepts the API key via the `X-API-Key` HTTP header. The existing `?apiKey=` query string parameter still works but is deprecated and will be removed in a future release. Callers should move to the header; query strings are exposed in access logs, browser history, and referrer headers.

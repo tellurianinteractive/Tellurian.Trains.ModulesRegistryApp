@@ -26,12 +26,24 @@ public sealed class ContentService
         return new TextContent(markdown, "MD", DateTimeOffset.Now);
     }
 
-    public Task<DateTimeOffset> GetLastModifiedTimeOfTextContent(string content)
+    /// <summary>
+    /// Gets the latest modification time of all language versions of a content, truncated to whole seconds in UTC.
+    /// An explicit <c>&lt;!-- LastModified: ... --&gt;</c> line in a file takes precedence over its file system timestamp.
+    /// </summary>
+    /// <remarks>
+    /// For TermsOfUse, this time decides whether users must accept the terms again, so it must not change by accident.
+    /// </remarks>
+    public async Task<DateTimeOffset> GetLastModifiedTimeOfTextContent(string content)
     {
         var directory = new DirectoryInfo(MarkdownPath);
         var files = directory.GetFiles($"{content}.*");
-        if (files.Length == 0) return Task.FromResult(DateTimeOffset.MinValue);
-        var lastModified = files.Max(f => f.LastWriteTimeUtc);
-        return Task.FromResult(lastModified.ToDateTimeOffset());
+        if (files.Length == 0) return DateTimeOffset.MinValue;
+        var lastModified = DateTimeOffset.MinValue;
+        foreach (var file in files)
+        {
+            var fileContent = await file.ReadMarkdownAsync().ConfigureAwait(false);
+            if (fileContent.LastModified > lastModified) lastModified = fileContent.LastModified;
+        }
+        return lastModified.UtcDateTime.ToDateTimeOffset();
     }
 }

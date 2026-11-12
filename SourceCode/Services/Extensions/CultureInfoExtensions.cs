@@ -10,9 +10,9 @@ public static class CultureInfoExtensions
     public async static Task<TextContent> GetMarkdownAsync(this string twoLetterISOLanguageName, string path, string content)
     {
         var specificCultureFile = new FileInfo($"{path}/{content}.{twoLetterISOLanguageName}.md");
-        if (specificCultureFile.Exists) return new TextContent(await File.ReadAllTextAsync(specificCultureFile.FullName), "MD", specificCultureFile.LastWriteTimeUtc);
+        if (specificCultureFile.Exists) return await specificCultureFile.ReadMarkdownAsync().ConfigureAwait(false);
         var defaultCultureFile = new FileInfo($"{path}/{content}.md");
-        if (defaultCultureFile.Exists) return new TextContent(await File.ReadAllTextAsync(defaultCultureFile.FullName), "MD", defaultCultureFile.LastWriteTimeUtc);
+        if (defaultCultureFile.Exists) return await defaultCultureFile.ReadMarkdownAsync().ConfigureAwait(false);
         return new TextContent(string.Empty, "MD", DateTimeOffset.Now);
     }
 

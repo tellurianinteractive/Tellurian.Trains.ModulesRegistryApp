@@ -15,7 +15,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 - **Definition of done** before the next step:
   1. `dotnet build` and all test projects green, with **new tests** for what the step changes.
   2. Manual check in the browser of the affected pages (UI changes aren't caught by tests).
-  3. An entry in `RELEASENOTES.md`.
+  3. An entry in `RELEASENOTES.md`, but **only if the step affects the users or the app's security**. Internal changes get no entry.
   4. Deployed to production and **observed** for a while (logs, errors, user feedback) without problems.
 - **Rollback must be possible** by redeploying the previous version. So database objects are never removed in the same release as the code stops using them; they're removed in the following release.
 - **No behaviour changes mixed with refactoring.** A step either changes structure (same behaviour) or changes behaviour, never both.
@@ -35,9 +35,10 @@ Today the app is published by hand from Visual Studio (Web Deploy profile). The 
 
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 1B.1 | CI workflow `.github/workflows/ci.yml`: on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
-| 1B.2 | Create the tag `v1.13.4` on the deployed commit. Deploy workflow `.github/workflows/deploy.yml`: on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: check that `RELEASENOTES.md` has a `## Release <Version>` heading, build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes. | A push without a version change doesn't deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
-| 1B.3 | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
+| 1B.1 ✅ | CI workflow `.github/workflows/ci.yml`: on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
+| 1B.2 | Explicit last modified time for Markdown content: a first line `<!-- LastModified: 2026-01-09T10:25:31Z -->` takes precedence over the file timestamp, and is removed before rendering. Added to `TermsOfUse.md`. **Released from Visual Studio as before**, since a deploy from a fresh checkout would otherwise move the Terms of Use date to the deploy time and force every user to accept the terms again. | Unit tests, including a guard test that `TermsOfUse.md` gives 2026-01-09 10:25:31 UTC whatever its file timestamp. In production: the Terms of Use page still shows 2026-01-09 10:25, and signed-in users aren't asked to accept again. | 6.2 |
+| 1B.3 | Deploy workflow `.github/workflows/deploy.yml`: on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes, if it has any. | A push without a version change doesn't deploy. The Terms of Use date is unchanged after the first deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
+| 1B.4 | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
 
 The database (DACPAC) is still published by hand. It moves into the pipeline in stage 4 (migration bundle).
 
@@ -542,7 +543,7 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 - [ ] `dotnet build`, plus both test projects green.
 - [ ] Manual browser check: notifications, person search, validation messages on all four forms, list filters kept between visits, and QuickGrid paging and sorting.
 - [ ] Check every fully supported language (en, de, da, sv, nb).
-- [ ] Add `RELEASENOTES.md` entries.
+- [ ] Add `RELEASENOTES.md` entries for the changes that affect the users or the app's security.
 
 
 ---
@@ -560,13 +561,15 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 
 **Steps in the job:**
 1. Read the version; stop (successfully) if the tag `v<Version>` already exists.
-2. Fail if `RELEASENOTES.md` has no `## Release <Version>` heading (definition of done, item 3).
+2. Look for a `## Release <Version>` section in `RELEASENOTES.md`. It's optional: only releases with changes that affect the users or security have one (definition of done, item 3).
 3. Build and run all tests.
 4. `dotnet publish SourceCode/App/App.csproj -c Release -o publish`.
 5. `azure/login` with OIDC (no stored password), then `azure/webapps-deploy` to `ModuleRegistry`.
-6. Create the tag `v<Version>` and a GitHub release with the release notes section as its body.
+6. Create the tag `v<Version>` and a GitHub release, with the release notes section as its body if there is one, otherwise a short "No user-facing changes" text.
 
 The job runs in a GitHub environment called `production`. Then Azure only trusts this environment, and approval rules can be added if wanted.
+
+**Content dates:** a fresh checkout gives every file the checkout time as its timestamp. Markdown content whose modification time matters must have an explicit `<!-- LastModified: ... -->` first line (step 1B.2). Today this is only `TermsOfUse.md`, whose date decides whether users must accept the terms again. Update the line only when the terms really change.
 
 **Rollback:** run the deploy workflow manually for an earlier tag, or redeploy the previous build from the GitHub release.
 

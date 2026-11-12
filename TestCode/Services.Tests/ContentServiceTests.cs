@@ -49,13 +49,75 @@ public class ContentServiceTests
         Assert.AreEqual(DateTimeOffset.MinValue, actual);
     }
 
+    [TestMethod]
+    public async Task ExplicitLastModifiedTakesPrecedenceOverFileTimestamp()
+    {
+        CreateFile("TermsOfUse.md", DateTime.UtcNow, "<!-- LastModified: 2026-01-09T10:25:31Z -->\r\n# Content");
+        var target = CreateTarget();
+
+        var actual = await target.GetLastModifiedTimeOfTextContent("TermsOfUse");
+
+        Assert.AreEqual(DateTimeOffset.Parse("2026-01-09 10:25:31 +00:00"), actual);
+    }
+
+    [TestMethod]
+    public async Task ExplicitAndFileTimestampsAreCombinedOverLanguageVersions()
+    {
+        CreateFile("TermsOfUse.md", new DateTime(2030, 1, 1, 0, 0, 0, DateTimeKind.Utc), "<!-- LastModified: 2026-01-09T10:25:31Z -->\n# Content");
+        CreateFile("TermsOfUse.sv.md", new DateTime(2027, 3, 1, 12, 0, 0, DateTimeKind.Utc));
+        var target = CreateTarget();
+
+        var actual = await target.GetLastModifiedTimeOfTextContent("TermsOfUse");
+
+        Assert.AreEqual(DateTimeOffset.Parse("2027-03-01 12:00:00 +00:00"), actual);
+    }
+
+    [TestMethod]
+    public async Task TextContentHasExplicitLastModifiedAndNoMetadataLine()
+    {
+        CreateFile("TermsOfUse.md", DateTime.UtcNow, "<!-- LastModified: 2026-01-09T10:25:31Z -->\r\n# Content");
+        var target = CreateTarget();
+
+        var actual = await target.GetTextContent("TermsOfUse", "en");
+
+        Assert.AreEqual(DateTimeOffset.Parse("2026-01-09 10:25:31 +00:00"), actual.LastModified);
+        Assert.AreEqual("# Content", actual.Text);
+        Assert.DoesNotContain("LastModified", actual.AsHtml);
+    }
+
+    /// <summary>
+    /// Guards the date that decides whether users must accept the Terms of Use again.
+    /// Change it only together with a real change of the terms.
+    /// </summary>
+    [TestMethod]
+    public async Task TermsOfUseKeepsItsLastModifiedTimeRegardlessOfFileTimestamp()
+    {
+        var source = Path.Combine(RepositoryRoot().FullName, "SourceCode", "App", "Content", "Markdown", "TermsOfUse.md");
+        var copy = Path.Combine(TempDirectory.FullName, "TermsOfUse.md");
+        File.Copy(source, copy);
+        File.SetLastWriteTimeUtc(copy, DateTime.UtcNow);
+        var target = CreateTarget();
+
+        var actual = await target.GetLastModifiedTimeOfTextContent("TermsOfUse");
+
+        Assert.AreEqual(DateTimeOffset.Parse("2026-01-09 10:25:31 +00:00"), actual);
+    }
+
     private ContentService CreateTarget() => new(new NoOpHttpClientFactory(), TempDirectory.FullName);
 
-    private void CreateFile(string name, DateTime lastWriteTimeUtc)
+    private void CreateFile(string name, DateTime lastWriteTimeUtc, string text = "# Content")
     {
         var path = Path.Combine(TempDirectory.FullName, name);
-        File.WriteAllText(path, "# Content");
+        File.WriteAllText(path, text);
         File.SetLastWriteTimeUtc(path, lastWriteTimeUtc);
+    }
+
+    private static DirectoryInfo RepositoryRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Directory.Build.props")))
+            directory = directory.Parent;
+        return directory ?? throw new InvalidOperationException("Repository root not found.");
     }
 
     private class NoOpHttpClientFactory : IHttpClientFactory

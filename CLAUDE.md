@@ -83,7 +83,7 @@ Markdown files referenced from razor components generally need `<CopyToOutputDir
 - Prefer `IDbContextFactory<ModulesDbContext>.CreateDbContextAsync()` over injecting `ModulesDbContext` directly (the factory is what's registered).
 - Front-end is Blazor Server with plain Bootstrap and FontAwesome (served from `wwwroot/css`), our own `App*` components, Blazored (Toast, LocalStorage, Typeahead, FluentValidation) and `Microsoft.AspNetCore.Components.QuickGrid`. No JS frameworks.
 - Authorisation policies are centralised in `App/Security/AuthorizationPolicyDefinitions.cs` and wired via `AddAuthorizationPolicies()`.
-- Release notes in `RELEASENOTES.md` are English only; every user-visible change should get an entry under the current version.
+- Release notes in `RELEASENOTES.md` are English only, with very short texts. **Only changes that affect the users or the app's security get an entry**; internal changes (refactoring, tests, CI, documentation, invisible fixes) don't. A release with no such changes has no release notes section.
 
 ## Running the UI
 

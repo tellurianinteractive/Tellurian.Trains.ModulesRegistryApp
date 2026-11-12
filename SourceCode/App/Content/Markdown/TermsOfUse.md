@@ -1,4 +1,5 @@
-﻿### 1. Preamble
+﻿<!-- LastModified: 2026-01-09T10:25:31Z -->
+### 1. Preamble
 In order to use this site - the *module registy web application* - you must accept the following terms of use,
 also each time the terms are changed.
 This is required to conform to GDPR.
