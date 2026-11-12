@@ -35,9 +35,9 @@ Today the app is published by hand from Visual Studio (Web Deploy profile). The 
 
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 1B.1 ✅ | CI workflow `.github/workflows/ci.yml`: on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
+| 1B.1 ✅ | CI workflow (now the `build` job in `.github/workflows/build-and-deploy.yml`): on push and pull request, restore, build and test the App, Data, Services and test projects one by one (not the `.slnx`, since `Database.sqlproj` can't be built by `dotnet`). Fix `ContentServiceTests.ReadsMaxDate`, which depends on the file's timestamp on disk and always fails on a fresh checkout. | The workflow runs green on GitHub, and a deliberately failing test turns it red | 6.1 |
 | 1B.2 ✅ | Explicit last modified time for Markdown content: a first line `<!-- LastModified: 2026-01-09T10:25:31Z -->` takes precedence over the file timestamp, and is removed before rendering. Added to `TermsOfUse.md`. **Released from Visual Studio as before**, since a deploy from a fresh checkout would otherwise move the Terms of Use date to the deploy time and force every user to accept the terms again. | Unit tests, including a guard test that `TermsOfUse.md` gives 2026-01-09 10:25:31 UTC whatever its file timestamp. In production: the Terms of Use page still shows 2026-01-09 10:25, and signed-in users aren't asked to accept again. | 6.2 |
-| 1B.3 | Deploy workflow `.github/workflows/deploy.yml`: on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes, if it has any. | A push without a version change doesn't deploy. The Terms of Use date is unchanged after the first deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
+| 1B.3 | Deploy job in the same workflow, `.github/workflows/build-and-deploy.yml` (one workflow: the build output that was tested is the one deployed): on push to `master`, read `<Version>`. If the tag `v<Version>` doesn't exist yet: build, test, `dotnet publish -c Release`, deploy to the `ModuleRegistry` App Service with OIDC login, then create the tag and a GitHub release with that version's release notes, if it has any. | A push without a version change doesn't deploy. The Terms of Use date is unchanged after the first deploy. The next real release (1.2) is deployed by the workflow, and the tag and GitHub release appear. | 6.2 |
 | 1B.4 | Remove the Web Deploy publish profile from the repo and turn off basic authentication (SCM and FTP) on the App Service. Document the release procedure in `CONTRIBUTING.md`. | Publishing from Visual Studio no longer works; the workflow still does | 6.2 |
 
 The database (DACPAC) is still published by hand. It moves into the pipeline in stage 4 (migration bundle).
@@ -557,7 +557,7 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 - `ContentServiceTests.ReadsMaxDate` compares with the file's last write time on disk. After a git checkout, that's the checkout time, so the test must be rewritten (for example, set the file time in the test, or test with a temporary file).
 
 ### 6.2 Deploy when the version is stepped up
-**Trigger:** push to `master`. The job reads `<Version>` from `Directory.Build.props` and compares it with the git tags. It deploys only if the tag `v<Version>` doesn't exist. This makes the run idempotent: re-running it, or pushing documentation changes, never deploys twice. It can also be started by hand (*Actions → Deploy → Run workflow*); the option *force* redeploys the current version even though it's already tagged.
+**Trigger:** push to `master`. The job reads `<Version>` from `Directory.Build.props` and compares it with the git tags. It deploys only if the tag `v<Version>` doesn't exist. This makes the run idempotent: re-running it, or pushing documentation changes, never deploys twice. It can also be started by hand (*Actions → Build and deploy → Run workflow*); the option *force* redeploys the current version even though it's already tagged.
 
 **Steps in the job:**
 1. Read the version; stop (successfully) if the tag `v<Version>` already exists.
@@ -583,5 +583,5 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [ ] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
 - [ ] Environment secrets `AZURE_CLIENT_ID` (the identity's Client ID, not the Object ID), `AZURE_TENANT_ID` (same as the Directory ID) and `AZURE_SUBSCRIPTION_ID`.
 - [ ] *Actions → General*: Actions allowed (check the organisation settings too). The workflow requests `contents: write` (tags and releases) and `id-token: write` (OIDC) itself.
-- [ ] Optional: a branch protection rule (or ruleset) on `master` that requires the CI check to pass.
+- [ ] Optional: a branch protection rule (or ruleset) on `master` that requires the `build` job to pass.
 - [x] Tag `v1.13.4` on the deployed commit `0aad653`.
