@@ -13,9 +13,12 @@
     <label class="form-control-label" for="@InputId">@SearchLabel</label>
     <input @key="ResetKey" id="@InputId" class="form-control" type="search" autocomplete="off" spellcheck="false"
            list="@ListId" data-person-search="@SearchUrl" data-min-length="@MinimumSearchCharacters"
-           data-value-input="@ValueInputId" data-not-found="@NotFoundId" />
+           data-value-input="@ValueInputId" data-not-found="@NotFoundId" data-searching="@SearchingId" />
     <datalist id="@ListId"></datalist>
     <input type="hidden" id="@ValueInputId" value="@Value" @onchange="OnValueInputChanged" />
+    <div id="@SearchingId" class="form-text" role="status" hidden>
+        <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>@Localizer["Searching"]
+    </div>
     <div id="@NotFoundId" class="form-text" hidden>
         @Localizer["NotFound"]
         @if (AddPersonHref is not null)
@@ -56,6 +59,7 @@
     private string ListId => $"person-search-list-{Id}";
     private string ValueInputId => $"person-search-value-{Id}";
     private string NotFoundId => $"person-search-not-found-{Id}";
+    private string SearchingId => $"person-search-searching-{Id}";
     private string SearchUrl => $"{PersonSearchEndpoint.Url}?countryId={CountryId}&excludeGroupId={ExcludeGroupId ?? 0}";
 
     protected override void OnParametersSet()

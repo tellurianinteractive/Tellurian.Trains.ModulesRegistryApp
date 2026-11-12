@@ -1,10 +1,12 @@
 // Person search: a text input with a <datalist>, filled from the /app/persons/search endpoint.
 // Markup (rendered by AppSearchPerson.razor):
-//   <input data-person-search="/app/persons/search?countryId=..." data-min-length="3" list="..." data-value-input="id-of-hidden" data-not-found="id-of-element">
+//   <input data-person-search="/app/persons/search?countryId=..." data-min-length="3" list="..."
+//          data-value-input="id-of-hidden" data-not-found="id-of-element" data-searching="id-of-element">
 //   <datalist id="..."></datalist>
 //   <input type="hidden" id="id-of-hidden">
 // When the text matches a suggestion, the person's id is written to the hidden input and a 'change' event is raised,
 // which Blazor handles; in a static SSR form the hidden input is posted.
+// While a search is pending, the 'searching' element is shown; when it is done, either suggestions or 'not found' appear.
 (function () {
     'use strict';
     const debounceMilliseconds = 250;
@@ -15,20 +17,18 @@
         const input = event.target;
         if (!(input instanceof HTMLInputElement) || !input.dataset.personSearch) return;
         selectMatchingPerson(input);
+        const willSearch = isSearchable(input);
+        if (!willSearch && input.list && !isSelected(input)) replaceOptions(input.list, []);
+        show(input.dataset.searching, willSearch);
+        show(input.dataset.notFound, false);
         clearTimeout(timers.get(input));
-        timers.set(input, setTimeout(function () { search(input); }, debounceMilliseconds));
+        if (willSearch) timers.set(input, setTimeout(function () { search(input); }, debounceMilliseconds));
+        else latestQueries.delete(input);
     });
 
     async function search(input) {
+        if (!input.list || !isSearchable(input)) return;
         const query = input.value.trim();
-        const list = input.list;
-        const minLength = parseInt(input.dataset.minLength || '3', 10);
-        if (!list) return;
-        if (query.length < minLength || isSelected(input)) {
-            if (query.length < minLength) replaceOptions(list, []);
-            showNotFound(input, false);
-            return;
-        }
         latestQueries.set(input, query);
         let persons = [];
         try {
@@ -39,10 +39,16 @@
         } catch {
             persons = [];
         }
-        if (latestQueries.get(input) !== query) return; // A newer search has started.
-        replaceOptions(list, persons);
-        showNotFound(input, persons.length === 0);
+        if (latestQueries.get(input) !== query) return; // A newer search has started; keep showing 'searching'.
+        replaceOptions(input.list, persons);
+        show(input.dataset.searching, false);
+        show(input.dataset.notFound, persons.length === 0);
         selectMatchingPerson(input);
+    }
+
+    function isSearchable(input) {
+        const minLength = parseInt(input.dataset.minLength || '3', 10);
+        return input.value.trim().length >= minLength && !isSelected(input);
     }
 
     function replaceOptions(list, persons) {
@@ -68,11 +74,14 @@
         if (hidden.value === id) return;
         hidden.value = id;
         hidden.dispatchEvent(new Event('change', { bubbles: true }));
-        if (match) showNotFound(input, false);
+        if (match) {
+            show(input.dataset.searching, false);
+            show(input.dataset.notFound, false);
+        }
     }
 
-    function showNotFound(input, visible) {
-        const element = document.getElementById(input.dataset.notFound);
+    function show(elementId, visible) {
+        const element = elementId ? document.getElementById(elementId) : null;
         if (element) element.hidden = !visible;
     }
 })();

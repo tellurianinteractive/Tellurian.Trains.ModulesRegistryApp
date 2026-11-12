@@ -1824,4 +1824,7 @@
   <data name="ValueMayNotBeNull" xml:space="preserve">
     <value>En værdi er påkrævet</value>
   </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Søger...</value>
+  </data>
 </root>

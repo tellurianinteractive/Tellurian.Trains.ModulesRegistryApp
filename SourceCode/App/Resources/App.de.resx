@@ -1824,4 +1824,7 @@
   <data name="ValueMayNotBeNull" xml:space="preserve">
     <value>Ein Wert ist erforderlich</value>
   </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Suche...</value>
+  </data>
 </root>
