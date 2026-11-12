@@ -577,7 +577,10 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 **In Azure:**
 - [x] User-assigned managed identity `id-moduleregistry-deploy` in resource group `Tellurian.Trains` (search the top bar for "Managed Identities").
 - [x] Federated credential `github-production`, issuer `https://token.actions.githubusercontent.com`, subject `repo:tellurianinteractive/Tellurian.Trains.ModulesRegistryApp:environment:production`. Note: the Portal suggests the immutable format with IDs (`tellurianinteractive@57481455/...@332267854`), but the repository uses GitHub's default subject format (`use_immutable_subject: false`), so the default format must be used.
-- [ ] Role **Website Contributor** for the identity on the `ModuleRegistry` web app only.
+- [x] Role **Website Contributor** for the identity on the `ModuleRegistry` web app only.
+- [x] Remove the obsolete app setting `WEBSITE_NODE_DEFAULT_VERSION` (was `6.9.1`). With it, Kudu's deployment script crashed (`util.promisify is not a function`) and copied nothing, yet reported "Deployment successful". Visual Studio's Web Deploy doesn't use Kudu's script, so it never showed. The workflow now verifies that the deployed `ModulesRegistry.dll` matches the build output.
+- [x] Minimum TLS version 1.2 for the deployment endpoint (`scmMinTlsVersion`, was 1.0). The site itself already required 1.2.
+- Note: the plan is **F1 (Free)**: no *Always On*, so the site sleeps when idle and starts slowly after a deploy or restart.
 
 **In GitHub** (repository Settings):
 - [ ] *Environments* → `production`, deployment branches restricted to `master`. Optionally a *Required reviewer* for manual approval before each deploy.
