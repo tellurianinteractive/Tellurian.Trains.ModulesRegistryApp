@@ -1,0 +1,126 @@
+name: Deploy
+
+# Deploys to Azure when <Version> in Directory.Build.props has no matching tag v<Version> yet.
+# Every other push to master does nothing here (CI still builds and tests it).
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Redeploy even if the version is already tagged
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  AZURE_WEBAPP_NAME: ModuleRegistry
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      deploy: ${{ steps.version.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Compare version with tags
+        id: version
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1 | tr -d '[:space:]')
+          if [ -z "$version" ]; then echo "::error::No <Version> found in Directory.Build.props"; exit 1; fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" > /dev/null; then
+            if [ "$FORCE" = "true" ]; then
+              echo "Version $version is already tagged, redeploying because force is set."
+              echo "deploy=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "Version $version is already tagged, nothing to deploy."
+              echo "deploy=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "Version $version is new and will be deployed."
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: check-version
+    if: needs.check-version.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: https://moduleregistry.azurewebsites.net
+    permissions:
+      contents: write # Tag and GitHub release.
+      id-token: write # OIDC login to Azure.
+    env:
+      VERSION: ${{ needs.check-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      # Projects are built one by one: the .slnx also contains Database.sqlproj, which dotnet can't build.
+      - name: Build
+        run: |
+          dotnet build "SourceCode/App/App.csproj" --configuration Release
+          dotnet build "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release
+          dotnet build "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release
+
+      - name: Test Data
+        run: dotnet test --project "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release --no-build
+
+      - name: Test Services
+        run: dotnet test --project "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release --no-build
+
+      - name: Publish
+        run: dotnet publish "SourceCode/App/App.csproj" --configuration Release --output publish
+
+      # The Terms of Use date decides whether users must accept the terms again; it must come from the file content.
+      - name: Check Terms of Use date
+        run: |
+          head -n 1 publish/Content/Markdown/TermsOfUse.md | grep -q '<!-- LastModified: ' \
+            || { echo "::error::TermsOfUse.md has no LastModified line; deploying would move its date."; exit 1; }
+
+      - uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: publish
+
+      - name: Tag and create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The release notes section for this version, if any (only changes that affect users or security have one).
+          awk -v heading="## Release $VERSION" '
+            $0 == heading { found = 1; next }
+            found && /^## / { exit }
+            found && !/^Released / { print }
+          ' RELEASENOTES.md | tr -d '\r' > release-notes.md
+          if [ ! -s release-notes.md ]; then echo "No user-facing changes." > release-notes.md; fi
+          if gh release view "v$VERSION" > /dev/null 2>&1; then
+            echo "Release v$VERSION already exists (forced redeploy)."
+          else
+            gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Release $VERSION" --notes-file release-notes.md
+          fi
