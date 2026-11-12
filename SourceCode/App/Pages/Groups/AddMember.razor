@@ -7,7 +7,6 @@
 
 @inject NavigationManager Navigator
 @inject GroupService GroupService
-@inject PersonService PersonService
 @inject CountryService CountryService
 
 <PageHeading Label="AddMemberIn" Context="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" HelpContext="AddGroupMember" ShowHelpInitially="true"/>
@@ -19,29 +18,16 @@
     <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
         <FluentValidationValidator />
         <ValidationSummary />
-        <div class="col-md-4">
-            <label class="form-control-label" for="personid">@SearchLabel</label>
-            <BlazoredTypeahead SearchMethod="SearchPersons" @bind-Value="GroupMember.PersonId" ConvertMethod="ConvertPerson" MinimumLength="MinimumSearchCharacters" MaximumSuggestions="10" EnableDropDown="true" Class="form-select">
-                <SelectedTemplate Context="personId">
-                    @{
-                            var selectedPerson = SelectedPerson(personId);
-                        <text>@selectedPerson?.Description</text>
-                    }
-                </SelectedTemplate>
-                <ResultTemplate Context="person">
-                    @person.Description
-                </ResultTemplate>
-                <NotFoundTemplate Context="NotFound">
-                    <div>
-                        <span>
-                            @Localizer["NotFound"]
-                            <a class="btn btn-link" href="persons/0/editgroup/@GroupId">@Localizer["Add"]</a>
-                        </span>
-                    </div>
-                </NotFoundTemplate>
-            </BlazoredTypeahead>
-            <ValidationMessage For="@(() => GroupMember.Person)" />
-        </div>
+        @if (Group is not null)
+        {
+            <AppSearchPerson @bind-Value="GroupMember.PersonId"
+                             SearchLabel="@SearchLabel"
+                             MinimumSearchCharacters="MinimumSearchCharacters"
+                             CountryId="SearchCountryId"
+                             ExcludeGroupId="Group.Id"
+                             AddPersonHref="@AddPersonHref(GroupId)"
+                             ValidationFor="@(() => GroupMember.Person)" />
+        }
         <AppInputFill Width="8" />
         <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
         <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
@@ -63,9 +49,9 @@ else
     ClaimsPrincipal? Principal;
     Group? Group;
     GroupMember GroupMember = new GroupMember();
-    IEnumerable<ListboxItem>? Persons;
     IEnumerable<ListboxItem>? Countries;
     int CountryId;
+    int SearchCountryId;
     bool MayEdit;
     const int MinimumSearchCharacters = 3;
 
@@ -89,21 +75,10 @@ else
             Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
             if (Group is not null)
             {
-                Persons = await PersonService.ListboxItemsAsync(Principal, Group.CountryId, Group.Id);
+                if (SearchCountryId == 0) SearchCountryId = Group.CountryId;
                 GroupMember.GroupId = Group.Id;
             }
         }
-    }
-
-    void OnSelectedPerson(int id)
-    {
-        if (GroupMember is not null) GroupMember.PersonId = id;
-    }
-
-    async Task<IEnumerable<ListboxItem>> SearchPersons(string searchText)
-    {
-        return await Task.FromResult<IEnumerable<ListboxItem>>(Persons is null ? Array.Empty<ListboxItem>() :
-        Persons.Where(p => !p.IsHidden && p.Description.ToLowerInvariant().Contains(searchText.ToLowerInvariant())).ToList());
     }
 
     async Task OnValidSubmit()
@@ -114,15 +89,13 @@ else
         if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
-    async Task OnSelectedCountry(int countryId)
+    void OnSelectedCountry(int countryId)
     {
         CountryId = countryId;
-        Persons = await PersonService.ListboxItemsAsync(Principal, countryId, Group?.Id ?? 0);
+        SearchCountryId = countryId;
     }
 
     string AddPersonHref(int? groupId) => $"persons/0/editgroup/{groupId}";
 
     string SearchLabel => Localizer.SearchObject("Person", MinimumSearchCharacters);
-    int ConvertPerson(ListboxItem person) => person.Id;
-    ListboxItem? SelectedPerson(int? id) => id is null ? null : Persons?.FirstOrDefault(p => p.Id == id.Value);
 }

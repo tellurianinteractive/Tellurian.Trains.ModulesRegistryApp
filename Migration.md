@@ -122,7 +122,7 @@ Options:
 - ~~Blazorise `Autocomplete`~~: Blazorise isn't actually used (see 1.7), so it isn't worth keeping just for this.
 
 Tasks:
-- [ ] Make `AddMember.razor` reuse `AppSearchPerson.razor` instead of duplicating the markup, so only one component needs replacing.
+- [x] Make `AddMember.razor` reuse `AppSearchPerson.razor` instead of duplicating the markup, so only one component needs replacing. (`AppSearchPerson` was unused; it now has `@bind-Value`, reloads when `CountryId` changes, and shows the validation message. Released as 1.13.8.)
 - [ ] Add a person search endpoint with authorisation, since person data is personal information. Limit the number of results and require a minimum query length.
 - [ ] Replace the typeahead in `AppSearchPerson.razor`.
 - [ ] Remove the `blazored-typeahead.css` and `blazored-typeahead.js` includes from `_Host.cshtml`.
