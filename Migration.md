@@ -198,7 +198,9 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 - [x] Update all `Microsoft.*` 10.0.x packages to 11.0.x (the full list is in the outdated-packages report).
 - [x] Update the remaining third-party packages: Swashbuckle 11 (the others were already current; Blazorise was removed in 1.1).
 - [ ] Read through the official migration guide and the breaking changes: https://learn.microsoft.com/aspnet/core/migration/100-to-110 (not done yet; build, tests and a local run work).
-- [ ] Update the Azure App Service runtime stack to .NET 11.
+- [x] Update the Azure App Service runtime stack to .NET 11. **But** Windows App Service only had a *preview* of .NET 11, so 1.14.0 (built for the released runtime) failed to start: HTTP 500.31 "ANCM Failed to Find Native Dependencies". Since 1.14.1 the workflow publishes **self-contained for win-x86** (the Free plan runs 32-bit), about 170 MB.
+- [ ] When the released .NET 11 runtime is installed on Windows App Service, go back to framework-dependent publishing (remove `--runtime win-x86 --self-contained true` in the workflow): smaller deploys, and Azure patches the runtime. Until then, runtime security patches reach production only when we deploy.
+- [ ] Lesson for the next upgrade: check the runtime actually installed on the App Service (not just the stack name), or publish self-contained from the start.
 
 - [ ] New .NET 11 Blazor analyser warnings (16), left for a separate step: BL0012 unnecessary `StateHasChanged` (12), BL0010/BL0016 JS interop should use `InvokeVoidAsync` and be wrapped in try/catch (4).
 

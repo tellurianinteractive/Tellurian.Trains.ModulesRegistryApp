@@ -95,9 +95,12 @@ jobs:
             END { exit ok ? 0 : 1 }
           ' || { echo "::error::RELEASENOTES.md needs a section '## Release $VERSION', then 'Released yyyy-MM-dd', then at least one bullet (e.g. '- Maintenance update.')."; exit 1; }
 
+      # Self-contained: the App Service only has a preview of .NET 11, which can't run apps built for the released runtime.
+      # win-x86 because the Free plan runs the site as a 32-bit process. Go back to framework-dependent (remove --runtime
+      # and --self-contained) when the released .NET 11 runtime is installed on Windows App Service.
       - name: Publish
         if: steps.version.outputs.deploy == 'true'
-        run: dotnet publish "SourceCode/App/App.csproj" --configuration Release --output publish
+        run: dotnet publish "SourceCode/App/App.csproj" --configuration Release --runtime win-x86 --self-contained true --output publish
 
       # The Terms of Use date decides whether users must accept the terms again; it must come from the file content.
       - name: Check Terms of Use date

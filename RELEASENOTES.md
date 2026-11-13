@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.1
+Released 2026-11-13
+- **Fix** for the site not starting after the upgrade to .NET 11.
 ## Release 1.14.0
 Released 2026-11-12
 - **Upgrade** to .NET 11 and the latest versions of all components, including their security fixes.
