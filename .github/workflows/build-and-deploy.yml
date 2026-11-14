@@ -143,37 +143,81 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Self-contained publishing puts the runtime and the IIS handler (aspnetcorev2_inprocess.dll) in wwwroot, and the
-      # worker process keeps them locked even with app_offline.htm, so KuduSync can't replace them (1.14.2 failed so).
-      # Kudu runs in its own sandbox and keeps deploying while the site is stopped.
-      - name: Stop the site
-        run: az webapp stop --resource-group Tellurian.Trains --name ModuleRegistry
+      # While wwwroot/app_offline.htm exists, the ASP.NET Core Module shuts the app down (which should release its files)
+      # and serves that file with 503, so visitors see our localised "site unavailable" page during the deploy.
+      # Kudu deletes app_offline.htm at the end of its deployment, which starts the new version.
+      - name: Show the site unavailable page
+        run: |
+          token=$(az account get-access-token --resource https://management.core.windows.net/ --query accessToken --output tsv)
+          curl --silent --show-error --fail --request PUT --header "Authorization: Bearer $token" --header "If-Match: *" \
+            --data-binary @SourceCode/App/StatusPages/site-unavailable.html \
+            "https://moduleregistry.scm.azurewebsites.net/api/vfs/site/wwwroot/app_offline.htm"
+          for attempt in $(seq 1 12); do
+            if curl --silent https://moduleregistry.azurewebsites.net/ | grep -q 'data-page="site-unavailable"'; then
+              echo "The site unavailable page is shown; waiting for the app to shut down."
+              sleep 15
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::warning::The site unavailable page didn't show up within a minute; deploying anyway."
 
       - uses: azure/webapps-deploy@v3
+        id: deploy
+        continue-on-error: true
         with:
           app-name: ModuleRegistry
           package: publish
 
-      # Always, so a failed deploy doesn't leave the site stopped.
-      - name: Start the site
-        if: always()
+      - name: Verify deployed files
+        id: verify
+        continue-on-error: true
+        run: bash .github/scripts/verify-deployment.sh publish
+
+      # Fallback if files were still locked: self-contained publishing puts the runtime and the IIS handler
+      # (aspnetcorev2_inprocess.dll) in wwwroot, and 1.14.2 failed because the worker process kept them locked.
+      # Kudu runs in its own sandbox and keeps deploying while the site is stopped (visitors then get Azure's own page).
+      - name: Stop the site (fallback)
+        if: steps.verify.outcome == 'failure'
+        run: |
+          echo "::warning::The files were not replaced with the app offline; stopping the site and deploying again."
+          az webapp stop --resource-group Tellurian.Trains --name ModuleRegistry
+
+      - uses: azure/webapps-deploy@v3
+        if: steps.verify.outcome == 'failure'
+        with:
+          app-name: ModuleRegistry
+          package: publish
+
+      # Always (after a fallback stop), so a failed deploy doesn't leave the site stopped.
+      - name: Start the site (fallback)
+        if: always() && steps.verify.outcome == 'failure'
         run: az webapp start --resource-group Tellurian.Trains --name ModuleRegistry
 
-      # Kudu can report "Deployment successful" without copying any files (it happened when its deployment
-      # script crashed), so compare the deployed main assembly with the one in the build output.
-      - name: Verify deployed files
+      - name: Verify deployed files (fallback)
+        if: steps.verify.outcome == 'failure'
+        run: bash .github/scripts/verify-deployment.sh publish
+
+      # Always: Kudu normally deletes it, but after a failed deploy it would keep the site offline.
+      - name: Remove the site unavailable page
+        if: always()
         run: |
           token=$(az account get-access-token --resource https://management.core.windows.net/ --query accessToken --output tsv)
-          expected=$(sha256sum publish/ModulesRegistry.dll | cut -d ' ' -f 1)
-          for attempt in 1 2 3 4 5 6; do
-            curl --silent --show-error --fail --header "Authorization: Bearer $token" \
-              --output deployed.dll "https://moduleregistry.scm.azurewebsites.net/api/vfs/site/wwwroot/ModulesRegistry.dll" || true
-            actual=$( [ -f deployed.dll ] && sha256sum deployed.dll | cut -d ' ' -f 1 )
-            if [ "$actual" = "$expected" ]; then echo "Deployed ModulesRegistry.dll matches the build output."; exit 0; fi
-            echo "Attempt $attempt: deployed ModulesRegistry.dll doesn't match yet, waiting..."
+          status=$(curl --silent --output /dev/null --write-out "%{http_code}" --request DELETE \
+            --header "Authorization: Bearer $token" --header "If-Match: *" \
+            "https://moduleregistry.scm.azurewebsites.net/api/vfs/site/wwwroot/app_offline.htm")
+          echo "Deleting app_offline.htm: HTTP $status (404 means Kudu had already removed it)."
+
+      # The site takes a while to start after a deploy; don't report success until it answers.
+      - name: Wait until the site responds
+        run: |
+          for attempt in $(seq 1 30); do
+            status=$(curl --silent --output page.html --write-out "%{http_code}" --max-time 60 https://moduleregistry.azurewebsites.net/ || true)
+            if [ "$status" = "200" ] && ! grep -q 'data-page="site-unavailable"' page.html; then echo "The site responds."; exit 0; fi
+            echo "Attempt $attempt: HTTP $status, waiting..."
             sleep 10
           done
-          echo "::error::The deployed ModulesRegistry.dll differs from the build output: the files were not deployed."
+          echo "::error::The site didn't respond within five minutes after the deploy."
           exit 1
 
       - name: Tag and create GitHub release

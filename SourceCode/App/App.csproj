@@ -32,6 +32,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="Shared/MainLayout.razor.css" CssScope="MainLayout" />
+		<!-- The error page is served by the exception handler. The site unavailable page is uploaded as app_offline.htm by the deploy workflow; never publish it. -->
+		<None Update="StatusPages\error.html" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+		<None Update="StatusPages\site-unavailable.html" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
 		<None Update="Shared/NavMenu.razor.css" CssScope="NavMenu" />
 		<Folder Include="wwwroot\css\fontawesome\" />
 		<None Include="wwwroot\images\Image1.jpg" />

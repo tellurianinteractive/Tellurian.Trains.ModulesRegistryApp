@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.6
+Released 2026-11-14
+- **New** pages for unexpected errors and for maintenance, in all languages.
 ## Release 1.14.5
 Released 2026-11-14
 - **Security**: documents can only be downloaded by signed-in users.

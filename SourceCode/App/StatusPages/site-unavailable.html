@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+    Shown while the site is being deployed. The deploy workflow uploads this file as wwwroot/app_offline.htm: while that file
+    exists, the ASP.NET Core Module stops the app and serves the file with status 503. Never publish it under that name.
+    Self-contained on purpose: the app is down, so nothing else can be loaded.
+    All fully supported languages are in this file; the script below shows the user's language (English without JavaScript).
+-->
+<html lang="en" data-page="site-unavailable">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Module Registry</title>
+    <style>
+        :root { --green: #1d6605; --dark-green: #064616; --text: #212529; --muted: #6c757d; --bg: #f7f7f7; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--text); background: var(--bg); line-height: 1.5; }
+        header { background: linear-gradient(180deg, var(--green) 0%, var(--dark-green) 70%); color: #fff; padding: 1rem 1.5rem; font-size: 1.25rem; font-weight: 600; }
+        main { max-width: 42rem; margin: 3rem auto; padding: 0 1rem; }
+        .card { background: #fff; border: 1px solid #d6d5d5; border-left: 0.4rem solid #e0a800; border-radius: 0.3rem; padding: 1.5rem 2rem; }
+        h1 { font-size: 1.6rem; margin: 0 0 1rem; }
+        p { margin: 0 0 0.75rem; }
+        a { color: var(--green); }
+        nav { margin-top: 1.5rem; font-size: 0.875rem; color: var(--muted); }
+        nav a { margin-right: 0.75rem; }
+        [data-lang] { display: none; }
+        [data-lang="en"] { display: block; }
+    </style>
+</head>
+<body>
+    <header>Module Registry</header>
+    <main>
+        <div class="card">
+            <section data-lang="en" lang="en">
+                <h1>The site is temporarily unavailable</h1>
+                <p>Due to ongoing maintenance, the site is temporarily unavailable.</p>
+                <p>We will be back up and running shortly. Try refreshing your browser in a few minutes.</p>
+            </section>
+            <section data-lang="de" lang="de">
+                <h1>Die Website ist vorübergehend nicht verfügbar</h1>
+                <p>Wegen laufender Wartungsarbeiten ist die Website vorübergehend nicht verfügbar.</p>
+                <p>Wir sind in Kürze wieder da. Bitte laden Sie die Seite in ein paar Minuten neu.</p>
+            </section>
+            <section data-lang="da" lang="da">
+                <h1>Webstedet er midlertidigt utilgængeligt</h1>
+                <p>På grund af igangværende vedligeholdelse er webstedet midlertidigt utilgængeligt.</p>
+                <p>Vi er snart oppe at køre igen. Prøv at opdatere siden i din browser om et par minutter.</p>
+            </section>
+            <section data-lang="sv" lang="sv">
+                <h1>Webbplatsen är tillfälligt otillgänglig</h1>
+                <p>På grund av pågående underhåll är webbplatsen tillfälligt otillgänglig.</p>
+                <p>Vi är snart igång igen. Försök att uppdatera sidan i webbläsaren om några minuter.</p>
+            </section>
+            <section data-lang="nb" lang="nb">
+                <h1>Nettstedet er midlertidig utilgjengelig</h1>
+                <p>På grunn av pågående vedlikehold er nettstedet midlertidig utilgjengelig.</p>
+                <p>Vi er snart oppe og går igjen. Prøv å oppdatere siden i nettleseren om noen minutter.</p>
+            </section>
+            <nav>
+                <a href="#" data-select="en">English</a><a href="#" data-select="de">Deutsch</a><a href="#" data-select="da">Dansk</a><a href="#" data-select="sv">Svenska</a><a href="#" data-select="nb">Norsk</a>
+            </nav>
+        </div>
+    </main>
+    <script>
+        (function () {
+            var supported = ["en", "de", "da", "sv", "nb"];
+            function normalise(code) {
+                code = (code || "").toLowerCase().split(/[-_]/)[0];
+                return code === "no" || code === "nn" ? "nb" : code;
+            }
+            function fromCookie() {
+                var match = document.cookie.match(/(?:^|;\s*)\.AspNetCore\.Culture=([^;]*)/);
+                if (!match) return null;
+                var value = decodeURIComponent(match[1]).match(/uic=([^|]*)/);
+                return value ? normalise(value[1]) : null;
+            }
+            function show(language) {
+                var sections = document.querySelectorAll("[data-lang]");
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].style.display = sections[i].getAttribute("data-lang") === language ? "block" : "none";
+                }
+                document.documentElement.lang = language;
+            }
+            var candidates = [fromCookie()].concat((navigator.languages || [navigator.language]).map(normalise));
+            for (var i = 0; i < candidates.length; i++) {
+                if (supported.indexOf(candidates[i]) >= 0) { show(candidates[i]); break; }
+            }
+            var links = document.querySelectorAll("[data-select]");
+            for (var j = 0; j < links.length; j++) {
+                links[j].addEventListener("click", function (e) { e.preventDefault(); show(this.getAttribute("data-select")); });
+            }
+        })();
+    </script>
+</body>
+</html>

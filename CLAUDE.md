@@ -85,6 +85,8 @@ Three parallel mechanisms; know which to touch:
 - **Long-form help / articles** → Markdown under `App/Content/Markdown/` (and `Markdown/Articles/`, `Markdown/Help/`). Same pattern: `About.md` is the master, `About.sv.md` is the Swedish translation. The `ContentService` + `ContentView` component load these by current culture.
 - **Per-row multilingual content** (e.g. cargo / NHM names) → dedicated columns per language on the table itself. Extension methods in `Data/Extensions` select the correct column for the current culture.
 
+- **Status pages** (`App/StatusPages/error.html`, `site-unavailable.html`) → all languages in the same self-contained HTML file, since they must work when the app (or its content loading) doesn't. Add a `<section data-lang="xx">` and the code to the script's `supported` list when a language becomes fully supported; a test checks this. `site-unavailable.html` is uploaded as `app_offline.htm` by the deploy workflow and must never be published under that name.
+
 **Do not translate `Content/Markdown/TermsOfUse.md`.** Fully-supported UI languages are defined by `LanguageExtensions.FullySupportedLanguages` (en, de, da, sv, nb). Additional languages (hu, pl) exist only as partial resource translations.
 
 Markdown files referenced from razor components generally need `<CopyToOutputDirectory>Always</CopyToOutputDirectory>` in `App.csproj` — there are hundreds of entries already; follow the existing pattern when adding new content files.

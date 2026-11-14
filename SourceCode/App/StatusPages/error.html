@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+    Shown by the exception handler (StatusPages/ErrorPage.cs) when a request fails.
+    Self-contained on purpose: no stylesheets, scripts, fonts or Markdown content are loaded, since they may be what fails.
+    All fully supported languages are in this file; the script below shows the user's language (English without JavaScript).
+    {{RequestId}} is replaced when the page is served.
+-->
+<html lang="en" data-page="error">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Module Registry</title>
+    <style>
+        :root { --green: #1d6605; --dark-green: #064616; --text: #212529; --muted: #6c757d; --bg: #f7f7f7; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--text); background: var(--bg); line-height: 1.5; }
+        header { background: linear-gradient(180deg, var(--green) 0%, var(--dark-green) 70%); color: #fff; padding: 1rem 1.5rem; font-size: 1.25rem; font-weight: 600; }
+        main { max-width: 42rem; margin: 3rem auto; padding: 0 1rem; }
+        .card { background: #fff; border: 1px solid #d6d5d5; border-left: 0.4rem solid #c0392b; border-radius: 0.3rem; padding: 1.5rem 2rem; }
+        h1 { font-size: 1.6rem; margin: 0 0 1rem; }
+        p { margin: 0 0 0.75rem; }
+        .reference { color: var(--muted); font-size: 0.875rem; }
+        a { color: var(--green); }
+        nav { margin-top: 1.5rem; font-size: 0.875rem; color: var(--muted); }
+        nav a { margin-right: 0.75rem; }
+        [data-lang] { display: none; }
+        [data-lang="en"] { display: block; }
+    </style>
+</head>
+<body>
+    <header>Module Registry</header>
+    <main>
+        <div class="card">
+            <section data-lang="en" lang="en">
+                <h1>An unexpected error has occurred</h1>
+                <p>We are sorry to inform you that an unexpected error occurred, which makes some features not work as expected.</p>
+                <p>The error has been logged and will get attention from the management.</p>
+                <p><a href="/">Go to the start page</a></p>
+                <p class="reference">Reference: {{RequestId}}</p>
+            </section>
+            <section data-lang="de" lang="de">
+                <h1>Ein unerwarteter Fehler ist aufgetreten</h1>
+                <p>Leider ist ein unerwarteter Fehler aufgetreten, sodass einige Funktionen nicht wie erwartet funktionieren.</p>
+                <p>Der Fehler wurde protokolliert und wird von der Verwaltung beachtet.</p>
+                <p><a href="/">Zur Startseite</a></p>
+                <p class="reference">Referenz: {{RequestId}}</p>
+            </section>
+            <section data-lang="da" lang="da">
+                <h1>Der er opstået en uventet fejl</h1>
+                <p>Vi beklager, men der er opstået en uventet fejl, som gør, at nogle funktioner ikke virker som forventet.</p>
+                <p>Fejlen er logget og vil få opmærksomhed fra administrationen.</p>
+                <p><a href="/">Til forsiden</a></p>
+                <p class="reference">Reference: {{RequestId}}</p>
+            </section>
+            <section data-lang="sv" lang="sv">
+                <h1>Ett oväntat fel har inträffat</h1>
+                <p>Vi beklagar att ett oväntat fel har inträffat, vilket gör att vissa funktioner inte fungerar som förväntat.</p>
+                <p>Felet har loggats och kommer att uppmärksammas av förvaltningen.</p>
+                <p><a href="/">Till startsidan</a></p>
+                <p class="reference">Referens: {{RequestId}}</p>
+            </section>
+            <section data-lang="nb" lang="nb">
+                <h1>Det har oppstått en uventet feil</h1>
+                <p>Vi beklager, men det har oppstått en uventet feil som gjør at enkelte funksjoner ikke virker som forventet.</p>
+                <p>Feilen er logget og vil bli fulgt opp av forvaltningen.</p>
+                <p><a href="/">Til forsiden</a></p>
+                <p class="reference">Referanse: {{RequestId}}</p>
+            </section>
+            <nav>
+                <a href="#" data-select="en">English</a><a href="#" data-select="de">Deutsch</a><a href="#" data-select="da">Dansk</a><a href="#" data-select="sv">Svenska</a><a href="#" data-select="nb">Norsk</a>
+            </nav>
+        </div>
+    </main>
+    <script>
+        (function () {
+            var supported = ["en", "de", "da", "sv", "nb"];
+            function normalise(code) {
+                code = (code || "").toLowerCase().split(/[-_]/)[0];
+                return code === "no" || code === "nn" ? "nb" : code;
+            }
+            function fromCookie() {
+                var match = document.cookie.match(/(?:^|;\s*)\.AspNetCore\.Culture=([^;]*)/);
+                if (!match) return null;
+                var value = decodeURIComponent(match[1]).match(/uic=([^|]*)/);
+                return value ? normalise(value[1]) : null;
+            }
+            function show(language) {
+                var sections = document.querySelectorAll("[data-lang]");
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].style.display = sections[i].getAttribute("data-lang") === language ? "block" : "none";
+                }
+                document.documentElement.lang = language;
+            }
+            var candidates = [fromCookie()].concat((navigator.languages || [navigator.language]).map(normalise));
+            for (var i = 0; i < candidates.length; i++) {
+                if (supported.indexOf(candidates[i]) >= 0) { show(candidates[i]); break; }
+            }
+            var links = document.querySelectorAll("[data-select]");
+            for (var j = 0; j < links.length; j++) {
+                links[j].addEventListener("click", function (e) { e.preventDefault(); show(this.getAttribute("data-select")); });
+            }
+        })();
+    </script>
+</body>
+</html>

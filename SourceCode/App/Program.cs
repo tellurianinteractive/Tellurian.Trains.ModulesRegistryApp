@@ -13,6 +13,7 @@ using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
+using ModulesRegistry.StatusPages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -170,7 +171,7 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
-else app.UseExceptionHandler("/Error");
+else app.UseErrorPage();
 app.UseSecurityHeaders(SecurityHeadersPolicy.CreateSecurityHeaderCollection(app.Environment));
 
 app.MapOpenApi("openapi/{document}/openapi.json");
