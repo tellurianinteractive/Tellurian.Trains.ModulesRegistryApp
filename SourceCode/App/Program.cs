@@ -28,6 +28,9 @@ builder.Services.AddScoped<AppService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
+    // Pages that require sign-in at the HTTP level (document downloads) send the visitor to the start page, where the login is.
+    options.LoginPath = "/";
+    options.AccessDeniedPath = "/";
     // Endpoints called from scripts get status codes instead of a redirect to a login page.
     options.Events.OnRedirectToLogin = context => RedirectOrStatusCode(context, StatusCodes.Status401Unauthorized);
     options.Events.OnRedirectToAccessDenied = context => RedirectOrStatusCode(context, StatusCodes.Status403Forbidden);
@@ -160,6 +163,7 @@ builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 builder.Services.AddPublicApi();
 builder.Services.AddScoped<ILoginHandler, LoginHandler>();
+builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -195,6 +199,7 @@ app.UseAntiforgery();
 app.MapPublicApi();
 app.MapAppEndpoints();
 app.MapLogin();
+app.MapDocumentDownload();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

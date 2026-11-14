@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.5
+Released 2026-11-14
+- **Security**: documents can only be downloaded by signed-in users.
 ## Release 1.14.4
 Released 2026-11-14
 - **Security**: the password is no longer sent in the web address when you log in.
