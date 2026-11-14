@@ -208,13 +208,16 @@ jobs:
             "https://moduleregistry.scm.azurewebsites.net/api/vfs/site/wwwroot/app_offline.htm")
           echo "Deleting app_offline.htm: HTTP $status (404 means Kudu had already removed it)."
 
-      # The site takes a while to start after a deploy; don't report success until it answers.
+      # The site takes a while to start after a deploy, and Kudu restarts it once more right after removing app_offline.htm
+      # (1.14.6 answered 200 and then 503 for about 45 seconds), so require three good answers in a row.
       - name: Wait until the site responds
         run: |
+          good=0
           for attempt in $(seq 1 30); do
             status=$(curl --silent --output page.html --write-out "%{http_code}" --max-time 60 https://moduleregistry.azurewebsites.net/ || true)
-            if [ "$status" = "200" ] && ! grep -q 'data-page="site-unavailable"' page.html; then echo "The site responds."; exit 0; fi
-            echo "Attempt $attempt: HTTP $status, waiting..."
+            if [ "$status" = "200" ] && ! grep -q 'data-page="site-unavailable"' page.html; then good=$((good + 1)); else good=0; fi
+            echo "Attempt $attempt: HTTP $status ($good good in a row)"
+            if [ "$good" -ge 3 ]; then echo "The site responds."; exit 0; fi
             sleep 10
           done
           echo "::error::The site didn't respond within five minutes after the deploy."
