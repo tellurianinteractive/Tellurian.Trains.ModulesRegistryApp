@@ -16,6 +16,13 @@ There are also authorization policies for *User* and *Administrator* that can be
 ## Authentication
 Users are authenticated by retrieving their *primary email address* and *hashed password* from the **User** table.
 
+## Database access
+The app connects with the SQL login `ModuleRegistryApp` (since 2026-11-14; before, it used the server admin): roles `db_datareader` and `db_datawriter`, plus `EXECUTE` on schema `dbo` for the stored procedures. It can't change the schema. The connection string is the Key Vault secret `ConnectionStrings--TimetablePlanningDatabase`, read at startup via `VaultUri`.
+
+- Schema changes (DACPAC publish, later EF migrations) use an admin login, never the app's.
+- Local testing against production uses the read-only login `Agent` (`db_datareader` only), stored in the developer's user secrets as `ConnectionStrings:TimetablePlanningDatabaseReadOnly`.
+- Passwords are only kept in Key Vault and user secrets, never in the repository.
+
 ## Security Policy Headers
 In addition, the site uses a strict policy for what resources the app may access from the browser.
 
