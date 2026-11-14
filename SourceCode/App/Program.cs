@@ -57,7 +57,6 @@ else
     builder.Services.AddSingleton(new DefaultUser());
 }
 
-builder.Services.AddRazorPages();
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
@@ -82,8 +81,9 @@ builder.Services.AddOpenApi(options =>
 });
 
 
-builder.Services.AddServerSideBlazor()
-    .AddCircuitOptions(options =>
+// Blazor Web App hosting model (Migration step 2.2). App.razor sets global InteractiveServer without prerendering.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents(options =>
     {
         options.DetailedErrors = true;
         options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(20);
@@ -202,7 +202,9 @@ app.MapPublicApi();
 app.MapAppEndpoints();
 app.MapLogin();
 app.MapDocumentDownload();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+// Framework assets such as _framework/blazor.web.js are static web assets (.NET 9+), served from the build manifest.
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();

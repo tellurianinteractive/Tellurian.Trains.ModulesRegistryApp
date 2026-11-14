@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModulesRegistry.Data;
+﻿using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Services.Models;
-using System.Security.Claims;
 
 namespace ModulesRegistry.Security;
 
@@ -26,11 +21,5 @@ internal static class LoginLogoutHandler
             if (message is not null) _ = await mailSender.SendMailMessageAsync(message);
         }
         catch { /* security notifications are best-effort; never block the primary flow */ }
-    }
-
-    public static async Task<IActionResult> LogoutAsync(this PageModel model)
-    {
-        await model.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); // Clears the authenication cookie.
-        return model.LocalRedirect(model.Url.Content("~/"));
     }
 }

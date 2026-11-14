@@ -225,12 +225,12 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 
 The app still uses the .NET 5–7 style: `AddServerSideBlazor()`, `MapBlazorHub()`, `_Host.cshtml` and `AddRazorPages()`. Several .NET 8–11 features only work with `AddRazorComponents().AddInteractiveServerComponents()` and `MapRazorComponents<App>().AddInteractiveServerRenderMode()`.
 
-- [ ] Replace `_Host.cshtml` with an `App.razor` root component, using `<HeadOutlet>`, `<Routes>` and the new `<BasePath />` component.
-- [ ] To begin with, set a global interactive render mode (`InteractiveServer`) on `<Routes>` so existing pages behave the same. This is a temporary step. Section 3 then moves pages to static SSR one by one, which requires switching to per-page render modes.
-- [ ] Move the SignalR options (`KeepAliveInterval`, timeouts) and the Azure SignalR setup. Use the new `ConfigureConnection` on `AddInteractiveServerRenderMode` for connection options.
-- [ ] Check how cookie authentication, `ApplicationClaimsTransformation` and the API user middleware work with the new pipeline.
-- [ ] Check whether anything still needs Razor Pages, then remove `AddRazorPages()`.
-- [ ] In .NET 11, antiforgery protection is automatic, so `UseAntiforgery()` is optional.
+- [x] Replace `_Host.cshtml` with an `App.razor` root component, using `<HeadOutlet>` and `<Routes>`. (`<base href="/" />` kept; the site runs at the root.) `App` renders the document per request: culture cookie and antiforgery token, as `_Host.cshtml` did. `MapStaticAssets()` serves `_framework/blazor.web.js`; `UseStaticFiles` still serves `wwwroot`.
+- [x] To begin with, set a global interactive render mode (`InteractiveServer`, **without prerendering**, as the old `render-mode="Server"`) on `<Routes>` so existing pages behave the same. A catch-all page (`Pages/NotFound.razor`, `{*path:nonfile}`) replaces `MapFallbackToPage`, so unknown addresses still show "nothing to display". This is a temporary step. Section 3 then moves pages to static SSR one by one, which requires switching to per-page render modes.
+- [x] Move the SignalR options (`KeepAliveInterval`, timeouts) and the Azure SignalR setup. (Unchanged: `AddSignalR(...).AddAzureSignalR(...)` in production; the circuit options moved to `AddInteractiveServerComponents`.) Use the new `ConfigureConnection` on `AddInteractiveServerRenderMode` for connection options.
+- [x] Check how cookie authentication, `ApplicationClaimsTransformation` and the API user middleware work with the new pipeline. (The API key is a filter since 2.1B; login, logout and claims checked in the browser against production, read-only.)
+- [x] Check whether anything still needs Razor Pages, then remove `AddRazorPages()`. (Login 2.2A, Documents 2.2B, Error 1.14.6 and Logout became endpoints; Closed was unused.)
+- [x] In .NET 11, antiforgery protection is automatic, so `UseAntiforgery()` is optional. (Kept: the login endpoint relies on it.)
 
 ### 2.3 New .NET 11 Blazor features worth considering
 

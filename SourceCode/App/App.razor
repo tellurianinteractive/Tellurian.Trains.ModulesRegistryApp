@@ -1,34 +1,77 @@
-@inject IStringLocalizer<App> Localizer
+@using System.Globalization
+@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Localization
 
-<CascadingValue Value="AntiforgeryToken" IsFixed="true">
-<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" >
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <NotAuthorized>
-                    <div class="alert alert-danger">
-                        <h2><span class="oi oi-circle-x" /> @Localizer["YouAreNotAuthorizedToViewThisPage"]</h2>
-                        <ContentView ContentName="ReasonsForNotAuthorised" />
-                    </div>
-                </NotAuthorized>
-            </AuthorizeRouteView>
-        </Found>
-        <NotFound>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <div class="alert alert-warning">
-                    <h2><span class="oi oi-link-broken" /> @Localizer["SorryNothingToDisplayHere"]</h2>
-                </div>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
-</CascadingValue>
+@inject IStringLocalizer<App> Localizer
+@inject IAntiforgery Antiforgery
+@inject IHostEnvironment Environment
+
+@* The HTML document, rendered per request on the server (it replaced _Host.cshtml in Migration step 2.2).
+   Everything inside <Routes> runs interactively over SignalR, as before: global InteractiveServer, without prerendering
+   (the old render-mode="Server" didn't prerender either). The class name App is also the key for Resources/App.*.resx. *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Localizer["AppName"]</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/fontawesome/css/all.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="ModulesRegistry.styles.css" rel="stylesheet" />
+    <HeadOutlet @rendermode="InteractiveRenderMode" />
+</head>
+<body>
+    <Routes @rendermode="InteractiveRenderMode" AntiforgeryFieldName="@AntiforgeryFieldName" AntiforgeryRequestToken="@AntiforgeryRequestToken" />
+    <div id="blazor-error-ui">
+        @if (Environment.IsDevelopment())
+        {
+            <text>An unhandled exception has occurred. See browser dev tools for details.</text>
+        }
+        else
+        {
+            <text>An error has occurred. This application may no longer respond until reloaded.</text>
+        }
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.web.js"></script>
+    <script src="js/person-search.js"></script>
+    <script>
+        window.clipboardCopy = {
+            copyText: function (text, message) {
+                navigator.clipboard.writeText(text).then(function () {
+                    alert(message);
+                })
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            }
+        };
+    </script>
+</body>
+</html>
 
 @code {
-    /// <summary>From <c>_Host.cshtml</c>: the antiforgery token for forms posted to endpoints, such as the login form.</summary>
-    [Parameter] public string? AntiforgeryFieldName { get; set; }
-    [Parameter] public string? AntiforgeryRequestToken { get; set; }
+    private static readonly IComponentRenderMode InteractiveRenderMode = new InteractiveServerRenderMode(prerender: false);
 
-    private AntiforgeryFormToken? AntiforgeryToken =>
-        AntiforgeryFieldName is null || AntiforgeryRequestToken is null ? null : new(AntiforgeryFieldName, AntiforgeryRequestToken);
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    private string? AntiforgeryFieldName;
+    private string? AntiforgeryRequestToken;
+
+    protected override void OnInitialized()
+    {
+        // The culture chosen by request localization is stored in the culture cookie, as _Host.cshtml did.
+        HttpContext.Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture)));
+
+        // The token for forms posted from interactive components to endpoints, such as the login form.
+        var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
+        AntiforgeryFieldName = tokens.FormFieldName;
+        AntiforgeryRequestToken = tokens.RequestToken;
+    }
 }

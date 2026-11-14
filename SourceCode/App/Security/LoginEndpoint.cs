@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +16,7 @@ namespace ModulesRegistry.Security;
 public static class LoginEndpoint
 {
     public const string Route = "/login";
+    public const string LogoutRoute = "/logout";
 
     extension(IEndpointRouteBuilder endpoints)
     {
@@ -21,6 +24,8 @@ public static class LoginEndpoint
         {
             endpoints.MapPost(Route, LoginAsync).ExcludeFromDescription();
             endpoints.MapGet(Route, (HttpContext context) => TypedResults.LocalRedirect(RootUrl(context.Request.PathBase))).ExcludeFromDescription();
+            // Sign-out: clears the authentication cookie and goes to the start page (was the Logout Razor Page before step 2.2).
+            endpoints.MapGet(LogoutRoute, (Delegate)LogoutAsync).ExcludeFromDescription();
         }
     }
 
@@ -32,6 +37,12 @@ public static class LoginEndpoint
 
         await handler.SignInAsync(context, form.Username, form.Password);
         return TypedResults.LocalRedirect(ReturnUrlOrRoot(pathBase, form.ReturnUrl));
+    }
+
+    private static async Task<RedirectHttpResult> LogoutAsync(HttpContext context)
+    {
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return TypedResults.LocalRedirect(RootUrl(context.Request.PathBase));
     }
 
     /// <summary>

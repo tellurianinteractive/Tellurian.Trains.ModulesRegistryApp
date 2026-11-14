@@ -1,0 +1,14 @@
+@page "/{*path:nonfile}"
+@inject IStringLocalizer<App> Localizer
+
+@* Any address that no page or endpoint matches. Before Migration step 2.2, MapFallbackToPage("/_Host") served the app for
+   every such address and the router showed this message; now the server only serves component routes, so this catch-all
+   keeps that behaviour (the most specific route always wins, so it never hides a real page, endpoint or file). *@
+
+<div class="alert alert-warning">
+    <h2><span class="fa fa-unlink"></span> @Localizer["SorryNothingToDisplayHere"]</h2>
+</div>
+
+@code {
+    [Parameter] public string? Path { get; set; }
+}
