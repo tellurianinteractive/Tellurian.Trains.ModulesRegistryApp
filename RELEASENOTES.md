@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.10
+Released 2026-11-14
+- Maintenance update.
 ## Release 1.14.9
 Released 2026-11-14
 - Maintenance update.
