@@ -33,6 +33,7 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="SourceCode/Resources/Resources.csproj" />
   <Project Path="SourceCode/Services/Services.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>

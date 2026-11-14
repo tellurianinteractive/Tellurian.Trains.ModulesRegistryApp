@@ -49,15 +49,13 @@ After translation with Google, you can refine the translation if necessary.
 
 #### Resource files
 Resource files are XML-files with shorter texts or single words. However, the content is very noisy, and its important to not
-change anything but the translated words/sentences. The files are located in three places:
-* App.xx.resx [App/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/App/Resources),
-* Strings.xx.resx and Validators.xx.resx [Data/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Data/Resources),
-* Strings.xx.resx [Services/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Services/Resources)
+change anything but the translated words/sentences. All texts are in one file per language,
+*Strings.xx.resx* in [SourceCode/Resources](https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/tree/master/SourceCode/Resources).
 
 Where *xx* is the two-letter language code for the translated language.
 
-1. Make a copy of the *English version* files. These are the one without a language code in the file name, example *Strings.md*.
-2. Rename your copied files to use your language's two letter language code, example *Strings.hu.resx* for Hungarian.
+1. Make a copy of the *English version*, *Strings.resx* (the one without a language code in the file name).
+2. Rename your copy to use your language's two letter language code, example *Strings.hu.resx* for Hungarian.
 3. Translate the texts and save. It is important to preserve the placeholders like {0} {1} etc.
 4. Add the translated files to your local repository.
 

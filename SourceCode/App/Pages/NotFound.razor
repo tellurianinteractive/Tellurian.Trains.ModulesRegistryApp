@@ -1,5 +1,5 @@
 @page "/{*path:nonfile}"
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 
 @* Any address that no page or endpoint matches. Before Migration step 2.2, MapFallbackToPage("/_Host") served the app for
    every such address and the router showed this message; now the server only serves component routes, so this catch-all

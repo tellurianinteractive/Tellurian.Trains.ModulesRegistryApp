@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -7,7 +8,7 @@ namespace ModulesRegistry.Validators;
 public class LayoutValidator : AbstractValidator<Layout>
 {
     public const int MaxNoteLength = 2000;
-    public LayoutValidator(IStringLocalizer<App> localizer)
+    public LayoutValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.MeetingId)
             .MustBeSelected(localizer)

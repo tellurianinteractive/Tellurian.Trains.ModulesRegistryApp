@@ -28,6 +28,7 @@
 		<ProjectReference Include="..\Api\Api.csproj" />
 		<ProjectReference Include="..\Data.Api\Data.Api.csproj" />
 		<ProjectReference Include="..\Data\Data.csproj" />
+		<ProjectReference Include="..\Resources\Resources.csproj" />
 		<ProjectReference Include="..\Services\Services.csproj" />
 	</ItemGroup>
 	<ItemGroup>

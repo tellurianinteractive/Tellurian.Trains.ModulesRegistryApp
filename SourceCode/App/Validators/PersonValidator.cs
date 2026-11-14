@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class PersonValidator : AbstractValidator<Person>
 {
-    public PersonValidator(IStringLocalizer<App> localizer)
+    public PersonValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(person => person.FirstName)
             .NotEmpty()

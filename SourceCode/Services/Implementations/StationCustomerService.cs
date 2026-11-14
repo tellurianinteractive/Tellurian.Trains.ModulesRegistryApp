@@ -1,4 +1,4 @@
-﻿using ModulesRegistry.Data.Resources;
+﻿using ModulesRegistry.Resources;
 using ModulesRegistry.Services.Projections;
 
 namespace ModulesRegistry.Services.Implementations;

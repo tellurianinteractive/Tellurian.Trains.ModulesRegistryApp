@@ -1,7 +1,7 @@
 @implements IDisposable
 @inject INotificationService NotificationService
 @inject NavigationManager Navigator
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 
 <div class="notification-area noprint" aria-live="polite">
     @foreach (var notification in NotificationService.Notifications)

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -7,7 +8,7 @@ namespace ModulesRegistry.Validators;
 public class CargoValidator : AbstractValidator<Cargo>
 {
     private const int TranslatedLength = 30;
-    public CargoValidator(IStringLocalizer<App> localizer)
+    public CargoValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.DefaultClasses)
             .MinimumLength(1)

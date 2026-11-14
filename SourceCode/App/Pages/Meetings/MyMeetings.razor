@@ -4,7 +4,7 @@
 
 @attribute [Authorize(Policy = "User")]
 
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 @inject PersonService PersonService
 @inject MeetingService MeetingService
 @inject ITimeProvider TimeProvider

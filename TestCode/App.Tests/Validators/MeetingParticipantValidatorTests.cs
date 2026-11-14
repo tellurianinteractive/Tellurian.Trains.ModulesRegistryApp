@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Validators;
+using ModulesRegistry.Resources;
 
 namespace ModulesRegistry.AppTests.Validators;
 
@@ -42,7 +43,7 @@ public sealed class MeetingParticipantValidatorTests
     };
 
     /// <summary>Returns the resource key as the text, so the tests can check which message is used.</summary>
-    private sealed class KeyLocalizer : IStringLocalizer<App>
+    private sealed class KeyLocalizer : IStringLocalizer<Strings>
     {
         public LocalizedString this[string name] => new(name, name);
         public LocalizedString this[string name, params object[] arguments] => this[name];

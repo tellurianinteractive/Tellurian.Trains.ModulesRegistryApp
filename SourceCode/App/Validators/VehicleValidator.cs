@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Extensions;
@@ -7,7 +8,7 @@ namespace ModulesRegistry.Validators;
 
 public class VehicleValidator : AbstractValidator<Vehicle>
 {
-    public VehicleValidator(IStringLocalizer<App> localizer)
+    public VehicleValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(x => x.InventoryNumber).InclusiveBetween(1, 9999).WithName(x => localizer[nameof(x.InventoryNumber)]);
         RuleFor(x => x.PrototypeManufacturerName).Length(1, 20).MustBeOrdinaryText(localizer).WithName(localizer["Manufacturer"]);

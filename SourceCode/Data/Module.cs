@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using static ModulesRegistry.Data.Resources.Strings;
+using static ModulesRegistry.Resources.Strings;
 
 namespace ModulesRegistry.Data;
 #pragma warning disable IDE0028 // Simplify collection initialization

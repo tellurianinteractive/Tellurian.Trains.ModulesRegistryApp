@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ModulesRegistry.Services.Resources;
+using ModulesRegistry.Resources;
 using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;

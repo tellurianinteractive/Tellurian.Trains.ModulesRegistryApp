@@ -2,7 +2,7 @@
 @using System.Globalization;
 
 @inherits AppInputBase<int?>
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 
 <div class="@BootstrapWrapperCss">
     @if (!string.IsNullOrWhiteSpace(Label))
@@ -42,7 +42,7 @@
     [Parameter] public bool ShowNoneOption { get; set; }
     [Parameter] public Action<int?>? OnSelected { get; set; }
 
-    string NoneOption => Localizer["NotApplicable"].Value;
+    string NoneOption => Localizer["NotApplicableOption"].Value;
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int? result, [NotNullWhen(false)] out string? validationErrorMessage)

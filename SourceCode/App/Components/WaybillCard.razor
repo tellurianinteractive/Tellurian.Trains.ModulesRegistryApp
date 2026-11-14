@@ -1,4 +1,4 @@
-﻿@inject IStringLocalizer<App> Localizer
+﻿@inject IStringLocalizer<Strings> Localizer
 
 @if (Item != null && Item.Origin is not null && Item.Destination is not null)
 {
@@ -37,13 +37,13 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="destination">
-                            <div class="label">@Item.Destination.DualLanguageLabel("Cargo")</div>
+                            <div class="label">@Item.Destination.DualLanguageLabel("WaybillCargo", "Cargo")</div>
                             <div class="item">@Item.Destination.CargoName()</div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3" class="destination">
-                            <div class="label">@Item.Destination.DualLanguageLabel("Quantity")</div>
+                            <div class="label">@Item.Destination.DualLanguageLabel("WaybillQuantity", "Quantity")</div>
                             <div class="item">@Item.DestinationQuantity()</div>
                         </td>
                     </tr>
@@ -92,7 +92,7 @@
                     {
                         <tr>
                             <td colspan="3">
-                                <div class="label">@Item.Origin.DualLanguageLabel("Cargo")</div>
+                                <div class="label">@Item.Origin.DualLanguageLabel("WaybillCargo", "Cargo")</div>
                                 <div class="smaller">@Item.Origin.CargoName()</div>
                             </td>
                         </tr>

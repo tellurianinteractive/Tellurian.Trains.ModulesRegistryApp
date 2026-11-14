@@ -167,7 +167,7 @@ builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 builder.Services.AddSingleton<PublicDocumentKeys>();
 
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization();
 
 var app = builder.Build();
 

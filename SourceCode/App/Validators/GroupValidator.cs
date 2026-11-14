@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class GroupValidator : AbstractValidator<Group>
 {
-    public GroupValidator(IStringLocalizer<App> localizer)
+    public GroupValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(group => group.ShortName)
             .NotEmpty()

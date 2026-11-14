@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class ModuleStandardValidator : AbstractValidator<ModuleStandard>
 {
-    public ModuleStandardValidator(IStringLocalizer<App> localizer)
+    public ModuleStandardValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.ShortName)
             .NotEmpty()

@@ -34,7 +34,7 @@ public class PasswordPolicy : ValidationAttribute
     }
 
     public override string ToString() =>
-        string.Format(Resources.Strings.PasswordPolicy, MinimumLength,
+        string.Format(Resources.Strings.PasswordPolicyRules, MinimumLength,
             Letters.Minimum, Letters.Characters,
             Digits.Minimum, Digits.Characters,
             Special.Minimum, Special.Characters);

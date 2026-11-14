@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class ExternalStationValidator : AbstractValidator<ExternalStation>
 {
-    public ExternalStationValidator(IStringLocalizer<App> localizer)
+    public ExternalStationValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.RegionId)
             .MustBeSelected(localizer)

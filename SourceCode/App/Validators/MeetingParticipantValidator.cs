@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators
 {
     public class MeetingParticipantValidator : AbstractValidator<MeetingParticipant>
     {
-        public MeetingParticipantValidator(IStringLocalizer<App> localizer)
+        public MeetingParticipantValidator(IStringLocalizer<Strings> localizer)
         {
             RuleFor(m => m.PersonId)
                 .MustBeSelected(localizer)

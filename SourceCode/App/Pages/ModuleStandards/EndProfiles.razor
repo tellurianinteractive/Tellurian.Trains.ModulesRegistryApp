@@ -2,7 +2,7 @@
 
 @attribute [Authorize(Policy = "User")]
 
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 @inject ModuleEndProfileService ModuleEndProfileService
 
 <PageHeading Label="ModuleEndProfiles" IconClass="@FontAwesome.Standard" PageAction="PageAction.List" />

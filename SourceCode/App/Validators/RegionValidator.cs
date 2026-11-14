@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class RegionValidator : AbstractValidator<Region>
 {
-    public RegionValidator(IStringLocalizer<App> localizer)
+    public RegionValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.CountryId)
             .MustBeSelected(localizer)

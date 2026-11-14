@@ -17,25 +17,6 @@
     <PackageReference Include="Rationals" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resources\Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Validators.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Validators.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Strings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Validators.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Validators.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Resources\Resources.csproj" />
   </ItemGroup>
 </Project>

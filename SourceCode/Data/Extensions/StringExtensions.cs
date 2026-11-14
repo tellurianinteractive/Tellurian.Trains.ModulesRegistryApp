@@ -1,4 +1,4 @@
-﻿using ModulesRegistry.Data.Resources;
+﻿using ModulesRegistry.Resources;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data.Extensions;

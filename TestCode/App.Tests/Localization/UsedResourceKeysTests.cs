@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace ModulesRegistry.AppTests.Localization;
 
 /// <summary>
-/// Every literal key used as <c>Localizer["Key"]</c> in the App project must exist in <c>App.resx</c>,
+/// Every literal key used as <c>Localizer["Key"]</c> in the App project must exist in <c>Resources/Strings.resx</c>,
 /// otherwise users see the key instead of a text. (Translations are checked by <see cref="TranslationCompletenessTests"/>.)
 /// </summary>
 [TestClass]
@@ -14,10 +14,10 @@ public sealed partial class UsedResourceKeysTests
     private static partial Regex LocalizerKeyRegex();
 
     [TestMethod]
-    public void AllLiteralKeysUsedInAppExistInAppResx()
+    public void AllLiteralKeysUsedInAppExistInResources()
     {
         var appDirectory = Path.Combine(RepositoryRoot().FullName, "SourceCode", "App");
-        var resourceKeys = XDocument.Load(Path.Combine(appDirectory, "Resources", "App.resx")).Root!.Elements("data")
+        var resourceKeys = XDocument.Load(Path.Combine(RepositoryRoot().FullName, "SourceCode", "Resources", "Strings.resx")).Root!.Elements("data")
             .Select(data => (string?)data.Attribute("name"))
             .OfType<string>()
             .ToHashSet();
@@ -35,7 +35,7 @@ public sealed partial class UsedResourceKeysTests
             .Distinct()
             .ToList();
 
-        Assert.IsEmpty(missing, $"Add these keys to App.resx (and its translations): {string.Join(", ", missing)}");
+        Assert.IsEmpty(missing, $"Add these keys to Resources/Strings.resx (and its translations): {string.Join(", ", missing)}");
     }
 
     private static bool IsBuildOutput(string file)

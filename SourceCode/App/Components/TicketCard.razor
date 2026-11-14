@@ -1,4 +1,4 @@
-﻿@inject IStringLocalizer<App> Localizer
+﻿@inject IStringLocalizer<Strings> Localizer
 
 @if (Item is not null)
 {
@@ -9,11 +9,11 @@
             <div class="heading">@("RoundTrip".GetLocalizedString(TicketLanguageCode(Item)))</div>
 
             <div class="from">
-                <span class="from label">@("From".GetLocalizedString(TicketLanguageCode(Item)))</span>
+                <span class="from label">@("TicketFrom".GetLocalizedString(TicketLanguageCode(Item)))</span>
                 <span class="from name" style="font-size: @StationNameTextSize(Item.From.NameInLayout)">@Item.From.NameInLayout</span>
             </div>
             <div class="from">
-                <span class="from label">@("To".GetLocalizedString(TicketLanguageCode(Item)))</span>
+                <span class="from label">@("TicketTo".GetLocalizedString(TicketLanguageCode(Item)))</span>
                 <span class="from name" style="font-size: @StationNameTextSize(Item.To.NameInLayout)">@Item.To.NameInLayout.ToUpperInvariant()</span>
             </div>
             <div class="validity">

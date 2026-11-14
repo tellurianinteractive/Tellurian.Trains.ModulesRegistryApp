@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -7,7 +8,7 @@ namespace ModulesRegistry.Validators;
 public class WiThrottleValidator : AbstractValidator<WiFredThrottle>
 
 {
-    public WiThrottleValidator(IStringLocalizer<App> localizer)
+    public WiThrottleValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(throttle => throttle.OwningPersonId)
             .MustBeSelected(localizer)

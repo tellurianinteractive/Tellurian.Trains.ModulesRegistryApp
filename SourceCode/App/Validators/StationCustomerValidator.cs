@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class StationCustomerValidator : AbstractValidator<StationCustomer>
 {
-    public StationCustomerValidator(IStringLocalizer<App> localizer)
+    public StationCustomerValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.CustomerName)
             .NotEmpty()

@@ -2,7 +2,7 @@
 @page "/reports/emptywagonorders/station/{stationId:int}/customer/{customerId:int}"
 
 @layout PrintLayout
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 @inject ILanguageService LanguageService
 @inject EmptyWagonOrderService EmptyWagonOrderService
 @if (EmptyWagonOrders is null)

@@ -1,5 +1,5 @@
 ﻿using ModulesRegistry.Services.Implementations;
-using ModulesRegistry.Services.Resources;
+using ModulesRegistry.Resources;
 
 namespace ModulesRegistry.Services.Projections;
 

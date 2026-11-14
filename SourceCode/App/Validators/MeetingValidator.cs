@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -9,7 +10,7 @@ public class MeetingValidator : AbstractValidator<Meeting>
     public const int DetailsMaxLength = 2000;
     public const int AccomodationMaxLenght = 1000;
     public const int FoodMaxLength = 1000;
-    public MeetingValidator(IStringLocalizer<App> localizer)
+    public MeetingValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.OrganiserGroupId)
             .MustBeSelected(localizer)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using ModulesRegistry.Data.Resources;
+using ModulesRegistry.Resources;
 using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;

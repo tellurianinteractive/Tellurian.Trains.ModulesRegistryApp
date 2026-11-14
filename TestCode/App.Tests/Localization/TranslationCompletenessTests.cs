@@ -12,10 +12,7 @@ public sealed class TranslationCompletenessTests
     private static readonly string[] FullySupportedTranslations = ["sv", "de", "da", "nb"];
 
     [TestMethod]
-    [DataRow("SourceCode/App/Resources/App.resx")]
-    [DataRow("SourceCode/Data/Resources/Strings.resx")]
-    [DataRow("SourceCode/Data/Resources/Validators.resx")]
-    [DataRow("SourceCode/Services/Resources/Strings.resx")]
+    [DataRow("SourceCode/Resources/Strings.resx")]
     public void AllTextsAreTranslated(string masterFile)
     {
         var masterPath = Path.Combine(RepositoryRoot().FullName, masterFile);

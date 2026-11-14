@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ModulesRegistry.Resources;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 
@@ -6,7 +7,7 @@ namespace ModulesRegistry.Validators;
 
 public class StationCustomerCargoValidator : AbstractValidator<StationCustomerCargo>
 {
-    public StationCustomerCargoValidator(IStringLocalizer<App> localizer)
+    public StationCustomerCargoValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(m => m.StationCustomerId)
             .MustBeSelected(localizer)

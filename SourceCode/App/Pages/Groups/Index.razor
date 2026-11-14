@@ -4,7 +4,7 @@
 
 @attribute [Authorize(Policy = "User")]
 
-@inject IStringLocalizer<App> Localizer
+@inject IStringLocalizer<Strings> Localizer
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject GroupService GroupService
@@ -164,7 +164,7 @@ else
     CountryName.HasValue() ||
     HideForeignGroups;
 
-        public IQueryable<(Group Value, bool MayEdit)> Groups(IEnumerable<(Group value, bool)> groups, ClaimsPrincipal? principal, IStringLocalizer<App> localizer)
+        public IQueryable<(Group Value, bool MayEdit)> Groups(IEnumerable<(Group value, bool)> groups, ClaimsPrincipal? principal, IStringLocalizer<Strings> localizer)
         {
             return groups?
         .Where(g =>

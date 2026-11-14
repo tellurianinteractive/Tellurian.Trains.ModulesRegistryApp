@@ -13,8 +13,8 @@ public static partial class ValidatorsExtensions
 
     private static string Message(bool allWordsWithInitialCapitals) =>
         allWordsWithInitialCapitals ?
-        $"\"{{PropertyName}}\" {Resources.Validators.MustBeginWithCapitalLetter}" :
-        $"\"{{PropertyName}}\" {Resources.Validators.AllWordsMustBeginWithCapitalLetter}";
+        $"\"{{PropertyName}}\" {Resources.Strings.MustBeginWithCapitalLetter}" :
+        $"\"{{PropertyName}}\" {Resources.Strings.AllWordsMustBeginWithCapitalLetter}";
 
 
     private static bool IsNameCapitalizedCorrectly(this string? name, bool allWordsWithInitialCapitals)
@@ -61,19 +61,19 @@ public static partial class ValidatorsExtensions
     private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von" };
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder) =>
-       builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustOnlyContainOrdinaryText}");
+       builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustOnlyContainOrdinaryText}");
 
     public static IRuleBuilderOptions<T, string> MustBeOrdinaryText<T>(this IRuleBuilder<T, string> builder) =>
-        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustOnlyContainOrdinaryText}");
+        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustOnlyContainOrdinaryText}");
 
     public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder) =>
-        builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustBeValidDccAdresses}");
+        builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustBeValidDccAdresses}");
 
     public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder) =>
-     builder.Must(value => string.IsNullOrEmpty(value) || value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustBeValidEmailAddresses}");
+     builder.Must(value => string.IsNullOrEmpty(value) || value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustBeValidEmailAddresses}");
 
     public static IRuleBuilderOptions<T, Station> IsRegionRequired<T>(this IRuleBuilder<T, Station> builder) =>
-        builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {Resources.Validators.MustBeSelected}");
+        builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {Resources.Strings.MustBeSelected}");
 
     private static bool IsValidEmailAddress(this string? email)
     {
@@ -124,33 +124,33 @@ public static partial class ValidatorsExtensions
 
 
     public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, bool orZero = false) =>
-        builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustBeSelected}");
+        builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustBeSelected}");
     private static bool IsSelected(this int id, bool zero) => id > 0 || zero;
 
     public static IRuleBuilderOptions<T, int> MustBeEnumValue<T>(this IRuleBuilder<T, int> builder, Type enumType) =>
-        builder.Must(value => value.IsValidEnum(enumType)).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Validators.MustBeAnyOf, string.Join(",", EnumExtensions.StationTrackDirections()))}");
+        builder.Must(value => value.IsValidEnum(enumType)).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Strings.MustBeAnyOf, string.Join(",", EnumExtensions.StationTrackDirections()))}");
     private static bool IsValidEnum(this int value, Type enumType) => Enum.IsDefined(enumType, value);
 
     public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder) =>
-        builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Validators.MustBeBetween, MinYear, MaxYear)}");
+        builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Strings.MustBeBetween, MinYear, MaxYear)}");
     private static bool IsValidYear(this short? year) => year is null || year >= MinYear && year <= MaxYear;
     private static int MinYear => 1900;
     private static int MaxYear => DateTimeOffset.Now.Year;
 
     public static IRuleBuilderOptions<T, short?> MustBeValidHour<T>(this IRuleBuilder<T, short?> builder) =>
-        builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Validators.MustBeBetween, MinHour, MaxHour)}");
+        builder.Must(value => value.IsValidHour()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Strings.MustBeBetween, MinHour, MaxHour)}");
 
     private static bool IsValidHour(this short? hour) => hour is null || hour >= MinHour && hour <= MaxHour;
     const short MinHour = 0;
     const short MaxHour = 23;
 
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder) =>
-         builder.Must(value => value.IsHexColorOrNull()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Validators.MustBeAColor)}");
+         builder.Must(value => value.IsHexColorOrNull()).WithMessage($"\"{{PropertyName}}\" {string.Format(Resources.Strings.MustBeAColor)}");
 
     public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder) =>
-        builder.Must(value => value.IsMacAddress()).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustBeAMacAddress}");
+        builder.Must(value => value.IsMacAddress()).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustBeAMacAddress}");
     public static IRuleBuilderOptions<T, short?> MustBeDccAddressOrEmpty<T>(this IRuleBuilder<T, short?> builder) =>
-        builder.Must(value => value is null || value.IsDccAddress()).WithMessage($"\"{{PropertyName}}\" {Resources.Validators.MustBeADccAddress}");
+        builder.Must(value => value is null || value.IsDccAddress()).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustBeADccAddress}");
     private static bool IsHexColorOrNull(this string? value) =>
         value is null || value.IsHexColor();
     

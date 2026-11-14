@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -171,6 +171,9 @@
   <data name="Empty" xml:space="preserve">
     <value>Pusty</value>
   </data>
+  <data name="EmptyWagonForCargo" xml:space="preserve">
+    <value>Pusty wagon dla {0}</value>
+  </data>
   <data name="EmptyWagonOrder" xml:space="preserve">
     <value>Zamówienie na pusty wagon</value>
   </data>
@@ -215,6 +218,9 @@
   </data>
   <data name="Netherlands" xml:space="preserve">
     <value>Holandia</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nie znaleziono</value>
   </data>
   <data name="Origin" xml:space="preserve">
     <value>Stacja wysyłkowa</value>

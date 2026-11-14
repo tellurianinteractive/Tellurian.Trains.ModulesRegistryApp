@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ModulesRegistry.Resources;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Extensions;
@@ -21,7 +22,7 @@ public abstract partial class AppInputBase<TValue>
 
     public string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
-    public string LabelText(IStringLocalizer<App> localizer)
+    public string LabelText(IStringLocalizer<Strings> localizer)
     {
         if (Label.HasNoValue()) return string.Empty;
         return localizer.FromParts(Label);

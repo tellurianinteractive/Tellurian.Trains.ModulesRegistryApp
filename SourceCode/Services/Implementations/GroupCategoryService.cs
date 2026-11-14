@@ -1,4 +1,4 @@
-﻿using ModulesRegistry.Services.Resources;
+﻿using ModulesRegistry.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 #pragma warning disable CA1822 // Mark members as static dont apply because this may calling a database later.

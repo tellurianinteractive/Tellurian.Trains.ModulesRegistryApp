@@ -1,7 +1,7 @@
 ﻿#nullable disable
 
 using ModulesRegistry.Data.Extensions;
-using static ModulesRegistry.Data.Resources.Strings;
+using static ModulesRegistry.Resources.Strings;
 
 namespace ModulesRegistry.Data;
 
