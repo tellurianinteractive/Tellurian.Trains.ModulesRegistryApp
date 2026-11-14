@@ -2,7 +2,7 @@
 
 Things to address when modernising dependencies and moving to .NET 11. Tick items off as they are done.
 
-Current state (2026-11-14): `net11.0` (release 1.14.1, published self-contained for win-x86), Blazor Server with the legacy hosting model (`_Host.cshtml`, `MapBlazorHub()`, `MapFallbackToPage("/_Host")`). The SQL Server schema is maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
+Current state (2026-11-14): `net11.0` (published self-contained for win-x86), Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with global `InteractiveServer` and no prerendering, release 1.14.7. The SQL Server schema is maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
 
 Sections 1–4 describe **what** needs to be done and why. **The roadmap below describes the order:** small steps, each verified, tested and deployed before the next one starts.
 
@@ -50,9 +50,11 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 | 2.1C ✅ | Public API behaviour changes for external consumers: (a) remove `/api/layouts/{id}/vehicles`, which has returned `500` since 1.11.9 and isn't supported yet (no release note, hardly used); (b) an empty result returns `200` with an empty list instead of `404 Not Found` (release note bullet) | Removed endpoint gives `404` with a key and is gone from the OpenAPI document; endpoint tests for empty results | 2.5 |
 | 2.2A ✅ | **Security, before 2.2:** the login posts a form to `POST /login` (antiforgery-protected) instead of a link with the username and password in the query string. `GET /login` only redirects to the start page. The `Login` Razor Page is removed. | Endpoint tests (form signs in, no token gives 400, credentials in the URL don't sign in, return URL always local); login and logout in the browser | 2.2 |
 | 2.2B ✅ | **Security, before 2.2:** document downloads (`/Documents/{id}`) require the `User` policy (signed in with the cookie; an API key gives no access). Before, anyone could download any document by its id. Minimal endpoint replaces the `Document` Razor Page; visitors who aren't signed in are redirected to the start page. Exception (1.14.6): `<DocumentLink IsPublic="true">` draws a link with a key signed for that document id (Data Protection), which works without signing in. | Endpoint tests (not signed in 401, API key 401, policy not met 403, signed in gets the file, no-store); download in the browser signed in and signed out | 2.2 |
-| 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
+| 2.2 ✅ | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
 
 Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on App Service (only a .NET 11 preview runtime there). Release 1.14.1 (2026-11-13) publishes self-contained for win-x86 and runs. See section 2.1.
+
+Step 2.2 deployed as release 1.14.7 (2026-11-14): checked locally against production (read-only) and in production, including Azure SignalR. **Stage 2 complete.**
 
 Step 2.2B deployed as release 1.14.5 (2026-11-14), public document links in 1.14.6; download checked in production. 1.14.6 also added the localised error and site unavailable pages: the deploy workflow uploads `app_offline.htm`, and the app released its files without stopping the site.
 
