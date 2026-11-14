@@ -20,6 +20,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 - **Rollback must be possible** by redeploying the previous version. So database objects are never removed in the same release as the code stops using them; they're removed in the following release.
 - **No behaviour changes mixed with refactoring.** A step either changes structure (same behaviour) or changes behaviour, never both.
 - Tick off each step here when it's deployed, and adjust the coming steps based on what was learned.
+- **Version numbers** (decided 2026-11-14): stages 1–2B are released as 1.14.x. The first release of stage 3 (server-side rendering) steps up to **1.15.0**, and its following releases are 1.15.x. When the full SSR implementation is done (end of stage 3), it is announced as **2.0.0**.
 
 ### Stage 1: dependency hygiene (still .NET 10)
 | # | Step | Verification | Ref |
@@ -83,6 +84,7 @@ All translations in one resource assembly, and the app's own localisation code r
 | 2B.5 | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | 7 |
 
 ### Stage 3: SSR, page group by page group
+Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; the release that completes the full SSR implementation is **2.0.0** (see the rules above).
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 3.1 | Switch to per-page render modes (all pages still `InteractiveServer`). Make the shared components (`AppButton`, `AppInput*`, `EditTemplate`, `Paginator`) work in both modes. | All pages behave as before | 3.1, 3.2 |
