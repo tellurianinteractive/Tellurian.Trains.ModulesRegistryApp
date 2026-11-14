@@ -165,6 +165,7 @@ builder.Services.AddScoped<WiFredThrottleService>();
 builder.Services.AddPublicApi();
 builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 builder.Services.AddScoped<IDocumentSource, DocumentSource>();
+builder.Services.AddSingleton<PublicDocumentKeys>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 

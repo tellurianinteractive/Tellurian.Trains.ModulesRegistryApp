@@ -1,4 +1,7 @@
-﻿@if (DocumentId.HasValue)
+﻿@using ModulesRegistry.Endpoints
+@inject PublicDocumentKeys PublicKeys
+
+@if (DocumentId.HasValue)
 {
     <a target="_blank" href="@Href"><img src="@ImgSrc" class="icon" /></a>
 }
@@ -7,6 +10,14 @@
     [Parameter] public int? DocumentId { get; set; }
     [Parameter] public string? FileExtension { get; set; }
 
-    string Href => $"documents/{DocumentId}";
+    /// <summary>
+    /// True gives a link that anyone can use, also without signing in. Only for documents meant to be public:
+    /// the link keeps working for anyone who has it. Default false: only signed-in users can download.
+    /// </summary>
+    [Parameter] public bool IsPublic { get; set; }
+
+    string Href => IsPublic
+        ? DocumentEndpoint.PublicUrl(DocumentId!.Value, PublicKeys.Create(DocumentId.Value))
+        : DocumentEndpoint.Url(DocumentId!.Value);
     string ImgSrc => $"images/{FileExtension}.png";
 }

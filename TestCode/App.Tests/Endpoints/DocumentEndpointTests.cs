@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ namespace ModulesRegistry.AppTests.Endpoints;
 /// <summary>
 /// Runs the real document download endpoint and authorization policies in a test server, with a test sign-in and fake documents.
 /// Only signed-in users who meet the User policy may download; an API key gives no access.
+/// Exception: a public link with a key signed for that document id.
 /// </summary>
 [TestClass]
 public sealed class DocumentEndpointTests
@@ -20,6 +22,7 @@ public sealed class DocumentEndpointTests
     private WebApplication _app = null!;
     private HttpClient _client = null!;
     private FakeDocumentSource _source = null!;
+    private PublicDocumentKeys _publicKeys = null!;
 
     [TestInitialize]
     public async Task InitializeAsync()
@@ -32,11 +35,14 @@ public sealed class DocumentEndpointTests
             .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(TestAuthenticationHandler.SchemeName, null);
         builder.Services.AddAuthorizationPolicies();
         builder.Services.AddSingleton<IDocumentSource>(_source);
+        builder.Services.AddSingleton<IDataProtectionProvider>(new EphemeralDataProtectionProvider());
+        builder.Services.AddSingleton<PublicDocumentKeys>();
         _app = builder.Build();
         _app.UseAuthentication();
         _app.UseAuthorization();
         _app.MapDocumentDownload();
         await _app.StartAsync();
+        _publicKeys = _app.Services.GetRequiredService<PublicDocumentKeys>();
         _client = _app.GetTestClient();
     }
 
@@ -90,6 +96,44 @@ public sealed class DocumentEndpointTests
         Assert.AreEqual("Station A.pdf", response.Content.Headers.ContentDisposition?.FileNameStar ?? response.Content.Headers.ContentDisposition?.FileName);
         CollectionAssert.AreEqual(_source.Content, await response.Content.ReadAsByteArrayAsync());
         Assert.IsTrue(response.Headers.CacheControl?.NoStore, "Documents must not be cached.");
+    }
+
+    [TestMethod]
+    public async Task PublicLinkWorksWithoutSigningIn()
+    {
+        var response = await GetAsync("/" + DocumentEndpoint.PublicUrl(5, _publicKeys.Create(5)), user: null);
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.AreEqual(5, _source.Id);
+    }
+
+    [TestMethod]
+    public async Task PublicKeyOnlyWorksForItsOwnDocument()
+    {
+        var response = await GetAsync("/" + DocumentEndpoint.PublicUrl(6, _publicKeys.Create(5)), user: null);
+
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.IsFalse(_source.WasCalled);
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("not-a-key")]
+    [DataRow("5")]
+    public async Task InvalidPublicKeyGivesNoAccess(string key)
+    {
+        var response = await GetAsync($"/Documents/5?key={Uri.EscapeDataString(key)}", user: null);
+
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.IsFalse(_source.WasCalled);
+    }
+
+    [TestMethod]
+    public async Task PublicLinkAlsoWorksForUserNotMeetingUserPolicy()
+    {
+        var response = await GetAsync("/" + DocumentEndpoint.PublicUrl(5, _publicKeys.Create(5)), "no-terms");
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
     [TestMethod]
