@@ -111,6 +111,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapOperatingBasicDay();
         modelBuilder.MapOperationDay();
         modelBuilder.MapOperator();
+        modelBuilder.MapRegion();
 
         modelBuilder.MapVehicle();
         modelBuilder.MapVehicleFeature();
@@ -178,39 +179,6 @@ public partial class ModulesDbContext : DbContext
             entity.Property(e => e.Value)
                 .IsRequired()
                 .HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<Region>(entity =>
-        {
-            entity.ToTable("Region");
-
-            entity.Property(e => e.BackColor)
-                .IsRequired()
-                .HasMaxLength(10);
-
-            entity.Property(e => e.ColourName)
-                .HasMaxLength(10);
-
-            entity.Property(e => e.EnglishName)
-                .HasMaxLength(50);
-
-            entity.Property(e => e.ForeColor)
-                .IsRequired()
-                .HasMaxLength(10);
-
-            entity.Property(e => e.LocalName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.HasOne(d => d.Country)
-                .WithMany(p => p.Regions)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(s => s.RepresentativeExternalStation)
-                .WithOne()
-                .HasForeignKey<Region>(s => s.RepresentativeExternalStationId)
-                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Scale>(entity =>

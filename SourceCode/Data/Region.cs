@@ -38,68 +38,36 @@ public partial class Region
     public const string DefaultDestinationBackColor = "#FFFFE0";
 }
 
-public static class RegionExtentions
+public static class RegionExtensions
 {
     extension(ModelBuilder builder)
     {
         internal void MapRegion() =>
-             builder.Entity<Region>(entity =>
-             {
-                 entity.ToTable("Region");
-                 entity.HasOne(r => r.Country)
-                     .WithMany(c => c.Regions)
-                     .HasForeignKey(r => r.CountryId)
-                     .OnDelete(DeleteBehavior.ClientSetNull);
-                 entity.HasOne(r => r.RepresentativeExternalStation)
-                     .WithOne(es => es.Region)
-                     .HasForeignKey<Region>(r => r.RepresentativeExternalStationId);
-             });
-    }
+            builder.Entity<Region>(entity =>
+            {
+                entity.ToTable("Region");
 
-    extension(Region region)
-    {
-        // QUESTION: Should we also include the countries and external stations in the form data, or do we load that as part of the form itself?
-        public RegionFormData AsFormData() => new()
-        {
-            Id = region.Id,
-            EnglishName = region.EnglishName,
-            LocalName = region.LocalName,
-            ColourName = region.ColourName,
-            Description = region.Description,
-            ForeColor = region.ForeColor,
-            BackColor = region.BackColor,
-            CountryId = region.CountryId,
-            RepresentativeExternalStationId = region.RepresentativeExternalStationId
-        };
-    }
+                entity.Property(r => r.EnglishName).HasMaxLength(50);
+                entity.Property(r => r.LocalName).IsRequired().HasMaxLength(50);
+                entity.Property(r => r.ColourName).HasMaxLength(10);
+                entity.Property(r => r.ForeColor).IsRequired().HasMaxLength(10);
+                entity.Property(r => r.BackColor).IsRequired().HasMaxLength(10);
 
-    extension(RegionFormData formData)
-    {
-        public Region AsEntity() => new()
-        {
-            Id = formData.Id,
-            EnglishName = formData.EnglishName,
-            LocalName = formData.LocalName,
-            ColourName = formData.ColourName,
-            Description = formData.Description,
-            ForeColor = formData.ForeColor,
-            BackColor = formData.BackColor,
-            CountryId = formData.CountryId,
-            RepresentativeExternalStationId = formData.RepresentativeExternalStationId
-        };
+                entity.HasIndex(r => r.CountryId, "IX_Region_CountryId");
+
+                entity.HasOne(r => r.Country)
+                    .WithMany(c => c.Regions)
+                    .HasForeignKey(r => r.CountryId)
+                    .HasConstraintName("FK_Region_Country")
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                // No inverse navigation: ExternalStation.Region belongs to the RegionId relationship.
+                // WithMany, not WithOne: the database has no unique index on RepresentativeExternalStationId.
+                entity.HasOne(r => r.RepresentativeExternalStation)
+                    .WithMany()
+                    .HasForeignKey(r => r.RepresentativeExternalStationId)
+                    .HasConstraintName("FK_Region_RepresentativeExternalStationId")
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
     }
 }
-
-public class RegionFormData
-{
-    public int Id { get; set; }
-    public string EnglishName { get; set; }
-    public string LocalName { get; set; }
-    public string ColourName { get; set; }
-    public string Description { get; set; }
-    public string ForeColor { get; set; }
-    public string BackColor { get; set; }
-    public int CountryId { get; set; }
-    public int? RepresentativeExternalStationId { get; set; }
-}
-

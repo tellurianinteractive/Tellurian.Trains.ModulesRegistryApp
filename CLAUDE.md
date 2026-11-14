@@ -12,7 +12,7 @@ The solution file is `Modules Registry App.slnx` (XML-based .slnx format — not
 
 Projects:
 - `SourceCode/App` — Blazor Server host (`AssemblyName=ModulesRegistry`, SDK `Microsoft.NET.Sdk.Web`). Contains `Pages/` (routable razor components, organised in feature subfolders), `Components/` (non-routable UI), `Api/` (REST controllers exposing `Data.Api` DTOs), `Security/` (cookie auth, API user middleware, `ApplicationClaimsTransformation`, security headers), `Content/Markdown/` (help texts, localised per-language via `.xx.md` suffix), `Resources/` (App.*.resx).
-- `SourceCode/Data` — EF Core domain model + `ModulesDbContext` (partial class; `_ModulesDbContext.cs` holds `DbSet`s and config, fluent mappings are in a generated partial). Also holds `Resources/Strings.*.resx` and `Resources/Validators.*.resx` (FluentValidation messages).
+- `SourceCode/Data` — EF Core domain model + `ModulesDbContext` (partial class; `_ModulesDbContext.cs` holds `DbSet`s and config; fluent mappings are moving into a `Map<Entity>()` extension in each entity's file, see "EF model" below). Also holds `Resources/Strings.*.resx` and `Resources/Validators.*.resx` (FluentValidation messages).
 - `SourceCode/Data.Api` — Plain DTO contracts shared with API consumers (no dependencies).
 - `SourceCode/Services` — Business logic in `Implementations/` (one `XxxService` class per aggregate, all registered as scoped in `App/Program.cs`). Uses `IDbContextFactory<ModulesDbContext>` — services create their own short-lived context per operation rather than taking an injected `DbContext`.
 - `SourceCode/Database` — SQL Server database project (`Database.sqlproj`). Schema-as-code under `dbo/Tables`, `dbo/Views`, `dbo/Procedures`. **Entity Framework migrations are NOT used** — see "Database workflow" below.
@@ -67,6 +67,15 @@ There are no EF migrations. The domain classes in `SourceCode/Data` and the SQL 
 3. Deploy the app so model and schema match again.
 
 Make changes in small steps (one column/table at a time). Triggers exist only to override cascade-delete behaviour. See `System Design Documents/Overview.md` for the full rationale.
+
+### EF model (moving to EF Core migrations, Migration.md stage 4)
+
+Follow the global `efcore` skill. Project specifics:
+
+- Fluent mappings are moving out of `_ModulesDbContext.cs` into one `Map<Entity>()` extension per entity file (`Data/Region.cs` is the template). When moving one, carry over **every** `HasMaxLength`, `IsRequired`, index, trigger and `OnDelete` from the old block: step 4.1 requires a model identical to the production schema.
+- The database default collation is `Finnish_Swedish_CI_AS` (annotation in `OnModelCreating`). SQLite tests won't reproduce its sorting or case-insensitivity.
+- Entities are legacy scaffolded (`#nullable disable`, `partial`, `virtual`). Keep that style per entity until it is modernised on purpose.
+- Form models go in `App/Forms/<Aggregate>/` (Migration.md section 3.4), not in the Data project.
 
 ## Localisation
 
