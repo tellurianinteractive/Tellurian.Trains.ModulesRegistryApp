@@ -65,7 +65,6 @@ public sealed class PublicApiEndpointsTests
     [TestMethod]
     [DataRow("/api/cargoes")]
     [DataRow("/api/languages/all/supported")]
-    [DataRow("/api/layouts/7/vehicles")]
     [DataRow("/api/meetings")]
     [DataRow("/api/meetings/1")]
     [DataRow("/api/unknown/path")]
@@ -96,9 +95,11 @@ public sealed class PublicApiEndpointsTests
     }
 
     [TestMethod]
-    public async Task UnknownPathWithApiKeyIsNotFound()
+    [DataRow("/api/unknown/path")]
+    [DataRow("/api/layouts/7/vehicles")] // Removed in step 2.1C: it was never backed by data.
+    public async Task UnknownPathWithApiKeyIsNotFound(string url)
     {
-        var response = await GetAsync("/api/unknown/path");
+        var response = await GetAsync(url);
 
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -142,38 +143,6 @@ public sealed class PublicApiEndpointsTests
     }
 
     [TestMethod]
-    public async Task LayoutVehiclesHaveTheFormerEntityFormat()
-    {
-        var json = await GetJsonAsync("/api/layouts/7/vehicles");
-
-        // Before step 2.1B the endpoint returned the EF entity; the new contract must serialise identically.
-        var formerEntities = _source.LayoutVehicles.Select(v => new Data.LayoutVehicle
-        {
-            Id = v.Id,
-            DccAddress = v.DccAddress,
-            LayoutId = v.LayoutId,
-            OperatorSignature = v.OperatorSignature,
-            VehicleClass = v.VehicleClass,
-            VehicleNumber = v.VehicleNumber,
-            VehicleProviderName = v.VehicleProviderName,
-            ThrottleIdentity = v.ThrottleIdentity,
-            IsTractionUnit = v.IsTractionUnit,
-        }).ToList();
-        Assert.AreEqual(FormerControllerJson(formerEntities), json);
-    }
-
-    [TestMethod]
-    [DataRow("/api/layouts/7/vehicles", 7, false)]
-    [DataRow("/api/layouts/7/vehicles?tractionOnly=true", 7, true)]
-    [DataRow("/api/layouts/9/vehicles?tractionOnly=false", 9, false)]
-    public async Task LayoutVehiclesPassLayoutAndTractionOnly(string url, int layoutId, bool tractionOnly)
-    {
-        await GetAsync(url);
-
-        Assert.AreEqual((layoutId, tractionOnly), _source.LastLayoutVehiclesQuery);
-    }
-
-    [TestMethod]
     [DataRow("/api/meetings", null, null)]
     [DataRow("/api/meetings/0", null, null)]
     [DataRow("/api/meetings/3", 3, null)]
@@ -188,7 +157,6 @@ public sealed class PublicApiEndpointsTests
 
     [TestMethod]
     [DataRow("/api/cargoes")]
-    [DataRow("/api/layouts/7/vehicles")]
     [DataRow("/api/meetings")]
     public async Task EmptyResultIsNotFound(string url)
     {
@@ -226,7 +194,6 @@ public sealed class PublicApiEndpointsTests
     {
         public bool WasCalled { get; private set; }
         public bool ReturnEmpty { get; set; }
-        public (int, bool)? LastLayoutVehiclesQuery { get; private set; }
         public (int?, string?)? LastMeetingsQuery { get; private set; }
 
         public List<CargoType> CargoTypes { get; } =
@@ -243,12 +210,6 @@ public sealed class PublicApiEndpointsTests
             },
         ];
 
-        public List<LayoutVehicle> LayoutVehicles { get; } =
-        [
-            new() { Id = 1, DccAddress = 3, LayoutId = 7, OperatorSignature = "SJ", VehicleClass = "Rc", VehicleNumber = "1001", VehicleProviderName = "Anna", ThrottleIdentity = "T1", IsTractionUnit = true },
-            new() { Id = 2, LayoutId = 7 },
-        ];
-
         public Task<IEnumerable<CargoType>> CargoTypesAsync()
         {
             WasCalled = true;
@@ -259,13 +220,6 @@ public sealed class PublicApiEndpointsTests
         {
             WasCalled = true;
             return new[] { "en", "de", "sv" };
-        }
-
-        public Task<IEnumerable<LayoutVehicle>> LayoutVehiclesAsync(int layoutId, bool tractionOnly)
-        {
-            WasCalled = true;
-            LastLayoutVehiclesQuery = (layoutId, tractionOnly);
-            return Task.FromResult<IEnumerable<LayoutVehicle>>(ReturnEmpty ? [] : LayoutVehicles);
         }
 
         public Task<IEnumerable<Meeting>> MeetingsAsync(int? countryId, string? countries)

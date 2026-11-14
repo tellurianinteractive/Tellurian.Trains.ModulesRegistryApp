@@ -41,7 +41,6 @@ public static class PublicApi
             var api = endpoints.MapGroup(Prefix).AddEndpointFilter<ApiKeyFilter>();
             api.MapGet("cargoes", GetCargoTypesAsync).WithTags("Cargo");
             api.MapGet("languages/all/supported", GetSupportedLanguages).WithTags("Language");
-            api.MapGet("layouts/{layoutId:int}/vehicles", GetLayoutVehiclesAsync).WithTags("Layout");
             api.MapGet("meetings/{countryId:int?}", GetMeetingsAsync).WithTags("Meeting");
             // Any other /api path: 401 without an API key, 404 with one (instead of falling through to the app's pages).
             api.Map("{**path}", () => TypedResults.NotFound()).ExcludeFromDescription();
@@ -54,9 +53,6 @@ public static class PublicApi
 
     private static PublicApiOk<IEnumerable<string>> GetSupportedLanguages(IPublicApiSource source) =>
         PublicApiResults.Ok(source.SupportedLanguages());
-
-    private static async Task<Results<PublicApiOk<IEnumerable<LayoutVehicle>>, ProblemHttpResult>> GetLayoutVehiclesAsync(int layoutId, IPublicApiSource source, bool tractionOnly = false) =>
-        OkOrNotFound(await source.LayoutVehiclesAsync(layoutId, tractionOnly));
 
     private static async Task<Results<PublicApiOk<IEnumerable<Meeting>>, ProblemHttpResult>> GetMeetingsAsync(int? countryId, string? countries, IPublicApiSource source) =>
         OkOrNotFound(await source.MeetingsAsync(countryId > 0 ? countryId : null, countries));

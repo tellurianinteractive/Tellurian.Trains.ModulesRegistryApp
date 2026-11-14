@@ -32,14 +32,13 @@ public sealed class OpenApiDocumentTests
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         var paths = document.RootElement.GetProperty("paths").EnumerateObject().Select(p => p.Name).ToList();
         CollectionAssert.AreEquivalent(
-            new[] { "/api/cargoes", "/api/languages/all/supported", "/api/layouts/{layoutId}/vehicles", "/api/meetings/{countryId}" },
+            new[] { "/api/cargoes", "/api/languages/all/supported", "/api/meetings/{countryId}" },
             paths);
         Assert.IsFalse(paths.Any(p => p.StartsWith("/app")), "The app's own /app endpoints must not be in the public API description.");
     }
 
     [TestMethod]
     [DataRow("/api/cargoes", "CargoType")]
-    [DataRow("/api/layouts/{layoutId}/vehicles", "LayoutVehicle")]
     [DataRow("/api/meetings/{countryId}", "Meeting")]
     public async Task EndpointDocumentsItsResponseType(string path, string schemaName)
     {
@@ -51,20 +50,6 @@ public sealed class OpenApiDocumentTests
         var ok = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty("get").GetProperty("responses").GetProperty("200");
         var schema = ok.GetProperty("content").GetProperty("application/json").GetProperty("schema").GetRawText();
         StringAssert.Contains(schema, $"#/components/schemas/{schemaName}");
-    }
-
-    [TestMethod]
-    public async Task LayoutVehicleSchemaIsTheApiContract()
-    {
-        using var client = _factory.CreateClient();
-
-        using var document = JsonDocument.Parse(await client.GetStringAsync("openapi/v1/openapi.json"));
-
-        var properties = document.RootElement.GetProperty("components").GetProperty("schemas").GetProperty("LayoutVehicle").GetProperty("properties")
-            .EnumerateObject().Select(p => p.Name).ToList();
-        CollectionAssert.AreEqual(
-            new[] { "id", "dccAddress", "layoutId", "operatorSignature", "vehicleClass", "vehicleNumber", "vehicleProviderName", "throttleIdentity", "isTractionUnit" },
-            properties);
     }
 
     [TestMethod]

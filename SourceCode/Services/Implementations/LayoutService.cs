@@ -75,14 +75,6 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         return [];
     }
 
-    public async Task<IEnumerable<LayoutVehicle>> GetLayoutVehicles(int layoutId, bool onlyTractionUnits = false)
-    {
-        using var dbContext = Factory.CreateDbContext();
-        return await dbContext.LayoutVehicles
-            .Where(lv => lv.LayoutId == layoutId && (onlyTractionUnits == false || lv.IsTractionUnit == true))
-            .ToReadOnlyListAsync();
-    }
-
     public async Task<LayoutStation?> GetLayoutStationAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.IsAuthenticated())
