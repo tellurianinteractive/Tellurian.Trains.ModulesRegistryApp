@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.7
+Released 2026-11-14
+- **Fix**: the icons on the *nothing to display* and *not authorised* messages show correctly.
 ## Release 1.14.6
 Released 2026-11-14
 - **New** pages for unexpected errors and for maintenance, in all languages.
