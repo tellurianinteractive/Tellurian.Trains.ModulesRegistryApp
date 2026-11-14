@@ -159,6 +159,7 @@ builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 builder.Services.AddPublicApi();
+builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -189,9 +190,11 @@ app.UseRequestLocalization(options =>
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
 
 app.MapPublicApi();
 app.MapAppEndpoints();
+app.MapLogin();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

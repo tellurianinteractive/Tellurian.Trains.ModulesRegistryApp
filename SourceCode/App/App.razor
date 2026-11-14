@@ -1,5 +1,6 @@
 @inject IStringLocalizer<App> Localizer
 
+<CascadingValue Value="AntiforgeryToken" IsFixed="true">
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" >
         <Found Context="routeData">
@@ -21,7 +22,13 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+</CascadingValue>
 
 @code {
+    /// <summary>From <c>_Host.cshtml</c>: the antiforgery token for forms posted to endpoints, such as the login form.</summary>
+    [Parameter] public string? AntiforgeryFieldName { get; set; }
+    [Parameter] public string? AntiforgeryRequestToken { get; set; }
 
+    private AntiforgeryFormToken? AntiforgeryToken =>
+        AntiforgeryFieldName is null || AntiforgeryRequestToken is null ? null : new(AntiforgeryFieldName, AntiforgeryRequestToken);
 }

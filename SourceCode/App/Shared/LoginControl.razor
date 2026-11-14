@@ -1,9 +1,7 @@
-﻿@using System.Web;
-@using System.Security.Claims;
+﻿@implements IDisposable
 
 @inject IStringLocalizer<App> Localizer
 @inject NavigationManager Navigator
-@inject PageHistory PageHistory
 @inject DefaultUser DefaultUserService
 
 <AuthorizeView>
@@ -16,27 +14,31 @@
            target="_top">@Localizer["Logout"]</a>
     </Authorized>
     <NotAuthorized>
-        <input type="text" @bind="Username" placeholder="@Localizer["Username"]" />
-        &nbsp;&nbsp;
-        <input type="password" @bind="Password" placeholder="@Localizer["Password"]" />
-        <a class="ml-md-auto btn btn-primary"
-           href="/login?username=@encode(Username)&password=@encode(Password)&returnUrl=@encode(ReturnUrl)"
-           target="_top">@Localizer["Login"]</a>
+        @* A plain form posted to the login endpoint (not handled by Blazor), so the credentials are never in a URL.
+           display: contents keeps the inputs and the button laid out as direct children of the top row. *@
+        <form method="post" action="@LoginEndpoint.Route.TrimStart('/')" style="display: contents">
+            @if (AntiforgeryToken is not null)
+            {
+                <input type="hidden" name="@AntiforgeryToken.FieldName" value="@AntiforgeryToken.Value" />
+            }
+            <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+            <input type="text" name="username" value="@DefaultUserService.Username" placeholder="@Localizer["Username"]" autocomplete="username" />
+            &nbsp;&nbsp;
+            <input type="password" name="password" value="@DefaultUserService.Password" placeholder="@Localizer["Password"]" autocomplete="current-password" />
+            <button type="submit" class="ml-md-auto btn btn-primary" style="margin-left: 1.5rem; white-space: nowrap">@Localizer["Login"]</button>
+        </form>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
-    string? Username { get; set; }
-    string? Password { get; set; }
-
-    protected override void OnInitialized()
-    {
-        Username = DefaultUserService.Username;
-        Password = DefaultUserService.Password;
-    }
-
-    private string encode(string? param) => param is null ? string.Empty : HttpUtility.UrlEncode(param);
+    [CascadingParameter] private AntiforgeryFormToken? AntiforgeryToken { get; set; }
 
     private string ReturnUrl => Navigator.ToBaseRelativePath(Navigator.Uri);
 
+    // The return URL follows the page the user is on; the layout doesn't re-render this component on navigation.
+    protected override void OnInitialized() => Navigator.LocationChanged += OnLocationChanged;
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e) => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Navigator.LocationChanged -= OnLocationChanged;
 }
