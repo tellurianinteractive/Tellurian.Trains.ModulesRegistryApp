@@ -664,13 +664,54 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - **Tellurian.Localization** (NuGet, currently 1.5.0, `net10.0`) instead of the app's own code: RESX, Markdown and object (language column) resource providers, `ILanguageService`, and a fallback chain from specific culture to language to default language to key.
 - **Translators** keep working the same way (ResX Manager, `.xx.md` files); `CONTRIBUTING.md` is updated with the new location.
 
-### 7.3 Things to decide in step 2B.1
-- [ ] Name and place of the resource project, and whether entity and validation texts get key prefixes (for example `Validation.`) to avoid collisions when merged.
-- [ ] How conflicts are resolved when the same key has different texts in different files.
-- [ ] Whether `hu` and `pl` (partial translations) stay as they are.
-- [ ] The app's `ILanguageService` has the same name as the package's: replace it, don't keep both.
-- [ ] Whether the package supports everything `ContentService` does today (remote Markdown via `Href`, the `LastModified` line that the Terms of Use date depends on); otherwise extend the package first (via the local NuGet feed workflow) and use a published version here.
-- [ ] Adapt the two translation tests to the new location, and add a test that no key exists twice.
+### 7.3 Inventory (step 2B.1, 2026-11-14)
+
+**Resource files** (master, keys, translations):
+
+| Set | Keys | sv, de, da, nb | hu | pl | Accessed through |
+|---|---|---|---|---|---|
+| `App/Resources/App` | 572 | complete | 2 | 2 | `IStringLocalizer<App>` (154 injections) |
+| `Data/Resources/Strings` | 80 | complete | 1 | 1 | generated class `Resources.Strings.X` and `ResourceManager` (enum names in `EnumExtensions`) |
+| `Data/Resources/Validators` | 13 | complete | – | – | generated class `Resources.Validators.X` (15 uses) |
+| `Services/Resources/Strings` | 218 | complete | 59 | 60 | generated class `Strings.X` (about 60 uses), `LanguageExtensions.GetLocalizedString` |
+
+815 distinct keys in 883 entries. **62 keys exist in more than one file**: 27 in App and Services, 13 in App and Validators (all of Validators), 11 in Data and Services, 6 in all three, 5 in App and Data.
+
+**11 conflicts, same key with different English text:**
+
+| Key | Texts | Proposal |
+|---|---|---|
+| `AllWordsMustBeginWithCapitalLetter` | "…with **a** capital letter" (App) / "…with capital letter" (Validators) | App text |
+| `MustBeValidDccAdresses` | "must be valid DCC addresses" (App) / "must be a valid DCC-adresses" (Validators) | App text |
+| `NothingToDelete`, `RegistrationClosed` | only a full stop differs | one text, without full stop |
+| `TicketIsValidTo` | `{0}` (Data) / `{0:d}` (Services) | `{0:d}` if all callers pass a date |
+| `AppName` | "The Modules Registry" (App) / "The Module Registry" (Services) | **to decide** |
+| `From`, `To` | "From"/"To" (App labels) / "from"/"to" (Services, inside sentences) | two keys, decided by usage |
+| `PasswordPolicy` | "Password policy" (App, a heading) / "Minimum length {0} characters, …" (Services, the rule text) | `PasswordPolicy` + `PasswordPolicyRules` |
+| `Success` | "Success" (App) / "OK" (Services) | two keys, decided by usage |
+| `Users` | "Users" (App) / "All users" (Data, Services) | `Users` + `AllUsers` |
+
+**23 translation conflicts, same English text but different translations.** Some are plain mistakes from copying between languages: Norwegian "Samfunnsgruppe" in the German file, Danish "Fejl", "Oprett" and "Dage" in the Norwegian file, Norwegian "Dager" in the Danish file. Others depend on context: `Canceled` is "Avbokad" (a booking) or "Inställd" (a meeting), `Cargo` is "Gods" or "Last", and gender agreement differs (`Approved` "Godkänt"/"Godkänd", `Unknown` "Okänd"/"Okänt", `Straight` "Rakt"/"Raka"). These get a key per meaning where the usage differs, otherwise the correct translation.
+
+**The app's own localisation code compared with Tellurian.Localization 1.5.0** (`net10.0`, works on `net11.0`):
+
+| App today | Package | Gap |
+|---|---|---|
+| `ILanguageService.GetSupportedLanguages()` → `string[]` (also the public API `/api/languages/all/supported`) | `ILanguageService` → `IList<Language>` | Same name: replace it; the API keeps returning the two-letter codes of the fully supported languages. |
+| `LanguageExtensions.LanguageCultureMap`: 12 languages in three tiers (UI: en, de, da, sv, nb; cargo names also nl, pl, it, fr; flag only: cs, sk, hu) | `Language(TwoLetterCode, IsFullySupported, CultureCode, CapitalizesNouns)` | The cargo tier isn't modelled: keep it as a list in the app, or add a property to `Language`. |
+| `GetMarkdownAsync` + `ContentService`: `{name}.{lang}.md`, then `{name}.md` | `MarkdownResourceProvider`, same lookup | **The package takes `LastModified` from the file timestamp only.** The app reads the `<!-- LastModified: ... -->` line first, and removes it before rendering; the Terms of Use date depends on it. Extend the package first (1.6.0, via the local NuGet feed). |
+| `ContentService.GetLastModifiedTimeOfTextContent` (latest of all language versions) | – | Keep in the app, or add to the package. |
+| `ContentService.GetRemoteTextContent(href)` | `HttpMarkdownResourceProvider` | Check that it behaves the same in 2B.4. |
+| `LocalizedName()`: reflection on a property named like the upper-case language code | `ObjectResourceProvider`: property matching the two-letter code, case-insensitively | Compatible. |
+
+### 7.4 Decisions for step 2B.2
+- [x] **`hu` and `pl` stay partial**: they are there for printing waybills. Full support can come later. (Decided 2026-11-14.)
+- [ ] Resource project: proposal `SourceCode/Resources` (assembly `ModulesRegistry.Resources`), referenced by Data, Services and App, with **one** set `Strings.resx` + `Strings.<lang>.resx`. The generated class `ModulesRegistry.Resources.Strings` keeps most static uses (`Strings.X`) unchanged apart from the namespace; `IStringLocalizer<App>` becomes `IStringLocalizer<Strings>`.
+- [ ] Key prefixes: proposal **none**. The duplicates almost always mean the same thing, and the 11 conflicts are resolved one by one as above.
+- [ ] `AppName`: "The Modules Registry" or "The Module Registry"?
+- [ ] The app's `ILanguageService` is replaced, not kept beside the package's (2B.3).
+- [ ] Extend Tellurian.Localization with the `<!-- LastModified -->` line before 2B.4.
+- [ ] Tests: the translation tests read the merged files; a test checks that every key exists exactly once (follows from one file).
 
 ---
 
