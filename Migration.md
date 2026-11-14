@@ -47,9 +47,12 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 |---|---|---|---|
 | 2.1 ✅ | `net11.0` + 11.0.x packages + Swashbuckle/OpenAPI 3.x, nothing else. Check that Blazored.FluentValidation and Blazored.LocalStorage still work on .NET 11; if not, replace them earlier. | All tests green, OpenAPI document and Swagger UI work, smoke test, App Service runtime updated | 2.1, 2.4 |
 | 2.1B | Public API as minimal APIs in a separate class library `SourceCode/Api` (`MapPublicApi()`), still hosted by the app: route group `/api` with the API key as a group filter, `TypedResults` with `Data.Api` DTOs only (a DTO for `LayoutVehicle`). Remove `AddControllers`/`MapControllers` and the MVC JSON options. **Decide the JSON format first** (see 2.5). | Tests that compare each endpoint's JSON before and after; the OpenAPI document test; API key tests (401 without, 200 with) | 2.5 |
+| 2.1C | Public API: an empty result returns `200` with an empty list instead of `404 Not Found` (behaviour change for external consumers, release note bullet) | Endpoint tests for empty results; OpenAPI document no longer lists 404 for them | 2.5 |
 | 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
 
 Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on App Service (only a .NET 11 preview runtime there). Release 1.14.1 (2026-11-13) publishes self-contained for win-x86 and runs. See section 2.1.
+
+Step 2.1B implemented 2026-11-14 (not yet released): `SourceCode/Api` with `MapPublicApi()`, `ApiKeyFilter` (header `X-API-Key` or query `apiKey`, as before) and `PublicApiOk<T>`, a typed result that writes the former MVC JSON format and documents its type in OpenAPI. `Data.Api.LayoutVehicle` replaces the entity. Tests compare each endpoint's JSON with the former controller options. Differences consumers might notice, all for errors only: the `404` body for an empty result is now a plain problem details object (without `$id`, not indented), and an unknown `/api` path with a valid key gives `404` instead of the app's HTML page.
 
 
 ### Stage 2B: localisation in one place, with Tellurian.Localization
@@ -257,9 +260,9 @@ The public API (`/api/...`, API key) has four read-only GET endpoints in `App/Ap
 - A separate app is not worth it today (four endpoints, Free plan).
 
 **To decide before the step:**
-- [ ] **JSON format.** The controllers use `ReferenceHandler.Preserve` and `WriteIndented`, so lists are returned as `{"$id":"1","$values":[...]}`. Minimal APIs use other JSON options, so a straight switch changes the format. Either configure the same options for the `/api` group (no change for consumers), or switch to plain arrays (cleaner; then announce it, preferably as `/api/v2/...`).
-- [ ] **Who uses the API** today, to judge what a format change would break.
-- [ ] Whether an empty result should stay `404 Not Found` (today) or become `200` with an empty list (a behaviour change, so a separate step).
+- [x] **JSON format.** The controllers use `ReferenceHandler.Preserve` and `WriteIndented`, so lists are returned as `{"$id":"1","$values":[...]}`. Minimal APIs use other JSON options, so a straight switch changes the format. Either configure the same options for the `/api` group (no change for consumers), or switch to plain arrays (cleaner; then announce it, preferably as `/api/v2/...`). **Decided 2026-11-14: keep the current format** (same options on the `/api` group). Plain arrays only as a future `/api/v2`.
+- [x] **Who uses the API** today, to judge what a format change would break. **External users hold API keys**, so the format must stay or be versioned.
+- [x] Whether an empty result should stay `404 Not Found` (today) or become `200` with an empty list (a behaviour change, so a separate step). **Decided: `200` with an empty list, as step 2.1C** after 2.1B, with a release note bullet since external consumers see it. 2.1B keeps `404`.
 
 ## 3. Architecture: static SSR first, SignalR only where needed
 
@@ -330,7 +333,7 @@ Current size: 78 page components, 61 component files with `@onclick`, `@onchange
 Consequences:
 - About 7 custom attributes need both a C# and a JS implementation, and the two must behave identically (empty values, case, Unicode, including `IsText()`). Unit-test the C# side and put the JS validators in one file.
 - The validation messages in `Validators.*.resx` / `App.*.resx` are reused as resource keys. Their `{PropertyName}` placeholders become `{0}`.
-- The REST API (`Api/`) uses its own DTOs from `Data.Api` and isn't affected. Its DTOs can get DataAnnotations later if needed, which `[ApiController]` validates automatically.
+- The public API (`SourceCode/Api`) uses its own DTOs from `Data.Api` and isn't affected.
 
 **Tasks:**
 - [ ] Do a pilot with a simple form (`Region` or `Operator`): form model, mapping extensions, attributes, localisation, SSR form handling and tests. Check it in all five languages. Then adjust this document with what was learned.

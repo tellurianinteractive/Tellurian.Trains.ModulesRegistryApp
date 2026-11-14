@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using ModulesRegistry.Api;
 using ModulesRegistry;
 using ModulesRegistry.Data;
 using ModulesRegistry.Endpoints;
@@ -12,7 +13,6 @@ using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Shared;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,13 +54,6 @@ else
 }
 
 builder.Services.AddRazorPages();
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.AllowTrailingCommas = true;
-    options.JsonSerializerOptions.WriteIndented = true;
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.MaxDepth = 200;
-});
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
@@ -165,6 +158,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
+builder.Services.AddPublicApi();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -192,12 +186,11 @@ app.UseRequestLocalization(options =>
     options.FallBackToParentCultures = true;
     options.FallBackToParentUICultures = true;
 });
-app.UseApiUserAuthentication();
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapPublicApi();
 app.MapAppEndpoints();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

@@ -38,6 +38,36 @@ public sealed class OpenApiDocumentTests
     }
 
     [TestMethod]
+    [DataRow("/api/cargoes", "CargoType")]
+    [DataRow("/api/layouts/{layoutId}/vehicles", "LayoutVehicle")]
+    [DataRow("/api/meetings/{countryId}", "Meeting")]
+    public async Task EndpointDocumentsItsResponseType(string path, string schemaName)
+    {
+        using var client = _factory.CreateClient();
+
+        var json = await client.GetStringAsync("openapi/v1/openapi.json");
+        using var document = JsonDocument.Parse(json);
+
+        var ok = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty("get").GetProperty("responses").GetProperty("200");
+        var schema = ok.GetProperty("content").GetProperty("application/json").GetProperty("schema").GetRawText();
+        StringAssert.Contains(schema, $"#/components/schemas/{schemaName}");
+    }
+
+    [TestMethod]
+    public async Task LayoutVehicleSchemaIsTheApiContract()
+    {
+        using var client = _factory.CreateClient();
+
+        using var document = JsonDocument.Parse(await client.GetStringAsync("openapi/v1/openapi.json"));
+
+        var properties = document.RootElement.GetProperty("components").GetProperty("schemas").GetProperty("LayoutVehicle").GetProperty("properties")
+            .EnumerateObject().Select(p => p.Name).ToList();
+        CollectionAssert.AreEqual(
+            new[] { "id", "dccAddress", "layoutId", "operatorSignature", "vehicleClass", "vehicleNumber", "vehicleProviderName", "throttleIdentity", "isTractionUnit" },
+            properties);
+    }
+
+    [TestMethod]
     public async Task MeetingSchemaIsTheApiContractNotTheEntity()
     {
         using var client = _factory.CreateClient();

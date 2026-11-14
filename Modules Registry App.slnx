@@ -20,6 +20,7 @@
     <File Path="System Design Documents/Overview.md" />
     <File Path="System Design Documents/WiFredThrottles.md" />
   </Folder>
+  <Project Path="SourceCode/Api/Api.csproj" />
   <Project Path="SourceCode/App/App.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
