@@ -54,6 +54,8 @@ Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on A
 
 Step 2.1B implemented 2026-11-14 (not yet released): `SourceCode/Api` with `MapPublicApi()`, `ApiKeyFilter` (header `X-API-Key` or query `apiKey`, as before) and `PublicApiOk<T>`, a typed result that writes the former MVC JSON format and documents its type in OpenAPI. `Data.Api.LayoutVehicle` replaces the entity. Tests compare each endpoint's JSON with the former controller options. Differences consumers might notice, all for errors only: the `404` body for an empty result is now a plain problem details object (without `$id`, not indented), and an unknown `/api` path with a valid key gives `404` instead of the app's HTML page.
 
+Production baseline taken 2026-11-14 before deploying 2.1B (responses saved outside the repo, to compare after the deploy): cargoes, languages and meetings return `200` in the expected format. **`/api/layouts/{id}/vehicles` returns `500` for every layout:** the `LayoutVehicles` view was removed from `Database.sqlproj` in release 1.11.9 (commit `e3f25aa`), but the entity `Data.LayoutVehicle`, `LayoutService.GetLayoutVehicles` and the endpoint were kept. 2.1B doesn't change that (structure only). **To decide:** remove the endpoint (with a release note bullet, since external users may call it) or bring the data back from the current timetable tables.
+
 
 ### Stage 2B: localisation in one place, with Tellurian.Localization
 All translations in one resource assembly, and the app's own localisation code replaced by the NuGet package **Tellurian.Localization**. Structural change: the texts users see stay the same. See section 7.
