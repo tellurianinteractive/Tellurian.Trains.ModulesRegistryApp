@@ -54,6 +54,8 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 
 Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on App Service (only a .NET 11 preview runtime there). Release 1.14.1 (2026-11-13) publishes self-contained for win-x86 and runs. See section 2.1.
 
+Step 2B.1 (inventory, 2026-11-14) and 2B.2 (one resource project, release 1.14.8, 2026-11-14) done; 1.14.8 checked in production, the public API output is byte-identical.
+
 Step 2.2 deployed as release 1.14.7 (2026-11-14): checked locally against production (read-only) and in production, including Azure SignalR. **Stage 2 complete.**
 
 Step 2.2B deployed as release 1.14.5 (2026-11-14), public document links in 1.14.6; download checked in production. 1.14.6 also added the localised error and site unavailable pages: the deploy workflow uploads `app_offline.htm`, and the app released its files without stopping the site.
@@ -73,7 +75,7 @@ All translations in one resource assembly, and the app's own localisation code r
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 2B.1 ✅ | Inventory: all resource files and keys, duplicates and conflicts between them (same key, different texts), and the app's localisation code with its Tellurian.Localization counterpart. Decide the target project and the naming of keys. No production change. | Inventory and decisions documented in section 7 | 7 |
-| 2B.2 | Create the resource project and move all `.resx` files there, merged into one set per language. Resolve duplicates and conflicts. Point all `IStringLocalizer` users to it. | The translation tests (all texts translated, all used keys exist) run against the new location and pass; all languages checked in the browser | 7 |
+| 2B.2 ✅ | Create the resource project and move all `.resx` files there, merged into one set per language. Resolve duplicates and conflicts. Point all `IStringLocalizer` users to it. | The translation tests (all texts translated, all used keys exist) run against the new location and pass; all languages checked in the browser | 7 |
 | 2B.3 | Replace the app's language selection and culture handling (`ILanguageService`/`LanguageService`, `LanguageExtensions`) with Tellurian.Localization, a few call sites per release | Unit tests for language selection and fallback; language switch in the browser | 7 |
 | 2B.4 | Replace the Markdown content loading (`ContentService`, `CultureInfoExtensions.GetMarkdownAsync`, including the `<!-- LastModified -->` line) with the package's Markdown provider, or extend the package where it lacks something | Content pages in all languages; the Terms of Use guard test still gives 2026-01-09 10:25:31 UTC | 7, 6.2 |
 | 2B.5 | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | 7 |
