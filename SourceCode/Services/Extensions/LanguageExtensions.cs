@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ModulesRegistry.Resources;
 using ModulesRegistry.Services.Localization;
+using ObjectResourceProvider = Tellurian.Localization.Implementatioms.ObjectResourceProvider;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -81,36 +82,30 @@ public static class LanguageExtensions
     public static LocalizedText LocalizedName(this object me) => me.LocalizedName(CurrentCulture);
 
     /// <summary>
-    /// Finds a translated property for an object for the provided <paramref name="culture"/>. The object must have a property for that langauge.
+    /// The text in the property named after the <paramref name="culture"/>'s language (for example <c>SV</c>), or else the first
+    /// language in <see cref="AppLanguages.All"/> that has one, or <see cref="LocalizedText.Empty"/>. Read through
+    /// Tellurian.Localization's object provider (Migration step 2B.5); an empty text counts as a text.
     /// </summary>
-    /// <param name="me"></param>
-    /// <param name="culture"></param>
-    /// <returns></returns>
+    /// <param name="me">Usually a data entity with one property per language, such as a cargo or an NHM code.</param>
     public static LocalizedText LocalizedName(this object me, CultureInfo culture)
     {
-        var language = culture.TwoLetterISOLanguageName;
-        var value = language.GetPropertyValue(me);
-        if (value is not null) return new (language, value);
+        var text = ObjectTexts.GetTranslation(me, culture);
+        if (text.IsFound) return new(culture.TwoLetterISOLanguageName, text.Text);
         return me.LocalizedNames().FirstOrDefault() ?? LocalizedText.Empty;
     }
 
     /// <summary>
-    /// This method is used to extract values of object properties that have a name that match a two-letter ISO language name.
+    /// All texts of an object's language properties, in the order of <see cref="AppLanguages.All"/>.
     /// </summary>
-    /// <param name="me">Usually a data entity that contains a set of language properties.</param>
-    /// <returns></returns>
+    /// <param name="me">Usually a data entity with one property per language.</param>
     internal static IEnumerable<LocalizedText> LocalizedNames(this object me)
     {
-        foreach (var language in AllSupportedCultures)
+        foreach (var language in AppLanguages.All)
         {
-            var value = language.TwoLetterISOLanguageName.GetPropertyValue(me);
-            if (value is not null) yield return new LocalizedText(language.TwoLetterISOLanguageName, value);
+            var text = ObjectTexts.GetTranslation(me, language.CultureInfo);
+            if (text.IsFound) yield return new LocalizedText(language.TwoLetterCode, text.Text);
         }
     }
 
-    private static string? GetPropertyValue(this string propertyName, object me)
-    {
-        var property = me.GetType().GetProperty(propertyName.ToUpperInvariant());
-        return property is null ? null : (string?)property.GetValue(me);
-    }
+    private static readonly ObjectResourceProvider ObjectTexts = new();
 }
