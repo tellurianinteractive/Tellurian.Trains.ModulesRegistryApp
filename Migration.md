@@ -2,7 +2,7 @@
 
 Things to address when modernising dependencies and moving to .NET 11. Tick items off as they are done.
 
-Current state (2026-11-11): `net10.0`, Blazor Server with the legacy hosting model (`_Host.cshtml`, `MapBlazorHub()`, `MapFallbackToPage("/_Host")`). The SQL Server schema is maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
+Current state (2026-11-14): `net11.0` (release 1.14.1, published self-contained for win-x86), Blazor Server with the legacy hosting model (`_Host.cshtml`, `MapBlazorHub()`, `MapFallbackToPage("/_Host")`). The SQL Server schema is maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
 
 Sections 1–4 describe **what** needs to be done and why. **The roadmap below describes the order:** small steps, each verified, tested and deployed before the next one starts.
 
@@ -45,9 +45,11 @@ The database (DACPAC) is still published by hand. It moves into the pipeline in 
 ### Stage 2: .NET 11, with no behaviour change
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 2.1 | `net11.0` + 11.0.x packages + Swashbuckle/OpenAPI 3.x, nothing else. Check that Blazored.FluentValidation and Blazored.LocalStorage still work on .NET 11; if not, replace them earlier. | All tests green, OpenAPI document and Swagger UI work, smoke test, App Service runtime updated | 2.1, 2.4 |
+| 2.1 ✅ | `net11.0` + 11.0.x packages + Swashbuckle/OpenAPI 3.x, nothing else. Check that Blazored.FluentValidation and Blazored.LocalStorage still work on .NET 11; if not, replace them earlier. | All tests green, OpenAPI document and Swagger UI work, smoke test, App Service runtime updated | 2.1, 2.4 |
 | 2.1B | Public API as minimal APIs in a separate class library `SourceCode/Api` (`MapPublicApi()`), still hosted by the app: route group `/api` with the API key as a group filter, `TypedResults` with `Data.Api` DTOs only (a DTO for `LayoutVehicle`). Remove `AddControllers`/`MapControllers` and the MVC JSON options. **Decide the JSON format first** (see 2.5). | Tests that compare each endpoint's JSON before and after; the OpenAPI document test; API key tests (401 without, 200 with) | 2.5 |
 | 2.2 | Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with **global** `InteractiveServer`, so behaviour is unchanged | Login/logout, authorisation on protected pages, Azure SignalR in production, all languages | 2.2 |
+
+Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on App Service (only a .NET 11 preview runtime there). Release 1.14.1 (2026-11-13) publishes self-contained for win-x86 and runs. See section 2.1.
 
 
 ### Stage 2B: localisation in one place, with Tellurian.Localization
@@ -78,6 +80,8 @@ All translations in one resource assembly, and the app's own localisation code r
 | 4.1 | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | 4.3 B |
 | 4.2 | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | 4.3 B |
 | 4.3 | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | 4.3 B |
+
+Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` fluent mapping moved from `_ModulesDbContext.cs` to `MapRegion()` in `Data/Region.cs`, the template for the other entities. It now has the index and constraint names, and `RepresentativeExternalStation` is mapped `WithMany()` since the database has no unique index on that column. The Region form model and its mapping extensions moved to `App/Forms/Regions/`; no page uses them yet.
 
 ### Stage 5: database logic to code (still SQL Server + DACPAC)
 | # | Step | Verification | Ref |
