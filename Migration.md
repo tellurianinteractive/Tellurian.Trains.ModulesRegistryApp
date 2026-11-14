@@ -72,7 +72,7 @@ All translations in one resource assembly, and the app's own localisation code r
 
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 2B.1 | Inventory: all resource files and keys, duplicates and conflicts between them (same key, different texts), and the app's localisation code with its Tellurian.Localization counterpart. Decide the target project and the naming of keys. No production change. | Inventory and decisions documented in section 7 | 7 |
+| 2B.1 ✅ | Inventory: all resource files and keys, duplicates and conflicts between them (same key, different texts), and the app's localisation code with its Tellurian.Localization counterpart. Decide the target project and the naming of keys. No production change. | Inventory and decisions documented in section 7 | 7 |
 | 2B.2 | Create the resource project and move all `.resx` files there, merged into one set per language. Resolve duplicates and conflicts. Point all `IStringLocalizer` users to it. | The translation tests (all texts translated, all used keys exist) run against the new location and pass; all languages checked in the browser | 7 |
 | 2B.3 | Replace the app's language selection and culture handling (`ILanguageService`/`LanguageService`, `LanguageExtensions`) with Tellurian.Localization, a few call sites per release | Unit tests for language selection and fallback; language switch in the browser | 7 |
 | 2B.4 | Replace the Markdown content loading (`ContentService`, `CultureInfoExtensions.GetMarkdownAsync`, including the `<!-- LastModified -->` line) with the package's Markdown provider, or extend the package where it lacks something | Content pages in all languages; the Terms of Use guard test still gives 2026-01-09 10:25:31 UTC | 7, 6.2 |
@@ -685,7 +685,7 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 | `MustBeValidDccAdresses` | "must be valid DCC addresses" (App) / "must be a valid DCC-adresses" (Validators) | App text |
 | `NothingToDelete`, `RegistrationClosed` | only a full stop differs | one text, without full stop |
 | `TicketIsValidTo` | `{0}` (Data) / `{0:d}` (Services) | `{0:d}` if all callers pass a date |
-| `AppName` | "The Modules Registry" (App) / "The Module Registry" (Services) | **to decide** |
+| `AppName` | "The Modules Registry" (App) / "The Module Registry" (Services) | "The Module Registry" (decided) |
 | `From`, `To` | "From"/"To" (App labels) / "from"/"to" (Services, inside sentences) | two keys, decided by usage |
 | `PasswordPolicy` | "Password policy" (App, a heading) / "Minimum length {0} characters, …" (Services, the rule text) | `PasswordPolicy` + `PasswordPolicyRules` |
 | `Success` | "Success" (App) / "OK" (Services) | two keys, decided by usage |
@@ -706,9 +706,9 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 
 ### 7.4 Decisions for step 2B.2
 - [x] **`hu` and `pl` stay partial**: they are there for printing waybills. Full support can come later. (Decided 2026-11-14.)
-- [ ] Resource project: proposal `SourceCode/Resources` (assembly `ModulesRegistry.Resources`), referenced by Data, Services and App, with **one** set `Strings.resx` + `Strings.<lang>.resx`. The generated class `ModulesRegistry.Resources.Strings` keeps most static uses (`Strings.X`) unchanged apart from the namespace; `IStringLocalizer<App>` becomes `IStringLocalizer<Strings>`.
-- [ ] Key prefixes: proposal **none**. The duplicates almost always mean the same thing, and the 11 conflicts are resolved one by one as above.
-- [ ] `AppName`: "The Modules Registry" or "The Module Registry"?
+- [x] Resource project (decided 2026-11-14): `SourceCode/Resources` (assembly `ModulesRegistry.Resources`), referenced by Data, Services and App, with **one** set `Strings.resx` + `Strings.<lang>.resx`. The generated class `ModulesRegistry.Resources.Strings` keeps most static uses (`Strings.X`) unchanged apart from the namespace; `IStringLocalizer<App>` becomes `IStringLocalizer<Strings>`.
+- [x] Key prefixes (decided): **none**. The duplicates almost always mean the same thing, and the 11 conflicts are resolved one by one as above.
+- [x] `AppName` (decided): **"The Module Registry"** (also the browser tab title from now on).
 - [ ] The app's `ILanguageService` is replaced, not kept beside the package's (2B.3).
 - [ ] Extend Tellurian.Localization with the `<!-- LastModified -->` line before 2B.4.
 - [ ] Tests: the translation tests read the merged files; a test checks that every key exists exactly once (follows from one file).
