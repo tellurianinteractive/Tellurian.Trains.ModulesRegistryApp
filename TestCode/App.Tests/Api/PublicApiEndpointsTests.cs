@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,7 @@ public sealed class PublicApiEndpointsTests
 
     /// <summary>
     /// The JSON options the MVC controllers were configured with (in Program.cs, before step 2.1B), on top of the MVC defaults.
+    /// The encoder isn't in Program.cs: MVC's output formatter used the relaxed one when none was configured (found by comparing with production).
     /// Written out here on purpose, so a change in <see cref="PublicApiJson"/> is caught.
     /// </summary>
     private static readonly JsonSerializerOptions FormerControllerOptions = new(JsonSerializerDefaults.Web)
@@ -30,6 +32,7 @@ public sealed class PublicApiEndpointsTests
         WriteIndented = true,
         ReferenceHandler = ReferenceHandler.Preserve,
         MaxDepth = 200,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 
     private WebApplication _app = null!;
@@ -135,6 +138,7 @@ public sealed class PublicApiEndpointsTests
 
         Assert.AreEqual(FormerControllerJson(_source.Meetings), json);
         StringAssert.Contains(json, "\"layouts\"");
+        StringAssert.Contains(json, "\"location\": \"Borås\"", "Non-ASCII letters must not be escaped, as in the former format.");
     }
 
     [TestMethod]

@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +11,8 @@ namespace ModulesRegistry.Api;
 /// <summary>
 /// The JSON format of the public API. It is the format the MVC controllers had, kept so external consumers see no change:
 /// web defaults (camelCase), indented, and <see cref="ReferenceHandler.Preserve"/>, so a list is written as
-/// <c>{"$id":"1","$values":[...]}</c>. A format with plain arrays would come as a new API version (<c>/api/v2</c>).
+/// <c>{"$id":"1","$values":[...]}</c>. Non-ASCII letters are written as they are (<c>"Borås"</c>, not escaped as a Unicode sequence):
+/// MVC's output formatter used <see cref="JavaScriptEncoder.UnsafeRelaxedJsonEscaping"/> when no encoder was configured. A format with plain arrays would come as a new API version (<c>/api/v2</c>).
 /// </summary>
 /// <remarks>
 /// Only the <c>/api</c> endpoints use these options. The app's own <c>/app</c> endpoints keep the default minimal API format.
@@ -23,6 +25,7 @@ public static class PublicApiJson
         WriteIndented = true,
         ReferenceHandler = ReferenceHandler.Preserve,
         MaxDepth = 200,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 }
 
