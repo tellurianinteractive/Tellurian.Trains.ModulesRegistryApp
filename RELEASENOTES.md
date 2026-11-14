@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.8
+Released 2026-11-14
+- **Fix**: some Danish, Norwegian and German texts that were in the wrong language are corrected.
+- The site's name is *The Module Registry* everywhere, also in the browser tab.
 ## Release 1.14.7
 Released 2026-11-14
 - **Fix**: the icons on the *nothing to display* and *not authorised* messages show correctly.
