@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="11.0.0" />
-    <PackageReference Include="Tellurian.Localization" Version="1.6.0" />
+    <PackageReference Include="Tellurian.Localization" Version="1.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data.Api\Data.Api.csproj" />

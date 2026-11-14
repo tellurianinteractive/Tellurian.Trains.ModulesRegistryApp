@@ -85,6 +85,48 @@ public class ContentServiceTests
         Assert.DoesNotContain("LastModified", actual.AsHtml);
     }
 
+    [TestMethod]
+    public async Task UsesTheLanguageVersion()
+    {
+        CreateFile("About.md", DateTime.UtcNow, "# About");
+        CreateFile("About.sv.md", DateTime.UtcNow, "# Om");
+        var target = CreateTarget();
+
+        Assert.AreEqual("# Om", (await target.GetTextContent("About", "sv")).Text);
+        Assert.AreEqual("# About", (await target.GetTextContent("About", "de")).Text);
+    }
+
+    [TestMethod]
+    public async Task HyphensInTheNameAreFolders()
+    {
+        Directory.CreateDirectory(Path.Combine(TempDirectory.FullName, "Help"));
+        CreateFile(Path.Combine("Help", "Modules.md"), DateTime.UtcNow, "# Help");
+        var target = CreateTarget();
+
+        Assert.AreEqual("# Help", (await target.GetTextContent("Help-Modules", "en")).Text);
+    }
+
+    [TestMethod]
+    public async Task MissingContentIsAnEmptyText()
+    {
+        var target = CreateTarget();
+
+        var actual = await target.GetTextContent("Missing", "sv");
+
+        Assert.AreEqual(string.Empty, actual.Text, "Not the key: ContentView shows 'No information' for an empty text.");
+    }
+
+    [TestMethod]
+    [DataRow("not a language")]
+    [DataRow("x")]
+    public async Task InvalidLanguageCodeGivesTheEnglishText(string language)
+    {
+        CreateFile("About.md", DateTime.UtcNow, "# About");
+        var target = CreateTarget();
+
+        Assert.AreEqual("# About", (await target.GetTextContent("About", language)).Text);
+    }
+
     /// <summary>
     /// Guards the date that decides whether users must accept the Terms of Use again.
     /// Change it only together with a real change of the terms.
