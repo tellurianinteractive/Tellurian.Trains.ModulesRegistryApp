@@ -105,3 +105,9 @@ Markdown files referenced from razor components generally need `<CopyToOutputDir
 ## Running the UI
 
 Starting the app requires the SQL Server database (local copy or dev access to production). UI changes should be verified in a browser — type checking and unit tests do not catch Blazor rendering regressions.
+
+## Local NuGet Development
+
+This repo consumes `Tellurian.Localization`, which may come from the local feed `C:\NuGets` during development. When iterating on that library locally (repo `Tellurian/Tellurian.Localization`), bump this repo's `<PackageReference Version="..." />` (in `Resources.csproj` and `Services.csproj`) to the library's local patch version. CI will reject any local-only version with NU1101: the library must be published to nuget.org before the app can ship with its changes.
+
+Full workflow: user-level `local-nuget-development` skill.

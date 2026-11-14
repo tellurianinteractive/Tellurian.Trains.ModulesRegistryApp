@@ -22,7 +22,7 @@ public static class AppTexts
     public static string? Find(string key, CultureInfo? culture = null)
     {
         var text = Provider.GetTranslation(key, culture);
-        return text.IsEmpty ? null : text.Text;
+        return text.IsFound ? text.Text : null;
     }
 
     /// <summary>
