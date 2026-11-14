@@ -143,10 +143,21 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      # Self-contained publishing puts the runtime and the IIS handler (aspnetcorev2_inprocess.dll) in wwwroot, and the
+      # worker process keeps them locked even with app_offline.htm, so KuduSync can't replace them (1.14.2 failed so).
+      # Kudu runs in its own sandbox and keeps deploying while the site is stopped.
+      - name: Stop the site
+        run: az webapp stop --resource-group Tellurian.Trains --name ModuleRegistry
+
       - uses: azure/webapps-deploy@v3
         with:
           app-name: ModuleRegistry
           package: publish
+
+      # Always, so a failed deploy doesn't leave the site stopped.
+      - name: Start the site
+        if: always()
+        run: az webapp start --resource-group Tellurian.Trains --name ModuleRegistry
 
       # Kudu can report "Deployment successful" without copying any files (it happened when its deployment
       # script crashed), so compare the deployed main assembly with the one in the build output.
