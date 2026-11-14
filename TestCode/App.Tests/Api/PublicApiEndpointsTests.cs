@@ -219,8 +219,10 @@ public sealed class PublicApiEndpointsTests
         public Task<IEnumerable<CargoType>> CargoTypesAsync()
         {
             WasCalled = true;
-            // The services return a List<T>, also when it's empty; the JSON format depends on that type.
-            return Task.FromResult<IEnumerable<CargoType>>(ReturnEmpty ? new List<CargoType>() : CargoTypes);
+            // The services return a List<T>, also when it's empty, and the JSON format depends on the runtime type.
+            // So the target of [] is List<T>: aimed at IEnumerable<T> the compiler may create an array instead.
+            List<CargoType> result = ReturnEmpty ? [] : CargoTypes;
+            return Task.FromResult<IEnumerable<CargoType>>(result);
         }
 
         public IEnumerable<string> SupportedLanguages()
@@ -233,7 +235,8 @@ public sealed class PublicApiEndpointsTests
         {
             WasCalled = true;
             LastMeetingsQuery = (countryId, countries);
-            return Task.FromResult<IEnumerable<Meeting>>(ReturnEmpty ? new List<Meeting>() : Meetings);
+            List<Meeting> result = ReturnEmpty ? [] : Meetings;
+            return Task.FromResult<IEnumerable<Meeting>>(result);
         }
     }
 }
