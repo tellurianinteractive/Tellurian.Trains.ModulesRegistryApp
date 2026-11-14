@@ -1,6 +1,6 @@
 using ModulesRegistry.Data.Api;
-using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
+using Tellurian.Localization;
 
 namespace ModulesRegistry.Api;
 
@@ -18,7 +18,9 @@ internal sealed class PublicApiSource(CargoService cargoService, ILanguageServic
 {
     public Task<IEnumerable<CargoType>> CargoTypesAsync() => cargoService.CargoTypesAsync();
 
-    public IEnumerable<string> SupportedLanguages() => languageService.GetSupportedLanguages();
+    // The two-letter codes of the user interface languages, as a string[] (the JSON format depends on the runtime type).
+    public IEnumerable<string> SupportedLanguages() =>
+        languageService.GetSupportedLanguages().Where(l => l.IsFullySupported).Select(l => l.TwoLetterCode).ToArray();
 
     public Task<IEnumerable<Meeting>> MeetingsAsync(int? countryId, string? countries) => meetingService.GetMeetingsAsync(countryId, countries);
 }

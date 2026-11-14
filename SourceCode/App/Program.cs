@@ -12,6 +12,8 @@ using ModulesRegistry.Notifications;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
+using ModulesRegistry.Services.Localization;
+using Tellurian.Localization.DependencyInjection;
 using ModulesRegistry.Shared;
 using ModulesRegistry.StatusPages;
 
@@ -123,7 +125,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
-builder.Services.AddScoped<ILanguageService, LanguageService>();
+builder.Services.AddLanguageService(AppLanguages.All);
 builder.Services.AddScoped<ITimeProvider, SystemTimeProvider>();
 
 builder.Services.AddScoped<PageHistory>();

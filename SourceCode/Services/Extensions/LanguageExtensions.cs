@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ModulesRegistry.Resources;
+using ModulesRegistry.Services.Localization;
 using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -9,7 +10,7 @@ public static class LanguageExtensions
     public const string DefaultLanguage = "en";
     public static string CurrentLanguage => CurrentCulture.TwoLetterISOLanguageName;
     public static CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
-    public static CultureInfo DefaultCulture => LanguageCultureMap[Language.English];
+    public static CultureInfo DefaultCulture => AppLanguages.Default.CultureInfo;
 
     private static readonly ResourceManager ResourceManager = Strings.ResourceManager;
 
@@ -35,34 +36,13 @@ public static class LanguageExtensions
     /// <summary>
     /// Returns a list of <see cref="CultureInfo"/> that are fully supported in user interface.
     /// </summary>
-    public static IList<CultureInfo> FullySupportedCultures => LanguageCultureMap.Values.Take(5).ToArray();
-    public static IList<CultureInfo> CargoNameSupportedCultures => LanguageCultureMap.Values.Take(9).ToArray();
+    public static IList<CultureInfo> FullySupportedCultures => [.. AppLanguages.FullySupported.Select(l => l.CultureInfo)];
+    public static IList<CultureInfo> CargoNameSupportedCultures => [.. AppLanguages.WithCargoNames.Select(l => l.CultureInfo)];
     public static string[] FullySupportedLanguages => FullySupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
     public static string[] CargoSupportedLanguages => CargoNameSupportedCultures.Select(c => c.TwoLetterISOLanguageName).ToArray();
 
-    public static IEnumerable<CultureInfo> AllSupportedCultures => LanguageCultureMap.Values;
+    public static IEnumerable<CultureInfo> AllSupportedCultures => AppLanguages.All.Select(l => l.CultureInfo);
 
-    /// <summary>
-    /// This list contains all languages that are fully or partial supported
-    /// </summary>
-    private static IDictionary<Language, CultureInfo> LanguageCultureMap =>
-         new Dictionary<Language, CultureInfo>() {
-                 // User interface is supported
-                 { Language.English, new CultureInfo("en-GB") },
-                 { Language.German, new CultureInfo("de-DE") },
-                 { Language.Danish, new CultureInfo("da-DK") },
-                 { Language.Swedish, new CultureInfo("sv-SE") },
-                 { Language.Norwegian, new CultureInfo("nb-NO") },
-                 // Cargo names are supported
-                 { Language.Dutch, new CultureInfo("nl-NL") },
-                 { Language.Polish, new CultureInfo("pl-PL") },
-                 { Language.Italian, new CultureInfo("it-IT") },
-                 { Language.French, new CultureInfo("fr-FR") },
-                 // Only country and flag supported
-                 { Language.Czech, new CultureInfo("cs-CZ") },
-                 { Language.Slovak, new CultureInfo("sk-SK") },
-                 { Language.Hungarian, new CultureInfo("hu-HU") },
-        };
 
 
     public static string CountrySuffix(this CultureInfo culture) => culture.TwoLetterISOLanguageName switch
@@ -135,21 +115,4 @@ public static class LanguageExtensions
         var property = me.GetType().GetProperty(propertyName.ToUpperInvariant());
         return property is null ? null : (string?)property.GetValue(me);
     }
-}
-
-public enum Language
-{
-    Default,
-    English,
-    Swedish,
-    Danish,
-    Norwegian,
-    German,
-    Polish,
-    Dutch,
-    Italian,
-    French,
-    Hungarian,
-    Czech,
-    Slovak,
 }
