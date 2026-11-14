@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ModulesRegistry.Resources;
+using Microsoft.AspNetCore.Components;
 
 namespace ModulesRegistry.Services.Extensions;
 
@@ -8,7 +9,7 @@ public static class MeetingStatusExtensions
     {
         if (meeting is null) return string.Empty;
         var resourceKey = meeting.StatusResourceName(at);
-        return Resources.Strings.ResourceManager.GetString(resourceKey) ?? resourceKey;
+        return AppTexts.Find(resourceKey) ?? resourceKey;
     }
 
     internal static string StatusResourceName(this Meeting? meeting, DateTime at) =>

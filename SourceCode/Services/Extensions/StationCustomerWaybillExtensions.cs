@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using ModulesRegistry.Resources;
+using Microsoft.Extensions.Localization;
 using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.Services.Extensions;
@@ -28,7 +29,7 @@ public static class StationCustomerWaybillExtensions
 
     public static string OperationDayShortName(this StationCustomerWaybill? waybill) =>
         waybill is null || waybill.OperatingDay is null ? string.Empty :
-        Resources.Strings.ResourceManager.GetString(waybill.OperatingDay.ShortName) ?? waybill.OperatingDay.ShortName;
+        AppTexts.Find(waybill.OperatingDay.ShortName) ?? waybill.OperatingDay.ShortName;
 
     public static bool IsGenerated(this StationCustomerWaybill waybill) =>
         !waybill.IsManuallyCreated || waybill.OtherStationCustomerCargoId.HasValue;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Resources;
 using System.Text;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -31,7 +30,6 @@ public class EmptyWagonOrderService(IDbContextFactory<ModulesDbContext> factory,
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         emptyWagonOrders.Add(reader.Map());

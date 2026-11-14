@@ -1,4 +1,5 @@
-﻿namespace ModulesRegistry.Services.Models;
+﻿using ModulesRegistry.Resources;
+namespace ModulesRegistry.Services.Models;
 
 public class LanguageLabel
 {
@@ -18,11 +19,10 @@ public static class LanguageLabelsExtensions
     public static LanguageLabels CreateLabels(this string languageCode, IEnumerable<string> resourceKeys)
     {
         var culture = new CultureInfo(languageCode);
-        var resourceManager = Resources.Strings.ResourceManager;
         return new LanguageLabels
         {
             LanguageCode = languageCode,
-            Labels = resourceKeys.Select(k => new LanguageLabel { ResourceKey = k, Text = resourceManager.GetString(k, culture) ?? k }).ToArray()
+            Labels = resourceKeys.Select(k => new LanguageLabel { ResourceKey = k, Text = AppTexts.Find(k, culture) ?? k }).ToArray()
         };
     }
     public static string GetLabelText(this IEnumerable<LanguageLabels> me, string resourceKey, string languageCode) =>

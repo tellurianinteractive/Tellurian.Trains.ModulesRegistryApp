@@ -58,8 +58,8 @@ public static class OperationDaysExtensions
         var isDaily = flags == 0x7F;
         var fullName = new StringBuilder(20);
         var shortName = new StringBuilder(10);
-        var to = Strings.ResourceManager.GetString("In", culture) ?? "to";
-        var and = Strings.ResourceManager.GetString("And", culture) ?? "and";
+        var to = AppTexts.Find("In", culture) ?? "to";
+        var and = AppTexts.Find("And", culture) ?? "and";
         if (days.Length == 1)
         {
             fullName.Append(days[0].GetLocalizedFullName(culture));
@@ -137,18 +137,14 @@ internal class Day(byte number, byte flag, string resourceKey)
     private string ShortNameResourceKey { get; } = resourceKey + "Short";
     public string GetLocalizedShortName(CultureInfo? specificCulture = null)
     {
-        var resourceManager = Strings.ResourceManager;
         var culture = specificCulture ?? CultureInfo.CurrentCulture;
-        if (resourceManager == null) return string.Empty;
-        return resourceManager.GetString(ShortNameResourceKey, culture) ?? string.Empty;
+        return AppTexts.Find(ShortNameResourceKey, culture) ?? string.Empty;
     }
 
     public string GetLocalizedFullName(CultureInfo? specificCulture = null)
     {
-        var resourceManager = Strings.ResourceManager;
         var culture = specificCulture ?? CultureInfo.CurrentCulture;
-        if (resourceManager == null) return string.Empty;
-        return resourceManager.GetString(FullNameResourceKey, culture) ?? string.Empty;
+        return AppTexts.Find(FullNameResourceKey, culture) ?? string.Empty;
     }
 
     public override string ToString() => FullNameResourceKey;

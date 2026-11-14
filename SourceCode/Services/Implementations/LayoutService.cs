@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -155,7 +154,6 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         result.Add(reader.MapAvailableModule());
@@ -197,7 +195,6 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         result.Add(reader.MapRegisteredModule());

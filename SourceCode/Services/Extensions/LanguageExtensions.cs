@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ModulesRegistry.Resources;
 using ModulesRegistry.Services.Localization;
-using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -12,7 +11,6 @@ public static class LanguageExtensions
     public static CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
     public static CultureInfo DefaultCulture => AppLanguages.Default.CultureInfo;
 
-    private static readonly ResourceManager ResourceManager = Strings.ResourceManager;
 
     public static string GetLocalizedString(this string? resourceName, string? language = null)
     {
@@ -29,7 +27,7 @@ public static class LanguageExtensions
                 return $"Language '{language}' is invalid!";
             }
         }
-        var result = Strings.ResourceManager.GetString(resourceName, culture);
+        var result = AppTexts.Find(resourceName, culture);
         return result is null ? resourceName : result;
     }
     
@@ -71,7 +69,7 @@ public static class LanguageExtensions
     public static string AsLocalized(this string? resourceKey)
     {
         if (string.IsNullOrWhiteSpace(resourceKey)) return string.Empty;
-        var translated = ResourceManager.GetString(resourceKey);
+        var translated = AppTexts.Find(resourceKey);
         return string.IsNullOrEmpty(translated) ? resourceKey : translated;
     }
 

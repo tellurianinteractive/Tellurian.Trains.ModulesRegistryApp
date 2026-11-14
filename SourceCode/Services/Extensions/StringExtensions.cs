@@ -1,4 +1,5 @@
-﻿using Markdig;
+﻿using ModulesRegistry.Resources;
+using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
@@ -12,7 +13,7 @@ public static partial class StringExtensions
 {
     internal static string Localized(this string? text) =>
         string.IsNullOrWhiteSpace(text) ? string.Empty :
-        Resources.Strings.ResourceManager.GetString(text) ?? text;
+        AppTexts.Find(text) ?? text;
 
     public static string? Max(this string? me, int max) =>
         me is null ? null : me.Length < max ? me : me[0..max];

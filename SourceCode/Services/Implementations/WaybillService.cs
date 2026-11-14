@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Models;
 using System.Data;
-using System.Resources;
 
 namespace ModulesRegistry.Services.Implementations;
 
@@ -62,7 +61,6 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         var stationId = reader.GetInt("DestinationStationId");
@@ -105,7 +103,6 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId));
@@ -147,7 +144,6 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
                     while (await reader.ReadAsync())
                     {
                         waybills.Add(reader.MapWaybill(stationId));
@@ -216,7 +212,6 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 {
                     connection.Open();
                     var reader = await command.ExecuteReaderAsync();
-                    var resourceManager = new ResourceManager(typeof(Resources.Strings));
 
                     while (await reader.ReadAsync())
                     {

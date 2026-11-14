@@ -1,4 +1,5 @@
-﻿using ModulesRegistry.Services.Implementations;
+﻿using ModulesRegistry.Resources;
+using ModulesRegistry.Services.Implementations;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -234,9 +235,8 @@ public static class CargoCustomerExtensions
 
     public static string DualLanguageText(this string languageTwoLetterISOCode, string resourceKey, string? otherEnglishText = null)
     {
-        var resourceManager = Resources.Strings.ResourceManager;
         var culture = new CultureInfo(languageTwoLetterISOCode);
-        var localizedText = resourceManager.GetString(resourceKey, culture);
+        var localizedText = AppTexts.Find(resourceKey, culture);
         var englishText = otherEnglishText ?? resourceKey;
         if (localizedText.HasValue() && englishText != localizedText) return $"{englishText}/{localizedText}";
         return englishText;
@@ -244,9 +244,8 @@ public static class CargoCustomerExtensions
 
     public static string TranslatedText(this string languageTwoLetterISOCode, string resourceKey)
     {
-        var resourceManager = Resources.Strings.ResourceManager;
         var culture = new CultureInfo(languageTwoLetterISOCode);
-        var localizedText = resourceManager.GetString(resourceKey, culture);
+        var localizedText = AppTexts.Find(resourceKey, culture);
         return localizedText ?? resourceKey;
     }
 
