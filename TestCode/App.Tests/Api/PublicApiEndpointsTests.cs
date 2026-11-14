@@ -158,13 +158,19 @@ public sealed class PublicApiEndpointsTests
     [TestMethod]
     [DataRow("/api/cargoes")]
     [DataRow("/api/meetings")]
-    public async Task EmptyResultIsNotFound(string url)
+    public async Task EmptyResultIsAnEmptyList(string url)
     {
         _source.ReturnEmpty = true;
 
-        var response = await GetAsync(url);
+        var json = await GetJsonAsync(url);
 
-        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        var expected = """
+            {
+              "$id": "1",
+              "$values": []
+            }
+            """;
+        Assert.AreEqual(expected.ReplaceLineEndings("\n"), json.ReplaceLineEndings("\n"));
     }
 
     private static string FormerControllerJson<T>(T value) where T : notnull =>
@@ -213,7 +219,8 @@ public sealed class PublicApiEndpointsTests
         public Task<IEnumerable<CargoType>> CargoTypesAsync()
         {
             WasCalled = true;
-            return Task.FromResult<IEnumerable<CargoType>>(ReturnEmpty ? [] : CargoTypes);
+            // The services return a List<T>, also when it's empty; the JSON format depends on that type.
+            return Task.FromResult<IEnumerable<CargoType>>(ReturnEmpty ? new List<CargoType>() : CargoTypes);
         }
 
         public IEnumerable<string> SupportedLanguages()
@@ -226,7 +233,7 @@ public sealed class PublicApiEndpointsTests
         {
             WasCalled = true;
             LastMeetingsQuery = (countryId, countries);
-            return Task.FromResult<IEnumerable<Meeting>>(ReturnEmpty ? [] : Meetings);
+            return Task.FromResult<IEnumerable<Meeting>>(ReturnEmpty ? new List<Meeting>() : Meetings);
         }
     }
 }

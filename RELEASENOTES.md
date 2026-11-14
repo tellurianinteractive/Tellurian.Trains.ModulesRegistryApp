@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.3
+Released 2026-11-14
+- **API**: an empty result returns an empty list instead of *404 Not Found*.
 ## Release 1.14.2
 Released 2026-11-14
 - Maintenance update.

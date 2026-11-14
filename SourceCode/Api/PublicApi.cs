@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using ModulesRegistry.Data.Api;
@@ -48,16 +47,14 @@ public static class PublicApi
         }
     }
 
-    private static async Task<Results<PublicApiOk<IEnumerable<CargoType>>, ProblemHttpResult>> GetCargoTypesAsync(IPublicApiSource source) =>
-        OkOrNotFound(await source.CargoTypesAsync());
+    // An empty result is 200 with an empty list (before release 1.14.3 it was 404 Not Found).
+
+    private static async Task<PublicApiOk<IEnumerable<CargoType>>> GetCargoTypesAsync(IPublicApiSource source) =>
+        PublicApiResults.Ok(await source.CargoTypesAsync());
 
     private static PublicApiOk<IEnumerable<string>> GetSupportedLanguages(IPublicApiSource source) =>
         PublicApiResults.Ok(source.SupportedLanguages());
 
-    private static async Task<Results<PublicApiOk<IEnumerable<Meeting>>, ProblemHttpResult>> GetMeetingsAsync(int? countryId, string? countries, IPublicApiSource source) =>
-        OkOrNotFound(await source.MeetingsAsync(countryId > 0 ? countryId : null, countries));
-
-    // An empty result is 404 Not Found, as before (Migration.md step 2.1C changes it to 200 with an empty list).
-    private static Results<PublicApiOk<IEnumerable<T>>, ProblemHttpResult> OkOrNotFound<T>(IEnumerable<T> items) =>
-        items.Any() ? PublicApiResults.Ok(items) : TypedResults.Problem(statusCode: StatusCodes.Status404NotFound);
+    private static async Task<PublicApiOk<IEnumerable<Meeting>>> GetMeetingsAsync(int? countryId, string? countries, IPublicApiSource source) =>
+        PublicApiResults.Ok(await source.MeetingsAsync(countryId > 0 ? countryId : null, countries));
 }

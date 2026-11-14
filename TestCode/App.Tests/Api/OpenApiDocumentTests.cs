@@ -47,9 +47,10 @@ public sealed class OpenApiDocumentTests
         var json = await client.GetStringAsync("openapi/v1/openapi.json");
         using var document = JsonDocument.Parse(json);
 
-        var ok = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty("get").GetProperty("responses").GetProperty("200");
-        var schema = ok.GetProperty("content").GetProperty("application/json").GetProperty("schema").GetRawText();
+        var responses = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty("get").GetProperty("responses");
+        var schema = responses.GetProperty("200").GetProperty("content").GetProperty("application/json").GetProperty("schema").GetRawText();
         StringAssert.Contains(schema, $"#/components/schemas/{schemaName}");
+        Assert.IsFalse(responses.TryGetProperty("404", out _), "An empty result is 200 with an empty list, not 404.");
     }
 
     [TestMethod]
