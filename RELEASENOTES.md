@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.17
+Released 2026-11-15
+- Sign-ins, sign-outs, lockouts and password reset requests are now logged for security monitoring, with user ids only.
 ## Release 1.14.16
 Released 2026-11-15
 - Maintenance update.
