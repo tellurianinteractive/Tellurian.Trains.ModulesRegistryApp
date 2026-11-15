@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.22
+Released 2026-11-15
+- Only users who may edit a module or station can now upload or delete its documents.
+- A station's operating instructions are now linked to the right station when uploaded.
 ## Release 1.14.21
 Released 2026-11-15
 - Saving a module or station right after deleting one of its documents no longer fails.
