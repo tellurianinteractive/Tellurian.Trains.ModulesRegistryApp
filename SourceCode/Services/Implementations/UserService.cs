@@ -1,8 +1,12 @@
-﻿namespace ModulesRegistry.Services.Implementations;
+﻿using Microsoft.Extensions.Logging;
+using ModulesRegistry.Services.Diagnostics;
 
-public sealed class UserService(IDbContextFactory<ModulesDbContext> factory)
+namespace ModulesRegistry.Services.Implementations;
+
+public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILogger<UserService> logger)
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly ILogger Logger = logger;
 
     public async Task<User?> FindByIdAsync(int id)
     {
@@ -48,10 +52,19 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory)
         if (string.IsNullOrWhiteSpace(emailAddress)) return null;
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(u => u.EmailAddress == emailAddress);
-        if (existing is null) return null;
-        if (existing.PasswordResetAttempts > PasswordResetRequest.MaxRequests) return existing;
+        if (existing is null)
+        {
+            Logger.PasswordResetUnknownUser();
+            return null;
+        }
+        if (existing.PasswordResetAttempts > PasswordResetRequest.MaxRequests)
+        {
+            Logger.PasswordResetRequested(existing.Id, existing.PasswordResetAttempts + 1, limitReached: true);
+            return existing;
+        }
         existing.EmailAddress = existing.Person.PrimaryEmail();
         existing.PasswordResetAttempts += 1;
+        Logger.PasswordResetRequested(existing.Id, existing.PasswordResetAttempts, limitReached: false);
         var result = await dbContext.SaveChangesAsync();
         return result == 0 ? null : existing;
     }

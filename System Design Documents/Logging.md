@@ -31,6 +31,18 @@ Steps 2C.2–2C.5 add these entries; until then the levels are as the code had t
 
 Only the path is logged, never the query string (it can hold an API key).
 
+**Security events** (event ids 1001–1007, `Services/Diagnostics/SecurityLog.cs`):
+
+| Event id | Level | Event |
+|---|---|---|
+| 1001 | Information | User signed in |
+| 1002 | Warning | Sign-in failed for a user (reason: `WrongPassword`, `AlreadyLockedOut`, `NoPerson`) |
+| 1003 | Warning | Sign-in failed for an address that has no user (no id, no address) |
+| 1004 | Warning | User signed out (the logout link) |
+| 1005 | Warning | User locked out after too many failed sign-ins |
+| 1006 | Warning | Password reset requested (with the request number and whether the limit is reached) |
+| 1007 | Warning | Password reset requested for an address that has no user (no id, no address) |
+
 `appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop; `Microsoft.Azure.SignalR` from *Error*). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
 ## Reading the logs
@@ -75,4 +87,14 @@ union *
 | summarize MB = sum(_BilledSize) / 1000000 by bin(timestamp, 1d)
 ```
 
-Queries for security events and saved data come with steps 2C.4 and 2C.5 (event ids 1000–1999 and 2000–2999).
+Security events per day and type (many 1003 or 1002 in a short time can mean someone is guessing passwords):
+```kusto
+traces
+| where timestamp > ago(7d)
+| extend EventId = toint(customDimensions.EventId)
+| where EventId between (1000 .. 1999)
+| summarize count() by bin(timestamp, 1d), EventId
+| order by timestamp desc
+```
+
+Queries for saved data come with step 2C.5 (event ids 2000–2999).

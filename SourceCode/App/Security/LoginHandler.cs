@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services;
+using ModulesRegistry.Services.Diagnostics;
 using ModulesRegistry.Services.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;
@@ -25,7 +26,16 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
         await SignOutAsync(context);
 
         var user = await userService.FindByEmailAsync(username);
-        if (user is null || user.IsLockedOut()) return;
+        if (user is null)
+        {
+            logger.SignInFailedUnknownUser();
+            return;
+        }
+        if (user.IsLockedOut())
+        {
+            logger.SignInFailed(user.Id, SignInFailure.AlreadyLockedOut);
+            return;
+        }
 
         var verification = user.Person is not null
             ? password.VerifyPassword(user.HashedPassword)
@@ -47,19 +57,22 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
                 new(AppClaimTypes.ObjectId, user.ObjectId.ToString()),
                 new(ClaimTypes.Email, user.EmailAddress),
             };
-            await TrySignInAsync(context, user, claims);
+            if (await TrySignInAsync(context, user, claims)) logger.SignedIn(user.Id);
         }
         else
         {
+            logger.SignInFailed(user.Id, user.Person is null ? SignInFailure.NoPerson : SignInFailure.WrongPassword);
             var updated = await userService.UpdateFailedLoginAttempts(user.Id);
             if (updated is not null && updated.IsLockedOut())
             {
+                logger.LockedOut(updated.Id, updated.FailedLoginAttempts);
                 await LoginLogoutHandler.SendSecurityNotification(updated, "AccountLockedMail", "AccountLockedMailSubject", mailSender, contentService, logger);
             }
         }
     }
 
-    private async Task TrySignInAsync(HttpContext context, User user, List<Claim> claims)
+    /// <returns>True if the user was signed in.</returns>
+    private async Task<bool> TrySignInAsync(HttpContext context, User user, List<Claim> claims)
     {
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties
@@ -71,10 +84,12 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
         {
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
             _ = await userService.UpdateLastSignIn(user.Id, DateTimeOffset.Now);
+            return true;
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Signing in user {UserId} failed", user.Id);
+            return false;
         }
     }
 

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services.Diagnostics;
 
 namespace ModulesRegistry.Security;
 
@@ -39,8 +41,10 @@ public static class LoginEndpoint
         return TypedResults.LocalRedirect(ReturnUrlOrRoot(pathBase, form.ReturnUrl));
     }
 
-    private static async Task<RedirectHttpResult> LogoutAsync(HttpContext context)
+    private static async Task<RedirectHttpResult> LogoutAsync(HttpContext context, ILoggerFactory loggerFactory)
     {
+        if (context.User.IsAuthenticated())
+            loggerFactory.CreateLogger(typeof(LoginEndpoint)).SignedOut(context.User.UserId());
         await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return TypedResults.LocalRedirect(RootUrl(context.Request.PathBase));
     }
