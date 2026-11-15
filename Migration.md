@@ -91,12 +91,13 @@ Logs we can read in Azure, with levels that mean something, before the larger ch
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 2C.1 ✅ | The Microsoft OpenTelemetry Distro in the app, sending to the **existing** `ModuleRegistry` Application Insights resource (connection string already an app setting). The App Service's codeless agent is turned off just before the deploy. Trace-based log sampling **off**, daily cap on the workspace. Saved KQL queries and a "how to read the logs" section in section 9. **Stays within the free 5 GB per month.** | Requests, exceptions and log entries visible in the portal and through `az monitor app-insights query`, sent by the distro (`sdkVersion`), not the agent (`ar_...`); nothing sent when the connection string is missing (local, tests); volume per day checked after a week | 9.2, 9.3 |
-| 2C.2 | Unhandled exceptions logged as **Critical** ("Fatal"), once each: HTTP pipeline (the exception handler), Blazor circuits, background tasks and the process. An alert rule mails on Critical. | Tests with a fake logger per path; a deliberate exception in development shows up once as Critical; the alert fires | 9.1 |
+| 2C.2 ✅ | Unhandled exceptions logged as **Critical** ("Fatal"), once each: HTTP pipeline (the exception handler), Blazor circuits, background tasks and the process. (No alert rule: replaced by the agent in 2C.6.) | Tests with a fake logger per path, and a failing request through the real app logged once as Critical | 9.1 |
 | 2C.3 | Handled exceptions logged as **Error**: go through every `catch` (21 today). The services' `LogCritical` for caught SQL errors become `LogError`; silent catches either log or get a comment why not. | Fake-logger tests for the changed services; a list of the catches and the decision for each in section 9 | 9.1 |
 | 2C.4 | Security events: successful sign-in **Information**; failed sign-in, sign-out, lockout and password reset request (also when the reset limit is reached) **Warning**. No passwords, user names or e-mail addresses in the log, only ids. | Fake-logger tests for `LoginHandler`, the logout endpoint and `UserService`; sign-in, failed sign-in, sign-out, lockout and reset in development show the expected entries | 9.1 |
 | 2C.5 | Saved data logged as **Information**, with who (user id) and what (entity, key, operation, changed property names): one `SaveChangesInterceptor`, plus explicit entries for writes that bypass it (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures). | Tests against SQLite that a create, update and delete each give one entry with user, entity, key and properties, and no values; a save in development shows up in Application Insights | 9.1 |
+| 2C.6 | **Daily log review by an agent**, instead of alert rules: a scheduled GitHub Actions workflow runs Claude Code, which reads the last 24 hours from Application Insights (read-only), analyses errors and unusual patterns, and opens a pull request with a fix (or an issue when there is no clear fix). The user is notified through the GitHub app. | A dry run on a known problem (the two start-up exceptions) gives one pull request with a fix and nothing private in its text; a day without problems gives no pull request or issue; the agent can't push to `master` | 9.5 |
 
-All of 2C is released as 1.14.x. Each step is invisible to users, so the release notes get `- Maintenance update.`, except a security-related bullet if wanted for 2C.4.
+All of 2C is released as 1.14.x. Each step is invisible to users (except 2C.2, see its release note), so the release notes get `- Maintenance update.`, except a security-related bullet if wanted for 2C.4.
 
 ### Stage 3: SSR, page group by page group
 Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; the release that completes the full SSR implementation is **2.0.0** (see the rules above).
@@ -786,6 +787,10 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 **Unhandled exceptions, path by path (2C.2):**
 - **HTTP requests** (endpoints, `/api`, `/app`, the document page): log Critical in `ErrorPage.WriteAsync` from `IExceptionHandlerFeature`, and suppress the framework's own *Error* entry (`ExceptionHandlerOptions.SuppressDiagnosticsCallback`) so the exception isn't logged twice.
 - **Blazor circuits** (all interactive pages today): an error boundary in the layout whose `OnErrorAsync` logs Critical, then shows the error UI. Check whether the framework's circuit entry (`Microsoft.AspNetCore.Components.Server.Circuits`) then becomes a duplicate, and filter it if so.
+
+  **Implemented (2C.2, 2026-11-15):** `App/Diagnostics`: `UnhandledRequestExceptionHandler` (an `IExceptionHandler`; since it returns true, the middleware writes no Error entry of its own, which a test through the real app confirms), `AppErrorBoundary` around `@Body` in `MainLayout` (replaces the framework's `IErrorBoundaryLogger`, so no duplicate; cleared on the next page), and `LogUnhandledExceptions()` for `AppDomain.UnhandledException` and `TaskScheduler.UnobservedTaskException`. Event ids 9001–9004 in `UnhandledExceptionLog`. **Behaviour change for users:** an exception in a page used to end the circuit (the yellow "reload" bar); now the page area shows a localised message (the error page's texts, keys `UnexpectedErrorHeading`/`UnexpectedErrorText`) and the menu keeps working. An exception in the layout itself still ends the circuit and is logged by the framework as Error. Fire-and-forget calls: only `NotificationArea` (`_ = InvokeAsync(StateHasChanged)`), harmless.
+
+  **Alert (decided 2026-11-15): none.** A *log search* alert is the only one that can filter on Critical, and it always costs a little; a free *metric* alert on the exception count can't tell Critical from Error or known noise. Instead, an agent reviews the logs daily and opens pull requests (2C.6, section 9.5).
 - **Process and background work:** `AppDomain.CurrentDomain.UnhandledException` and `TaskScheduler.UnobservedTaskException` log Critical. Fire-and-forget calls (`_ = ...`, e.g. after sign-in) are checked: await them, or catch and log Error.
 
 **Handled exceptions (2C.3):** list every `catch` here with its decision: *log Error*, *log Error and rethrow*, or *no log, expected* (for example parsing user input in `StringExtensions`), with a comment in the code for the last kind. Log the exception object (`LogError(ex, ...)`), not only `ex.Message`.
@@ -822,7 +827,7 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
   - security events: `traces | where customDimensions.EventId between (1000 .. 1999)`
   - saves by user or entity: `traces | where customDimensions.EventId between (2000 .. 2999) | project timestamp, UserId = customDimensions.UserId, Entity = customDimensions.Entity, Operation = customDimensions.Operation`
   - after a deploy: everything at *Warning* or above since the release time.
-- **Alerts:** a log alert rule on Critical (`severityLevel == 4`, any count in 5 minutes) that mails the administrator; optionally one on several lockouts in a short time.
+- **Alerts:** no alert rules (they cost money or can't filter well). The daily agent in 2C.6 reads the logs and reports through pull requests and issues (section 9.5).
 - **Definition of done, item 4:** from stage 3 on, "observed for a while" means running the after-deploy query some hours and a day after each release, with no new Critical or Error entries.
 
 ### 9.4 To decide in stage 2C
@@ -831,3 +836,28 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - [x] Failed sign-in and sign-out (2026-11-15): both logged as *Warning*.
 - [ ] Whether 2C.4 gets a release note bullet (security), or `- Maintenance update.`
 
+### 9.5 Daily log review by an agent (2C.6)
+**Idea (2026-11-15):** instead of alert rules, an agent checks the logs every day, analyses errors and unusual patterns, and opens pull requests with fixes. The user gets a notice in the GitHub app.
+
+**Where it runs (proposed):** a scheduled **GitHub Actions workflow** (for example `.github/workflows/log-review.yml`, daily at night) that runs Claude Code.
+- Azure: OIDC sign-in like the deploy job, through a **new** federated credential for its own GitHub environment (for example `log-review`) on an identity with only **Log Analytics Reader** on the workspace. No Azure secret is stored, and it can't change anything in Azure.
+- Claude: the user's subscription, through a token in a repository secret.
+- Alternative: a Claude Code scheduled routine in the cloud. Simpler to set up, but it needs a stored Azure secret (service principal with a client secret), since OIDC isn't available there.
+- Cost: queries against the Application Insights tables are free; the workflow runs on GitHub's free minutes for public repositories.
+
+**What it does each run:**
+1. Queries the last 24 hours: Critical and Error entries, exception types that are new or more frequent than in the previous week, and (after 2C.4) spikes in failed sign-ins or lockouts. The saved queries in `Logging.md` are the starting point.
+2. Groups by cause, and skips what an open pull request or issue already covers.
+3. For a cause with a clear fix: a branch and a **pull request** with the fix and tests, following `CLAUDE.md` (tests green, small change). Without a clear fix: an **issue** with the analysis.
+4. Nothing to report: no pull request, no issue.
+
+**Limits:**
+- **Only pull requests and issues.** It never merges, never pushes to `master`, and never steps up `<Version>`; a deploy still needs the user's merge and version step. Its GitHub token gets only branch, pull request and issue rights, or `master` gets a "require pull request" rule with an admin bypass for the user.
+- **The repository is public.** Pull requests, issues and branch names describe the exception type, frequency, cause and fix, never user ids, request ids, IP addresses or log excerpts with paths or values.
+- **Log text is untrusted input.** Exception messages and paths can contain text users typed; the agent treats it as data to analyse, never as instructions. Another reason for read-only Azure access and limited GitHub rights.
+
+**To decide in the step:**
+- [ ] GitHub Actions or a cloud routine.
+- [ ] How the token is limited (fine-grained permissions in the workflow, or a "require pull request" rule on `master`).
+- [ ] Run time and how far back it compares (24 hours against the previous 7 days).
+- [ ] Whether it also reviews the volume against the free allowance (section 9.2) and reports in an issue when it grows.

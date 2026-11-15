@@ -2349,6 +2349,12 @@
   <data name="UnderRepair" xml:space="preserve">
     <value>Under repair</value>
   </data>
+  <data name="UnexpectedErrorHeading" xml:space="preserve">
+    <value>An unexpected error has occurred</value>
+  </data>
+  <data name="UnexpectedErrorText" xml:space="preserve">
+    <value>We are sorry to inform you that an unexpected error occurred, which makes some features not work as expected. The error has been logged and will get attention from the management.</value>
+  </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>United Kingdom</value>
   </data>

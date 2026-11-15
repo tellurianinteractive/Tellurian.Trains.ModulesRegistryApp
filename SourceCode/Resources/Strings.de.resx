@@ -2349,6 +2349,12 @@
   <data name="UnderRepair" xml:space="preserve">
     <value>In Reperatur</value>
   </data>
+  <data name="UnexpectedErrorHeading" xml:space="preserve">
+    <value>Ein unerwarteter Fehler ist aufgetreten</value>
+  </data>
+  <data name="UnexpectedErrorText" xml:space="preserve">
+    <value>Leider ist ein unerwarteter Fehler aufgetreten, sodass einige Funktionen nicht wie erwartet funktionieren. Der Fehler wurde protokolliert und wird von der Verwaltung beachtet.</value>
+  </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>Vereinigtes Königreich</value>
   </data>

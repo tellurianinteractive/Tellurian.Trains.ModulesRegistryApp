@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IStringLocalizer<Strings> Localizer
 @using System.Web;
+@using ModulesRegistry.Diagnostics
 
 <NotificationArea />
 
@@ -26,7 +27,24 @@
             </div>
         </div>
         <div class="content px-4">
-            @Body
+            <AppErrorBoundary @ref="ErrorBoundary">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <div class="alert alert-danger">
+                        <h2><span class="fa fa-exclamation-triangle"></span> @Localizer["UnexpectedErrorHeading"]</h2>
+                        <p>@Localizer["UnexpectedErrorText"]</p>
+                    </div>
+                </ErrorContent>
+            </AppErrorBoundary>
         </div>
     </div>
 </div>
+
+@code {
+    private AppErrorBoundary? ErrorBoundary;
+
+    // A new page (the layout gets a new Body) clears an error shown for the previous one.
+    protected override void OnParametersSet() => ErrorBoundary?.Recover();
+}

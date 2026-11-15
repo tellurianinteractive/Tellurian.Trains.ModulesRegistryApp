@@ -173,8 +173,10 @@ builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 builder.Services.AddSingleton<PublicDocumentKeys>();
 
 builder.Services.AddLocalization();
+builder.Services.AddExceptionHandler<UnhandledRequestExceptionHandler>();
 
 var app = builder.Build();
+app.LogUnhandledExceptions();
 
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 else app.UseErrorPage();

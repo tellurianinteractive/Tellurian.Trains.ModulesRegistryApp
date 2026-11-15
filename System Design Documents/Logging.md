@@ -20,6 +20,17 @@ The workspace includes 5 GB per month for free; the whole workspace (also `fastc
 
 Steps 2C.2–2C.5 add these entries; until then the levels are as the code had them.
 
+**Unhandled exceptions** (event ids 9001–9004, `App/Diagnostics/UnhandledExceptionLog.cs`):
+
+| Event id | Where | Logged by |
+|---|---|---|
+| 9001 | An HTTP request (endpoints, `/api`, `/app`, documents) | `UnhandledRequestExceptionHandler`, which also shows `error.html` |
+| 9002 | A page or one of its components (the Blazor circuit) | `AppErrorBoundary` in `MainLayout`, which shows a message in the page area |
+| 9003 | The process (`AppDomain.UnhandledException`) | `UnhandledExceptionLogging` |
+| 9004 | A background task nobody awaited (`TaskScheduler.UnobservedTaskException`) | `UnhandledExceptionLogging` |
+
+Only the path is logged, never the query string (it can hold an API key).
+
 `appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
 ## Reading the logs
@@ -38,6 +49,7 @@ Unhandled exceptions (severity 4 = Critical):
 ```kusto
 exceptions
 | where severityLevel == 4
+| project timestamp, EventId = tostring(customDimensions.EventId), type, outerMessage, Path = tostring(customDimensions.Path), Page = tostring(customDimensions.Page), operation_Id
 | order by timestamp desc
 ```
 

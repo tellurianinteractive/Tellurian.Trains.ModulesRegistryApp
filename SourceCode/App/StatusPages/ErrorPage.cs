@@ -7,7 +7,8 @@ namespace ModulesRegistry.StatusPages;
 /// The page shown when a request fails: <c>StatusPages/error.html</c>, served by the exception handler with status 500.
 /// </summary>
 /// <remarks>
-/// The exception handler middleware logs the exception before this runs. The page is a static file with all fully supported
+/// <see cref="Diagnostics.UnhandledRequestExceptionHandler"/> logs the exception as Critical and writes this page;
+/// <see cref="WriteAsync"/> is also the middleware's fallback. The page is a static file with all fully supported
 /// languages, so showing it doesn't depend on Razor, localisation or content loading, any of which may be what failed.
 /// </remarks>
 public static class ErrorPage

@@ -2349,6 +2349,12 @@
   <data name="UnderRepair" xml:space="preserve">
     <value>Under reparation</value>
   </data>
+  <data name="UnexpectedErrorHeading" xml:space="preserve">
+    <value>Der er opstået en uventet fejl</value>
+  </data>
+  <data name="UnexpectedErrorText" xml:space="preserve">
+    <value>Vi beklager, men der er opstået en uventet fejl, som gør, at nogle funktioner ikke virker som forventet. Fejlen er logget og vil få opmærksomhed fra administrationen.</value>
+  </data>
   <data name="United Kingdom" xml:space="preserve">
     <value>Storbritanien</value>
   </data>
