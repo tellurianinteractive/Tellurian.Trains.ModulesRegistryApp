@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Rationals;
+﻿using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;
 public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
@@ -97,22 +96,20 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
            .ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// A new entity with only the ids, so that navigations on <paramref name="ownership"/> aren't added too.
+    /// (Was raw SQL, from before <c>BlankTriggerAddingConvention</c> made inserts into tables with triggers work.)
+    /// </summary>
     private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
     {
-        if (dbContext.Database.GetDbConnection() is not SqlConnection connection) throw new ArgumentException(nameof(connection));
-
-        var sql = "INSERT INTO ModuleOwnership (PersonId, GroupId, ModuleId, OwnedShare) VALUES (@PersonId, @GroupId, @ModuleId, @OwnedShare)";
-        var command = connection.CreateCommand();
-        command.CommandText = sql;
-        command.CommandType = System.Data.CommandType.Text;
-        command.Parameters.AddWithValue("@PersonId", ownership.PersonId.AsValueOrDBNull());
-        command.Parameters.AddWithValue("@GroupId", ownership.GroupId.AsValueOrDBNull());
-        command.Parameters.AddWithValue("@ModuleId", ownership.ModuleId);
-        command.Parameters.AddWithValue("@OwnedShare", 0);
-        connection.Open();
-        var result = await command.ExecuteNonQueryAsync();
-        connection.Close();
-        return result;
+        dbContext.ModuleOwnerships.Add(new ModuleOwnership
+        {
+            PersonId = ownership.PersonId,
+            GroupId = ownership.GroupId,
+            ModuleId = ownership.ModuleId,
+            OwnedShare = 0,
+        });
+        return await dbContext.SaveChangesAsync();
     }
 
     public async Task<(int Count, string Message)> RemoveAssistantAsync(ClaimsPrincipal? principal, ModuleOwnership ownership)

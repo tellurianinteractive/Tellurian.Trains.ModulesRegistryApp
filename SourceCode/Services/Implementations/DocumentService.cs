@@ -55,12 +55,23 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             var document = await dbContext.Documents.FindAsync(documentId);
             if (document is not null)
             {
-                count += await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfDocumentationId, (int?)null));
-                count += await dbContext.Modules.Where(m => m.DwgDrawingId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.DwgDrawingId, (int?)null));
-                count += await dbContext.Modules.Where(m => m.SkpDrawingId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.SkpDrawingId, (int?)null));
-                count += await dbContext.Stations.Where(m => m.PdfInstructionId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfInstructionId, (int?)null));
-                count += await dbContext.ModuleEndProfiles.Where(m => m.PdfDocumentId == documentId).ExecuteUpdateAsync(s => s.SetProperty(x => x.PdfDocumentId, (int?)null));
-                if (count > 0) { dbContext.Documents.Remove(document); }
+                // Through the change tracker, so the cleared references are in the change log, in the same save as the delete.
+                var references = 0;
+                foreach (var module in await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId).ToListAsync())
+                {
+                    if (module.PdfDocumentationId == documentId) { module.PdfDocumentationId = null; references++; }
+                    if (module.DwgDrawingId == documentId) { module.DwgDrawingId = null; references++; }
+                    if (module.SkpDrawingId == documentId) { module.SkpDrawingId = null; references++; }
+                }
+                foreach (var station in await dbContext.Stations.Where(s => s.PdfInstructionId == documentId).ToListAsync())
+                {
+                    station.PdfInstructionId = null; references++;
+                }
+                foreach (var endProfile in await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId).ToListAsync())
+                {
+                    endProfile.PdfDocumentId = null; references++;
+                }
+                if (references > 0) { dbContext.Documents.Remove(document); }
                 count = await dbContext.SaveChangesAsync();
             }
         }

@@ -1,4 +1,6 @@
-﻿namespace ModulesRegistry.Services.Implementations;
+﻿using System.Linq.Expressions;
+
+namespace ModulesRegistry.Services.Implementations;
 
 public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 {
@@ -133,40 +135,50 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
     {
-        if (vehicle.PrototypeLength == 0) return 0; 
-        using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Vehicles
-            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength == null &&
-                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeLength, vehicle.PrototypeLength));
+        if (vehicle.PrototypeLength == 0) return 0;
+        return await FillInForSameKeeperAsync(
+            v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength == null &&
+                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+            v => v.PrototypeLength = vehicle.PrototypeLength);
     }
+
     public async Task<int> AddPrototypeWeightForSameKeeperAndClass(Vehicle vehicle)
     {
         if (vehicle.PrototypeWeight == null) return 0;
-        using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Vehicles
-            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeWeight == null &&
-                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.PrototypeWeight, vehicle.PrototypeWeight));
+        return await FillInForSameKeeperAsync(
+            v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeWeight == null &&
+                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+            v => v.PrototypeWeight = vehicle.PrototypeWeight);
     }
 
     public async Task<int> AddEnginePowerForSameKeeperAndClass(Vehicle vehicle)
     {
         if (vehicle.EnginePower == null) return 0;
-        using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Vehicles
-            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.EnginePower == null &&
-                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.EnginePower, vehicle.EnginePower));
+        return await FillInForSameKeeperAsync(
+            v => v.OwningPersonId == vehicle.OwningPersonId && v.EnginePower == null &&
+                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+            v => v.EnginePower = vehicle.EnginePower);
     }
 
     public async Task<int> AddKeeperCountryForSameKeeper(Vehicle vehicle)
     {
         if (vehicle.KeeperCountryId == null || vehicle.KeeperCountryId.Value == 0) return 0;
+        return await FillInForSameKeeperAsync(
+            v => v.OwningPersonId == vehicle.OwningPersonId && v.KeeperCountryId == null &&
+                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature,
+            v => v.KeeperCountryId = vehicle.KeeperCountryId);
+    }
+
+    /// <summary>
+    /// Loads the matching vehicles and changes them through the change tracker (not <c>ExecuteUpdate</c>),
+    /// so each changed vehicle gets a change log row. Only one owner's vehicles, so few rows.
+    /// </summary>
+    private async Task<int> FillInForSameKeeperAsync(Expression<Func<Vehicle, bool>> predicate, Action<Vehicle> fillIn)
+    {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Vehicles
-            .Where(v => v.OwningPersonId == vehicle.OwningPersonId && v.KeeperCountryId == null &&
-                    vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.KeeperCountryId, vehicle.KeeperCountryId));
+        var vehicles = await dbContext.Vehicles.Where(predicate).ToListAsync();
+        if (vehicles.Count == 0) return 0;
+        foreach (var vehicle in vehicles) fillIn(vehicle);
+        return await dbContext.SaveChangesAsync();
     }
 }

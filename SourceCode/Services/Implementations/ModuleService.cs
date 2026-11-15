@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using ModulesRegistry.Resources;
+﻿using ModulesRegistry.Resources;
 using Rationals;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -438,44 +437,6 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             return result.SaveResult(module);
         }
         return principal.SaveNotAuthorised<Module>();
-    }
-
-    public async Task<(int Count, string Message, Module? Entity)> AddAssistant(ClaimsPrincipal? principal, ModuleOwnership ownership)
-    {
-        if (principal.IsAuthenticated() && ownership.IsAssistantOnly())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var existing = dbContext.ModuleOwnerships.AsNoTracking().SingleOrDefault(mo =>
-                mo.ModuleId == ownership.ModuleId &&
-                (ownership.PersonId.HasValue && mo.PersonId == ownership.PersonId || ownership.GroupId.HasValue && mo.GroupId == ownership.GroupId));
-            if (existing is not null) return principal.SaveNotAuthorised<Module>();
-
-            var result = await SaveAssistant(dbContext, ownership);
-            //ownership.OwnedShare = 0.0;
-            //dbContext.ModuleOwnerships.Add(ownership);
-            //var result = await dbContext.SaveChangesAsync();
-            var module = await FindByIdAsync(principal, ownership.ModuleId);
-            return result.SaveResult(module);
-        }
-        return principal.SaveNotAuthorised<Module>();
-    }
-
-    private static async Task<int> SaveAssistant(ModulesDbContext dbContext, ModuleOwnership ownership)
-    {
-        if (dbContext.Database.GetDbConnection() is not SqlConnection connection) throw new ArgumentException(nameof(connection));
-
-        var sql = "INSERT INTO ModuleOwnership (PersonId, GroupId, ModuleId, OwnedShare) VALUES (@PersonId, @GroupId, @ModuleId, @OwnedShare)";
-        var command = connection.CreateCommand();
-        command.CommandText = sql;
-        command.CommandType = System.Data.CommandType.Text;
-        command.Parameters.AddWithValue("@PersonId", ownership.PersonId.AsValueOrDBNull());
-        command.Parameters.AddWithValue("@GroupId", ownership.GroupId.AsValueOrDBNull());
-        command.Parameters.AddWithValue("@ModuleId", ownership.ModuleId);
-        command.Parameters.AddWithValue("@OwnedShare", 0);
-        connection.Open();
-        var result = await command.ExecuteNonQueryAsync();
-        connection.Close();
-        return result;
     }
 
     public async Task<(int Count, string Message)> RemoveAssistant(ClaimsPrincipal? principal, ModuleOwnership ownership)
