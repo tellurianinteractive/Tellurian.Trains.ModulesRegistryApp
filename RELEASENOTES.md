@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.23
+Released 2026-11-15
+- The warning for a too large file now shows the size limit in kB.
 ## Release 1.14.22
 Released 2026-11-15
 - Only users who may edit a module or station can now upload or delete its documents.
