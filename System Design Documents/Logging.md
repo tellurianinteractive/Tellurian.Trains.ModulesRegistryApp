@@ -3,7 +3,7 @@
 How the app logs, where the logs go, and how to read them. Background and decisions: `Migration.md`, section 9.
 
 ## Where the logs go
-- **Production:** Application Insights resource `ModuleRegistry` (resource group `Tellurian.Trains`), stored in the Log Analytics workspace `Tellurian-Trains-LogAnalytics-Workspace`. The app sends through the Microsoft OpenTelemetry Distro (`App/Diagnostics/ApplicationInsights.cs`), turned on by the App Service app setting `APPLICATIONINSIGHTS_CONNECTION_STRING`. The App Service's codeless Application Insights agent is **off** (`ApplicationInsightsAgent_EXTENSION_VERSION = disabled`); turning it on again would send everything twice.
+- **Production:** Application Insights resource `ModuleRegistry` (resource group `Tellurian.Trains`), stored in the Log Analytics workspace `Tellurian-Trains-LogAnalytics-Workspace`. The app sends through the Microsoft OpenTelemetry Distro (`App/Diagnostics/ApplicationInsights.cs`), turned on by the App Service app setting `APPLICATIONINSIGHTS_CONNECTION_STRING`. The App Service's codeless Application Insights agent, Profiler and Snapshot Debugger are **not used** (their app settings were removed 2026-11-15); turning the agent on again would send everything twice. The app is self-contained, so App Service add-ons that need a framework-dependent app (such as the *ASP.NET Core Logging Integration* site extension) don't work and must not be installed.
 - **Locally, in tests and in CI:** no connection string, so nothing is sent. Logs go to the console and the debug output.
 - **Who can read them:** only the administrator and developers, through Azure roles (*Log Analytics Reader* or *Monitoring Reader* is enough). App users have no access.
 
@@ -31,7 +31,7 @@ Steps 2C.2–2C.5 add these entries; until then the levels are as the code had t
 
 Only the path is logged, never the query string (it can hold an API key).
 
-`appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
+`appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop; `Microsoft.Azure.SignalR` from *Error*). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
 ## Reading the logs
 **Portal:** Application Insights `ModuleRegistry` → *Failures*, *Transaction search*, *Live metrics* and *Logs*. In *Logs* the tables are `requests`, `traces` (log entries), `exceptions` and `dependencies`; in the workspace the same data is in `AppRequests`, `AppTraces`, `AppExceptions` and `AppDependencies`.

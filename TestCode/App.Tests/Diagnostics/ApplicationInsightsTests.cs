@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Testing;
 using Microsoft.OpenTelemetry;
 using ModulesRegistry.Diagnostics;
 using OpenTelemetry.Trace;
@@ -68,9 +69,14 @@ public sealed class ApplicationInsightsTests
     [DataRow("Microsoft.Hosting.Lifetime", LogLevel.Information)]
     [DataRow("System.Net.Http.HttpClient.Default", LogLevel.Warning)]
     [DataRow("Azure.Core", LogLevel.Warning)]
+    [DataRow("Microsoft.Azure.SignalR.NegotiateHandler", LogLevel.Error)]
     public void ProductionLogLevels(string category, LogLevel expectedMinimum)
     {
-        using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder.UseEnvironment("Testing"));
+        // Only a provider without rules of its own, like the OpenTelemetry provider in production. On Windows the default
+        // Event Log provider has its own Warning rule, which would otherwise make Warning look enabled for every category.
+        using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
+            .UseEnvironment("Testing")
+            .ConfigureLogging(logging => logging.ClearProviders().AddProvider(new FakeLoggerProvider())));
         var logger = factory.Services.GetRequiredService<ILoggerFactory>().CreateLogger(category);
 
         Assert.IsTrue(logger.IsEnabled(expectedMinimum), $"{category} should log {expectedMinimum}.");
