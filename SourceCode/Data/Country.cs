@@ -14,6 +14,7 @@ public partial class Country
 
     public int Id { get; set; }
     public string EnglishName { get; set; }
+    public string IsoCode { get; set; }
     public string DomainSuffix { get; set; }
     public string Languages { get; set; }
     public short PhoneNumber { get; set; }
@@ -48,6 +49,10 @@ internal static class CountryMapper
             entity.Property(e => e.EnglishName)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            entity.Property(e => e.IsoCode)
+                .HasMaxLength(2)
+                .IsFixedLength(true);
 
             entity.Property(e => e.Languages)
                 .HasMaxLength(10);

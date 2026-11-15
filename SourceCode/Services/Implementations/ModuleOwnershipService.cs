@@ -16,16 +16,16 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
 
             var (From, To) = origin.Transfer(transfer);
             using var dbContext = Factory.CreateDbContext();
-
+            var existingOrigin = await dbContext.ModuleOwnerships.FindAsync(origin.Id);
+            if (existingOrigin is null) return principal.NothingToUpdate<Module>();
             if (From.OwnedShare < 0.01)
             {
-                dbContext.ModuleOwnerships.Entry(origin).State = EntityState.Deleted;
+                dbContext.ModuleOwnerships.Remove(existingOrigin);
             }
             else
             {
-                dbContext.ModuleOwnerships.Entry(origin).CurrentValues.SetValues(From);
-                dbContext.ModuleOwnerships.Entry(origin).State = EntityState.Modified;
-            };
+                dbContext.ModuleOwnerships.Entry(existingOrigin).CurrentValues.SetValues(From);
+            }
             var existingNewOwnership = await dbContext.ModuleOwnerships
                  .SingleOrDefaultAsync(mo => mo.ModuleId == To.ModuleId && (To.PersonId.HasValue && mo.PersonId == To.PersonId.Value || To.GroupId.HasValue && mo.GroupId == To.GroupId.Value));
             if (existingNewOwnership is null)
@@ -35,7 +35,6 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
             else
             {
                 existingNewOwnership.OwnedShare += To.OwnedShare;
-                dbContext.ModuleOwnerships.Entry(existingNewOwnership).State = EntityState.Modified;
             }
             var result = await dbContext.SaveChangesAsync();
 

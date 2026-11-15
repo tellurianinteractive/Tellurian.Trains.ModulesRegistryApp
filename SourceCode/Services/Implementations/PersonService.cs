@@ -116,14 +116,39 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         if (principal.MaySave(ownerRef, isGroupAdministrator))
         {
             using var dbContext = Factory.CreateDbContext();
-            dbContext.People.Attach(entity);
-            if (entity.User is not null) dbContext.Users.Attach(entity.User);
             if (entity.EmailAddresses.HasValue() && entity.User is not null)
             {
-                entity.User!.EmailAddress = entity.EmailAddresses.FirstItem(delimiter: ';');
+                entity.User.EmailAddress = entity.EmailAddresses.FirstItem(delimiter: ';');
             }
-            dbContext.Entry(entity).State = entity.Id.GetState();
-            if (entity.User is not null) dbContext.Entry(entity.User).State = entity.User.Id.GetState();
+            if (entity.Id > 0)
+            {
+                var existing = await dbContext.People.FindAsync(entity.Id);
+                if (existing is null) return principal.NothingToUpdate<Person>();
+                dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                var isUserChanged = false;
+                if (entity.User is not null)
+                {
+                    if (entity.User.Id > 0)
+                    {
+                        var existingUser = await dbContext.Users.FindAsync(entity.User.Id);
+                        if (existingUser is null) return principal.NothingToUpdate<Person>();
+                        dbContext.Entry(existingUser).CurrentValues.SetValues(entity.User);
+                        isUserChanged = dbContext.Entry(existingUser).State != EntityState.Unchanged;
+                    }
+                    else
+                    {
+                        existing.User = entity.User;
+                        isUserChanged = true;
+                    }
+                }
+                if (!isUserChanged && dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+            }
+            else
+            {
+                dbContext.People.Attach(entity);
+                if (entity.User is not null) dbContext.Entry(entity.User).State = entity.User.Id.GetState();
+                dbContext.Entry(entity).State = EntityState.Added;
+            }
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(entity);
         }

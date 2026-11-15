@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[Country] (
     [Id]           INT           IDENTITY (1, 1) NOT NULL,
     [EnglishName]  NVARCHAR (50) NOT NULL,
+    [IsoCode]       NCHAR (2)     NULL,
     [DomainSuffix] NCHAR (2)     NOT NULL,
     [Languages]    NVARCHAR (10) NULL,
     [PhoneNumber]  SMALLINT NOT NULL,

@@ -77,7 +77,7 @@ else
         var result = await GroupService.SaveMemberAsync(Principal, GroupMember);
         NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(3000);
-        if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
+        if (result.Count != 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
     }
 
     private async Task AddGroupLayoutModule(int moduleId)

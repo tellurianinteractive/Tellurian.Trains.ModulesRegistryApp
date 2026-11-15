@@ -16,7 +16,7 @@ The workspace includes 5 GB per month for free; the whole workspace (also `fastc
 | Critical | Unhandled exceptions ("Fatal") |
 | Error | Handled exceptions |
 | Warning | Failed sign-in, sign-out, lockout, password reset |
-| Information | Successful sign-in, saved data |
+| Information | Successful sign-in |
 
 Steps 2C.2–2C.5 add these entries; until then the levels are as the code had them.
 
@@ -97,4 +97,4 @@ traces
 | order by timestamp desc
 ```
 
-Queries for saved data come with step 2C.5 (event ids 2000–2999).
+Saved data is not logged here but stored in the database table `ChangeLog` (step 2C.5c).

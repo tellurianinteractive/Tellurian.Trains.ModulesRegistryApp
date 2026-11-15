@@ -168,8 +168,18 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         if (principal.MaySave() || await IsGroupMemberAdministratorAsync(principal, group.Id))
         {
             using var dbContext = Factory.CreateDbContext();
-            dbContext.Groups.Attach(group);
-            dbContext.Entry(group).State = group.Id.GetState();
+            if (group.Id > 0)
+            {
+                var existing = await dbContext.Groups.FindAsync(group.Id);
+                if (existing is null) return principal.NothingToUpdate<Group>();
+                dbContext.Entry(existing).CurrentValues.SetValues(group);
+                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(group);
+            }
+            else
+            {
+                dbContext.Groups.Attach(group);
+                dbContext.Entry(group).State = EntityState.Added;
+            }
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(group);
         }
@@ -182,8 +192,18 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         var countryId = (await dbContext.Groups.AsNoTracking().SingleOrDefaultAsync(g => g.Id == entity.GroupId))?.CountryId;
         if (await IsGroupMemberAdministratorAsync(principal, entity.GroupId, countryId))
         {
-            dbContext.GroupMembers.Attach(entity);
-            dbContext.Entry(entity).State = entity.Id.GetState();
+            if (entity.Id > 0)
+            {
+                var existing = await dbContext.GroupMembers.FindAsync(entity.Id);
+                if (existing is null) return principal.NothingToUpdate<GroupMember>();
+                dbContext.Entry(existing).CurrentValues.SetValues(entity);
+                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+            }
+            else
+            {
+                dbContext.GroupMembers.Attach(entity);
+                dbContext.Entry(entity).State = EntityState.Added;
+            }
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(entity);
         }
