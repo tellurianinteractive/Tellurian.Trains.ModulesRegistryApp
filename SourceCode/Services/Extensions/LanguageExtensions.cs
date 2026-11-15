@@ -25,6 +25,7 @@ public static class LanguageExtensions
             }
             catch (CultureNotFoundException)
             {
+                // Expected, not logged: the language code comes from input; the caller shows the message.
                 return $"Language '{language}' is invalid!";
             }
         }

@@ -80,6 +80,6 @@ public sealed class ContentService
     private static CultureInfo Culture(string language)
     {
         try { return new CultureInfo(language); }
-        catch (CultureNotFoundException) { return CultureInfo.InvariantCulture; }
+        catch (CultureNotFoundException) { return CultureInfo.InvariantCulture; } // Expected, not logged (see above).
     }
 }

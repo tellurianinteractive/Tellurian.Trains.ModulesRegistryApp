@@ -171,6 +171,7 @@ public static partial class StringExtensions
         }
         catch (FormatException)
         {
+            // Expected, not logged: a stored value that isn't a hash in this format.
             return false;
         }
         return salt.Length == SaltBytes && hash.Length == HashBytes;

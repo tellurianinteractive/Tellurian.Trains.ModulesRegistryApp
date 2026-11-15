@@ -1,12 +1,19 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<WiFredThrottleService> logger)
 {
     private IDbContextFactory<ModulesDbContext> Factory { get; } = factory;
     public ITimeProvider TimeProvider { get; } = timeProvider;
+
+    private static readonly ErrorCase[] SaveErrorCases =
+    [
+        new("UX_WIFredThrottle_InventoryNumber", "Duplicated", "InventoryNumber"),
+        new("UX_WIFredThrottle_MacAddress", "Duplicated", "MacAddress")
+    ];
 
 
     public async Task<WiFredThrottle?> FindById(ClaimsPrincipal? principal, int id)
@@ -96,12 +103,9 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
             }
             catch (Exception ex)
             {
-                return DbContextExtensions.SaveResult<WiFredThrottle>(
-                    ex.ErrorMessage(new[]
-                    {
-                        new ErrorCase("UX_WIFredThrottle_InventoryNumber", "Duplicated", "InventoryNumber"),
-                        new ErrorCase("UX_WIFredThrottle_MacAddress", "Duplicated", "MacAddress")
-                    }));
+                // A duplicate is an expected input error shown to the user; anything else is logged.
+                if (!ex.IsAnyOf(SaveErrorCases)) logger.LogError(ex, "Saving WiFRED throttle {ThrottleId} failed", entity.Id);
+                return DbContextExtensions.SaveResult<WiFredThrottle>(ex.ErrorMessage(SaveErrorCases));
             }
         }
         return principal.SaveNotAuthorised<WiFredThrottle>();

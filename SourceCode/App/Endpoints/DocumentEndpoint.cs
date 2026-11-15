@@ -73,6 +73,7 @@ public sealed class PublicDocumentKeys(IDataProtectionProvider provider)
         }
         catch (CryptographicException)
         {
+            // Expected, not logged: a key that is invalid or tampered with gives no access.
             return false;
         }
     }

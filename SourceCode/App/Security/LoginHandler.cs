@@ -18,7 +18,7 @@ public interface ILoginHandler
     Task SignInAsync(HttpContext context, string username, string password);
 }
 
-internal sealed class LoginHandler(UserService userService, IMailSender mailSender, ContentService contentService) : ILoginHandler
+internal sealed class LoginHandler(UserService userService, IMailSender mailSender, ContentService contentService, ILogger<LoginHandler> logger) : ILoginHandler
 {
     public async Task SignInAsync(HttpContext context, string username, string password)
     {
@@ -36,7 +36,11 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
             if (verification.NeedsRehash)
             {
                 try { _ = await userService.UpdateHashedPasswordAsync(user.Id, password.AsHashedPassword()); }
-                catch { /* rehash is best-effort; user stays on legacy hash until next login */ }
+                catch (Exception ex)
+                {
+                    // Best-effort: the user stays on the legacy hash until the next sign-in.
+                    logger.LogError(ex, "Rehashing the password of user {UserId} failed", user.Id);
+                }
             }
             var claims = new List<Claim>
             {
@@ -50,7 +54,7 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
             var updated = await userService.UpdateFailedLoginAttempts(user.Id);
             if (updated is not null && updated.IsLockedOut())
             {
-                await LoginLogoutHandler.SendSecurityNotification(updated, "AccountLockedMail", "AccountLockedMailSubject", mailSender, contentService);
+                await LoginLogoutHandler.SendSecurityNotification(updated, "AccountLockedMail", "AccountLockedMailSubject", mailSender, contentService, logger);
             }
         }
     }
@@ -68,17 +72,21 @@ internal sealed class LoginHandler(UserService userService, IMailSender mailSend
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
             _ = await userService.UpdateLastSignIn(user.Id, DateTimeOffset.Now);
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Signing in user {UserId} failed", user.Id);
         }
     }
 
-    private static async Task SignOutAsync(HttpContext context)
+    private async Task SignOutAsync(HttpContext context)
     {
         try
         {
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Signing out before signing in failed");
+        }
     }
 }

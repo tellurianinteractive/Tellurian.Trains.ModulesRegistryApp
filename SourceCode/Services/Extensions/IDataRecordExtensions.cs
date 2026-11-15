@@ -112,6 +112,7 @@ public static class IDataRecordExtensions
         try { i = record.GetOrdinal(columnName); }
         catch (IndexOutOfRangeException)
         {
+            // Expected, not logged: an optional column. A required one throws, and is logged where it is handled.
             if (throwOnNotFound || ThrowOnMissingColumnName) throw new InvalidOperationException(columnName);
         }
         return i;

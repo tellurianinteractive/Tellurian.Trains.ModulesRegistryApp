@@ -12,6 +12,11 @@ public static class ExceptionExtensions
         }
         return ex.InnerException.Message;
     }
+
+    /// <summary>True if the exception is one of the expected cases, such as a duplicate in a unique index.</summary>
+    public static bool IsAnyOf(this Exception ex, IEnumerable<ErrorCase> errorCases) =>
+        ex.InnerException is not null &&
+        errorCases.Any(errorCase => ex.InnerException.Message.Contains(errorCase.ConstraintName, StringComparison.OrdinalIgnoreCase));
 }
 
 public record ErrorCase(string ConstraintName, string ErrorResouceCode, string ObjectResourceCode);

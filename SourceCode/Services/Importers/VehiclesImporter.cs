@@ -182,6 +182,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
         }
         catch (Exception)
         {
+            // Not logged: the importer is only used by an ignored test, not by the app.
             return [];
         }
         return items;

@@ -1,4 +1,5 @@
 ﻿@inject HttpClient Http
+@inject ILogger<Image> Logger
 @if (Avaliable)
 {
  <img class="@CssClass" src="data:@ContentType(Href);base64,@Base64Data" />
@@ -22,8 +23,9 @@
                 Base64Data = Convert.ToBase64String(data);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogError(ex, "The image {Href} could not be loaded", Href);
                 Avaliable = false;
             }
 

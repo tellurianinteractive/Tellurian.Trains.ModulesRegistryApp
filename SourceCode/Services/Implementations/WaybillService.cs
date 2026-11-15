@@ -25,17 +25,9 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                     CommandTimeout = 120
                 };
                 command.Parameters.AddWithValue("@StationId", stationId);
-                try
-                {
-                    connection.Open();
-                    var result = await command.ExecuteScalarAsync();
-                    if (result is string names) return names;
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
-                    throw;
-                }
+                connection.Open();
+                var result = await command.ExecuteScalarAsync();
+                if (result is string names) return names;
             }
 
         }
@@ -57,23 +49,15 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                     CommandTimeout = 120
                 };
                 command.Parameters.AddWithValue("@GroupId", groupId);
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        var stationId = reader.GetInt("DestinationStationId");
-                        var ownerNames = await GetStationOwnerNames(principal, stationId);
+                    var stationId = reader.GetInt("DestinationStationId");
+                    var ownerNames = await GetStationOwnerNames(principal, stationId);
 
-                        waybills.Add(reader.MapWaybill(stationId));
-                        waybills.Last().OwnerNames = ownerNames;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
-                    throw;
+                    waybills.Add(reader.MapWaybill(stationId));
+                    waybills.Last().OwnerNames = ownerNames;
                 }
             }
         }
@@ -99,20 +83,12 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 command.Parameters.AddWithValue("StationCustomerId", stationCustomerId);
                 command.Parameters.AddWithValue("@Sending", sending);
                 command.Parameters.AddWithValue("@Receiving", receiving);
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        waybills.Add(reader.MapWaybill(stationId));
-                        waybills.Last().OwnerNames = ownerNames;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
-                    throw;
+                    waybills.Add(reader.MapWaybill(stationId));
+                    waybills.Last().OwnerNames = ownerNames;
                 }
             }
         }
@@ -140,19 +116,11 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 command.Parameters.AddWithValue("@StationId", stationId);
                 command.Parameters.AddWithNullableValue("@StationCustomerId", stationCustomerId);
 
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        waybills.Add(reader.MapWaybill(stationId));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
-                    throw;
+                    waybills.Add(reader.MapWaybill(stationId));
                 }
 
             }
@@ -220,7 +188,7 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogCritical(ex, "An error occured: {ErrorMessage}", ex.Message);
+                    Logger.LogError(ex, "Reading the waybills for layout {LayoutId} failed; returns the {Count} read so far", layoutId, waybills.Count);
                     return waybills;
                 }
             }

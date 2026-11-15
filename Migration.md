@@ -96,7 +96,7 @@ Logs we can read in Azure, with levels that mean something, before the larger ch
 |---|---|---|---|
 | 2C.1 ✅ | The Microsoft OpenTelemetry Distro in the app, sending to the **existing** `ModuleRegistry` Application Insights resource (connection string already an app setting). The App Service's codeless agent is turned off just before the deploy. Trace-based log sampling **off**, daily cap on the workspace. Saved KQL queries and a "how to read the logs" section in section 9. **Stays within the free 5 GB per month.** | Requests, exceptions and log entries visible in the portal and through `az monitor app-insights query`, sent by the distro (`sdkVersion`), not the agent (`ar_...`); nothing sent when the connection string is missing (local, tests); volume per day checked after a week | 9.2, 9.3 |
 | 2C.2 ✅ | Unhandled exceptions logged as **Critical** ("Fatal"), once each: HTTP pipeline (the exception handler), Blazor circuits, background tasks and the process. (No alert rule: replaced by the agent in 2C.6.) | Tests with a fake logger per path, and a failing request through the real app logged once as Critical | 9.1 |
-| 2C.3 | Handled exceptions logged as **Error**: go through every `catch` (21 today). The services' `LogCritical` for caught SQL errors become `LogError`; silent catches either log or get a comment why not. | Fake-logger tests for the changed services; a list of the catches and the decision for each in section 9 | 9.1 |
+| 2C.3 ✅ code | Handled exceptions logged as **Error**: go through every `catch` (21 today). The services' `LogCritical` for caught SQL errors become `LogError`; silent catches either log or get a comment why not. | Fake-logger tests for the changed services; a list of the catches and the decision for each in section 9 | 9.1 |
 | 2C.4 | Security events: successful sign-in **Information**; failed sign-in, sign-out, lockout and password reset request (also when the reset limit is reached) **Warning**. No passwords, user names or e-mail addresses in the log, only ids. | Fake-logger tests for `LoginHandler`, the logout endpoint and `UserService`; sign-in, failed sign-in, sign-out, lockout and reset in development show the expected entries | 9.1 |
 | 2C.5 | Saved data logged as **Information**, with who (user id) and what (entity, key, operation, changed property names): one `SaveChangesInterceptor`, plus explicit entries for writes that bypass it (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures). | Tests against SQLite that a create, update and delete each give one entry with user, entity, key and properties, and no values; a save in development shows up in Application Insights | 9.1 |
 | 2C.6 | **Daily log review by an agent**, instead of alert rules: a scheduled GitHub Actions workflow runs Claude Code, which reads the last 24 hours from Application Insights (read-only), analyses errors and unusual patterns, and opens a pull request with a fix (or an issue when there is no clear fix). The user is notified through the GitHub app. | A dry run on a known problem (the two start-up exceptions) gives one pull request with a fix and nothing private in its text; a day without problems gives no pull request or issue; the agent can't push to `master` | 9.5 |
@@ -799,6 +799,23 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - **Process and background work:** `AppDomain.CurrentDomain.UnhandledException` and `TaskScheduler.UnobservedTaskException` log Critical. Fire-and-forget calls (`_ = ...`, e.g. after sign-in) are checked: await them, or catch and log Error.
 
 **Handled exceptions (2C.3):** list every `catch` here with its decision: *log Error*, *log Error and rethrow*, or *no log, expected* (for example parsing user input in `StringExtensions`), with a comment in the code for the last kind. Log the exception object (`LogError(ex, ...)`), not only `ex.Message`.
+
+**Done (2C.3, 2026-11-15), the 21 `catch` blocks:**
+
+| Where | Before | Now |
+|---|---|---|
+| `WaybillService` (4), `LayoutService` (2), `EmptyWagonOrderService` (2) | Logged Critical, then rethrew, so the unhandled handlers logged it again | **Catch removed**: the exception isn't handled, so it is logged once, as Critical, by the unhandled path (2C.2), with the page path |
+| `WaybillService.GetLayoutWaybillsAsync` | Critical, returned the waybills read so far | **Error** with the layout id and count |
+| `CloudMailSender` | Silent, returned 0 | **Error**; for a failed recipient only the type and SMTP status, since that exception holds the e-mail address |
+| `WiFredThrottleService` save | Silent, error message to the user | Duplicates (expected input errors) not logged; anything else **Error** (`ExceptionExtensions.IsAnyOf`) |
+| `LoginHandler`: rehash, sign-in, sign-out | Silent | **Error** with the user id |
+| `LoginLogoutHandler.SendSecurityNotification` | Silent | **Error** with the content name and user id |
+| `Image` component | Silent, hides the image | **Error** with the address (an external link that is broken; lower it to *Warning* if it gets noisy) |
+| `AvaliableModuleExtensions` | `Debugger.Break()` and rethrow, unreachable | **Catch removed** |
+| `LanguageExtensions`, `ContentService` (culture from input), `StringExtensions` (hash format), `DocumentEndpoint` (invalid or tampered key), `IDataRecordExtensions` (optional column), `EmptyWagonOrderService.GetCargoName` (no language column) | Silent | **Not logged, expected**: a comment in the code says why |
+| `VehiclesImporter` | Silent | **Not logged**: only used by an ignored test; comment |
+
+Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggingTests` (App).
 
 **Saved data (2C.5):**
 - **Who:** the user id (and person id) of the signed-in user. The services already get the `ClaimsPrincipal` in `SaveAsync`, but the interceptor doesn't. Proposal: the services open a log scope (`logger.BeginScope`) with `UserId` around the save, or a small ambient `ISaveContext` (`AsyncLocal`) that the interceptor reads. Decide in the step; a save without a user (startup, imports) logs `UserId` as empty.

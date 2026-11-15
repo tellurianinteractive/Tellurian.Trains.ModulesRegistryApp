@@ -150,20 +150,11 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 };
                 command.Parameters.AddWithValue("@LayoutId", layoutId);
                 command.Parameters.AddWithValue("@PersonId", personId);
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        result.Add(reader.MapAvailableModule());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (Logger.IsEnabled(LogLevel.Critical))
-                        Logger.LogCritical(ex, "Failed {storedProcedureName} for layout id={layoutId} and person id = {personId}", storedProcedureName, layoutId, personId);
-                    throw;
+                    result.Add(reader.MapAvailableModule());
                 }
             }
         }
@@ -191,19 +182,11 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 };
                 command.Parameters.AddWithValue("@LayoutId", layoutId);
                 command.Parameters.AddWithValue("@PersonId", personId);
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        result.Add(reader.MapRegisteredModule());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "Failed {storedProcedureName} for layout id={layoutId} and person id = {personId}", storedProcedureName, layoutId, personId);
-                    throw;
+                    result.Add(reader.MapRegisteredModule());
                 }
             }
         }

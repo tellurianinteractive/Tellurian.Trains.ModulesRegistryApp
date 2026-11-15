@@ -26,20 +26,12 @@ public class EmptyWagonOrderService(IDbContextFactory<ModulesDbContext> factory,
                 };
                 command.Parameters.AddWithValue("@StationId", stationId);
                 command.Parameters.AddWithValue("@CustomerId", stationCustomerId);
-                try
+                connection.Open();
+                var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    connection.Open();
-                    var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        emptyWagonOrders.Add(reader.Map());
-                        emptyWagonOrders.Last().OwnerNames = ownerNames;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
-                    throw;
+                    emptyWagonOrders.Add(reader.Map());
+                    emptyWagonOrders.Last().OwnerNames = ownerNames;
                 }
                 return emptyWagonOrders;
             }
@@ -61,17 +53,9 @@ public class EmptyWagonOrderService(IDbContextFactory<ModulesDbContext> factory,
                     CommandTimeout = 120
                 };
                 command.Parameters.AddWithValue("@StationId", stationId);
-                try
-                {
-                    connection.Open();
-                    var result = await command.ExecuteScalarAsync();
-                    if (result is string names) return names;
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogCritical(ex, "An error occured: {SqlErrorMessage}", ex.Message);
-                    throw;
-                }
+                connection.Open();
+                var result = await command.ExecuteScalarAsync();
+                if (result is string names) return names;
             }
 
         }
@@ -112,6 +96,7 @@ internal static class EmptyWagonOrderMapper
         }
         catch (IndexOutOfRangeException)
         {
+            // Expected, not logged: no column for this language, so the English name is used.
         }
 
         index = record.GetOrdinal("EN");

@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Diagnostics;
 
 namespace ModulesRegistry.Services.Extensions;
 public static class AvaliableModuleExtensions
@@ -28,17 +27,9 @@ public static class AvaliableModuleExtensions
                 }
                 else
                 {
-                    try
+                    if (!packages.ContainsKey(module.FullName))
                     {
-                        if (!packages.ContainsKey(module.FullName))
-                        {
-                            packages.Add(module.FullName, new List<(AvailableModule, int, ModulePackageType)>() { (module, scale.Key, ModulePackageType.SingleModule) });
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Debugger.Break();
-                        throw;
+                        packages.Add(module.FullName, new List<(AvailableModule, int, ModulePackageType)>() { (module, scale.Key, ModulePackageType.SingleModule) });
                     }
                 }
             }

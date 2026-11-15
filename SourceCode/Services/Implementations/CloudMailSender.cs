@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Net.Mail;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class CloudMailSender(IOptions<CloudMailSenderSettings> options) : IMailSender
+public sealed class CloudMailSender(IOptions<CloudMailSenderSettings> options, ILogger<CloudMailSender> logger) : IMailSender
 {
     private readonly CloudMailSenderSettings Settings = options.Value;
 
@@ -18,11 +19,24 @@ public sealed class CloudMailSender(IOptions<CloudMailSenderSettings> options) :
         {
             await client.SendMailAsync(message).ConfigureAwait(false);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            LogFailure(logger, ex, message.To.Count + message.CC.Count + message.Bcc.Count);
             return 0;
         }
         return message.To.Count + message.CC.Count + message.Bcc.Count;
+    }
+
+    /// <summary>
+    /// Logs a failed sending as Error. A failed recipient's exception holds the e-mail address, so then only the type and
+    /// the SMTP status are logged, not the exception (log entries hold no e-mail addresses).
+    /// </summary>
+    public static void LogFailure(ILogger logger, Exception exception, int recipientCount)
+    {
+        if (exception is SmtpFailedRecipientException failedRecipient)
+            logger.LogError("Sending a mail to {RecipientCount} recipients failed: {ExceptionType} {StatusCode}", recipientCount, failedRecipient.GetType().Name, failedRecipient.StatusCode);
+        else
+            logger.LogError(exception, "Sending a mail to {RecipientCount} recipients failed", recipientCount);
     }
 
     private MailAddress Sender =>

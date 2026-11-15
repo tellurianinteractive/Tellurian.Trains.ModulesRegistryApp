@@ -6,6 +6,7 @@
 @inject UserService UserService
 @inject IMailSender MailSender
 @inject ContentService ContentService
+@inject ILogger<Confirm> Logger
 
 @if (User is null)
 {
@@ -72,7 +73,7 @@ else if (User.IsLockedOut())
             IsPasswordAssigned = User is not null;
             if (IsPasswordAssigned)
             {
-                await LoginLogoutHandler.SendSecurityNotification(User!, "PasswordChangedMail", "PasswordChangedMailSubject", MailSender, ContentService);
+                await LoginLogoutHandler.SendSecurityNotification(User!, "PasswordChangedMail", "PasswordChangedMailSubject", MailSender, ContentService, Logger);
             }
         }
         else
