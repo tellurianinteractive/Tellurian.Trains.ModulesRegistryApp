@@ -114,6 +114,7 @@ Logs we can read in Azure, with levels that mean something, before the larger ch
 | 2C.5b ✅ | Extension methods `entry.ModifiedProperties()` (the properties whose current value differs from the original) and `IsModified` on the result. A `SaveChangesInterceptor` resets properties marked modified with an unchanged value, and an entry with nothing changed to `Unchanged`, so a save without changes doesn't reach the database. **Behaviour change** (no release note: invisible to users). | Unit tests for the extensions; interceptor tests against SQLite: an unchanged save gives no `UPDATE`, a partial change updates only the changed columns | 9.1 |
 | 2C.5c ✅ | **Change log in the database:** table `ChangeLog` (SQL project + entity), written by the interceptor in the same transaction: entity type, key, operation, changed property names (no values), user id, time. The user comes from a scoped `ICurrentUser` (`AuthenticationStateProvider` in components, `HttpContext` in endpoints), through a scoped context factory, so the services don't change. Retention by age and per object, configurable, cleaned up on save. No GUI. | Tests against SQLite that a create, update and delete each give one row with user, entity, key and property names; retention tests; a save in development gives a row | 9.1 |
 | 2C.5d | Explicit change log rows for the writes that bypass the change tracker (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures), or a documented decision per write to wait for stage 5. **Decided 2026-11-15:** explicit rows for the `ExecuteUpdate`/`ExecuteDelete` calls (`DocumentService`, `VehicleService`, `ModuleOwnershipService`, `ModuleService`), which stage 5 keeps; the `AddGenerated*Waybills` procedures wait for 5.5 and the cascade triggers' child deletes for 5.7, where they go through `SaveChanges` and are logged without extra code. The other stored procedure and `SqlCommand` calls only read (check each in the step). | Tests per write, or the list with decisions in section 9.1 | 9.1 |
+| 2C.7 | **Documents: permissions, no new orphans, station link** (done before 2C.6, released after 2C.5d). Upload and delete check that the user may edit every object that refers to the document, worked out from the database; a refusal is a Warning security event (1008). Deleting a module or station deletes its documents that nothing else refers to. The station upload links the right station. `RemoveUnreferencedDocuments` also checks `ModuleEndProfile`; the user runs it once after the release. **Security release note.** | Tests per role for upload and delete, for module and station deletes (documents gone, shared ones kept) and the station link; in production: the list of orphans before, the count after the clean-up | 10 |
 | 2C.6 | **Daily log review by an agent**, instead of alert rules: a scheduled GitHub Actions workflow runs Claude Code, which reads the last 24 hours from Application Insights (read-only), analyses errors and unusual patterns, and opens a pull request with a fix (or an issue when there is no clear fix). The user is notified through the GitHub app. | A dry run on a known problem (the two start-up exceptions) gives one pull request with a fix and nothing private in its text; a day without problems gives no pull request or issue; the agent can't push to `master` | 9.5 |
 
 All of 2C is released as 1.14.x. The GUI for the change log ("last changed by … at …", a history list) comes later, as an SSR page in stage 3. Each step is invisible to users (except 2C.2, see its release note), so the release notes get `- Maintenance update.`, except a security-related bullet if wanted for 2C.4.
@@ -909,3 +910,25 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 - [ ] How the token is limited (fine-grained permissions in the workflow, or a "require pull request" rule on `master`).
 - [ ] Run time and how far back it compares (24 hours against the previous 7 days).
 - [ ] Whether it also reviews the volume against the free allowance (section 9.2) and reports in an issue when it grows.
+
+## 10. Documents (step 2C.7)
+
+### 10.1 Current state (2026-11-15)
+- `DocumentService.DeleteAsync` and `SaveAsync` (upload) only check that the user is signed in: any signed-in user can delete or replace any document, given its id or the object.
+- The references go from the object to the document (`Module.PdfDocumentationId`, `DwgDrawingId`, `SkpDrawingId`, `Station.PdfInstructionId`, `ModuleEndProfile.PdfDocumentId`). Deleting a module or station leaves its documents behind. **Production: 83 of 622 documents are orphaned, 11.6 MB of 158 MB** (created 2023: 31, 2024: 38, 2025: 13, 2026: 1).
+- `DeleteAsync` deletes a document only when it cleared a reference; an orphan can't be deleted (and can't be reached in the UI anyway).
+- For a station, `DocumentedObject` returns the station's `PrimaryModuleId`, but `UpdateDocumentReference` looks up a station with that id: the upload probably links the wrong station or none. Confirm with a test first.
+- `RemoveUnreferencedDocuments` (manual, not called from code) misses `ModuleEndProfile.PdfDocumentId`, so as written it treats end-profile PDFs as orphans.
+
+### 10.2 Plan
+- **Permission, from the database** (never from the page's owner reference): a document may be changed by a user who may edit the object that refers to it.
+  - Module: a person who owns a share (`OwnedShare > 0`), a data administrator of a group that owns a share, a country or global administrator (as `ModuleService.SaveAsync`).
+  - Station: the same, for any of the station's modules.
+  - Module end profile: country or global administrators only (as `ModuleEndProfileService`).
+  - Read-only users never.
+  - Delete requires the right for **every** referring object, since the delete clears all references. Upload checks the target object, loaded by id.
+  - A refusal returns "not authorised" and logs `SecurityLog` event 1008 (Warning, user id and document or object id only).
+- **No new orphans:** `ModuleService` and `StationService` deletes also delete the documents the object refers to, in the same save, unless another object still refers to them (through the change tracker, so the change log has them).
+- **Station link:** upload links the station by its own id.
+- **Clean-up:** `RemoveUnreferencedDocuments` gets the `ModuleEndProfile` reference. Before the release, list the orphans (id, type, size, date) for the user to review; after the release the user runs the procedure from SSMS and the count is checked.
+- **Release note:** "Only users who may edit a module or station can now upload or delete its documents."
