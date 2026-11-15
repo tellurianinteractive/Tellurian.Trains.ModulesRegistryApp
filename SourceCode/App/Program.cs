@@ -1,4 +1,4 @@
-using Azure.Identity;
+﻿using Azure.Identity;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,6 +7,7 @@ using Microsoft.OpenApi;
 using ModulesRegistry.Api;
 using ModulesRegistry;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.ChangeTracking;
 using ModulesRegistry.Diagnostics;
 using ModulesRegistry.Endpoints;
 using ModulesRegistry.Notifications;
@@ -72,7 +73,7 @@ builder.Services.AddOpenApi(options =>
         document.Info.TermsOfService = new Uri("https://github.com/tellurianinteractive/Tellurian.Trains.ModuleRegistryApp/wiki/Terms-of-Use");
         document.Info.Contact = new OpenApiContact
         {
-            Name = "Stefan Fj�llemark",
+            Name = "Stefan Fjällemark",
             Email = "stefan@tellurian.se",
             Url = new Uri("https://github.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp")
         };
@@ -114,7 +115,9 @@ builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
         {
             options.CommandTimeout(60);
             options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-        }).EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+        })
+        .AddInterceptors(new SkipUnchangedValuesInterceptor())
+        .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
 
 });
 builder.Services.AddSingleton(TimeProvider.System);

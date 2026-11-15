@@ -145,9 +145,14 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
             }
             else
             {
-                dbContext.People.Attach(entity);
-                if (entity.User is not null) dbContext.Entry(entity.User).State = entity.User.Id.GetState();
-                dbContext.Entry(entity).State = EntityState.Added;
+                if (entity.User is { Id: > 0 } user)
+                {
+                    var existingUser = await dbContext.Users.FindAsync(user.Id);
+                    if (existingUser is null) return principal.NothingToUpdate<Person>();
+                    dbContext.Entry(existingUser).CurrentValues.SetValues(user);
+                    entity.User = existingUser;
+                }
+                dbContext.People.Add(entity);
             }
             var count = await dbContext.SaveChangesAsync();
             return count.SaveResult(entity);

@@ -77,6 +77,7 @@ Follow the global `efcore` skill. Project specifics:
 - Fluent mappings are moving out of `_ModulesDbContext.cs` into one `Map<Entity>()` extension per entity file (`Data/Region.cs` is the template). When moving one, carry over **every** `HasMaxLength`, `IsRequired`, index, trigger and `OnDelete` from the old block: step 4.1 requires a model identical to the production schema.
 - The database default collation is `Finnish_Swedish_CI_AS` (annotation in `OnModelCreating`). SQLite tests won't reproduce its sorting or case-insensitivity.
 - Entities are legacy scaffolded (`#nullable disable`, `partial`, `virtual`). Keep that style per entity until it is modernised on purpose.
+- `SkipUnchangedValuesInterceptor` (`Data/ChangeTracking`) drops modified marks whose value didn't change, so **an entity attached and forced to `Modified` is not saved**. To update: load the entity, then change it or use `CurrentValues.SetValues`.
 - Form models go in `App/Forms/<Aggregate>/` (Migration.md section 3.4), not in the Data project.
 
 ## Localisation

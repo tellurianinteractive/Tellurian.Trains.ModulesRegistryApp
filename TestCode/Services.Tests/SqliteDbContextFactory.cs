@@ -1,6 +1,8 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.ChangeTracking;
 
 namespace ModulesRegistry.Services.Tests;
 
@@ -14,12 +16,14 @@ public sealed class SqliteDbContextFactory : IDbContextFactory<ModulesDbContext>
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<ModulesDbContext> _options;
 
-    public SqliteDbContextFactory()
+    /// <param name="interceptors">Extra interceptors, for example one that records the SQL commands.</param>
+    public SqliteDbContextFactory(params IInterceptor[] interceptors)
     {
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
         _options = new DbContextOptionsBuilder<ModulesDbContext>()
             .UseSqlite(_connection)
+            .AddInterceptors([new SkipUnchangedValuesInterceptor(), .. interceptors])
             .Options;
         using var dbContext = CreateDbContext();
         dbContext.Database.EnsureCreated();
