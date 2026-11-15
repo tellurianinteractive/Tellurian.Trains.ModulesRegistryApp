@@ -841,6 +841,7 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 - **Retention:** configurable maximum age and maximum rows per object; a row goes when either is passed. Cleaned up on save (the F1 plan sleeps, so a timer is unreliable): rows beyond the maximum for the saved object at once, rows past the age at most once a day.
 - **Not covered by the interceptor:** `ExecuteUpdateAsync`/`ExecuteDeleteAsync`, `SqlCommand` and the stored procedures that write (`AddGenerated*Waybills`), about 22 places: explicit rows or a decision per write (2C.5d).
 - **Rejected:** SQL Server temporal tables (store values, no user, not in PostgreSQL), Change Tracking/CDC (no user), Audit.NET (a dependency for about 100 lines).
+- **Circuit user, accepted (2026-11-15):** in a Blazor circuit the user and claims are read from the cookie once, when the circuit starts. A sign-out in another tab, an expired cookie or removed rights take effect in an open page only when it reconnects or reloads, and its saves are logged with the circuit's user. The user id never changes within a circuit, so no rights leak to another user; accepted as is. Mostly gone with SSR in stage 3, where each form post is a normal request.
 - **Open:** who may see the history in the GUI (administrators only, or also the object's owners), and whether `TermsOfUse.md` should mention it (changing it forces every user to accept the terms again). Decide before the GUI in stage 3.
 
 **Conventions:**
