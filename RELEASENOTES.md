@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.21
+Released 2026-11-15
+- Saving a module or station right after deleting one of its documents no longer fails.
 ## Release 1.14.20
 Released 2026-11-15
 - Maintenance update.
