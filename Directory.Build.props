@@ -3,7 +3,6 @@
 		<TargetFramework>net11.0</TargetFramework>
 		<Platform>AnyCPU</Platform>
 		<Version>1.14.12</Version>
-		<AssemblyVersion>1.14.11</AssemblyVersion>
 		<UserSecretsId>ModulesRegistryDevelopmentSecrets</UserSecretsId>
 		<NeutralLanguage>en-150</NeutralLanguage>
 	</PropertyGroup>
