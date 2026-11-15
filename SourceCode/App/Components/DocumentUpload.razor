@@ -61,6 +61,13 @@
     async Task DeleteFileAsync(int documentId)
     {
         var result = await DocumentService.DeleteAsync(Principal, documentId);
+        if (result.Count > 0)
+        {
+            // The page's object still refers to the deleted document; saving it would write the id back.
+            // Cleared here instead of reloading the object, so unsaved changes in the page's form are kept.
+            DocumentService.ClearDocumentReference(DocumentedObject, FileExtension);
+            DocumentId = null;
+        }
         NotificationService.ShowSuccessOrFailure(Localizer, result.Count, Localizer["FileDeleted"]);
         StateHasChanged();
     }

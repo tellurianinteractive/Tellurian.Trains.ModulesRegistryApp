@@ -174,6 +174,23 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     }
 
     /// <summary>
+    /// Clears the reference to a deleted document on the object a page holds, so that saving the object afterwards
+    /// doesn't write the deleted document's id back (which fails on the foreign key). The same mapping as <see cref="DocumentedObject"/>.
+    /// </summary>
+    /// <returns>True when a reference was cleared.</returns>
+    public static bool ClearDocumentReference(object? documentObject, string? fileExtension)
+    {
+        switch (documentObject, fileExtension)
+        {
+            case (Module module, "dwg"): module.DwgDrawingId = null; return true;
+            case (Module module, "pdf"): module.PdfDocumentationId = null; return true;
+            case (Module module, "skp"): module.SkpDrawingId = null; return true;
+            case (Station station, "pdf"): station.PdfInstructionId = null; return true;
+            default: return false;
+        }
+    }
+
+    /// <summary>
     /// This function contains all valid document types valid for different entities.
     /// </summary>
     /// <param name="documentObject">The object that should refer to the <see cref=">Document"/></param>
