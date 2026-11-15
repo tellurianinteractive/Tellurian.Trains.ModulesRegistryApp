@@ -58,7 +58,7 @@ The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Us
 }
 ```
 
-In production, secrets come from Azure Key Vault via the `VaultUri` environment variable (`App/Program.cs`). `DefaultUser` is registered as a singleton — populated from `TestUsername`/`TestPassword` in development, empty in production.
+In production, secrets come from Azure Key Vault via the `VaultUri` environment variable (`App/Program.cs`). Logs and telemetry go to Application Insights only when the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` is set (`App/Diagnostics/ApplicationInsights.cs`); log levels and saved queries are in `System Design Documents/Logging.md`. The app must stay on Azure free tiers, so check the cost of any change in Azure first. `DefaultUser` is registered as a singleton — populated from `TestUsername`/`TestPassword` in development, empty in production.
 
 ## Database workflow (important)
 

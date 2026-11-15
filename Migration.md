@@ -57,6 +57,8 @@ Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on A
 
 Steps 2B.3 (release 1.14.9) and 2B.4 (release 1.14.10, Tellurian.Localization 1.7.0) done 2026-11-14 and checked in production; Markdown pages and the Terms of Use date work as before. The package now publishes with nuget.org Trusted Publishing.
 
+Step 2C.1 started 2026-11-15: the distro in the app (not released yet), daily cap set on the workspace; request and dependency telemetry kept (decided). The codeless agent is turned off just before the release.
+
 Step 2B.1 (inventory, 2026-11-14) and 2B.2 (one resource project, release 1.14.8, 2026-11-14) done; 1.14.8 checked in production, the public API output is byte-identical.
 
 Step 2.2 deployed as release 1.14.7 (2026-11-14): checked locally against production (read-only) and in production, including Azure SignalR. **Stage 2 complete.**
@@ -88,7 +90,7 @@ Logs we can read in Azure, with levels that mean something, before the larger ch
 
 | # | Step | Verification | Ref |
 |---|---|---|---|
-| 2C.1 | Application Insights resource (workspace-based) and the Microsoft OpenTelemetry Distro in the app; the connection string from an app setting, not the repo. Today's logs flow unchanged. Trace-based log sampling **off**, daily cap and retention set. Saved KQL queries and a "how to read the logs" section in section 9. | Requests, exceptions and the existing log entries visible in the portal and through `az monitor app-insights query`; nothing sent when the connection string is missing (local, tests) | 9.2, 9.3 |
+| 2C.1 | The Microsoft OpenTelemetry Distro in the app, sending to the **existing** `ModuleRegistry` Application Insights resource (connection string already an app setting). The App Service's codeless agent is turned off just before the deploy. Trace-based log sampling **off**, daily cap on the workspace. Saved KQL queries and a "how to read the logs" section in section 9. **Stays within the free 5 GB per month.** | Requests, exceptions and log entries visible in the portal and through `az monitor app-insights query`, sent by the distro (`sdkVersion`), not the agent (`ar_...`); nothing sent when the connection string is missing (local, tests); volume per day checked after a week | 9.2, 9.3 |
 | 2C.2 | Unhandled exceptions logged as **Critical** ("Fatal"), once each: HTTP pipeline (the exception handler), Blazor circuits, background tasks and the process. An alert rule mails on Critical. | Tests with a fake logger per path; a deliberate exception in development shows up once as Critical; the alert fires | 9.1 |
 | 2C.3 | Handled exceptions logged as **Error**: go through every `catch` (21 today). The services' `LogCritical` for caught SQL errors become `LogError`; silent catches either log or get a comment why not. | Fake-logger tests for the changed services; a list of the catches and the decision for each in section 9 | 9.1 |
 | 2C.4 | Security events: successful sign-in **Information**; failed sign-in, sign-out, lockout and password reset request (also when the reset limit is reached) **Warning**. No passwords, user names or e-mail addresses in the log, only ids. | Fake-logger tests for `LoginHandler`, the logout endpoint and `UserService`; sign-in, failed sign-in, sign-out, lockout and reset in development show the expected entries | 9.1 |
@@ -106,7 +108,7 @@ Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; 
 | 3.4 | Forms pilot `Region`: form model + mapping extensions + DataAnnotations + localisation + SSR form handling | Mapping, round-trip and validation tests; client-side and server-side validation in all languages | 3.3, 3.4 |
 | 3.5 | Custom validation attributes + JS validators (`OrdinaryText`, `Capitalized`, `ValidYear`, …) | C# and JS tested against the same table of test values | 3.3 |
 | 3.6 | Remaining forms, **one aggregate per release**. The last one removes FluentValidation, Blazored.FluentValidation and `App/Validators`. | As in 4.4 | 3.3, 3.4 |
-| 3.7 | Remaining interactive islands + `AutoPause`. Evaluate the Azure SignalR Service. | Number of circuits and connections in Azure before/after | 3.5 |
+| 3.7 | Remaining interactive islands + `AutoPause`. Evaluate the Azure SignalR Service; **the goal is to remove it** (about $50 per month, the largest cost) and use the app's own SignalR. | Number of circuits and connections in Azure before/after | 3.5 |
 
 ### Stage 4 EF Core migrations
 | # | Step | Verification | Ref |
@@ -460,7 +462,7 @@ Alternative (a larger change): let the services take a delegate, `SaveAsync(prin
 ### 3.5 Remaining interactive islands
 - [ ] Identify components that must stay interactive and give them `@rendermode InteractiveServer` individually.
 - [ ] Turn on `AutoPause` (2.3) for these, so idle tabs don't hold circuits open.
-- [ ] Evaluate whether the remaining load justifies the **Azure SignalR Service**, or whether the app's own SignalR is enough (`AddAzureSignalR`, `ServerStickyMode.Required` in `Program.cs`). Removing it would also remove the deprecated `Microsoft.Azure.SignalR` package (1.4).
+- [ ] Evaluate whether the remaining load justifies the **Azure SignalR Service** (about $50 per month, by far the largest cost; the database is about $5), or whether the app's own SignalR is enough. **Goal (2026-11-15): remove it** once SSR is done; today the app's own SignalR is too limited (`AddAzureSignalR`, `ServerStickyMode.Required` in `Program.cs`). Removing it would also remove the deprecated `Microsoft.Azure.SignalR` package (1.4).
 - [ ] Consider `CacheView` for expensive static parts.
 
 ### 3.6 Security and authentication in SSR
@@ -802,11 +804,12 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 ### 9.2 Application Insights (2C.1)
 **Choice:** the **Microsoft OpenTelemetry Distro** (`Microsoft.OpenTelemetry`, `builder.Services.AddOpenTelemetry().UseMicrosoftOpenTelemetry(o => o.Exporters = ExportTarget.AzureMonitor)`), which Microsoft now recommends over the older `Azure.Monitor.OpenTelemetry.AspNetCore` and the classic Application Insights SDK. It sends `ILogger` entries, requests, dependencies, exceptions and metrics. Check the current package and API names when the step starts.
 - **Not the App Service auto-instrumentation (agent):** it depends on the runtime installed on the App Service, and we publish self-contained `net11.0` (2.1). The SDK in the app works no matter how it is published.
+- **Found 2026-11-15:** the agent is already on (`ApplicationInsightsAgent_EXTENSION_VERSION ~2`, profiler settings) and sends to the existing workspace-based resource `ModuleRegistry` (since 2022): requests, *Warning* and higher log entries, and exceptions (`sdkVersion` `ar_...`). It uses **adaptive sampling that can't be turned off without code**. **Decided:** the distro replaces it; set `ApplicationInsightsAgent_EXTENSION_VERSION` to `disabled` just before deploying 2C.1, so telemetry isn't sent twice. `APPLICATIONINSIGHTS_CONNECTION_STRING` is already set and is reused.
 - **Connection string** in the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` (or Key Vault, like the other secrets). When it is missing (locally, in tests, in CI) nothing is exported. Optionally, Entra ID authentication with the App Service's managed identity, so the instrumentation key alone can't send data.
 - **Sampling:** the distro samples traces (by default rate-limited, 5 per second) and **drops log entries belonging to unsampled traces by default**. Set `EnableTraceBasedLogsSampler = false`, so no security or save entry is ever sampled away. With our traffic, trace sampling can stay at the default.
 - **Log levels to Application Insights:** `Default` *Information* for our own categories (`ModulesRegistry.*`), *Warning* for `Microsoft.*` and `System.*`, in `appsettings.json`.
-- **Cost:** a workspace-based resource in a Log Analytics workspace in `Tellurian.Trains`. Set a **daily cap** (e.g. 0.2 GB) and check the volume after a week (*Usage and estimated costs*). The first 5 GB per month are free.
-- **Retention:** the default 90 days (can be shortened later if the volume calls for it).
+- **Cost: must stay free** (the app runs on free tiers; only the database, about $5, and the Azure SignalR Service, about $50 per month, cost money). The pay-as-you-go workspace includes 5 GB per month per billing account. `Tellurian-Trains-LogAnalytics-Workspace` is the only workspace and holds both `ModuleRegistry` and `fastclock`: about **1.25 GB billable per 31 days** (2026-11-15; `AppRequests` 0.92 GB, `AppPerformanceCounters` 0.22 GB). **Daily cap 0.15 GB** on the workspace, set 2026-11-15 (at most about 4.6 GB per month, so never above the free allowance), and check the volume a week after the deploy. The distro samples requests (5 traces per second), so their volume shouldn't grow; the new log entries are small.
+- **Retention:** the workspace default is 30 days, but the Application Insights tables (`AppRequests`, `AppTraces`, `AppExceptions`, …) keep **90 days at no charge** by default. Nothing to change.
 - **Privacy (decided 2026-11-15):** logging is a technical detail. The log entries are pseudonymised (ids only, no names, user names, e-mail addresses or values), so `TermsOfUse.md` is **not** changed.
 - **Access (decided 2026-11-15):** users of the app have **no** access to the logs; there is no log page in the app. Only the administrator and developers read them, through Azure roles on the Application Insights resource and its workspace.
 - **Blazor Server:** requests over the SignalR circuit appear as one long websocket request per circuit, not one per click. The log entries are what show what users do, which is one more reason for 2C.4 and 2C.5.
@@ -824,7 +827,7 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 
 ### 9.4 To decide in stage 2C
 - [ ] How the saving user reaches the interceptor (log scope or ambient context), 2C.5.
-- [x] Privacy and access (2026-11-15): logs are pseudonymised (ids only), no change in `TermsOfUse.md`; app users have no access to the logs. Retention: the default 90 days.
+- [x] Privacy and access (2026-11-15): logs are pseudonymised (ids only), no change in `TermsOfUse.md`; app users have no access to the logs. Retention: 90 days, the free default for the Application Insights tables. Must stay within the free 5 GB per month (daily cap).
 - [x] Failed sign-in and sign-out (2026-11-15): both logged as *Warning*.
 - [ ] Whether 2C.4 gets a release note bullet (security), or `- Maintenance update.`
 

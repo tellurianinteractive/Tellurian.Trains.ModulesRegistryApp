@@ -7,6 +7,7 @@ using Microsoft.OpenApi;
 using ModulesRegistry.Api;
 using ModulesRegistry;
 using ModulesRegistry.Data;
+using ModulesRegistry.Diagnostics;
 using ModulesRegistry.Endpoints;
 using ModulesRegistry.Notifications;
 using ModulesRegistry.Security;
@@ -24,6 +25,8 @@ if (builder.Environment.IsProduction())
     var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
     builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 }
+
+builder.AddApplicationInsights();
 
 builder.Services.Configure<CookiePolicyOptions>(options => options.MinimumSameSitePolicy = SameSiteMode.Lax);
 builder.Services.Configure<CloudMailSenderSettings>(builder.Configuration.GetSection("Brevo"));
