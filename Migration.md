@@ -20,7 +20,7 @@ Sections 1–4 describe **what** needs to be done and why. **The roadmap below d
 - **Rollback must be possible** by redeploying the previous version. So database objects are never removed in the same release as the code stops using them; they're removed in the following release.
 - **No behaviour changes mixed with refactoring.** A step either changes structure (same behaviour) or changes behaviour, never both.
 - Tick off each step here when it's deployed, and adjust the coming steps based on what was learned.
-- **Version numbers** (decided 2026-11-14): stages 1–2B are released as 1.14.x. The first release of stage 3 (server-side rendering) steps up to **1.15.0**, and its following releases are 1.15.x. When the full SSR implementation is done (end of stage 3), it is announced as **2.0.0**.
+- **Version numbers** (decided 2026-11-14): stages 1–2C are released as 1.14.x. The first release of stage 3 (server-side rendering) steps up to **1.15.0**, and its following releases are 1.15.x. When the full SSR implementation is done (end of stage 3), it is announced as **2.0.0**.
 
 ### Stage 1: dependency hygiene (still .NET 10)
 | # | Step | Verification | Ref |
@@ -83,6 +83,19 @@ All translations in one resource assembly, and the app's own localisation code r
 | 2B.4 ✅ | Replace the Markdown content loading (`ContentService`, `CultureInfoExtensions.GetMarkdownAsync`, including the `<!-- LastModified -->` line) with the package's Markdown provider, or extend the package where it lacks something | Content pages in all languages; the Terms of Use guard test still gives 2026-01-09 10:25:31 UTC | 7, 6.2 |
 | 2B.5 | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | 7 |
 
+### Stage 2C: logging and Application Insights
+Logs we can read in Azure, with levels that mean something, before the larger changes in stage 3, so each of those releases can be "observed for a while" (definition of done, item 4) by looking at real data. Application Insights comes first, so the new log entries land somewhere they can be read. See section 9.
+
+| # | Step | Verification | Ref |
+|---|---|---|---|
+| 2C.1 | Application Insights resource (workspace-based) and the Microsoft OpenTelemetry Distro in the app; the connection string from an app setting, not the repo. Today's logs flow unchanged. Trace-based log sampling **off**, daily cap and retention set. Saved KQL queries and a "how to read the logs" section in section 9. | Requests, exceptions and the existing log entries visible in the portal and through `az monitor app-insights query`; nothing sent when the connection string is missing (local, tests) | 9.2, 9.3 |
+| 2C.2 | Unhandled exceptions logged as **Critical** ("Fatal"), once each: HTTP pipeline (the exception handler), Blazor circuits, background tasks and the process. An alert rule mails on Critical. | Tests with a fake logger per path; a deliberate exception in development shows up once as Critical; the alert fires | 9.1 |
+| 2C.3 | Handled exceptions logged as **Error**: go through every `catch` (21 today). The services' `LogCritical` for caught SQL errors become `LogError`; silent catches either log or get a comment why not. | Fake-logger tests for the changed services; a list of the catches and the decision for each in section 9 | 9.1 |
+| 2C.4 | Security events: successful sign-in **Information**; failed sign-in, sign-out, lockout and password reset request (also when the reset limit is reached) **Warning**. No passwords, user names or e-mail addresses in the log, only ids. | Fake-logger tests for `LoginHandler`, the logout endpoint and `UserService`; sign-in, failed sign-in, sign-out, lockout and reset in development show the expected entries | 9.1 |
+| 2C.5 | Saved data logged as **Information**, with who (user id) and what (entity, key, operation, changed property names): one `SaveChangesInterceptor`, plus explicit entries for writes that bypass it (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures). | Tests against SQLite that a create, update and delete each give one entry with user, entity, key and properties, and no values; a save in development shows up in Application Insights | 9.1 |
+
+All of 2C is released as 1.14.x. Each step is invisible to users, so the release notes get `- Maintenance update.`, except a security-related bullet if wanted for 2C.4.
+
 ### Stage 3: SSR, page group by page group
 Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; the release that completes the full SSR implementation is **2.0.0** (see the rules above).
 | # | Step | Verification | Ref |
@@ -122,7 +135,7 @@ Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` f
 ### Stage 6: PostgreSQL (optional, decided later)
 Only once stages 3 and 5 are done. See 4.3 phase C. This is planned as its own project with a rehearsed data migration.
 
-**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stage 2B should come before stage 3, so the new forms (3.4–3.6) get their texts from one place. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
+**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stage 2B should come before stage 3, so the new forms (3.4–3.6) get their texts from one place. Stage 2C should also come before stage 3, so the SSR releases can be observed in Application Insights. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
 
 ---
 
@@ -740,11 +753,78 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 ### 8.3 Assessment
 - Aspire does not merge services into one app; it orchestrates several. With one app (the public API stays in it, 2.5), its orchestration adds little; the database container and the test support are what solve a real problem here.
 - Cost: two more projects (AppHost, ServiceDefaults) for Aspire, Docker/Podman for developers, and one more tool to keep updated.
-- Likely choice: start with **Testcontainers** for the integration tests in stage 5. Add **Aspire** when there is more than one runnable project, or if the local dashboard and OpenTelemetry (to Application Insights) are wanted.
+- Likely choice: start with **Testcontainers** for the integration tests in stage 5. Add **Aspire** when there is more than one runnable project, or if the local dashboard and OpenTelemetry (to Application Insights) are wanted. OpenTelemetry to Application Insights comes already in stage 2C (section 9); Aspire's ServiceDefaults could take over that setup later.
 
 ### 8.4 To decide in step 5.0
 - [ ] Testcontainers alone, or Aspire.
 - [ ] How the schema gets into the container now (DACPAC) and after stage 4 (EF migrations bundle).
 - [ ] Test data: a small hand-written set per golden-master scenario, not a copy of production (personal data).
 - [ ] Whether the integration tests run in CI on every push, or separately.
+
+---
+
+## 9. Logging and Application Insights
+
+### 9.1 Log levels (decided 2026-11-15)
+`Microsoft.Extensions.Logging` has no *Fatal*; **`LogLevel.Critical`** is the same thing (Application Insights shows it as severity *Critical*, `severityLevel` 4).
+
+| Event | Level | Where it is logged |
+|---|---|---|
+| Unhandled exception | **Critical** | One place per path (see below), so each exception is logged once |
+| Handled (caught) exception | **Error** | In the `catch` |
+| Failed sign-in | **Warning** | `LoginHandler`: with the user id when the user exists (wrong password, already locked out), without any id when it doesn't (the entered user name is never logged) |
+| Sign-out | **Warning** | The logout endpoint, with the user id |
+| User locked out | **Warning** | `LoginHandler`, when `UpdateFailedLoginAttempts` gives a locked-out user |
+| Password reset requested (also when the limit is reached) | **Warning** | `UserService.ResetPasswordAsync` or its caller |
+| Successful sign-in | **Information** | `LoginHandler.TrySignInAsync`, after `SignInAsync` |
+| Data saved (added, changed, deleted) | **Information** | `SaveChangesInterceptor` + explicit entries for writes that bypass EF's change tracker |
+
+**Current state (2026-11-15):** 21 `catch` blocks in 14 files. The services log caught SQL errors as `LogCritical` (`WaybillService`, `EmptyWagonOrderService`, `LayoutService`), others catch silently. The exception handler (`ErrorPage.UseErrorPage`) relies on the framework's own log entry (level *Error*). Unhandled exceptions in Blazor circuits are logged by the framework at *Error*. Sign-in, lockout, password resets and saves aren't logged. `appsettings.json`: `Default` *Information*, `Microsoft` *Warning*; there is no log destination in production that is easy to read.
+
+**Unhandled exceptions, path by path (2C.2):**
+- **HTTP requests** (endpoints, `/api`, `/app`, the document page): log Critical in `ErrorPage.WriteAsync` from `IExceptionHandlerFeature`, and suppress the framework's own *Error* entry (`ExceptionHandlerOptions.SuppressDiagnosticsCallback`) so the exception isn't logged twice.
+- **Blazor circuits** (all interactive pages today): an error boundary in the layout whose `OnErrorAsync` logs Critical, then shows the error UI. Check whether the framework's circuit entry (`Microsoft.AspNetCore.Components.Server.Circuits`) then becomes a duplicate, and filter it if so.
+- **Process and background work:** `AppDomain.CurrentDomain.UnhandledException` and `TaskScheduler.UnobservedTaskException` log Critical. Fire-and-forget calls (`_ = ...`, e.g. after sign-in) are checked: await them, or catch and log Error.
+
+**Handled exceptions (2C.3):** list every `catch` here with its decision: *log Error*, *log Error and rethrow*, or *no log, expected* (for example parsing user input in `StringExtensions`), with a comment in the code for the last kind. Log the exception object (`LogError(ex, ...)`), not only `ex.Message`.
+
+**Saved data (2C.5):**
+- **Who:** the user id (and person id) of the signed-in user. The services already get the `ClaimsPrincipal` in `SaveAsync`, but the interceptor doesn't. Proposal: the services open a log scope (`logger.BeginScope`) with `UserId` around the save, or a small ambient `ISaveContext` (`AsyncLocal`) that the interceptor reads. Decide in the step; a save without a user (startup, imports) logs `UserId` as empty.
+- **What:** entity type, key, operation (`Added`/`Modified`/`Deleted`) and the names of the changed properties. **No values**: the tables hold personal data (names, e-mail, addresses), and the database already holds the values. One entry per saved entity, all with the same message template so they can be queried.
+- **Not covered by the interceptor:** `ExecuteUpdateAsync`/`ExecuteDeleteAsync`, `SqlCommand` and the stored procedures that write (`AddGenerated*Waybills`). These get an explicit entry with the same template (entity, key or count, operation, user) until stage 5 removes them.
+
+**Conventions:**
+- Message templates with named placeholders (`"User {UserId} signed in"`), never string interpolation, so the values become queryable properties (`customDimensions`).
+- Event ids per area, defined with the `[LoggerMessage]` source generator in one class per area: 1000–1999 security, 2000–2999 saved data, 9000–9999 unhandled exceptions.
+- Never log passwords, user names, e-mail addresses, API keys or form values. Ids only.
+- Tests use `FakeLogger` (`Microsoft.Extensions.Diagnostics.Testing`) to check level, event id and properties.
+
+### 9.2 Application Insights (2C.1)
+**Choice:** the **Microsoft OpenTelemetry Distro** (`Microsoft.OpenTelemetry`, `builder.Services.AddOpenTelemetry().UseMicrosoftOpenTelemetry(o => o.Exporters = ExportTarget.AzureMonitor)`), which Microsoft now recommends over the older `Azure.Monitor.OpenTelemetry.AspNetCore` and the classic Application Insights SDK. It sends `ILogger` entries, requests, dependencies, exceptions and metrics. Check the current package and API names when the step starts.
+- **Not the App Service auto-instrumentation (agent):** it depends on the runtime installed on the App Service, and we publish self-contained `net11.0` (2.1). The SDK in the app works no matter how it is published.
+- **Connection string** in the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` (or Key Vault, like the other secrets). When it is missing (locally, in tests, in CI) nothing is exported. Optionally, Entra ID authentication with the App Service's managed identity, so the instrumentation key alone can't send data.
+- **Sampling:** the distro samples traces (by default rate-limited, 5 per second) and **drops log entries belonging to unsampled traces by default**. Set `EnableTraceBasedLogsSampler = false`, so no security or save entry is ever sampled away. With our traffic, trace sampling can stay at the default.
+- **Log levels to Application Insights:** `Default` *Information* for our own categories (`ModulesRegistry.*`), *Warning* for `Microsoft.*` and `System.*`, in `appsettings.json`.
+- **Cost:** a workspace-based resource in a Log Analytics workspace in `Tellurian.Trains`. Set a **daily cap** (e.g. 0.2 GB) and check the volume after a week (*Usage and estimated costs*). The first 5 GB per month are free.
+- **Retention:** the default 90 days (can be shortened later if the volume calls for it).
+- **Privacy (decided 2026-11-15):** logging is a technical detail. The log entries are pseudonymised (ids only, no names, user names, e-mail addresses or values), so `TermsOfUse.md` is **not** changed.
+- **Access (decided 2026-11-15):** users of the app have **no** access to the logs; there is no log page in the app. Only the administrator and developers read them, through Azure roles on the Application Insights resource and its workspace.
+- **Blazor Server:** requests over the SignalR circuit appear as one long websocket request per circuit, not one per click. The log entries are what show what users do, which is one more reason for 2C.4 and 2C.5.
+
+### 9.3 Reading the logs
+- **Portal:** Application Insights → *Failures* (exceptions), *Transaction search*, *Live metrics*, and *Logs* (KQL). Tables: `traces` (log entries) and `exceptions` in the Application Insights view; `AppTraces` and `AppExceptions` in the workspace.
+- **Command line** (also for Claude Code, read-only): `az monitor app-insights query --app <name> -g Tellurian.Trains --analytics-query "<KQL>"`, with the role *Log Analytics Reader* or *Monitoring Reader* for the developer. No write access needed.
+- **Saved queries** in the repo (`System Design Documents/Logging.md`), at least:
+  - unhandled exceptions: `exceptions | where severityLevel == 4 | order by timestamp desc`
+  - security events: `traces | where customDimensions.EventId between (1000 .. 1999)`
+  - saves by user or entity: `traces | where customDimensions.EventId between (2000 .. 2999) | project timestamp, UserId = customDimensions.UserId, Entity = customDimensions.Entity, Operation = customDimensions.Operation`
+  - after a deploy: everything at *Warning* or above since the release time.
+- **Alerts:** a log alert rule on Critical (`severityLevel == 4`, any count in 5 minutes) that mails the administrator; optionally one on several lockouts in a short time.
+- **Definition of done, item 4:** from stage 3 on, "observed for a while" means running the after-deploy query some hours and a day after each release, with no new Critical or Error entries.
+
+### 9.4 To decide in stage 2C
+- [ ] How the saving user reaches the interceptor (log scope or ambient context), 2C.5.
+- [x] Privacy and access (2026-11-15): logs are pseudonymised (ids only), no change in `TermsOfUse.md`; app users have no access to the logs. Retention: the default 90 days.
+- [x] Failed sign-in and sign-out (2026-11-15): both logged as *Warning*.
+- [ ] Whether 2C.4 gets a release note bullet (security), or `- Maintenance update.`
 
