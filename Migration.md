@@ -57,7 +57,7 @@ Step 2.1 was deployed as release 1.14.0 (2026-11-12), which failed to start on A
 
 Steps 2B.3 (release 1.14.9) and 2B.4 (release 1.14.10, Tellurian.Localization 1.7.0) done 2026-11-14 and checked in production; Markdown pages and the Terms of Use date work as before. The package now publishes with nuget.org Trusted Publishing.
 
-Step 2C.5a code done 2026-11-15, not released yet: the five saves load the row and use `SetValues`; `SaveWithChangeDetectionTests` against SQLite. Group and group member saves checked locally against the production database. Published to production ahead of the code: the table `ChangeLog` (unused until 2C.5c) and the column `Country.IsoCode` (nullable; the entity got the property in the same commit).
+Step 2C.5a code done 2026-11-15, not released yet: the five saves load the row and use `SetValues`; `SaveWithChangeDetectionTests` against SQLite. All the changed saves (group, group member, module standard, person, module ownership) checked locally against the production database. Published to production ahead of the code: the table `ChangeLog` (unused until 2C.5c) and the column `Country.IsoCode` (nullable; the entity got the property in the same commit).
 
 Step 2C.4 deployed as release 1.14.17 (2026-11-15), with a security release note bullet. **Checked in Application Insights:** sign-out (1004), failed sign-in for an unknown address (1003, no id or address), failed sign-in with a wrong password (1002, user id and reason `WrongPassword`) and successful sign-in (1001), each logged once with the expected level and only ids. Lockout and password reset not triggered in production.
 
