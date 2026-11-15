@@ -1,6 +1,8 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging.Testing;
+using Microsoft.Extensions.Time.Testing;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.ChangeTracking;
 
@@ -16,14 +18,23 @@ public sealed class SqliteDbContextFactory : IDbContextFactory<ModulesDbContext>
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<ModulesDbContext> _options;
 
+    /// <summary>
+    /// The user the change log records; null means nobody signed in.
+    /// </summary>
+    public TestCurrentUser CurrentUser { get; } = new();
+    public ChangeLogOptions ChangeLogOptions { get; } = new();
+    public FakeTimeProvider Time { get; } = new(new DateTimeOffset(2026, 11, 15, 12, 0, 0, TimeSpan.Zero));
+    public FakeLogger<ChangeLogInterceptor> ChangeLogLogger { get; } = new();
+
     /// <param name="interceptors">Extra interceptors, for example one that records the SQL commands.</param>
     public SqliteDbContextFactory(params IInterceptor[] interceptors)
     {
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
+        var changeLog = new ChangeLogInterceptor(CurrentUser, ChangeLogOptions, new ChangeLogCleanupSchedule(), Time, ChangeLogLogger);
         _options = new DbContextOptionsBuilder<ModulesDbContext>()
             .UseSqlite(_connection)
-            .AddInterceptors([new SkipUnchangedValuesInterceptor(), .. interceptors])
+            .AddInterceptors([new SkipUnchangedValuesInterceptor(), changeLog, .. interceptors])
             .Options;
         using var dbContext = CreateDbContext();
         dbContext.Database.EnsureCreated();
@@ -51,4 +62,14 @@ public sealed class SqliteDbContextFactory : IDbContextFactory<ModulesDbContext>
     }
 
     public void Dispose() => _connection.Dispose();
+}
+
+/// <summary>
+/// A settable signed-in user for the change log.
+/// </summary>
+public sealed class TestCurrentUser : ICurrentUser
+{
+    public int? UserId { get; set; }
+    public Exception? Throws { get; set; }
+    public Task<int?> GetUserIdAsync() => Throws is null ? Task.FromResult(UserId) : Task.FromException<int?>(Throws);
 }

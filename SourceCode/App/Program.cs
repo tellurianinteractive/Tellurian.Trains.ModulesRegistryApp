@@ -2,7 +2,9 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using ModulesRegistry.Api;
 using ModulesRegistry;
@@ -108,7 +110,19 @@ builder.Services.AddScoped<HttpContextAccessor>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddAuthorizationPolicies();
-builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
+builder.Services.Configure<ChangeLogOptions>(builder.Configuration.GetSection(ChangeLogOptions.SectionName));
+builder.Services.AddScoped<CurrentUser>();
+builder.Services.AddScoped<ICurrentUser>(sp => sp.GetRequiredService<CurrentUser>());
+builder.Services.AddScoped<CircuitHandler, CurrentUserCircuitHandler>();
+builder.Services.AddSingleton<ChangeLogCleanupSchedule>();
+builder.Services.AddScoped(sp => new ChangeLogInterceptor(
+    sp.GetRequiredService<ICurrentUser>(),
+    sp.GetRequiredService<IOptions<ChangeLogOptions>>().Value,
+    sp.GetRequiredService<ChangeLogCleanupSchedule>(),
+    sp.GetRequiredService<TimeProvider>(),
+    sp.GetRequiredService<ILogger<ChangeLogInterceptor>>()));
+// Scoped, so each circuit or request gets a change log interceptor with its own user.
+builder.Services.AddDbContextFactory<ModulesDbContext>((sp, options) =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
         options =>
@@ -116,10 +130,9 @@ builder.Services.AddDbContextFactory<ModulesDbContext>(options =>
             options.CommandTimeout(60);
             options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
         })
-        .AddInterceptors(new SkipUnchangedValuesInterceptor())
+        .AddInterceptors(new SkipUnchangedValuesInterceptor(), sp.GetRequiredService<ChangeLogInterceptor>())
         .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
-
-});
+}, ServiceLifetime.Scoped);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddBlazoredLocalStorage();

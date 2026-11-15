@@ -19,6 +19,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
     public virtual DbSet<CargoRelation> CargoRelations { get; set; }
     public virtual DbSet<CargoQuantityUnit> CargoUnits { get; set; }
+    public virtual DbSet<ChangeLog> ChangeLogs { get; set; }
     public virtual DbSet<Country> Countries { get; set; }
     public virtual DbSet<CountryStatistics> CountriesStatistics { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
@@ -84,6 +85,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapCargoQuantityUnit();
         modelBuilder.MapCargoReadyTime();
         modelBuilder.MapCargoRelation();
+        modelBuilder.MapChangeLog();
         modelBuilder.MapCountry();
         modelBuilder.MapCountryStatistics();
         modelBuilder.MapDocument();

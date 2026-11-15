@@ -78,6 +78,7 @@ Follow the global `efcore` skill. Project specifics:
 - The database default collation is `Finnish_Swedish_CI_AS` (annotation in `OnModelCreating`). SQLite tests won't reproduce its sorting or case-insensitivity.
 - Entities are legacy scaffolded (`#nullable disable`, `partial`, `virtual`). Keep that style per entity until it is modernised on purpose.
 - `SkipUnchangedValuesInterceptor` (`Data/ChangeTracking`) drops modified marks whose value didn't change, so **an entity attached and forced to `Modified` is not saved**. To update: load the entity, then change it or use `CurrentValues.SetValues`.
+- `ChangeLogInterceptor` writes a `ChangeLog` row (entity, key, operation, changed property names, user id) for every save through the change tracker. The context factory is **scoped** for this (the user comes from `ICurrentUser`); don't inject it into singletons. Writes that bypass the change tracker (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures) aren't logged.
 - Form models go in `App/Forms/<Aggregate>/` (Migration.md section 3.4), not in the Data project.
 
 ## Localisation
