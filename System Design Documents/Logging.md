@@ -15,7 +15,7 @@ The workspace includes 5 GB per month for free; the whole workspace (also `fastc
 |---|---|
 | Critical | Unhandled exceptions ("Fatal") |
 | Error | Handled exceptions |
-| Warning | Failed sign-in, sign-out, lockout, password reset |
+| Warning | Failed sign-in, sign-out, lockout, password reset, document change refused, upload over the size limit |
 | Information | Successful sign-in |
 
 Steps 2C.2–2C.5 add these entries; until then the levels are as the code had them.
@@ -42,6 +42,13 @@ Only the path is logged, never the query string (it can hold an API key).
 | 1005 | Warning | User locked out after too many failed sign-ins |
 | 1006 | Warning | Password reset requested (with the request number and whether the limit is reached) |
 | 1007 | Warning | Password reset requested for an address that has no user (no id, no address) |
+| 1008 | Warning | Upload or delete of a document refused: the user may not edit the module or station |
+
+**Document events** (event ids 3000–3999, `Services/Diagnostics/DocumentLog.cs`):
+
+| Event id | Level | Event |
+|---|---|---|
+| 3001 | Warning | Upload refused because the file is over the size limit: document kind (`DwgDrawing`, `PdfDocumentation`, `SkpDrawing`, `PdfInstruction`), file size and limit in kB, user id, module or station id. Logged only for users who may upload, to learn what sizes are needed (SKP drawings can often be shrunk by purging unused objects). |
 
 `appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop; `Microsoft.Azure.SignalR` from *Error*). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
@@ -95,6 +102,15 @@ traces
 | where EventId between (1000 .. 1999)
 | summarize count() by bin(timestamp, 1d), EventId
 | order by timestamp desc
+```
+
+Uploads over the size limit, by kind of document (how often, and how large compared to the limit):
+
+```kusto
+traces
+| where customDimensions.EventId == "3001"
+| extend Kind = tostring(customDimensions.DocumentKind), SizeKb = toint(customDimensions.FileSizeKb), LimitKb = toint(customDimensions.MaxSizeKb)
+| summarize count(), max(SizeKb), percentile(SizeKb, 50), any(LimitKb) by Kind
 ```
 
 Saved data is not logged here but stored in the database table `ChangeLog` (step 2C.5c).

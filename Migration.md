@@ -849,7 +849,7 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 
 **Conventions:**
 - Message templates with named placeholders (`"User {UserId} signed in"`), never string interpolation, so the values become queryable properties (`customDimensions`).
-- Event ids per area, defined with the `[LoggerMessage]` source generator in one class per area: 1000–1999 security, 2000–2999 change log (for its own errors, if any), 9000–9999 unhandled exceptions.
+- Event ids per area, defined with the `[LoggerMessage]` source generator in one class per area: 1000–1999 security, 2000–2999 change log, 3000–3999 documents (3001: upload over the size limit, logged to learn the needed sizes) (for its own errors, if any), 9000–9999 unhandled exceptions.
 - Never log passwords, user names, e-mail addresses, API keys or form values. Ids only.
 - Tests use `FakeLogger` (`Microsoft.Extensions.Diagnostics.Testing`) to check level, event id and properties.
 

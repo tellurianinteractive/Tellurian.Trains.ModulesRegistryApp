@@ -44,18 +44,17 @@
 
     async Task SaveFileAsync(InputFileChangeEventArgs e)
     {
-        if (IsFileSizeWithinLimits(e.File))
+        // The size is checked (and a too large file logged) by the service; the file is only read when it is within the limit.
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
+        if (result.Message == DocumentService.FileTooLargeMessage)
         {
-            var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-            var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
-            DocumentId = result.Entity?.Id;
-            if (OnUpdatedAsync is not null) await OnUpdatedAsync();
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Count > 0 ? string.Format(Localizer["UploadOfFile"], e.File.Name) : result.Message);
+            NotificationService.ShowWarning(string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize / 1024));
+            return;
         }
-        else
-        {
-            NotificationService.ShowWarning(string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize));
-        }
+        DocumentId = result.Entity?.Id;
+        if (OnUpdatedAsync is not null) await OnUpdatedAsync();
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Count > 0 ? string.Format(Localizer["UploadOfFile"], e.File.Name) : result.Message);
     }
 
     async Task DeleteFileAsync(int documentId)
@@ -79,7 +78,5 @@
     string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
     string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
     string MaxSizeText => string.Format(LanguageExtensions.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
-
-    bool IsFileSizeWithinLimits(IBrowserFile file) => MaxFileSizeKb.HasValue && file.Size <= MaxFileSize;
 
 }

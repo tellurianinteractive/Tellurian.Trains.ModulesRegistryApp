@@ -10,6 +10,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
     public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station) };
 
+    /// <summary>
+    /// The message of an upload refused because the file is over the size limit; the page shows its own text with the limit.
+    /// </summary>
+    public const string FileTooLargeMessage = "UploadFileToLarge";
+
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
     private readonly ITimeProvider TimeProvider = timeProvider;
     private readonly ILogger<DocumentService> Logger = logger;
@@ -105,7 +110,6 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize)
     {
         if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Document>();
-        if (file.Size > maxFileSize) return (0, "UploadFileToLarge", null);
         var (id, _, typeName) = DocumentedObject(documentedObject, fileExtension);
         if (id <= 0) return (0, "UploadFailed", null);
 
@@ -121,6 +125,12 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         {
             Denied(principal, "upload", typeName, id);
             return principal.SaveNotAuthorised<Document>();
+        }
+        // Checked here, after the permission, so the log tells what sizes users who may upload need.
+        if (file.Size > maxFileSize)
+        {
+            Logger.FileTooLarge(DocumentKind(target, fileExtension), KiloBytes(file.Size), KiloBytes(maxFileSize), principal.UserId(), typeName, id);
+            return (0, FileTooLargeMessage, null);
         }
 
         var (_, currentDocumentId, _) = DocumentedObject(target, fileExtension);
@@ -175,6 +185,25 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         dbContext.Documents.RemoveRange(documents);
         return documents.Count;
     }
+
+    /// <summary>
+    /// The kind of document, as the referring property is named: <c>DwgDrawing</c>, <c>PdfDocumentation</c>,
+    /// <c>SkpDrawing</c> or <c>PdfInstruction</c>.
+    /// </summary>
+    public static string DocumentKind(object? documentObject, string? fileExtension) =>
+        (documentObject, fileExtension) switch
+        {
+            (Module, "dwg") => nameof(Module.DwgDrawing),
+            (Module, "pdf") => nameof(Module.PdfDocumentation),
+            (Module, "skp") => nameof(Module.SkpDrawing),
+            (Station, "pdf") => nameof(Station.PdfInstruction),
+            _ => fileExtension ?? string.Empty
+        };
+
+    /// <summary>
+    /// Rounded up, so a file just over the limit doesn't show as equal to it.
+    /// </summary>
+    private static long KiloBytes(long bytes) => (bytes + 1023) / 1024;
 
     /// <summary>
     /// Sets the navigation, so EF sets the reference to the new document's generated id in the same save.

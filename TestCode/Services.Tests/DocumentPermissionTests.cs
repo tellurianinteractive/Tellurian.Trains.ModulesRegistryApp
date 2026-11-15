@@ -195,6 +195,48 @@ public sealed class DocumentPermissionTests
         Assert.IsNull((await _factory.FindAsync<Module>(PersonModule))?.PdfDocumentationId);
     }
 
+    [TestMethod]
+    public async Task TooLargeUploadIsRefusedAndLoggedWithSizes()
+    {
+        var documentsBefore = await CountDocumentsAsync();
+
+        var (count, message, document) = await Target.SaveAsync(Person(Owner), new FakeFile(new byte[3000]), new Module { Id = PersonModule }, "skp", 2048);
+
+        Assert.AreEqual(0, count);
+        Assert.AreEqual(DocumentService.FileTooLargeMessage, message);
+        Assert.IsNull(document);
+        Assert.AreEqual(documentsBefore, await CountDocumentsAsync());
+        var entry = _logger.LatestRecord;
+        Assert.AreEqual(DocumentLog.FileTooLargeEventId, entry.Id.Id);
+        Assert.AreEqual(LogLevel.Warning, entry.Level);
+        Assert.AreEqual("SkpDrawing", entry.GetStructuredStateValue("DocumentKind"));
+        Assert.AreEqual("3", entry.GetStructuredStateValue("FileSizeKb"), "Rounded up.");
+        Assert.AreEqual("2", entry.GetStructuredStateValue("MaxSizeKb"));
+        Assert.AreEqual((100 + Owner).ToString(), entry.GetStructuredStateValue("UserId"));
+        Assert.AreEqual(nameof(Module), entry.GetStructuredStateValue("ObjectType"));
+        Assert.AreEqual(PersonModule.ToString(), entry.GetStructuredStateValue("ObjectId"));
+    }
+
+    [TestMethod]
+    public async Task TooLargeUploadByAnotherPersonIsOnlyLoggedAsRefused()
+    {
+        await Target.SaveAsync(Person(Other), new FakeFile(new byte[3000]), new Module { Id = PersonModule }, "skp", 2048);
+
+        Assert.AreEqual(SecurityLog.DocumentChangeDeniedEventId, _logger.LatestRecord.Id.Id);
+        Assert.IsFalse(_logger.Collector.GetSnapshot().Any(r => r.Id.Id == DocumentLog.FileTooLargeEventId), "Sizes are logged only for users who may upload.");
+    }
+
+    [TestMethod]
+    [DataRow("dwg", "DwgDrawing")]
+    [DataRow("pdf", "PdfDocumentation")]
+    [DataRow("skp", "SkpDrawing")]
+    public void ModuleDocumentKind(string fileExtension, string expected) =>
+        Assert.AreEqual(expected, DocumentService.DocumentKind(new Module(), fileExtension));
+
+    [TestMethod]
+    public void StationDocumentKind() =>
+        Assert.AreEqual("PdfInstruction", DocumentService.DocumentKind(new Station(), "pdf"));
+
     #endregion
 
     #region Documents deleted with their object
