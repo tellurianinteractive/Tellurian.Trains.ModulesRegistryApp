@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.14
+Released 2026-11-15
+- An error in a page no longer stops the app; a message is shown and the menu keeps working.
 ## Release 1.14.13
 Released 2026-11-15
 - Maintenance update.
