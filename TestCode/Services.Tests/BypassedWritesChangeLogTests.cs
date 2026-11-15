@@ -23,6 +23,15 @@ public sealed class BypassedWritesChangeLogTests
         new Claim(AppClaimTypes.PersonId, "1"),
     ], "Test"));
 
+    /// <summary>
+    /// Document deletes need the right to edit the module (step 2C.7); no owner is seeded here.
+    /// </summary>
+    private static ClaimsPrincipal Administrator => new(new ClaimsIdentity(
+    [
+        new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString()),
+        new Claim(AppClaimTypes.GlobalAdministrator, "true"),
+    ], "Test"));
+
     [TestInitialize]
     public async Task InitializeAsync()
     {
@@ -67,9 +76,9 @@ public sealed class BypassedWritesChangeLogTests
         module.DwgDrawingId = 1;
         await _factory.SeedAsync(module);
         await ClearChangeLogAsync();
-        var target = new DocumentService(_factory, new SystemTimeProvider());
+        var target = new DocumentService(_factory, new SystemTimeProvider(), new Microsoft.Extensions.Logging.Testing.FakeLogger<DocumentService>());
 
-        var (count, _) = await target.DeleteAsync(SignedIn, 1);
+        var (count, _) = await target.DeleteAsync(Administrator, 1);
 
         Assert.IsGreaterThan(0, count);
         Assert.IsNull(await _factory.FindAsync<Document>(1));

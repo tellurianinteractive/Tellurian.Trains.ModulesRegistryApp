@@ -196,6 +196,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             var entity = await FindByIdAsync(principal, id).ConfigureAwait(false);
             using var dbContext = Factory.CreateDbContext();
             if (entity is null) return principal.NotAuthorized<Station>();
+            if (entity.PdfInstructionId.HasValue) await DocumentService.RemoveDocumentsAsync(dbContext, [entity.PdfInstructionId.Value]);
             dbContext.Stations.Remove(entity);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
             return result.DeleteResult();

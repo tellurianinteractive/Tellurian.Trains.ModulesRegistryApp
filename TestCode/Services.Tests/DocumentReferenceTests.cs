@@ -19,6 +19,15 @@ public sealed class DocumentReferenceTests
     private static ClaimsPrincipal SignedIn => new(new ClaimsIdentity(
         [new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString())], "Test"));
 
+    /// <summary>
+    /// Document deletes need the right to edit the module (step 2C.7); no owner is seeded here.
+    /// </summary>
+    private static ClaimsPrincipal Administrator => new(new ClaimsIdentity(
+    [
+        new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString()),
+        new Claim(AppClaimTypes.GlobalAdministrator, "true"),
+    ], "Test"));
+
     [TestInitialize]
     public async Task InitializeAsync()
     {
@@ -79,7 +88,7 @@ public sealed class DocumentReferenceTests
     public async Task SavingStaleObjectAfterDeleteFailsOnForeignKey()
     {
         var pageModule = await LoadAsPageAsync();
-        await new DocumentService(_factory, new SystemTimeProvider()).DeleteAsync(SignedIn, 1);
+        await new DocumentService(_factory, new SystemTimeProvider(), new Microsoft.Extensions.Logging.Testing.FakeLogger<DocumentService>()).DeleteAsync(Administrator, 1);
 
         await Assert.ThrowsAsync<DbUpdateException>(() => SaveAsPageAsync(pageModule));
     }
@@ -88,7 +97,7 @@ public sealed class DocumentReferenceTests
     public async Task SavingClearedObjectAfterDeleteWorks()
     {
         var pageModule = await LoadAsPageAsync();
-        await new DocumentService(_factory, new SystemTimeProvider()).DeleteAsync(SignedIn, 1);
+        await new DocumentService(_factory, new SystemTimeProvider(), new Microsoft.Extensions.Logging.Testing.FakeLogger<DocumentService>()).DeleteAsync(Administrator, 1);
         pageModule.FullName = "Changed";
 
         DocumentService.ClearDocumentReference(pageModule, "skp");

@@ -19,6 +19,7 @@ public static partial class SecurityLog
     public const int LockedOutEventId = 1005;
     public const int PasswordResetRequestedEventId = 1006;
     public const int PasswordResetUnknownUserEventId = 1007;
+    public const int DocumentChangeDeniedEventId = 1008;
 
     [LoggerMessage(EventId = SignedInEventId, Level = LogLevel.Information, Message = "User {UserId} signed in")]
     public static partial void SignedIn(this ILogger logger, int userId);
@@ -40,6 +41,9 @@ public static partial class SecurityLog
 
     [LoggerMessage(EventId = PasswordResetUnknownUserEventId, Level = LogLevel.Warning, Message = "Password reset requested for an address that has no user")]
     public static partial void PasswordResetUnknownUser(this ILogger logger);
+
+    [LoggerMessage(EventId = DocumentChangeDeniedEventId, Level = LogLevel.Warning, Message = "User {UserId} was refused to {Operation} a document of {ObjectType} {ObjectId}")]
+    public static partial void DocumentChangeDenied(this ILogger logger, int userId, string operation, string objectType, int objectId);
 }
 
 public enum SignInFailure

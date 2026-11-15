@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Logging;
+using ModulesRegistry.Resources;
+using ModulesRegistry.Services.Diagnostics;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider)
+public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<DocumentService> logger)
 {
     public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
     public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station) };
 
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
     private readonly ITimeProvider TimeProvider = timeProvider;
+    private readonly ILogger<DocumentService> Logger = logger;
 
     public async Task<Document?> FindByIdAsync(int id)
     {
@@ -45,85 +49,108 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         return id.ToString();
     }
 
+    /// <summary>
+    /// Deletes a document and clears the references to it, in one save. Only for a user who may edit
+    /// <b>every</b> object that refers to it (see <see cref="MayChangeDocumentsOfAsync"/>), worked out from the database.
+    /// </summary>
+    /// <remarks>
+    /// The references are cleared before the document is removed: the model has <c>OnDelete(Cascade)</c> from a document
+    /// to modules and end profiles, so removing it while they refer to it would delete them too.
+    /// A document that nothing refers to isn't deleted (it can't be reached in the UI; orphans are cleaned up by
+    /// <c>RemoveUnreferencedDocuments</c>).
+    /// </remarks>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int documentId)
     {
-        var count = -1;
-        if (principal.IsAuthenticated())
-        {
-            count = 0;
-            using var dbContext = Factory.CreateDbContext();
-            var document = await dbContext.Documents.FindAsync(documentId);
-            if (document is not null)
-            {
-                // Through the change tracker, so the cleared references are in the change log, in the same save as the delete.
-                var references = 0;
-                foreach (var module in await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId).ToListAsync())
-                {
-                    if (module.PdfDocumentationId == documentId) { module.PdfDocumentationId = null; references++; }
-                    if (module.DwgDrawingId == documentId) { module.DwgDrawingId = null; references++; }
-                    if (module.SkpDrawingId == documentId) { module.SkpDrawingId = null; references++; }
-                }
-                foreach (var station in await dbContext.Stations.Where(s => s.PdfInstructionId == documentId).ToListAsync())
-                {
-                    station.PdfInstructionId = null; references++;
-                }
-                foreach (var endProfile in await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId).ToListAsync())
-                {
-                    endProfile.PdfDocumentId = null; references++;
-                }
-                if (references > 0) { dbContext.Documents.Remove(document); }
-                count = await dbContext.SaveChangesAsync();
-            }
-        }
-        return count.DeleteResult();
+        if (!principal.IsAuthenticated()) return (-1).DeleteResult();
+        using var dbContext = Factory.CreateDbContext();
+        var document = await dbContext.Documents.FindAsync(documentId);
+        if (document is null) return 0.DeleteResult();
 
+        var modules = await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId).ToListAsync();
+        var stations = await dbContext.Stations.Where(s => s.PdfInstructionId == documentId).ToListAsync();
+        var endProfiles = await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId).ToListAsync();
+        var references = modules.Count + stations.Count + endProfiles.Count;
+        if (references == 0) return 0.DeleteResult();
+
+        foreach (var module in modules)
+        {
+            if (!await MayChangeDocumentsOfAsync(dbContext, principal, module)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+        }
+        foreach (var station in stations)
+        {
+            if (!await MayChangeDocumentsOfAsync(dbContext, principal, station)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+        }
+        if (endProfiles.Count > 0 && !MayChangeEndProfileDocuments(principal)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+
+        foreach (var module in modules)
+        {
+            if (module.PdfDocumentationId == documentId) module.PdfDocumentationId = null;
+            if (module.DwgDrawingId == documentId) module.DwgDrawingId = null;
+            if (module.SkpDrawingId == documentId) module.SkpDrawingId = null;
+        }
+        foreach (var station in stations) station.PdfInstructionId = null;
+        foreach (var endProfile in endProfiles) endProfile.PdfDocumentId = null;
+        dbContext.Documents.Remove(document);
+        return (await dbContext.SaveChangesAsync()).DeleteResult();
     }
 
+    /// <summary>
+    /// Uploads a document for a module or station: replaces the content of the document the object refers to in the
+    /// database, or adds a new one and sets the reference, in one save. Only for a user who may edit the object.
+    /// </summary>
+    /// <remarks>
+    /// The object is loaded from the database by its id; the current reference is taken from there, not from the page,
+    /// so a page with an old document id doesn't leave the replaced document behind.
+    /// </remarks>
     public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize)
     {
-        if (principal.IsAuthenticated())
+        if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Document>();
+        if (file.Size > maxFileSize) return (0, "UploadFileToLarge", null);
+        var (id, _, typeName) = DocumentedObject(documentedObject, fileExtension);
+        if (id <= 0) return (0, "UploadFailed", null);
+
+        using var dbContext = Factory.CreateDbContext();
+        object? target = typeName switch
         {
-            if (file.Size > maxFileSize) return (0, "UploadFileToLarge", null);
-            using var dbContext = Factory.CreateDbContext();
-            var fileSize = (int)file.Size;
-            using var stream = file.OpenReadStream(file.Size);
-            Document? document = null;
-            var (Id, DocumentId, TypeName) = DocumentedObject(documentedObject, fileExtension);
-            if (DocumentId.HasValue)
-            {
-                document = await dbContext.Documents.FindAsync(DocumentId);
-            }
-            document ??= CreateNewDocument(fileExtension);
-            document.Content = await GetContent(stream, fileSize);
-            document.LastModifiedTime = TimeProvider.Now;
-            if (document.Id == 0) dbContext.Documents.Add(document);
-            var count = await dbContext.SaveChangesAsync();
-
-            if (count > 0)
-            {
-                await UpdateDocumentReference(dbContext, document, documentedObject);
-                return count.SaveResult(document);
-            }
-            return (0, "UploadFailed", null);
-
-            static Document CreateNewDocument(string? fileExtension) =>
-                new()
-                {
-                    Id = 0,
-                    FileExtension = fileExtension,
-                    ContentType = ContentType(fileExtension)
-                };
-
-            static async Task<byte[]> GetContent(Stream stream, int size)
-            {
-                byte[] buffer = new byte[size];
-                await stream.ReadExactlyAsync(buffer, 0, size);
-                return buffer;
-            }
-
-
+            nameof(Module) => await dbContext.Modules.FindAsync(id),
+            nameof(Station) => await dbContext.Stations.FindAsync(id),
+            _ => null
+        };
+        if (target is null) return (0, "UploadFailed", null);
+        if (!await MayChangeDocumentsOfAsync(dbContext, principal, target))
+        {
+            Denied(principal, "upload", typeName, id);
+            return principal.SaveNotAuthorised<Document>();
         }
-        return principal.SaveNotAuthorised<Document>();
+
+        var (_, currentDocumentId, _) = DocumentedObject(target, fileExtension);
+        var document = currentDocumentId.HasValue ? await dbContext.Documents.FindAsync(currentDocumentId.Value) : null;
+        if (document is null)
+        {
+            document = CreateNewDocument(fileExtension);
+            dbContext.Documents.Add(document);
+            SetDocumentReference(target, fileExtension, document);
+        }
+        using var stream = file.OpenReadStream(file.Size);
+        document.Content = await GetContent(stream, (int)file.Size);
+        document.LastModifiedTime = TimeProvider.Now;
+        var result = await dbContext.SaveChangesAsync();
+        return result > 0 ? result.SaveResult(document) : (0, "UploadFailed", null);
+
+        static Document CreateNewDocument(string? fileExtension) =>
+            new()
+            {
+                Id = 0,
+                FileExtension = fileExtension,
+                ContentType = ContentType(fileExtension)
+            };
+
+        static async Task<byte[]> GetContent(Stream stream, int size)
+        {
+            byte[] buffer = new byte[size];
+            await stream.ReadExactlyAsync(buffer, 0, size);
+            return buffer;
+        }
 
         static string ContentType(string? fileExtension) =>
               fileExtension switch
@@ -134,43 +161,79 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
               };
     }
 
-
-    private static async Task<int> UpdateDocumentReference(ModulesDbContext dbContext, Document document, object? documentedObject)
+    /// <summary>
+    /// For deleting a module or station: removes the documents it refers to, saved by the caller in the same save as
+    /// the delete, so no orphans are left. A document belongs to one object only (by design), so nothing else refers
+    /// to it; if one ever did, the save fails on the foreign key instead of removing it.
+    /// </summary>
+    /// <returns>The number of documents removed.</returns>
+    internal static async Task<int> RemoveDocumentsAsync(ModulesDbContext dbContext, IEnumerable<int> documentIds)
     {
-        var (Id, _, TypeName) = DocumentedObject(documentedObject, document.FileExtension);
-        if (TypeName == "Module" && document.FileExtension == "dwg")
+        var ids = documentIds.Distinct().ToList();
+        if (ids.Count == 0) return 0;
+        var documents = await dbContext.Documents.Where(d => ids.Contains(d.Id)).ToListAsync();
+        dbContext.Documents.RemoveRange(documents);
+        return documents.Count;
+    }
+
+    /// <summary>
+    /// Sets the navigation, so EF sets the reference to the new document's generated id in the same save.
+    /// </summary>
+    private static void SetDocumentReference(object target, string? fileExtension, Document document)
+    {
+        switch (target, fileExtension)
         {
-            var existing = await dbContext.Modules.FindAsync(Id);
-            if (existing is not null)
-            {
-                existing.DwgDrawingId = document.Id;
-            }
+            case (Module module, "dwg"): module.DwgDrawing = document; break;
+            case (Module module, "pdf"): module.PdfDocumentation = document; break;
+            case (Module module, "skp"): module.SkpDrawing = document; break;
+            case (Station station, "pdf"): station.PdfInstruction = document; break;
         }
-        else if (TypeName == "Module" && document.FileExtension == "skp")
+    }
+
+    /// <summary>
+    /// Who may upload or delete the documents of an object, from the database (never from the page's owner reference):
+    /// a global administrator, a country administrator (as for saving a module), or, for a module, a person who owns a
+    /// share of it, a data administrator of a group that owns a share, or a data administrator of a group that a
+    /// person owner is a member of. For a station: the same for any of its modules. Read-only users never.
+    /// </summary>
+    internal static async Task<bool> MayChangeDocumentsOfAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, object target)
+    {
+        if (!principal.IsAuthenticated() || principal.IsReadOnly()) return false;
+        if (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(principal.CountryId())) return true;
+        var personId = principal.PersonId();
+        if (personId <= 0) return false;
+
+        var modules = target switch
         {
-            var existing = await dbContext.Modules.FindAsync(Id);
-            if (existing is not null)
-            {
-                existing.SkpDrawingId = document.Id;
-            }
-        }
-        else if (TypeName == "Module" && document.FileExtension == "pdf")
-        {
-            var existing = await dbContext.Modules.FindAsync(Id);
-            if (existing is not null)
-            {
-                existing.PdfDocumentationId = document.Id;
-            }
-        }
-        else if (TypeName == "Station" && document.FileExtension == "pdf")
-        {
-            var existing = await dbContext.Stations.FindAsync(Id);
-            if (existing is not null)
-            {
-                existing.PdfInstructionId = document.Id;
-            }
-        }
-        return await dbContext.SaveChangesAsync();
+            Module module => dbContext.Modules.Where(m => m.Id == module.Id),
+            Station station => dbContext.Modules.Where(m => m.StationId == station.Id),
+            _ => null
+        };
+        if (modules is null) return false;
+
+        var dataAdministratorGroupIds = dbContext.GroupMembers
+            .Where(gm => gm.PersonId == personId && gm.IsDataAdministrator)
+            .Select(gm => gm.GroupId);
+        return await modules.AnyAsync(m => m.ModuleOwnerships.Any(mo => mo.OwnedShare > 0 && (
+            mo.PersonId == personId ||
+            mo.GroupId.HasValue && dataAdministratorGroupIds.Contains(mo.GroupId.Value) ||
+            mo.PersonId.HasValue && dbContext.GroupMembers.Any(gm => gm.PersonId == mo.PersonId && dataAdministratorGroupIds.Contains(gm.GroupId)))));
+    }
+
+    /// <summary>
+    /// End profiles are edited by administrators only: as in <see cref="ModuleEndProfileService"/>, which in practice
+    /// means global administrators (it checks a country administrator against country 0).
+    /// </summary>
+    private static bool MayChangeEndProfileDocuments(ClaimsPrincipal? principal) =>
+        principal.IsGlobalOrCountryAdministrator() && !principal.IsReadOnly();
+
+    /// <summary>
+    /// Logs the refusal as a security event and gives the "not authorised" text.
+    /// </summary>
+    private string Denied(ClaimsPrincipal? principal, string operation, string objectType, int objectId)
+    {
+        Logger.DocumentChangeDenied(principal.UserId(), operation, objectType, objectId);
+        return Strings.NotAuthorized;
     }
 
     /// <summary>
@@ -208,7 +271,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             },
             Station station => fileExtension switch
             {
-                "pdf" => (station.PrimaryModuleId!.Value, station.PdfInstructionId, nameof(Station)),
+                "pdf" => (station.Id, station.PdfInstructionId, nameof(Station)), // Was PrimaryModuleId, which linked the wrong station.
                 _ => (0, null, string.Empty)
             },
             _ => (0, null, string.Empty)

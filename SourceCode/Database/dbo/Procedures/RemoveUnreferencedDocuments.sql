@@ -10,7 +10,8 @@ AS
 			SELECT DwgDrawingId AS Id FROM Module UNION
 			SELECT SkpDrawingId FROM Module UNION
 			SELECT PdfDocumentationId FROM Module UNION
-			SELECT PdfInstructionId FROM Station
+			SELECT PdfInstructionId FROM Station UNION
+			SELECT PdfDocumentId FROM ModuleEndProfile
 			-- Add additional SELECT of document references here
 		) 
 		AS DocumentRef ON Document.Id = DocumentRef.Id

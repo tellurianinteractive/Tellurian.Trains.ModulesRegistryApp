@@ -50,7 +50,7 @@
             var result = await DocumentService.SaveAsync(principal, e.File, DocumentedObject, FileExtension, MaxFileSize);
             DocumentId = result.Entity?.Id;
             if (OnUpdatedAsync is not null) await OnUpdatedAsync();
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, string.Format(Localizer["UploadOfFile"], e.File.Name));
+            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Count > 0 ? string.Format(Localizer["UploadOfFile"], e.File.Name) : result.Message);
         }
         else
         {
@@ -68,7 +68,7 @@
             DocumentService.ClearDocumentReference(DocumentedObject, FileExtension);
             DocumentId = null;
         }
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, Localizer["FileDeleted"]);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Count > 0 ? Localizer["FileDeleted"] : result.Message);
         StateHasChanged();
     }
 
