@@ -1,166 +1,166 @@
-# .NET-utveckling
-*Av [Stefan Fjällemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, december 2024*
+ï»¿# .NET-utveckling
+*Av [Stefan FjÃ¤llemark](https://github.com/fjallemark), Tellurian Interactive AB, Sverige, december 2024*
 
-Den här artikeln syftar till att beskriva teknikval vid utveckling av mjukvara i modernt .NET. 
-I skrivande stund bör all ny .NET-utveckling använda .NET 9 eller senare.
+Den hÃ¤r artikeln syftar till att beskriva teknikval vid utveckling av mjukvara i modernt .NET. 
+I skrivande stund bÃ¶r all ny .NET-utveckling anvÃ¤nda .NET 9 eller senare.
 
 ## Nuvarande .NET
-Nuvarande .NET är gratis och öppen källkod; rambiblioteken, exekveringsmotorerna och kompilatorerna. 
-Du kan bygga alla typer av applikationer på nästan vilken plattform som helst. 
-.NET körs även i webbläsaren i web assembly och på många enkelkortsdatorer. 
-Detta gör .NET till en one-stop-shop där du kan återanvända mycket av dina .NET-kunskaper för alla typer av applikationer.
+Nuvarande .NET Ã¤r gratis och Ã¶ppen kÃ¤llkod; rambiblioteken, exekveringsmotorerna och kompilatorerna. 
+Du kan bygga alla typer av applikationer pÃ¥ nÃ¤stan vilken plattform som helst. 
+.NET kÃ¶rs Ã¤ven i webblÃ¤saren i web assembly och pÃ¥ mÃ¥nga enkelkortsdatorer. 
+Detta gÃ¶r .NET till en one-stop-shop dÃ¤r du kan Ã¥teranvÃ¤nda mycket av dina .NET-kunskaper fÃ¶r alla typer av applikationer.
 
 > ### Missuppfattningar om .NET
-> När du söker på Internet och jämför .NET med andra plattformar och tekniker verkar det som att mycket av skrivningen om 
-> .NET är föråldrad eller helt enkelt fel. [Denna YouTube-video av Nick Chapsas](https://youtube.com/watch?v=AFNujHJfMtU) ger några exempel.
+> NÃ¤r du sÃ¶ker pÃ¥ Internet och jÃ¤mfÃ¶r .NET med andra plattformar och tekniker verkar det som att mycket av skrivningen om 
+> .NET Ã¤r fÃ¶rÃ¥ldrad eller helt enkelt fel. [Denna YouTube-video av Nick Chapsas](https://youtube.com/watch?v=AFNujHJfMtU) ger nÃ¥gra exempel.
 
 > ### .NET Framework
-> Dagens .NET är *inte* samma sak som .NET Framework, som endast är Windows och aldrig bör användas för nya applikationer. 
-> Den senaste versionen av .NET Framework är 4.8, och den kommer att underhållas så länge som Windows stöds.
+> Dagens .NET Ã¤r *inte* samma sak som .NET Framework, som endast Ã¤r Windows och aldrig bÃ¶r anvÃ¤ndas fÃ¶r nya applikationer. 
+> Den senaste versionen av .NET Framework Ã¤r 4.8, och den kommer att underhÃ¥llas sÃ¥ lÃ¤nge som Windows stÃ¶ds.
 
-## Programspråk
-Alla språk på .NET använder samma exekveringssystem och samma typsystem, 
-så du kan vanligtvis kombinera bibliotek skrivna i vilket .NET-program som helst med varandra. 
-Det finns några regler att följa för att få det att fungera.
+## ProgramsprÃ¥k
+Alla sprÃ¥k pÃ¥ .NET anvÃ¤nder samma exekveringssystem och samma typsystem, 
+sÃ¥ du kan vanligtvis kombinera bibliotek skrivna i vilket .NET-program som helst med varandra. 
+Det finns nÃ¥gra regler att fÃ¶lja fÃ¶r att fÃ¥ det att fungera.
 
-- **C#** är det vanligaste språket som används i .NET-utveckling. 
-Är ett språk i C-familjen och delar de flesta av sina egenskaper med programmeringsspråket Java.
-- **F#** är ett funktionellt förstaspråk med ett pragmatiskt förhållningssätt. 
-F# har en mycket mer kortfattad syntax, vilket gör att F#-program är betydligt mindre än motsvarande C#-program.
-- **VB.NET** är den moderna varianten av programmeringsspråket BASIC. 
-Den har nästan samma funktioner som C# och en enkel och lättförståelig syntax.
+- **C#** Ã¤r det vanligaste sprÃ¥ket som anvÃ¤nds i .NET-utveckling. 
+Ã„r ett sprÃ¥k i C-familjen och delar de flesta av sina egenskaper med programmeringssprÃ¥ket Java.
+- **F#** Ã¤r ett funktionellt fÃ¶rstasprÃ¥k med ett pragmatiskt fÃ¶rhÃ¥llningssÃ¤tt. 
+F# har en mycket mer kortfattad syntax, vilket gÃ¶r att F#-program Ã¤r betydligt mindre Ã¤n motsvarande C#-program.
+- **VB.NET** Ã¤r den moderna varianten av programmeringssprÃ¥ket BASIC. 
+Den har nÃ¤stan samma funktioner som C# och en enkel och lÃ¤ttfÃ¶rstÃ¥elig syntax.
 
-Det finns även andra språk som körs på .NET, till exempel  [Phyton](https://ironpython.net/) och [COBOL](https://portal.microfocus.com/s/article/KM000009164?language=en_US)..
+Det finns Ã¤ven andra sprÃ¥k som kÃ¶rs pÃ¥ .NET, till exempel  [Phyton](https://ironpython.net/) och [COBOL](https://portal.microfocus.com/s/article/KM000009164?language=en_US)..
 
 ## Programbibliotek
-Oavsett vilket .NET-språk du använder kommer du att vara beroende av samma .NET-basbibliotek. 
-Så mycket av kunskapen handlar om att få ut det mesta av den färdiga programvaran som Microsoft 
+Oavsett vilket .NET-sprÃ¥k du anvÃ¤nder kommer du att vara beroende av samma .NET-basbibliotek. 
+SÃ¥ mycket av kunskapen handlar om att fÃ¥ ut det mesta av den fÃ¤rdiga programvaran som Microsoft 
 och andra biblioteksskribenter har att erbjuda:
 
-- [**.NET Base Class Library**](https://learn.microsoft.com/en-us/dotnet/standard/class-library-overview) (BCL) har en hel del inbyggd funktionalitet för nästan allt du vill skriva kod för.
-- Bilbliotekshanteraren [**NuGet**](https://www.nuget.org/) är sättet du kan återanvända komponenter skrivna av andra eller dig själv.
+- [**.NET Base Class Library**](https://learn.microsoft.com/en-us/dotnet/standard/class-library-overview) (BCL) har en hel del inbyggd funktionalitet fÃ¶r nÃ¤stan allt du vill skriva kod fÃ¶r.
+- Bilbliotekshanteraren [**NuGet**](https://www.nuget.org/) Ã¤r sÃ¤ttet du kan Ã¥teranvÃ¤nda komponenter skrivna av andra eller dig sjÃ¤lv.
 
 ## Utvecklarverktyg
-Microsoft är känt för sina bra utvecklingsverktyg. 
-Det här avsnittet täcker endast gratisverktyg för att utveckla .NET-applikationer.
+Microsoft Ã¤r kÃ¤nt fÃ¶r sina bra utvecklingsverktyg. 
+Det hÃ¤r avsnittet tÃ¤cker endast gratisverktyg fÃ¶r att utveckla .NET-applikationer.
 
-- **Visual Studio Code** är nu en av de mest populära verktygen för att skriva programvara på nästan alla språk. 
-Det är en plattformsoberoende applikation som körs på Windows, macOS och Linux. 
-Anpassning görs genom att installera olika plugins för ett visst språk eller andra ändamål.
-- **Visual Studio** har en community-utgåva som är gratis och mycket kapabel för utveckling av .NET-applikationer. 
-Anpassning görs genom att välja att installera en eller flera utvecklingspaket. 
-Det finns också många användbara gratis plugins att installera från Visual Studio Markeplace. 
-Visual Studio är ett endast Windows-program, men det finns också en separat version för macOS.
-- **SQL Server** har en gratis utvecklarutgåva som är en komplett version med vissa begränsningar. 
-Det finns också en gratis expressutgåva som är idealisk för mindre applikationer. 
-SQL Server har också en molnversion men ingen gratis nivå, den minsta SQL Server-molndatabasen kostar cirka 5 € per månad.
-- **SQL Server Management Studio** är en gratis Windows-applikation för att skapa och hantera SQL Server-databas. 
-Den fungerar med både lokala databaser och molndatabaser. Den kommer att installeras med SQL Server Developer Edition.
-- **Visual Studio** har bra stöd för att bygga och underhålla databaser i **Microsoft SQL Server**. 
-För det första har du liknande tillgång till databasen som med SQL Server Management Studio, 
-och för det andra finns det en speciell databasprojekttyp, 
-som du kan underhålla din SQL-kod med versionskontroll och distribuera uppdateringar och 
+- **Visual Studio Code** Ã¤r nu en av de mest populÃ¤ra verktygen fÃ¶r att skriva programvara pÃ¥ nÃ¤stan alla sprÃ¥k. 
+Det Ã¤r en plattformsoberoende applikation som kÃ¶rs pÃ¥ Windows, macOS och Linux. 
+Anpassning gÃ¶rs genom att installera olika plugins fÃ¶r ett visst sprÃ¥k eller andra Ã¤ndamÃ¥l.
+- **Visual Studio** har en community-utgÃ¥va som Ã¤r gratis och mycket kapabel fÃ¶r utveckling av .NET-applikationer. 
+Anpassning gÃ¶rs genom att vÃ¤lja att installera en eller flera utvecklingspaket. 
+Det finns ocksÃ¥ mÃ¥nga anvÃ¤ndbara gratis plugins att installera frÃ¥n Visual Studio Markeplace. 
+Visual Studio Ã¤r ett endast Windows-program, men det finns ocksÃ¥ en separat version fÃ¶r macOS.
+- **SQL Server** har en gratis utvecklarutgÃ¥va som Ã¤r en komplett version med vissa begrÃ¤nsningar. 
+Det finns ocksÃ¥ en gratis expressutgÃ¥va som Ã¤r idealisk fÃ¶r mindre applikationer. 
+SQL Server har ocksÃ¥ en molnversion men ingen gratis nivÃ¥, den minsta SQL Server-molndatabasen kostar cirka 5 â‚¬ per mÃ¥nad.
+- **SQL Server Management Studio** Ã¤r en gratis Windows-applikation fÃ¶r att skapa och hantera SQL Server-databas. 
+Den fungerar med bÃ¥de lokala databaser och molndatabaser. Den kommer att installeras med SQL Server Developer Edition.
+- **Visual Studio** har bra stÃ¶d fÃ¶r att bygga och underhÃ¥lla databaser i **Microsoft SQL Server**. 
+FÃ¶r det fÃ¶rsta har du liknande tillgÃ¥ng till databasen som med SQL Server Management Studio, 
+och fÃ¶r det andra finns det en speciell databasprojekttyp, 
+som du kan underhÃ¥lla din SQL-kod med versionskontroll och distribuera uppdateringar och 
 migrering till din befintliga databas eller skapa nya.
-- **Entity Framework Core** har också bra stöd för databasdefinitioner och inkrementella databasuppgraderingar. 
-Den stöder de vanligaste databaserna.
+- **Entity Framework Core** har ocksÃ¥ bra stÃ¶d fÃ¶r databasdefinitioner och inkrementella databasuppgraderingar. 
+Den stÃ¶der de vanligaste databaserna.
 
-## Användargränssnitt
-Det finns många sätt att skapa applikationer med ett användargränssnitt med .NET. Huvudfaktorn är målplattformen du tänker bygga mjukvara för:
+## AnvÃ¤ndargrÃ¤nssnitt
+Det finns mÃ¥nga sÃ¤tt att skapa applikationer med ett anvÃ¤ndargrÃ¤nssnitt med .NET. Huvudfaktorn Ã¤r mÃ¥lplattformen du tÃ¤nker bygga mjukvara fÃ¶r:
 
-- **Endast Windows**: Du har för avsikt att utveckla ett program som endast ska köras på Windows-datorer.
-- **Webb**: Applikationen ska vara tillgänglig i en webbläsare.
-- **Cross-platform**: Din app bör köras på ioS, Andriod, macOs, Windows och/eller Linux.
+- **Endast Windows**: Du har fÃ¶r avsikt att utveckla ett program som endast ska kÃ¶ras pÃ¥ Windows-datorer.
+- **Webb**: Applikationen ska vara tillgÃ¤nglig i en webblÃ¤sare.
+- **Cross-platform**: Din app bÃ¶r kÃ¶ras pÃ¥ ioS, Andriod, macOs, Windows och/eller Linux.
 
-### Användargränssnittsteknik
-- **Windows Forms** är ett enkelt och snabbt sätt att skapa Windows-applikationer med enkla formulär.
-- **Windows Presentation Foundations** förkortning WPF är ett mer avancerat sätt att skapa användargränssnitt endast på Windows.
-- **ASP.NET** är ett ramverk för att skapa webbapplikationer. 
-ASP.NET-applikationer kan vara värd och köras på alla plattformar som stöds av .NET, inklusive molnplattformar. 
+### AnvÃ¤ndargrÃ¤nssnittsteknik
+- **Windows Forms** Ã¤r ett enkelt och snabbt sÃ¤tt att skapa Windows-applikationer med enkla formulÃ¤r.
+- **Windows Presentation Foundations** fÃ¶rkortning WPF Ã¤r ett mer avancerat sÃ¤tt att skapa anvÃ¤ndargrÃ¤nssnitt endast pÃ¥ Windows.
+- **ASP.NET** Ã¤r ett ramverk fÃ¶r att skapa webbapplikationer. 
+ASP.NET-applikationer kan vara vÃ¤rd och kÃ¶ras pÃ¥ alla plattformar som stÃ¶ds av .NET, inklusive molnplattformar. 
 Med Razor-syntaxen kan du skriva webbsidor som en blandning av HTML, CSS och C#.
-- **Blazor** är ett speciellt webbramverk för ASP.NET. Du skriver komponenter med en blandning av HTML, CSS och C#. 
+- **Blazor** Ã¤r ett speciellt webbramverk fÃ¶r ASP.NET. Du skriver komponenter med en blandning av HTML, CSS och C#. 
 Du kan interagera med JavaScript och vilken kod som helst som kan kompileras till Web Assembly (C, Rust och andra). 
-  Det finns många färdiga komponenter tillgängliga. Komponenterna skrivna i Blazor kan renderas i flera miljöer:
-  - på en webbserver som uppdaterar webbanvändargränssnittet via websockets,
-  - på en webbserver som skickar vanlig html till webbläsaren (nytt i .NET 8),
-  - inbäddad i vilken webbapplikation som helst med vilket ramverk som helst,
-  - kör komponenten på webbsammansättning i webbläsaren, och
+  Det finns mÃ¥nga fÃ¤rdiga komponenter tillgÃ¤ngliga. Komponenterna skrivna i Blazor kan renderas i flera miljÃ¶er:
+  - pÃ¥ en webbserver som uppdaterar webbanvÃ¤ndargrÃ¤nssnittet via websockets,
+  - pÃ¥ en webbserver som skickar vanlig html till webblÃ¤saren (nytt i .NET 8),
+  - inbÃ¤ddad i vilken webbapplikation som helst med vilket ramverk som helst,
+  - kÃ¶r komponenten pÃ¥ webbsammansÃ¤ttning i webblÃ¤saren, och
   - i en plattformsoberoende MAUI-applikation.
-  - Med den kommande .NET 8 kommer du även att kunna blanda renderingslägen i samma applikation. Detta gör Blazor-komponenter till de mest återställbara användargränssnittskomponenterna i .NET.
-- **Multiplatform Application User Interface** förkortat MAUI är den senaste teknologin som syftar till att göra det enklare att skapa appar som körs inbyggt på iOS, Android, macOs och Windows med det inbyggda användargränssnittet för var och en av dessa plattformar. MAUI är en utveckling av Xmamarin Forms. Du kan också bädda in Blazor-komponenter i en MAUI-applikation, eller skriva en MAUI-applikation enbart med Blazor-komponenter.
-- **UNO Plattformen** är avsedd för att bygga en enda kodbas för
-mobil-, webb-, skrivbords- och inbäddade appar med antingen XAML eller C# Markup.
-UNO-projektet drivs som öppen källkod.
+  - Med den kommande .NET 8 kommer du Ã¤ven att kunna blanda renderingslÃ¤gen i samma applikation. Detta gÃ¶r Blazor-komponenter till de mest Ã¥terstÃ¤llbara anvÃ¤ndargrÃ¤nssnittskomponenterna i .NET.
+- **Multiplatform Application User Interface** fÃ¶rkortat MAUI Ã¤r den senaste teknologin som syftar till att gÃ¶ra det enklare att skapa appar som kÃ¶rs inbyggt pÃ¥ iOS, Android, macOs och Windows med det inbyggda anvÃ¤ndargrÃ¤nssnittet fÃ¶r var och en av dessa plattformar. MAUI Ã¤r en utveckling av Xmamarin Forms. Du kan ocksÃ¥ bÃ¤dda in Blazor-komponenter i en MAUI-applikation, eller skriva en MAUI-applikation enbart med Blazor-komponenter.
+- **UNO Plattformen** Ã¤r avsedd fÃ¶r att bygga en enda kodbas fÃ¶r
+mobil-, webb-, skrivbords- och inbÃ¤ddade appar med antingen XAML eller C# Markup.
+UNO-projektet drivs som Ã¶ppen kÃ¤llkod.
 
 ## Datalagring
-Det finns flera typer av sätt att lagra data och komma åt den. De viktigaste typerna av databaser är:
+Det finns flera typer av sÃ¤tt att lagra data och komma Ã¥t den. De viktigaste typerna av databaser Ã¤r:
 
-- **Relationsdatabaser** som lagrar data i tabeller och som vanligtvis nås av SQL-frågespråket. Exempel på databaser är Microsoft SQL Server, Postgress, My SQL och SQL Lite.
-- **Dokumentdatabaser** som lagrar hela strukturer av objekt i ett stycke som en hierakisk struktur. Exempel på databaser är Mongo DB och Azure Cosmos DB.
-- **Molnlagring** är givetvis alla ovanstående typer av databaser men även andra alternativ som bloblagring eller nyckel/värdelagring.
-- **Inbäddade databaser**, ett exempel är SQL Lite kompilerad till webassembly så att du kan köra den som en lokal lagring i din Blazor-webbapplikation.
+- **Relationsdatabaser** som lagrar data i tabeller och som vanligtvis nÃ¥s av SQL-frÃ¥gesprÃ¥ket. Exempel pÃ¥ databaser Ã¤r Microsoft SQL Server, Postgress, My SQL och SQL Lite.
+- **Dokumentdatabaser** som lagrar hela strukturer av objekt i ett stycke som en hierakisk struktur. Exempel pÃ¥ databaser Ã¤r Mongo DB och Azure Cosmos DB.
+- **Molnlagring** Ã¤r givetvis alla ovanstÃ¥ende typer av databaser men Ã¤ven andra alternativ som bloblagring eller nyckel/vÃ¤rdelagring.
+- **InbÃ¤ddade databaser**, ett exempel Ã¤r SQL Lite kompilerad till webassembly sÃ¥ att du kan kÃ¶ra den som en lokal lagring i din Blazor-webbapplikation.
 
-Databaser gör din applikation mer komplex. Om kraven på datalagring och sökning är begränsad är det definitivt ett alternativ att bara lagra applikationsdata på disken i en enda fil eller flera filer.
-Då kan man använda de inbyggda JSON- och XML-serialiseringsteknikerna för att skriva och läsa data till/från filer på disken. Detta är en robust teknik och anpassad för förändringar i dina datastrukturer.
+Databaser gÃ¶r din applikation mer komplex. Om kraven pÃ¥ datalagring och sÃ¶kning Ã¤r begrÃ¤nsad Ã¤r det definitivt ett alternativ att bara lagra applikationsdata pÃ¥ disken i en enda fil eller flera filer.
+DÃ¥ kan man anvÃ¤nda de inbyggda JSON- och XML-serialiseringsteknikerna fÃ¶r att skriva och lÃ¤sa data till/frÃ¥n filer pÃ¥ disken. Detta Ã¤r en robust teknik och anpassad fÃ¶r fÃ¶rÃ¤ndringar i dina datastrukturer.
 
-### Dataåtkomstteknik
-För att komma åt data i databaser krävs ett bibliotek för dataåtkomst.
+### DataÃ¥tkomstteknik
+FÃ¶r att komma Ã¥t data i databaser krÃ¤vs ett bibliotek fÃ¶r dataÃ¥tkomst.
 
-- **ADO.NET** är det grundläggande biblioteket för all databasåtkomst i .NET. 
-Den är ganska låg nivå men har hög prestanda, men du måste skriva mycket kod för att använda den. 
-ADO.NET fungerar även för molndatabaser.
-- **Dapper** är en enkel objektmappare för .NET och är praktiskt taget lika snabb som att använda en rå ADO.NET. 
-Att använda Dapper minskar mängden kod att skriva, men ändå måste du hantera mycket av logiken i din kod, speciellt när du sparar data.
-- **Entity Framework Core** är en objekt-relationell överbyggnad som gör det möjligt att arbeta med databaser. 
-- Det eliminerar behovet av det mesta av dataåtkomstkoden som utvecklare vanligtvis behöver skriva. 
-- Det stöder en mängd olika databaser och gör databasens typ  mer eller mindre transparent. 
-Den stöder också databasmigrering och versionshantering.
+- **ADO.NET** Ã¤r det grundlÃ¤ggande biblioteket fÃ¶r all databasÃ¥tkomst i .NET. 
+Den Ã¤r ganska lÃ¥g nivÃ¥ men har hÃ¶g prestanda, men du mÃ¥ste skriva mycket kod fÃ¶r att anvÃ¤nda den. 
+ADO.NET fungerar Ã¤ven fÃ¶r molndatabaser.
+- **Dapper** Ã¤r en enkel objektmappare fÃ¶r .NET och Ã¤r praktiskt taget lika snabb som att anvÃ¤nda en rÃ¥ ADO.NET. 
+Att anvÃ¤nda Dapper minskar mÃ¤ngden kod att skriva, men Ã¤ndÃ¥ mÃ¥ste du hantera mycket av logiken i din kod, speciellt nÃ¤r du sparar data.
+- **Entity Framework Core** Ã¤r en objekt-relationell Ã¶verbyggnad som gÃ¶r det mÃ¶jligt att arbeta med databaser. 
+- Det eliminerar behovet av det mesta av dataÃ¥tkomstkoden som utvecklare vanligtvis behÃ¶ver skriva. 
+- Det stÃ¶der en mÃ¤ngd olika databaser och gÃ¶r databasens typ  mer eller mindre transparent. 
+Den stÃ¶der ocksÃ¥ databasmigrering och versionshantering.
 
 ## Datakommunikation
-Du kan använda råa kommunikationsstandarder som TCP och UDP med sockets. 
-Oftare kommer du att använda ett ramverk som bygger på dessa standarder.
-- **ASP.NET** är också ett ramverk för att bygga webb-API:er baserade på HTTP-protokollet. ASP.NET stöder nästan alla funktioner du vill använda och är också mycket anpassningsbara.
-- **gPRC** är ett modernt, högpresterande, lätt RPC-ramverk (Remote Procedure Call). gPRC är också plattformsoberoende och kompatibel med tjänster/klienter skrivna på alla andra språk på vilken annan plattform som helst. .NET har en mycket effektiv implementering och verktyg för att utveckla både gRPC klient- och serverapplikationer, .NET gRPC har även en funktion som gör gRPC API:er tillgängliga som webb-API, så du behöver inte implementera båda.
+Du kan anvÃ¤nda rÃ¥a kommunikationsstandarder som TCP och UDP med sockets. 
+Oftare kommer du att anvÃ¤nda ett ramverk som bygger pÃ¥ dessa standarder.
+- **ASP.NET** Ã¤r ocksÃ¥ ett ramverk fÃ¶r att bygga webb-API:er baserade pÃ¥ HTTP-protokollet. ASP.NET stÃ¶der nÃ¤stan alla funktioner du vill anvÃ¤nda och Ã¤r ocksÃ¥ mycket anpassningsbara.
+- **gPRC** Ã¤r ett modernt, hÃ¶gpresterande, lÃ¤tt RPC-ramverk (Remote Procedure Call). gPRC Ã¤r ocksÃ¥ plattformsoberoende och kompatibel med tjÃ¤nster/klienter skrivna pÃ¥ alla andra sprÃ¥k pÃ¥ vilken annan plattform som helst. .NET har en mycket effektiv implementering och verktyg fÃ¶r att utveckla bÃ¥de gRPC klient- och serverapplikationer, .NET gRPC har Ã¤ven en funktion som gÃ¶r gRPC API:er tillgÃ¤ngliga som webb-API, sÃ¥ du behÃ¶ver inte implementera bÃ¥da.
 
 ## Interoperabilitet
-.NET är känt för interoperabilitet:
-- Anropsfunktioner i Dynamic Link Libraries (DLL) kompilerade på ett icke .NET-språk.
-- C++ interop för att kapsla in en inbyggd C++-klass och anropa denna från C# eller ett annat .NET-språk.
-- Att exponera COM-komponenter för .NET så att .NET-kod kan anropa dessa det (endast Windows). Detta stöd har förbättats i .NET 8.
-- Stöd för dynamiska objekt för interoperabilitet med språk som IronPython och IronRuby.
-- Blazor interoperabilitet i webbläsaren med JavaScript och bibliotek på valfritt språk som kompileras till Web Assembly.
+.NET Ã¤r kÃ¤nt fÃ¶r interoperabilitet:
+- Anropsfunktioner i Dynamic Link Libraries (DLL) kompilerade pÃ¥ ett icke .NET-sprÃ¥k.
+- C++ interop fÃ¶r att kapsla in en inbyggd C++-klass och anropa denna frÃ¥n C# eller ett annat .NET-sprÃ¥k.
+- Att exponera COM-komponenter fÃ¶r .NET sÃ¥ att .NET-kod kan anropa dessa det (endast Windows). Detta stÃ¶d har fÃ¶rbÃ¤ttats i .NET 8.
+- StÃ¶d fÃ¶r dynamiska objekt fÃ¶r interoperabilitet med sprÃ¥k som IronPython och IronRuby.
+- Blazor interoperabilitet i webblÃ¤saren med JavaScript och bibliotek pÃ¥ valfritt sprÃ¥k som kompileras till Web Assembly.
 
 ## Molnutveckling
-Dagens .NET är skapat med molnet i åtanke. Du kan enkelt distribuera appar till molnet, och .NET har stöd på flera molnplattformar inklusive Microsoft Azure och Amazon Web Services (AWS).
+Dagens .NET Ã¤r skapat med molnet i Ã¥tanke. Du kan enkelt distribuera appar till molnet, och .NET har stÃ¶d pÃ¥ flera molnplattformar inklusive Microsoft Azure och Amazon Web Services (AWS).
 
-Du får ofta en viss nivå av gratis cloud computing, vilket vanligtvis räcker för applikationer med begränsad användning. Det är också lätt att skala upp med måttliga kostnader.
-Det enklaste sättet att distribuera till ett molnmiljö kallas mjukvara som en tjänst, där hanteringen av den underliggande infrastrukturen hanteras av molnleverantören.
+Du fÃ¥r ofta en viss nivÃ¥ av gratis cloud computing, vilket vanligtvis rÃ¤cker fÃ¶r applikationer med begrÃ¤nsad anvÃ¤ndning. Det Ã¤r ocksÃ¥ lÃ¤tt att skala upp med mÃ¥ttliga kostnader.
+Det enklaste sÃ¤ttet att distribuera till ett molnmiljÃ¶ kallas mjukvara som en tjÃ¤nst, dÃ¤r hanteringen av den underliggande infrastrukturen hanteras av molnleverantÃ¶ren.
 
-.NET har också utmärkt stöd för distribution till containers och för att distribuera containers till orkestreringstjänster som Kubernetes.
+.NET har ocksÃ¥ utmÃ¤rkt stÃ¶d fÃ¶r distribution till containers och fÃ¶r att distribuera containers till orkestreringstjÃ¤nster som Kubernetes.
 
-Stödet för *ahead of time (AOT)* kompilering stöds för konsolapplikationer och WEB API. 
-Innebär mindre exekverbara filer och har kortare uppstartstid.
-Microsoft håller på med att anpassa fler typer av .NET applikationer för *ahead of time* kompilering.
+StÃ¶det fÃ¶r *ahead of time (AOT)* kompilering stÃ¶ds fÃ¶r konsolapplikationer och WEB API. 
+InnebÃ¤r mindre exekverbara filer och har kortare uppstartstid.
+Microsoft hÃ¥ller pÃ¥ med att anpassa fler typer av .NET applikationer fÃ¶r *ahead of time* kompilering.
 
 ## IoT-utveckling
-Du kan bygga IoT-appar med C# och .NET som körs på Raspberry Pi, HummingBoard, BeagleBoard, Pine A64 och mer. Det finns tre vanliga tillvägagångssätt:
-- **.NET IoT Libraries** är lämplig för datorer som kan köra .NET, det vill säga en dator med ett operativsystem som Raspberry PI.
-- **.NET nanoFramework** är en gratis plattform med öppen källkod som gör att du kan skriva C#-applikationer för begränsade inbäddade enheter.
-- **Meadow** av Wilderness Labs ger dig .NET på inbäddade enheter för industriell IoT och bygger produktionsklassade lösningar med .NET.
+Du kan bygga IoT-appar med C# och .NET som kÃ¶rs pÃ¥ Raspberry Pi, HummingBoard, BeagleBoard, Pine A64 och mer. Det finns tre vanliga tillvÃ¤gagÃ¥ngssÃ¤tt:
+- **.NET IoT Libraries** Ã¤r lÃ¤mplig fÃ¶r datorer som kan kÃ¶ra .NET, det vill sÃ¤ga en dator med ett operativsystem som Raspberry PI.
+- **.NET nanoFramework** Ã¤r en gratis plattform med Ã¶ppen kÃ¤llkod som gÃ¶r att du kan skriva C#-applikationer fÃ¶r begrÃ¤nsade inbÃ¤ddade enheter.
+- **Meadow** av Wilderness Labs ger dig .NET pÃ¥ inbÃ¤ddade enheter fÃ¶r industriell IoT och bygger produktionsklassade lÃ¶sningar med .NET.
 ## Kodhantering
-Det rekommenderas starkt att använda ett källkontrollsystem online för att hantera din kod och andra tillgångar i din applikation.
+Det rekommenderas starkt att anvÃ¤nda ett kÃ¤llkontrollsystem online fÃ¶r att hantera din kod och andra tillgÃ¥ngar i din applikation.
 
-Stöd för GitHub är inbyggt i Visual Studio, vilket gör GitHub till ett rekommenderat val. Förutom kodhantering har GitHub många andra användbara funktioner för att bygga och distribuera din app, dokumentation, hantering av problem, projektplaner etc. GitHub är gratis att använda för de flesta hobbyprojekt.
+StÃ¶d fÃ¶r GitHub Ã¤r inbyggt i Visual Studio, vilket gÃ¶r GitHub till ett rekommenderat val. FÃ¶rutom kodhantering har GitHub mÃ¥nga andra anvÃ¤ndbara funktioner fÃ¶r att bygga och distribuera din app, dokumentation, hantering av problem, projektplaner etc. GitHub Ã¤r gratis att anvÃ¤nda fÃ¶r de flesta hobbyprojekt.
 
 ## Prestanda
-.NET-applikationer kan ha hög prestanda, även jämfört med andra tekniker. 
-Ett exempel på oberoende prestandatester finns på [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22).
-Prestanda är i fokus, och .NET har många prestandaförbättringar med varje utgåva.
-Du får prestandaförbättringar bara genom att uppdatera din app till senaste .NET-versionen.
+.NET-applikationer kan ha hÃ¶g prestanda, Ã¤ven jÃ¤mfÃ¶rt med andra tekniker. 
+Ett exempel pÃ¥ oberoende prestandatester finns pÃ¥ [TechEmpower](https://www.techempower.com/benchmarks/#section=data-r22).
+Prestanda Ã¤r i fokus, och .NET har mÃ¥nga prestandafÃ¶rbÃ¤ttringar med varje utgÃ¥va.
+Du fÃ¥r prestandafÃ¶rbÃ¤ttringar bara genom att uppdatera din app till senaste .NET-versionen.
 
-Du måste fråga dig själv: Hur kritisk är min applikation? Att skriva din kod lätt att förstå är att föredra. Optimering bör endast tillämpas vid flaskhalsar och endast när resultatet kan mätas.
-För att mäta prestandan för din kod och effekten på kodändringar du gör, använd [BenchMark .NET](https://github.com/dotnet/BenchmarkDotNet).
+Du mÃ¥ste frÃ¥ga dig sjÃ¤lv: Hur kritisk Ã¤r min applikation? Att skriva din kod lÃ¤tt att fÃ¶rstÃ¥ Ã¤r att fÃ¶redra. Optimering bÃ¶r endast tillÃ¤mpas vid flaskhalsar och endast nÃ¤r resultatet kan mÃ¤tas.
+FÃ¶r att mÃ¤ta prestandan fÃ¶r din kod och effekten pÃ¥ kodÃ¤ndringar du gÃ¶r, anvÃ¤nd [BenchMark .NET](https://github.com/dotnet/BenchmarkDotNet).
 
-## Läs mer
+## LÃ¤s mer
 
 - **[.NET](https://dotnet.microsoft.com/)**
 - **[IoT med .NET](https://dotnet.microsoft.com/en-us/apps/iot)**
