@@ -1,6 +1,8 @@
 ﻿@page "/tools/wagonerrorcards"
 @page "/tools/wagonerrorcards/{PrintBlackAndWhite:bool}"
 @layout PrintLayout
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3a): pure print output. *@
 
 <div class="pagebreak">
     <WagonErrorCard PrintBlackAndWhite="@PrintBlackAndWhite" />

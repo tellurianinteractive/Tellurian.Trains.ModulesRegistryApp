@@ -2,6 +2,9 @@
 @page "/reports/emptywagonorders/station/{stationId:int}/customer/{customerId:int}"
 
 @layout PrintLayout
+@attribute [ExcludeFromInteractiveRouting]
+@attribute [StreamRendering]
+@* Static SSR (Migration step 3.3a): pure print output. Streaming shows "Creating report" until the orders are ready. *@
 @inject IStringLocalizer<Strings> Localizer
 @inject EmptyWagonOrderService EmptyWagonOrderService
 @if (EmptyWagonOrders is null)

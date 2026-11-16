@@ -1,5 +1,7 @@
 ﻿@page "/Throttles/My/Preview"
 @layout PrintLayout
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3a): pure print output. *@
 @attribute [Authorize(Policy = "User")]
 
 @inject IStringLocalizer<Strings> Localizer

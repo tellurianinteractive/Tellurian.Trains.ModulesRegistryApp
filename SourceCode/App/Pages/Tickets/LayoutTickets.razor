@@ -1,6 +1,8 @@
 ﻿@page "/reports/tickets/layout/{layoutId:int}"
 
 @layout PrintLayout
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3a): pure print output. *@
 @inject NavigationManager Navigator
 @inject IStringLocalizer<Strings> Localizer
 @inject LayoutService LayoutService

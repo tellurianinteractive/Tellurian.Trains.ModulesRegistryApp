@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.2
+Released 2026-11-17
+- Print pages (waybills, empty wagon orders, tickets, name badges, wagon error cards and the throttle list) open faster.
 ## Release 1.15.1
 Released 2026-11-16
 - The start page, Terms of use, About, Contact, Release notes and the help pages load faster and work without JavaScript.

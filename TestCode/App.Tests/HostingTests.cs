@@ -1,7 +1,10 @@
 using System.Net;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ModulesRegistry.AppTests;
 
@@ -126,6 +129,38 @@ public sealed partial class HostingTests
         Assert.DoesNotContain("<!--Blazor:", termsHtml, "No interactive root on the terms of use.");
         StringAssert.Contains(termsHtml, "fa-file-signature");
         Assert.DoesNotContain("accept-terms-of-use", termsHtml, "Signed out, there is no accept form.");
+    }
+
+    [TestMethod]
+    public void PrintPagesAreStatic()
+    {
+        // Migration step 3.3a: the print previews (waybills, empty wagon orders, tickets) are pure output. They read the
+        // database, which these tests don't have, so the routes' metadata is checked instead of a response.
+        var reports = _factory.Services.GetRequiredService<EndpointDataSource>().Endpoints.OfType<RouteEndpoint>()
+            .Where(e => e.RoutePattern.RawText?.StartsWith("/reports/", StringComparison.OrdinalIgnoreCase) == true)
+            .ToList();
+
+        Assert.IsGreaterThanOrEqualTo(8, reports.Count, "The waybill, empty wagon order and ticket routes.");
+        foreach (var report in reports)
+        {
+            Assert.IsNotNull(report.Metadata.GetMetadata<ExcludeFromInteractiveRoutingAttribute>(), $"{report.RoutePattern.RawText} is not static.");
+        }
+    }
+
+    [TestMethod]
+    public void PagesOnPrintLayoutAreStatic()
+    {
+        // Migration step 3.3a: every page on the print layout (also name badges, wagon error cards, throttle preview) is static.
+        var printPages = typeof(Shared.PrintLayout).Assembly.GetTypes()
+            .Where(t => t.GetCustomAttributes(typeof(RouteAttribute), false).Length > 0)
+            .Where(t => t.GetCustomAttributes(typeof(LayoutAttribute), true).OfType<LayoutAttribute>().Any(l => l.LayoutType == typeof(Shared.PrintLayout)))
+            .ToList();
+
+        Assert.IsGreaterThanOrEqualTo(6, printPages.Count, "Waybills, empty wagon orders, tickets, name badges, wagon error cards and the throttle preview.");
+        foreach (var page in printPages)
+        {
+            Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.Name} is not static.");
+        }
     }
 
     [TestMethod]
