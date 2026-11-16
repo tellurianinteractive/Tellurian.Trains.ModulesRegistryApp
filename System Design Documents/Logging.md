@@ -114,3 +114,6 @@ traces
 ```
 
 Saved data is not logged here but stored in the database table `ChangeLog` (step 2C.5c).
+
+## Daily log review
+The workflow `.github/workflows/log-review.yml` runs every night at 03:17 UTC. It runs the queries in `.github/log-review/queries/` against the workspace (the last 24 hours against the 7 days before), and Claude Code analyses the results following `.github/log-review/prompt.md`. A cause with a clear fix becomes a pull request, the rest an issue, both labelled `log-review`; a quiet day gives nothing. When something new shows up regularly and is expected, describe it in this file, so the review learns to skip it. Design and setup: `Migration.md`, section 9.5.

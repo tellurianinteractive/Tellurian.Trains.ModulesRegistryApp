@@ -1,0 +1,13 @@
+// Failed requests in the last 24 hours, per name and result code, with the count in the 7 days before.
+let app = AppRequests | where _ResourceId endswith "/components/moduleregistry" and Success == false;
+let baseline = app
+    | where TimeGenerated between (ago(8d) .. ago(24h))
+    | summarize Previous7Days = count() by Name, ResultCode;
+app
+| where TimeGenerated > ago(24h)
+| summarize Last24Hours = count(), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Name, ResultCode
+| join kind=leftouter baseline on Name, ResultCode
+| project-away Name1, ResultCode1
+| extend Previous7Days = coalesce(Previous7Days, 0)
+| order by Last24Hours desc
+| take 50

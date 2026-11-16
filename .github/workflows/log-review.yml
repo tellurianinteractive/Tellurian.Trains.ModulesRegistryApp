@@ -1,0 +1,229 @@
+name: Daily log review
+
+# Claude Code reads the last 24 hours of production logs and reports through a pull request (a fix) or an issue (Migration.md 9.5).
+# Three jobs, so that no job both runs the agent's output and holds credentials:
+# - review:  signs in to Azure (Log Analytics Reader only), saves the query results to files, signs out, then runs the agent
+#            with file tools only (no shell). The agent can't run code, reach Azure or write to GitHub.
+# - verify:  no secrets; applies the agent's patch, builds and runs all tests.
+# - publish: plain script with write rights; opens the pull request (a draft when the tests fail) and the issue,
+#            and reminds of a maintenance release when a newer .NET runtime patch is out.
+# The repository is public, and so are these logs and artifacts: query results are never printed or uploaded.
+
+on:
+  schedule:
+    - cron: '17 3 * * *' # Daily, 03:17 UTC.
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Review, but open no pull request or issue
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: log-review
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  CLAUDE_CODE_VERSION: 2.1.325
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: log-review # Azure trusts only this environment; it holds the Claude token.
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+      id-token: write # OIDC login to Azure.
+    outputs:
+      has-output: ${{ steps.package.outputs.has-output }}
+      has-patch: ${{ steps.package.outputs.has-patch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Collect the logs and earlier reports
+        env:
+          LOG_ANALYTICS_WORKSPACE_ID: ${{ vars.LOG_ANALYTICS_WORKSPACE_ID }}
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/log-review-collect.sh .log-review/input
+
+      - name: Sign out of Azure
+        if: always()
+        run: |
+          az logout || true
+          rm -rf ~/.azure
+
+      - name: Install Claude Code
+        run: npm install --global "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION"
+
+      # Only the result's summary is printed; the agent's text can quote the logs.
+      - name: Review
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          mkdir -p .log-review/output
+          prompt="$(cat .github/log-review/prompt.md)"$'\n\n'"Today is $(date -u +%Y-%m-%d)."
+          claude -p "$prompt" \
+            --permission-mode acceptEdits \
+            --allowedTools "Read,Grep,Glob,Edit,Write" \
+            --disallowedTools "Bash,WebFetch,WebSearch,Task,Agent,NotebookEdit" \
+            --max-turns 80 \
+            --output-format json > "$RUNNER_TEMP/result.json" || true
+          jq '{subtype, is_error, num_turns, duration_ms}' "$RUNNER_TEMP/result.json" \
+            || { echo "::error::Claude Code gave no result."; exit 1; }
+          [ "$(jq -r .is_error "$RUNNER_TEMP/result.json")" = "false" ] || { echo "::error::The review ended with an error."; exit 1; }
+
+      - name: Remove the logs
+        if: always()
+        run: rm -rf .log-review/input "$RUNNER_TEMP/result.json"
+
+      # .log-review is in .gitignore, so the patch holds only the agent's code changes.
+      - name: Check and package the output
+        id: package
+        run: |
+          out="$RUNNER_TEMP/review-output"
+          mkdir -p "$out"
+          cp -r .log-review/output/. "$out/"
+          git add --all
+          git diff --cached --binary > "$out/changes.patch"
+          git diff --cached --stat
+          [ -s "$out/changes.patch" ] || rm "$out/changes.patch"
+          bash .github/scripts/log-review-check.sh "$out"
+          ls -A "$out"
+          [ -n "$(ls -A "$out")" ] && echo "has-output=true" >> "$GITHUB_OUTPUT" || echo "Nothing to report."
+          [ -f "$out/changes.patch" ] && echo "has-patch=true" >> "$GITHUB_OUTPUT" || true
+
+      - uses: actions/upload-artifact@v7
+        if: steps.package.outputs.has-output == 'true'
+        with:
+          name: review-output
+          path: ${{ runner.temp }}/review-output
+          retention-days: 7
+
+  verify:
+    needs: review
+    if: needs.review.outputs.has-patch == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      passed: ${{ steps.test.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: review-output
+          path: ${{ runner.temp }}/review-output
+
+      - name: Apply the change
+        run: git apply --index "$RUNNER_TEMP/review-output/changes.patch"
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 11.0.x
+
+      # As in build-and-deploy.yml.
+      - name: Build and test
+        id: test
+        continue-on-error: true
+        run: |
+          dotnet build "SourceCode/App/App.csproj" --configuration Release
+          dotnet build "TestCode/App.Tests/App.Tests.csproj" --configuration Release
+          dotnet build "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release
+          dotnet build "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release
+          dotnet test --project "TestCode/App.Tests/App.Tests.csproj" --configuration Release --no-build
+          dotnet test --project "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release --no-build
+          dotnet test --project "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release --no-build
+
+  publish:
+    needs: [review, verify]
+    if: always() && needs.review.result == 'success' && inputs.dry-run != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # The pull request's branch.
+      pull-requests: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OUT: ${{ runner.temp }}/review-output
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        if: needs.review.outputs.has-output == 'true'
+        with:
+          name: review-output
+          path: ${{ runner.temp }}/review-output
+
+      - name: Label
+        if: needs.review.outputs.has-output == 'true'
+        run: gh label create log-review --color 5319E7 --description "Opened by the daily log review" --force
+
+      # Pull requests opened with the workflow token don't start other workflows, so the result of the verify job goes in the body.
+      - name: Pull request
+        if: needs.review.outputs.has-patch == 'true'
+        env:
+          PASSED: ${{ needs.verify.outputs.passed }}
+        run: |
+          bash .github/scripts/log-review-check.sh "$OUT"
+          branch="log-review/$(date -u +%Y-%m-%d)-$GITHUB_RUN_ID"
+          git switch --create "$branch"
+          git apply --index "$OUT/changes.patch"
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet --message "$(cat "$OUT/pr-title.txt")" --message "Opened by the daily log review."
+          git push --quiet origin "$branch"
+          cp "$OUT/pr-body.md" body.md
+          if [ "$PASSED" = "true" ]; then
+            printf '\n\n---\nOpened by the [daily log review](%s). Build and all tests passed on this change.\n' "$RUN_URL" >> body.md
+            draft=""
+          else
+            printf '\n\n---\nOpened by the [daily log review](%s). **The build or the tests failed on this change**, so it is a draft.\n' "$RUN_URL" >> body.md
+            draft="--draft"
+          fi
+          gh pr create --base master --head "$branch" --title "$(cat "$OUT/pr-title.txt")" --body-file body.md --label log-review $draft
+
+      - name: Issue
+        if: needs.review.outputs.has-output == 'true'
+        run: |
+          [ -f "$OUT/issue-title.txt" ] || { echo "No issue."; exit 0; }
+          bash .github/scripts/log-review-check.sh "$OUT"
+          cp "$OUT/issue-body.md" body.md
+          printf '\n\n---\nOpened by the [daily log review](%s).\n' "$RUN_URL" >> body.md
+          gh issue create --title "$(cat "$OUT/issue-title.txt")" --body-file body.md --label log-review
+
+      # Migration.md 2.1: a maintenance release for each runtime patch. Compares the patch's date with the latest GitHub release.
+      - name: .NET runtime patch
+        run: |
+          metadata=$(curl --silent --show-error --fail https://builds.dotnet.microsoft.com/dotnet/release-metadata/11.0/releases.json)
+          runtime=$(echo "$metadata" | jq -r '."latest-runtime"')
+          released=$(echo "$metadata" | jq -r '."latest-release-date"')
+          deployed=$(gh release view --json publishedAt --jq .publishedAt | cut -c1-10)
+          echo "Runtime $runtime released $released; latest app release $deployed."
+          if [[ "$released" > "$deployed" ]]; then
+            title="Maintenance release for .NET runtime $runtime"
+            if [ -z "$(gh issue list --state all --search "\"$title\" in:title" --json number --jq '.[].number')" ]; then
+              gh label create log-review --color 5319E7 --description "Opened by the daily log review" --force
+              printf '.NET runtime %s was released %s, after the latest release of the app (%s). The app is published self-contained, so it gets the patch only with a new release: step up the version and add `- Maintenance update.` to the release notes.\n\n---\nOpened by the [daily log review](%s).\n' \
+                "$runtime" "$released" "$deployed" "$RUN_URL" > body.md
+              gh issue create --title "$title" --body-file body.md --label log-review
+            fi
+          fi

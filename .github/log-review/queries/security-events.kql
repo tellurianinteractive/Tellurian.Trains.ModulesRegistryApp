@@ -1,0 +1,7 @@
+// Security events (event ids 1000-1999, see Logging.md) per day and event id, the last 8 days. Counts only.
+AppTraces
+| where _ResourceId endswith "/components/moduleregistry" and TimeGenerated > ago(8d)
+| extend EventId = toint(Properties.EventId)
+| where EventId between (1000 .. 1999)
+| summarize Count = count() by Day = bin(TimeGenerated, 1d), EventId
+| order by Day desc, EventId asc

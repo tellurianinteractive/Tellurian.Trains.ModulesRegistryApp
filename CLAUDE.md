@@ -40,7 +40,7 @@ dotnet test --project TestCode/Services.Tests/Services.Tests.csproj --filter "Fu
 dotnet run --project SourceCode/App/App.csproj
 ```
 
-CI/CD is one workflow, `.github/workflows/build-and-deploy.yml`. Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
+CI/CD is one workflow, `.github/workflows/build-and-deploy.yml` (the other workflow, `log-review.yml`, is the nightly log review, Migration.md 9.5). Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
 
 Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version, add its release notes section with the date (bullets for changes that affect users or security, otherwise `- Maintenance update.`), then push. Publishing from Visual Studio is not possible (basic authentication is turned off on the App Service); the release procedure is in `CONTRIBUTING.md`. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
 

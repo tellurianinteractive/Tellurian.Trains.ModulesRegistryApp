@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+# Daily log review: query results and agent output (.github/workflows/log-review.yml)
+.log-review/

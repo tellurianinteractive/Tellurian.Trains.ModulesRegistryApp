@@ -886,9 +886,9 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 ### 9.5 Daily log review by an agent (2C.6)
 **Idea (2026-11-15):** instead of alert rules, an agent checks the logs every day, analyses errors and unusual patterns, and opens pull requests with fixes. The user gets a notice in the GitHub app.
 
-**Where it runs (proposed):** a scheduled **GitHub Actions workflow** (for example `.github/workflows/log-review.yml`, daily at night) that runs Claude Code.
+**Where it runs (decided 2026-11-16):** a scheduled **GitHub Actions workflow** (for example `.github/workflows/log-review.yml`, daily at night) that runs Claude Code.
 - Azure: OIDC sign-in like the deploy job, through a **new** federated credential for its own GitHub environment (for example `log-review`) on an identity with only **Log Analytics Reader** on the workspace. No Azure secret is stored, and it can't change anything in Azure.
-- Claude: the user's subscription, through a token in a repository secret.
+- Claude: the user's subscription, through a token in a secret of the `log-review` environment.
 - Alternative: a Claude Code scheduled routine in the cloud. Simpler to set up, but it needs a stored Azure secret (service principal with a client secret), since OIDC isn't available there.
 - Cost: queries against the Application Insights tables are free; the workflow runs on GitHub's free minutes for public repositories.
 
@@ -906,10 +906,24 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 **Also checks** the .NET runtime: when a newer `11.0.x` patch is out than the one in the deployed build, it opens an issue reminding of a maintenance release (see the patch routine in 2.1).
 
 **To decide in the step:**
-- [ ] GitHub Actions or a cloud routine.
-- [ ] How the token is limited (fine-grained permissions in the workflow, or a "require pull request" rule on `master`).
-- [ ] Run time and how far back it compares (24 hours against the previous 7 days).
-- [ ] Whether it also reviews the volume against the free allowance (section 9.2) and reports in an issue when it grows.
+- [x] GitHub Actions or a cloud routine: **GitHub Actions** (decided 2026-11-16).
+- [x] How the token is limited: **by splitting the work into jobs** (below), so the agent never holds a GitHub write token or Azure credentials, and no job both runs the agent's code and holds credentials. A "require pull request" rule on `master` isn't needed for this.
+- [x] Run time: daily at 03:17 UTC; the last 24 hours against the 7 days before.
+- [x] Volume: yes, from the `Usage` table; reported when a day is above 120 MB (the daily cap is 150 MB) or keeps growing.
+
+**Implemented (2026-11-16):** `.github/workflows/log-review.yml`, the queries in `.github/log-review/queries/`, the agent's instructions in `.github/log-review/prompt.md`, and the scripts `log-review-collect.sh` and `log-review-check.sh` in `.github/scripts/`. Three jobs:
+1. **review** (environment `log-review`): signs in to Azure with OIDC, runs the queries against the workspace into files (never printed: the workflow logs of a public repository are public), adds the log review issues and pull requests of the last 30 days, and signs out of Azure. Then Claude Code runs with **file tools only** (no shell, no web): it can't run code, reach Azure or write to GitHub. It writes at most one fix (code changes) and one issue text. `log-review-check.sh` rejects ids (GUIDs), IP and e-mail addresses in the texts, and changes to `.github/`, `Directory.Build.props`, `RELEASENOTES.md` and the Terms of Use. The logs are deleted; only the output (public anyway) goes to the next jobs as an artifact.
+2. **verify** (no secrets, read-only): applies the patch, builds and runs all tests.
+3. **publish** (plain script, `contents`, `pull-requests` and `issues: write`): pushes a branch `log-review/<date>-<run>` and opens the pull request (a **draft** when the build or tests failed), opens the issue, and checks the .NET runtime: when the latest `11.0.x` patch is newer than the latest GitHub release, it opens a reminder issue (once per patch). Pull requests opened with the workflow token don't start `build-and-deploy.yml`, so the verify result is written in the body. Everything gets the label `log-review`.
+
+*Run workflow* by hand with **dry-run** reviews without opening anything (the output is still checked and kept as an artifact for 7 days).
+
+**Setup outside the repository (done once):**
+- [x] Azure (2026-11-16): user-assigned managed identity `id-moduleregistry-logreview` in `Tellurian.Trains`, federated credential `github-log-review` with subject `repo:tellurianinteractive/Tellurian.Trains.ModulesRegistryApp:environment:log-review`, role **Log Analytics Reader** on `Tellurian-Trains-LogAnalytics-Workspace` only (its only role).
+- [x] GitHub (2026-11-16): environment `log-review`, deployment branches restricted to `master`, with secrets `AZURE_CLIENT_ID` (the new identity), `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` and the variable `LOG_ANALYTICS_WORKSPACE_ID` (the workspace id).
+- [x] GitHub (2026-11-16): secret `CLAUDE_CODE_OAUTH_TOKEN` in the `log-review` environment, from `claude setup-token` (the user's subscription).
+- [x] GitHub: *Settings → Actions → General → Allow GitHub Actions to create and approve pull requests* was already on.
+- [ ] Verification: a dry run, then a real run on the two start-up exceptions; a day without problems gives nothing.
 
 ## 10. Documents (step 2C.7)
 

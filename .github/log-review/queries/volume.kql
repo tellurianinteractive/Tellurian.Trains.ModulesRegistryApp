@@ -1,0 +1,5 @@
+// Billable volume per day for the whole workspace (the daily cap and the free 5 GB per month are per workspace), the last 8 days.
+Usage
+| where TimeGenerated > ago(8d) and IsBillable
+| summarize MB = round(sum(Quantity), 1) by Day = bin(TimeGenerated, 1d), DataType
+| order by Day desc, MB desc
