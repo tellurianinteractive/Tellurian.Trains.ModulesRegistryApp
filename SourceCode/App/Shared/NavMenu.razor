@@ -1,6 +1,9 @@
 ﻿@inject IStringLocalizer<Strings> Localizer
 @inject AppService AppService
 
+@* The menu toggle on narrow screens is a checkbox with a label, so it works also in static SSR pages (Migration step 3.1).
+   In interactive pages, a click in the menu also closes it again (through the binding). *@
+<input type="checkbox" id="nav-menu-state" class="nav-menu-state" @bind="expanded" />
 
 <div class="top-row pl-4 navbar navbar-dark">
 
@@ -10,12 +13,12 @@
     </a>
 
 
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+    <label for="nav-menu-state" class="navbar-toggler" title="@Localizer["Menu"]" aria-label="@Localizer["Menu"]">
         <span class="navbar-toggler-icon"></span>
-    </button>
+    </label>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="nav-menu" @onclick="CloseNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -169,12 +172,8 @@
 
 @code {
 
-    private bool collapseNavMenu = true;
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private bool expanded;
+    private void CloseNavMenu() => expanded = false;
 
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
     ClaimsPrincipal? Principal;

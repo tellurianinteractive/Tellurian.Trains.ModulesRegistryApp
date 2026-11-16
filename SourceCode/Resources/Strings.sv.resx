@@ -354,6 +354,9 @@
   <data name="Close" xml:space="preserve">
     <value>Stäng</value>
   </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Meny</value>
+  </data>
   <data name="ClosedYear" xml:space="preserve">
     <value>Stängd år</value>
   </data>

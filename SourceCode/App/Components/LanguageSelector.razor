@@ -1,23 +1,29 @@
-﻿@inject NavigationManager Navigator
+﻿@implements IDisposable
+@inject NavigationManager Navigator
 
+@* Plain links, so they work also in static SSR pages (Migration step 3.1). target="_top" makes the interactive router leave
+   them alone: changing the language needs a full page load, so request localization reads the new culture. *@
 <div class="languageselector">
     @foreach (var language in LanguageExtensions.FullySupportedCultures)
     {
-        <img style="padding: 2px" src="@Flag(language)" @onclick="@(()=>OnClick(language))" />
+        <a href="@Url(language)" target="_top" style="margin-left: 0"hreflang="@language.TwoLetterISOLanguageName" title="@language.NativeName"><img style="padding: 2px" src="@Flag(language)" alt="@language.NativeName" /></a>
     }
 </div>
+
 @code {
     string Url(System.Globalization.CultureInfo language) => $"{UriWithoutQueryString(Navigator.Uri)}?culture={language.TwoLetterISOLanguageName}";
-    string Flag(System.Globalization.CultureInfo language) => $"/images/flags/{language.CountrySuffix()}.png";
+    static string Flag(System.Globalization.CultureInfo language) => $"/images/flags/{language.CountrySuffix()}.png";
 
-    private void OnClick(System.Globalization.CultureInfo language)
-    {
-        Navigator.NavigateTo(Url(language), true);
-    }
+    // The links follow the page the user is on; the layout doesn't re-render this component on navigation.
+    protected override void OnInitialized() => Navigator.LocationChanged += OnLocationChanged;
 
-    private string UriWithoutQueryString(string uri)
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e) => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Navigator.LocationChanged -= OnLocationChanged;
+
+    private static string UriWithoutQueryString(string uri)
     {
         var q = uri.IndexOf('?');
-        return q > 1 ? uri.Substring(0, q) : uri;
-    }       
+        return q > 1 ? uri[..q] : uri;
+    }
 }

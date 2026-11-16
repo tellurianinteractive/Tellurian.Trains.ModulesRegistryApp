@@ -62,9 +62,28 @@ public sealed partial class HostingTests
 
         var response = await client.GetAsync(url);
 
-        // As with the former MapFallbackToPage("/_Host"): the app loads and the router shows "nothing to display".
+        // As with the former MapFallbackToPage("/_Host"): the app loads and shows "nothing to display".
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         StringAssert.Matches(await response.Content.ReadAsStringAsync(), BlazorScript());
+    }
+
+    [TestMethod]
+    public async Task UnknownAddressIsRenderedAsStaticPageWithTheLayout()
+    {
+        using var client = CreateClient();
+
+        var response = await client.GetAsync("/no/such/page");
+
+        // NotFound.razor is excluded from interactive routing (Migration step 3.1): the server renders the page and the
+        // layout in the response, with no interactive root, and the layout works without a circuit.
+        var html = await response.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("<!--Blazor:", html, "No interactive root on a static page.");
+        StringAssert.Contains(html, "Sorry, nothing to display here.");
+        StringAssert.Contains(html, "id=\"nav-menu-state\"", "The menu toggle is a checkbox.");
+        StringAssert.Contains(html, "action=\"login\"", "The login form.");
+        StringAssert.Contains(html, "class=\"nav-menu\"", "The menu.");
+        // Signed out, the returnUrl is the page itself, as in interactive pages.
+        StringAssert.Contains(html, "name=\"returnUrl\" value=\"no/such/page\"");
     }
 
     [TestMethod]

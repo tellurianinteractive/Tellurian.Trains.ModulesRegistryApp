@@ -354,6 +354,9 @@
   <data name="Close" xml:space="preserve">
     <value>Luk</value>
   </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
   <data name="ClosedYear" xml:space="preserve">
     <value>Lukket år</value>
   </data>

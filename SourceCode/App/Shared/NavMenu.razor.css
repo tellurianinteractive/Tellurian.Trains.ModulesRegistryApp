@@ -1,5 +1,12 @@
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+/* The checkbox that holds the menu's open state; its label is the toggler. */
+.nav-menu-state {
+    display: none;
 }
 
 .top-row {
@@ -50,13 +57,19 @@
     color: white;
 }
 
-@media (min-width: 1420px) {
-    .navbar-toggler {
+/* Narrow screens: the menu is hidden until the toggler is clicked. Wide screens never hide it. */
+@media (max-width: 1419.98px) {
+    .nav-menu {
         display: none;
     }
 
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
+    .nav-menu-state:checked ~ .nav-menu {
         display: block;
+    }
+}
+
+@media (min-width: 1420px) {
+    .navbar-toggler {
+        display: none;
     }
 }

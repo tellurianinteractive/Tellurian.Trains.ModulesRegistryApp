@@ -1,9 +1,11 @@
 @page "/{*path:nonfile}"
+@attribute [ExcludeFromInteractiveRouting]
 @inject IStringLocalizer<Strings> Localizer
 
 @* Any address that no page or endpoint matches. Before Migration step 2.2, MapFallbackToPage("/_Host") served the app for
    every such address and the router showed this message; now the server only serves component routes, so this catch-all
-   keeps that behaviour (the most specific route always wins, so it never hides a real page, endpoint or file). *@
+   keeps that behaviour (the most specific route always wins, so it never hides a real page, endpoint or file).
+   Static SSR (Migration step 3.1): the first static page, so the layout's static rendering is used in production. *@
 
 <div class="alert alert-warning">
     <h2><span class="fa fa-unlink"></span> @Localizer["SorryNothingToDisplayHere"]</h2>

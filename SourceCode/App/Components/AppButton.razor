@@ -1,20 +1,13 @@
 ﻿@using System.Diagnostics
 @inject IStringLocalizer<Strings> Localizer
-@inject IJSRuntime JSRuntime
 
 <span class="noprint">
 
     <span style="margin-left: 4px; display: @Display">
         @if (Href.HasValue())
         {
-            @if (OpenInNewTab)
-            {
-                <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@NavigateToNewTab"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
-            }
-            else
-            {
-                <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
-            }
+            @* A plain link, also for a new tab, so it works in static SSR pages too (Migration step 3.1). *@
+            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" target="@(OpenInNewTab ? "_blank" : null)" rel="@(OpenInNewTab ? "noopener" : null)" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
         }
         else if (IsSubmit)
         {
@@ -42,11 +35,6 @@
     [Parameter] public bool IsHidden { get; set; }
     [Parameter] public bool AlwaysShowLabel { get; set; }
     [Parameter] public string? Title { get; set; }
-
-    async Task NavigateToNewTab()
-    {
-        await JSRuntime.InvokeAsync<object>("open", Href, "_blank");
-    }
 
 
     string ButtonClassType

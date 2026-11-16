@@ -354,6 +354,9 @@
   <data name="Close" xml:space="preserve">
     <value>Schließen</value>
   </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
   <data name="ClosedYear" xml:space="preserve">
     <value>Geschlossenes Jahr</value>
   </data>
