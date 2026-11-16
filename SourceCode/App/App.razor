@@ -17,10 +17,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@Localizer["AppName"]</title>
     <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/fontawesome/css/all.css" rel="stylesheet">
-    <link href="css/site.css" rel="stylesheet" />
-    <link href="ModulesRegistry.styles.css" rel="stylesheet" />
+    @* Fingerprinted URLs from MapStaticAssets: a new deploy gives new URLs, so browsers never keep stale files (issue #233). *@
+    <link href="@Assets["css/bootstrap/bootstrap.min.css"]" rel="stylesheet" />
+    <link href="@Assets["css/fontawesome/css/all.css"]" rel="stylesheet">
+    <link href="@Assets["css/site.css"]" rel="stylesheet" />
+    <link href="@Assets["ModulesRegistry.styles.css"]" rel="stylesheet" />
     <HeadOutlet @rendermode="InteractiveRenderMode" />
 </head>
 <body>
@@ -37,8 +38,8 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.web.js"></script>
-    <script src="js/person-search.js"></script>
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="@Assets["js/person-search.js"]"></script>
     <script>
         window.clipboardCopy = {
             copyText: function (text, message) {

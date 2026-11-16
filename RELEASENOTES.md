@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.14.24
+Released 2026-11-16
+- Waybills and other print pages no longer lose their layout after an update.
 ## Release 1.14.23
 Released 2026-11-15
 - The warning for a too large file now shows the size limit in kB.

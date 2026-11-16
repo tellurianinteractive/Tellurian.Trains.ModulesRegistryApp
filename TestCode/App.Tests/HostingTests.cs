@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -10,7 +11,7 @@ namespace ModulesRegistry.AppTests;
 /// nothing is prerendered, so no page runs on the server during these requests.
 /// </summary>
 [TestClass]
-public sealed class HostingTests
+public sealed partial class HostingTests
 {
     private static WebApplicationFactory<Program> _factory = null!;
 
@@ -33,7 +34,7 @@ public sealed class HostingTests
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();
-        StringAssert.Contains(html, "_framework/blazor.web.js");
+        StringAssert.Matches(html, BlazorScript());
         Assert.DoesNotContain("blazor.server.js", html);
         StringAssert.Contains(html, "<!--Blazor:", "The interactive root component marker.");
         StringAssert.Contains(html, "<base href=\"/\">");
@@ -63,7 +64,7 @@ public sealed class HostingTests
 
         // As with the former MapFallbackToPage("/_Host"): the app loads and the router shows "nothing to display".
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-        StringAssert.Contains(await response.Content.ReadAsStringAsync(), "_framework/blazor.web.js");
+        StringAssert.Matches(await response.Content.ReadAsStringAsync(), BlazorScript());
     }
 
     [TestMethod]
@@ -117,4 +118,33 @@ public sealed class HostingTests
         Assert.AreEqual(HttpStatusCode.Redirect, (await client.GetAsync("/login")).StatusCode);
         Assert.AreEqual(HttpStatusCode.Redirect, (await client.GetAsync("/Documents/1")).StatusCode);
     }
+
+    [TestMethod]
+    public async Task StylesheetsAndScriptsAreFingerprinted()
+    {
+        // Issue #233: unfingerprinted URLs let browsers keep an old ModulesRegistry.styles.css whose scope ids no longer
+        // matched the components, so the waybills lost their layout. A fingerprinted URL changes with the file's content.
+        // (Only the publish manifest marks them immutable; the build manifest used here says no-cache.)
+        using var client = CreateClient();
+        var html = await (await client.GetAsync("/")).Content.ReadAsStringAsync();
+
+        var urls = AssetReference().Matches(html).Select(m => m.Groups["url"].Value).ToList();
+
+        Assert.IsGreaterThanOrEqualTo(6, urls.Count, "Bootstrap, Font Awesome, site.css, the scoped CSS bundle, blazor.web.js and person-search.js.");
+        foreach (var url in urls)
+        {
+            StringAssert.Matches(url, Fingerprinted(), $"{url} is not fingerprinted.");
+            var response = await client.GetAsync("/" + url);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, url);
+        }
+    }
+
+    [GeneratedRegex(@"_framework/blazor\.web\.[a-z0-9]+\.js")]
+    private static partial Regex BlazorScript();
+
+    [GeneratedRegex(@"(?:<link href|<script src)=""(?<url>[^""]+)""")]
+    private static partial Regex AssetReference();
+
+    [GeneratedRegex(@"\.[a-z0-9]{10}\.(?:styles\.css|css|js)$")]
+    private static partial Regex Fingerprinted();
 }
