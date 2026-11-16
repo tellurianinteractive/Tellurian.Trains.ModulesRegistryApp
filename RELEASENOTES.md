@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.1
+Released 2026-11-16
+- The start page, Terms of use, About, Contact, Release notes and the help pages load faster and work without JavaScript.
+- Pages load faster for signed-in users.
 ## Release 1.15.0
 Released 2026-11-16
 - New layout: a top bar with a drop-down menu replaces the side menu, and works better on tablets.

@@ -1,8 +1,9 @@
 ﻿
 @page "/"
+@attribute [ExcludeFromInteractiveRouting]
 @inject NavigationManager Navigator
 @inject IStringLocalizer<Strings> Localizer
-@inject PageHistory PageHistory
+@* Static SSR (Migration step 3.2b): the redirect to TermsOfUse below becomes an HTTP redirect. *@
 
 @using System.Security.Claims
 

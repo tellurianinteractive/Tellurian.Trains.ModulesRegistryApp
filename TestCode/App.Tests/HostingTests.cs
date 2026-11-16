@@ -26,11 +26,12 @@ public sealed partial class HostingTests
     private static HttpClient CreateClient() => _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
     [TestMethod]
-    public async Task StartPageIsTheAppDocumentWithAnInteractiveRoot()
+    public async Task InteractivePageIsTheAppDocumentWithAnInteractiveRoot()
     {
         using var client = CreateClient();
 
-        var response = await client.GetAsync("/");
+        // Any page not yet moved to static SSR (the start page was until Migration step 3.2b).
+        var response = await client.GetAsync("/Meetings/Index");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();
@@ -105,6 +106,25 @@ public sealed partial class HostingTests
         Assert.DoesNotContain("Sorry, nothing to display here.", html);
         StringAssert.Contains(html, "<html lang=\"de\"");
         StringAssert.Contains(html, expected);
+    }
+
+    [TestMethod]
+    public async Task StartPageAndTermsOfUseAreStatic()
+    {
+        // Migration step 3.2b. Signed out, there is nothing to accept and no redirect to the terms.
+        using var client = CreateClient();
+
+        var start = await client.GetAsync("/");
+        var terms = await client.GetAsync("/TermsOfUse");
+
+        Assert.AreEqual(HttpStatusCode.OK, start.StatusCode);
+        Assert.AreEqual(HttpStatusCode.OK, terms.StatusCode);
+        var startHtml = await start.Content.ReadAsStringAsync();
+        var termsHtml = await terms.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("<!--Blazor:", startHtml, "No interactive root on the start page.");
+        Assert.DoesNotContain("<!--Blazor:", termsHtml, "No interactive root on the terms of use.");
+        StringAssert.Contains(termsHtml, "fa-file-signature");
+        Assert.DoesNotContain("accept-terms-of-use", termsHtml, "Signed out, there is no accept form.");
     }
 
     [TestMethod]

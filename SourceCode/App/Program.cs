@@ -220,7 +220,9 @@ app.MapAppEndpoints();
 app.MapLogin();
 app.MapDocumentDownload();
 // Framework assets such as _framework/blazor.web.js are static web assets (.NET 9+), served from the build manifest.
-app.MapStaticAssets();
+// Short-circuited: served right after routing, without localization, authentication (whose claims transformation queries
+// the database for every request from a signed-in user), authorization or antiforgery. Security headers come before routing.
+app.MapStaticAssets().ShortCircuit();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

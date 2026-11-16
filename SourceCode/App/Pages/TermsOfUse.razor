@@ -1,45 +1,45 @@
 ﻿@page "/TermsOfUse"
+@attribute [ExcludeFromInteractiveRouting]
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<Strings> Localizer
-
 @inject UserService UserService
 
+@* Static SSR (Migration step 3.2b). Accepting is a form posted to this page, so it works without JavaScript. The claims
+   are built per request (ApplicationClaimsTransformation), so the redirect after the post already sees the acceptance. *@
+
 <h1><span class="fa fa-file-signature" />@Localizer["TermsOfUse"]</h1>
-<AuthorizeView>
-    <Authorized>
-        @if (!Principal.IsLatestTermsOfUseAccepted())
-        {
-            <ActionMessage AlertType="warning" Label="PleaseReadAndAccept" />
-        }
-    </Authorized>
-</AuthorizeView>
+@if (MustAccept)
+{
+    <ActionMessage AlertType="warning" Label="PleaseReadAndAccept" />
+}
 <ContentView ContentName="TermsOfUse" ShowModificationTime="true" />
-<AuthorizeView>
-    <Authorized>
-        @if (!Principal.IsLatestTermsOfUseAccepted())
-        {
-        <AppButton Label="Accept" IconName="@FontAwesome.Signature" OnClickCallback="OnAccept" AlwaysShowLabel="true" />           
-        }
-    </Authorized>
-</AuthorizeView>
+@if (MustAccept)
+{
+    <form method="post" @formname="accept-terms-of-use" @onsubmit="OnAccept">
+        <AntiforgeryToken />
+        <AppButton Label="Accept" IconName="@FontAwesome.Signature" IsSubmit="true" AlwaysShowLabel="true" />
+    </form>
+}
 
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     private ClaimsPrincipal? Principal;
 
-    protected async override Task OnParametersSetAsync()
+    private bool MustAccept => Principal.IsAuthenticated() && !Principal.IsLatestTermsOfUseAccepted();
+
+    protected override async Task OnInitializedAsync()
     {
-        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
     }
 
     private async Task OnAccept()
     {
+        if (!MustAccept) return;
         var result = await UserService.AcceptTermsOfUse(Principal.ObjectId());
         if (result is not null)
         {
-            Navigator.NavigateTo(Navigator.BaseUri, true);
+            Navigator.NavigateTo("/");
         }
     }
-
 }

@@ -6,13 +6,17 @@
         <div style="flex-grow: 4">
             <span class="@IconClass" /><span>@Localizer.HeadingText(Label, ObjectName, Context, PageAction)</span>
         </div>
-        <div class="noprint" style="flex-grow: 1; text-align:right">
-            @if (IsHelpAvailable)
-            {
-                <span class="fa fa-question-circle" @onclick="ToggleHelp" />
-            }
-            <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
-        </div>
+        @* The help toggle and the back arrow need a circuit, so static SSR pages don't show them yet (Migration step 3.2b). *@
+        @if (RendererInfo.IsInteractive)
+        {
+            <div class="noprint" style="flex-grow: 1; text-align:right">
+                @if (IsHelpAvailable)
+                {
+                    <span class="fa fa-question-circle" @onclick="ToggleHelp" />
+                }
+                <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
+            </div>
+        }
     </div>
     @if (HelpContentName.HasValue())
     {

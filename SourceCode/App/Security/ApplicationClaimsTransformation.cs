@@ -20,20 +20,30 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
         var clonedPrincipal = principal.Clone();
         if (clonedPrincipal.Identity is not ClaimsIdentity newIdentity) return principal;
 
+        // Runs for every request from a signed-in user, so everything is read in one query (one round trip to the database).
         await using var db = await Factory.CreateDbContextAsync().ConfigureAwait(false);
-        var user = await db.Users.AsNoTracking()
-            .SingleOrDefaultAsync(u => objectGuid == u.ObjectId).ConfigureAwait(false);
-        if (user is null) return principal;
+        var data = await db.Users.AsNoTracking()
+            .Where(u => u.ObjectId == objectGuid)
+            .Select(u => new UserClaimsData(
+                u,
+                u.Person == null ? null : new PersonClaimsData(u.Person.Id, u.Person.FirstName, u.Person.LastName, u.Person.CountryId),
+                u.Person.GroupMembers.Where(gm => gm.Group.GroupDomainId != null).Select(gm => gm.Group.GroupDomainId!.Value).ToList()))
+            .SingleOrDefaultAsync().ConfigureAwait(false);
+        if (data is null) return principal;
 
-        foreach (var claim in await GetUserClaimsAsync(db, user).ConfigureAwait(false))
+        foreach (var claim in await GetUserClaimsAsync(data).ConfigureAwait(false))
         {
             newIdentity.AddClaim(claim);
         }
         return clonedPrincipal;
     }
 
-    private async Task<IEnumerable<Claim>> GetUserClaimsAsync(ModulesDbContext db, User user)
+    private sealed record UserClaimsData(User User, PersonClaimsData? Person, List<int> DomainIds);
+    private sealed record PersonClaimsData(int Id, string FirstName, string LastName, int CountryId);
+
+    private async Task<IEnumerable<Claim>> GetUserClaimsAsync(UserClaimsData data)
     {
+        var user = data.User;
         var result = new List<Claim>(20)
             {
                 Claim(AppClaimTypes.UserId, user.Id)
@@ -49,17 +59,13 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
             }
         }
 
-        var person = await db.People.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user.Id).ConfigureAwait(false);
+        var person = data.Person;
         if (person is not null)
         {
             AddPersonalClaims(person, result);
             AppService.LastCountryId = person.CountryId;
-            var domainIds = await db.GroupDomains.AsNoTracking()
-                .Where(gd => gd.Groups.Any(g => g.GroupMembers.Any(gm => gm.PersonId == person.Id)))
-                .Select(g => g.Id)
-                .Distinct()
-                .ToListAsync().ConfigureAwait(false);
-            foreach (var domainId in domainIds) result.Add(Claim(AppClaimTypes.DomainId, domainId));
+            // The domains of the groups the person is a member of.
+            foreach (var domainId in data.DomainIds.Distinct()) result.Add(Claim(AppClaimTypes.DomainId, domainId));
         }
         return result;
 
@@ -75,16 +81,13 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
             if (user.IsLockedOut()) result.Add(Claim(AppClaimTypes.IsLockedOut, true));
         }
 
-        static void AddPersonalClaims(Person? person, List<Claim> result)
+        static void AddPersonalClaims(PersonClaimsData person, List<Claim> result)
         {
-            if (person is not null)
-            {
-                result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
-                result.Add(Claim(ClaimTypes.Surname, person.LastName));
-                result.Add(Claim(ClaimTypes.Name, $"{person.FirstName} {person.LastName}"));
-                result.Add(Claim(AppClaimTypes.PersonId, person.Id));
-                result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
-            }
+            result.Add(Claim(ClaimTypes.GivenName, person.FirstName));
+            result.Add(Claim(ClaimTypes.Surname, person.LastName));
+            result.Add(Claim(ClaimTypes.Name, $"{person.FirstName} {person.LastName}"));
+            result.Add(Claim(AppClaimTypes.PersonId, person.Id));
+            result.Add(Claim(AppClaimTypes.CountryId, person.CountryId));
         }
     }
 
