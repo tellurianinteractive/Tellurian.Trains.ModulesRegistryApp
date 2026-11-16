@@ -163,10 +163,13 @@ jobs:
       issues: write
     env:
       GH_TOKEN: ${{ github.token }}
-      OUT: ${{ runner.temp }}/review-output
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - uses: actions/checkout@v7
+
+      # The runner context isn't available in a job's env.
+      - name: Output folder
+        run: echo "OUT=$RUNNER_TEMP/review-output" >> "$GITHUB_ENV"
 
       - uses: actions/download-artifact@v8
         if: needs.review.outputs.has-output == 'true'
