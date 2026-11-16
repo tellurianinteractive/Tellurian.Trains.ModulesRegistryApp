@@ -1,3 +1,7 @@
 ﻿@page "/ReleaseNotes"
+@attribute [ExcludeFromInteractiveRouting]
 
-<MarkdownView Href="https://raw.githubusercontent.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/master/RELEASENOTES.md" />
+@* Static SSR (Migration step 3.2). The release notes are fetched from GitHub, so the page is cached for a while. *@
+<CacheView ExpiresAfter="TimeSpan.FromMinutes(30)">
+    <MarkdownView Href="https://raw.githubusercontent.com/tellurianinteractive/Tellurian.Trains.ModulesRegistryApp/master/RELEASENOTES.md" />
+</CacheView>

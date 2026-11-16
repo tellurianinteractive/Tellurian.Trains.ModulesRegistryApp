@@ -87,6 +87,37 @@ public sealed partial class HostingTests
     }
 
     [TestMethod]
+    [DataRow("/About", "<h4 id=\"zweck\">Zweck</h4>")]
+    [DataRow("/tools/locopreparationguide", "Bereite Deine Lok für das Modultreffen vor")]
+    [DataRow("/Content/articles-documentation", "Dokumentationsübersicht")]
+    public async Task ContentPagesAreStaticInTheUsersLanguage(string url, string expected)
+    {
+        // Migration step 3.2: the content pages are excluded from interactive routing, so they work without JavaScript.
+        using var client = CreateClient();
+        using var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Add("Cookie", ".AspNetCore.Culture=c%3Dde%7Cuic%3Dde");
+
+        var response = await client.SendAsync(request);
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var html = await response.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("<!--Blazor:", html, "No interactive root on a static page.");
+        Assert.DoesNotContain("Sorry, nothing to display here.", html);
+        StringAssert.Contains(html, "<html lang=\"de\"");
+        StringAssert.Contains(html, expected);
+    }
+
+    [TestMethod]
+    public async Task StaticPageForUsersRequiresSignIn()
+    {
+        using var client = CreateClient();
+
+        var response = await client.GetAsync("/tools");
+
+        Assert.AreEqual(HttpStatusCode.Redirect, response.StatusCode);
+    }
+
+    [TestMethod]
     public async Task MissingFileIsNotFound()
     {
         using var client = CreateClient();
