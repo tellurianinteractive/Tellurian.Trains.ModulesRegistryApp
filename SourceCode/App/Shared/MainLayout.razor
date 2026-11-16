@@ -1,46 +1,35 @@
 ﻿@inherits LayoutComponentBase
 @inject IStringLocalizer<Strings> Localizer
-@using System.Web;
 @using ModulesRegistry.Diagnostics
 
 <NotificationArea />
 
-<div class="page">
-    <div class="sidebar">
-        <div class="noprint">
-            <NavMenu />
-        </div>
+@* One sticky top bar at all widths: the menu toggler and the app name on the left (NavMenu, whose menu drops down from
+   the bar), the user and the general links on the right. Below 900 px the general links and the user's name move
+   into the menu (wide-only and narrow-only in site.css). *@
+<header class="app-bar noprint">
+    <NavMenu />
+    <div class="app-bar-end">
+        <LoginControl />
+        <a class="app-bar-link wide-only" href="TermsOfUse">@Localizer["TermsOfUse"]</a>
+        <a class="app-bar-link wide-only" href="Contact">@Localizer["Contact"]</a>
+        <a class="app-bar-link wide-only" href="About">@Localizer["About"]</a>
     </div>
-    <div class="main">
-        <div class="noprint">
-            <div class="top-row px-4 auth">
-                <LoginControl />
-                <a class="nav-link" href="TermsOfUse">
-                    @Localizer["TermsOfUse"]
-                </a>
-                <a class="nav-link" href="Contact">
-                    @Localizer["Contact"]
-                </a>
-                <a class="nav-link" href="About">
-                    @Localizer["About"]
-                </a>
+</header>
+
+<main class="content px-4">
+    <AppErrorBoundary @ref="ErrorBoundary">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent>
+            <div class="alert alert-danger">
+                <h2><span class="fa fa-exclamation-triangle"></span> @Localizer["UnexpectedErrorHeading"]</h2>
+                <p>@Localizer["UnexpectedErrorText"]</p>
             </div>
-        </div>
-        <div class="content px-4">
-            <AppErrorBoundary @ref="ErrorBoundary">
-                <ChildContent>
-                    @Body
-                </ChildContent>
-                <ErrorContent>
-                    <div class="alert alert-danger">
-                        <h2><span class="fa fa-exclamation-triangle"></span> @Localizer["UnexpectedErrorHeading"]</h2>
-                        <p>@Localizer["UnexpectedErrorText"]</p>
-                    </div>
-                </ErrorContent>
-            </AppErrorBoundary>
-        </div>
-    </div>
-</div>
+        </ErrorContent>
+    </AppErrorBoundary>
+</main>
 
 @code {
     private AppErrorBoundary? ErrorBoundary;

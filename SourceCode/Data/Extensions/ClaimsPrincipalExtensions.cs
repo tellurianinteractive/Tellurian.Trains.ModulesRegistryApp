@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
@@ -49,10 +48,14 @@ public static class ClaimsPrincipalExtensions
     public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.GlobalAdministrator);
     public static bool IsCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.CountryAdministrator);
 
-    public static MarkupString LoginStatus(this ClaimsPrincipal principal, IStringLocalizer localizer) =>
-        new($"""{principal.GivenName()} {principal.Surname()} <span class="{principal.LoginIcon()}" title="{principal.LoginRole(localizer)}"/> """);
+    /// <summary>The signed-in user's name, for the user icon's tooltip and the menu.</summary>
+    public static string LoginName(this ClaimsPrincipal principal) => $"{principal.GivenName()} {principal.Surname()}".Trim();
 
-    private static string LoginIcon(this ClaimsPrincipal principal) =>
+    /// <summary>The user icon's tooltip and accessible name: the name and the role.</summary>
+    public static string LoginTooltip(this ClaimsPrincipal principal, IStringLocalizer localizer) => $"{principal.LoginName()} ({principal.LoginRole(localizer)})";
+
+    /// <summary>The user icon: a globe for global administrators, a flag for country administrators, otherwise a person.</summary>
+    public static string LoginIcon(this ClaimsPrincipal principal) =>
         principal.IsGlobalAdministrator() ? "fa fa-globe-europe" :
         principal.IsCountryAdministrator() ? "fa fa-flag" :
         principal.IsAuthenticated() ? "fa fa-user" :

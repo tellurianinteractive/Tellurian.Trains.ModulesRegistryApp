@@ -1,28 +1,70 @@
+/* The left part of the top bar (MainLayout): the toggler and the app name. */
+.app-bar-start {
+    flex-wrap: nowrap;
+    padding: 0.25rem 1rem;
+    gap: 0.75rem;
+}
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
     margin-bottom: 0;
 }
 
-/* The checkbox that holds the menu's open state; its label is the toggler. */
-.nav-menu-state {
+.navbar-brand {
+    font-size: 1.1rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+    .navbar-brand .copyright {
+        display: block;
+        font-size: 7pt;
+    }
+
+/* The checkbox that holds the menu's open state; its labels are the toggler and the backdrop. */
+.nav-menu-state, .nav-menu-backdrop {
     display: none;
 }
 
-.top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+/* The menu drops down below the top bar on the left, as wide as its longest item, over the page. It scrolls by itself
+   when taller than the screen, with the wheel or touch and no visible scroll bar. The top bar is sticky, so it is the
+   containing block (100% is its height). */
+.nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 2;
+    width: max-content;
+    max-width: 100vw;
+    max-height: calc(100vh - 100%);
+    max-height: calc(100dvh - 100%);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding: 0.25rem 0.5rem 0.5rem 0;
+    background-image: linear-gradient(180deg, rgb(29, 102, 5) 0%, #064616 70%);
+    box-shadow: 0.25rem 0.5rem 1rem rgba(0, 0, 0, 0.35);
+    border-bottom-right-radius: 0.5rem;
 }
 
-.navbar-brand {
-    font-size: 1.1rem;
+    /* Older Safari, which lacks scrollbar-width. */
+    .nav-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+.nav-menu-state:checked ~ .nav-menu {
+    display: block;
 }
 
-.oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
+/* Transparent, over the page and under the menu: a click outside the menu closes it. */
+.nav-menu-state:checked ~ .nav-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
 }
 
 .nav-item {
@@ -45,6 +87,7 @@
         display: flex;
         align-items: center;
         line-height: 2rem;
+        white-space: nowrap;
     }
 
 .nav-item ::deep a.active {
@@ -57,19 +100,15 @@
     color: white;
 }
 
-/* Narrow screens: the menu is hidden until the toggler is clicked. Wide screens never hide it. */
-@media (max-width: 1419.98px) {
-    .nav-menu {
-        display: none;
-    }
-
-    .nav-menu-state:checked ~ .nav-menu {
-        display: block;
-    }
+/* The signed-in user's name, first in the menu below 900 px (the top bar shows it as a tooltip). */
+.nav-menu-user {
+    color: white;
+    font-weight: bold;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: solid 1px white;
 }
 
-@media (min-width: 1420px) {
-    .navbar-toggler {
-        display: none;
+    .nav-menu-user span {
+        margin-right: 0.5rem;
     }
-}

@@ -234,3 +234,30 @@ blockquote {
     .person-search-list .list-group-item {
         cursor: pointer;
     }
+
+/* Top bar and menu (MainLayout, NavMenu, LoginControl): what moves into the menu below 900 px. Global, since the
+   elements are in several components. */
+@media (max-width: 899.98px) {
+    .wide-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: 900px) {
+    .narrow-only {
+        display: none !important;
+    }
+}
+
+/* The login form in the top bar; the inputs shrink on narrow screens. */
+.login-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .login-form input[type=text], .login-form input[type=password] {
+        width: 11rem;
+        max-width: 38vw;
+    }

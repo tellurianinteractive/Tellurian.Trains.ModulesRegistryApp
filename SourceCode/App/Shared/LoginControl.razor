@@ -6,26 +6,26 @@
 
 <AuthorizeView>
     <Authorized>
-        <span class="languageselector"><LanguageSelector /></span>
-
-        <b>@context.User.LoginStatus(Localizer)</b>
-        <a class="ml-md-auto btn btn-primary"
+        @* Below 900 px, the user's name is in the menu (NavMenu); the icon's tooltip is always there. *@
+        <LanguageSelector />
+        <span class="wide-only" style="white-space: nowrap"><b>@context.User.LoginName()</b></span>
+        <span class="@context.User.LoginIcon()" role="img" style="font-size: 1.25rem; cursor: help"
+              title="@context.User.LoginTooltip(Localizer)" aria-label="@context.User.LoginTooltip(Localizer)"></span>
+        <a class="btn btn-primary"
            href="/logout?returnUrl=/"
            target="_top">@Localizer["Logout"]</a>
     </Authorized>
     <NotAuthorized>
-        @* A plain form posted to the login endpoint (not handled by Blazor), so the credentials are never in a URL.
-           display: contents keeps the inputs and the button laid out as direct children of the top row. *@
-        <form method="post" action="@LoginEndpoint.Route.TrimStart('/')" style="display: contents">
+        @* A plain form posted to the login endpoint (not handled by Blazor), so the credentials are never in a URL. *@
+        <form method="post" action="@LoginEndpoint.Route.TrimStart('/')" class="login-form">
             @if (AntiforgeryToken is not null)
             {
                 <input type="hidden" name="@AntiforgeryToken.FieldName" value="@AntiforgeryToken.Value" />
             }
             <input type="hidden" name="returnUrl" value="@ReturnUrl" />
-            <input type="text" name="username" value="@DefaultUserService.Username" placeholder="@Localizer["Username"]" autocomplete="username" />
-            &nbsp;&nbsp;
-            <input type="password" name="password" value="@DefaultUserService.Password" placeholder="@Localizer["Password"]" autocomplete="current-password" />
-            <button type="submit" class="ml-md-auto btn btn-primary" style="margin-left: 1.5rem; white-space: nowrap">@Localizer["Login"]</button>
+            <input type="text" name="username" value="@DefaultUserService.Username" placeholder="@Localizer["Username"]" aria-label="@Localizer["Username"]" autocomplete="username" />
+            <input type="password" name="password" value="@DefaultUserService.Password" placeholder="@Localizer["Password"]" aria-label="@Localizer["Password"]" autocomplete="current-password" />
+            <button type="submit" class="btn btn-primary" style="white-space: nowrap">@Localizer["Login"]</button>
         </form>
     </NotAuthorized>
 </AuthorizeView>
