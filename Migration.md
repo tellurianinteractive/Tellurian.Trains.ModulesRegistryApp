@@ -923,7 +923,8 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 - [x] GitHub (2026-11-16): environment `log-review`, deployment branches restricted to `master`, with secrets `AZURE_CLIENT_ID` (the new identity), `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` and the variable `LOG_ANALYTICS_WORKSPACE_ID` (the workspace id).
 - [x] GitHub (2026-11-16): secret `CLAUDE_CODE_OAUTH_TOKEN` in the `log-review` environment, from `claude setup-token` (the user's subscription).
 - [x] GitHub: *Settings → Actions → General → Allow GitHub Actions to create and approve pull requests* was already on.
-- [ ] Verification: a dry run, then a real run on the two start-up exceptions; a day without problems gives nothing.
+- [x] Dry run (2026-11-16): all five queries returned data, the agent finished in 21 turns and reported nothing, which was right: every exception in the window (the two start-up exceptions, the `FK_Module_Document` save) happened before the releases that fixed them (1.14.15, 1.14.21–22).
+- [ ] Verification of a pull request: the two start-up exceptions planned for it are fixed, so the first real finding (or a known, still unfixed problem) has to show it: one pull request or issue, nothing private in its text, the verify result in the body.
 
 ## 10. Documents (step 2C.7)
 
