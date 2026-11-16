@@ -13,7 +13,8 @@ namespace ModulesRegistry.Services.Implementations;
 /// </remarks>
 public sealed class ContentService
 {
-    public readonly string MarkdownPath = "content/markdown";
+    // Cased as the folder (App/Content/Markdown): Linux file systems, such as on the CI runner, are case-sensitive.
+    public readonly string MarkdownPath = "Content/Markdown";
     private readonly IHttpClientFactory ClientFactory;
     private readonly MarkdownResourceProvider Markdown;
 

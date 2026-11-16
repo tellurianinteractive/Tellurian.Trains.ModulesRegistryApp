@@ -90,7 +90,8 @@ public sealed partial class HostingTests
     [TestMethod]
     [DataRow("/About", "<h4 id=\"zweck\">Zweck</h4>")]
     [DataRow("/tools/locopreparationguide", "Bereite Deine Lok für das Modultreffen vor")]
-    [DataRow("/Content/articles-documentation", "Dokumentationsübersicht")]
+    // Cased as the file (Articles/Documentation.md), since the CI runner's file system is case-sensitive.
+    [DataRow("/Content/Articles-Documentation", "Dokumentationsübersicht")]
     public async Task ContentPagesAreStaticInTheUsersLanguage(string url, string expected)
     {
         // Migration step 3.2: the content pages are excluded from interactive routing, so they work without JavaScript.
