@@ -8,3 +8,27 @@
         font-size: 24pt;
         font-weight: bold;
     }
+
+
+/* Static SSR (Migration step 3.3): the help is shown while the checkbox before the heading is checked. */
+.page-help-state {
+    display: none;
+}
+
+.page-help {
+    display: none;
+}
+
+.page-help-state:checked ~ .page-help {
+    display: block;
+}
+
+.page-help-toggle {
+    cursor: pointer;
+    margin: 0;
+}
+
+.page-back {
+    color: inherit;
+    text-decoration: none;
+}

@@ -148,6 +148,19 @@ public sealed partial class HostingTests
     }
 
     [TestMethod]
+    public void CargoListIsStaticWithoutLocalStorage()
+    {
+        // Migration step 3.3: the first list page in static SSR. It reads the database, so the page type is checked, not a response.
+        var page = typeof(ModulesRegistry.Pages.Cargo.Index);
+
+        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), "The cargo list is not static.");
+        var injected = page.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
+            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
+            .Select(p => p.PropertyType.Name);
+        Assert.DoesNotContain("ILocalStorageService", injected, "The filter is in the query string, not in local storage.");
+    }
+
+    [TestMethod]
     public void PagesOnPrintLayoutAreStatic()
     {
         // Migration step 3.3a: every page on the print layout (also name badges, wagon error cards, throttle preview) is static.
@@ -236,7 +249,7 @@ public sealed partial class HostingTests
 
         var urls = AssetReference().Matches(html).Select(m => m.Groups["url"].Value).ToList();
 
-        Assert.IsGreaterThanOrEqualTo(6, urls.Count, "Bootstrap, Font Awesome, site.css, the scoped CSS bundle, blazor.web.js and person-search.js.");
+        Assert.IsGreaterThanOrEqualTo(7, urls.Count, "Bootstrap, Font Awesome, site.css, the scoped CSS bundle, blazor.web.js, person-search.js and filter-form.js.");
         foreach (var url in urls)
         {
             StringAssert.Matches(url, Fingerprinted(), $"{url} is not fingerprinted.");

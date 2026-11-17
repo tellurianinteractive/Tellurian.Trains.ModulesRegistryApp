@@ -216,6 +216,9 @@
   <data name="AvailableModules" xml:space="preserve">
     <value>Verfügbare Module</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
   <data name="BackColor" xml:space="preserve">
     <value>Hintergrundfarbe</value>
   </data>
@@ -353,6 +356,9 @@
   </data>
   <data name="Close" xml:space="preserve">
     <value>Schließen</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hilfe</value>
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menü</value>

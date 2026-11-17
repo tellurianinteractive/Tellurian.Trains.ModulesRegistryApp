@@ -123,6 +123,9 @@
   <data name="Austria" xml:space="preserve">
     <value>Austria</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Wstecz</value>
+  </data>
   <data name="Bale" xml:space="preserve">
     <value>Bela</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="Germany" xml:space="preserve">
     <value>Niemcy</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
   </data>
   <data name="Hungary" xml:space="preserve">
     <value>Węgry</value>

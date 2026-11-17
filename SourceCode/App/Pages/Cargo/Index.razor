@@ -1,9 +1,12 @@
 ﻿@page "/Cargo/Index"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): the filter is a GET form and QuickGrid pages and sorts by URL, so the query string holds
+   the whole list state (shareable, back button). The current sort goes along with the filter as hidden fields.
+   wwwroot/js/filter-form.js submits the form on a pause in typing (data-auto-submit); Enter works without JavaScript. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
 @inject CargoService CargoService
 
 <PageHeading ObjectName="CargoTypes" IconClass="@FontAwesome.Cargo" PageAction="PageAction.List" HelpContext="CargoTypes" ShowHelpInitially="false" />
@@ -14,89 +17,67 @@
         <AppButton Label="Add" Href="@("cargo/0/edit/")" />
     </span>
 }
-@if (Filter.HasFilter)
-{
-    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
-    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase"/></span>
-}
+<form id="cargo-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @* The filter fields are in the column headers (FilterColumn), joined to this form by its id; Clear filter is in the Actions header. *@
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
 <div class="grid" tabindex="-1">
-    <QuickGrid Items="@FilteredItems" Virtualize="true" Pagination="PaginationState">
-        <PropertyColumn Property="@(c => c.NhmCodeOrEmpty())" Sortable="true" Title="@Localizer["NHMCode"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.Code" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["NHMCode"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(c => c.LocalizedName().Value)" Sortable="true" Title="@Localizer["Name"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.Name" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Name"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(c => c.DefaultClasses)" Title="@Localizer["DefaultClasses"]" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.WagonClass" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Class"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
+    <QuickGrid Items="@FilteredItems" Pagination="PaginationState">
+        <FilterColumn Property="@(c => c.NhmCodeOrEmpty())" Sortable="true" Title="@Localizer["NHMCode"]" FilterForm="cargo-filter" FilterName="code" FilterValue="@Code" />
+        <FilterColumn Property="@(c => c.LocalizedName().Value)" Sortable="true" Title="@Localizer["Name"]" FilterForm="cargo-filter" FilterName="name" FilterValue="@Name" />
+        <FilterColumn Property="@(c => c.DefaultClasses)" Title="@Localizer["DefaultClasses"]" Sortable="true" FilterForm="cargo-filter" FilterName="class" FilterValue="@WagonClass" />
         <PropertyColumn Property="@(c => c.FromYear)" Title="@Localizer["FromYear"]" Align="Align.Center" />
         <PropertyColumn Property="@(c => c.UptoYear)" Title="@Localizer["UptoYear"]" Align="Align.Center" />
         <PropertyColumn Property="@(c => c.IsExpress.AsYesOrNo())" Title="@Localizer["IsExpress"]" Align="Align.Center" />
         <PropertyColumn Property="@(c => c.IsCoolingRequired.AsYesOrNo())" Title="@Localizer["RequiresCooling"]" Align="Align.Center" />
         <TemplateColumn Title="@Localizer["Actions"]" Context="cargo">
-            @if (MayEdit)
-            {
-                <AppButton Label="Edit" Href="@EditHref(cargo)"/>
-            }
+            <HeaderTemplate Context="column">
+                @* QuickGrid's default theme puts the bold and the padding on .col-title, not on the th. *@
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
+                {
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                @if (MayEdit)
+                {
+                    <AppButton Label="Edit" Href="@EditHref(cargo)"/>
+                }
+            </ChildContent>
         </TemplateColumn>
     </QuickGrid>
 </div>
-<Paginator State="@PaginationState">
-
-</Paginator>
+<Paginator State="@PaginationState" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [SupplyParameterFromQuery(Name = "code")] public string? Code { get; set; }
+    [SupplyParameterFromQuery(Name = "name")] public string? Name { get; set; }
+    [SupplyParameterFromQuery(Name = "class")] public string? WagonClass { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
+
     ClaimsPrincipal? Principal;
     IEnumerable<Cargo>? Cargos;
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    CargoFilter Filter = new();
     bool MayEdit;
 
+    CargoFilter Filter => new() { Code = Code, Name = Name, WagonClass = WagonClass };
     string EditHref(Cargo cargo) => $"Cargo/{cargo.Id}/Edit";
+    string ClearFilterHref => Sort.HasValue() ? $"Cargo/Index?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : "Cargo/Index";
 
-    IQueryable<Cargo> FilteredItems
-    {
-        get
-        {
-            if (Cargos is null) return Enumerable.Empty<Cargo>().AsQueryable();
-            return Cargos.AsQueryable()
-                .Where(c =>
-                    c.NhmCodeOrEmpty().StartsWithCaseInsensitive(Filter.Code) &&
-                    c.LocalizedName().Value.ContainsCaseInsensitive(Filter.Name) &&
-                    c.DefaultClasses.ContainsCaseInsensitive(Filter.WagonClass));
-        }
-    }
-
-    void OnFilterChanged()
-    {
-        LocalStorage.SetItemAsync(nameof(CargoFilter), Filter);
-    }
-
-    void OnClearFilter()
-    {
-        Filter.Clear();
-        OnFilterChanged();
-    }
+    IQueryable<Cargo> FilteredItems => Cargos is null ? Enumerable.Empty<Cargo>().AsQueryable() : Filter.Apply(Cargos).AsQueryable();
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         MayEdit = Principal.IsGlobalOrCountryAdministrator();
-        Filter = await LocalStorage.GetItemAsync<CargoFilter>(nameof(CargoFilter)) ?? Filter;
         Cargos = (await CargoService.GetAll()).OrderBy(c => c.NhmCode);
     }
 }

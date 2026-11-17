@@ -7,7 +7,7 @@
 @inject INotificationService NotificationService
 @inject CargoService CargoService
 
-<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToAddOrEditPageAction()" />
+<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToAddOrEditPageAction()" BackHref="Cargo/Index" />
 
 <EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
     <Inputs>
@@ -63,7 +63,7 @@
         if (result.Entity is not null)  Cargo = result.Entity;
         NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await Task.Delay(1000);
-        if (PageHistory.CanNavigateBack) PageHistory.NavigateBack();
+        PageHistory.NavigateBack("Cargo/Index"); // The list is static, so this page may have no history (Migration step 3.3).
     }
 
     async Task OnTopLevelNhmChanged(int id)

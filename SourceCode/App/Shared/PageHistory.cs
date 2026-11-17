@@ -23,13 +23,14 @@ public class PageHistory : IDisposable
 
     public bool IsCurrentAlsoLast => History.Count != 0 && Navigator.Uri.Equals(History.Last().Url, StringComparison.OrdinalIgnoreCase);
 
-    public void NavigateBack()
+    /// <summary>
+    /// Goes to the previous page in this circuit, or to <paramref name="fallbackUrl"/> when there is none: a page reached
+    /// from a static SSR page starts a new circuit with no history (Migration step 3.3).
+    /// </summary>
+    public void NavigateBack(string? fallbackUrl = null)
     {
-        //if ( IsCurrentAlsoLast)return;
-        if (!CanNavigateBack) return;
-        var page = History[^2];
-        if (page == null) return;
-        Navigator.NavigateTo(page.Url);
+        if (CanNavigateBack) Navigator.NavigateTo(History[^2].Url);
+        else if (fallbackUrl is not null) Navigator.NavigateTo(fallbackUrl);
     }
     public bool IsShowningHelp
     {

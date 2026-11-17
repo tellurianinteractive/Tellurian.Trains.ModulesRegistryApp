@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.3
+Released 2026-11-17
+- Cargo types: the filter fields are in the column headers, and the filter, sorting and page are in the address, so the list can be bookmarked and shared.
+- Cargo types without default wagon classes no longer match a wagon class filter.
 ## Release 1.15.2
 Released 2026-11-17
 - Print pages (waybills, empty wagon orders, tickets, name badges, wagon error cards and the throttle list) open faster.

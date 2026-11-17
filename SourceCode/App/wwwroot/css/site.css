@@ -191,6 +191,28 @@ blockquote {
         font-weight: bold
     }
 
+    /* Titles line up at the top beside a column with a filter field. (The default theme makes .col-title bold, not the th.) */
+    .quickgrid thead th {
+        vertical-align: top;
+    }
+
+    /* Filter fields and Clear filter under the column titles (FilterColumn, Migration step 3.3). */
+    .quickgrid .col-header-content:has(.col-filter, .col-filter-clear) {
+        flex-wrap: wrap;
+    }
+
+    /* Indented as the titles and the cells (0.4rem in QuickGrid's default theme). */
+    .quickgrid .col-filter-clear {
+        flex-basis: 100%;
+        margin-top: 2px;
+        padding-left: 0.4rem;
+    }
+
+    .quickgrid .col-filter {
+        flex: 1 0 calc(100% - 0.4rem);
+        margin: 2px 0 0 0.4rem;
+    }
+
 .tooltip {
     position: relative;
     display: inline-block;
