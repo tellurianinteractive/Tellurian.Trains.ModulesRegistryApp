@@ -3,6 +3,9 @@
 @page "/Regions/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): the country is chosen with a GET form to /Regions/Index?country=..., which redirects to
+   the country's address. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
@@ -10,11 +13,9 @@
 @inject RegionService RegionService
 @inject CountryService CountryService
 
-
 <PageHeading ObjectName="Regions" IconClass="@FontAwesome.Region" PageAction="PageAction.List" HelpContext="Regions" ShowHelpInitially="false" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
-
+<ListboxForm Id="regions-country" Action="Regions/Index" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
 @if (Principal.IsGlobalOrCountryAdministrator())
 {
@@ -37,7 +38,6 @@
         <td>
             @if (Principal.IsCountryAdministratorInCountry(region.CountryId))
             {
-
                 <AppButton Label="Edit" Href="@EditHref(region.Id)" />
             }
         </td>
@@ -47,46 +47,31 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+
     ClaimsPrincipal? Principal;
-    IEnumerable<Region>? Regions;
+    IEnumerable<Region> Regions = [];
     IEnumerable<ListboxItem>? Countries;
 
-
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
-
-
-    void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            AppService.LastCountryId = id;
-            Navigator.NavigateTo(IndexHref);
-        }
-    }
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal, true);
-        Regions = Array.Empty<Region>();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         if (CountryId < 1)
         {
-            //var id = Principal.CountryId();
-            //AppService.LastCountryId = id;
-            Navigator.NavigateTo(IndexHref);
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"Regions/Country/{id}");
+            return;
         }
-        else
-        {
-            AppService.LastCountryId = CountryId;
-            Regions = await RegionService.AllAsync(Principal, AppService.LastCountryId);
-        }
+        AppService.LastCountryId = CountryId;
+        Regions = await RegionService.AllAsync(Principal, CountryId);
     }
 
     string EditHref(int id) => $"regions/{id}/edit";
-    string IndexHref => $"Regions/Country/{AppService.LastCountryId}";
-
 }

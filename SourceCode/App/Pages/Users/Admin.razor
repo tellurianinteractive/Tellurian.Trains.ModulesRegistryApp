@@ -7,7 +7,7 @@
 @attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3), as the persons list: the country is chosen with a GET form to /admin/users?country=...,
    which redirects to the country's address; the date for users not signed in is a GET form (?since=yyyy-MM-dd). The test
-   mail is a POST form (antiforgery), followed by a redirect that tells the result in the query string (?testmail=...). *@
+   mail is a POST form (antiforgery), followed by a redirect with the result as a one-time message (SetFlashMessage). *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
@@ -67,14 +67,6 @@
     <form id="users-testmail" method="post" @formname="testmail" @onsubmit="SendTestMailAsync" data-enhance>
         <AntiforgeryToken />
         <AppButton Label="Send" IsSubmit="true" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
-        @if (TestMailResult == "sent")
-        {
-            <span class="text-success" style="padding-left: 10px;">@Localizer["TestMailSent"]</span>
-        }
-        else if (TestMailResult == "failed")
-        {
-            <span class="text-danger" style="padding-left: 10px;">@Localizer["TestMailFailed"]</span>
-        }
     </form>
 </div>
 
@@ -83,7 +75,7 @@
     [Parameter] public int CountryId { get; set; }
     [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
     [SupplyParameterFromQuery(Name = "since")] public string? Since { get; set; }
-    [SupplyParameterFromQuery(Name = "testmail")] public string? TestMailResult { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<ListboxItem>? CountryListItems;
@@ -135,6 +127,7 @@
             Sender = new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"])
         };
         var result = await MailSender.SendMailMessageAsync(message);
-        Navigator.NavigateTo(Navigator.GetUriWithQueryParameter("testmail", result > 0 ? "sent" : "failed"));
+        HttpContext.SetFlashMessage(result > 0 ? "TestMailSent" : "TestMailFailed", result > 0);
+        Navigator.NavigateTo(Navigator.Uri);
     }
 }

@@ -1,6 +1,13 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.5
+Released 2026-11-17
+- Groups and External stations: the filter fields are in the column headers, and the filter, sorting and page are in the address.
+- Regions, Groups and External stations open faster and keep the chosen country in the address.
+- Groups without members, modules and meetings can be deleted.
+- Deleting asks for confirmation on the page, and the result is shown in a message that disappears by itself.
+- Sortable columns are marked with an arrow.
 ## Release 1.15.4
 Released 2026-11-17
 - Persons: the filter fields are in the column headers, and the filter, sorting and page are in the address. A new column shows when the user was last active, and can be sorted.

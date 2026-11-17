@@ -4,10 +4,13 @@
 @page "/ExternalStations/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form stations-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
+   /ExternalStations?country=..., which redirects to the country's address. Delete is a link that adds ?delete={id}, which
+   shows a confirmation with a POST form (antiforgery); after it, the result is a one-time message (SetFlashMessage) after the redirect. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
-@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 
 @inject ExternalStationService ExternalStationService
@@ -16,14 +19,19 @@
 
 <PageHeading ObjectName="ExternalStations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" HelpContext="ExternalStations" ShowHelpInitially="false" />
 
-<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="CanSelectCountry" SelectedId="CountryId" LocalStorageKey="Country" />
+<ListboxForm Id="stations-country" Action="ExternalStations" Name="country" Items="CountryItems" ItemType="Country" IsVisible="CanSelectCountry" SelectedId="CountryId" />
 
-@if (DeleteDialogOpen)
+@if (StationToDelete is not null)
 {
-    <AppModalDialog Title="@DeleteTitle"
-                    Text="@Localizer["ClickOKToDelete"]"
-                    OnClose="@OnDeleteDialogClose">
-    </AppModalDialog>
+    <div class="alert alert-warning" role="alert">
+        <form method="post" @formname="delete" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <input type="hidden" name="DeleteStationId" value="@StationToDelete.Id" />
+            <strong>@Localizer["Delete"] @StationToDelete.FullName?</strong>
+            <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+            <AppButton Label="Cancel" Href="@WithoutQuery("delete")" AlwaysShowLabel="true" />
+        </form>
+    </div>
 }
 
 @if (MayEdit)
@@ -31,162 +39,119 @@
     <span><AppButton Href="ExternalStations/0/Edit" Label="Add" /></span>
 }
 
-@if (Filter.HasFilter)
-{
-    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
-    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase"/></span>
-}
+<form id="stations-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
 
 @if (HasData)
 {
-    <QuickGrid Items="FilteredItems" Virtualize="true" Pagination="PaginationState">
-        <PropertyColumn Property="@(es => es.FullName)" Title="@Localizer["Name"]" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.Name" @bind:event="oninput" @onchange="OnFilterChanged" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(es => es.Signature)" Title="@Localizer["Signature"]" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.Signature" @bind:event="oninput" @onchange="OnFilterChanged"/>
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(es => es.Note)" Title="@Localizer["Note"]" />
-        <PropertyColumn Property="@(es => es.OpenedYear)" Title="@Localizer["OpenedYear"]" Sortable="true" />
-        <PropertyColumn Property="@(es => es.ClosedYear)" Title="@Localizer["ClosedYear"]" Sortable="true" />
-        <TemplateColumn Title="@Localizer["Actions"]" Context="station">
-            @if (MayEdit)
-            {
-                <AppButton Label="Edit" Href="@EditHref(station)" />
-            }
-            @if (Principal.IsGlobalOrCountryAdministrator())
-            {
-                <AppButton Label="Delete" OnClickCallback="@(() => OpenDeleteDialog(station.Id))" />
-            }
-        </TemplateColumn>
-    </QuickGrid>
-    <Paginator State="@PaginationState">
-    </Paginator>
-
+    <div class="grid" tabindex="-1">
+        <QuickGrid Items="FilteredItems" Pagination="PaginationState">
+            <FilterColumn Property="@(es => es.FullName)" Title="@Localizer["Name"]" Sortable="true" FilterForm="stations-filter" FilterName="name" FilterValue="@Name" />
+            <FilterColumn Property="@(es => es.Signature)" Title="@Localizer["Signature"]" Sortable="true" FilterForm="stations-filter" FilterName="signature" FilterValue="@Signature" />
+            <PropertyColumn Property="@(es => es.Note)" Title="@Localizer["Note"]" />
+            <PropertyColumn Property="@(es => es.OpenedYear)" Title="@Localizer["OpenedYear"]" Sortable="true" />
+            <PropertyColumn Property="@(es => es.ClosedYear)" Title="@Localizer["ClosedYear"]" Sortable="true" />
+            <TemplateColumn Title="@Localizer["Actions"]" Context="station">
+                <HeaderTemplate Context="column">
+                    <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                    @if (Filter.HasFilter)
+                    {
+                        <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                    }
+                </HeaderTemplate>
+                <ChildContent>
+                    @if (MayEdit)
+                    {
+                        <AppButton Label="Edit" Href="@EditHref(station)" />
+                    }
+                    @if (MayDelete)
+                    {
+                        <AppButton Label="Delete" Href="@DeleteHref(station)" />
+                    }
+                </ChildContent>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+    <Paginator State="@PaginationState" />
 }
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int RegionId { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "name")] public string? Name { get; set; }
+    [SupplyParameterFromQuery(Name = "signature")] public string? Signature { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
+    [SupplyParameterFromQuery(Name = "delete")] public int? DeleteId { get; set; }
+    [SupplyParameterFromForm(FormName = "delete")] public int DeleteStationId { get; set; }
 
     ClaimsPrincipal? Principal;
 
     IEnumerable<ExternalStation>? ExternalStations;
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    ExternalStationsFilter Filter = new();
-    CountryFilter FilterCountry = new();
     IEnumerable<ListboxItem>? CountryItems;
-    IEnumerable<ListboxItem>? RegionItems;
     Country? Country;
     Region? Region;
 
-    int DefaultCountryId => CountryId > 0 ? CountryId : FilterCountry.CountryId > 0 ? FilterCountry.CountryId : Principal.CountryId();
-
-
-    string EditHref(ExternalStation station) => $"ExternalStations/{station.Id}/Edit";
-    string FreightCustomersHref(ExternalStation station) => $"ExternalStations/{station.Id}/StationCustomers";
+    ExternalStationsFilter Filter => new() { Name = Name, Signature = Signature };
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CountryItems = await CountryService.ListboxItemsAsync(Principal, true, true);
-        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
-        if (CountryItems.Count() == 1) OnSelectedCountry(CountryItems.First().Id);
-        if (Principal.CountryId() > 0) OnSelectedCountry(Principal.CountryId());
     }
 
     protected override async Task OnParametersSetAsync()
-    {
-        Filter = await LocalStorage.GetItemAsync<ExternalStationsFilter>(nameof(ExternalStationsFilter)) ?? Filter;
-        FilterCountry = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? FilterCountry;
-        await GetCountryStations();
-        await GetRegionStations();
-    }
-
-    async Task GetCountryStations()
-    {
-        if (DefaultCountryId > 0)
-        {
-            Country = await CountryService.FindById(DefaultCountryId);
-            ExternalStations = await ExternalStationService.GetAsync(Principal, DefaultCountryId);
-        }
-    }
-
-    void OnSelectedCountry(int countryId)
-    {
-        FilterCountry.CountryId = countryId;
-        LocalStorage.SetItemAsync(nameof(CountryFilter), FilterCountry);
-        Navigator.NavigateTo($"ExternalStations/Country/{countryId}");
-    }
-
-    async Task GetRegionStations()
     {
         if (RegionId > 0)
         {
             Region = await RegionService.FindById(Principal, RegionId);
             ExternalStations = await ExternalStationService.GetAsync(Principal, 0, RegionId);
+            return;
         }
+        if (CountryId < 1)
+        {
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value :
+                CountryItems?.Count() == 1 ? CountryItems.First().Id :
+                Principal.CountryId();
+            Navigator.NavigateTo($"ExternalStations/Country/{id}");
+            return;
+        }
+        Country = await CountryService.FindById(CountryId);
+        ExternalStations = await ExternalStationService.GetAsync(Principal, CountryId);
     }
 
-    void OnSelectedRegion(int regionId)
+    async Task DeleteAsync()
     {
-        Navigator.NavigateTo($"ExternalStations/Region{regionId}");
+        // Only a station shown in this list is deleted; the service checks the permission.
+        var deleted = MayDelete && ExternalStations?.Any(es => es.Id == DeleteStationId) == true &&
+            (await ExternalStationService.DeleteAsync(Principal, DeleteStationId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(WithoutQuery("delete"));
     }
 
     IQueryable<ExternalStation> FilteredItems =>
-        ExternalStations is null ? Enumerable.Empty<ExternalStation>().AsQueryable() :
-        ExternalStations.AsQueryable()
-            .Where(es => 
-                es.FullName.StartsWithCaseInsensitive(Filter.Name) &&
-                es.Signature.StartsWithCaseInsensitive(Filter.Signature)
-            );
+        ExternalStations is null ? Enumerable.Empty<ExternalStation>().AsQueryable() : Filter.Apply(ExternalStations).AsQueryable();
 
-    void OnFilterChanged()
-    {
-        LocalStorage.SetItemAsync(nameof(ExternalStationsFilter), Filter);
-    }
-
-    void OnClearFilter()
-    {
-        Filter.Clear();
-        OnFilterChanged();
-    }
-
-    bool DeleteDialogOpen { get; set; }
-    int DeletedId;
-    string DeleteTitle => $"{Localizer["Delete"]} {ItemName(DeletedId)}?";
-
-    private void OpenDeleteDialog(int id)
-    {
-        DeletedId = id;
-        DeleteDialogOpen = true;
-        StateHasChanged();
-    }
-
-    async Task OnDeleteDialogClose(bool accept)
-    {
-        if (accept && DeletedId > 0)
-        {
-            var result = await ExternalStationService.DeleteAsync(Principal, DeletedId);
-            ExternalStations = await ExternalStationService.GetAsync(Principal, 0, RegionId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-        DeleteDialogOpen = false;
-        StateHasChanged();
-    }
+    ExternalStation? StationToDelete => MayDelete && DeleteId > 0 ? ExternalStations?.FirstOrDefault(es => es.Id == DeleteId) : null;
 
     object? Owner => Country is not null ? Country : Region;
-
     bool MayEdit => ExternalStations is not null;
-    bool HasData => ExternalStations is not null && ExternalStations.Count() > 0;
+    bool MayDelete => Principal.IsGlobalOrCountryAdministrator();
+    bool HasData => ExternalStations is not null && ExternalStations.Any();
     bool CanSelectCountry => CountryItems is not null && CountryItems.Count() > 1;
-    string ItemName(int id) => id < 1 || ExternalStations is null ? string.Empty : ExternalStations.Single(es => es.Id == DeletedId).FullName;
+
+    string EditHref(ExternalStation station) => $"ExternalStations/{station.Id}/Edit";
+    string DeleteHref(ExternalStation station) => Navigator.GetUriWithQueryParameter("delete", station.Id);
+    string WithoutQuery(string name) => Navigator.GetUriWithQueryParameter(name, (string?)null);
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["name"] = null, ["signature"] = null, ["page"] = null, ["delete"] = null });
 }

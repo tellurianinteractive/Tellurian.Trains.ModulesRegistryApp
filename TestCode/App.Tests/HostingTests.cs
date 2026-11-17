@@ -151,6 +151,9 @@ public sealed partial class HostingTests
     [DataRow(typeof(ModulesRegistry.Pages.Cargo.Index))]
     [DataRow(typeof(ModulesRegistry.Pages.Persons.Index))]
     [DataRow(typeof(ModulesRegistry.Pages.Users.Admin))]
+    [DataRow(typeof(ModulesRegistry.Pages.Regions.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Groups.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.Index))]
     public void ListPageIsStaticWithoutLocalStorage(Type page)
     {
         // Migration step 3.3: list pages in static SSR. They read the database, so the page type is checked, not a response.

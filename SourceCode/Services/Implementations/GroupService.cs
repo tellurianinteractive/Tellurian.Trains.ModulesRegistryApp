@@ -210,20 +210,48 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         return principal.SaveNotAuthorised<GroupMember>();
     }
 
+    /// <summary>
+    /// The groups among <paramref name="groupIds"/> that <paramref name="principal"/> may delete: a global administrator,
+    /// or a country administrator in the group's country, and only a group that has no members, no modules and no meetings
+    /// (nor layouts at meetings, which also refer to the group).
+    /// </summary>
+    public async Task<IReadOnlySet<int>> DeletableIdsAsync(ClaimsPrincipal? principal, IEnumerable<int> groupIds)
+    {
+        if (principal is null || principal.IsReadOnly()) return new HashSet<int>();
+        var ids = groupIds.ToList();
+        if (ids.Count == 0) return new HashSet<int>();
+        using var dbContext = Factory.CreateDbContext();
+        var groups = await Unreferenced(dbContext)
+            .Where(g => ids.Contains(g.Id))
+            .Select(g => new { g.Id, g.CountryId })
+            .ToListAsync();
+        return groups.Where(g => principal.IsGlobalOrCountryAdministrator(g.CountryId)).Select(g => g.Id).ToHashSet();
+    }
+
+    /// <summary>
+    /// Deletes a group, under the same conditions as <see cref="DeletableIdsAsync"/>.
+    /// </summary>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.MayDelete())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var group = await FindByIdAsync(principal, id);
-            if (group is null) return (0, Strings.NothingToDelete);
-            if (group.GroupMembers.Any() || group.ModuleOwnerships.Any()) return (0, Strings.MayNotBeDeleted);
-            dbContext.Remove(group);
-            var count = await dbContext.SaveChangesAsync();
-            return count.DeleteResult();
-        }
-        return principal.NotAuthorized<Group>();
+        if (principal is null || principal.IsReadOnly()) return principal.NotAuthorized<Group>();
+        using var dbContext = Factory.CreateDbContext();
+        var group = await dbContext.Groups.SingleOrDefaultAsync(g => g.Id == id);
+        if (group is null) return (0, Strings.NothingToDelete);
+        if (!principal.IsGlobalOrCountryAdministrator(group.CountryId)) return principal.NotAuthorized<Group>();
+        if (!await Unreferenced(dbContext).AnyAsync(g => g.Id == id)) return (0, Strings.MayNotBeDeleted);
+        dbContext.Groups.Remove(group);
+        var count = await dbContext.SaveChangesAsync();
+        return count.DeleteResult();
     }
+
+    // Groups that nothing refers to, so they can be deleted without breaking a foreign key.
+    private static IQueryable<Group> Unreferenced(ModulesDbContext dbContext) =>
+        dbContext.Groups.Where(g =>
+            !g.GroupMembers.Any() &&
+            !g.ModuleOwnerships.Any() &&
+            !dbContext.Meetings.Any(m => m.OrganiserGroupId == g.Id) &&
+            !dbContext.Layouts.Any(l => l.OrganisingGroupId == g.Id) &&
+            !dbContext.GroupLayoutModules.Any(glm => glm.GroupId == g.Id));
 
     public async Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember)
     {

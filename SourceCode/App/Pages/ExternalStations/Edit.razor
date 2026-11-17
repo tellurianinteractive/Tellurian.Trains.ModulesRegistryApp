@@ -8,7 +8,7 @@
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false"/>
+<PageHeading ObjectName="ExternalStation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false" BackHref="@BackHref" />
 <ContentView ContentName="ExternalStationNote"/>
 
 <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
@@ -61,6 +61,8 @@
 
     
 
+    // The external stations list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => Station.Region is null ? "ExternalStations" : $"ExternalStations/Country/{Station.Region.CountryId}";
     string CustomersHref => $"ExternalStations/{Station.Id}/StationCustomers";
 
 }

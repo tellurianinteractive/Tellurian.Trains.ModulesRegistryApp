@@ -3,89 +3,112 @@
 @page "/Groups/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form groups-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
+   /Groups/Index?country=..., which redirects to the country's address. Delete, only for a group with no members, modules and
+   meetings, is a link that adds ?delete={id}, which shows a confirmation with a POST form (antiforgery); after it, the result is
+   a one-time message (SetFlashMessage) after the redirect, as on the external stations list. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 @inject CountryService CountryService
 
 <PageHeading ObjectName="Groups" IconClass="@FontAwesome.Group" PageAction="PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="@Localizer["Country"]" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" LocalStorageKey="Country" />
+<ListboxForm Id="groups-country" Action="Groups/Index" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
-@if (Groups is null)
+@if (Principal.IsCountryAdministratorInCountry(CountryId))
 {
-    @Localizer["GettingData"]
+    <span class="col-12" style="margin-top: 10px">
+        <AppButton Label="Add" Href="@EditHref(0)" />
+    </span>
 }
-else
+<hr />
+
+@if (GroupToDelete is not null)
 {
-    @if (Principal.IsCountryAdministratorInCountry(DefaultCountryId))
+    <div class="alert alert-warning" role="alert">
+        <form method="post" @formname="delete" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <input type="hidden" name="DeleteGroupId" value="@GroupToDelete.Id" />
+            <strong>@Localizer["Delete"] @GroupToDelete.FullName?</strong>
+            <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+            <AppButton Label="Cancel" Href="@WithoutDelete" AlwaysShowLabel="true" />
+        </form>
+    </div>
+}
+
+<form id="groups-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
     {
-        <span class="col-12" style="margin-top: 10px">
-            <AppButton Label="Add" Href="@EditHref(0)" />
-        </span>
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
     }
-    @if (Filter.HasFilter)
-    {
-        <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
-        <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase" /></span>
-    }
-    <hr />
-    <QuickGrid Items="@Filter.Groups(Groups, Principal, Localizer)" Virtualize="true">
-        <PropertyColumn Property="@(p => p.Value.ShortName)" Sortable="true" Title="@Localizer["ShortName"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.ShortName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["ShortName"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(p => p.Value.FullName)" Sortable="true" Title="@Localizer["FullName"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.FullName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["FullName"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
+
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="@FilteredGroups" Pagination="PaginationState">
+        <FilterColumn Property="@(p => p.Value.ShortName)" Sortable="true" Title="@Localizer["ShortName"]" FilterForm="groups-filter" FilterName="short" FilterValue="@ShortName" />
+        <FilterColumn Property="@(p => p.Value.FullName)" Sortable="true" Title="@Localizer["FullName"]" FilterForm="groups-filter" FilterName="full" FilterValue="@FullName" />
         <PropertyColumn Property="@(p => CityName(p.Value))" Sortable="true" Title="@Localizer["CityName"]" />
         @if (HasGroupsFromSeveralCountries)
         {
-            <PropertyColumn Property="@(p => p.Value.Country.EnglishName.GetLocalizedString(null))" Sortable="true" Title="@Localizer["Country"]">
-                <ColumnOptions>
-                    <div class="search-box">
-                        <input type="search" autofocus @bind="Filter.CountryName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["Country"]" />
-                    </div>
-                </ColumnOptions>
-            </PropertyColumn>
+            <FilterColumn Property="@(p => CountryNameOf(p.Value))" Sortable="true" Title="@Localizer["Country"]" FilterForm="groups-filter" FilterName="countryname" FilterValue="@CountryName" />
         }
         <PropertyColumn Property="@(p => GroupDomain(p.Value))" Sortable="true" Title="@Localizer["Domain"]" />
-        <PropertyColumn Property="@(p => Localizer[p.Value.Category])" Sortable="true" Title="@Localizer["Category"]" />
+        <PropertyColumn Property="@(p => Localizer[p.Value.Category].Value)" Sortable="true" Title="@Localizer["Category"]" />
         <TemplateColumn Title="@Localizer["Actions"]">
-            <AppButton Label="Members" Href="@MembersHref(context.Value.Id)" IconName="@FontAwesome.User"></AppButton>
-            <AppButton Label="Modules" Href="@ModulesHref(context.Value.Id)" IconName="@FontAwesome.Modules"></AppButton>
-            <AppButton Label="Stations" Href="@StationsHref(context.Value.Id)" IconName="@FontAwesome.Stations"></AppButton>
-            <AppButton Label="Waybills" Href="@WaybillsHref(context.Value.Id)" IconName="@FontAwesome.Waybills"></AppButton>
-            @if (context.MayEdit)
-            {
-                <AppButton Label="Edit" Href="@EditHref(context.Value.Id)"></AppButton>
-                <AppButton Label="NewMeeting" Href="@CreateMeetingHref(context.Value.Id)" IconName="@FontAwesome.Meeting"></AppButton>
-            }
+            <HeaderTemplate Context="column">
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
+                {
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                <AppButton Label="Members" Href="@MembersHref(context.Value.Id)" IconName="@FontAwesome.User"></AppButton>
+                <AppButton Label="Modules" Href="@ModulesHref(context.Value.Id)" IconName="@FontAwesome.Modules"></AppButton>
+                <AppButton Label="Stations" Href="@StationsHref(context.Value.Id)" IconName="@FontAwesome.Stations"></AppButton>
+                <AppButton Label="Waybills" Href="@WaybillsHref(context.Value.Id)" IconName="@FontAwesome.Waybills"></AppButton>
+                @if (context.MayEdit)
+                {
+                    <AppButton Label="Edit" Href="@EditHref(context.Value.Id)"></AppButton>
+                    <AppButton Label="NewMeeting" Href="@CreateMeetingHref(context.Value.Id)" IconName="@FontAwesome.Meeting"></AppButton>
+                }
+                @if (DeletableIds.Contains(context.Value.Id))
+                {
+                    <AppButton Label="Delete" Href="@DeleteHref(context.Value.Id)" />
+                }
+            </ChildContent>
         </TemplateColumn>
     </QuickGrid>
-    <Paginator State="PaginationState" />
-}
+</div>
+<Paginator State="PaginationState" />
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "short")] public string? ShortName { get; set; }
+    [SupplyParameterFromQuery(Name = "full")] public string? FullName { get; set; }
+    [SupplyParameterFromQuery(Name = "countryname")] public string? CountryName { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
+    [SupplyParameterFromQuery(Name = "delete")] public int? DeleteId { get; set; }
+    [SupplyParameterFromForm(FormName = "delete")] public int DeleteGroupId { get; set; }
 
     ClaimsPrincipal? Principal;
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    GroupFilter Filter = new();
-    IEnumerable<(Group value, bool mayEdit)>? Groups;
+    IEnumerable<(Group Value, bool MayEdit)> Groups = [];
     IEnumerable<ListboxItem>? Countries;
-    CountryFilter FilterCountry = new();
-    int DefaultCountryId => CountryId > 0 ? CountryId : FilterCountry.CountryId > 0 ? FilterCountry.CountryId : Principal.CountryId();
     bool HasGroupsFromSeveralCountries;
+    IReadOnlySet<int> DeletableIds = new HashSet<int>();
+
+    GroupsFilter Filter => new() { ShortName = ShortName, FullName = FullName, CountryName = CountryName };
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,84 +118,41 @@ else
 
     protected async override Task OnParametersSetAsync()
     {
-        FilterCountry = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? FilterCountry;
-        Filter = await LocalStorage.GetItemAsync<GroupFilter>(nameof(GroupFilter)) ?? Filter;
-        await GetGroups(DefaultCountryId);
-    }
-
-    void OnSelectedCountry(int countryId)
-    {
-        if (countryId > 0)
+        if (CountryId < 1)
         {
-            FilterCountry.CountryId = countryId;
-            LocalStorage.SetItemAsync(nameof(CountryFilter), FilterCountry);
-            Navigator.NavigateTo($"Groups/Country/{countryId}");
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"Groups/Country/{id}");
+            return;
         }
+        Groups = [.. (await GroupService.GetAllAsync(Principal, CountryId)).Select(g => (g.Item1, g.Item2))];
+        HasGroupsFromSeveralCountries = Groups.Select(g => g.Value.CountryId).Distinct().Count() > 1;
+        DeletableIds = await GroupService.DeletableIdsAsync(Principal, Groups.Select(g => g.Value.Id));
     }
 
-    async Task GetGroups(int countryId)
+    async Task DeleteAsync()
     {
-        if (countryId > 0)
-        {
-            Groups = null;
-            StateHasChanged();
-            Groups = await GroupService.GetAllAsync(Principal, countryId);
-            HasGroupsFromSeveralCountries = Groups.Select(g => g.value.CountryId).Distinct().Count() > 1;
-        }
+        // Only a group shown as deletable in this list is deleted; the service checks the conditions again.
+        var deleted = DeletableIds.Contains(DeleteGroupId) && (await GroupService.DeleteAsync(Principal, DeleteGroupId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(WithoutDelete);
     }
 
-    void OnFilterChanged()
-    {
-        LocalStorage.SetItemAsync(nameof(GroupFilter), Filter);
-    }
+    Group? GroupToDelete => DeleteId > 0 && DeletableIds.Contains(DeleteId.Value) ? Groups.FirstOrDefault(g => g.Value.Id == DeleteId).Value : null;
+    string DeleteHref(int groupId) => Navigator.GetUriWithQueryParameter("delete", groupId);
+    string WithoutDelete => Navigator.GetUriWithQueryParameter("delete", (string?)null);
 
-    void OnClearFilter()
-    {
-        Filter.Clear();
-        OnFilterChanged();
-    }
+    IQueryable<(Group Value, bool MayEdit)> FilteredGroups => Filter.Apply(Groups, CountryNameOf).AsQueryable();
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
+    static string CountryNameOf(Group group) => group.Country.EnglishName.GetLocalizedString(null);
     string CityName(Group? group) => group is null ? string.Empty : group.CountryId == CountryId ? group.CityName : $"{group.CityName} ({group.Country.DomainSuffix.ToUpperInvariant()})";
     string GroupDomain(Group? group) => group?.GroupDomain is not null ? group.GroupDomain.Name : string.Empty;
+    string ClearFilterHref => Sort.HasValue() ? $"Groups/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Groups/Country/{CountryId}";
     string EditHref(int groupId) => $"groups/{groupId}/edit";
     string MembersHref(int groupId) => $"groups/{groupId}/members";
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";
     string StationsHref(int groupId) => $"groups/{groupId}/stations";
     string CreateMeetingHref(int groupId) => $"/Meetings/Create/{groupId}";
     string WaybillsHref(int groupId) => $"reports/waybills/group/{groupId}";
-
-    internal class GroupFilter
-    {
-        public string? ShortName { get; set; }
-        public string? FullName { get; set; }
-        public string? CountryName { get; set; }
-        public bool HideForeignGroups { get; set; }
-
-        public void Clear()
-        {
-            ShortName = null;
-            FullName = null;
-            CountryName = null;
-            HideForeignGroups = false;
-        }
-
-        public bool HasFilter =>
-    ShortName.HasValue() ||
-    FullName.HasValue() ||
-    CountryName.HasValue() ||
-    HideForeignGroups;
-
-        public IQueryable<(Group Value, bool MayEdit)> Groups(IEnumerable<(Group value, bool)> groups, ClaimsPrincipal? principal, IStringLocalizer<Strings> localizer)
-        {
-            return groups?
-        .Where(g =>
-            (ShortName is null || g.value.ShortName.ContainsCaseInsensitive(ShortName)) &&
-            (FullName is null || g.value.FullName.ContainsCaseInsensitive(FullName)) &&
-            (CountryName is null || (localizer[g.value.Country.EnglishName].ToString()).ContainsCaseInsensitive(CountryName)) &&
-            (!HideForeignGroups || HideForeignGroups && g.value.CountryId == principal.CountryId()))
-        .AsQueryable<(Group, bool)>() ?? new List<(Group, bool)>().AsQueryable();
-        }
-    }
 }

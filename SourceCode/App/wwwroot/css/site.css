@@ -213,6 +213,20 @@ blockquote {
         margin: 2px 0 0 0.4rem;
     }
 
+    /* Sortable columns (the title is a link in static pages, a button in interactive ones) show a faint up-down arrow
+       until sorted, when QuickGrid shows the direction; the title is highlighted under the pointer. */
+    .quickgrid th:not(.col-sort-asc, .col-sort-desc) :is(a, button).col-title .sort-indicator {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 12 1 L 19 10 L 5 10 z M 12 23 L 5 14 L 19 14 z" /></svg>');
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.3;
+    }
+
+    .quickgrid :is(a, button).col-title:hover {
+        background-color: rgba(128, 128, 128, 0.2);
+        cursor: pointer;
+    }
+
 .tooltip {
     position: relative;
     display: inline-block;
@@ -283,3 +297,18 @@ blockquote {
         width: 11rem;
         max-width: 38vw;
     }
+
+/* FlashMessage (Migration step 3.3): with JavaScript a pop-up under the top bar that fades out (wwwroot/js/flash-message.js). */
+.flash-message-popup {
+    position: fixed;
+    top: 4rem;
+    right: 1rem;
+    z-index: 1050; /* As the notifications: above the top bar. */
+    max-width: min(90vw, 30rem);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+    transition: opacity 0.5s ease-in;
+}
+
+.flash-message-hidden {
+    opacity: 0;
+}

@@ -1,0 +1,17 @@
+@inject IStringLocalizer<Strings> Localizer
+
+@* A one-time message after a POST on a static SSR page (FlashMessageExtensions, Migration step 3.3), in the layout so every
+   static page can use it. With JavaScript it is a pop-up that fades out after a few seconds (wwwroot/js/flash-message.js);
+   without, it is a banner until the next page. Interactive pages have no HttpContext and keep their notifications. *@
+@if (Message is not null)
+{
+    <div class="alert @(Message.IsSuccess ? "alert-success" : "alert-danger") flash-message" role="@(Message.IsSuccess ? "status" : "alert")">@Localizer[Message.TextKey]</div>
+}
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    FlashMessageText? Message;
+
+    protected override void OnInitialized() => Message = HttpContext.TakeFlashMessage();
+}

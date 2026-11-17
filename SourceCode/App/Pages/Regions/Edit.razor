@@ -10,7 +10,7 @@
 @inject RegionService RegionService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToAddOrEditPageAction()" />
+<PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@BackHref" />
 
 <EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
     <Inputs>
@@ -46,6 +46,8 @@
     }
 
     Region Default => new Region { CountryId = Principal.CountryId() };
+    // The regions list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => $"Regions/Country/{Region.CountryId}";
 
     async Task OnValidSubmit()
     {
@@ -56,7 +58,7 @@
             var result = await RegionService.SaveAsync(Principal, Region);
             NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);
-            PageHistory.NavigateBack();
+            PageHistory.NavigateBack(BackHref);
         }
     }
 }

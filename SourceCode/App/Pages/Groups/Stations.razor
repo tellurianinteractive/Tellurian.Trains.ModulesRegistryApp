@@ -8,7 +8,7 @@
 @inject GroupService GroupService
 @inject ModuleService ModuleService
 
-<PageHeading ObjectName="OperationLocations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
+<PageHeading ObjectName="OperationLocations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" BackHref="@BackHref" />
 
 <StationsList Stations="OwnedStations" MayEdit="MayEdit" OwningGroupId="Id" AnyModules="AnyModules" />
 
@@ -19,6 +19,8 @@
     ClaimsPrincipal? Principal;
     IEnumerable<Station>? OwnedStations;
     Group? Owner;
+    // The groups list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => Owner is null ? "Groups/Index" : $"Groups/Country/{Owner.CountryId}";
     bool IsGroupDataAdministrator;
     bool AnyModules;
 

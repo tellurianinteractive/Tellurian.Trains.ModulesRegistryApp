@@ -8,7 +8,7 @@
 @inject CountryService CountryService
 @inject GroupCategoryService GroupCategoryService
 
-<PageHeading ObjectName="Group" IconClass="@FontAwesome.Group" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Group" />
+<PageHeading ObjectName="Group" IconClass="@FontAwesome.Group" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Group" BackHref="@BackHref" />
 
 @if (Group is null)
 {
@@ -81,6 +81,8 @@ else
 
     private async Task<Group> GetOrCreateAsync() =>
         Id > 0 ? await GroupService.FindByIdAsync(Principal, Id) ?? NewGroup : NewGroup;
+    // The groups list is static, so this page may have no history (Migration step 3.3).
+    private string BackHref => Group is null || Group.CountryId < 1 ? "Groups/Index" : $"Groups/Country/{Group.CountryId}";
     private Group NewGroup => new Group { CountryId = DefaultCountryId };
 
     private string SelectCategoryLabel => $"{Localizer["Select"]} {Localizer["Category"].Value.ToLowerInvariant()}";
