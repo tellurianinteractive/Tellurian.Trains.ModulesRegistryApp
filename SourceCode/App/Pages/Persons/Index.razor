@@ -4,9 +4,13 @@
 @page "/Persons/Country/{CountryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the cargo list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form persons-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
+   /Persons?country=..., which redirects to the country's address. Unlock is a POST form (antiforgery) with the user's id
+   in the row's button, followed by a redirect back to the same address. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 
 @inject PersonService PersonService
@@ -16,80 +20,89 @@
 
 <PageHeading ObjectName="Persons" IconClass="@FontAwesome.People" PageAction="@PageAction.List" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
+<ListboxForm Id="persons-country" Action="Persons" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
 @if (CountryId > 0)
 {
     <span class="col-12" style="margin-top: 10px">
         <AppButton Href=@AddHref(CountryId) Label="Add" />
     </span>
-    @if (Filter.HasFilter)
-    {
-        <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
-        <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" IconName="@FontAwesome.Erase" /></span>
-    }
     <hr />
 }
 
+<form id="persons-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
+<form id="persons-unlock" method="post" @formname="unlock" @onsubmit="UnlockAsync" data-enhance>
+    <AntiforgeryToken />
+</form>
+
 <div class="grid" tabindex="-1">
-    <QuickGrid Items="@FilteredPeople" Virtualize="true" Pagination="PaginationState">
-        <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" Title="@Localizer["FirstName"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.FirstName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["FirstName"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(p => p.LastName)" Sortable="true" Title="@Localizer["LastName"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.LastName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["LastName"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Property="@(p => p.CityName)" Sortable="true" Title="@Localizer["City"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.CityName" @bind:event="oninput" @onchange="OnFilterChanged" placeholder="@Localizer["CityName"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <TemplateColumn Title="@Localizer["Status"]" Align="Align.Center">
-            @context.StatusIcon()
-        </TemplateColumn>
+    <QuickGrid Items="@FilteredPeople" Pagination="PaginationState">
+        <FilterColumn Property="@(p => p.FirstName)" Sortable="true" Title="@Localizer["FirstName"]" FilterForm="persons-filter" FilterName="first" FilterValue="@FirstName" />
+        <FilterColumn Property="@(p => p.LastName)" Sortable="true" Title="@Localizer["LastName"]" FilterForm="persons-filter" FilterName="last" FilterValue="@LastName" />
+        <FilterColumn Property="@(p => p.CityName)" Sortable="true" Title="@Localizer["City"]" FilterForm="persons-filter" FilterName="city" FilterValue="@CityName" />
         <TemplateColumn Title="@Localizer["FremoNumber"]">
             @context.FremoNumber()
         </TemplateColumn>
-        <TemplateColumn Title="@Localizer["LastActive"]" Context="person">
-            <UserStatusView User="person.User"></UserStatusView>
+        <TemplateColumn Title="@Localizer["Status"]" Align="Align.Center" Context="person">
+            <PersonStatusIcon Person="person" />
+        </TemplateColumn>
+        <TemplateColumn Title="@Localizer["LastActive"]" Context="person" SortBy="ByLastActive" InitialSortDirection="SortDirection.Descending">
+            @* Only the date; the status icon tells what it is, and so does the date's tooltip. *@
+            @if (person.AccountStatus() is { Date: not null } status)
+            {
+                <span title="@Localizer[status.DateTextKey!]">@status.Date.DateOnly()</span>
+            }
         </TemplateColumn>
         <TemplateColumn Title="@Localizer["Actions"]" Context="person">
-            @if (Principal.IsAuthorisedInCountry(person.CountryId))
-            {
-                <AppButton Href="@EditHref(person)" Label="Edit" />
-                <AppButton Href="@ModulesHref(person)" Label="Modules" />
-                <AppButton Href="@StationsHref(person)" Label="Stations" />
-                <AppButton Href="@InviteHref(person)" Label="Invite" IsHidden="@(!person.MayBeInvited())" />
-                <AppButton Label="Unlock" OnClickCallback="@(() => UnlockUser(person.User))" IsHidden=@(!person.User.IsLockedOut()) />
-            }
+            <HeaderTemplate Context="column">
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
+                {
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                @if (Principal.IsAuthorisedInCountry(person.CountryId))
+                {
+                    <AppButton Href="@EditHref(person)" Label="Edit" />
+                    <AppButton Href="@ModulesHref(person)" Label="Modules" />
+                    <AppButton Href="@StationsHref(person)" Label="Stations" />
+                    <AppButton Href="@InviteHref(person)" Label="Invite" IsHidden="@(!person.MayBeInvited())" />
+                    @if (person.User.IsLockedOut())
+                    {
+                        <AppButton Label="Unlock" IsSubmit="true" Form="persons-unlock" Name="UnlockUserId" Value="@person.User.Id.ToString()" />
+                    }
+                }
+            </ChildContent>
         </TemplateColumn>
     </QuickGrid>
 </div>
-<Paginator State="@PaginationState">
-
-</Paginator>
+<Paginator State="@PaginationState" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "first")] public string? FirstName { get; set; }
+    [SupplyParameterFromQuery(Name = "last")] public string? LastName { get; set; }
+    [SupplyParameterFromQuery(Name = "city")] public string? CityName { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
+    [SupplyParameterFromForm(FormName = "unlock")] public int UnlockUserId { get; set; }
 
     private ClaimsPrincipal? Principal;
-    private IEnumerable<Person> People = Array.Empty<Person>().AsQueryable();
+    private IEnumerable<Person> People = [];
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    private PersonsFilter Filter = new();
     private IEnumerable<ListboxItem>? Countries;
 
-
+    PersonsFilter Filter => new() { FirstName = FirstName, LastName = LastName, CityName = CityName };
 
     protected async override Task OnInitializedAsync()
     {
@@ -99,60 +112,37 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Filter = await LocalStorage.GetItemAsync<PersonsFilter>(nameof(PersonsFilter)) ?? Filter;
         if (CountryId < 1)
         {
-            var id = Principal.CountryId();
-            Navigator.NavigateTo($"/Persons/Country/{id}");
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"Persons/Country/{id}");
+            return;
         }
-        else
+        AppService.LastCountryId = CountryId;
+        People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
+    }
+
+    async Task UnlockAsync()
+    {
+        // Only a user shown in this list, in a country the administrator is authorised for, is unlocked.
+        var person = People.FirstOrDefault(p => p.User is not null && p.User.Id == UnlockUserId);
+        if (person is not null && Principal.IsAuthorisedInCountry(person.CountryId))
         {
-            AppService.LastCountryId = CountryId;
-            People = await PersonService.GetAllInCountryAsync(Principal, AppService.LastCountryId);
+            await UserService.UnlockUser(person.User);
         }
+        Navigator.NavigateTo(Navigator.Uri);
     }
 
-
-    private void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            AppService.LastCountryId = id;
-            Navigator.NavigateTo($"/Persons/Country/{id}");
-        }
-    }
-
-    async Task UnlockUser(User? user)
-    {
-        user = await UserService.UnlockUser(user);
-    }
-
-    private void OnFilterChanged()
-    {
-        LocalStorage.SetItemAsync(nameof(PersonsFilter), Filter);
-    }
-
-    void OnClearFilter()
-    {
-        Filter.Clear();
-        OnFilterChanged();
-    }
-
-    IQueryable<Person> FilteredPeople =>
-        People.AsQueryable()
-                .Where(p =>
-                    p.FirstName.ContainsCaseInsensitive(Filter.FirstName) &&
-                    p.LastName.ContainsCaseInsensitive(Filter.LastName) &&
-                    p.CityName.ContainsCaseInsensitive(Filter.CityName));
-
-    
+    IQueryable<Person> FilteredPeople => Filter.Apply(People).AsQueryable();
+    // The date shown in the column; the first click sorts the most recent first.
+    static readonly GridSort<Person> ByLastActive = GridSort<Person>.ByAscending(p => p.AccountStatus().Date);
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
+    string ClearFilterHref => Sort.HasValue() ? $"Persons/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Persons/Country/{CountryId}";
     string AddHref(int countryId) => countryId > 0 ? $"persons/0/edit/{countryId}" : string.Empty;
     string EditHref(Person person) => $"persons/{person.Id}/edit";
     string ModulesHref(Person person) => $"persons/{person.Id}/modules";
     string StationsHref(Person person) => $"persons/{person.Id}/stations";
     string InviteHref(Person person) => $"persons/{person.Id}/invite";
-    string DeleteHref(Person person) => $"persons/{person.Id}/delete";
 }

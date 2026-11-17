@@ -11,7 +11,7 @@
         }
         else if (IsSubmit)
         {
-            <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText" form="@Form" name="@Name" value="@Value"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
         }
         else
         {
@@ -30,6 +30,11 @@
     [Parameter] public string? Type { get; set; }
     [Parameter] public string IconName { get; set; } = string.Empty;
     [Parameter] public bool IsSubmit { get; set; }
+    /// <summary>With <see cref="IsSubmit"/>: the id of the form to submit, when the button is outside it (HTML <c>form</c> attribute).</summary>
+    [Parameter] public string? Form { get; set; }
+    /// <summary>With <see cref="IsSubmit"/>: the name and value the button posts, such as the id of the row it is in.</summary>
+    [Parameter] public string? Name { get; set; }
+    [Parameter] public string? Value { get; set; }
     [Parameter] public int OnClickParameter { get; set; }
     [Parameter] public bool OpenInNewTab { get; set; }
     [Parameter] public bool IsHidden { get; set; }

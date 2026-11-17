@@ -39,7 +39,7 @@
         <td align="center">@member.IsMeetingAdministrator.AsYesOrNo()</td>
         <td align="center">@member.MayBorrowGroupsModules.AsYesOrNo()</td>
         <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
-        <td align="center">@member.Person.StatusIcon()</td>
+        <td align="center"><PersonStatusIcon Person="member.Person" /></td>
         <td style="white-space: nowrap !important;">
             <AppButton Label="Modules" Href="@ModulesHref(member)"  />
             <AppButton Label="Stations" Href="@StationsHref(member)" />

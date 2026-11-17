@@ -1,0 +1,28 @@
+@inject IStringLocalizer<Strings> Localizer
+
+@* Mail buttons for a list of persons, split in groups as a mailto link cannot be too long, and the number of persons. *@
+<div style="padding: 2px 0px;">
+    @if (Label.HasValue())
+    {
+        <span style="display: inline-block; min-width: 200px;">@Label</span>
+    }
+    @if (Recipients.Count > 0)
+    {
+        @foreach (var group in Recipients.MailHolders().MailHrefGroups(Sender, Subject))
+        {
+            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+        }
+    }
+    <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], Recipients.Count)</span>
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public required IEnumerable<Person> People { get; set; }
+    [Parameter] public required MailHolder Sender { get; set; }
+    [Parameter] public required string Subject { get; set; }
+
+    private List<Person> Recipients = [];
+
+    protected override void OnParametersSet() => Recipients = [.. People];
+}

@@ -9,7 +9,7 @@
 @inject ModuleService ModuleService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
 
 <ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
 
@@ -20,6 +20,8 @@
     [Parameter] public int GroupId { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    private string? BackHref => GroupId > 0 || Owner is null ? null : $"Persons/Country/{Owner.CountryId}";
     private IEnumerable<Module>? OwnedModules;
     bool IsDataAdministratorInSameGroupAsMember;
 

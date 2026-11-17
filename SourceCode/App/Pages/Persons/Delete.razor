@@ -9,7 +9,7 @@
 
 @inject PageHistory PageHistory
 
-<PageHeading ObjectName="Person" Context="@Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" />
+<PageHeading ObjectName="Person" Context="@Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" BackHref="@BackHref" />
 
 @if (Person is null)
 {
@@ -31,6 +31,8 @@ else
     private ClaimsPrincipal? Principal;
 
     private Person? Person;
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    private string? BackHref => Person is null ? null : $"Persons/Country/{Person.CountryId}";
 
     protected async override Task OnParametersSetAsync()
     {

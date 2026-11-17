@@ -135,6 +135,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="ActiveUser" xml:space="preserve">
+    <value>Active user</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -1560,6 +1563,9 @@
   <data name="NotApplicableOption" xml:space="preserve">
     <value>Not applicable</value>
   </data>
+  <data name="NotAUser" xml:space="preserve">
+    <value>Not a user</value>
+  </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Unauthorised</value>
   </data>
@@ -1595,6 +1601,9 @@
   </data>
   <data name="NotScheduled" xml:space="preserve">
     <value>Not scheduled</value>
+  </data>
+  <data name="NotSignedInSince" xml:space="preserve">
+    <value>Not signed in since</value>
   </data>
   <data name="NotStandalone" xml:space="preserve">
     <value>Not standalone</value>
@@ -2082,6 +2091,9 @@
   <data name="SendMailTo" xml:space="preserve">
     <value>Send mail to {0}</value>
   </data>
+  <data name="SendMailToAdministrators" xml:space="preserve">
+    <value>Send mail to administrators</value>
+  </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail to all</value>
   </data>
@@ -2090,6 +2102,9 @@
   </data>
   <data name="SendMailToAllWithEmailIn" xml:space="preserve">
     <value>Send mail to all with email address in {0}</value>
+  </data>
+  <data name="SendMailToUsersNotSignedInSinceIn" xml:space="preserve">
+    <value>Send mail to users in {0} who have not signed in for a while</value>
   </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Send test mail to yourself</value>
@@ -2225,6 +2240,12 @@
   </data>
   <data name="TestMail" xml:space="preserve">
     <value>Test e-mail</value>
+  </data>
+  <data name="TestMailFailed" xml:space="preserve">
+    <value>The test e-mail could not be sent</value>
+  </data>
+  <data name="TestMailSent" xml:space="preserve">
+    <value>The test e-mail has been sent</value>
   </data>
   <data name="TextColor" xml:space="preserve">
     <value>Text colour</value>

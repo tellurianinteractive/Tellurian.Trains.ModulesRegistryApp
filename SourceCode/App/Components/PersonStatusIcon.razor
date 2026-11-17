@@ -1,0 +1,16 @@
+﻿@inject IStringLocalizer<Strings> Localizer
+
+@* The person's user account state as an icon with a tooltip, red for a problem (PersonUserStatus). *@
+@if (Person is not null)
+{
+    <span class="@IconClass" title="@Text" aria-label="@Text" role="img"></span>
+}
+
+@code {
+    [Parameter] public Person? Person { get; set; }
+
+    PersonUserStatus? Status => Person?.AccountStatus();
+    string? IconClass => Status is null ? null : Status.IsWarning ? $"{Status.IconClass} text-danger" : Status.IconClass;
+    string? Text => Status is null ? null :
+        Status.RoleTextKey is null ? Localizer[Status.TextKey].Value : $"{Localizer[Status.RoleTextKey].Value}: {Localizer[Status.TextKey].Value}";
+}

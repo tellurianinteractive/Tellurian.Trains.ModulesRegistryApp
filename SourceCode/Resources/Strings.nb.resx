@@ -135,6 +135,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Handlinger</value>
   </data>
+  <data name="ActiveUser" xml:space="preserve">
+    <value>Aktiv bruker</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Legg til</value>
   </data>
@@ -1560,6 +1563,9 @@
   <data name="NotApplicableOption" xml:space="preserve">
     <value>Ikke aktuelt</value>
   </data>
+  <data name="NotAUser" xml:space="preserve">
+    <value>Ikke bruker</value>
+  </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Uautorisert</value>
   </data>
@@ -1595,6 +1601,9 @@
   </data>
   <data name="NotScheduled" xml:space="preserve">
     <value>Ikke planlagt</value>
+  </data>
+  <data name="NotSignedInSince" xml:space="preserve">
+    <value>Ikke logget inn siden</value>
   </data>
   <data name="NotStandalone" xml:space="preserve">
     <value>Ikke frittstående</value>
@@ -2082,6 +2091,9 @@
   <data name="SendMailTo" xml:space="preserve">
     <value>Send e-post til {0}</value>
   </data>
+  <data name="SendMailToAdministrators" xml:space="preserve">
+    <value>Send e-post til administratorer</value>
+  </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail til alle</value>
   </data>
@@ -2090,6 +2102,9 @@
   </data>
   <data name="SendMailToAllWithEmailIn" xml:space="preserve">
     <value>Send e-post til alle med e-postadresse i {0}</value>
+  </data>
+  <data name="SendMailToUsersNotSignedInSinceIn" xml:space="preserve">
+    <value>Send e-post til brukere i {0} som ikke har logget inn på en stund</value>
   </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Send testmail til deg selv</value>
@@ -2225,6 +2240,12 @@
   </data>
   <data name="TestMail" xml:space="preserve">
     <value>Test e-post</value>
+  </data>
+  <data name="TestMailFailed" xml:space="preserve">
+    <value>Test-e-posten kunne ikke sendes</value>
+  </data>
+  <data name="TestMailSent" xml:space="preserve">
+    <value>Test-e-posten er sendt</value>
   </data>
   <data name="TextColor" xml:space="preserve">
     <value>Tekstfarge</value>

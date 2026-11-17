@@ -7,7 +7,7 @@
 @inject StationService StationService
 @inject GroupService GroupService
 
-<PageHeading ObjectName="OperationLocations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
+<PageHeading ObjectName="OperationLocations" Context="Owner" IconClass="@FontAwesome.Station" PageAction="PageAction.List" BackHref="@BackHref" />
 
 <StationsList Stations="OwnedStations" OwningPersonId="OwnerId" OwningGroupId=GroupId MayEdit="MayEdit" AnyModules="true" />
 
@@ -17,6 +17,8 @@
     [Parameter] public int OwnerId { get; set; }
     private ClaimsPrincipal? Principal;
     private Person? Owner;
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    private string? BackHref => GroupId > 0 || Owner is null ? null : $"Persons/Country/{Owner.CountryId}";
     private IEnumerable<Station>? OwnedStations;
     bool MayEdit;
 

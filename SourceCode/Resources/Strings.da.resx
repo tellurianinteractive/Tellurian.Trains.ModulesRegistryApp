@@ -135,6 +135,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Handlinger</value>
   </data>
+  <data name="ActiveUser" xml:space="preserve">
+    <value>Aktiv bruger</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Tilføj</value>
   </data>
@@ -1560,6 +1563,9 @@
   <data name="NotApplicableOption" xml:space="preserve">
     <value>Ikke anvendelig</value>
   </data>
+  <data name="NotAUser" xml:space="preserve">
+    <value>Ikke bruger</value>
+  </data>
   <data name="NotAuthorised" xml:space="preserve">
     <value>Uberettiget</value>
   </data>
@@ -1595,6 +1601,9 @@
   </data>
   <data name="NotScheduled" xml:space="preserve">
     <value>Ikke planlagt</value>
+  </data>
+  <data name="NotSignedInSince" xml:space="preserve">
+    <value>Ikke logget ind siden</value>
   </data>
   <data name="NotStandalone" xml:space="preserve">
     <value>Ikke frit stående</value>
@@ -2082,6 +2091,9 @@
   <data name="SendMailTo" xml:space="preserve">
     <value>Send mail til {0}</value>
   </data>
+  <data name="SendMailToAdministrators" xml:space="preserve">
+    <value>Send e-mail til administratorer</value>
+  </data>
   <data name="SendMailToAll" xml:space="preserve">
     <value>Send mail til alle</value>
   </data>
@@ -2090,6 +2102,9 @@
   </data>
   <data name="SendMailToAllWithEmailIn" xml:space="preserve">
     <value>Send mail til alle med e-mailadresse i {0}</value>
+  </data>
+  <data name="SendMailToUsersNotSignedInSinceIn" xml:space="preserve">
+    <value>Send e-mail til brugere i {0}, der ikke har logget ind i et stykke tid</value>
   </data>
   <data name="SendTestMail" xml:space="preserve">
     <value>Send en testmail til dig selv</value>
@@ -2225,6 +2240,12 @@
   </data>
   <data name="TestMail" xml:space="preserve">
     <value>Test e-mail</value>
+  </data>
+  <data name="TestMailFailed" xml:space="preserve">
+    <value>Test-e-mailen kunne ikke sendes</value>
+  </data>
+  <data name="TestMailSent" xml:space="preserve">
+    <value>Test-e-mailen er sendt</value>
   </data>
   <data name="TextColor" xml:space="preserve">
     <value>Tekstfarve</value>

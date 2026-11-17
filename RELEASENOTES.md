@@ -1,6 +1,12 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.4
+Released 2026-11-17
+- Persons: the filter fields are in the column headers, and the filter, sorting and page are in the address. A new column shows when the user was last active, and can be sorted.
+- Persons and group members: the status icon has a tooltip and is red for a locked out user or one who has not accepted the terms of use.
+- User administration: mail to the administrators, and to users who have not signed in since a chosen date.
+- Persons and user administration open faster and keep the chosen country in the address.
 ## Release 1.15.3
 Released 2026-11-17
 - Cargo types: the filter fields are in the column headers, and the filter, sorting and page are in the address, so the list can be bookmarked and shared.

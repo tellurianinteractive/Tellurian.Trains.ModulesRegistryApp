@@ -1,0 +1,36 @@
+﻿@inject IStringLocalizer<Strings> Localizer
+
+@* The static SSR counterpart of ListboxSelector (Migration step 3.3): a GET form with a select, submitted when the selection
+   changes (wwwroot/js/filter-form.js, data-auto-submit) or with Ok without JavaScript. The page reads the value from the
+   query string; nothing is stored in the browser. *@
+@if (IsVisible && Items is not null)
+{
+    <form id="@Id" method="get" action="@Action" data-auto-submit data-enhance class="noprint" style="margin-bottom: 4px">
+        <select name="@Name" class="form-control-sm" aria-label="@Label">
+            @if (SelectedId == 0)
+            {
+                <option value="0">@Label</option>
+            }
+            @foreach (var item in Items)
+            {
+                <option value="@item.Id" selected="@(item.Id == SelectedId)">@item.Description</option>
+            }
+        </select>
+        <noscript><AppButton Label="Ok" IsSubmit="true" /></noscript>
+    </form>
+}
+
+@code {
+    /// <summary>The form's id, unique on the page.</summary>
+    [Parameter, EditorRequired] public string Id { get; set; } = string.Empty;
+    /// <summary>Where the form goes; the selected id is added as the query parameter <see cref="Name"/>.</summary>
+    [Parameter, EditorRequired] public string Action { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Name { get; set; } = string.Empty;
+    [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
+    [Parameter] public int SelectedId { get; set; }
+    [Parameter] public string? ItemType { get; set; }
+    [Parameter] public bool IsVisible { get; set; } = true;
+
+    private string Label => $"{Localizer["Select"]} {LocalizedItemType.ToLowerInvariant()}";
+    private string LocalizedItemType => ItemType is null ? string.Empty : Localizer[ItemType].Value;
+}

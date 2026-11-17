@@ -13,7 +13,7 @@
 @inject ContentService ContentService
 @inject CountryService CountryService
 
-<PageHeading Label="Invite" Context="Invitation?.Recipient.Person" PageAction="PageAction.Unknown"/>
+<PageHeading Label="Invite" Context="Invitation?.Recipient.Person" PageAction="PageAction.Unknown" BackHref="@BackHref" />
 
 @if (CanSend)
 {
@@ -40,6 +40,8 @@ else
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
     UserInvitation? Invitation;
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    string? BackHref => Invitation?.Recipient.Person is { } person ? $"Persons/Country/{person.CountryId}" : null;
     private string DisplayedMessage = string.Empty;
     private string? PersonalMessage;
     private bool IsReadOnly;

@@ -1,71 +1,132 @@
 ﻿@page "/admin/users"
 @page "/admin/users/country/{CountryId:int}"
+@using System.Globalization
 @using System.Net.Mail
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the country is chosen with a GET form to /admin/users?country=...,
+   which redirects to the country's address; the date for users not signed in is a GET form (?since=yyyy-MM-dd). The test
+   mail is a POST form (antiforgery), followed by a redirect that tells the result in the query string (?testmail=...). *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 @inject CountryService CountryService
 @inject UserService UserService
 @inject PersonService PersonService
 @inject AppService AppService
 @inject IMailSender MailSender
+@inject ITimeProvider TimeProvider
 
 <PageHeading Label="UserAdministration" IconClass="@FontAwesome.User" PageAction="@PageAction.Tools" />
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="CountryListItems" ItemType="Country" IsVisible="true" SelectedId=CountryId LocalStorageKey="Country" />
+<ListboxForm Id="users-country" Action="admin/users" Name="country" Items="CountryListItems" ItemType="Country" SelectedId="CountryId" />
 
-
-@if (PeopleWithUserAccount.Any() && Principal is not null)
+@if (Principal is not null && CurrentCountry is not null)
 {
+    @if (PeopleWithUserAccount.Any())
+    {
+        <div style="padding: 5px 0px;">
+            <h3>@(string.Format(Localizer["SendMailToAllUsersIn"], CountryName))</h3>
+            <MailGroupButtons People="PeopleWithUserAccount" Sender="Principal.MailHolder()" Subject="@MailSubject" />
+        </div>
+    }
+    @if (PeopleWithEmail.Any())
+    {
+        <div style="padding: 5px 0px;">
+            <h3>@(string.Format(Localizer["SendMailToAllWithEmailIn"], CountryName))</h3>
+            <MailGroupButtons People="PeopleWithEmail" Sender="Principal.MailHolder()" Subject="@MailSubject" />
+        </div>
+    }
+    @if (Administrators.Any())
+    {
+        <div style="padding: 5px 0px;">
+            <h3>@Localizer["SendMailToAdministrators"]</h3>
+            <MailGroupButtons People="Administrators" Sender="Principal.MailHolder()" Subject="@MailSubject" />
+        </div>
+    }
     <div style="padding: 5px 0px;">
-        <h3>@(string.Format(Localizer["SendMailToAllUsersIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
-        @foreach (var group in PeopleWithUserAccount.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
-        {
-            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
-        }
-        <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], PeopleWithUserAccount.Count())</span>
+        <h3>@(string.Format(Localizer["SendMailToUsersNotSignedInSinceIn"], CountryName))</h3>
+        <form id="users-since" method="get" data-auto-submit data-enhance class="noprint" style="display: flex; align-items: center; gap: 10px; padding-bottom: 5px;">
+            <label for="notSignedInSince">@Localizer["NotSignedInSince"]</label>
+            <input id="notSignedInSince" name="since" type="date" class="form-control" style="width: auto;" value="@NotSignedInSinceDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)" />
+            <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+        </form>
+        <MailGroupButtons People="PeopleNotSignedInSince" Sender="Principal.MailHolder()" Subject="@MailSubject" />
     </div>
-}
-@if (PeopleWithEmail.Any() && Principal is not null)
-{
-    <div style="padding: 5px 0px;">
-        <h3>@(string.Format(Localizer["SendMailToAllWithEmailIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
-        @foreach (var group in PeopleWithEmail.MailHolders().MailHrefGroups(Principal.MailHolder(), LanguageExtensions.GetLocalizedString("ModuleRegistry", Language)))
-        {
-            <AppButton Href="@group.Href" Label="@group.Subset" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
-        }
-        <span style="padding-left: 10px; font-weight: bold">@string.Format(Localizer["TotalCount"], PeopleWithEmail.Count())</span>
-    </div>
-}
-@if (PeopleWithoutMail.Any())
-{
-    <h3>@(string.Format(Localizer["PeopleWithoutEmailAddressIn"], LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName)))</h3>
-    <div>
-        @string.Join(", ", PeopleWithoutMail.Select(p => p.Name()))
-    </div>
-
+    @if (PeopleWithoutMail.Any())
+    {
+        <h3>@(string.Format(Localizer["PeopleWithoutEmailAddressIn"], CountryName))</h3>
+        <div>
+            @string.Join(", ", PeopleWithoutMail.Select(p => p.Name()))
+        </div>
+    }
 }
 <div style="padding: 5px 0px;">
     <h3>@Localizer["SendTestMail"]</h3>
-    <AppButton Label="Send" OnClickCallback="SendTestMail" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+    <form id="users-testmail" method="post" @formname="testmail" @onsubmit="SendTestMailAsync" data-enhance>
+        <AntiforgeryToken />
+        <AppButton Label="Send" IsSubmit="true" IconName="@FontAwesome.Mail" AlwaysShowLabel=true />
+        @if (TestMailResult == "sent")
+        {
+            <span class="text-success" style="padding-left: 10px;">@Localizer["TestMailSent"]</span>
+        }
+        else if (TestMailResult == "failed")
+        {
+            <span class="text-danger" style="padding-left: 10px;">@Localizer["TestMailFailed"]</span>
+        }
+    </form>
 </div>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "since")] public string? Since { get; set; }
+    [SupplyParameterFromQuery(Name = "testmail")] public string? TestMailResult { get; set; }
 
     private ClaimsPrincipal? Principal;
     private IEnumerable<ListboxItem>? CountryListItems;
-    private IEnumerable<Person>? People;
+    private IEnumerable<Person> People = [];
     private IEnumerable<Person> PeopleWithEmail = [];
     private IEnumerable<Person> PeopleWithoutMail = [];
     private IEnumerable<Person> PeopleWithUserAccount = [];
+    private IEnumerable<Person> PeopleNotSignedInSince = [];
     private Country? CurrentCountry;
+    private IEnumerable<Person> Administrators = [];
+    private DateOnly NotSignedInSinceDate;
 
-    private async Task SendTestMail()
+    private string CountryName => LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName);
+    private string MailSubject => LanguageExtensions.GetLocalizedString("ModuleRegistry", Language);
+    private string Language => CurrentCountry is null ? "en" : CurrentCountry.Languages.Items().First();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        CountryListItems = await CountryService.ListboxItemsAsync(Principal);
+        Administrators = [.. (await UserService.GetCountryAdministratorsAsync()).AdministratorsFor(Principal)];
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CountryId < 1)
+        {
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"admin/users/country/{id}");
+            return;
+        }
+        NotSignedInSinceDate = DateOnly.TryParseExact(Since, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var since) ? since : TimeProvider.Today.AddYears(-1);
+        CurrentCountry = await CountryService.FindById(CountryId);
+        if (CurrentCountry is null) return;
+        AppService.LastCountryId = CountryId;
+        People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
+        PeopleWithEmail = [.. People.Where(p => p.EmailAddresses.HasValue())];
+        PeopleWithoutMail = [.. People.Where(p => p.EmailAddresses.HasNoValue())];
+        PeopleWithUserAccount = [.. People.Where(p => p.IsActiveUser())];
+        PeopleNotSignedInSince = [.. People.NotSignedInSince(new DateTimeOffset(NotSignedInSinceDate.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero))];
+    }
+
+    private async Task SendTestMailAsync()
     {
         var message = new MailMessage(new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"]), new MailAddress(Principal!.EmailAddress(), Principal!.GivenName()))
         {
@@ -74,35 +135,6 @@
             Sender = new MailAddress("moduleregistry@tellurian.se", Localizer["AppName"])
         };
         var result = await MailSender.SendMailMessageAsync(message);
-        NotificationService.ShowSuccessOrFailure(Localizer, result, "TestMail");
+        Navigator.NavigateTo(Navigator.GetUriWithQueryParameter("testmail", result > 0 ? "sent" : "failed"));
     }
-
-    protected override async Task OnInitializedAsync()
-    {
-        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountryListItems = await CountryService.ListboxItemsAsync(Principal);
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (CountryId == 0) CountryId = Principal.CountryId();
-        CurrentCountry = await CountryService.FindById(CountryId);
-        if (CurrentCountry is null) return;
-        People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
-        PeopleWithEmail = People?.Where(p => p.EmailAddresses.HasValue()) ?? [];
-        PeopleWithoutMail = People?.Where(p => p.EmailAddresses.HasNoValue()) ?? [];
-        PeopleWithUserAccount = People?.Where(p => p.IsActiveUser()) ?? [];
-    }
-
-    private void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            AppService.LastCountryId = id;
-            Navigator.NavigateTo($"/admin/users/country/{id}");
-        }
-    }
-
-    string Language => CurrentCountry is null ? "en" : CurrentCountry.Languages.Items().First();
-
 }

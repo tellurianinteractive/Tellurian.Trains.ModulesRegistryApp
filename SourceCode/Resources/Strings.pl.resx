@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActiveUser" xml:space="preserve">
+    <value>Aktywny użytkownik</value>
+  </data>
   <data name="At night" xml:space="preserve">
     <value>W nocy</value>
   </data>
@@ -225,8 +228,14 @@
   <data name="Netherlands" xml:space="preserve">
     <value>Holandia</value>
   </data>
+  <data name="NotAUser" xml:space="preserve">
+    <value>Nie jest użytkownikiem</value>
+  </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nie znaleziono</value>
+  </data>
+  <data name="NotSignedInSince" xml:space="preserve">
+    <value>Niezalogowani od</value>
   </data>
   <data name="Origin" xml:space="preserve">
     <value>Stacja wysyłkowa</value>
@@ -267,6 +276,12 @@
   <data name="SaturdayShort" xml:space="preserve">
     <value>So</value>
   </data>
+  <data name="SendMailToAdministrators" xml:space="preserve">
+    <value>Wyślij e-mail do administratorów</value>
+  </data>
+  <data name="SendMailToUsersNotSignedInSinceIn" xml:space="preserve">
+    <value>Wyślij e-mail do użytkowników w {0}, którzy od dawna się nie logowali</value>
+  </data>
   <data name="Slovakia" xml:space="preserve">
     <value>Słowacja</value>
   </data>
@@ -281,6 +296,12 @@
   </data>
   <data name="Switzerland" xml:space="preserve">
     <value>Szwajcaria</value>
+  </data>
+  <data name="TestMailFailed" xml:space="preserve">
+    <value>Nie udało się wysłać testowego e-maila</value>
+  </data>
+  <data name="TestMailSent" xml:space="preserve">
+    <value>Testowy e-mail został wysłany</value>
   </data>
   <data name="Thursday" xml:space="preserve">
     <value>Czwartek</value>

@@ -148,12 +148,13 @@ public sealed partial class HostingTests
     }
 
     [TestMethod]
-    public void CargoListIsStaticWithoutLocalStorage()
+    [DataRow(typeof(ModulesRegistry.Pages.Cargo.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Persons.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Users.Admin))]
+    public void ListPageIsStaticWithoutLocalStorage(Type page)
     {
-        // Migration step 3.3: the first list page in static SSR. It reads the database, so the page type is checked, not a response.
-        var page = typeof(ModulesRegistry.Pages.Cargo.Index);
-
-        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), "The cargo list is not static.");
+        // Migration step 3.3: list pages in static SSR. They read the database, so the page type is checked, not a response.
+        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.FullName} is not static.");
         var injected = page.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
             .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
             .Select(p => p.PropertyType.Name);

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActiveUser" xml:space="preserve">
+    <value>Aktív felhasználó</value>
+  </data>
   <data name="At night" xml:space="preserve">
     <value>Éjszaka</value>
   </data>
@@ -222,8 +225,14 @@
   <data name="Netherlands" xml:space="preserve">
     <value>Hollandia</value>
   </data>
+  <data name="NotAUser" xml:space="preserve">
+    <value>Nem felhasználó</value>
+  </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nem található</value>
+  </data>
+  <data name="NotSignedInSince" xml:space="preserve">
+    <value>Nem jelentkezett be ezóta</value>
   </data>
   <data name="Origin" xml:space="preserve">
     <value>Szállítási állomás</value>
@@ -264,6 +273,12 @@
   <data name="SaturdayShort" xml:space="preserve">
     <value>Szo</value>
   </data>
+  <data name="SendMailToAdministrators" xml:space="preserve">
+    <value>E-mail küldése az adminisztrátoroknak</value>
+  </data>
+  <data name="SendMailToUsersNotSignedInSinceIn" xml:space="preserve">
+    <value>E-mail küldése azoknak a felhasználóknak ({0}), akik egy ideje nem jelentkeztek be</value>
+  </data>
   <data name="Slovakia" xml:space="preserve">
     <value>Szlovákia</value>
   </data>
@@ -278,6 +293,12 @@
   </data>
   <data name="Switzerland" xml:space="preserve">
     <value>Svájc</value>
+  </data>
+  <data name="TestMailFailed" xml:space="preserve">
+    <value>A teszt e-mailt nem sikerült elküldeni</value>
+  </data>
+  <data name="TestMailSent" xml:space="preserve">
+    <value>A teszt e-mail elküldve</value>
   </data>
   <data name="Thursday" xml:space="preserve">
     <value>Csütörtök</value>
