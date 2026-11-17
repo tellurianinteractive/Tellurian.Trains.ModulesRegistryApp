@@ -11,7 +11,7 @@
 @inject LayoutService LayoutService
 @inject GroupService GroupService
 
-<PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" />
+<PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" BackHref="@BackHref" />
 
 <EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="Meeting.MayDelete(Principal)">
     <Inputs>
@@ -50,6 +50,8 @@
 </EditTemplate>
 
 @code {
+    // The meetings and groups lists are static, so this page may have no history (Migration step 3.3).
+    string BackHref => OrganiserGroupId > 0 ? "Groups/Index" : "Meetings/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OrganiserGroupId { get; set; }

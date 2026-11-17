@@ -17,7 +17,7 @@
 @inject StationCustomerService StationCustomerService
 @inject ModuleOwnershipService ModuleOwnershipService
 
-<PageHeading Label="FreightCustomers" Context="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading Label="FreightCustomers" Context="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" BackHref="@BackHref" />
 
 @if (MayEdit)
 {
@@ -37,6 +37,8 @@
 }
 
 @code {
+    // Reached from the static freight customers or modules list, this page may have no history (Migration step 3.3).
+    string BackHref => CustomerId > 0 ? "FreightCustomers" : "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int StationId { get; set; }

@@ -1,65 +1,51 @@
-﻿@page "/vehicles/"
+﻿@page "/vehicles/admin"
+@page "/vehicles/admin/country/{CountryId:int}"
+@page "/vehicles/"
 @page "/vehicles/country/{CountryId:int}"
-@using ModulesRegistry.Pages.Country
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): the country is chosen with a GET form to /vehicles/admin?country=..., which redirects to
+   the country's address; the list and its filter are in VehiclesList. The addresses start with /vehicles/admin, so the
+   menu's Vehicles link doesn't also light up for My vehicles (/vehicles/my); the old /vehicles addresses redirect. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject VehicleService VehicleService
 @inject CountryService CountryService
-@inject AppService AppService
 
 <PageHeading Label="Vehicles" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
 
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId=CountryId LocalStorageKey="Country" />
+<ListboxForm Id="vehicles-country" Action="vehicles/admin" Name="country" Items="Countries" ItemType="Country" SelectedId="CountryId" />
 <hr />
-<VehiclesList Vehicles="Vehicles" MayEdit="true" ShowOwner="true" AddHrefFunc="AddHref" EditHrefFunc="EditHref" FilterName="AdminVehicleFilter" />
+<VehiclesList Vehicles="Vehicles" MayEdit="true" ShowOwner="true" AddHrefFunc="AddHref" EditHrefFunc="EditHref" />
+
 @code {
-    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+
     ClaimsPrincipal? Principal;
-    CountryFilter Filter = new();
-
     IEnumerable<ListboxItem>? Countries;
-    IEnumerable<Vehicle>? Vehicles;
-
-    int CountryOrDefaultId => CountryId > 0 ? CountryId : Filter.CountryId > 0 ? Filter.CountryId : Principal.CountryId();
-
-
+    IEnumerable<Vehicle> Vehicles = [];
 
     protected override async Task OnInitializedAsync()
     {
-        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        Filter = await LocalStorage.GetItemAsync<CountryFilter>(nameof(CountryFilter)) ?? Filter;
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (CountryId > 0)
+        if (CountryId < 1 || !IsAdminAddress)
         {
-            await LocalStorage.SetItemAsync(nameof(CountryFilter), Filter);
-            Vehicles = await VehicleService.GetVehiclesByOwnerCountryAsync(Principal, CountryId);
+            var id = CountryId > 0 ? CountryId : SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"vehicles/admin/country/{id}");
+            return;
         }
-        else
-        {
-            OnSelectedCountry(CountryOrDefaultId);
-        }
+        Vehicles = await VehicleService.GetVehiclesByOwnerCountryAsync(Principal, CountryId);
     }
 
-    private void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            CountryId = id;
-            Navigator.NavigateTo($"vehicles/country/{CountryId}");
-        }
-    }
-
+    bool IsAdminAddress => Navigator.ToBaseRelativePath(Navigator.Uri).StartsWith("vehicles/admin", StringComparison.OrdinalIgnoreCase);
     string EditHref(Vehicle vehicle) => $"/vehicles/{vehicle.Id}/country/{CountryId}/edit";
     string AddHref() => $"vehicles/0/country/{CountryId}/edit";
 }
-
-

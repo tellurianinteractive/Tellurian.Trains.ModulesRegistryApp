@@ -1,27 +1,23 @@
 ﻿@page "/vehicles/my"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): the list and its filter are in VehiclesList. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
-@inject NavigationManager Navigator
 @inject VehicleService VehicleService
-@inject AppService AppService
 
 <PageHeading Label="MyVehicles" IconClass="@FontAwesome.Train" PageAction="@PageAction.List"></PageHeading>
-<hr />
 <VehiclesList Vehicles="Vehicles" MayEdit="MayEdit" ShowOwner="false" AddHrefFunc="AddHref" EditHrefFunc="EditHref" />
-@code {
-    [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    ClaimsPrincipal? Principal;
-    IEnumerable<Vehicle>? Vehicles;
 
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    ClaimsPrincipal? Principal;
+    IEnumerable<Vehicle> Vehicles = [];
     bool MayEdit;
-    PaginationState PaginationState = new() { ItemsPerPage = 30 };
 
     protected override async Task OnInitializedAsync()
     {
-        Principal = await authenticationStateTask.GetClaimsPrincipalAsync();
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -33,6 +29,3 @@
     string EditHref(Vehicle vehicle) => $"/vehicles/my/{vehicle.Id}";
     string AddHref() => $"/vehicles/my/0";
 }
-
-
-

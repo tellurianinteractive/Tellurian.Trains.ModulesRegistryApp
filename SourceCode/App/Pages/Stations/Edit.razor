@@ -17,7 +17,7 @@
 @inject GroupService GroupService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Station" />
+<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Station" BackHref="@BackHref" />
 
 @if (Station is not null)
 {
@@ -51,6 +51,8 @@
 }
 
 @code {
+    // Reached from the static modules list, this page may have no history (Migration step 3.3).
+    const string BackHref = "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerId { get; set; }

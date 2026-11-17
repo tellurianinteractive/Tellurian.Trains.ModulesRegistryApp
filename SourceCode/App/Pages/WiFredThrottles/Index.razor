@@ -2,48 +2,49 @@
 @page "/Throttles/{personId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form throttles-filter, so filter, sort and page are in the query string. Validate is a POST form (antiforgery)
+   with the throttle's id in the row's button. Delete is a link that adds ?delete={id}, which shows Confirm delete in that
+   row, a POST form; the results are one-time messages (SetFlashMessage) after the redirect. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
 
 <PageHeading ObjectName="WiFredThrottles" IconClass="@FontAwesome.Wifi" PageAction="PageAction.List" ShowHelpInitially="false" />
 
-
 <div class="col-12">
-    @if (OnlyMyThrottles && Throttles?.Any() == true)
+    @if (OnlyMyThrottles && Throttles.Any())
     {
-        <AppButton Label="Preview" Href="@PreviewHref(0)" />
+        <AppButton Label="Preview" Href="@PreviewHref" />
     }
     <AppButton Label="Add" Href="@EditHref(0)" />
-    @if (HasFilter)
-    {
-        <AppButton Label="RemoveFiltering" IconName="@FontAwesome.Erase" OnClickCallback="RemoveFilter" />
-    }
 </div>
 
+<form id="throttles-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
+<form id="throttles-validate" method="post" @formname="validate" @onsubmit="ValidateAsync" data-enhance>
+    <AntiforgeryToken />
+</form>
+<form id="throttles-delete" method="post" @formname="delete" @onsubmit="DeleteAsync" data-enhance>
+    <AntiforgeryToken />
+</form>
+
 <div class="grid" tabindex="-1">
-    <QuickGrid Items="@FilteredItems" Virtualize="true" Pagination="PaginationState">
-        <PropertyColumn Property="@(c => c.MacAddress)" Sortable="true" Title="@Localizer["MacAddress"]">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="MacFilter" @bind:event="oninput" placeholder="@Localizer["MacAddress"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
+    <QuickGrid Items="@FilteredItems" Pagination="PaginationState">
+        <FilterColumn Property="@(c => c.MacAddress)" Sortable="true" Title="@Localizer["MacAddress"]" FilterForm="throttles-filter" FilterName="mac" FilterValue="@MacAddress" />
         <PropertyColumn Property="@(c => c.Name)" Sortable="true" Title="@Localizer["Name"]" />
         <PropertyColumn Property="@(c => c.BarcodeId())" Title="@Localizer["BarcodeId"]" Align="Align.Center" />
         @if (!OnlyMyThrottles)
         {
-            <PropertyColumn Property="@(c => c.OwningPerson.NameWithCityAndCountry())" Title="@Localizer["Owner"]">
-                <ColumnOptions>
-                    <div class="search-box">
-                        <input type="search" autofocus @bind="NameFilter" @bind:event="oninput" placeholder="@Localizer["Name"]" />
-                    </div>
-                </ColumnOptions>
-            </PropertyColumn>
+            <FilterColumn Property="@(c => c.OwningPerson.NameWithCityAndCountry())" Title="@Localizer["Owner"]" FilterForm="throttles-filter" FilterName="owner" FilterValue="@OwnerName" />
         }
         <PropertyColumn Property="@(c => c.DccAddresses())" Title="@Localizer["DccAddress"]" />
         <PropertyColumn Property="@(c => c.ValidationDateTime.DateAndTime() )" Title="@Localizer["Validated"]" Align="Align.Center" />
@@ -52,64 +53,59 @@
             <PropertyColumn Property="@(c => c.DeletedDateTime.DateAndTime() )" Title="@Localizer["Deleted"]" Align="Align.Center" />
         }
         <TemplateColumn Title="@Localizer["Actions"]" Context="throttle">
-            @if (MayEditThrottle(throttle))
-            {
-                <AppButton Label="Edit" Href="@EditHref(throttle.Id)" />
-            }
-            @if (MayValidateThrottle(throttle))
-            {
-                <AppButton Label="Validate" OnClickCallback="@( async () => await OnVerify(throttle.Id))" />
-            }
-            @if (DeleteConfirm(throttle))
-            {
-                <AppButton Label="ConfirmDelete" OnClickCallback="@( async () => await ConfirmDelete(throttle.Id))" />
-            }
-            else if (MayDelete(throttle))
-            {
-                <AppButton Label="Delete" OnClickCallback="@(() => OnDelete(throttle.Id))" />
-            }
+            <HeaderTemplate Context="column">
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
+                {
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                @if (MayEditThrottle(throttle))
+                {
+                    <AppButton Label="Edit" Href="@EditHref(throttle.Id)" />
+                }
+                @if (MayValidateThrottle(throttle))
+                {
+                    <AppButton Label="Validate" IsSubmit="true" Form="throttles-validate" Name="ValidateThrottleId" Value="@throttle.Id.ToString()" />
+                }
+                @if (MayDelete(throttle))
+                {
+                    @if (DeleteId == throttle.Id)
+                    {
+                        <AppButton Label="ConfirmDelete" IsSubmit="true" Form="throttles-delete" Name="DeleteThrottleId" Value="@throttle.Id.ToString()" />
+                        <AppButton Label="Cancel" Href="@WithoutDelete" />
+                    }
+                    else
+                    {
+                        <AppButton Label="Delete" Href="@DeleteHref(throttle.Id)" />
+                    }
+                }
+            </ChildContent>
         </TemplateColumn>
     </QuickGrid>
 </div>
-<Paginator State="@PaginationState">
-
-</Paginator>
-
-
-
+<Paginator State="@PaginationState" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int PersonId { get; set; }
+    [SupplyParameterFromQuery(Name = "mac")] public string? MacAddress { get; set; }
+    [SupplyParameterFromQuery(Name = "owner")] public string? OwnerName { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
+    [SupplyParameterFromQuery(Name = "delete")] public int? DeleteId { get; set; }
+    [SupplyParameterFromForm(FormName = "validate")] public int ValidateThrottleId { get; set; }
+    [SupplyParameterFromForm(FormName = "delete")] public int DeleteThrottleId { get; set; }
+
     ClaimsPrincipal? Principal;
-    IEnumerable<WiFredThrottle>? Throttles;
-
-    IQueryable<WiFredThrottle> FilteredItems
-    {
-        get
-        {
-            if (Throttles is null) return Enumerable.Empty<WiFredThrottle>().AsQueryable();
-            return Throttles.AsQueryable()
-                .Where(c => (
-                    MacFilter.HasNoValue() || c.MacAddress.StartsWith(MacFilter)) &&
-                    NameFilter.HasNoValue() ||
-                        c.OwningPerson.FirstName.StartsWith(NameFilter!, StringComparison.CurrentCultureIgnoreCase) ||
-                        c.OwningPerson.LastName.StartsWith(NameFilter!, StringComparison.CurrentCultureIgnoreCase));
-        }
-    }
-
+    IEnumerable<WiFredThrottle> Throttles = [];
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    string? MacFilter;
-    string? NameFilter;
-    bool HasFilter => MacFilter.HasValue() || NameFilter.HasValue();
-    int DeleteId = 0;
 
-    void RemoveFilter()
-    {
-        MacFilter = default;
-        NameFilter = default;
-        StateHasChanged();
-    }
+    // Without the owner column, its filter isn't shown, so it doesn't apply either.
+    ThrottlesFilter Filter => new() { MacAddress = MacAddress, OwnerName = OnlyMyThrottles ? null : OwnerName };
+    IQueryable<WiFredThrottle> FilteredItems => Filter.Apply(Throttles).AsQueryable();
 
     protected async override Task OnInitializedAsync()
     {
@@ -118,46 +114,35 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        await GetThrottles();
-
-    }
-
-    private async Task OnVerify(int throttleId)
-    {
-        var result = await ThrottleService.SetVerified(Principal, throttleId);
-        await GetThrottles();
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-
-    }
-
-    private void OnDelete(int throttleId)
-    {
-        DeleteId = throttleId;
-    }
-
-    private async Task ConfirmDelete(int throttleId)
-    {
-        if (DeleteId == throttleId)
-        {
-            var result = await ThrottleService.DeleteAsync(Principal, throttleId);
-            await GetThrottles();
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-        DeleteId = 0;
-    }
-
-    private async Task GetThrottles()
-    {
         Throttles = await ThrottleService.GetThrottles(Principal, OnlyMyThrottles);
     }
 
+    async Task ValidateAsync()
+    {
+        // Only a throttle shown in this list, and one the user may validate, is validated.
+        var throttle = Throttles.FirstOrDefault(t => t.Id == ValidateThrottleId);
+        var validated = throttle is not null && MayValidateThrottle(throttle) && (await ThrottleService.SetVerified(Principal, throttle.Id)).Count > 0;
+        HttpContext.SetFlashMessage(validated ? "UpdatedSuccessfully" : "UpdateFailed", validated);
+        Navigator.NavigateTo(Navigator.Uri);
+    }
+
+    async Task DeleteAsync()
+    {
+        // Only a throttle shown in this list, and one the user may delete, is deleted.
+        var throttle = Throttles.FirstOrDefault(t => t.Id == DeleteThrottleId);
+        var deleted = throttle is not null && MayDelete(throttle) && (await ThrottleService.DeleteAsync(Principal, throttle.Id)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(WithoutDelete);
+    }
 
     bool OnlyMyThrottles => PersonId > 0;
     bool MayEditThrottle(WiFredThrottle throttle) => throttle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
     bool MayValidateThrottle(WiFredThrottle throttle) => !throttle.ValidationDateTime.HasValue && Principal.MayManageWiFreds();
-    bool MayDelete(WiFredThrottle thottle) => thottle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
-    bool DeleteConfirm(WiFredThrottle throttle) => DeleteId == throttle.Id;
+    bool MayDelete(WiFredThrottle throttle) => throttle.OwningPersonId == Principal.PersonId() || Principal.MayManageWiFreds();
 
     string EditHref(int id) => $"Throttles/{id}/Edit";
-    string PreviewHref(int id) => $"Throttles/My/Preview";
+    const string PreviewHref = "Throttles/My/Preview";
+    string DeleteHref(int id) => Navigator.GetUriWithQueryParameter("delete", id);
+    string WithoutDelete => Navigator.GetUriWithQueryParameter("delete", (string?)null);
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["mac"] = null, ["owner"] = null, ["page"] = null, ["delete"] = null });
 }

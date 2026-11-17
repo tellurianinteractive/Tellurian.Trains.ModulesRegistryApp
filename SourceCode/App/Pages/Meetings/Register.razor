@@ -10,7 +10,7 @@
 @inject CountryService CountryService
 @inject GroupService GroupService
 
-<PageHeading Label="Registration" Context="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" />
+<PageHeading Label="Registration" Context="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" BackHref="@BackHref" />
 
 @if (Meeting is null)
 {
@@ -177,6 +177,8 @@ else
 
 
 @code {
+    // The meetings list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => "Meetings/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int MeetingId { get; set; }
     [Parameter] public int PersonId { get; set; }

@@ -95,7 +95,7 @@
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="vehicles">
+                <NavLink class="nav-link" href="vehicles/admin">
                     <span class="@FontAwesome.Train" aria-hidden="true" />@Localizer["Vehicles"]
                 </NavLink>
             </li>
@@ -134,7 +134,7 @@
         </AuthorizeView>
         <AuthorizeView Policy="@AppPolicyNames.Admin">
             <li class="nav-item px-3" style="border-bottom: solid 1px white">
-                <NavLink class="nav-link" href="Throttles">
+                <NavLink class="nav-link" href="Throttles" Match="NavLinkMatch.All">
                     <span class="@FontAwesome.Wifi" aria-hidden="true" />@Localizer["Throttles"]
                 </NavLink>
             </li>

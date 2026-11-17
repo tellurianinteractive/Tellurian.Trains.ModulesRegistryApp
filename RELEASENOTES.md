@@ -1,6 +1,14 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.6
+Released 2026-11-17
+- Modules, Vehicles, My vehicles, Throttles and Freight customers: the filter fields are in the column headers, and the filter, sorting and page are in the address.
+- Freight customers is a sortable list with filters on station and customer name.
+- Modules, Vehicles, My vehicles, Throttles, Freight customers and Meetings open faster.
+- The menu no longer highlights Vehicles on My vehicles, or Throttles on My throttles.
+- Filtering throttles on both MAC address and owner works.
+- The back arrow returns to the right list after opening a page from a list.
 ## Release 1.15.5
 Released 2026-11-17
 - Groups and External stations: the filter fields are in the column headers, and the filter, sorting and page are in the address.

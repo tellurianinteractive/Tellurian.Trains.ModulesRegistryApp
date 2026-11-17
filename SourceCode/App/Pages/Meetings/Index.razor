@@ -1,6 +1,9 @@
 ﻿@page "/Meetings/Index"
 @page "/Meetings/{countryid:int}/Index"
 
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): a read-only list with links. *@
+
 @inject IStringLocalizer<Strings> Localizer
 @inject ITimeProvider TimeProvider
 @inject INotificationService NotificationService

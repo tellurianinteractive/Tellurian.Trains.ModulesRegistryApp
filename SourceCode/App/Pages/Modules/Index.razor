@@ -2,42 +2,35 @@
 @page "/Modules/Country/{CountryId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form modules-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
+   /Modules/Index?country=..., which redirects to the country's address. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 
 @inject ModuleService ModuleService
 @inject CountryService CountryService
-@inject ScaleService ScaleService
-
 
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
-<ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId Inline="true" LocalStorageKey="Country" />
-@if (Filter.HasFilter)
-{
-    <span style="padding-left: 20px">@Localizer["Filter"]: @Filter.ToString()</span>
-    <span><AppButton Label="ClearFilter" OnClickCallback="OnClearFilter" /></span>
-}
+<ListboxForm Id="modules-country" Action="Modules/Index" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 <hr />
 
+<form id="modules-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
+
 <div class="grid" tabindex="-1">
-    <QuickGrid Items="FilteredModules" Virtualize="true" Pagination="PaginationState">
-        <PropertyColumn Title="@Localizer["Scale"]" Property="p => p.Scale.Display()" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.Scale" @bind:event="oninput" placeholder="@Localizer["Scale"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <PropertyColumn Title="@Localizer["Name"]" Property="p => p.NameOrStationNameWithSignature()" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.ModuleName" @bind:event="oninput" placeholder="@Localizer["Name"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        <TemplateColumn Context="module" Title="@Localizer["Description"]"> 
+    <QuickGrid Items="FilteredModules" Pagination="PaginationState">
+        <FilterColumn Title="@Localizer["Scale"]" Property="p => p.Scale.Display()" Sortable="true" FilterForm="modules-filter" FilterName="scale" FilterValue="@Scale" />
+        <FilterColumn Title="@Localizer["Name"]" Property="p => p.NameOrStationNameWithSignature()" Sortable="true" FilterForm="modules-filter" FilterName="name" FilterValue="@ModuleName" />
+        <TemplateColumn Context="module" Title="@Localizer["Description"]">
             <span>@module.Description(true)</span>
         </TemplateColumn>
         <TemplateColumn Context="module" Title="@Localizer["Status"]" Align="Align.Center">
@@ -50,27 +43,30 @@
                 <DocumentLink DocumentId="module.SkpDrawingId" FileExtension="skp" />
             </span>
         </TemplateColumn>
-        <PropertyColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="Filter.OwnerName" @bind:event="oninput" placeholder="@Localizer["Owners"]" />
-                </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        @if (Principal.IsGlobalOrCountryAdministrator(CountryOrDefaultId))
-        {
-            <TemplateColumn Context="module" Title="@Localizer["Actions"]">
-                <AppButton Label="Edit" IconName="@FontAwesome.Module" Href="@EditModuleHref(module)" IsDisabled="(!MayEdit(module))" />
-                @if (module.IsPrimaryStationModule())
+        <FilterColumn Title="@Localizer["Owners"]" Property="p => p.OwnerNames()" Sortable="true" FilterForm="modules-filter" FilterName="owner" FilterValue="@OwnerName" />
+        <TemplateColumn Context="module" Title="@Localizer["Actions"]">
+            <HeaderTemplate Context="column">
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
                 {
-                    <AppButton Label="Edit" IconName="@FontAwesome.Station" Href="@EditStationHref(module)" IsDisabled="(!MayEdit(module))" />
-                    @if (module.Station.HasCargoCustomers == true)
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                @if (IsAdministrator)
+                {
+                    <AppButton Label="Edit" IconName="@FontAwesome.Module" Href="@EditModuleHref(module)" IsDisabled="(!MayEdit(module))" />
+                    @if (module.IsPrimaryStationModule())
                     {
-                        <AppButton Label="Edit" IconName="@FontAwesome.Customer" Href="@EditStationCustomersHref(module)" IsDisabled="(!MayEdit(module))" />
+                        <AppButton Label="Edit" IconName="@FontAwesome.Station" Href="@EditStationHref(module)" IsDisabled="(!MayEdit(module))" />
+                        @if (module.Station.HasCargoCustomers == true)
+                        {
+                            <AppButton Label="Edit" IconName="@FontAwesome.Customer" Href="@EditStationCustomersHref(module)" IsDisabled="(!MayEdit(module))" />
+                        }
                     }
                 }
-            </TemplateColumn>
-        }
+            </ChildContent>
+        </TemplateColumn>
     </QuickGrid>
 </div>
 <Paginator State="PaginationState" />
@@ -78,59 +74,45 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
-    int CountryOrDefaultId => CountryId > 0 ? CountryId : Filter.CountryId > 0 ? Filter.CountryId : Principal.CountryId();
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "scale")] public string? Scale { get; set; }
+    [SupplyParameterFromQuery(Name = "name")] public string? ModuleName { get; set; }
+    [SupplyParameterFromQuery(Name = "owner")] public string? OwnerName { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
 
     private ClaimsPrincipal? Principal;
-    private IEnumerable<Module>? Modules;
+    private IEnumerable<Module> Modules = [];
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
-    private ModulesFilter Filter = new();
     private IEnumerable<ListboxItem>? Countries;
-    private IEnumerable<ListboxItem>? Scales;
 
-    private void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            CountryId = id;
-            OnFilterChanged();
-            Navigator.NavigateTo($"/Modules/Country/{CountryId}");
-        }
-    }
+    ModulesFilter Filter => new() { Scale = Scale, ModuleName = ModuleName, OwnerName = OwnerName };
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
-    private bool MayEdit(Module module) => Principal.IsGlobalOrCountryAdministrator(CountryOrDefaultId) || module.OwningPersonsIds().Contains(Principal.PersonId());
-
+    // The Actions column is shown to all, since it also holds Clear filter; its buttons only to administrators, as before.
+    private bool IsAdministrator => Principal.IsGlobalOrCountryAdministrator(CountryId);
+    private bool MayEdit(Module module) => IsAdministrator || module.OwningPersonsIds().Contains(Principal.PersonId());
 
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Countries = await CountryService.ListboxItemsAsync(Principal);
-        Scales = await ScaleService.ListboxItemsAsync(Principal);
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryOrDefaultId);
+        if (CountryId < 1)
+        {
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"Modules/Country/{id}");
+            return;
+        }
+        Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId);
     }
 
-    private void OnFilterChanged()
-    {
-        LocalStorage.SetItemAsync(nameof(ModulesFilter), Filter);
-    }
+    IQueryable<Module> FilteredModules => Filter.Apply(Modules).AsQueryable();
 
-    void OnClearFilter()
-    {
-        Filter.Clear();
-        OnFilterChanged();
-    }
-    IQueryable<Module> FilteredModules =>
-        Modules is null ? Enumerable.Empty<Module>().AsQueryable() :
-        Modules.AsQueryable()
-    .Where(m =>
-            m.Scale.Display().ContainsCaseInsensitive(Filter.Scale) &&
-            m.FullName.ContainsCaseInsensitive(Filter.ModuleName) &&
-            m.OwnerNames().ContainsCaseInsensitive(Filter.OwnerName)
-        );
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["scale"] = null, ["name"] = null, ["owner"] = null, ["page"] = null });
 
     string EditModuleHref(Module? module) =>
         module is null ? string.Empty :
@@ -143,11 +125,7 @@
         $"/Stations/{module.StationId}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
 
     string EditStationCustomersHref(Module? module) =>
-    module is null || module.StationId < 1 ? string.Empty :
-    module.IsGroupOwned() ? $"/Stations/{module.StationId}/Customers/GroupOwned/{module.OwningGroupId()}" :
-    $"/Stations/{module.StationId}/Customers/PersonOwned/{module.OwningPersonsIds()[0]}";
-
-
-
-
+        module is null || module.StationId < 1 ? string.Empty :
+        module.IsGroupOwned() ? $"/Stations/{module.StationId}/Customers/GroupOwned/{module.OwningGroupId()}" :
+        $"/Stations/{module.StationId}/Customers/PersonOwned/{module.OwningPersonsIds()[0]}";
 }

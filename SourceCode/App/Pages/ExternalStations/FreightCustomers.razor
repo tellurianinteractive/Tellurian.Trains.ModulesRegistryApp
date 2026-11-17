@@ -4,6 +4,10 @@
 @page "/FreightCustomers/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
+   the GET form customers-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
+   /FreightCustomers?country=..., which redirects to the country's address. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
@@ -14,83 +18,85 @@
 
 <PageHeading ObjectName="FreightCustomers" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
 
-<ListboxSelector Items="CountryItems" OnSelected="OnSelectedCountry" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" LocalStorageKey="Country" />
+<ListboxForm Id="customers-country" Action="FreightCustomers" Name="country" Items="CountryItems" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
+<form id="customers-filter" method="get" data-auto-submit data-enhance class="noprint">
+    @if (Sort.HasValue())
+    {
+        <input type="hidden" name="sort" value="@Sort" />
+        <input type="hidden" name="direction" value="@Direction" />
+    }
+    <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+</form>
 
-<TableTemplate Items="AllFreightCustomers?.OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)">
-    <TableHeader>
-        <th>@Localizer["Station"]</th>
-        <th>@Localizer["Name"]</th>
-        @if (NoCountrySelected)
-        {
-            <th>@Localizer["Country"]</th>
-        }
-        <th>@Localizer["Region"]</th>
-        <th>@Localizer["Actions"]</th>
-    </TableHeader>
-    <RowTemplate Context="item">
-        <td>@StationSymbol(item) @item.Station.FullName</td>
-        <td>@item.CustomerName @item.OpenPeriod</td>
-        @if (NoCountrySelected)
-        {
-            <td>@Flag(item) @item.Country.EnglishName.AsLocalized()</td>
-        }
-        <td style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold">@item.Region.Name</td>
-        <td>
-            @if (item.Station.IsExternal)
-            {
-                <AppButton Label="View" Href="@ExternalHref(item.Station.Id, item.Id)" />
-            }
-            else
-            {
-                <AppButton Label="View" Href="@InternalHref(item.Station.Id, item.Id)" />
-            }
-        </td>
-    </RowTemplate>
-</TableTemplate>
+<div class="grid" tabindex="-1">
+    <QuickGrid Items="@FilteredItems" Pagination="PaginationState">
+        <TemplateColumn Context="item">
+            @StationSymbol(item)
+        </TemplateColumn>
+        <FilterColumn Property="@(c => c.Station.FullName)" Sortable="true" Title="@Localizer["Station"]" FilterForm="customers-filter" FilterName="station" FilterValue="@StationName" />
+        <FilterColumn Property="@(c => c.CustomerName)" Sortable="true" Title="@Localizer["Name"]" FilterForm="customers-filter" FilterName="customer" FilterValue="@CustomerName" />
+        <PropertyColumn Property="@(c => c.OpenPeriod)" Title="@Localizer["Period"]" Align="Align.Center" />
+        <TemplateColumn Title="@Localizer["Region"]" Context="item">
+            <span style="color: @item.Region.TextColor; background-color: @item.Region.BackColor; font-weight: bold; padding: 0 4px">@item.Region.Name</span>
+        </TemplateColumn>
+        <TemplateColumn Title="@Localizer["Actions"]" Context="item">
+            <HeaderTemplate Context="column">
+                <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                @if (Filter.HasFilter)
+                {
+                    <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                }
+            </HeaderTemplate>
+            <ChildContent>
+                <AppButton Label="View" Href="@ViewHref(item)" />
+            </ChildContent>
+        </TemplateColumn>
+    </QuickGrid>
+</div>
+<Paginator State="@PaginationState" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "station")] public string? StationName { get; set; }
+    [SupplyParameterFromQuery(Name = "customer")] public string? CustomerName { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? Direction { get; set; }
 
     ClaimsPrincipal? Principal;
-    IEnumerable<FreightCustomerInfo>? AllFreightCustomers;
-    IEnumerable<FreightCustomerInfo>? ExternalFreightCustomers;
-    IEnumerable<FreightCustomerInfo>? StationFreightCustomers;
+    IEnumerable<FreightCustomerInfo> AllFreightCustomers = [];
     IEnumerable<ListboxItem>? CountryItems;
+    PaginationState PaginationState = new() { ItemsPerPage = 20 };
 
-    bool NoCountrySelected => CountryId == 0;
-
-    void OnSelectedCountry(int id)
-    {
-        if (id > 0)
-        {
-            Navigator.NavigateTo($"/FreightCustomers/{id}");
-        }
-    }
+    FreightCustomersFilter Filter => new() { StationName = StationName, CustomerName = CustomerName };
+    // Unsorted, the list is by station and customer name, as before.
+    IQueryable<FreightCustomerInfo> FilteredItems => Filter.Apply(AllFreightCustomers).AsQueryable();
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
-        var countryId = CountryId < 1 ? Principal.CountryId() : CountryId;
-        if (CountryId < 1)
-        {
-            Navigator.NavigateTo($"/FreightCustomers/{countryId}");
-        }
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        ExternalFreightCustomers = await ExternalStationService.CustomersAsync(Principal, CountryId);
-        StationFreightCustomers = await StationCustomerService.GetCustomersAsync(Principal, CountryId);
-        AllFreightCustomers = ExternalFreightCustomers.Concat(StationFreightCustomers);
+        if (CountryId < 1)
+        {
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"FreightCustomers/{id}");
+            return;
+        }
+        var external = await ExternalStationService.CustomersAsync(Principal, CountryId);
+        var stations = await StationCustomerService.GetCustomersAsync(Principal, CountryId);
+        AllFreightCustomers = [.. external.Concat(stations).OrderBy(fc => fc.Station.FullName).ThenBy(fc => fc.CustomerName)];
     }
 
     bool IsSelectCountryVisible => CountryItems?.Count() > 1 == true;
 
-    string InternalHref(int stationId, int customerId) => $"Stations/{stationId}/Customers/{customerId}";
-    string ExternalHref(int stationId, int customerId) => $"ExternalStations/{stationId}/Customers/{customerId}";
-    MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
-    MarkupString Flag(FreightCustomerInfo me) => new(string.IsNullOrWhiteSpace(me.Country.DomainSuffix) ? string.Empty : $"<img src=\"images/flags/{me.Country.DomainSuffix}.png\" />");
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["station"] = null, ["customer"] = null, ["page"] = null });
+    static string ViewHref(FreightCustomerInfo item) =>
+        item.Station.IsExternal ? $"ExternalStations/{item.Station.Id}/Customers/{item.Id}" : $"Stations/{item.Station.Id}/Customers/{item.Id}";
+    static MarkupString StationSymbol(FreightCustomerInfo me) => new(me.Station.IsExternal ? "<span class=\"fa fa-globe-europe\" />" : "<span class=\"fa fa-school\" />");
 }

@@ -33,8 +33,8 @@ public sealed partial class HostingTests
     {
         using var client = CreateClient();
 
-        // Any page not yet moved to static SSR (the start page was until Migration step 3.2b).
-        var response = await client.GetAsync("/Meetings/Index");
+        // Any page not yet moved to static SSR (the start page until Migration step 3.2b, the meetings list until 3.3).
+        var response = await client.GetAsync("/Meetings/1/View");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();
@@ -154,6 +154,12 @@ public sealed partial class HostingTests
     [DataRow(typeof(ModulesRegistry.Pages.Regions.Index))]
     [DataRow(typeof(ModulesRegistry.Pages.Groups.Index))]
     [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Modules.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Vehicles.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.Vehicles.MyVehicles))]
+    [DataRow(typeof(ModulesRegistry.Pages.WiFredThrottles.Index))]
+    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.FreightCustomers))]
+    [DataRow(typeof(ModulesRegistry.Pages.Meetings.Index))]
     public void ListPageIsStaticWithoutLocalStorage(Type page)
     {
         // Migration step 3.3: list pages in static SSR. They read the database, so the page type is checked, not a response.
@@ -162,6 +168,16 @@ public sealed partial class HostingTests
             .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
             .Select(p => p.PropertyType.Name);
         Assert.DoesNotContain("ILocalStorageService", injected, "The filter is in the query string, not in local storage.");
+    }
+
+    [TestMethod]
+    public void VehiclesListDoesNotUseLocalStorage()
+    {
+        // Migration step 3.3: the vehicle list shared by Vehicles and My vehicles keeps its filter in the query string.
+        var injected = typeof(ModulesRegistry.Pages.Vehicles.VehiclesList).GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
+            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
+            .Select(p => p.PropertyType.Name);
+        Assert.DoesNotContain("ILocalStorageService", injected);
     }
 
     [TestMethod]

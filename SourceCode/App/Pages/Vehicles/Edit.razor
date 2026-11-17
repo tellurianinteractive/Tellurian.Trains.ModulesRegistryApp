@@ -10,7 +10,7 @@
 @inject ScaleService ScaleService
 @inject CountryService CountryService
 
-<PageHeading Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle" />
+<PageHeading Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle" BackHref="@ListHref" />
 
 @if (Vehicle is null)
 {
@@ -142,15 +142,11 @@ else
         NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Vehicle = result.Entity;
         await Task.Delay(3000);
-        if (Navigator.Uri.Contains("My", StringComparison.OrdinalIgnoreCase))
-        {
-            Navigator.NavigateTo($"/vehicles/my");
-        }
-        else
-        {
-            Navigator.NavigateTo($"/vehicles/country/{CountryId}");
-        }
+        Navigator.NavigateTo(ListHref);
     }
+
+    // The vehicle lists are static, so this page may have no history (Migration step 3.3).
+    string ListHref => CountryId > 0 ? $"/vehicles/admin/country/{CountryId}" : "/vehicles/my";
 
     async Task ScaleHasChanged(int scaleId)
     {

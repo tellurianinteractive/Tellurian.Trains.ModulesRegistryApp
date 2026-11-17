@@ -9,7 +9,7 @@
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=ShowHelpInitially />
+<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=ShowHelpInitially BackHref="@BackHref" />
 
 @if (Throttle is null)
 {
@@ -38,6 +38,8 @@ else
 }
 
 @code {
+    // The throttles lists are static, so this page may have no history (Migration step 3.3).
+    string BackHref => Throttle is not null && Throttle.OwningPersonId == Principal.PersonId() ? $"Throttles/{Throttle.OwningPersonId}" : "Throttles";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
 
