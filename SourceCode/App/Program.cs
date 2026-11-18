@@ -185,6 +185,8 @@ builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 builder.Services.AddSingleton<PublicDocumentKeys>();
 
 builder.Services.AddLocalization();
+// Form models (App/Forms, Migration step 3.4): DataAnnotations whose display names and messages are keys in Strings.resx.
+builder.Services.AddValidation(options => options.LocalizerProvider = (_, factory) => factory.Create(typeof(ModulesRegistry.Resources.Strings)));
 builder.Services.AddExceptionHandler<UnhandledRequestExceptionHandler>();
 
 var app = builder.Build();

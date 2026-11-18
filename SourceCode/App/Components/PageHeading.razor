@@ -14,6 +14,8 @@
         <div class="noprint" style="flex-grow: 1; text-align:right">
             @if (IsStatic)
             {
+                @* A one-time message (FlashMessage) is moved here by wwwroot/js/flash-message.js, beside the icons, where it is seen. *@
+                <span class="flash-message-slot"></span>
                 @if (IsHelpAvailable)
                 {
                     <label for="page-help-state" class="fa fa-question-circle page-help-toggle" title="@Localizer["Help"]" aria-label="@Localizer["Help"]"></label>

@@ -1,64 +1,93 @@
 ﻿@page "/Regions/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.4, the forms pilot): a POST of RegionFormData, validated with its DataAnnotations in the
+   browser and again on the server; the region's id comes from the address, never from the form. After saving, a redirect to
+   this form (a new region gets its own address), which reads the region back, so the user sees what was saved, including
+   corrections such as capitals in the name, and decides when to go back to the list; the result is a one-time message
+   (SetFlashMessage). A failed save shows the posted values again with the message. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject PageHistory PageHistory
+@using ModulesRegistry.Forms.Regions
 
+@inject NavigationManager Navigator
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 @inject CountryService CountryService
 
 <PageHeading ObjectName="Region" IconClass="@FontAwesome.Region" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@BackHref" />
 
-<EditTemplate Item="Region" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
-    <Inputs>
-        <AppInputSelect Width="2" @bind-Value="Region.CountryId" Items="CountryItems" Label="Country" ShowPleaseSelect="true" />
-        <AppInputSelectNullable Width="3" @bind-Value="Region.RepresentativeExternalStationId" Label="RepresentativeStation" Items="ExternalStationsItems" ShowNoneOption="true" />
-        <AppInputText Width="3" @bind-Value="Region.LocalName" Label="Name" TextColor="@Region.BackColor.TextColor()" BackColor="@Region.BackColor" />
-        <AppInputColor Width="2" @bind-Value="Region.BackColor" Label="BackColor" />
-        <AppInputText Width="12" @bind-Value="Region.Description" Label="Description" />
-    </Inputs>
-    <Buttons>
+@if (FailureKey is not null)
+{
+    <ActionMessage Label="@FailureKey" AlertType="stop" />
+}
 
-    </Buttons>
+<EditTemplate Item="Form" FormName="region" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="2" @bind-Value="Form!.CountryId" Items="CountryItems" Label="Country" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" />
+        <AppInputSelectNullable Width="3" @bind-Value="Form!.RepresentativeExternalStationId" Label="RepresentativeStation" Items="ExternalStationsItems" ShowNoneOption="true" />
+        <AppInputText Width="3" @bind-Value="Form!.LocalName" Label="Name" />
+        <AppInputColorSelect Width="2" @bind-Value="Form!.BackColor" Label="Color" Colors="RegionColors.All" />
+        <AppInputText Width="12" @bind-Value="Form!.Description" Label="Description" />
+    </Inputs>
 </EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "region")] private RegionFormData? Form { get; set; }
+
     ClaimsPrincipal? Principal;
-    Region Region = new Region();
+    Region? Existing;
     IEnumerable<ListboxItem>? CountryItems;
-    IEnumerable<ListboxItem>?ExternalStationsItems;
+    IEnumerable<ListboxItem>? ExternalStationsItems;
+    string? FailureKey;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        Region = Id > 0 ? await RegionService.FindById(Principal, Id) ?? Default : Default;
-        CountryItems = await CountryService.ListboxItemsAsync(Principal);
-        ExternalStationsItems = await ExternalStationService.ListboxItemsAsync(Principal, Region.CountryId, Region.Id);
-    }
-
-    Region Default => new Region { CountryId = Principal.CountryId() };
-    // The regions list is static, so this page may have no history (Migration step 3.3).
-    string BackHref => $"Regions/Country/{Region.CountryId}";
-
-    async Task OnValidSubmit()
-    {
-        if (Region is not null)
+        if (Id > 0)
         {
-            Region.ForeColor = Region.BackColor.TextColor();
-            Region.ColourName = Region.ColourName?.ToUpperInvariant();
-            var result = await RegionService.SaveAsync(Principal, Region);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(3000);
-            PageHistory.NavigateBack(BackHref);
+            Existing = await RegionService.FindById(Principal, Id);
+            if (Existing is null || !Principal.IsCountryAdministratorInCountry(Existing.CountryId))
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Region { CountryId = Principal.CountryId() }).AsFormData();
+        // Only a global administrator selects the country; for a country administrator it is always their own. The disabled
+        // list isn't posted, so the country is set here, before the posted form is validated.
+        if (!MaySelectCountry) Form.CountryId = Principal.CountryId();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
+        ExternalStationsItems = await ExternalStationService.ListboxItemsAsync(Principal, Form.CountryId, Id);
+    }
+
+    bool MaySelectCountry => Principal.IsGlobalAdministrator();
+
+    // The regions list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => $"Regions/Country/{Existing?.CountryId ?? Principal.CountryId()}";
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        if (!Principal.IsCountryAdministratorInCountry(Form.CountryId))
+        {
+            FailureKey = "NotAuthorized";
+            return;
+        }
+        // Edit: only the form's fields change on the loaded region (Migration section 3.4, the data-loss rule).
+        var region = Form.AsEntity(Existing);
+        var (count, _, _) = await RegionService.SaveAsync(Principal, region);
+        if (count == 0)
+        {
+            FailureKey = "SaveFailed";
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Regions/{region.Id}/Edit");
     }
 }

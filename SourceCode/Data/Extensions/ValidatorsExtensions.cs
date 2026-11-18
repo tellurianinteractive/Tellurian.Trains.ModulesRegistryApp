@@ -7,7 +7,7 @@ public static partial class ValidatorsExtensions
 {
 
     public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, bool allWordsWithInitialCapitals = true) =>
-        builder.Must(value => value.IsNameCapitalizedCorrectly(allWordsWithInitialCapitals)).WithMessage(Message(allWordsWithInitialCapitals));
+        builder.Must(value => value.IsCapitalizedName(allWordsWithInitialCapitals ? NameStyle.AllWords : NameStyle.FirstLetter)).WithMessage(Message(allWordsWithInitialCapitals));
 
 
 
@@ -17,48 +17,6 @@ public static partial class ValidatorsExtensions
         $"\"{{PropertyName}}\" {Resources.Strings.AllWordsMustBeginWithCapitalLetter}";
 
 
-    private static bool IsNameCapitalizedCorrectly(this string? name, bool allWordsWithInitialCapitals)
-    {
-        if (name is null || name.Length < 1) return true;
-        var n = name.AsSpan();
-        if (allWordsWithInitialCapitals)
-        {
-            for (var i = 0; i < n.Length; i++)
-            {
-                if (i == 0)
-                {
-                    if (char.IsLower(n[i]))
-                    {
-                        if (IsAnyLowerCaseWord(n)) continue;
-                        return false;
-                    }
-                }
-                else if (n[i - 1] == ' ')
-                {
-                    var rest = n[i..];
-                    if (IsAnyLowerCaseWord(rest)) continue;
-                    if (char.IsLower(n[i])) return false;
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return !char.IsLower(n[0]);
-        }
-    }
-
-    private static bool IsAnyLowerCaseWord(ReadOnlySpan<char> word)
-    {
-        foreach (var w in LowerCaseWords)
-        {
-            if (w.Length > word.Length) continue;
-            if (word.StartsWith(w, StringComparison.OrdinalIgnoreCase)) return true;
-        }
-        return false;
-    }
-
-    private static string[] LowerCaseWords => new[] { "i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von" };
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder) =>
        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {Resources.Strings.MustOnlyContainOrdinaryText}");

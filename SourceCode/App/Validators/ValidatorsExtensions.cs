@@ -3,6 +3,7 @@ using FluentValidation.Validators;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Forms.Validation;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
@@ -12,64 +13,25 @@ public static partial class ValidatorsExtensions
 {
 
     public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, bool allWordsWithInitialCapitals = true) =>
-        builder.Must(value => value.IsNameCapitalizedCorrectly(allWordsWithInitialCapitals)).WithMessage(Message(localizer, allWordsWithInitialCapitals));
+        builder.MustBeCapitalizedCorrectly(localizer, allWordsWithInitialCapitals ? NameStyle.AllWords : NameStyle.FirstLetter);
+
+    // The same rules as the correction when saving (NameCapitalizationExtensions): valid when the correction wouldn't change the name.
+    public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, NameStyle style) =>
+        builder.Must(value => value.IsCapitalizedName(style)).WithMessage(Message(localizer, style != NameStyle.FirstLetter));
 
 
 
     private static string Message(IStringLocalizer localizer, bool allWordsWithInitialCapitals) =>
         allWordsWithInitialCapitals ?
-        $"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}" :
-        $"\"{{PropertyName}}\" {localizer["AllWordsMustBeginWithCapitalLetter"]}";
+        $"\"{{PropertyName}}\" {localizer["AllWordsMustBeginWithCapitalLetter"]}" :
+        $"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}";
 
-
-    private static bool IsNameCapitalizedCorrectly(this string? name, bool allWordsWithInitialCapitals)
-    {
-        if (name is null || name.Length < 1) return true;
-        var n = name.AsSpan();
-        if (allWordsWithInitialCapitals)
-        {
-            for (var i = 0; i < n.Length; i++)
-            {
-                if (i == 0)
-                {
-                    if (char.IsLower(n[i]))
-                    {
-                        if (IsAnyLowerCaseWord(n)) continue;
-                        return false;
-                    }
-                }
-                else if (n[i - 1] == ' ')
-                {
-                    var rest = n[i..];
-                    if (IsAnyLowerCaseWord(rest)) continue;
-                    if (char.IsLower(n[i])) return false;
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return !char.IsLower(n[0]);
-        }
-    }
-
-    private static bool IsAnyLowerCaseWord(ReadOnlySpan<char> word)
-    {
-        foreach (var w in LowerCaseWords)
-        {
-            if (w.Length > word.Length) continue;
-            if (word.StartsWith(w, StringComparison.OrdinalIgnoreCase)) return true;
-        }
-        return false;
-    }
-
-    private static string[] LowerCaseWords => ["i", "af", "am", "an", "by", "in", "im", "auf", "och", "und", "van", "von"];
 
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-       builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
+       builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
 
     public static IRuleBuilderOptions<T, string> MustBeOrdinaryText<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsText()).WithMessage($"\"{{PropertyName}}\" {localizer["MayOnlyContainOrdinaryText"]}");
+        builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
 
     public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
@@ -91,18 +53,6 @@ public static partial class ValidatorsExtensions
         if (email == null) return false;
         return EmailRegex().IsMatch(email);
     }
-    private static bool IsText(this string? text)
-    {
-        if (string.IsNullOrEmpty(text)) return true;
-        foreach (var c in text)
-        {
-            if (c.IsLatinChar()) continue;
-            if (c.IsDigit()) continue;
-            if (c.IsPermittedPunctuationOrSymbol()) continue;
-            return false;
-        }
-        return true;
-    }
     private static bool IsMacAddress(this string? text)
     {
         if (string.IsNullOrEmpty(text)) return false;
@@ -118,18 +68,8 @@ public static partial class ValidatorsExtensions
 
     private static bool IsDccAddress(this short? value) => value.HasValue && value.Value >= 1 && value.Value <= 9999;
 
-    private static bool IsPermittedPunctuationOrSymbol(this char c) => " (),.:;-+*!?%&§#±°²³/«»£€´'\"".Contains(c);
     private static bool IsDigit(this char c) => c.IsInRange(0x0030, 0x0039);
     private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0041, 0x0046) || c.IsInRange(0x0061, 0x066);
-    private static bool IsLatinChar(this char c) =>
-        c.IsInRange(0x0061, 0x007A) ||
-        c.IsInRange(0x0041, 0x005A) ||
-        c.IsInRange(0x00C0, 0x00FF) ||
-        c.IsInRange(0x0100, 0x0148) ||
-        c.IsInRange(0x014A, 0x017F) ||
-        c.IsInRange(0x0100, 0x0148) ||
-        c.IsInRange(0x014A, 0x01BF) ||
-        c.IsInRange(0x1E00, 0x1E9B);
     private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
         c >= firstCodePoint && c <= lastCodePoint;
 

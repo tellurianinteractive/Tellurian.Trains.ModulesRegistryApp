@@ -9,7 +9,7 @@
     {
         <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
     }
-    <select disabled=@IsDisabled class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+    <select disabled=@IsDisabled class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString">
         @if (ShowNoneOption)
         {
             <option value="">@NoneOption</option>
@@ -34,6 +34,10 @@
         <div class="form-control-validation">
             <ValidationMessage For="@ValidationFor" />
         </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
     }
 </div>
 

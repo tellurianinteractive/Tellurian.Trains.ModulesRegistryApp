@@ -54,10 +54,18 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<(int Count, string Message, Region? Entity)> SaveAsync(ClaimsPrincipal? principal, Region entity)
     {
-        if (principal.IsGlobalOrCountryAdministrator())
+        // A country administrator may save the regions of their own country, also when moving one (both countries are checked).
+        if (principal.IsCountryAdministratorInCountry(entity.CountryId))
         {
+            entity.LocalName = entity.LocalName.AsCapitalizedName();
+            // Only the permitted colours (RegionColors, decided 2026-11-18); the text colour follows.
+            var color = RegionColors.Permitted(entity.BackColor);
+            if (color is null) return Resources.Strings.SaveFailed.SaveResult(entity);
+            entity.BackColor = color;
+            entity.ForeColor = color.TextColor();
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Regions.FindAsync(entity.Id);
+            if (existing is not null && !principal.IsCountryAdministratorInCountry(existing.CountryId)) return principal.SaveNotAuthorised<Region>();
             if (existing is null)
             {
                 dbContext.Regions.Add(entity);

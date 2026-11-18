@@ -255,6 +255,12 @@
   <data name="BigSacks" xml:space="preserve">
     <value>Big sacks</value>
   </data>
+  <data name="Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="Blue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
   <data name="BorrowedFrom" xml:space="preserve">
     <value>Borrowed from {0}</value>
   </data>
@@ -272,6 +278,9 @@
   </data>
   <data name="BringsModulesAfterAgreement" xml:space="preserve">
     <value>Brings modules after agreement</value>
+  </data>
+  <data name="Brown" xml:space="preserve">
+    <value>Brown</value>
   </data>
   <data name="Bulk" xml:space="preserve">
     <value>Bulk</value>
@@ -359,6 +368,9 @@
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="Green" xml:space="preserve">
+    <value>Green</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
@@ -1431,6 +1443,9 @@
   <data name="MustBeSelected" xml:space="preserve">
     <value>must be selected</value>
   </data>
+  <data name="MustBeSelected_Error" xml:space="preserve">
+    <value>"{0}" must be selected</value>
+  </data>
   <data name="MustBeValidDccAdresses" xml:space="preserve">
     <value>must be valid DCC addresses</value>
   </data>
@@ -1683,6 +1698,12 @@
   <data name="Optional" xml:space="preserve">
     <value>Optional</value>
   </data>
+  <data name="Orange" xml:space="preserve">
+    <value>Orange</value>
+  </data>
+  <data name="OrdinaryTextAttribute_Error" xml:space="preserve">
+    <value>"{0}" must only contain ordinary text</value>
+  </data>
   <data name="Organiser" xml:space="preserve">
     <value>Organiser</value>
   </data>
@@ -1848,6 +1869,9 @@
   <data name="Pieces" xml:space="preserve">
     <value>Pieces</value>
   </data>
+  <data name="Pink" xml:space="preserve">
+    <value>Pink</value>
+  </data>
   <data name="Place" xml:space="preserve">
     <value>Place</value>
   </data>
@@ -1917,6 +1941,9 @@
   <data name="Public" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="Purple" xml:space="preserve">
+    <value>Purple</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>
@@ -1934,6 +1961,9 @@
   </data>
   <data name="RecentlyPastMeetings" xml:space="preserve">
     <value>Recently past meetings</value>
+  </data>
+  <data name="Red" xml:space="preserve">
+    <value>Red</value>
   </data>
   <data name="ReeferContainer20" xml:space="preserve">
     <value>20' Reefer container</value>
@@ -2006,6 +2036,9 @@
   </data>
   <data name="RepresentsToYear" xml:space="preserve">
     <value>Represents to year</value>
+  </data>
+  <data name="RequiredAttribute_Error" xml:space="preserve">
+    <value>"{0}" must have a value</value>
   </data>
   <data name="RequiresCooling" xml:space="preserve">
     <value>Requires cooling</value>
@@ -2201,6 +2234,9 @@
   </data>
   <data name="Straight" xml:space="preserve">
     <value>Straight</value>
+  </data>
+  <data name="StringLengthAttribute_Error" xml:space="preserve">
+    <value>"{0}" can have at most {1} characters</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Success</value>
@@ -2565,6 +2601,9 @@
   <data name="WhenNeededShort" xml:space="preserve">
     <value>When needed</value>
   </data>
+  <data name="White" xml:space="preserve">
+    <value>White</value>
+  </data>
   <data name="Width" xml:space="preserve">
     <value>Width</value>
   </data>
@@ -2594,6 +2633,9 @@
   </data>
   <data name="YearsInOperation" xml:space="preserve">
     <value>Years in operation</value>
+  </data>
+  <data name="Yellow" xml:space="preserve">
+    <value>Yellow</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

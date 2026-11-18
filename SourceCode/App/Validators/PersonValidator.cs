@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Validators;
 
@@ -14,13 +15,13 @@ public class PersonValidator : AbstractValidator<Person>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.GivenName)
             .WithName(n => localizer[nameof(n.FirstName)]);
 
         RuleFor(person => person.MiddleName)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.FamilyName)
             .WithName(n => localizer[nameof(n.MiddleName)]);
 
         RuleFor(person => person.LastName)
@@ -28,7 +29,7 @@ public class PersonValidator : AbstractValidator<Person>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.FamilyName)
             .WithName(n => localizer[nameof(n.LastName)]);
 
         RuleFor(person => person.CityName)

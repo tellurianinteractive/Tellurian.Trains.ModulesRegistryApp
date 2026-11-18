@@ -8,9 +8,18 @@
 }
 else
 {
-    <EditForm Model="Item" OnValidSubmit="OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
+    @* With a FormName, the form is a static SSR form (Migration step 3.4): a POST with antiforgery, validated with DataAnnotations
+       on a form model, in the browser and again on the server; each input shows its own message. *@
+    <EditForm Model="Item" OnValidSubmit="OnValidSubmit" Class="row g-3" FormName="@FormName" Enhance="@IsStatic">
+        @if (IsStatic)
+        {
+            <DataAnnotationsValidator />
+        }
+        else
+        {
+            <FluentValidationValidator />
+            <ValidationSummary />
+        }
         @Inputs
         <div class="col-12">
             @if (ShowSaveButton)
@@ -48,4 +57,8 @@ else
     [Parameter] public bool ShowSaveButton { get; set; } = true;
     [Parameter] public string? DeleteHref { get; set; }
     [Parameter] public bool MayDelete { get; set; }
+    /// <summary>The form's name on a static SSR page, matching the page's <c>[SupplyParameterFromForm(FormName = ...)]</c>.</summary>
+    [Parameter] public string? FormName { get; set; }
+
+    bool IsStatic => FormName.HasValue();
 }

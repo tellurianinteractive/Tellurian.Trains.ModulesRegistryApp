@@ -255,6 +255,12 @@
   <data name="BigSacks" xml:space="preserve">
     <value>Storsäckar</value>
   </data>
+  <data name="Black" xml:space="preserve">
+    <value>Svart</value>
+  </data>
+  <data name="Blue" xml:space="preserve">
+    <value>Blå</value>
+  </data>
   <data name="BorrowedFrom" xml:space="preserve">
     <value>Lånad av {0}</value>
   </data>
@@ -272,6 +278,9 @@
   </data>
   <data name="BringsModulesAfterAgreement" xml:space="preserve">
     <value>Tar med moduler efter överenskommelse</value>
+  </data>
+  <data name="Brown" xml:space="preserve">
+    <value>Brun</value>
   </data>
   <data name="Bulk" xml:space="preserve">
     <value>Bulk</value>
@@ -359,6 +368,9 @@
   </data>
   <data name="Close" xml:space="preserve">
     <value>Stäng</value>
+  </data>
+  <data name="Green" xml:space="preserve">
+    <value>Grön</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Hjälp</value>
@@ -1431,6 +1443,9 @@
   <data name="MustBeSelected" xml:space="preserve">
     <value>måste väljas</value>
   </data>
+  <data name="MustBeSelected_Error" xml:space="preserve">
+    <value>"{0}" måste väljas</value>
+  </data>
   <data name="MustBeValidDccAdresses" xml:space="preserve">
     <value>måste vara giltiga DCC-adresser</value>
   </data>
@@ -1683,6 +1698,12 @@
   <data name="Optional" xml:space="preserve">
     <value>Valbar</value>
   </data>
+  <data name="Orange" xml:space="preserve">
+    <value>Orange</value>
+  </data>
+  <data name="OrdinaryTextAttribute_Error" xml:space="preserve">
+    <value>"{0}" får bara innehålla vanlig text</value>
+  </data>
   <data name="Organiser" xml:space="preserve">
     <value>Arrangör</value>
   </data>
@@ -1848,6 +1869,9 @@
   <data name="Pieces" xml:space="preserve">
     <value>Stycken</value>
   </data>
+  <data name="Pink" xml:space="preserve">
+    <value>Rosa</value>
+  </data>
   <data name="Place" xml:space="preserve">
     <value>Plats</value>
   </data>
@@ -1917,6 +1941,9 @@
   <data name="Public" xml:space="preserve">
     <value>Offentlig</value>
   </data>
+  <data name="Purple" xml:space="preserve">
+    <value>Lila</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Mängd</value>
   </data>
@@ -1934,6 +1961,9 @@
   </data>
   <data name="RecentlyPastMeetings" xml:space="preserve">
     <value>Nyligen genomförda träffar</value>
+  </data>
+  <data name="Red" xml:space="preserve">
+    <value>Röd</value>
   </data>
   <data name="ReeferContainer20" xml:space="preserve">
     <value>20' Kylcontainer</value>
@@ -2006,6 +2036,9 @@
   </data>
   <data name="RepresentsToYear" xml:space="preserve">
     <value>Representerar till år</value>
+  </data>
+  <data name="RequiredAttribute_Error" xml:space="preserve">
+    <value>"{0}" måste ha ett värde</value>
   </data>
   <data name="RequiresCooling" xml:space="preserve">
     <value>Kräver kylning</value>
@@ -2201,6 +2234,9 @@
   </data>
   <data name="Straight" xml:space="preserve">
     <value>Rakt</value>
+  </data>
+  <data name="StringLengthAttribute_Error" xml:space="preserve">
+    <value>"{0}" får ha högst {1} tecken</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>OK</value>
@@ -2565,6 +2601,9 @@
   <data name="WhenNeededShort" xml:space="preserve">
     <value>Vid behov</value>
   </data>
+  <data name="White" xml:space="preserve">
+    <value>Vit</value>
+  </data>
   <data name="Width" xml:space="preserve">
     <value>Bredd</value>
   </data>
@@ -2594,6 +2633,9 @@
   </data>
   <data name="YearsInOperation" xml:space="preserve">
     <value>År i drift</value>
+  </data>
+  <data name="Yellow" xml:space="preserve">
+    <value>Gul</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>

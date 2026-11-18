@@ -1,0 +1,50 @@
+@using System.Diagnostics.CodeAnalysis
+
+@inherits AppInputBase<string>
+@inject IStringLocalizer<Strings> Localizer
+
+@* A choice among named colours, each option shown in its colour; the value is the colour's hex code. Works in static SSR forms
+   (name attribute, field message) and interactive ones. *@
+
+<div class="@WidthCss">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
+    }
+    <select disabled=@IsDisabled class="form-select @CssClass" id="@Label" name="@NameAttributeValue" style="@SelectedStyle" @bind="CurrentValueAsString">
+        <option value="" style="background-color: white; color: black">@PleaseSelectText</option>
+        @if (Colors is not null)
+        {
+            foreach (var color in Colors)
+            {
+                <option value="@color.Hex" selected="@(IsSelected(color) ? "selected" : null)" style="@Style(color.Hex)">@Localizer[color.Name]</option>
+            }
+        }
+    </select>
+    @if (ValidationFor is not null)
+    {
+        <div class="form-control-validation">
+            <ValidationMessage For="@ValidationFor" />
+        </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
+    }
+</div>
+
+@code {
+    [Parameter] public IEnumerable<NamedColor>? Colors { get; set; }
+
+    string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
+    bool IsSelected(NamedColor color) => color.Hex.Equals(CurrentValue, StringComparison.OrdinalIgnoreCase);
+    string? SelectedStyle => Colors?.Any(IsSelected) == true ? Style(CurrentValue) : null;
+    static string Style(string? hex) => $"background-color: {hex}; color: {hex.TextColor()}";
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
+    }
+}

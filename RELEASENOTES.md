@@ -1,6 +1,15 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.12
+Released 2026-11-18
+- The region form checks the entries as you type, and stays open after saving so you can see what was saved.
+- Region names are capitalised when saved, also when written in capitals only.
+- A region's colour is chosen from Yellow, Red, Green, Blue, Brown, Black, Orange, Purple, Pink and White.
+- Country administrators can add and edit the regions of their own country.
+- Messages after saving are shown beside the back arrow, with an icon.
+- Person names written in capitals only, or with a capital "Von" or "Af", must be corrected before saving.
+- A validation message showed a code instead of a text.
 ## Release 1.15.11
 Released 2026-11-18
 - Freight customer pages open faster, and their back arrow returns to the right list.

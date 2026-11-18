@@ -298,7 +298,38 @@ blockquote {
         max-width: 38vw;
     }
 
-/* FlashMessage (Migration step 3.3): with JavaScript a pop-up under the top bar that fades out (wwwroot/js/flash-message.js). */
+/* FlashMessage (Migration step 3.3): with JavaScript it moves into the page heading, just left of the help and back icons, and
+   fades out (wwwroot/js/flash-message.js); on a page without a heading slot it is a pop-up under the top bar. */
+/* The slot takes no space; the message is anchored at its right edge and grows to the left over the title, as wide as the
+   interactive notifications (NotificationArea), without moving the heading. */
+.flash-message-slot {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.flash-message-inline {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 30rem;
+    max-width: calc(100vw - 6rem);
+    margin: 0;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: normal;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    pointer-events: none; /* It covers only the title; clicks pass through. */
+    transition: opacity 0.5s ease-in;
+}
+
+.flash-message-icon {
+    margin-right: 0.5rem;
+}
+
 .flash-message-popup {
     position: fixed;
     top: 4rem;
@@ -307,6 +338,7 @@ blockquote {
     max-width: min(90vw, 30rem);
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
     transition: opacity 0.5s ease-in;
+    pointer-events: none; /* Clicks pass through to what it covers; it has nothing to click itself. */
 }
 
 .flash-message-hidden {

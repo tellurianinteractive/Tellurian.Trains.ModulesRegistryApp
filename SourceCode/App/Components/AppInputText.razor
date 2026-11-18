@@ -10,17 +10,21 @@
     }
     @if (IsTextArea)
     {
-        <textarea style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" rows="@NumberOfRows"/>
+        <textarea style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" rows="@NumberOfRows"/>
     }      
     else
     {
-        <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+        <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" placeholder="@PlaceholderText" />
     }
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
             <ValidationMessage For="@ValidationFor" />
         </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
     }
 </div>
 

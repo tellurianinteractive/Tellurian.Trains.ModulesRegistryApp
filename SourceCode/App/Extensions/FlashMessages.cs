@@ -2,8 +2,24 @@
 
 namespace ModulesRegistry.Extensions;
 
-/// <summary>A message shown once on the next page: a resource key, and whether it tells a success or a failure.</summary>
-public sealed record FlashMessageText(string TextKey, bool IsSuccess);
+/// <summary>How a one-time message is shown: its colour and icon.</summary>
+public enum FlashMessageLevel
+{
+    Error = 0,
+    Success = 1,
+    /// <summary>Something to pay attention to.</summary>
+    Warning = 2,
+    /// <summary>Neither success nor failure, such as nothing to save; light blue, as the interactive pages' information.</summary>
+    Info = 3,
+}
+
+/// <summary>A message shown once on the next page: a resource key, and how it is shown.</summary>
+public sealed record FlashMessageText(string TextKey, FlashMessageLevel Level)
+{
+    public FlashMessageText(string textKey, bool isSuccess) : this(textKey, isSuccess ? FlashMessageLevel.Success : FlashMessageLevel.Error) { }
+
+    public bool IsSuccess => Level == FlashMessageLevel.Success;
+}
 
 /// <summary>
 /// One-time messages after a POST on a static SSR page (Migration step 3.3), as TempData in MVC: the POST sets a short-lived
@@ -17,10 +33,14 @@ public static partial class FlashMessageExtensions
     extension(HttpContext? context)
     {
         /// <summary>Sets the message for the next page; call it before the redirect.</summary>
-        public void SetFlashMessage(string textKey, bool isSuccess)
+        public void SetFlashMessage(string textKey, bool isSuccess) =>
+            context.SetFlashMessage(textKey, isSuccess ? FlashMessageLevel.Success : FlashMessageLevel.Error);
+
+        /// <summary>Sets the message for the next page; call it before the redirect.</summary>
+        public void SetFlashMessage(string textKey, FlashMessageLevel level)
         {
             if (context is null || context.Response.HasStarted) return;
-            var value = Format(new FlashMessageText(textKey, isSuccess));
+            var value = Format(new FlashMessageText(textKey, level));
             if (value is null) return;
             context.Response.Cookies.Append(CookieName, value, new CookieOptions
             {
@@ -42,13 +62,14 @@ public static partial class FlashMessageExtensions
         }
     }
 
-    // "1:Key" for a success, "0:Key" for a failure. Only a plain resource key is accepted.
+    // "<level>:Key": "1:Key" for a success, "0:Key" for a failure, "2:Key" for a warning, "3:Key" for information.
+    // Only a plain resource key is accepted.
     internal static string? Format(FlashMessageText message) =>
-        ResourceKey().IsMatch(message.TextKey) ? $"{(message.IsSuccess ? '1' : '0')}:{message.TextKey}" : null;
+        ResourceKey().IsMatch(message.TextKey) && Enum.IsDefined(message.Level) ? $"{(int)message.Level}:{message.TextKey}" : null;
 
     internal static FlashMessageText? Parse(string? value) =>
-        value is { Length: > 2 } && value[1] == ':' && (value[0] == '0' || value[0] == '1') && ResourceKey().IsMatch(value[2..]) ?
-        new FlashMessageText(value[2..], value[0] == '1') : null;
+        value is { Length: > 2 } && value[1] == ':' && value[0] is >= '0' and <= '3' && ResourceKey().IsMatch(value[2..]) ?
+        new FlashMessageText(value[2..], (FlashMessageLevel)(value[0] - '0')) : null;
 
     [GeneratedRegex("^[A-Za-z][A-Za-z0-9]{0,99}$")]
     private static partial Regex ResourceKey();

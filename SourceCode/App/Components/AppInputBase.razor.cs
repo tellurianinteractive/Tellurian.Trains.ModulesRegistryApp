@@ -20,6 +20,12 @@ public abstract partial class AppInputBase<TValue>
 
     public void OnChange() => OnChangeNotifier?.Invoke();
 
+    /// <summary>
+    /// On a static page (an SSR form, Migration step 3.4) each field shows its own message, which is also where the
+    /// browser's client-side validation puts it; interactive forms keep their <c>ValidationSummary</c>.
+    /// </summary>
+    protected bool ShowFieldValidationMessage => !RendererInfo.IsInteractive && ValueExpression is not null;
+
     public string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
     public string LabelText(IStringLocalizer<Strings> localizer)

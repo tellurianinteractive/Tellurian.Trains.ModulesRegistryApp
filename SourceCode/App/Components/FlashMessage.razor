@@ -5,7 +5,7 @@
    without, it is a banner until the next page. Interactive pages have no HttpContext and keep their notifications. *@
 @if (Message is not null)
 {
-    <div class="alert @(Message.IsSuccess ? "alert-success" : "alert-danger") flash-message" role="@(Message.IsSuccess ? "status" : "alert")">@Localizer[Message.TextKey]</div>
+    <div class="alert @AlertClass flash-message" role="@(Message.Level == FlashMessageLevel.Error ? "alert" : "status")"><span class="fa @IconClass flash-message-icon" aria-hidden="true"></span>@Localizer[Message.TextKey]</div>
 }
 
 @code {
@@ -14,4 +14,20 @@
     FlashMessageText? Message;
 
     protected override void OnInitialized() => Message = HttpContext.TakeFlashMessage();
+
+    string AlertClass => Message?.Level switch
+    {
+        FlashMessageLevel.Success => "alert-success",
+        FlashMessageLevel.Warning => "alert-warning",
+        FlashMessageLevel.Info => "alert-primary", // Light blue with dark blue text: the best contrast of Bootstrap's blues.
+        _ => "alert-danger",
+    };
+
+    string IconClass => Message?.Level switch
+    {
+        FlashMessageLevel.Success => "fa-check-circle",
+        FlashMessageLevel.Warning => "fa-exclamation-triangle",
+        FlashMessageLevel.Info => "fa-info-circle",
+        _ => "fa-times-circle",
+    };
 }

@@ -37,6 +37,20 @@ public sealed class FlashMessageTests
     }
 
     [TestMethod]
+    [DataRow(FlashMessageLevel.Warning)]
+    [DataRow(FlashMessageLevel.Info)]
+    public void WarningAndInformationAreKept(FlashMessageLevel level)
+    {
+        var post = new DefaultHttpContext();
+        post.SetFlashMessage("NoModification", level);
+
+        var message = RequestWithCookie(CookieValue(post.Response.Headers.SetCookie.ToString())).TakeFlashMessage();
+
+        Assert.AreEqual(new FlashMessageText("NoModification", level), message);
+        Assert.IsFalse(message!.IsSuccess);
+    }
+
+    [TestMethod]
     public void NoCookieGivesNoMessage()
     {
         var context = new DefaultHttpContext();
@@ -48,7 +62,7 @@ public sealed class FlashMessageTests
     [TestMethod]
     [DataRow("")]
     [DataRow("1:")]
-    [DataRow("2:DeletedSuccessfully")]
+    [DataRow("4:DeletedSuccessfully")]
     [DataRow("DeletedSuccessfully")]
     [DataRow("1:<script>")]
     [DataRow("1:Two words")]
