@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.7
+Released 2026-11-18
+- My modules and the modules of a person or group open faster; cloning a module shows the result in a message that disappears by itself.
+- A person's modules in a group have a back arrow to the group's members.
 ## Release 1.15.6
 Released 2026-11-17
 - Modules, Vehicles, My vehicles, Throttles and Freight customers: the filter fields are in the column headers, and the filter, sorting and page are in the address.

@@ -1,7 +1,8 @@
 ﻿@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
+@inject NavigationManager Navigator
 @inject ModuleService ModuleService
+@* Static SSR (Migration step 3.3): the lists of my, a person's and a group's modules. Clone is a POST form (antiforgery)
+   with the module's id in the row's button; the result is a one-time message (SetFlashMessage) after the redirect. *@
 
 @preservewhitespace true
 
@@ -11,6 +12,9 @@
         <AppButton Label="Add" Href="@ModuleEditHref(0)" />
         <AppButton Label="OperationLocations" Href="@StationsHref()" />
     </div>
+    <form id="modules-clone" method="post" @formname="clone-module" @onsubmit="CloneAsync" data-enhance>
+        <AntiforgeryToken />
+    </form>
 }
 
 <TableTemplate Items="Modules?.OrderBy(m => m.FullName).ThenBy(m => m.ConfigurationLabel)" >
@@ -47,7 +51,7 @@
                 <AppButton Label="Transfer" Href="@TransferOwnershipHref(module.Id)" />
                 @if (module.Id > 0)
                 {
-                    <AppButton Label="Clone" OnClickCallback="(() => Clone(module.Id))" />
+                    <AppButton Label="Clone" IsSubmit="true" Form="modules-clone" Name="CloneModuleId" Value="@module.Id.ToString()" />
                 }
             }
             <AppButton Label="Delete" Href="@ModuleDeleteHref(module.Id)" />
@@ -69,6 +73,8 @@
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
     [Parameter] public ClaimsPrincipal? Principal { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [SupplyParameterFromForm(FormName = "clone-module")] public int CloneModuleId { get; set; }
 
     ModuleOwnershipRef OwnershipRef => ModuleOwnershipRef.PersonAndOrGroup(Principal, OwningPersonId, OwningGroupId);
 
@@ -78,11 +84,12 @@
         AnyHasFremoName = Modules.HasAnyFremoName();
     }
 
-    async Task Clone(int id)
+    async Task CloneAsync()
     {
-        var result = await ModuleService.CloneAsync(Principal, id, OwnershipRef);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        Modules = await ModuleService.GetAllAsync(Principal, OwnershipRef);
+        // Only a module shown in this list, and only when the user may edit the list, is cloned.
+        var cloned = MayEdit && Modules?.Any(m => m.Id == CloneModuleId) == true && (await ModuleService.CloneAsync(Principal, CloneModuleId, OwnershipRef)).Count > 0;
+        HttpContext.SetFlashMessage(cloned ? "ClonedSuccessfully" : "CloningFailed", cloned);
+        Navigator.NavigateTo(Navigator.Uri);
     }
     bool AnyHasFremoName;
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
