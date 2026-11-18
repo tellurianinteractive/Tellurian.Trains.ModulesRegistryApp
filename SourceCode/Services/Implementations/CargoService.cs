@@ -1,8 +1,16 @@
-﻿namespace ModulesRegistry.Services.Implementations;
+﻿using Microsoft.Extensions.Caching.Memory;
 
-public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
+namespace ModulesRegistry.Services.Implementations;
+
+/// <remarks>
+/// The rows behind the listbox items (cargo types, directions, quantity units, ready times, packaging units) are kept in
+/// memory (<see cref="ReferenceDataCache"/>): they are read on many pages, change seldom, and each read is a round trip to
+/// the database. The items are made from them on each call, since their texts depend on the user's language.
+/// </remarks>
+public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IMemoryCache cache)
 {
     private readonly IDbContextFactory<ModulesDbContext> Factory = factory;
+    private readonly IMemoryCache Cache = cache;
 
     public async Task<IEnumerable<Data.Api.CargoType>> CargoTypesAsync()
     {
@@ -17,9 +25,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal.IsAuthenticated())
         {
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.Cargos
-                .ToReadOnlyListAsync();
+            var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.Cargos, Factory, db => db.Cargos);
             if (includeDefaultClasses)
             {
                 return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})"))
@@ -50,10 +56,8 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal.IsAuthenticated())
         {
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.CargoDirections
-                .Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized())).ToReadOnlyListAsync();
-            return items
+            var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.CargoDirections, Factory, db => db.CargoDirections);
+            return items.Select(cd => new ListboxItem(cd.Id, cd.FullName.AsLocalized()))
                 .OrderBy(l => l.Description).ToList();
         }
         return [];
@@ -74,10 +78,8 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal.IsAuthenticated())
         {
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.CargoUnits
-                .Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).ToReadOnlyListAsync();
-            return items.OrderBy(l => l.Description).ToList();
+            var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.CargoUnits, Factory, db => db.CargoUnits);
+            return items.Select(cu => new ListboxItem(cu.Id, cu.FullName.AsLocalized())).OrderBy(l => l.Description).ToList();
         }
         return [];
     }
@@ -97,10 +99,8 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal.IsAuthenticated())
         {
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.CargoReadyTimes
-                .Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).ToReadOnlyListAsync();
-            return items.OrderBy(l => l.Id).ToList();
+            var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.CargoReadyTimes, Factory, db => db.CargoReadyTimes);
+            return items.Select(crt => new ListboxItem(crt.Id, crt.FullName.AsLocalized())).OrderBy(l => l.Id).ToList();
         }
         return [];
     }
@@ -118,10 +118,9 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
     {
         if (principal.IsAuthenticated())
         {
-            using var dbContext = Factory.CreateDbContext();
-            var items = await dbContext.CargoPackagingUnits
-                .Select(cpu => new ListboxItem(cpu.Id, cpu.PluralResourceCode.AsLocalized()) { DisplayOrder = cpu.DisplayOrder }).ToReadOnlyListAsync();
-            return items.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Description);
+            var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.CargoPackagingUnits, Factory, db => db.CargoPackagingUnits);
+            return items.Select(cpu => new ListboxItem(cpu.Id, cpu.PluralResourceCode.AsLocalized()) { DisplayOrder = cpu.DisplayOrder })
+                .OrderBy(l => l.DisplayOrder).ThenBy(l => l.Description).ToList();
         }
         return [];
 
@@ -150,6 +149,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
         {
             dbContext.Cargos.Add(entity);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            Cache.Remove(ReferenceDataCache.Cargos);
             return result.SaveResult(entity);
         }
         else
@@ -157,6 +157,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
             if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
             var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            Cache.Remove(ReferenceDataCache.Cargos);
             return result.SaveResult(existing);
         }
     }
@@ -168,6 +169,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory)
         if (existing is null) return principal.NotFound();
         dbContext.Remove(existing);
         var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+        Cache.Remove(ReferenceDataCache.Cargos);
         return result.DeleteResult();
     }
 

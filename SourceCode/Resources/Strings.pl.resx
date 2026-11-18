@@ -333,4 +333,7 @@
   <data name="WorkInProgressNote" xml:space="preserve">
     <value>Trwają prace nad aplikacją. Niektóre funkcje mogą nie działać zgodnie z oczekiwaniami.</value>
   </data>
+  <data name="EnterSearchValue" xml:space="preserve">
+    <value>Wpisz wyszukiwaną wartość</value>
+  </data>
 </root>

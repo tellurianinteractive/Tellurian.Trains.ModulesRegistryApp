@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.Extensions.Localization;
+using ModulesRegistry.Resources;
 
 namespace ModulesRegistry.Components;
 
@@ -17,6 +19,7 @@ public class FilterColumn<TGridItem, TProp> : PropertyColumn<TGridItem, TProp>
     [Parameter] public string? FilterValue { get; set; }
     /// <summary>The id of the filter form.</summary>
     [Parameter, EditorRequired] public string FilterForm { get; set; } = string.Empty;
+    [Inject] private IStringLocalizer<Strings> Localizer { get; set; } = default!;
 
     public FilterColumn()
     {
@@ -33,6 +36,9 @@ public class FilterColumn<TGridItem, TProp> : PropertyColumn<TGridItem, TProp>
             builder.AddAttribute(5, "class", "form-control form-control-sm col-filter");
             builder.AddAttribute(6, "autocomplete", "off");
             builder.AddAttribute(7, "aria-label", Title);
+            // It isn't obvious that the fields are for filtering, so they say so (as placeholder and as tooltip).
+            builder.AddAttribute(8, "placeholder", Localizer["EnterSearchValue"].Value);
+            builder.AddAttribute(9, "title", Localizer["EnterSearchValue"].Value);
             builder.CloseElement();
         };
     }

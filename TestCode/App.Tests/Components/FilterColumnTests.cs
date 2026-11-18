@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Globalization;
 using Microsoft.JSInterop;
 using ModulesRegistry.Components;
 
@@ -29,6 +30,8 @@ public sealed class FilterColumnTests
         StringAssert.Contains(html, "form=\"the-filter\"");
         StringAssert.Contains(html, "value=\"ab\"");
         StringAssert.Contains(html, "aria-label=\"Name\"");
+        StringAssert.Contains(html, "placeholder=\"Enter search value\"", "It isn't obvious that the field is for filtering.");
+        StringAssert.Contains(html, "title=\"Enter search value\"");
         StringAssert.Contains(html, "abc", "The rows are rendered.");
     }
 
@@ -43,7 +46,9 @@ public sealed class FilterColumnTests
 
     private static async Task<string> RenderAsync(string uri, string? filterValue)
     {
+        CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en-GB");
         var services = new ServiceCollection();
+        services.AddLogging().AddLocalization();
         services.AddSingleton<NavigationManager>(new TestNavigationManager(uri));
         services.AddSingleton<IJSRuntime, NoJSRuntime>();
         await using var provider = services.BuildServiceProvider();

@@ -6,9 +6,10 @@
 @page "/Stations/{stationid:int}/Customers/GroupOwned/{owningGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): StationCustomerItemView has only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
 
 @inject CargoService CargoService
 @inject OperatingDayService OperatingDayService
@@ -35,8 +36,14 @@
 }
 
 @code {
-    // Reached from the static freight customers or modules list, this page may have no history (Migration step 3.3).
-    string BackHref => CustomerId > 0 ? "FreightCustomers" : "Modules/Index";
+    // The back arrow of a static page is a link (Migration step 3.3): to the freight customers list for one customer,
+    // otherwise to the owner's modules list, from which the station's lists are reached.
+    string BackHref =>
+        CustomerId > 0 ? "FreightCustomers" :
+        OwningPersonId > 0 && OwningGroupId > 0 ? $"Persons/{OwningPersonId}/Modules/InGroup/{OwningGroupId}" :
+        OwningPersonId > 0 ? $"Persons/{OwningPersonId}/Modules" :
+        OwningGroupId > 0 ? $"Groups/{OwningGroupId}/Modules" :
+        "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int StationId { get; set; }
@@ -82,14 +89,6 @@
 
             }
         }
-    }
-
-    async Task OnDeleteStationCustomer(int customerId)
-    {
-
-        var result = await StationCustomerService.DeleteAsync(Principal, customerId);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        StationCustomers = await StationCustomerService.AllAsync(Principal, StationId);
     }
 
     string FreightCustomerHref(int customerId) => $"/Stations/{StationId}/Customers/{customerId}/Edit";

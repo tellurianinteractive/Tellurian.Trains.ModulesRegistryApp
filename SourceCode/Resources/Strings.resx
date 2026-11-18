@@ -2625,4 +2625,7 @@
   <data name="WorkInProgressNote" xml:space="preserve">
     <value>Work is in progress on the app. Some features may not work as expected.</value>
   </data>
+  <data name="EnterSearchValue" xml:space="preserve">
+    <value>Enter search value</value>
+  </data>
 </root>

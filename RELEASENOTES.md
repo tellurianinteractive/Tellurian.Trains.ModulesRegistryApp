@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.11
+Released 2026-11-18
+- Freight customer pages open faster, and their back arrow returns to the right list.
+- The filter fields in lists show "Enter search value".
+- External station customers can be added and edited from the station's customer page.
 ## Release 1.15.10
 Released 2026-11-18
 - Security fix: only the owners of a station, their groups' data administrators and administrators can change or delete the station's freight customers and waybills. Before, any signed-in user could.

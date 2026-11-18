@@ -3,6 +3,9 @@
 		<AssemblyName>ModulesRegistry</AssemblyName>
 		<RootNamespace>ModulesRegistry</RootNamespace>
 		<WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
+		<!-- NavigateTo on a static page sets the redirect instead of throwing NavigationException, which was also reported as an
+		     unobserved task exception (logged as Critical). Code after NavigateTo now runs, so return right after it. -->
+		<BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.2" />

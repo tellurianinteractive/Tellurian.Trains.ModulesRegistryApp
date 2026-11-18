@@ -2625,4 +2625,7 @@
   <data name="WorkInProgressNote" xml:space="preserve">
     <value>Die App wird gerade weiterentwickelt. Einige Funktionen funktionieren möglicherweise nicht wie erwartet.</value>
   </data>
+  <data name="EnterSearchValue" xml:space="preserve">
+    <value>Suchwert eingeben</value>
+  </data>
 </root>

@@ -2,9 +2,10 @@
 @page "/ExternalStations/{stationid:int}/Customers/{customerId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): ExternalStationCustomerItemView has only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
 
 @inject GroupService GroupService
 @inject CargoService CargoService
@@ -46,7 +47,8 @@
     ClaimsPrincipal? Principal;
     ExternalStation? Station;
     IEnumerable<ExternalStationCustomer>? StationCustomers;
-    bool MayEdit = false;
+    // External stations are shared: every signed-in user may edit them and their customers (as the external stations list).
+    bool MayEdit => Station is not null && !Principal.IsReadOnly();
 
     protected override async Task OnInitializedAsync()
     {

@@ -147,6 +147,8 @@ if (builder.Environment.IsProduction())
 if (builder.Environment.IsDevelopment())
     builder.Services.AddScoped<IMailSender, CloudMailSender>();
 
+// Lookup rows kept in memory by CargoService and OperatingDayService (ReferenceDataCache).
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<CargoService>();
 builder.Services.AddScoped<ContentService>();
 builder.Services.AddScoped<CountryService>();
