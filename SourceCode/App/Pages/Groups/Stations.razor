@@ -1,6 +1,8 @@
 ﻿@page "/Groups/{id:int}/Stations"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): StationsList has only links. *@
 
 @inject IStringLocalizer<Strings> Localizer
 

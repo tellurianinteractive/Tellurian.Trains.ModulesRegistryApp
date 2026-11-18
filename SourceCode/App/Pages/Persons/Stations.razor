@@ -1,6 +1,10 @@
 ﻿@page "/Persons/{OwnerId:int}/Stations"
 @page "/Persons/{OwnerId:int}/Stations/InGroup/{GroupId:int}"
 
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): StationsList has only links. *@
+
 @inject IStringLocalizer<Strings> Localizer
 
 @inject PersonService PersonService
@@ -18,7 +22,7 @@
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     // The persons list is static, so this page may have no history (Migration step 3.3).
-    private string? BackHref => GroupId > 0 || Owner is null ? null : $"Persons/Country/{Owner.CountryId}";
+    private string? BackHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : Owner is null ? null : $"Persons/Country/{Owner.CountryId}";
     private IEnumerable<Station>? OwnedStations;
     bool MayEdit;
 

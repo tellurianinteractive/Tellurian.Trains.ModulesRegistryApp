@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.8
+Released 2026-11-18
+- Operation locations, and the operation locations of a person or group, open faster.
+- A person's operation locations in a group have a back arrow to the group's members.
+- A person's operation locations require sign-in.
 ## Release 1.15.7
 Released 2026-11-18
 - My modules and the modules of a person or group open faster; cloning a module shows the result in a message that disappears by itself.
