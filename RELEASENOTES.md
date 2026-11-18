@@ -8,7 +8,7 @@ Released 2026-11-18
 - A region's colour is chosen from Yellow, Red, Green, Blue, Brown, Black, Orange, Purple, Pink and White.
 - Country administrators can add and edit the regions of their own country.
 - Messages after saving are shown beside the back arrow, with an icon.
-- Person names written in capitals only, or with a capital "Von" or "Af", must be corrected before saving.
+- Person names and cities are capitalised when saved; "von", "af" and similar are written in lower case.
 - A validation message showed a code instead of a text.
 ## Release 1.15.11
 Released 2026-11-18

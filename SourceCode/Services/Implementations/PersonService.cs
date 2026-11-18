@@ -115,6 +115,11 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         var ownerRef = ModuleOwnershipRef.Person(entity.Id);
         if (principal.MaySave(ownerRef, isGroupAdministrator))
         {
+            // Names are corrected, not validated, for capitals (NameCapitalizationExtensions, decided 2026-11-18).
+            entity.FirstName = entity.FirstName.AsCapitalizedName(NameStyle.GivenName);
+            entity.MiddleName = entity.MiddleName.AsCapitalizedName(NameStyle.FamilyName);
+            entity.LastName = entity.LastName.AsCapitalizedName(NameStyle.FamilyName);
+            entity.CityName = entity.CityName.AsCapitalizedName(NameStyle.AllWords);
             using var dbContext = Factory.CreateDbContext();
             if (entity.EmailAddresses.HasValue() && entity.User is not null)
             {

@@ -2,12 +2,12 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
-using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Validators;
 
 public class PersonValidator : AbstractValidator<Person>
 {
+    // Names and city are not validated for capitals: PersonService corrects them when saving.
     public PersonValidator(IStringLocalizer<Strings> localizer)
     {
         RuleFor(person => person.FirstName)
@@ -15,13 +15,11 @@ public class PersonValidator : AbstractValidator<Person>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.GivenName)
             .WithName(n => localizer[nameof(n.FirstName)]);
 
         RuleFor(person => person.MiddleName)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FamilyName)
             .WithName(n => localizer[nameof(n.MiddleName)]);
 
         RuleFor(person => person.LastName)
@@ -29,7 +27,6 @@ public class PersonValidator : AbstractValidator<Person>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FamilyName)
             .WithName(n => localizer[nameof(n.LastName)]);
 
         RuleFor(person => person.CityName)
@@ -37,7 +34,6 @@ public class PersonValidator : AbstractValidator<Person>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
             .WithName(n => localizer[nameof(n.CityName)]);
 
         RuleFor(person => person.EmailAddresses)
