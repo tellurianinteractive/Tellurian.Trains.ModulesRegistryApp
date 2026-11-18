@@ -59,32 +59,6 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
         return principal.SaveNotAuthorised<Module>();
     }
 
-    public async Task<ModuleOwnership?> GetModuleOwnershipAsync(ClaimsPrincipal? principal, int? moduleId, int personId, int groupId)
-    {
-        if (moduleId is null) return default;
-        if (principal.IsAuthenticated())
-        {
-            if (personId == 0 && groupId == 0) personId = principal.PersonId();
-            using var dbContext = Factory.CreateDbContext();
-            List<ModuleOwnership> ownerships = [];
-            if (groupId > 0)
-            {
-                ownerships = await dbContext.ModuleOwnerships
-                    .Include(mo => mo.Group)
-                    .Where(mo => mo.GroupId == groupId)
-                    .ToReadOnlyListAsync();
-            }
-            else if (personId > 0) {
-                ownerships = await dbContext.ModuleOwnerships
-                    .Include(mo => mo.Person)
-                    .Where (mo => mo.PersonId == personId)
-                    .ToReadOnlyListAsync();
-            }
-            return ownerships.Count > 0 ? ownerships[0] : default;
-        }
-        return default;
-    }
-
     private async Task<Module?> GetModule(int moduleId)
     {
         using var dbContext = Factory.CreateDbContext();

@@ -37,47 +37,37 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
 
     public async Task<int> AddGeneratedModuleCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
     {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedModuleWaybills] @StationCustomerId={stationCustomerId}");
-        }
-        return 0;
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationOfCustomerAsync(principal, stationCustomerId)) return 0;
+        return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedModuleWaybills] @StationCustomerId={stationCustomerId}");
     }
 
     public async Task<int> AddGeneratedExternalCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
     {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedExternalWaybills] @StationCustomerId={stationCustomerId}");
-        }
-        return 0;
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationOfCustomerAsync(principal, stationCustomerId)) return 0;
+        return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedExternalWaybills] @StationCustomerId={stationCustomerId}");
     }
     public async Task<int> AddGeneratedShadowYardCustomerWaybills(ClaimsPrincipal? principal, int stationCustomerId)
     {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
-        }
-        return 0;
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationOfCustomerAsync(principal, stationCustomerId)) return 0;
+        return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
     }
 
     public async Task<(int Count, string Message, StationCustomerWaybill? Entity)> SaveAsync(ClaimsPrincipal? principal, StationCustomerWaybill entity)
     {
-        if (principal.IsAuthenticated())
-        {
-            var dbContext = Factory.CreateDbContext();
-            var existing = dbContext.StationCustomerWaybills.FirstOrDefault(x => x.Id == entity.Id);
-            if (existing is null) return principal.SaveNotAuthorised<StationCustomerWaybill>();
-            dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(existing);
-
-        }
-        return principal.SaveNotAuthorised<StationCustomerWaybill>();
+        using var dbContext = Factory.CreateDbContext();
+        var existing = await dbContext.StationCustomerWaybills.FirstOrDefaultAsync(x => x.Id == entity.Id).ConfigureAwait(false);
+        if (existing is null || !await dbContext.MayEditStationOfCustomerAsync(principal, existing.StationCustomerId).ConfigureAwait(false))
+            return principal.SaveNotAuthorised<StationCustomerWaybill>();
+        // A waybill stays with its customer and its cargo flow.
+        entity.StationCustomerId = existing.StationCustomerId;
+        entity.StationCustomerCargoId = existing.StationCustomerCargoId;
+        dbContext.Entry(existing).CurrentValues.SetValues(entity);
+        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+        var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+        return result.SaveResult(existing);
     }
 
 }

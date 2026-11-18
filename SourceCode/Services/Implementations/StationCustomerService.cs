@@ -53,8 +53,12 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
         return null;
     }
 
-    public Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity) =>
-        SaveAsync(principal, stationId, entity, principal.AsModuleOwnershipRef());
+    /// <summary>Whether the user may change the station's freight customers and their waybills.</summary>
+    public async Task<bool> MayEditAsync(ClaimsPrincipal? principal, int stationId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayEditStationAsync(principal, stationId);
+    }
 
     public async Task<IEnumerable<FreightCustomerInfo>> GetCustomersAsync(ClaimsPrincipal? principal, int? maybeCountryId)
     {
@@ -93,49 +97,38 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
         return Array.Empty<StationCustomerWaybill>();
     }
 
-    public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity, ModuleOwnershipRef ownerRef)
+    /// <summary>
+    /// Adds or updates a freight customer of the station, if the user may edit the station. Saving an existing customer
+    /// with another station moves it there (a correction when it was added to the wrong station), which also requires
+    /// that the user may edit the station it is moved from.
+    /// </summary>
+    public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity)
     {
-        if (principal.IsAuthenticated())
-        {
-            entity.StationId = stationId;
-            entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
-            entity.TrackOrArea = entity.TrackOrArea.ValueOrNull();
-            if (entity.Cargos is not null)
-            {
-                foreach (var cargo in entity.Cargos)
-                {
-                    cargo.Id = cargo.Id < 0 ? 0 : cargo.Id;
-                    cargo.TrackOrArea = cargo.TrackOrArea.ValueOrNull();
-                    cargo.SpecialCargoName = cargo.SpecialCargoName.ValueOrNull();
-                    cargo.SpecificWagonClass = cargo.SpecificWagonClass.ValueOrNull();
-                }
-            }
-            if (ownerRef.IsGroup)
-            {
-                using var dbContext = Factory.CreateDbContext();
-                var isDataAdministrator = await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId());
-                if (isDataAdministrator)
-                {
-                    return await AddOrUpdate(dbContext, principal, entity);
-                }
-            }
-            else if (principal.MaySave(ownerRef))
-            {
-                using var dbContext = Factory.CreateDbContext();
-                return await AddOrUpdate(dbContext, principal, entity);
-            }
-        }
-        return principal.SaveNotAuthorised<StationCustomer>();
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationAsync(principal, stationId)) return principal.SaveNotAuthorised<StationCustomer>();
+        var station = await dbContext.Stations.FindAsync(stationId);
+        if (station is null) return principal.SaveNotAuthorised<StationCustomer>();
+        var existing = await dbContext.StationCustomers.Include(sc => sc.Cargos).SingleOrDefaultAsync(sc => sc.Id == entity.Id);
+        if (existing is not null && existing.StationId != stationId && !await dbContext.MayEditStationAsync(principal, existing.StationId))
+            return principal.SaveNotAuthorised<StationCustomer>();
 
-        static async Task<(int Count, string Message, StationCustomer? Entity)> AddOrUpdate(ModulesDbContext dbContext, ClaimsPrincipal? principal, StationCustomer entity)
+        entity.StationId = stationId;
+        entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
+        entity.TrackOrArea = entity.TrackOrArea.ValueOrNull();
+        if (entity.Cargos is not null)
         {
-            var station = await dbContext.Stations.FindAsync(entity.StationId);
-            if (station is null) return principal.SaveNotAuthorised<StationCustomer>();
-            var existing = dbContext.StationCustomers.Include(sc => sc.Cargos).SingleOrDefault(sc => sc.Id == entity.Id);
-            return existing is null ?
-                await AddNew(dbContext, principal, station, entity) :
-                await UpdateExisting(dbContext, principal, station, entity, existing);
+            foreach (var cargo in entity.Cargos)
+            {
+                // Only the customer's own cargo flows are updated; any other id is a new cargo flow.
+                cargo.Id = existing?.Cargos.Any(c => c.Id == cargo.Id) == true ? cargo.Id : 0;
+                cargo.TrackOrArea = cargo.TrackOrArea.ValueOrNull();
+                cargo.SpecialCargoName = cargo.SpecialCargoName.ValueOrNull();
+                cargo.SpecificWagonClass = cargo.SpecificWagonClass.ValueOrNull();
+            }
         }
+        return existing is null ?
+            await AddNew(dbContext, principal, station, entity) :
+            await UpdateExisting(dbContext, principal, station, entity, existing);
 
         static async Task<(int Count, string Message, StationCustomer? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station station, StationCustomer entity)
         {
@@ -176,16 +169,13 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
         {
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.StationCustomers.Include(sc => sc.Cargos).SingleOrDefaultAsync(sc => sc.Id == customerId);
-            if (existing is not null)
-            {
-                foreach (var cargoflow in existing.Cargos) dbContext.StationCustomerCargos.Remove(cargoflow);
-                dbContext.StationCustomers.Remove(existing);
-                var result = await dbContext.SaveChangesAsync();
-                return result.DeleteResult();
-            }
-            return Strings.NothingToDelete.DeleteResult();
+            if (existing is null) return Strings.NothingToDelete.DeleteResult();
+            if (!await dbContext.MayEditStationAsync(principal, existing.StationId)) return Strings.NotAuthorised.DeleteResult();
+            foreach (var cargoflow in existing.Cargos) dbContext.StationCustomerCargos.Remove(cargoflow);
+            dbContext.StationCustomers.Remove(existing);
+            var result = await dbContext.SaveChangesAsync();
+            return result.DeleteResult();
         }
         return Strings.NotAuthorised.DeleteResult();
-
     }
 }

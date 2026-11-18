@@ -10,12 +10,10 @@
 @inject IStringLocalizer<Strings> Localizer
 @inject INotificationService NotificationService
 
-@inject GroupService GroupService
 @inject CargoService CargoService
 @inject OperatingDayService OperatingDayService
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
-@inject ModuleOwnershipService ModuleOwnershipService
 
 <PageHeading Label="FreightCustomers" Context="@Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" BackHref="@BackHref" />
 
@@ -57,7 +55,6 @@
     ClaimsPrincipal? Principal;
     Station? Station;
     IEnumerable<StationCustomer>? StationCustomers;
-    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
     bool MayEdit;
 
     protected override async Task OnInitializedAsync()
@@ -80,14 +77,8 @@
             if (Station is not null)
             {
                 StationCustomers = await StationCustomerService.AllAsync(Principal, StationId, CustomerId);
-                var ownership = await ModuleOwnershipService.GetModuleOwnershipAsync(Principal, Station.PrimaryModuleId, OwningPersonId, OwningGroupId);
-                if (ownership is not null)
-                {
-                    var countryId = ownership.Group is not null ? ownership.Group.CountryId : ownership.Person is not null ? ownership.Person.CountryId : 0;
-                    OwnershipRef = ownership.AsModuleOwnershipRef();
-                MayEdit = await Principal.MayEdit(OwnershipRef, GroupService, countryId);
-                    
-                }
+                // The same rule as when saving: the station's owners, their group's data administrators and administrators.
+                MayEdit = await StationCustomerService.MayEditAsync(Principal, StationId);
 
             }
         }

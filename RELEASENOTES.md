@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.10
+Released 2026-11-18
+- Security fix: only the owners of a station, their groups' data administrators and administrators can change or delete the station's freight customers and waybills. Before, any signed-in user could.
 ## Release 1.15.9
 Released 2026-11-18
 - My meetings opens faster.
