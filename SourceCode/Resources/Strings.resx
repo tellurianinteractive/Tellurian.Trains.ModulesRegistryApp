@@ -2622,4 +2622,7 @@
   <data name="YourArrivalTime" xml:space="preserve">
     <value>Your arrival time the first day</value>
   </data>
+  <data name="WorkInProgressNote" xml:space="preserve">
+    <value>Work is in progress on the app. Some features may not work as expected.</value>
+  </data>
 </root>

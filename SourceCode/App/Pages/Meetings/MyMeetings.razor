@@ -3,6 +3,8 @@
 @page "/Persons/{Id:int}/Meetings/InGroup/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.3): MeetingWithLayouts has only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject PersonService PersonService

@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.9
+Released 2026-11-18
+- My meetings opens faster.
+- The start page tells that work is in progress and that some features may not work as expected.
 ## Release 1.15.8
 Released 2026-11-18
 - Operation locations, and the operation locations of a person or group, open faster.

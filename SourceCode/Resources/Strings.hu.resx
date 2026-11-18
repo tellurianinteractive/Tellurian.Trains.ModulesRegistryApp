@@ -327,4 +327,7 @@
   <data name="YearsInOperation" xml:space="preserve">
     <value>Üzemeltetési évek</value>
   </data>
+  <data name="WorkInProgressNote" xml:space="preserve">
+    <value>Az alkalmazás fejlesztése folyamatban van. Előfordulhat, hogy egyes funkciók nem a várt módon működnek.</value>
+  </data>
 </root>

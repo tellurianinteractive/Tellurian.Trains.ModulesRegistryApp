@@ -62,6 +62,7 @@ public static class FontAwesome
     public const string Verify = "fa fa-check-square";
     public const string View = "fa fa-eye";
     public const string Wifi = "fa fa-wifi";
+    public const string Wrench = "fa fa-wrench";
 
     public readonly static IDictionary<string, string> ButtonIcons = new Dictionary<string, string>
         {

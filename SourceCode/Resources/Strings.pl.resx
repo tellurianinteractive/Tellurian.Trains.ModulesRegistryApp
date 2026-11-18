@@ -330,4 +330,7 @@
   <data name="YearsInOperation" xml:space="preserve">
     <value>Lata eksploatacji</value>
   </data>
+  <data name="WorkInProgressNote" xml:space="preserve">
+    <value>Trwają prace nad aplikacją. Niektóre funkcje mogą nie działać zgodnie z oczekiwaniami.</value>
+  </data>
 </root>
