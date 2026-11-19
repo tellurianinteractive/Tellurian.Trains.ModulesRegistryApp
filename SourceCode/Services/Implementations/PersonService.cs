@@ -119,6 +119,9 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
             // Corrected, not validated: names (capitals, ordinary text, a quoted nickname to its own field), email and loco addresses.
             entity.CorrectInput();
             using var dbContext = Factory.CreateDbContext();
+            // Checked in the database (Migration step 3.5): the same person registered twice, the same address for two users.
+            if (await dbContext.IsRegisteredAgainAsync(entity)) return Strings.PersonAlreadyExists.SaveResult(entity);
+            if (await dbContext.IsAnotherUsersSignInAddressAsync(entity)) return Strings.EmailAddressIsAnotherUsersSignIn.SaveResult(entity);
             if (entity.EmailAddresses.HasValue() && entity.User is not null)
             {
                 entity.User.EmailAddress = entity.EmailAddresses.FirstItem(delimiter: ';');

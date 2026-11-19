@@ -1356,6 +1356,12 @@
   <data name="Message" xml:space="preserve">
     <value>Meldung</value>
   </data>
+  <data name="PersonAlreadyExists" xml:space="preserve">
+    <value>Eine Person mit demselben Namen und Ort gibt es bereits.</value>
+  </data>
+  <data name="EmailAddressIsAnotherUsersSignIn" xml:space="preserve">
+    <value>Die erste E-Mail-Adresse ist bereits die Anmeldeadresse eines anderen Benutzers.</value>
+  </data>
   <data name="NickName" xml:space="preserve">
     <value>Spitzname</value>
   </data>

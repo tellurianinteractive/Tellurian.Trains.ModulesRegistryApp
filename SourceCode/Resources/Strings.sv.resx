@@ -1356,6 +1356,12 @@
   <data name="Message" xml:space="preserve">
     <value>Meddelande</value>
   </data>
+  <data name="PersonAlreadyExists" xml:space="preserve">
+    <value>Det finns redan en person med samma namn och ort.</value>
+  </data>
+  <data name="EmailAddressIsAnotherUsersSignIn" xml:space="preserve">
+    <value>Den första e-postadressen är redan en annan användares inloggningsadress.</value>
+  </data>
   <data name="NickName" xml:space="preserve">
     <value>Smeknamn</value>
   </data>

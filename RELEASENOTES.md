@@ -7,6 +7,7 @@ Released 2026-11-19
 - Names of stations, modules, freight customers, groups and meeting places are capitalised when saved, instead of refused.
 - Years of a period may be given in either order and 0 means not given; years up to 2100 are accepted.
 - Email and loco addresses, MAC addresses and colours are accepted in common notations and saved in a standard form.
+- A person can't be registered twice with the same name and city, and a person's first email address can't be another user's sign-in address.
 ## Release 1.15.14
 Released 2026-11-19
 - In the region form, typographic quotes, dashes and pasted spaces are accepted and corrected when saved; the browser checks name and description as you type, and refuses letters other than Latin ones.
