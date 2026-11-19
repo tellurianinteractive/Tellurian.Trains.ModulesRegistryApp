@@ -50,6 +50,18 @@ public sealed class FormValidationLocalizationTests
     }
 
     [TestMethod]
+    [DataRow("sv", "\"Upp till år\" måste vara ett år från 1900 till 2100, eller tomt")]
+    [DataRow("en", "\"Up to year\" must be a year from 1900 to 2100, or empty")]
+    public async Task CargoYearOutsideTheRangeIsLocalised(string language, string message)
+    {
+        var form = new ModulesRegistry.Forms.Cargos.CargoFormData { EN = "Coal", DE = "Kohle", DA = "Kul", SV = "Kol", NB = "Kull", UptoYear = 2101 };
+
+        var errors = await ValidateAsync(form, language);
+
+        CollectionAssert.AreEqual(new[] { message }, errors[nameof(form.UptoYear)]);
+    }
+
+    [TestMethod]
     public void AllDisplayNamesAndMessagesOfFormModelsAreResourceKeys()
     {
         var keys = ResourceKeys();

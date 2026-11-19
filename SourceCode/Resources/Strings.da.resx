@@ -2244,6 +2244,15 @@
   <data name="Straight" xml:space="preserve">
     <value>Lige</value>
   </data>
+  <data name="RangeAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være mellem {1} og {2}</value>
+  </data>
+  <data name="YearPeriodHint" xml:space="preserve">
+    <value>Lad et år stå tomt for ingen grænse; begge år er inkluderet.</value>
+  </data>
+  <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være et år fra 1900 til 2100 eller tomt</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" må højst have {1} tegn</value>
   </data>

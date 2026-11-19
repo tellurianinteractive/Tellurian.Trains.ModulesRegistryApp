@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Forms;
+using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,5 +26,30 @@ public sealed class OrdinaryTextAttribute : ValidationAttribute, IClientValidati
     public IEnumerable<ClientValidationRule> GetClientValidationRules()
     {
         yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>());
+    }
+}
+
+/// <summary>
+/// A year of a period (<see cref="YearPeriod"/>), or empty: from <see cref="Minimum"/> to <see cref="YearPeriod.MaxYear"/>. Zero or
+/// less is accepted, since it is saved as empty. Our own attribute instead of <c>[Range]</c>, since the browser gets no range rule
+/// for a nullable number (Migration step 3.6).
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class YearOrEmptyAttribute(int minimum = YearPeriod.MinYear) : ValidationAttribute, IClientValidationRuleProvider
+{
+    public const string ClientRuleName = "yearorempty";
+
+    public int Minimum { get; } = minimum;
+
+    public override bool IsValid(object? value) =>
+        value is null || (value is IConvertible && Convert.ToInt32(value, System.Globalization.CultureInfo.InvariantCulture) is var year && (year <= 0 || (year >= Minimum && year <= YearPeriod.MaxYear)));
+
+    public IEnumerable<ClientValidationRule> GetClientValidationRules()
+    {
+        yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>
+        {
+            ["min"] = Minimum.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["max"] = YearPeriod.MaxYear.ToString(System.Globalization.CultureInfo.InvariantCulture),
+        });
     }
 }

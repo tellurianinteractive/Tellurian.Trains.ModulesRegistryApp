@@ -136,14 +136,15 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
     {
         if (principal is null) return null;
         using var dbContext = Factory.CreateDbContext();
-        if (principal.IsGlobalOrCountryAdministrator()) return await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
+        if (principal.IsGlobalAdministrator()) return await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         return null;
     }
 
     public async Task<(int Count, string Message, Cargo? Entity)> SaveAsync(ClaimsPrincipal? principal, Cargo entity)
     {
+        // Cargo types are reference data shared by all countries: only global administrators change them (Migration step 3.6).
+        if (!principal.IsGlobalAdministrator()) return principal.SaveNotAuthorised<Cargo>();
         entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
-        if (principal is null) return principal.SaveNotAuthorised<Cargo>();
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Cargos.FindAsync(entity.Id).ConfigureAwait(false);
         if (existing is null)
@@ -164,7 +165,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
     }
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal is null) return principal.NotAuthorized<Cargo>();
+        if (!principal.IsGlobalAdministrator()) return principal.NotAuthorized<Cargo>();
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Cargos.FindAsync(id).ConfigureAwait(false);
         if (existing is null) return principal.NotFound();

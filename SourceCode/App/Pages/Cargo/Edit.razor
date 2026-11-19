@@ -1,79 +1,96 @@
 ﻿@page "/Cargo/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the region form: a POST of CargoFormData, validated with its DataAnnotations in the
+   browser and again on the server; the id comes from the address. After saving, a redirect to this form, which reads the cargo
+   back, so the user sees what was saved, including corrections; the result is a one-time message. A failed save shows the posted
+   values again with the message. *@
 
-@inject PageHistory PageHistory
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.Cargos
+
+@inject NavigationManager Navigator
 @inject CargoService CargoService
 
-<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="Id.ToAddOrEditPageAction()" BackHref="Cargo/Index" />
+<PageHeading ObjectName="Cargo" IconClass="@FontAwesome.Cargo" PageAction="@Id.ToAddOrEditPageAction()" BackHref="Cargo/Index" />
 
-<EditTemplate Item="Cargo" OnValidSubmit="OnValidSubmit">
+@if (FailureKey is not null)
+{
+    <ActionMessage Label="@FailureKey" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="cargo" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="12" Label="NHMCode" Items="NextLevelNhmCodeItems" @bind-Value="Cargo.NhmCode" ShowPleaseSelect="true" ItemHeight="60" />
+        <AppInputSelect Width="12" Label="NHMCode" Items="NhmCodeItems" @bind-Value="Form!.NhmCode" ShowPleaseSelect="true" />
 
-        <AppInputText Width="4" Label="DefaultClasses" @bind-Value="Cargo.DefaultClasses" />
-        <AppInputNumber Width="2" Label="FromYear" @bind-Value="Cargo.FromYear" />
-        <AppInputNumber Width="2" Label="ToYear" @bind-Value="Cargo.UptoYear" />
-        <AppInputCheck Width="2" Label="IsExpress" @bind-Value="Cargo.IsExpress" ></AppInputCheck>
-        <AppInputCheck Width="2" Label="IsCoolingRequired" @bind-Value="Cargo.IsCoolingRequired"></AppInputCheck>
+        <AppInputText Width="3" Label="DefaultClasses" @bind-Value="Form!.DefaultClasses" />
+        <AppInputNumber TValue="int?" Width="2" Label="FromYear" @bind-Value="Form!.FromYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" @bind-Value="Form!.UptoYear" />
+        <AppInputCheck Width="2" Label="IsExpress" @bind-Value="Form!.IsExpress" AlignWithFields="true" />
+        <AppInputCheck Width="3" Label="IsCoolingRequired" @bind-Value="Form!.IsCoolingRequired" AlignWithFields="true" />
+        <AppYearPeriodHint />
 
-        <AppInputText Width="4" Label="English" @bind-Value="Cargo.EN" />
-        <AppInputText Width="4" Label="German" @bind-Value="Cargo.DE" />
-        <AppInputText Width="4" Label="Dutch" @bind-Value="Cargo.NL" />
+        <AppInputText Width="4" Label="English" @bind-Value="Form!.EN" />
+        <AppInputText Width="4" Label="German" @bind-Value="Form!.DE" />
+        <AppInputText Width="4" Label="Dutch" @bind-Value="Form!.NL" />
 
-        <AppInputText Width="4" Label="French" @bind-Value="Cargo.FR" />
-        <AppInputText Width="4" Label="Italian" @bind-Value="Cargo.IT" />
-        <AppInputText Width="4" Label="Polish" @bind-Value="Cargo.PL" />
+        <AppInputText Width="4" Label="French" @bind-Value="Form!.FR" />
+        <AppInputText Width="4" Label="Italian" @bind-Value="Form!.IT" />
+        <AppInputText Width="4" Label="Polish" @bind-Value="Form!.PL" />
 
-        <AppInputText Width="4" Label="Danish" @bind-Value="Cargo.DA" />
-        <AppInputText Width="4" Label="Swedish" @bind-Value="Cargo.SV" />
-        <AppInputText Width="4" Label="Norwegian" @bind-Value="Cargo.NB" />
+        <AppInputText Width="4" Label="Danish" @bind-Value="Form!.DA" />
+        <AppInputText Width="4" Label="Swedish" @bind-Value="Form!.SV" />
+        <AppInputText Width="4" Label="Norwegian" @bind-Value="Form!.NB" />
     </Inputs>
 </EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "cargo")] private CargoFormData? Form { get; set; }
 
-    private ClaimsPrincipal? Principal;
+    ClaimsPrincipal? Principal;
+    Cargo? Existing;
+    IEnumerable<ListboxItem>? NhmCodeItems;
+    string? FailureKey;
 
-    Cargo Cargo = new Cargo();
-    IEnumerable<ListboxItem>? TopLevelNhmCodeItems;
-    IEnumerable<ListboxItem>? NextLevelNhmCodeItems;
-    int LastTopLevelId;
-
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        TopLevelNhmCodeItems = await CargoService.GetNhmItems(Principal);
-        NextLevelNhmCodeItems = await CargoService.GetNhmItems(Principal, 0);
+        // Cargo types are shared by all countries: only global administrators change them (CargoService).
+        if (!Principal.IsGlobalAdministrator())
+        {
+            Form = null;
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = await CargoService.FindByIdAsync(Principal, Id);
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Cargo()).AsFormData();
+        NhmCodeItems = await CargoService.GetNhmItems(Principal, 0);
     }
 
-    protected override async Task OnParametersSetAsync()
+    async Task SaveAsync()
     {
-        Cargo = Id > 0 ? await CargoService.FindByIdAsync(Principal, Id) ?? new Cargo() : new Cargo();
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded cargo (Migration section 3.4, the data-loss rule).
+        var cargo = Form.AsEntity(Existing);
+        var (count, _, _) = await CargoService.SaveAsync(Principal, cargo);
+        if (count == 0)
+        {
+            FailureKey = "SaveFailed";
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Cargo/{cargo.Id}/Edit");
     }
-
-    async Task OnValidSubmit()
-    {
-        if (Cargo is null) return;
-        var result = await CargoService.SaveAsync(Principal, Cargo);
-        if (result.Entity is not null)  Cargo = result.Entity;
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(1000);
-        PageHistory.NavigateBack("Cargo/Index"); // The list is static, so this page may have no history (Migration step 3.3).
-    }
-
-    async Task OnTopLevelNhmChanged(int id)
-    {
-
-        if (id > 0 && id != LastTopLevelId)
-            NextLevelNhmCodeItems = await CargoService.GetNhmItems(Principal, id);
-        LastTopLevelId = id;
-        //StateHasChanged();
-    }
-
-
 }

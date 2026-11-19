@@ -51,12 +51,23 @@
         return true;
     }
 
+    // As YearOrEmptyAttribute.IsValid (App).
+    function isYearOrEmpty(value, min, max) {
+        const text = (value || '').trim();
+        if (!text) return true;
+        if (!/^-?\d+$/.test(text)) return false;
+        const year = Number(text);
+        return year <= 0 || (year >= min && year <= max);
+    }
+
     const validators = {
         // [OrdinaryText]: valid when the text, as corrected when saving, is ordinary text. Empty is valid: [Required] decides.
-        ordinarytext: context => ({ success: !context.value || isOrdinaryText(asOrdinaryText(context.value)) })
+        ordinarytext: context => ({ success: !context.value || isOrdinaryText(asOrdinaryText(context.value)) }),
+        // [YearOrEmpty]: empty, zero or less (saved as empty), or a whole year from min to max.
+        yearorempty: context => ({ success: isYearOrEmpty(context.value, Number(context.params.min), Number(context.params.max)) })
     };
 
-    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, validators };
+    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isYearOrEmpty, validators };
 
     if (global.Blazor && global.Blazor.formValidation) {
         for (const name of Object.keys(validators)) global.Blazor.formValidation.addValidator(name, validators[name]);

@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<Strings> Localizer
+
+@* The hint beside the two year fields of a period (YearPeriod in Data, decided 2026-11-19): an empty year means no limit, and both
+   years are included; reversed years are swapped when saved. Only the hint: the year fields must be AppInputNumber directly in the
+   form, since the browser only gets the validation rules of inputs placed directly in the form, not inside another component
+   (Migration step 3.6). *@
+
+<div class="col-md-@Width form-text">@Localizer["YearPeriodHint"]</div>
+
+@code {
+    [Parameter] public int Width { get; set; } = 12;
+}

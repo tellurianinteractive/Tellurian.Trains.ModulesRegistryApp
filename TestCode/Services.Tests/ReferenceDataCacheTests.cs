@@ -20,6 +20,7 @@ public sealed class ReferenceDataCacheTests
     private SqliteDbContextFactory _factory = null!;
     private MemoryCache _cache = null!;
     private static readonly ClaimsPrincipal User = new(new ClaimsIdentity([new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString())], "Test"));
+    private static readonly ClaimsPrincipal Administrator = new(new ClaimsIdentity([new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString()), new Claim(AppClaimTypes.CountryId, "1"), new Claim(AppClaimTypes.GlobalAdministrator, "true")], "Test"));
 
     [TestInitialize]
     public async Task InitializeAsync()
@@ -85,7 +86,7 @@ public sealed class ReferenceDataCacheTests
             CultureInfo.CurrentCulture = new CultureInfo("en-GB");
             _ = await target.CargoListboxItemsAsync(User, includeDefaultClasses: false);
 
-            await target.SaveAsync(User, new Cargo { Id = 1, NhmCode = 1, EN = "Hard coal", DE = "Kohle" });
+            await target.SaveAsync(Administrator, new Cargo { Id = 1, NhmCode = 1, EN = "Hard coal", DE = "Kohle" });
             var items = await target.CargoListboxItemsAsync(User, includeDefaultClasses: false);
 
             Assert.Contains("Hard coal", items.Single().Description);

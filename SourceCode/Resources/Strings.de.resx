@@ -2244,6 +2244,15 @@
   <data name="Straight" xml:space="preserve">
     <value>Gerade</value>
   </data>
+  <data name="RangeAttribute_Error" xml:space="preserve">
+    <value>"{0}" muss zwischen {1} und {2} liegen</value>
+  </data>
+  <data name="YearPeriodHint" xml:space="preserve">
+    <value>Ein leeres Jahr bedeutet keine Grenze; beide Jahre sind eingeschlossen.</value>
+  </data>
+  <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" muss ein Jahr von 1900 bis 2100 sein oder leer</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" darf höchstens {1} Zeichen haben</value>
   </data>

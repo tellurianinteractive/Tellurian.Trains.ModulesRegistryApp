@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.18
+Released 2026-11-19
+- Security fix: cargo types can only be changed by global administrators.
+- The cargo form checks the entries as you type and stays open after saving; typographic quotes in the names are corrected, and the years of a period may be left empty.
+- An emptied number field is saved as empty, not as 0.
 ## Release 1.15.17
 Released 2026-11-19
 - Signing in and resetting a password work also when an old, unused account has the same email address.

@@ -69,6 +69,26 @@ public sealed class FormValidationScriptTests
         Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{OrdinaryTextAttribute.ClientRuleName}({{ value: {Js(input)} }}).success").AsBoolean(), "JavaScript");
     }
 
+    // A year as typed, and whether [YearOrEmpty] accepts it (the C# value is the posted int?, or no number).
+    public static IEnumerable<object?[]> YearValues =>
+    [
+        [null, true], ["", true], ["0", true], ["-5", true], ["1900", true], ["2100", true], ["1965", true],
+        ["1899", false], ["2101", false], ["19650", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(YearValues))]
+    public void YearOrEmptyIsTheSame(string? typed, bool valid)
+    {
+        int? year = typed is { Length: > 0 } ? int.Parse(typed, System.Globalization.CultureInfo.InvariantCulture) : null;
+        Assert.AreEqual(valid, new YearOrEmptyAttribute().IsValid(year), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{YearOrEmptyAttribute.ClientRuleName}({{ value: {Js(typed)}, params: {{ min: '1900', max: '2100' }} }}).success").AsBoolean(), "JavaScript");
+    }
+
+    [TestMethod]
+    public void TheJavaScriptRefusesWhatIsNoWholeNumber() =>
+        Assert.IsFalse(Script.Evaluate("modulesRegistryValidation.isYearOrEmpty('19.5', 1900, 2100)").AsBoolean());
+
     [TestMethod]
     public void TheAttributeEmitsTheRuleTheScriptRegisters()
     {
@@ -79,5 +99,6 @@ public sealed class FormValidationScriptTests
         engine.Execute(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Forms", "form-validation.js")));
 
         CollectionAssert.Contains(registered, new OrdinaryTextAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new YearOrEmptyAttribute().GetClientValidationRules().Single().Name);
     }
 }

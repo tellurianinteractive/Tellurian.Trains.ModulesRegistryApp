@@ -69,7 +69,21 @@ public static class EntityCorrectionExtensions
 
     extension(Cargo cargo)
     {
-        public void CorrectInput() => (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
+        public void CorrectInput()
+        {
+            (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
+            cargo.DefaultClasses = cargo.DefaultClasses.AsOrdinaryText().OrNullIfEmpty;
+            // Required names stay text; optional ones are null when empty.
+            cargo.EN = cargo.EN.AsOrdinaryText();
+            cargo.DE = cargo.DE.AsOrdinaryText();
+            cargo.DA = cargo.DA.AsOrdinaryText();
+            cargo.SV = cargo.SV.AsOrdinaryText();
+            cargo.NB = cargo.NB.AsOrdinaryText();
+            cargo.NL = cargo.NL.AsOrdinaryText().OrNullIfEmpty;
+            cargo.FR = cargo.FR.AsOrdinaryText().OrNullIfEmpty;
+            cargo.IT = cargo.IT.AsOrdinaryText().OrNullIfEmpty;
+            cargo.PL = cargo.PL.AsOrdinaryText().OrNullIfEmpty;
+        }
     }
 
     extension(Module module)

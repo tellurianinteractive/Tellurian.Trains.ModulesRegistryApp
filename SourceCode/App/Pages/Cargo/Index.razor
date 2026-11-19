@@ -77,7 +77,7 @@
     protected async override Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        MayEdit = Principal.IsGlobalOrCountryAdministrator();
+        MayEdit = Principal.IsGlobalAdministrator(); // Cargo types are shared by all countries (CargoService).
         Cargos = (await CargoService.GetAll()).OrderBy(c => c.NhmCode);
     }
 }
