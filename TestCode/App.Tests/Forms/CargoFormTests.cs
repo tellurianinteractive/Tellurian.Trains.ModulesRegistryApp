@@ -13,7 +13,7 @@ public sealed class CargoFormTests
     private static Cargo Existing() => new()
     {
         Id = 4, NhmCode = 44, DefaultClasses = "Fals", FromYear = 1950, UptoYear = 1990, IsExpress = true, IsCoolingRequired = false,
-        EN = "Coal", DE = "Kohle", NL = "Steenkool", FR = "Charbon", IT = "Carbone", PL = "W\u0119giel", DA = "Kul", SV = "Kol", NB = "Kull",
+        EN = "Coal", DE = "Kohle", NL = "Steenkool", FR = "Charbon", IT = "Carbone", PL = "Węgiel", DA = "Kul", SV = "Kol", NB = "Kull",
     };
 
     private static CargoFormData ValidForm() => Existing().AsFormData();
@@ -52,7 +52,7 @@ public sealed class CargoFormTests
     public void OptionalNamesMayBeEmpty() => Assert.IsEmpty(InvalidMembers(Change(f => { f.FR = null; f.NL = null; f.IT = null; f.PL = null; f.DefaultClasses = null; })));
 
     [TestMethod]
-    public void NamesAreOrdinaryText() => AssertInvalid(f => f.IT = "\u0423\u0433\u043E\u043B\u044C", nameof(CargoFormData.IT));
+    public void NamesAreOrdinaryText() => AssertInvalid(f => f.IT = "Уголь", nameof(CargoFormData.IT));
 
     [TestMethod]
     public void TypographicQuotesAreAcceptedSinceTheyAreCorrected() => Assert.IsEmpty(InvalidMembers(Change(f => f.EN = "\u201CCoal\u201D")));

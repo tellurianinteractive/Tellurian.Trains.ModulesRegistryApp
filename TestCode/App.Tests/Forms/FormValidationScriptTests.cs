@@ -50,7 +50,7 @@ public sealed class FormValidationScriptTests
         ["STRAẞE", "STRAẞE", true],
         ["1º piano, 2ª", "1º piano, 2ª", true],
         ["Łódź, Žilina, Hőmérséklet, Œuvre, IJmuiden", "Łódź, Žilina, Hőmérséklet, Œuvre, IJmuiden", true],
-        ["Gro\u00DFe \u201EStra\u00DFe\u201C", "Große \"Straße\"", true],
+        ["Große \u201EStraße\u201C", "Große \"Straße\"", true],
     ];
 
     [TestMethod]
