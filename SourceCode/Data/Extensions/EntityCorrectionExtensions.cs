@@ -73,16 +73,19 @@ public static class EntityCorrectionExtensions
         {
             (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
             cargo.DefaultClasses = cargo.DefaultClasses.AsOrdinaryText().OrNullIfEmpty;
-            // Required names stay text; optional ones are null when empty.
-            cargo.EN = cargo.EN.AsOrdinaryText();
-            cargo.DE = cargo.DE.AsOrdinaryText();
-            cargo.DA = cargo.DA.AsOrdinaryText();
-            cargo.SV = cargo.SV.AsOrdinaryText();
-            cargo.NB = cargo.NB.AsOrdinaryText();
-            cargo.NL = cargo.NL.AsOrdinaryText().OrNullIfEmpty;
-            cargo.FR = cargo.FR.AsOrdinaryText().OrNullIfEmpty;
-            cargo.IT = cargo.IT.AsOrdinaryText().OrNullIfEmpty;
-            cargo.PL = cargo.PL.AsOrdinaryText().OrNullIfEmpty;
+            // The names in every language begin with a capital, the rest as typed ("General cargo", "Stückgut");
+            // required names stay text, optional ones are null when empty.
+            cargo.EN = Name(cargo.EN);
+            cargo.DE = Name(cargo.DE);
+            cargo.DA = Name(cargo.DA);
+            cargo.SV = Name(cargo.SV);
+            cargo.NB = Name(cargo.NB);
+            cargo.NL = Name(cargo.NL).OrNullIfEmpty;
+            cargo.FR = Name(cargo.FR).OrNullIfEmpty;
+            cargo.IT = Name(cargo.IT).OrNullIfEmpty;
+            cargo.PL = Name(cargo.PL).OrNullIfEmpty;
+
+            static string? Name(string? name) => name.AsOrdinaryText().AsCapitalizedName(NameStyle.FirstLetter);
         }
     }
 

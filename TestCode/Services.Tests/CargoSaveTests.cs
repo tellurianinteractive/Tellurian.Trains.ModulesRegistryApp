@@ -60,13 +60,18 @@ public sealed class CargoSaveTests
         var result = await target.SaveAsync(GlobalAdministrator, new Cargo
         {
             NhmCode = 1,
-            EN = "\u201CWood\u201D \u2013 logs", DE = "  Holz  ", DA = "Tr\u00E6", SV = "Tr\u00E4", NB = "Tre",
-            FR = " ", DefaultClasses = "", FromYear = 1990, UptoYear = 1950,
+            EN = "\u201CWood\u201D \u2013 logs", DE = "  holz  ", DA = "tr\u00E6", SV = "tr\u00E4 och massa", NB = "Tre",
+            FR = " ", PL = "drewno", IT = "legname", NL = "hout", DefaultClasses = "", FromYear = 1990, UptoYear = 1950,
         });
 
         var saved = (await _factory.FindAsync<Cargo>(result.Entity!.Id))!;
         Assert.AreEqual("\"Wood\" - logs", saved.EN);
-        Assert.AreEqual("Holz", saved.DE);
+        Assert.AreEqual("Holz", saved.DE, "Trimmed and capitalised.");
+        Assert.AreEqual("Tr\u00E6", saved.DA);
+        Assert.AreEqual("Tr\u00E4 och massa", saved.SV, "Only the first letter: the rest as typed.");
+        Assert.AreEqual("Drewno", saved.PL);
+        Assert.AreEqual("Legname", saved.IT);
+        Assert.AreEqual("Hout", saved.NL);
         Assert.IsNull(saved.FR, "An empty optional name is saved as empty.");
         Assert.IsNull(saved.DefaultClasses);
         Assert.AreEqual((short)1950, saved.FromYear, "Reversed years are swapped.");
