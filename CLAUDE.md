@@ -111,6 +111,6 @@ Starting the app requires the SQL Server database (local copy or dev access to p
 
 ## Local NuGet Development
 
-This repo consumes `Tellurian.Localization`, which may come from the local feed `C:\NuGets` during development. When iterating on that library locally (repo `Tellurian/Tellurian.Localization`), bump this repo's `<PackageReference Version="..." />` (in `Resources.csproj` and `Services.csproj`) to the library's local patch version. CI will reject any local-only version with NU1101: the library must be published to nuget.org before the app can ship with its changes.
+This repo consumes `Tellurian.Localization` and `Tellurian.Utilities`, which may come from the local feed `C:\NuGets` during development. When iterating on those libraries locally (repos `Tellurian/Tellurian.Localization` and `Tellurian/Tellurian.Utilities`), bump this repo's `<PackageReference Version="..." />` (Localization: `Resources.csproj` and `Services.csproj`; Utilities: `Data.csproj`) to the library's local patch version. CI will reject any local-only version with NU1101: the library must be published to nuget.org before the app can ship with its changes.
 
 Full workflow: user-level `local-nuget-development` skill.
