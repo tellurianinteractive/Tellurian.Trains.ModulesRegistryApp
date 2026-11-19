@@ -1,6 +1,5 @@
 ﻿#nullable disable
 
-using FluentValidation.Validators;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
