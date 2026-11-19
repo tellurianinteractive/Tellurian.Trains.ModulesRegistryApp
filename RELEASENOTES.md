@@ -2,7 +2,7 @@
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.15.17
-Released 2026-11-20
+Released 2026-11-19
 - Signing in and resetting a password work also when an old, unused account has the same email address.
 - Region colours are chosen from coloured swatches, also in Safari, and are the standard web colours; a region's earlier shade becomes the standard colour of its name when it is saved.
 ## Release 1.15.16
