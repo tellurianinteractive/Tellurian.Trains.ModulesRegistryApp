@@ -11,15 +11,15 @@ Träffen kan markeras som intern i gruppen och är då endast synligt för inlog
 - **Träffarrangörer** kan hantera allt i träffen: dess uppgifter, banor, alla deltagare och deras moduler, även efter att anmälan har stängt.
 De kan också ta bort träffen så länge ingen är anmäld till någon bana.
 Träffarrangörer är *globala administratörer*, *landsadministratörer* i den arrangerande gruppens land
-och medlemmar med *mötesadministratörsrättigheter* i den arrangerande gruppen.
-- **Mötesadministratörer i en banas ansvariga grupp** kan hantera sin egen bana, dess deltagare och deras moduler,
+och medlemmar med *träffadministratörsrättigheter* i den arrangerande gruppen.
+- **Träffadministratörer i en banas ansvariga grupp** kan hantera sin egen bana, dess deltagare och deras moduler,
 och kan anmäla och avanmäla deltagare till träffen.
 - **Deltagare** kan ändra sin egen anmälan så länge anmälan är öppen.
 
 Träffarrangörer och banadministratörer kan anmäla personer från alla länder.
 ### Banor
 En *bana* är en komplett uppsättning spår som drivs som en enhet och separat från andra banor.
-Du kan lägga till valfritt antal banor till ett möte.
+Du kan lägga till valfritt antal banor till en träff.
 Varje bana kan ha en ansvarig grupp, som skiljer sig från träffens arrangörsgrupp.
 
 Du kan tillåta användare att registrera moduler till en bana och första och sista datum då registreringen är öppen.

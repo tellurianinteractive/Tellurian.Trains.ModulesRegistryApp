@@ -5,11 +5,11 @@ Fraktsedlar kan skapas på två sätt:
 
 Det kan finnas flera anledningar till att inga fraktsedlar visas för utskrift för stationen.
 ## Fraktsedlar för en träff
-Mötesfraktsedlar är interna frakter mellan moduler som finns i banan:
+Träffens fraktsedlar är interna frakter mellan moduler som finns i banan:
 - Stationen måste tilldelas en *region*.
 - Stationen ska vara registrerad på den aktuella banan.
 - Stationen ska ha fraktkunder som *tar emot* varor som andra layoutstationer skickar. Observera att du inte får fraktsedlar för varor du *skickar*.
-- Om varukunderna och/eller varuflödet har start- och/eller slutdatum ska giltigheten falla inom mötets tidsperiod.
+- Om varukunderna och/eller varuflödet har start- och/eller slutdatum ska giltigheten falla inom träffens tidsperiod.
 
 ## Återanvändbara fraktsedlar
 Det här är fraktsedelar du skapar för din station och som kan återanvändas på flera modulträffar:

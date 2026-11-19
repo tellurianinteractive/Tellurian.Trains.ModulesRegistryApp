@@ -10,7 +10,7 @@ Det första (eller enda) e-epostadressen används när du skickar en inbjudan.
 - **Bosättningsland**, valt från en lista över länder som stöds.
 - **FREMO Ägarsignatur** används som prefix för modulidentitet. Inte obligatoriskt.
 - **FREMO reserverade lokadresser** är de lokadresser som FREMO har reserverat för dig. Inte obligatoriskt.
-Dessa adresser kommer automatiskt att reserveras för personen vid omprövning för en möteslayout.
+Dessa adresser kommer automatiskt att reserveras för personen vid anmälan till en bana på en träff.
   > **OBS** Du får endast registrera reserverade lokadresser om FREMO har reserverat dem åt dig.
   > Under inga andra omständigheter ska du ange lokadresser här, till exempel om du lånar en lokadress av
   > en person som tillåter dig att använda hans/hennes adress under en viss tid.

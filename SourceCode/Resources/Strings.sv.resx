@@ -1105,7 +1105,7 @@
     <value>Är bemannad?</value>
   </data>
   <data name="IsMeetingAdministrator" xml:space="preserve">
-    <value>Är träffadministratïr</value>
+    <value>Är träffadministratör</value>
   </data>
   <data name="IsOnlyOwner" xml:space="preserve">
     <value>Är den enda ägaren?</value>
@@ -1324,7 +1324,7 @@
     <value>Träffdatum kan inte ändras</value>
   </data>
   <data name="MeetingDoesAcceptRegistrations" xml:space="preserve">
-    <value>Mötesarrangören tar inte emot anmälningar här.</value>
+    <value>Träffarrangören tar inte emot anmälningar här.</value>
   </data>
   <data name="MeetingIsClosedForRegistration" xml:space="preserve">
     <value>Träffen är stängd för anmälan</value>
@@ -1375,7 +1375,7 @@
     <value>Moduländprofiler</value>
   </data>
   <data name="ModuleIsRegisteredForUpcomingMeeting" xml:space="preserve">
-    <value>Modulen är registrerad för kommande möte</value>
+    <value>Modulen är registrerad för kommande träff</value>
   </data>
   <data name="ModuleMeeting" xml:space="preserve">
     <value>Modulträff</value>

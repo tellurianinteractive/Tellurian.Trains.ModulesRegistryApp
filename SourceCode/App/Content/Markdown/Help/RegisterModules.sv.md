@@ -14,7 +14,7 @@ så länge de inte är tilldelade en *position* i banan eller har noteringen *ta
 Om du behöver ändra eller dra tillbaka moduler efter att registreringen är stängd,
 du måste kontakta den som ansvarar för planeringen av banan.
 
-#### Som mötesarrangör
-Träffarrangörerna och mötesadministratörerna i den grupp som ansvarar för banan kan registrera och avboka moduler även efter att registreringen är stängd.
+#### Som träffarrangör
+Träffarrangörerna och träffadministratörerna i den grupp som ansvarar för banan kan registrera och avboka moduler även efter att registreringen är stängd.
 
 

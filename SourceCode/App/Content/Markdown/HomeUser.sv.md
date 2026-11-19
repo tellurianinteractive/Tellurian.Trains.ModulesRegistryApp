@@ -2,7 +2,7 @@
 De flesta formulär har hjälptexter som hjälper dig att fylla i data. 
 Klicka bara på *frågetecken* i sidans övre vänstra hörn.
 
-#### Planera dina modulmöten med Modulregistret
+#### Planera dina modulträffar med Modulregistret
 
 Som *gruppadministratör* kan du
 - du kan lägga till och underhålla alla gruppmedlemmars moduler.

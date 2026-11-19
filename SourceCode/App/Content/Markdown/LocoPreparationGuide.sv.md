@@ -30,7 +30,7 @@ Ett lok som hoppar iväg är inte kul att köra.
 * Om ditt lok har slirskydd, kontrollera att de är okej. 
 Lok med hjul avsedda för slirskydd kommer inte att fungera bra utan dessa.
 * Testa dina lok före träffen genom att köra dem på en bana, inte bara i en provbädd.
-* Om ditt lok går sönder träffen mötet finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
+* Om ditt lok går sönder under träffen finns det förhoppningsvis någon som kan tillhandahålla ett reservlok. Så ta med lite extra lok.
 
 För H0-lok:
 - Hjul [NEM 310](https://www.morop.eu/images/NEM_register/NEM_E/nem310_en_2009_20111116.pdf) bör betraktas som ett minimikrav,

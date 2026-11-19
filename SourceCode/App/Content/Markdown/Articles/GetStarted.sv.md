@@ -72,6 +72,6 @@ Uppgifterna du anger används sedan för att skapa matchande fraktsedlar med fra
 
 ### Registrera dig till en modulträff
 Du kan välja en modulträff och anmäla ditt deltagande och valfritt även registrera några eller alla
-av dina moduler till en bana som mötesarrangören förväntar sig att bygga.
+av dina moduler till en bana som träffarrangören förväntar sig att bygga.
 Du kan också skapa fraktsedlar specifika för banan.
 Dessa fraktsedlar är endast internfrakter specifika för träffeb och kan vara ett komplement till dina andra fraktsedlar.

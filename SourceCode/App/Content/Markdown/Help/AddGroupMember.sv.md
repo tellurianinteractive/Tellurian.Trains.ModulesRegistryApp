@@ -2,7 +2,7 @@
 **NOTERA**
 
 **Syftet med en grupp *är alla personer som vill administrera data om moduler tillsammans*.
-En grupp kan också vara *mötesarrangör*.
+En grupp kan också vara *träffarrangör*.
 Så du bör bara lägga till personer av dessa skäl.**
 
 **En grupp är *inte* ett allmänt klubbmedlemregister och får inte användas för det ändamålet.**

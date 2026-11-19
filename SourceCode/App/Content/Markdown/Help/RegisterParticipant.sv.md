@@ -12,8 +12,8 @@ If you bring modules, usually you must attend all days.
 
 > NOTE: You cannot cancel your participation her, you must contact the organiser and ask them to cancel your participation.
 
-#### Som mötesarrangör
-Om du är träffarrangör, eller mötesadministratör i en grupp som ansvarar för en bana, kan du
+#### Som träffarrangör
+Om du är träffarrangör, eller träffadministratör i en grupp som ansvarar för en bana, kan du
 anmäla vilken *person* som helst från alla länder till träffen, även efter att anmälan har stängt.
 Banadministratörer kan bara anmäla deltagare till sin egen bana.
 När du har valt en person följer du samma steg som ovan.

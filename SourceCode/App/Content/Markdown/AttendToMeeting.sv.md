@@ -7,6 +7,6 @@ Om du inte har ett användarkonto finns det två alternativ:
 1. Skaffa ett användarkonto. Du måste kontakta din landsadministratör för att få en inbjudan att bli användare.
 När du väl är en användare kommer du att kunna registrera dig själv och eventuellt några eller alla dina moduler.
 2. Be kontaktpersonen för banan du tänker besöka att ordna registreringen åt dig.
-Träffens eller banans mötesadministratörer kan registrera dig och eventuellt några eller alla dina moduler,
+Träffens eller banans träffadministratörer kan registrera dig och eventuellt några eller alla dina moduler,
 även efter att anmälan är stängd.
 

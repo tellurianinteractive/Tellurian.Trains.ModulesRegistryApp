@@ -4,7 +4,7 @@ också med deltagare från flera länder i Europa.
 
 Huvudfunktionerna är att hålla ett register över alla *modelljärnvägsmoduler*,
 inklusive alla detaljer som behövs för planering av banor och tidtabeller,
-samt mötesplanering med anmälan av moduler.
+samt träffplanering med anmälan av moduler.
 
 #### Avsedda användare
 Alla som är intresserade av att underhålla strukturerad data om *modelljärnvägsmoduler*

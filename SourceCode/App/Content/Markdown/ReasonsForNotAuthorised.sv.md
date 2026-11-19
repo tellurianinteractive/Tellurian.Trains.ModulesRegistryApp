@@ -4,7 +4,7 @@ Du är inte behörig att visa den här sidan. Den här sidan kräver ytterligare
 ### Administratörsroller
 - **Administrera gruppmedlemmar och deras rättigheter** kräver *gruppadministratörsrättigheter* för den specifika gruppen.
 - **Hantera grupper och gruppmedlemsmoduler** kräver *dataadministratörsrättigheter* för den specifika gruppen.
-- **Hantera möten** som gruppen arrangerar kräver *mötesadministratörsrättigheter* för den specifika gruppen. **Hantera en bana** på en träff kräver *mötesadministratörsrättigheter* i banans ansvariga grupp. Landsadministratörer kan hantera träffar som arrangeras av grupper i det egna landet.
+- **Hantera träffar** som gruppen arrangerar kräver *träffadministratörsrättigheter* för den specifika gruppen. **Hantera en bana** på en träff kräver *träffadministratörsrättigheter* i banans ansvariga grupp. Landsadministratörer kan hantera träffar som arrangeras av grupper i det egna landet.
 - **Hantera personer/användare** kräver *landsadministratörsrättigheter* eller *globala administratörsrättigheter*.
 - **API-dataåtkomst** kräver särskild åtkomst och en *API-nyckel*.
 - **Verifiering av WiFreds** kräver särskild åtkomst.
