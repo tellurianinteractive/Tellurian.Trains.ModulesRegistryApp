@@ -63,6 +63,7 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("D'Alessandro", "D'Alessandro")]
     [DataRow("o'brien", "O'Brien")]
     [DataRow("mcdonald", "McDonald")]
+    [DataRow("\"svensson\"", "\"Svensson\"")]
     [DataRow("MCDONALD", "McDonald")]
     [DataRow("Mackenzie", "Mackenzie")]
     [DataRow("MacKenzie", "MacKenzie")]
@@ -107,6 +108,11 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("newcastle-under-lyme", "Newcastle-under-Lyme")]
     [DataRow("wells-next-the-sea", "Wells-next-the-Sea")]
     [DataRow("mcallen", "McAllen")]
+    [DataRow("'t harde", "'t Harde")]
+    [DataRow("horten/jæren", "Horten/Jæren")]
+    [DataRow("Hallen/Åre", "Hallen/Åre")]
+    [DataRow("upplands.väsby", "Upplands.Väsby")]
+    [DataRow("s:t eriks", "S:t Eriks")]
     public void PlaceNamesInTheAppsCountries(string name, string expected) => Assert.AreEqual(expected, name.AsCapitalizedName(NameStyle.AllWords));
 
     [TestMethod]
@@ -124,6 +130,8 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("modeltog a/s", "Modeltog A/S")]
     [DataRow("trains ltd", "Trains Ltd")]
     [DataRow("SNCF Réseau", "SNCF Réseau")]
+    [DataRow("KdMJK göteborg", "KdMJK Göteborg")]
+    [DataRow("MjBV", "MjBV")]
     public void Organisation(string name, string expected) => Assert.AreEqual(expected, name.AsCapitalizedName(NameStyle.Organisation));
 
     [TestMethod]

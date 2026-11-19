@@ -81,6 +81,10 @@ public static partial class NameCapitalizationExtensions
             _ => false,
         };
         if (isException) return word.ToLowerInvariant();
+        // Dutch "'s" and "'t" are lower case: "'s-Hertogenbosch", "'t Harde".
+        if (word.Length == 2 && word[0] is '\'' or '’' && word[1] is 's' or 'S' or 't' or 'T') return word.ToLowerInvariant();
+        // An abbreviation in an organisation's name, such as "KdMJK" or "MjBV", is kept as typed.
+        if (style == NameStyle.Organisation && word.Count(char.IsUpper) >= 2) return word;
 
         var apostrophe = word.IndexOfAny(['\'', '’']);
         if (apostrophe > 0 && apostrophe < word.Length - 1)
@@ -100,9 +104,15 @@ public static partial class NameCapitalizationExtensions
         return WordCapitalized(word);
     }
 
-    /// <summary>Capitals inside a word are kept only in a name form ("McDonald", "DiCaprio"); jumbled ones ("SÖdeR") are not.</summary>
+    /// <summary>
+    /// Each run of letters in the word gets its capital ("Horten/Jæren", a name in quotation marks); capitals inside a run are kept
+    /// only in a name form ("McDonald", "DiCaprio"), jumbled ones ("SÖdeR") are not. A colon belongs to the run, as in "S:t".
+    /// </summary>
     private static string WordCapitalized(string word) =>
-        WithFirstCapital(word.Any(char.IsLower) && !NameForm().IsMatch(word) ? word.ToLowerInvariant() : word);
+        LetterRun().Replace(word, run => WithFirstCapital(run.Value.Any(char.IsLower) && !NameForm().IsMatch(run.Value) ? run.Value.ToLowerInvariant() : run.Value));
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"\p{L}[\p{L}'’:]*")]
+    private static partial System.Text.RegularExpressions.Regex LetterRun();
 
     /// <summary>The first letter as a capital, and a Dutch "ij" at the start as "IJ" ("IJmuiden", "IJsselstein").</summary>
     private static string WithFirstCapital(string text)
