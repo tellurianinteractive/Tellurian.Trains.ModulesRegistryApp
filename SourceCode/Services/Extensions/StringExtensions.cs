@@ -20,9 +20,6 @@ public static partial class StringExtensions
 
 
 
-    public static string? ValueOrNull(this string? value) =>
-        string.IsNullOrWhiteSpace(value) ? null : value;
-
     [GeneratedRegex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]
     private static partial Regex EmailRegex();
 

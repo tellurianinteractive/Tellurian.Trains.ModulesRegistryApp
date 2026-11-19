@@ -6,7 +6,7 @@ namespace ModulesRegistry.Data.Extensions;
 
 /// <summary>
 /// The app's own string helpers that Tellurian.Utilities doesn't have; prefer the package's (HasValue, IsEmpty, OrEmpty, ToItems,
-/// IsAnyOf, ...). <see cref="HasValueExcept"/> compares case-insensitively against several values, unlike the package's on object.
+/// IsAnyOf, ...).
 /// </summary>
 public static class StringExtensions
 {
@@ -16,9 +16,6 @@ public static class StringExtensions
     public static bool StartsWithCaseInsensitive(this string? value, string? start) =>
         value is null || start.IsEmpty || start.Length > 0 && value.StartsWith(start, StringComparison.OrdinalIgnoreCase);
 
-    public static bool HasValueExcept([NotNullWhen(true)] this string? value, params string[] except) =>
-        except is not null ? !string.IsNullOrEmpty(value) && !except.Contains(value, StringComparer.OrdinalIgnoreCase) :
-        !string.IsNullOrWhiteSpace(value);
 
     public static string ToFirstLowerInvariant(this string? value) =>
         string.IsNullOrWhiteSpace(value) ? string.Empty :

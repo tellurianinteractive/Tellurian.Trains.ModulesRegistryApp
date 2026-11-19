@@ -115,16 +115,16 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
 
         entity.StationId = stationId;
         entity.TrackOrAreaColor = entity.TrackOrAreaColor?.ToLowerInvariant();
-        entity.TrackOrArea = entity.TrackOrArea.ValueOrNull();
+        entity.TrackOrArea = entity.TrackOrArea.OrNullIfEmpty;
         if (entity.Cargos is not null)
         {
             foreach (var cargo in entity.Cargos)
             {
                 // Only the customer's own cargo flows are updated; any other id is a new cargo flow.
                 cargo.Id = existing?.Cargos.Any(c => c.Id == cargo.Id) == true ? cargo.Id : 0;
-                cargo.TrackOrArea = cargo.TrackOrArea.ValueOrNull();
-                cargo.SpecialCargoName = cargo.SpecialCargoName.ValueOrNull();
-                cargo.SpecificWagonClass = cargo.SpecificWagonClass.ValueOrNull();
+                cargo.TrackOrArea = cargo.TrackOrArea.OrNullIfEmpty;
+                cargo.SpecialCargoName = cargo.SpecialCargoName.OrNullIfEmpty;
+                cargo.SpecificWagonClass = cargo.SpecificWagonClass.OrNullIfEmpty;
             }
         }
         return existing is null ?

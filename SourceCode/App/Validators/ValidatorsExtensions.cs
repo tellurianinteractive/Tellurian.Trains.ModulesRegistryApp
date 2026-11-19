@@ -22,11 +22,11 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, string> MustBeOrdinaryText<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
 
-    /// <summary>Loco addresses, after the correction when saving (<see cref="InputCorrectionExtensions.AsLocoAddresses"/>).</summary>
+    /// <summary>Loco addresses, after the correction when saving (<see cref="LocoAddressExtensions.AsLocoAddresses"/>).</summary>
     public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsLocoAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
 
-    /// <summary>Email addresses, after the correction when saving (<see cref="InputCorrectionExtensions.AsEmailAddresses"/>).</summary>
+    /// <summary>Email addresses, after the correction when saving (<c>AsEmailAddresses</c>).</summary>
     public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsEmailAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
 
@@ -56,11 +56,11 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, short?> MustBeYearOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer, int minimum = YearPeriod.MinYear) =>
         builder.Must(year => year.IsYearOrEmpty(minimum)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, minimum, YearPeriod.MaxYear)}");
 
-    /// <summary>A colour, after the correction when saving (<see cref="InputCorrectionExtensions.AsHexColor"/>): "f80" is accepted.</summary>
+    /// <summary>A colour, after the correction when saving (<c>NormalizedHexColor</c>): "f80" and colour names are accepted.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value is null || value.AsHexColor().IsHexColor).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
+        builder.Must(value => value is null || value.IsKnownColor).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
 
-    /// <summary>A MAC address, after the correction when saving (<see cref="InputCorrectionExtensions.AsMacAddress"/>): any common notation.</summary>
+    /// <summary>A MAC address, after the correction when saving (<c>AsMacAddress</c>): any common notation.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsMacAddressWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAMacAddress"].Value}");
 
@@ -75,7 +75,7 @@ public static partial class ValidatorsExtensions
 
         internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
 
-        internal bool IsMacAddressWhenCorrected() => value.AsMacAddress() is { } address && MacAddressRegex().IsMatch(address);
+        internal bool IsMacAddressWhenCorrected() => value.AsMacAddress().IsMacAddress;
     }
 
     extension(short? year)
@@ -86,6 +86,4 @@ public static partial class ValidatorsExtensions
     [GeneratedRegex("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
     private static partial Regex EmailRegex();
 
-    [GeneratedRegex("^([0-9A-F]{2}:){5}[0-9A-F]{2}$")]
-    private static partial Regex MacAddressRegex();
 }

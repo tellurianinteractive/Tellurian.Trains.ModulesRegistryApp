@@ -61,8 +61,8 @@ public static partial class PersonExtensions
         person.FirstName = MovedNickName(person, person.FirstName, required: true);
         person.LastName = MovedNickName(person, person.LastName, required: true);
         person.FirstName = person.FirstName.AsCapitalizedName(NameStyle.GivenName);
-        person.NickName = person.NickName.AsCapitalizedName(NameStyle.GivenName).AsNullIfEmpty();
-        person.MiddleName = person.MiddleName.AsCapitalizedName(NameStyle.FamilyName).AsNullIfEmpty();
+        person.NickName = person.NickName.AsCapitalizedName(NameStyle.GivenName).OrNullIfEmpty;
+        person.MiddleName = person.MiddleName.AsCapitalizedName(NameStyle.FamilyName).OrNullIfEmpty;
         person.LastName = person.LastName.AsCapitalizedName(NameStyle.FamilyName);
         person.CityName = person.CityName.AsOrdinaryText().AsCapitalizedName(NameStyle.AllWords);
 
@@ -82,14 +82,12 @@ public static partial class PersonExtensions
             return WithoutQuotationMarks(name);
         }
 
-        static string? WithoutQuotationMarks(string? name) => name is null ? null : QuotationMarks().Replace(name, "").AsOrdinaryText();
+        static string? WithoutQuotationMarks(string? name) => name?.WithoutQuotationMarks().AsOrdinaryText();
     }
 
     [System.Text.RegularExpressions.GeneratedRegex("[\"«»]\\s*([^\"«»]+?)\\s*[\"«»]")]
     private static partial System.Text.RegularExpressions.Regex QuotedPart();
 
-    [System.Text.RegularExpressions.GeneratedRegex("[\"«»]")]
-    private static partial System.Text.RegularExpressions.Regex QuotationMarks();
 
     public static string NameWithCity(this Person? person) =>
         person is not null ? $"{person.Name()}, {person.CityName}" : string.Empty;

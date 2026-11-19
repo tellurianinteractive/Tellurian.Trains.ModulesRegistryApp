@@ -8,6 +8,9 @@ namespace ModulesRegistry.Data.Extensions;
 /// </summary>
 public static class EntityCorrectionExtensions
 {
+    // A colour as #RRGGBB, also from a name or #RGB; anything else is kept, to be refused.
+    private static string? Color(string? color) => color.NormalizedHexColor ?? color?.Trim();
+
     extension(Station station)
     {
         public void CorrectInput()
@@ -50,7 +53,7 @@ public static class EntityCorrectionExtensions
         {
             customer.CustomerName = customer.CustomerName.AsCapitalizedName(NameStyle.FirstLetter);
             (customer.OpenedYear, customer.ClosedYear) = YearPeriod.Corrected(customer.OpenedYear, customer.ClosedYear);
-            customer.TrackOrAreaColor = customer.TrackOrAreaColor.AsHexColor();
+            customer.TrackOrAreaColor = Color(customer.TrackOrAreaColor);
             foreach (var cargo in customer.Cargos ?? []) cargo.CorrectInput();
         }
     }
@@ -60,7 +63,7 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
-            cargo.TrackOrAreaColor = cargo.TrackOrAreaColor.AsHexColor();
+            cargo.TrackOrAreaColor = Color(cargo.TrackOrAreaColor);
         }
     }
 
@@ -103,16 +106,16 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             (vehicle.ThisEmbodiementFromYear, vehicle.ThisEmbodiementUptoYear) = YearPeriod.Corrected(vehicle.ThisEmbodiementFromYear, vehicle.ThisEmbodiementUptoYear);
-            vehicle.PrototypeManufactureYear = vehicle.PrototypeManufactureYear > 0 ? vehicle.PrototypeManufactureYear : null;
-            vehicle.EnginePower = vehicle.EnginePower.AsNullIfZero();
-            vehicle.PrototypeLength = vehicle.PrototypeLength.AsNullIfZero();
-            vehicle.PrototypeWeight = vehicle.PrototypeWeight.AsNullIfZero();
+            vehicle.PrototypeManufactureYear = vehicle.PrototypeManufactureYear.OrNullIfZeroOrNegative();
+            vehicle.EnginePower = vehicle.EnginePower.OrNullIfZero();
+            vehicle.PrototypeLength = vehicle.PrototypeLength.OrNullIfZero();
+            vehicle.PrototypeWeight = vehicle.PrototypeWeight.OrNullIfZero();
         }
     }
 
     extension(StationTrack track)
     {
-        public void CorrectInput() => track.PlatformLength = track.PlatformLength.AsNullIfZero();
+        public void CorrectInput() => track.PlatformLength = track.PlatformLength.OrNullIfZero();
     }
 
     extension(WiFredThrottle throttle)
@@ -120,10 +123,10 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             throttle.MacAddress = throttle.MacAddress.AsMacAddress();
-            throttle.LocoAddress1 = throttle.LocoAddress1.AsNullIfZero();
-            throttle.LocoAddress2 = throttle.LocoAddress2.AsNullIfZero();
-            throttle.LocoAddress3 = throttle.LocoAddress3.AsNullIfZero();
-            throttle.LocoAddress4 = throttle.LocoAddress4.AsNullIfZero();
+            throttle.LocoAddress1 = throttle.LocoAddress1.OrNullIfZero();
+            throttle.LocoAddress2 = throttle.LocoAddress2.OrNullIfZero();
+            throttle.LocoAddress3 = throttle.LocoAddress3.OrNullIfZero();
+            throttle.LocoAddress4 = throttle.LocoAddress4.OrNullIfZero();
         }
     }
 
@@ -133,8 +136,8 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             person.CorrectNames();
-            person.EmailAddresses = person.EmailAddresses.AsEmailAddresses().AsNullIfEmpty();
-            person.FremoReservedAdresses = person.FremoReservedAdresses.AsLocoAddresses().AsNullIfEmpty();
+            person.EmailAddresses = person.EmailAddresses.AsEmailAddresses().OrNullIfEmpty;
+            person.FremoReservedAdresses = person.FremoReservedAdresses.AsLocoAddresses().OrNullIfEmpty;
         }
     }
 }

@@ -23,5 +23,6 @@
     <Using Include="Tellurian.Utilities" />
     <Using Include="Tellurian.Utilities.Web" />
     <Using Include="Tellurian.Utilities.Printing" />
+    <Using Include="Tellurian.Utilities.Text" />
   </ItemGroup>
 </Project>

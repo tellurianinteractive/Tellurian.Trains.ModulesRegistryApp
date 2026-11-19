@@ -1,64 +1,19 @@
-﻿using System.Text;
+﻿namespace ModulesRegistry.Data.Extensions;
 
-namespace ModulesRegistry.Data.Extensions;
+/// <summary>
+/// Loco addresses: DCC addresses from <see cref="MinDccAddress"/> to <see cref="MaxDccAddress"/>, written as numbers and ranges
+/// such as <c>3,10-15</c> (the number ranges of Tellurian.Utilities.Text).
+/// </summary>
 public static class LocoAddressExtensions
 {
-    public static bool TryParseLocoAdresses(this string? text, out int[] addresses)
+    public const int MinDccAddress = 1;
+    public const int MaxDccAddress = 9999;
+
+    extension(string? text)
     {
-        addresses = [];
-        if (string.IsNullOrWhiteSpace(text)) return true;
-        var itemGroups = text.Split(',');
-        if (itemGroups.Length == 0) return true;
-        var result = new List<int>();
-        foreach (var group in itemGroups)
-        {
-            if (string.IsNullOrWhiteSpace(group)) continue;
-            var trimmedGroup = group.Trim();
-            var interval = trimmedGroup.Split('-');
-            if (interval.Length == 0) continue;
-            if (interval.Length == 1)
-            {
-                if (int.TryParse(interval[0], out int address) && address.IsValidDccAddress())
-                    result.Add(address);
-                else
-                    return false;
-            }
-            if (interval.Length == 2)
-            {
-                if (int.TryParse(interval[0], out int fromAddress) && int.TryParse(interval[1], out int toAddress) && fromAddress < toAddress && fromAddress.IsValidDccAddress() && toAddress.IsValidDccAddress())
-                    result.AddRange(Enumerable.Range(fromAddress, toAddress - fromAddress + 1));
-                else
-                    return false;
-            }
-            if (interval.Length > 2) return false;
-        }
-        addresses = [.. result];
-        return true;
+        /// <summary>Corrected when saving: separators, reversed ranges, duplicates, order (<c>AsNumberRanges</c>).</summary>
+        public string? AsLocoAddresses() => text.AsNumberRanges(MinDccAddress, MaxDccAddress);
 
+        public bool TryParseLocoAdresses(out int[] addresses) => text.TryParseNumberRanges(MinDccAddress, MaxDccAddress, out addresses);
     }
-
-    public static string AsCollapsedLocoAdresses(this int[]? adresses)
-    {
-        if (adresses is null || adresses.Length == 0) return string.Empty;
-        var result = new StringBuilder(200);
-        int intervalStartIndex = -1;
-        var orderedAdresses = adresses.Where(a => a.IsValidDccAddress()).OrderBy(a => a).ToArray();
-        for (var i = 0; i < orderedAdresses.Length; i++)
-        {
-            if (i < orderedAdresses.Length - 1 && orderedAdresses[i] + 1 == orderedAdresses[i + 1])
-            {
-                if (intervalStartIndex == -1) intervalStartIndex = i;
-            }
-            else
-            {
-                if (intervalStartIndex >= 0) { result.Append(orderedAdresses[intervalStartIndex]); result.Append('-'); intervalStartIndex = -1; }
-                result.Append(orderedAdresses[i]);
-                if (i < orderedAdresses.Length - 1) result.Append(',');
-
-            }
-        }
-        return result.ToString();
-    }
-    private static bool IsValidDccAddress(this int address) => address >= 1 && address <= 9999;
-
 }

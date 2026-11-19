@@ -32,7 +32,7 @@ public readonly record struct YearPeriod(int? From, int? Upto)
     /// <summary>Corrected when saving: a year of zero or less is not given, and reversed years are swapped.</summary>
     public YearPeriod AsCorrected()
     {
-        var (from, upto) = (From > 0 ? From : null, Upto > 0 ? Upto : null);
+        var (from, upto) = (From.OrNullIfZeroOrNegative(), Upto.OrNullIfZeroOrNegative());
         return from > upto ? new(upto, from) : new(from, upto);
     }
 
