@@ -3,7 +3,8 @@
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.15.14
 Released 2026-11-19
-- In the region form, typographic quotes, dashes and pasted spaces are accepted and corrected when saved; the browser checks the description as you type.
+- In the region form, typographic quotes, dashes and pasted spaces are accepted and corrected when saved; the browser checks name and description as you type, and refuses letters other than Latin ones.
+- Names with jumbled capitals, such as "SÖdeR", are corrected when saved; name forms such as "McDonald" and "O'Brien" are kept.
 ## Release 1.15.13
 Released 2026-11-19
 - Security fix: meetings, layouts and registrations can only be changed by those responsible for them.

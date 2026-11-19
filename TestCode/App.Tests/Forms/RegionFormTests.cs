@@ -102,6 +102,7 @@ public sealed class RegionFormTests
     [TestMethod]
     [DataRow("")]
     [DataRow("Ett namn som är längre än femtio tecken, vilket inte går")]
+    [DataRow("Москва")]
     public void InvalidNameIsInvalid(string name) => AssertInvalid(f => f.LocalName = name, nameof(RegionFormData.LocalName));
 
     [TestMethod]

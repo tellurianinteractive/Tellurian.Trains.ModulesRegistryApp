@@ -27,6 +27,10 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("inverness", "Inverness")]
     [DataRow("McDonald Land", "McDonald Land")]
     [DataRow("östra  småland", "Östra  Småland")]
+    [DataRow("SÖdeR", "Söder")]
+    [DataRow("sÖDER malm", "Söder Malm")]
+    [DataRow("Västra GÖTALAND", "Västra GÖTALAND")]
+    [DataRow("MEC göteborg", "MEC Göteborg")]
     public void AllWords(string? name, string? expected) => Assert.AreEqual(expected, name.AsCapitalizedName(NameStyle.AllWords));
 
     [TestMethod]
@@ -34,6 +38,8 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("ANNA-KARIN", "Anna-Karin")]
     [DataRow("an", "An")]
     [DataRow("lars von", "Lars Von")]
+    [DataRow("aNNA", "Anna")]
+    [DataRow("KarL-eRik", "Karl-Erik")]
     public void GivenName(string name, string expected) => Assert.AreEqual(expected, name.AsCapitalizedName(NameStyle.GivenName));
 
     [TestMethod]
@@ -47,6 +53,9 @@ public sealed class NameCapitalizationExtensionsTests
     [DataRow("VAN PERSIE", "van Persie")]
     [DataRow("svensson-berg", "Svensson-Berg")]
     [DataRow("McDonald", "McDonald")]
+    [DataRow("O'Brien", "O'Brien")]
+    [DataRow("DiCaprio", "DiCaprio")]
+    [DataRow("AnDERSSON", "Andersson")]
     [DataRow("ANDERSSON", "Andersson")]
     public void FamilyName(string name, string expected) => Assert.AreEqual(expected, name.AsCapitalizedName(NameStyle.FamilyName));
 

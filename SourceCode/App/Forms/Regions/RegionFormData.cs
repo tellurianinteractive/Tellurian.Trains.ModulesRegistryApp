@@ -23,6 +23,7 @@ public class RegionFormData
     [Display(Name = "Name")]
     [Required]
     [StringLength(50)] // Capitalised when saved (RegionService), not validated.
+    [OrdinaryText]
     public string LocalName { get; set; } = string.Empty;
 
     /// <summary>One of <see cref="RegionColors"/>; empty until chosen, also for a region whose stored colour isn't one of them.</summary>

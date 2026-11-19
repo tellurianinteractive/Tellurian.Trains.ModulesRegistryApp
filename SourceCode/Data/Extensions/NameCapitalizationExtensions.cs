@@ -21,10 +21,11 @@ public enum NameStyle
 /// The capitalisation rules for names, in one place (decided 2026-11-18, Migration step 3.4): names are corrected with
 /// <see cref="AsCapitalizedName"/> when saved, and the remaining validators accept a name only when the correction wouldn't change it
 /// (<see cref="IsCapitalizedName"/>). A name written in capitals only is first made lower case (except with
-/// <see cref="NameStyle.FirstLetter"/>, where it may be an abbreviation); otherwise only first letters change, so capitals
-/// inside a word, such as in "McDonald", are kept.
+/// <see cref="NameStyle.FirstLetter"/>, where it may be an abbreviation); otherwise first letters change, and capitals inside a
+/// word are kept only in a name form, such as "McDonald" or "O'Brien": a jumbled word such as "SÖdeR" becomes "Söder". A word
+/// in capitals only in a name that isn't is kept, as an abbreviation.
 /// </summary>
-public static class NameCapitalizationExtensions
+public static partial class NameCapitalizationExtensions
 {
     extension(string? name)
     {
@@ -65,8 +66,17 @@ public static class NameCapitalizationExtensions
             _ => false,
         };
         if (isException) return word.ToLowerInvariant();
+        // Capitals inside a word are kept only in a name form ("McDonald", "O'Brien", "DiCaprio"); jumbled ones ("SÖdeR") are not.
+        if (word.Any(char.IsLower) && !NameForm().IsMatch(word)) word = word.ToLowerInvariant();
         return char.IsLower(word[0]) ? char.ToUpperInvariant(word[0]) + word[1..] : word;
     }
+
+    /// <summary>
+    /// A word in lower case after its first letter, or, beginning with a capital, in parts that each begin with one capital:
+    /// "McDonald", "O'Brien".
+    /// </summary>
+    [System.Text.RegularExpressions.GeneratedRegex(@"^(\p{L}[\p{Ll}'’]*|\p{Lu}[\p{Ll}'’]*(\p{Lu}\p{Ll}[\p{Ll}'’]*)+)$")]
+    private static partial System.Text.RegularExpressions.Regex NameForm();
 
     private static bool IsAllUpperCase(string text) => text.Count(char.IsLetter) > 1 && !text.Any(char.IsLower);
 
