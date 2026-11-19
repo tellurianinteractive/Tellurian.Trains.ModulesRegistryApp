@@ -22,6 +22,11 @@ public class PersonValidator : AbstractValidator<Person>
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.MiddleName)]);
 
+        RuleFor(person => person.NickName)
+            .MaximumLength(50)
+            .MustBeOrdinaryTextOrNull(localizer)
+            .WithName(n => localizer[nameof(n.NickName)]);
+
         RuleFor(person => person.LastName)
             .NotEmpty()
             .MinimumLength(1)

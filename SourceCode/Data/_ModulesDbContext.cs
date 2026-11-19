@@ -156,6 +156,8 @@ public partial class ModulesDbContext : DbContext
 
             entity.Property(e => e.MiddleName).HasMaxLength(50);
 
+            entity.Property(e => e.NickName).HasMaxLength(50);
+
             entity.HasOne(d => d.Country)
                 .WithMany(p => p.People)
                 .HasForeignKey(d => d.CountryId)

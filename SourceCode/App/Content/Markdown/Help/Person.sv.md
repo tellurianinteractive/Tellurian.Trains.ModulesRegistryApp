@@ -2,6 +2,7 @@
 Alla modulägare är registrerade som *person*. En person är inte automatiskt en *användare*:
 - **Förnamn**
 - **Mellannamn** är inte obligatoriskt.
+- **Smeknamn** är vad personen kallas, om inte förnamnet. Det visas inom citattecken, till exempel på namnbrickor: Karl "Kalle" Svensson. Skriv inte citattecken i namnen; ett namn inom citattecken flyttas hit när du sparar.
 - **Efternamn**
 - **E-postadresser** är inte obligatoriskt men krävs för att skicka *inbjudningar*.
 Det kan finnas mer än ett e-postadress, var och en separerad med ett semikolon.

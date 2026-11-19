@@ -2,6 +2,7 @@
 Jeder Modulbesitzer wird als *Person* registriert. Eine Person ist nicht automatisch ein *Benutzer*:
 - **Vorname**
 - **Zweiter Vorname** ist nicht obligatorisch.
+- **Spitzname** ist, wie die Person genannt wird, wenn nicht beim Vornamen. Er wird in Anführungszeichen angezeigt, zum Beispiel auf Namensschildern: Karl "Kalle" Svensson. Schreibe keine Anführungszeichen in die Namen; ein Name in Anführungszeichen wird beim Speichern hierher verschoben.
 - **Nachname**
 - **E-Mail-Adressen** ist nicht obligatorisch, aber zum Versenden von *Einladungen* erforderlich.
 Es kann mehrere E-Mail-Adressen geben, die jeweils durch ein Semikolon getrennt sind.

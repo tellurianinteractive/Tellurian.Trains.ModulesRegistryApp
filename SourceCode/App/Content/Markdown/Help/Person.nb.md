@@ -2,6 +2,7 @@
 Enhver moduleier er registrert som en *person*. En person er ikke automatisk en *bruker*:
 - **Fornavn**
 - **Mellomnavn** er ikke obligatorisk.
+- **Kallenavn** er det personen kalles, hvis ikke fornavnet. Det vises i anførselstegn, for eksempel på navneskilt: Karl "Kalle" Svensson. Ikke skriv anførselstegn i navnene; et navn i anførselstegn flyttes hit når du lagrer.
 - **Etternavn**
 - **E-postadresser** er ikke obligatorisk, men nødvendig for å sende *invitasjoner*.
 Det kan være mer enn én e-post, hver atskilt med et semikolon.

@@ -4,6 +4,7 @@
     [MiddleName]            NVARCHAR (50) NULL,
     [LastName]              NVARCHAR (50) NOT NULL,
     [EmailAddresses]        NVARCHAR (50) NULL,
+    [NickName]              NVARCHAR (50) NULL,
     [CityName]              NVARCHAR (50) NULL,
     [CountryId]             INT           NOT NULL,
     [UserId]                INT           NULL,

@@ -28,6 +28,8 @@ public partial class Person
     public string FremoReservedAdresses { get; set; }
     public int? FremoMemberNumber { get; set; }
     public DateTimeOffset? DeletedTimestamp { get; set; }
+    /// <summary>What the person is called, shown in quotation marks between first and middle name: Karl "Kalle" Svensson.</summary>
+    public string NickName { get; set; }
 
     public virtual Country Country { get; set; }
     public virtual User User { get; set; }
@@ -37,10 +39,57 @@ public partial class Person
 }
 
 # nullable enable
-public static class PersonExtensions
+public static partial class PersonExtensions
 {
+    /// <summary>First name, nickname in quotation marks, middle and last name: Karl "Kalle" Svensson.</summary>
     public static string Name(this Person? person) =>
-        person is not null ? $"{person.FirstName} {person.MiddleName} {person.LastName}" : string.Empty;
+        person is null ? string.Empty :
+        string.Join(' ', new[] { person.FirstName, string.IsNullOrWhiteSpace(person.NickName) ? null : $"\"{person.NickName}\"", person.MiddleName, person.LastName }.Where(part => !string.IsNullOrWhiteSpace(part)));
+
+    /// <summary>
+    /// Corrects the names when saving (decided 2026-11-19): a nickname isn't written in quotation marks in a name but in
+    /// <see cref="Person.NickName"/>. A quoted part of the first, middle or last name moves there when the nickname is empty and
+    /// the name isn't left empty; any other quotation marks are removed. Then the names are made ordinary text and capitalised.
+    /// </summary>
+    public static void CorrectNames(this Person person)
+    {
+        person.FirstName = person.FirstName.AsOrdinaryText();
+        person.MiddleName = person.MiddleName.AsOrdinaryText();
+        person.LastName = person.LastName.AsOrdinaryText();
+        person.NickName = WithoutQuotationMarks(person.NickName.AsOrdinaryText());
+        person.MiddleName = MovedNickName(person, person.MiddleName, required: false);
+        person.FirstName = MovedNickName(person, person.FirstName, required: true);
+        person.LastName = MovedNickName(person, person.LastName, required: true);
+        person.FirstName = person.FirstName.AsCapitalizedName(NameStyle.GivenName);
+        person.NickName = person.NickName.AsCapitalizedName(NameStyle.GivenName).AsNullIfEmpty();
+        person.MiddleName = person.MiddleName.AsCapitalizedName(NameStyle.FamilyName).AsNullIfEmpty();
+        person.LastName = person.LastName.AsCapitalizedName(NameStyle.FamilyName);
+        person.CityName = person.CityName.AsOrdinaryText().AsCapitalizedName(NameStyle.AllWords);
+
+        static string? MovedNickName(Person person, string? name, bool required)
+        {
+            if (string.IsNullOrEmpty(name)) return name;
+            var quoted = QuotedPart().Match(name);
+            if (quoted.Success && string.IsNullOrWhiteSpace(person.NickName))
+            {
+                var rest = WithoutQuotationMarks(name.Remove(quoted.Index, quoted.Length));
+                if (!required || !string.IsNullOrEmpty(rest))
+                {
+                    person.NickName = quoted.Groups[1].Value.Trim();
+                    return rest;
+                }
+            }
+            return WithoutQuotationMarks(name);
+        }
+
+        static string? WithoutQuotationMarks(string? name) => name is null ? null : QuotationMarks().Replace(name, "").AsOrdinaryText();
+    }
+
+    [System.Text.RegularExpressions.GeneratedRegex("[\"«»]\\s*([^\"«»]+?)\\s*[\"«»]")]
+    private static partial System.Text.RegularExpressions.Regex QuotedPart();
+
+    [System.Text.RegularExpressions.GeneratedRegex("[\"«»]")]
+    private static partial System.Text.RegularExpressions.Regex QuotationMarks();
 
     public static string NameWithCity(this Person? person) =>
         person is not null ? $"{person.Name()}, {person.CityName}" : string.Empty;

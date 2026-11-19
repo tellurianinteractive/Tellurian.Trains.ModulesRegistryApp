@@ -2,6 +2,7 @@
 Any module owner is registered as a *person*. A person is not automatically a *user*:
 - **First Name**
 - **Middle Name** is not mandatory.
+- **Nickname** is what the person is called, if not the first name. It is shown in quotation marks, for example on name badges: Karl "Kalle" Svensson. Don't write quotation marks in the names; a quoted name is moved here when saved.
 - **Last Name**
 - **Email Addresses** is not mandatory but required for sending *invitations* . 
 There may be more than one email, each separated by a semicolon. 

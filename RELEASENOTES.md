@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.15
+Released 2026-11-19
+- A person can have a nickname, shown in quotation marks, also on name badges; quotation marks in names are moved to the nickname when saved.
 ## Release 1.15.14
 Released 2026-11-19
 - In the region form, typographic quotes, dashes and pasted spaces are accepted and corrected when saved; the browser checks name and description as you type, and refuses letters other than Latin ones.

@@ -24,6 +24,7 @@ public static class PersonSearchExtensions
                 persons = persons.Where(p =>
                     p.FirstName.Contains(word) ||
                     (p.MiddleName != null && p.MiddleName.Contains(word)) ||
+                    (p.NickName != null && p.NickName.Contains(word)) ||
                     p.LastName.Contains(word) ||
                     (p.CityName != null && p.CityName.Contains(word)));
             }

@@ -1356,6 +1356,9 @@
   <data name="Message" xml:space="preserve">
     <value>Besked</value>
   </data>
+  <data name="NickName" xml:space="preserve">
+    <value>Kaldenavn</value>
+  </data>
   <data name="MiddleName" xml:space="preserve">
     <value>Mellemnavn</value>
   </data>

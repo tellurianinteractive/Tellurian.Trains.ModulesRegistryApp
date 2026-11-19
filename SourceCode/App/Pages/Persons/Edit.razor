@@ -25,11 +25,11 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
     <EditTemplate Item="@Person" OnValidSubmit="OnValidSumbit" DeleteHref="@DeleteHref(Person)" MayDelete="MayDelete(Person)">
         <Inputs>
             <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
+            <AppInputText Width="2" Label="NickName" @bind-Value="Person.NickName" />
             <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
             <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
             <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
             <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
-            <AppInputFill Width="2" />
             <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
                        <AppInputFill Width="6" />
 
