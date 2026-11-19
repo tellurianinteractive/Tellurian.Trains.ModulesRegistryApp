@@ -11,6 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="11.0.0" />
+    <PackageReference Include="Jint" Version="4.17.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SourceCode\App\wwwroot\js\form-validation.js" Link="Forms\form-validation.js" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SourceCode\App\App.csproj" />

@@ -57,7 +57,9 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
         // A country administrator may save the regions of their own country, also when moving one (both countries are checked).
         if (principal.IsCountryAdministratorInCountry(entity.CountryId))
         {
-            entity.LocalName = entity.LocalName.AsCapitalizedName();
+            // Corrected, not validated (Migration step 3.5): ordinary text and capitals.
+            entity.LocalName = entity.LocalName.AsOrdinaryText().AsCapitalizedName();
+            entity.Description = entity.Description.AsOrdinaryText().AsNullIfEmpty();
             // Only the permitted colours (RegionColors, decided 2026-11-18); the text colour follows.
             var color = RegionColors.Permitted(entity.BackColor);
             if (color is null) return Resources.Strings.SaveFailed.SaveResult(entity);

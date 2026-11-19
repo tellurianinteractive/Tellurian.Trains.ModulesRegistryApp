@@ -39,7 +39,7 @@ public static class LocoAddressExtensions
 
     public static string AsCollapsedLocoAdresses(this int[]? adresses)
     {
-        if (adresses is null || adresses.Length == 1) return string.Empty;
+        if (adresses is null || adresses.Length == 0) return string.Empty;
         var result = new StringBuilder(200);
         int intervalStartIndex = -1;
         var orderedAdresses = adresses.Where(a => a.IsValidDccAddress()).OrderBy(a => a).ToArray();

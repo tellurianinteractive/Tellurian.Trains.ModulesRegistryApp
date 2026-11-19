@@ -51,6 +51,20 @@ public sealed class RegionSaveTests
     }
 
     [TestMethod]
+    public async Task NameAndDescriptionAreCorrectedToOrdinaryText()
+    {
+        var target = new RegionService(_factory);
+
+        var result = await target.SaveAsync(CountryAdministrator(Sweden), new Region { CountryId = Sweden, LocalName = " nedre norrland ", Description = "“Skogen” – norr", BackColor = "#ff0000" });
+        var empty = await target.SaveAsync(CountryAdministrator(Sweden), new Region { CountryId = Sweden, LocalName = "Jämtland", Description = "  ", BackColor = "#ff0000" });
+
+        var saved = (await _factory.FindAsync<Region>(result.Entity!.Id))!;
+        Assert.AreEqual("Nedre Norrland", saved.LocalName);
+        Assert.AreEqual("\"Skogen\" - norr", saved.Description);
+        Assert.IsNull((await _factory.FindAsync<Region>(empty.Entity!.Id))!.Description, "An empty description is saved as empty.");
+    }
+
+    [TestMethod]
     public async Task AColourOutsideThePermittedOnesIsNotSaved()
     {
         var target = new RegionService(_factory);
