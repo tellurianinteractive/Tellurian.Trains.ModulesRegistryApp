@@ -27,7 +27,7 @@
         <AppInputSelect Width="2" @bind-Value="Form!.CountryId" Items="CountryItems" Label="Country" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" />
         <AppInputSelectNullable Width="3" @bind-Value="Form!.RepresentativeExternalStationId" Label="RepresentativeStation" Items="ExternalStationsItems" ShowNoneOption="true" />
         <AppInputText Width="3" @bind-Value="Form!.LocalName" Label="Name" />
-        <AppInputColorSelect Width="2" @bind-Value="Form!.BackColor" Label="Color" Colors="RegionColors.All" />
+        <AppInputColorSelect Width="12" @bind-Value="Form!.BackColor" Label="Color" Colors="RegionColors.All" />
         <AppInputText Width="12" @bind-Value="Form!.Description" Label="Description" />
     </Inputs>
 </EditTemplate>
