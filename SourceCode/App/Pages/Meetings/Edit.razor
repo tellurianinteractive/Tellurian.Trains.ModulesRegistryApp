@@ -13,7 +13,7 @@
 
 <PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" BackHref="@BackHref" />
 
-<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="Meeting.MayDelete(Principal)">
+<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="MayDelete">
     <Inputs>
         <AppInputSelect Width="2" @bind-Value="Meeting.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
         <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
@@ -61,6 +61,7 @@
     IEnumerable<ListboxItem>? OrganiserItems;
     IEnumerable<ListboxItem>? GroupDomainItems;
     bool MayEdit;
+    bool MayDelete;
     int RegisteredModulesCount;
 
     protected override async Task OnParametersSetAsync()
@@ -71,6 +72,7 @@
         {
             OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId, OrganiserGroupId);
             MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting));
+            MayDelete = Id > 0 && await MeetingService.MayDeleteAsync(Principal, Id);
             RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
             GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
         }

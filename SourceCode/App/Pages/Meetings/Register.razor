@@ -197,7 +197,6 @@ else
     bool HasParticipantsFromSeveralCountries;
 
     bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
-        Principal.IsGlobalOrCountryAdministrator() ||
         IsAdministratorOrMeetingOrganiser ||
         (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
 
@@ -210,13 +209,15 @@ else
             if (Meeting is not null)
             {
                 HasParticipantsFromSeveralCountries = Meeting.HasParticipantsFromSeveralCountries();
-                if (PersonId > 0 && (Principal.IsGlobalOrCountryAdministrator() || PersonId == Principal.PersonId()))
+                // Global administrators, country administrators in the arranging group's country, and the meeting administrators
+                // of the arranging group or of a layout's group register participants from any country.
+                IsAdministratorOrMeetingOrganiser = await MeetingService.MayManageMeetingParticipants(Principal, Meeting.Id);
+                if (PersonId > 0 && (IsAdministratorOrMeetingOrganiser || PersonId == Principal.PersonId()))
                 {
                     await OnSelectedPerson(PersonId);
                 }
                 else
                 {
-                    IsAdministratorOrMeetingOrganiser = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
                     if (IsAdministratorOrMeetingOrganiser)
                     {
                         CountryItems = await CountryService.ListboxItemsAsync(Principal, IsAdministratorOrMeetingOrganiser);

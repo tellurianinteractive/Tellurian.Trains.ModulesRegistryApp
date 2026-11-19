@@ -11,7 +11,7 @@ public interface IPersonSearchSource
 {
     Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, bool anyCountry, CancellationToken cancellationToken = default);
 
-    /// <summary>An organiser of the meeting may search persons in any country to register them.</summary>
+    /// <summary>Those who manage the meeting's participants may search persons in any country to register them.</summary>
     Task<bool> IsMeetingOrganiserAsync(ClaimsPrincipal principal, int meetingId);
 }
 
@@ -21,5 +21,5 @@ public sealed class PersonSearchSource(PersonService personService, MeetingServi
         personService.SearchAsync(principal, countryId, text, excludeGroupId, maxResults, anyCountry, cancellationToken);
 
     public Task<bool> IsMeetingOrganiserAsync(ClaimsPrincipal principal, int meetingId) =>
-        meetingService.IsAdministratorOrMeetingOrganiser(principal, meetingId);
+        meetingService.MayManageMeetingParticipants(principal, meetingId);
 }

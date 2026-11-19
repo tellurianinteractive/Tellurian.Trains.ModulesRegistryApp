@@ -40,7 +40,7 @@
         Meeting = await MeetingService.FindByIdWithParticipantsAsync(Principal, MeetingId);
         if (Meeting is not null)
         {
-            MayPrint = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
+            MayPrint = await MeetingService.MayManageMeetingParticipants(Principal, Meeting.Id);
         }
     }
 }

@@ -3,7 +3,9 @@
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.15.13
 Released 2026-11-19
-- Security fix: only the participant (while registration is open) and the meeting's organisers can change a registration, its layouts and its modules.
+- Security fix: meetings, layouts and registrations can only be changed by those responsible for them.
+- The arranging group's meeting administrators can handle all of a meeting, including deleting it while nobody is registered.
+- A layout group's meeting administrators can handle their own layout, and register and cancel meeting participants.
 - Meeting organisers can find and register persons from any country.
 ## Release 1.15.12
 Released 2026-11-18

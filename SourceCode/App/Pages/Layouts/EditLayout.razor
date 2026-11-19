@@ -74,7 +74,7 @@
                 ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
                 OperatingDayItems = await OperatingDayService.BasicDaysItemsAsync();
                 ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Layout.OrganisingGroupId);
-                MayEdit = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
+                MayEdit = Layout.Id > 0 ? await MeetingService.IsLayoutOrganiser(Principal, Layout.Id) : await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
             }
             else
             {

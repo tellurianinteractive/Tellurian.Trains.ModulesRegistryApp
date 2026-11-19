@@ -93,11 +93,15 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         {
             entity = entity.WithDataRulesApplied();
             using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.LayoutStations.SingleOrDefaultAsync(l => l.Id == entity.Id);
+            var existing = await dbContext.LayoutStations.Include(ls => ls.LayoutParticipant).SingleOrDefaultAsync(l => l.Id == entity.Id);
             if (existing is null) return (-1).SaveResult(entity);
+            // The participant while the layout is open, or a layout organiser at any time; the station stays with its participant.
+            if (existing.LayoutParticipantId != entity.LayoutParticipantId || existing.StationId != entity.StationId ||
+                !await dbContext.MayManageParticipantAsync(principal, existing.LayoutParticipant.MeetingParticipantId, TimeProvider.LocalTime, existing.LayoutParticipant.LayoutId))
+                return (0, Resources.Strings.NotAuthorized, entity);
 
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            if (dbContext.Entry(entity).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
             var result = await dbContext.SaveChangesAsync();
             return result.SaveResult(entity);
         }
@@ -110,6 +114,11 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             using var dbContext = Factory.CreateDbContext();
             if (!entity.ModuleRegistrationClosingDate.HasValue) entity.ModuleRegistrationClosingDate = entity.RegistrationClosingDate;
             var existing = await dbContext.Layouts.SingleOrDefaultAsync(l => l.Id == entity.Id);
+            // A new layout, or another organising group, by the meeting's organisers; the layout's own organisers may change the rest.
+            var mayEdit = existing is null || existing.OrganisingGroupId != entity.OrganisingGroupId ?
+                await dbContext.IsMeetingOrganiserAsync(principal, entity.MeetingId) :
+                existing.MeetingId == entity.MeetingId && await dbContext.IsLayoutOrganiserAsync(principal, existing.Id);
+            if (!mayEdit || (existing is not null && existing.MeetingId != entity.MeetingId)) return (0, Resources.Strings.NotAuthorized, entity);
             if (existing is null)
             {
                 dbContext.Layouts.Add(entity);
@@ -119,7 +128,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             else
             {
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                if (dbContext.Entry(entity).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(entity);
             }
@@ -228,7 +237,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .Include(lp => lp.MeetingParticipant).ThenInclude(mp => mp.Meeting)
                 .SingleOrDefaultAsync(lp => lp.Id == layoutParticipantId);
             if (participant is null) return (-1, Resources.Strings.NotFound);
-            // The participant while the layout is open, or an organiser at any time; for anyone, the participant must be at
+            // The participant while the layout is open, or a layout organiser at any time; for anyone, the participant must be at
             // the meeting while modules are needed (MayRegisterModules).
             if (!participant.MeetingParticipant.MayRegisterModules() ||
                 !await dbContext.MayManageParticipantAsync(principal, participant.MeetingParticipantId, TimeProvider.LocalTime, participant.LayoutId))
@@ -281,8 +290,8 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .SingleOrDefaultAsync(lm => lm.Id == layoutModuleId);
 
             if (existing is null) return (-1, Resources.Strings.NoModification);
-            // The participant while the meeting is open for registration, or an organiser at any time.
-            if (!await dbContext.MayManageParticipantAsync(principal, existing.LayoutParticipant.MeetingParticipantId, TimeProvider.LocalTime))
+            // The participant while the layout is open for registration, or a layout organiser at any time.
+            if (!await dbContext.MayManageParticipantAsync(principal, existing.LayoutParticipant.MeetingParticipantId, TimeProvider.LocalTime, existing.LayoutParticipant.LayoutId))
                 return principal.NotAuthorized<LayoutModule>();
 
             //var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);

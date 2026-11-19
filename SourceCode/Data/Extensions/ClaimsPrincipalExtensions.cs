@@ -125,9 +125,6 @@ public static class ClaimsPrincipalExtensions
     public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef, bool userMayDelete = false) =>
          principal?.IsReadOnly() == false && ((userMayDelete && ownerRef.IsPerson && ownerRef.PersonId == principal.PersonId()) || (principal.IsCountryAdministratorInCountry(principal.CountryId()) || principal.IsGlobalAdministrator()));
 
-    public static bool MayDelete([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting) =>
-        principal is not null && principal.IsGlobalOrCountryAdministrator() && meeting is not null && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
-
     [Obsolete("Use MeetingParticipant.MayUnregisterModules")]
     public static bool MayRemove([NotNullWhen(true)] this ClaimsPrincipal? principal, Meeting? meeting, LayoutModule? module) =>
         principal is not null && meeting is not null && module is not null &&

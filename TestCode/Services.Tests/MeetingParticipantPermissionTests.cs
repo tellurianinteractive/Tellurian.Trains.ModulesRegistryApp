@@ -8,11 +8,11 @@ using System.Security.Claims;
 namespace ModulesRegistry.Services.Tests;
 
 /// <summary>
-/// Who may manage a meeting's participants, their layout registrations and modules (decided 2026-11-18): an organiser of the
-/// meeting at any time, also after registration has closed and for persons from any country (a global administrator, a country
-/// administrator in the organising group's country, or a meeting administrator of the organising group or of a layout's group),
-/// and the participant themselves while registration is open. Before, these writes only required a signed-in user, and on the
-/// module registration page any country administrator counted as an organiser of any meeting.
+/// Who may do what with a meeting (decided 2026-11-19, <see cref="MeetingPermissionExtensions"/>): meeting organisers (a global
+/// administrator, a country administrator in the arranging group's country, a meeting administrator of the arranging group)
+/// handle everything; a layout group's meeting administrators handle their own layout and register and cancel meeting
+/// participants; the participant handles their own registration while it is open. Before, these writes only required a
+/// signed-in user, and on the module registration page any country administrator counted as an organiser of any meeting.
 /// </summary>
 [TestClass]
 public sealed class MeetingParticipantPermissionTests
@@ -73,7 +73,7 @@ public sealed class MeetingParticipantPermissionTests
 
     [TestMethod]
     [DataRow(OrganiserGroupMeetingAdministrator, true, DisplayName = "Meeting administrator of the organising group")]
-    [DataRow(LayoutGroupMeetingAdministrator, true, DisplayName = "Meeting administrator of a layout's group, in another country")]
+    [DataRow(LayoutGroupMeetingAdministrator, false, DisplayName = "Meeting administrator of a layout's group")]
     [DataRow(OrganiserGroupMember, false, DisplayName = "Group administrator, not meeting administrator")]
     [DataRow(Participant, false, DisplayName = "A participant")]
     [DataRow(Stranger, false, DisplayName = "Another user")]
@@ -114,18 +114,93 @@ public sealed class MeetingParticipantPermissionTests
     }
 
     [TestMethod]
-    [DataRow(Participant, true, false, DisplayName = "The participant")]
-    [DataRow(OrganiserGroupMeetingAdministrator, true, true, DisplayName = "Meeting administrator of the organising group")]
-    [DataRow(LayoutGroupMeetingAdministrator, true, true, DisplayName = "Meeting administrator of a layout's group")]
-    [DataRow(Stranger, false, false, DisplayName = "Another user")]
-    public async Task MayManageParticipant(int personId, bool whileOpen, bool afterClosing)
+    [DataRow(Participant, true, false, true, false, DisplayName = "The participant")]
+    [DataRow(OrganiserGroupMeetingAdministrator, true, true, true, true, DisplayName = "Meeting administrator of the organising group")]
+    [DataRow(LayoutGroupMeetingAdministrator, true, true, false, false, DisplayName = "Meeting administrator of another layout's group")]
+    [DataRow(Stranger, false, false, false, false, DisplayName = "Another user")]
+    public async Task MayManageParticipant(int personId, bool whileOpen, bool afterClosing, bool layoutWhileOpen, bool layoutAfterClosing)
     {
         await using var dbContext = _factory.CreateDbContext();
 
         Assert.AreEqual(whileOpen, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, WhileOpen), "While open.");
-        Assert.AreEqual(whileOpen, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, WhileOpen, OrganiserLayout), "Layout, while open.");
+        Assert.AreEqual(layoutWhileOpen, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, WhileOpen, OrganiserLayout), "Layout, while open.");
         Assert.AreEqual(afterClosing, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, AfterClosing), "After closing.");
-        Assert.AreEqual(afterClosing, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, AfterClosing, OrganiserLayout), "Layout, after closing.");
+        Assert.AreEqual(layoutAfterClosing, await dbContext.MayManageParticipantAsync(Principal(personId), TheParticipant, AfterClosing, OrganiserLayout), "Layout, after closing.");
+    }
+
+    [TestMethod]
+    public async Task ALayoutGroupsMeetingAdministratorHandlesOnlyTheirOwnLayout()
+    {
+        await using var dbContext = _factory.CreateDbContext();
+        var layoutAdministrator = Principal(LayoutGroupMeetingAdministrator, Norway);
+
+        Assert.IsTrue(await dbContext.IsLayoutOrganiserAsync(layoutAdministrator, LayoutGroupsLayout), "Their own layout.");
+        Assert.IsFalse(await dbContext.IsLayoutOrganiserAsync(layoutAdministrator, OrganiserLayout), "Another layout.");
+        Assert.IsTrue(await dbContext.IsLayoutOrganiserAsync(Principal(OrganiserGroupMeetingAdministrator), LayoutGroupsLayout), "The arranging group's meeting administrator.");
+        Assert.IsTrue(await dbContext.MayManageMeetingParticipantsAsync(layoutAdministrator, TheMeeting), "Registers and cancels meeting participants.");
+        Assert.IsFalse(await dbContext.MayManageMeetingParticipantsAsync(Principal(Stranger), TheMeeting));
+    }
+
+    [TestMethod]
+    public async Task SavingALayout()
+    {
+        var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
+        async Task<Layout> Stored(int id) { await using var dbContext = _factory.CreateDbContext(); return (await dbContext.Layouts.FindAsync(id))!; }
+
+        var ownLayout = await Stored(LayoutGroupsLayout); ownLayout.ShortName = "Changed";
+        var otherLayout = await Stored(OrganiserLayout); otherLayout.ShortName = "Changed";
+        var regrouped = await Stored(LayoutGroupsLayout); regrouped.OrganisingGroupId = OrganiserGroup;
+        var newLayout = NewLayout(0, TheMeeting, LayoutGroup);
+
+        Assert.AreEqual(1, (await target.SaveAsync(Principal(LayoutGroupMeetingAdministrator, Norway), ownLayout)).Count, "Their own layout.");
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(LayoutGroupMeetingAdministrator, Norway), otherLayout)).Count, "Another layout.");
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(LayoutGroupMeetingAdministrator, Norway), regrouped)).Count, "Another organising group.");
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(LayoutGroupMeetingAdministrator, Norway), newLayout)).Count, "A new layout.");
+        Assert.AreEqual(0, (await target.SaveAsync(NorwegianCountryAdministrator, otherLayout)).Count, "A country administrator in another country.");
+        Assert.AreEqual(1, (await target.SaveAsync(SwedishCountryAdministrator, otherLayout)).Count, "A country administrator in the arranging group's country.");
+        Assert.AreEqual(1, (await target.SaveAsync(Principal(OrganiserGroupMeetingAdministrator), newLayout)).Count, "A new layout by the arranging group.");
+    }
+
+    [TestMethod]
+    public async Task SavingAMeeting()
+    {
+        var target = new MeetingService(_factory, _time);
+        async Task<Meeting> Stored() => (await target.FindByIdWithLayoutsAsync(TheMeeting))!;
+
+        var renamed = await Stored(); renamed.Name = "Renamed";
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(LayoutGroupMeetingAdministrator, Norway), renamed)).Count, "A layout group's meeting administrator.");
+        Assert.AreEqual(0, (await target.SaveAsync(NorwegianCountryAdministrator, renamed)).Count, "A country administrator in another country.");
+        Assert.IsGreaterThan(0, (await target.SaveAsync(Principal(OrganiserGroupMeetingAdministrator), renamed)).Count, "The arranging group's meeting administrator.");
+        var moved = await Stored(); moved.OrganiserGroupId = LayoutGroup;
+        Assert.AreEqual(0, (await target.SaveAsync(SwedishCountryAdministrator, moved)).Count, "Moved to a group in another country.");
+        Assert.AreEqual(0, (await target.SaveAsync(NorwegianCountryAdministrator, NewMeeting(0))).Count, "A new meeting for a group in another country.");
+        Assert.AreEqual(1, (await target.SaveAsync(SwedishCountryAdministrator, NewMeeting(0))).Count, "A new meeting for a group in their country.");
+    }
+
+    [TestMethod]
+    public async Task DeletingLayoutsAndMeetings()
+    {
+        var target = new MeetingService(_factory, _time);
+
+        Assert.AreEqual(0, (await target.DeleteLayoutAsync(Principal(LayoutGroupMeetingAdministrator, Norway), TheMeeting, LayoutGroupsLayout)).Count, "A layout group's meeting administrator.");
+        Assert.AreEqual(0, (await target.DeleteLayoutAsync(null, TheMeeting, LayoutGroupsLayout)).Count, "Not signed in.");
+        Assert.IsFalse(await target.MayDeleteAsync(Principal(OrganiserGroupMeetingAdministrator), TheMeeting), "With registered participants.");
+        Assert.AreEqual(1, (await target.DeleteLayoutAsync(Principal(OrganiserGroupMeetingAdministrator), TheMeeting, LayoutGroupsLayout)).Count, "The arranging group's meeting administrator.");
+        Assert.IsFalse(await target.MayDeleteAsync(SwedishCountryAdministrator, OtherMeeting), "A country administrator in another country.");
+        Assert.IsTrue(await target.MayDeleteAsync(Principal(LayoutGroupMeetingAdministrator, Norway), OtherMeeting), "The arranging group's meeting administrator, without participants.");
+    }
+
+    [TestMethod]
+    public async Task ALayoutStationIsChangedOnlyByItsParticipantOrALayoutOrganiser()
+    {
+        await _factory.SeedAsync(new Station { Id = 1, FullName = "Station", Signature = "S", PrimaryModuleId = TheModule });
+        await _factory.SeedAsync(new LayoutStation { Id = 1, LayoutParticipantId = TheLayoutParticipant, StationId = 1 });
+        var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
+        LayoutStation Changed() => new() { Id = 1, LayoutParticipantId = TheLayoutParticipant, StationId = 1, OtherName = "Other" };
+
+        Assert.AreEqual(0, (await target.UpdateAsync(Principal(Stranger), Changed())).Count, "Another user.");
+        Assert.AreEqual(0, (await target.UpdateAsync(Principal(LayoutGroupMeetingAdministrator, Norway), Changed())).Count, "Another layout's organiser.");
+        Assert.AreEqual(1, (await target.UpdateAsync(Principal(Participant), Changed())).Count, "The participant.");
     }
 
     [TestMethod]
@@ -194,7 +269,7 @@ public sealed class MeetingParticipantPermissionTests
         }
 
         var byStranger = await target.AddPackageModulesAsync(Principal(Stranger), TheLayoutParticipant, Package());
-        var byOrganiser = await target.AddPackageModulesAsync(Principal(LayoutGroupMeetingAdministrator), TheLayoutParticipant, Package());
+        var byOrganiser = await target.AddPackageModulesAsync(Principal(OrganiserGroupMeetingAdministrator), TheLayoutParticipant, Package());
         await using (var dbContext = _factory.CreateDbContext())
         {
             var participant = (await dbContext.MeetingParticipants.FindAsync(TheParticipant))!;

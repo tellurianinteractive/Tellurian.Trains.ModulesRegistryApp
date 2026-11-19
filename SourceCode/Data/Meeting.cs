@@ -140,9 +140,6 @@ public static class MeetingExtensions
         meeting.Layouts.Count != 0 &&
         meeting.Layouts.All(l => l.IsRegistrationPermitted && l.RegistrationClosingDate <= at);
 
-    public static bool MayDelete(this Meeting meeting, ClaimsPrincipal? principal) =>
-        principal.IsGlobalOrCountryAdministrator() && meeting.Layouts.Sum(l => l.LayoutParticipants.Count) == 0;
-
     public static bool MayRegister(this Meeting meeting, ClaimsPrincipal? principal, DateTime at) =>
         meeting.PermitsRegistrations() &&
             (principal.IsGlobalAdministrator() ||

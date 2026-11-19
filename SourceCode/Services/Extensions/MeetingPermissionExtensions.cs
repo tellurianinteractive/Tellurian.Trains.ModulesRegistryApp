@@ -1,12 +1,15 @@
 namespace ModulesRegistry.Services.Extensions;
 
 /// <summary>
-/// Who may manage a meeting's participants, their layout registrations and their modules (decided 2026-11-18):
+/// Who may do what with a meeting (decided 2026-11-19):
 /// <list type="bullet">
-/// <item>an organiser of the meeting, at any time, also after registration has closed and for persons from any country:
-/// a global administrator, a country administrator in the organising group's country, or a member with
-/// <see cref="GroupMember.IsMeetingAdministrator"/> in the organising group or in a group that organises one of its layouts;</item>
-/// <item>the participant themselves, while registration is open.</item>
+/// <item><b>Meeting organisers</b> handle all aspects of the meeting (its data, layouts, deletion, all participants and modules),
+/// at any time, also after registration has closed and for persons from any country: a global administrator, a country
+/// administrator in the arranging group's country, or a member with <see cref="GroupMember.IsMeetingAdministrator"/> in the
+/// arranging group.</item>
+/// <item><b>Layout organisers</b>, the meeting administrators of a layout's organising group, handle their own layout (its data,
+/// layout registrations, modules and stations), and may register and cancel meeting participants.</item>
+/// <item><b>The participant</b> handles their own registration while registration is open.</item>
 /// </list>
 /// A read-only user may not. The rule is read from the database, never from entities passed in by a page.
 /// </summary>
@@ -19,33 +22,70 @@ public static class MeetingPermissionExtensions
 {
     extension(ModulesDbContext dbContext)
     {
+        /// <summary>A meeting organiser: handles all aspects of the meeting.</summary>
         public async Task<bool> IsMeetingOrganiserAsync(ClaimsPrincipal? principal, int meetingId)
         {
-            if (!principal.IsAuthenticated() || principal.IsReadOnly() || meetingId < 1) return false;
-            var personId = principal.PersonId();
-            var meeting = await dbContext.Meetings.AsNoTracking()
+            if (!principal.MayWrite() || meetingId < 1) return false;
+            var groupId = await dbContext.Meetings.AsNoTracking()
                 .Where(m => m.Id == meetingId)
-                .Select(m => new
-                {
-                    CountryId = (int?)m.OrganiserGroup.CountryId,
-                    IsMeetingAdministrator =
-                        m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == personId && gm.IsMeetingAdministrator) ||
-                        m.Layouts.Any(l => l.OrganisingGroup.GroupMembers.Any(gm => gm.PersonId == personId && gm.IsMeetingAdministrator)),
-                })
+                .Select(m => (int?)m.OrganiserGroupId)
                 .SingleOrDefaultAsync().ConfigureAwait(false);
-            if (meeting is null) return false;
-            return principal.IsGlobalAdministrator() ||
-                principal.IsCountryAdministratorInCountry(meeting.CountryId) ||
-                (personId > 0 && meeting.IsMeetingAdministrator);
+            return groupId.HasValue && await dbContext.MayOrganiseForGroupAsync(principal, groupId.Value).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// May change the meeting participant's registration: an organiser at any time, or the participant while registration
-        /// is open, for the given layout (which must belong to the meeting) or else for the meeting.
+        /// May arrange meetings for the group, or move a meeting to it: a global administrator, a country administrator in the
+        /// group's country, or a meeting administrator of the group.
+        /// </summary>
+        public async Task<bool> MayOrganiseForGroupAsync(ClaimsPrincipal? principal, int groupId)
+        {
+            if (!principal.MayWrite() || groupId < 1) return false;
+            var personId = principal.PersonId();
+            var group = await dbContext.Groups.AsNoTracking()
+                .Where(g => g.Id == groupId)
+                .Select(g => new { g.CountryId, IsMeetingAdministrator = g.GroupMembers.Any(gm => gm.PersonId == personId && gm.IsMeetingAdministrator) })
+                .SingleOrDefaultAsync().ConfigureAwait(false);
+            return group is not null && (
+                principal.IsGlobalAdministrator() ||
+                principal.IsCountryAdministratorInCountry(group.CountryId) ||
+                (personId > 0 && group.IsMeetingAdministrator));
+        }
+
+        /// <summary>A layout organiser: a meeting organiser, or a meeting administrator of the layout's organising group.</summary>
+        public async Task<bool> IsLayoutOrganiserAsync(ClaimsPrincipal? principal, int layoutId)
+        {
+            if (!principal.MayWrite() || layoutId < 1) return false;
+            var personId = principal.PersonId();
+            var layout = await dbContext.Layouts.AsNoTracking()
+                .Where(l => l.Id == layoutId)
+                .Select(l => new { l.MeetingId, IsMeetingAdministrator = l.OrganisingGroup.GroupMembers.Any(gm => gm.PersonId == personId && gm.IsMeetingAdministrator) })
+                .SingleOrDefaultAsync().ConfigureAwait(false);
+            if (layout is null) return false;
+            return (personId > 0 && layout.IsMeetingAdministrator) || await dbContext.IsMeetingOrganiserAsync(principal, layout.MeetingId).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// May register, change and cancel the meeting's participants, also from any country and after closing: a meeting
+        /// organiser, or a meeting administrator of a group organising one of its layouts.
+        /// </summary>
+        public async Task<bool> MayManageMeetingParticipantsAsync(ClaimsPrincipal? principal, int meetingId)
+        {
+            if (!principal.MayWrite() || meetingId < 1) return false;
+            var personId = principal.PersonId();
+            var isLayoutOrganiser = personId > 0 && await dbContext.Layouts.AsNoTracking()
+                .AnyAsync(l => l.MeetingId == meetingId && l.OrganisingGroup.GroupMembers.Any(gm => gm.PersonId == personId && gm.IsMeetingAdministrator))
+                .ConfigureAwait(false);
+            return isLayoutOrganiser || await dbContext.IsMeetingOrganiserAsync(principal, meetingId).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// May change the meeting participant's registration: for a given layout (which must belong to the meeting), the
+        /// participant while the layout is open or a layout organiser; without a layout, the participant while the meeting is
+        /// open or anyone who <see cref="MayManageMeetingParticipantsAsync">manages the meeting's participants</see>.
         /// </summary>
         public async Task<bool> MayManageParticipantAsync(ClaimsPrincipal? principal, int meetingParticipantId, DateTime now, int? layoutId = null)
         {
-            if (!principal.IsAuthenticated() || principal.IsReadOnly()) return false;
+            if (!principal.MayWrite()) return false;
             var participant = await dbContext.MeetingParticipants.AsNoTracking()
                 .Where(mp => mp.Id == meetingParticipantId)
                 .Select(mp => new { mp.PersonId, mp.MeetingId })
@@ -55,15 +95,20 @@ public static class MeetingPermissionExtensions
                 .Include(m => m.Layouts)
                 .SingleOrDefaultAsync(m => m.Id == participant.MeetingId).ConfigureAwait(false);
             if (meeting is null) return false;
-            Layout? layout = null;
             if (layoutId.HasValue)
             {
-                layout = meeting.Layouts.SingleOrDefault(l => l.Id == layoutId.Value);
+                var layout = meeting.Layouts.SingleOrDefault(l => l.Id == layoutId.Value);
                 if (layout is null) return false;
+                if (participant.PersonId == principal.PersonId() && !meeting.IsCancelled() && layout.IsOpenForRegistration(now)) return true;
+                return await dbContext.IsLayoutOrganiserAsync(principal, layout.Id).ConfigureAwait(false);
             }
-            var isOpen = layout is null ? meeting.IsOpenForRegistration(now) : !meeting.IsCancelled() && layout.IsOpenForRegistration(now);
-            if (isOpen && participant.PersonId == principal.PersonId()) return true;
-            return await dbContext.IsMeetingOrganiserAsync(principal, participant.MeetingId).ConfigureAwait(false);
+            if (participant.PersonId == principal.PersonId() && meeting.IsOpenForRegistration(now)) return true;
+            return await dbContext.MayManageMeetingParticipantsAsync(principal, participant.MeetingId).ConfigureAwait(false);
         }
+    }
+
+    extension(ClaimsPrincipal? principal)
+    {
+        private bool MayWrite() => principal.IsAuthenticated() && !principal.IsReadOnly();
     }
 }
