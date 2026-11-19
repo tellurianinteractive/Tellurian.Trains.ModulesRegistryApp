@@ -28,10 +28,11 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
     /// Persons in a country whose name or city contains every word in <paramref name="text"/>, filtered in the database.
     /// Only countries the user is authorised in are searched, as in <see cref="ListboxItemsAsync"/>.
     /// </summary>
-    public async Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal? principal, int countryId, string? text, int excludeGroupId = 0, int maxResults = 10, CancellationToken cancellationToken = default)
+    /// <param name="anyCountry">The caller has checked that the user may search persons in any country, as an organiser registering participants for a meeting.</param>
+    public async Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal? principal, int countryId, string? text, int excludeGroupId = 0, int maxResults = 10, bool anyCountry = false, CancellationToken cancellationToken = default)
     {
         var words = PersonSearchExtensions.SearchWords(text);
-        if (words.Length == 0 || maxResults < 1 || !principal.IsAuthorisedInCountry(countryId)) return [];
+        if (words.Length == 0 || maxResults < 1 || !principal.IsAuthenticated() || (!anyCountry && !principal.IsAuthorisedInCountry(countryId))) return [];
         using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
         var persons = await dbContext.People.AsNoTracking()
             .Include(p => p.Country)

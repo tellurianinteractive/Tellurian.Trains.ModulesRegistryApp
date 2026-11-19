@@ -43,22 +43,30 @@
         }
 
         /// <summary>
-        /// Saves <see cref="=LayoutParticipant"/> including the modules and stations the participant brings. 
+        /// Registers a meeting participant for a layout, or changes the registration: the participant while the layout is open,
+        /// or an organiser of the meeting at any time (<see cref="MeetingPermissionExtensions"/>).
         /// </summary>
-        /// <param name="principal"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         public async Task<(int Count, string Message, LayoutParticipant? Entity)> SaveAsync(ClaimsPrincipal? principal, LayoutParticipant entity)
         {
             if (principal.IsAuthenticated())
             {
                 if (!entity.IsValid()) return (0, "Incomplete data", entity);
-                var dbContext = Factory.CreateDbContext();
+                using var dbContext = Factory.CreateDbContext();
+                var meetingParticipantPersonId = await dbContext.MeetingParticipants.AsNoTracking()
+                    .Where(mp => mp.Id == entity.MeetingParticipantId)
+                    .Select(mp => (int?)mp.PersonId)
+                    .SingleOrDefaultAsync().ConfigureAwait(false);
+                // The layout registration belongs to the meeting participant's person, and the layout to the participant's meeting.
+                if (meetingParticipantPersonId != entity.PersonId ||
+                    !await dbContext.MayManageParticipantAsync(principal, entity.MeetingParticipantId, TimeProvider.LocalTime, entity.LayoutId).ConfigureAwait(false))
+                    return principal.SaveNotAuthorised<LayoutParticipant>();
                 if (entity.Id > 0)
                 {
                     var existing = await dbContext.LayoutParticipants.SingleOrDefaultAsync(lp => lp.Id == entity.Id).ConfigureAwait(false);
                     if (existing is not null)
                     {
+                        if (existing.MeetingParticipantId != entity.MeetingParticipantId || existing.LayoutId != entity.LayoutId || existing.PersonId != entity.PersonId)
+                            return principal.SaveNotAuthorised<LayoutParticipant>();
                         dbContext.Entry(existing).CurrentValues.SetValues(entity);
                         if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
                         existing.LastModifiedDateTime = TimeProvider.Now;
@@ -82,10 +90,12 @@
         {
             if (principal.IsAuthenticated() && layputParticipantId.HasValue)
             {
-                var dbContext = Factory.CreateDbContext();
-                var existing = await dbContext.LayoutParticipants.FindAsync(layputParticipantId).ConfigureAwait(false);
+                using var dbContext = Factory.CreateDbContext();
+                var existing = await dbContext.LayoutParticipants.Include(lp => lp.LayoutModules).SingleOrDefaultAsync(lp => lp.Id == layputParticipantId).ConfigureAwait(false);
                 if (existing is not null)
                 {
+                    if (!await dbContext.MayManageParticipantAsync(principal, existing.MeetingParticipantId, TimeProvider.LocalTime, existing.LayoutId).ConfigureAwait(false))
+                        return principal.NotAuthorized<LayoutParticipant>();
                     if (existing.LayoutModules.Count > 0) { return (-1, "RemoveRegisteredModulesFirst"); }
                     dbContext.LayoutParticipants.Remove(existing);
                     var result = await dbContext.SaveChangesAsync();

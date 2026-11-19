@@ -225,8 +225,14 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             var result = package.Modules.Count();
             using var dbContext = Factory.CreateDbContext();
             var participant = await dbContext.LayoutParticipants
+                .Include(lp => lp.MeetingParticipant).ThenInclude(mp => mp.Meeting)
                 .SingleOrDefaultAsync(lp => lp.Id == layoutParticipantId);
             if (participant is null) return (-1, Resources.Strings.NotFound);
+            // The participant while the layout is open, or an organiser at any time; for anyone, the participant must be at
+            // the meeting while modules are needed (MayRegisterModules).
+            if (!participant.MeetingParticipant.MayRegisterModules() ||
+                !await dbContext.MayManageParticipantAsync(principal, participant.MeetingParticipantId, TimeProvider.LocalTime, participant.LayoutId))
+                return (0, Resources.Strings.NotAuthorized);
             foreach (var module in package.Modules)
             {
                 var existing = await dbContext.LayoutModules
@@ -275,6 +281,9 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 .SingleOrDefaultAsync(lm => lm.Id == layoutModuleId);
 
             if (existing is null) return (-1, Resources.Strings.NoModification);
+            // The participant while the meeting is open for registration, or an organiser at any time.
+            if (!await dbContext.MayManageParticipantAsync(principal, existing.LayoutParticipant.MeetingParticipantId, TimeProvider.LocalTime))
+                return principal.NotAuthorized<LayoutModule>();
 
             //var stationIsReferredFromOtherLayoutModule = existing.LayoutStation is not null && existing.LayoutStation.LayoutModules.Any(lm => lm.Id != existing.Id);
 

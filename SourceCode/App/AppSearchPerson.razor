@@ -46,6 +46,8 @@
     [Parameter] public int MinimumSearchCharacters { get; set; } = PersonSearchEndpoint.MinimumQueryLength;
     /// <summary>Country to search persons in; 0 means the current user's country.</summary>
     [Parameter] public int CountryId { get; set; }
+    /// <summary>Registering participants for this meeting: its organisers may search persons in any country.</summary>
+    [Parameter] public int? MeetingId { get; set; }
     /// <summary>Persons that are already members of this group are not listed.</summary>
     [Parameter] public int? ExcludeGroupId { get; set; }
     /// <summary>Link shown with "Add" when no person matches.</summary>
@@ -63,7 +65,7 @@
     private string ValueInputId => $"person-search-value-{Id}";
     private string NotFoundId => $"person-search-not-found-{Id}";
     private string SearchingId => $"person-search-searching-{Id}";
-    private string SearchUrl => $"{PersonSearchEndpoint.Url}?countryId={CountryId}&excludeGroupId={ExcludeGroupId ?? 0}";
+    private string SearchUrl => $"{PersonSearchEndpoint.Url}?countryId={CountryId}&excludeGroupId={ExcludeGroupId ?? 0}&meetingId={MeetingId ?? 0}";
 
     protected override void OnParametersSet()
     {

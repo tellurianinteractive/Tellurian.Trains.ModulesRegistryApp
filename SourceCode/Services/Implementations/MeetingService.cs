@@ -67,6 +67,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     {
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Meetings.AsNoTracking()
+            .Include(m => m.OrganiserGroup)
             .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard)
             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
     }
@@ -221,10 +222,19 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     {
         if (principal is null || meeting is null) return false;
         if (principal.IsGlobalAdministrator()) return true;
+        if (meeting.Id > 0) return await IsAdministratorOrMeetingOrganiser(principal, meeting.Id);
+        // A meeting being created: its organising group, if chosen, decides.
         var countryId = meeting.OrganiserGroup?.CountryId ?? principal.CountryId();
         if (principal.IsCountryAdministratorInCountry(countryId)) return true;
         if (meeting.HasMeetingAdministrator(principal.PersonId())) return true; // Shortcut if data is available.
         return await IsMeetingOrLayoutAdministrator(principal, meeting); // Fallback ask the database querying a tailored view.
+    }
+
+    /// <summary>An organiser of the meeting, read from the database (<see cref="MeetingPermissionExtensions"/>).</summary>
+    public async Task<bool> IsAdministratorOrMeetingOrganiser(ClaimsPrincipal? principal, int meetingId)
+    {
+        await using var dbContext = await Factory.CreateDbContextAsync();
+        return await dbContext.IsMeetingOrganiserAsync(principal, meetingId);
     }
 
     private async Task<bool> IsMeetingOrLayoutAdministrator(ClaimsPrincipal? principal, Meeting meeting)
@@ -269,19 +279,22 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return null;
     }
 
-    public async Task<(int Count, string Message, MeetingParticipant? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting meeting, MeetingParticipant entity)
+    public async Task<(int Count, string Message, MeetingParticipant? Entity)> SaveAsync(ClaimsPrincipal? principal, MeetingParticipant entity)
     {
-        if (principal.IsAuthenticated())
+        if (principal.IsAuthenticated() && !principal.IsReadOnly())
         {
             using var dbContext = Factory.CreateDbContext();
-            var isSelf = entity.PersonId == principal.PersonId();
-            var isOrganiser = await IsAdministratorOrMeetingOrganiser(principal, meeting);
-            if (isOrganiser || isSelf)
+            var existing = await dbContext.MeetingParticipants
+                .SingleOrDefaultAsync(mp => mp.Id == entity.Id)
+                .ConfigureAwait(false);
+            // A registration never moves to another person or meeting; the rule is checked against the stored one.
+            if (existing is not null && (existing.PersonId != entity.PersonId || existing.MeetingId != entity.MeetingId)) return principal.SaveNotAuthorised<MeetingParticipant>();
+            // The participant while registration is open, an organiser at any time.
+            var isSelfWhileOpen = entity.PersonId == principal.PersonId() &&
+                (await dbContext.Meetings.AsNoTracking().Include(m => m.Layouts).SingleOrDefaultAsync(m => m.Id == entity.MeetingId).ConfigureAwait(false))
+                .IsOpenForRegistration(TimeProvider.LocalTime);
+            if (isSelfWhileOpen || await dbContext.IsMeetingOrganiserAsync(principal, entity.MeetingId))
             {
-                var existing = await dbContext.MeetingParticipants
-                    //.Include(mp=> mp.LayoutParticipations).ThenInclude(lp => lp.Layout)
-                    .SingleOrDefaultAsync(mp => mp.Id == entity.Id)
-                    .ConfigureAwait(false);
                 if (existing is null)
                 {
                     entity.LastModifiedDateTime = TimeProvider.Now;
@@ -310,9 +323,9 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<(int Count, string Message)> CancelMeetingParticipaction(ClaimsPrincipal? principal, int meetingParicipantId)
     {
-        if (principal.IsAuthenticated())
+        using var dbContext = Factory.CreateDbContext();
+        if (await dbContext.MayManageParticipantAsync(principal, meetingParicipantId, TimeProvider.LocalTime))
         {
-            using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.MeetingParticipants
                 .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.LayoutModules)
                 .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)
@@ -329,9 +342,9 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<(int Count, string Message, MeetingParticipant? Entity)> ReRegisterMeetingParticipaction(ClaimsPrincipal? principal, int meetingParicipantId)
     {
-        if (principal.IsAuthenticated())
+        using var dbContext = Factory.CreateDbContext();
+        if (await dbContext.MayManageParticipantAsync(principal, meetingParicipantId, TimeProvider.LocalTime))
         {
-            using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.MeetingParticipants
                 .Include(mp => mp.LayoutParticipations).ThenInclude(lp => lp.LayoutModules)
                 .SingleOrDefaultAsync(mp => mp.Id == meetingParicipantId)

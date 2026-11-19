@@ -141,6 +141,37 @@ public sealed class AppEndpointsTests
     }
 
     [TestMethod]
+    public async Task WithoutAMeetingTheSearchIsLimitedToAuthorisedCountries()
+    {
+        await GetAsync($"{PersonSearchEndpoint.Url}?q=and&countryId=5", "user");
+
+        Assert.IsFalse(_source.AnyCountry);
+        Assert.AreEqual(0, _source.AskedMeetingId, "No meeting, so no organiser lookup.");
+    }
+
+    [TestMethod]
+    public async Task AnOrganiserOfTheMeetingMaySearchAnyCountry()
+    {
+        _source.OrganisedMeetingId = 9;
+
+        await GetAsync($"{PersonSearchEndpoint.Url}?q=and&countryId=5&meetingId=9", "user");
+
+        Assert.IsTrue(_source.AnyCountry);
+        Assert.AreEqual(5, _source.CountryId);
+    }
+
+    [TestMethod]
+    public async Task OthersMayNotSearchAnyCountryForAMeeting()
+    {
+        _source.OrganisedMeetingId = 9;
+
+        await GetAsync($"{PersonSearchEndpoint.Url}?q=and&countryId=5&meetingId=8", "user");
+
+        Assert.AreEqual(8, _source.AskedMeetingId);
+        Assert.IsFalse(_source.AnyCountry);
+    }
+
+    [TestMethod]
     public void AllAppEndpointsAreReadOnly()
     {
         var appEndpoints = _app.Services.GetRequiredService<EndpointDataSource>().Endpoints
@@ -171,11 +202,20 @@ public sealed class AppEndpointsTests
         public int ExcludeGroupId { get; private set; }
         public string? Text { get; private set; }
         public int MaxResults { get; private set; }
+        public bool AnyCountry { get; private set; }
+        public int OrganisedMeetingId { get; set; }
+        public int AskedMeetingId { get; private set; }
 
-        public Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, CancellationToken cancellationToken = default)
+        public Task<IReadOnlyList<ListboxItem>> SearchAsync(ClaimsPrincipal principal, int countryId, string text, int excludeGroupId, int maxResults, bool anyCountry, CancellationToken cancellationToken = default)
         {
-            (WasCalled, CountryId, ExcludeGroupId, Text, MaxResults) = (true, countryId, excludeGroupId, text, maxResults);
+            (WasCalled, CountryId, ExcludeGroupId, Text, MaxResults, AnyCountry) = (true, countryId, excludeGroupId, text, maxResults, anyCountry);
             return Task.FromResult(Persons);
+        }
+
+        public Task<bool> IsMeetingOrganiserAsync(ClaimsPrincipal principal, int meetingId)
+        {
+            AskedMeetingId = meetingId;
+            return Task.FromResult(meetingId == OrganisedMeetingId);
         }
     }
 }

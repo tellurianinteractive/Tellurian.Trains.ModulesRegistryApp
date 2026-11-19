@@ -40,7 +40,7 @@ else
                     <AppSearchPerson @bind-Value:get="SearchedPersonId" @bind-Value:set="OnSearchedPerson"
                                      SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
                                      MinimumSearchCharacters="MinimumSearchCharacters"
-                                     CountryId="CountryId" />
+                                     CountryId="CountryId" MeetingId="Meeting.Id" />
                 </div>
                 <hr />
             </div>
@@ -293,7 +293,7 @@ else
         {
             var personId = Participant.PersonId;
             Participant.CancellationTime = null;
-            var result = await MeetingService.SaveAsync(Principal, Meeting, Participant);
+            var result = await MeetingService.SaveAsync(Principal, Participant);
             Meeting = await MeetingService.FindByIdAsync(MeetingId);
             Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
             PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
