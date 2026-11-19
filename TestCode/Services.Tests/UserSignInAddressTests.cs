@@ -42,6 +42,21 @@ public sealed class UserSignInAddressTests
     }
 
     [TestMethod]
+    public async Task AnAccountWithoutAPersonDoesNotCount()
+    {
+        // As in production 2026-11-19: accounts left over from removed persons, one with the same address as a real user.
+        await _factory.SeedAsync(
+            new User { Id = 7, ObjectId = Guid.NewGuid(), EmailAddress = "anna@example.se", RegistrationTime = DateTimeOffset.Now },
+            new User { Id = 8, ObjectId = Guid.NewGuid(), EmailAddress = "orphan@example.se", RegistrationTime = DateTimeOffset.Now });
+
+        var anna = await Target.FindByEmailAsync("anna@example.se");
+
+        Assert.AreEqual(5, anna?.Id, "The sign-in lookup doesn't fail on the address used twice, and finds the account with a person.");
+        Assert.IsNull(await Target.FindByEmailAsync("orphan@example.se"), "An account without a person can't sign in.");
+        Assert.IsNotNull(await Target.SetEmailAsync(5, "orphan@example.se"), "The address of an account without a person is free.");
+    }
+
+    [TestMethod]
     public async Task AUserIsCreatedOnlyForTheOnePersonWithTheWholeAddress()
     {
         var erik = await Target.FindOrCreateAsync("erik@example.se", null);

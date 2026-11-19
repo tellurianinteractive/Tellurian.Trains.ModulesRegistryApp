@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.17
+Released 2026-11-20
+- Signing in and resetting a password work also when an old, unused account has the same email address.
 ## Release 1.15.16
 Released 2026-11-19
 - Security fix: none of a person's email addresses can be another user's sign-in address, and a user's sign-in address can't be changed to an address another person uses.

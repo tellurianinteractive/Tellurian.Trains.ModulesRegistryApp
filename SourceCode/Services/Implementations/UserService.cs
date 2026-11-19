@@ -18,7 +18,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
     {
         if (string.IsNullOrWhiteSpace(emailAddress)) return null;
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.Users.Where(u => u.EmailAddress == emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
+        return await dbContext.Users.SignInAccounts(emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).FirstOrDefaultAsync();
     }
 
     public async Task<User?> SetEmailAsync(int userId, string? emailAddress)
@@ -54,7 +54,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
     {
         if (string.IsNullOrWhiteSpace(emailAddress)) return null;
         using var dbContext = Factory.CreateDbContext();
-        var existing = await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync(u => u.EmailAddress == emailAddress);
+        var existing = await dbContext.Users.SignInAccounts(emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).FirstOrDefaultAsync();
         if (existing is null)
         {
             Logger.PasswordResetUnknownUser();

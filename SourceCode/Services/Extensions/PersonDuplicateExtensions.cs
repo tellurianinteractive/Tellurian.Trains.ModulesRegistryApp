@@ -4,6 +4,7 @@ namespace ModulesRegistry.Services.Extensions;
 /// Rules for persons and users that need the database (Migration step 3.5, decided 2026-11-19), checked when saving, after the
 /// input is corrected. A user has one email address, the sign-in address; a person may have several, separated by semicolons.
 /// None of a person's addresses may be another user's sign-in address, and a sign-in address must belong to its own person only.
+/// Accounts without a person don't count: they can't sign in (<see cref="SignInAccounts"/>).
 /// They run on the server only: the interactive form shows the message after saving, and a static SSR form will show it beside
 /// the form.
 /// </summary>
@@ -34,7 +35,7 @@ public static class PersonDuplicateExtensions
             var userId = person.UserId ?? person.User?.Id ?? 0;
             foreach (var address in person.EmailAddresses.ToItems())
             {
-                if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == address)) return address;
+                if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.Person != null && u.EmailAddress.ToLower() == address)) return address;
             }
             return null;
         }
@@ -46,9 +47,20 @@ public static class PersonDuplicateExtensions
         public async Task<bool> IsSignInAddressTakenAsync(string address, int userId)
         {
             var lowerAddress = address.Trim().ToLower();
-            if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == lowerAddress)) return true;
+            if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.Person != null && u.EmailAddress.ToLower() == lowerAddress)) return true;
             return await dbContext.People.WithEmailAddress(lowerAddress).AnyAsync(p => p.UserId != userId || p.UserId == null);
         }
+    }
+
+    extension(IQueryable<User> users)
+    {
+        /// <summary>
+        /// The accounts that can sign in with the address: not deleted (the query filter) and belonging to a person, not deleted.
+        /// The newest first, so a sign-in address used twice, as by an account left over from a removed person
+        /// (production 2026-11-19: 8 accounts without a person, two of them with the same address), can't make the lookup fail.
+        /// </summary>
+        public IQueryable<User> SignInAccounts(string emailAddress) =>
+            users.Where(u => u.EmailAddress == emailAddress && u.Person != null).OrderByDescending(u => u.Id);
     }
 
     extension(IQueryable<Person> persons)

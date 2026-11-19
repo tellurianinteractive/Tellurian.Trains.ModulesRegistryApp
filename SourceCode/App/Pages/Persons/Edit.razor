@@ -31,7 +31,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
             <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
             <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
             <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
-                       <AppInputFill Width="6" />
+            <AppInputFill Width="4" />
 
             <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Person.FremoMemberNumber" />
             @if (Person.IsFremoMember())
@@ -41,7 +41,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 <AppInputText Width="7" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
 
             }
-            <hr/>
+            <hr />
             @if (Principal.IsGlobalOrCountryAdministrator() && Person.User is not null)
             {
                 <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
