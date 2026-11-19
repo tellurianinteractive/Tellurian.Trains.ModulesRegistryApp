@@ -9,6 +9,7 @@ Released 2026-11-19
 - Meeting organisers can find and register persons from any country.
 - The help texts describe who can manage meetings, layouts and registrations.
 - Registering a cancelled participant again from the participant list registered the wrong person or nobody.
+- Swedish only: a module meeting is called "träff" instead of "möte" throughout the texts.
 ## Release 1.15.12
 Released 2026-11-18
 - The region form checks the entries as you type, and stays open after saving so you can see what was saved.
