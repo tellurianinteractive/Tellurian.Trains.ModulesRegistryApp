@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Validators;
 
@@ -14,7 +15,7 @@ public class GroupValidator : AbstractValidator<Group>
             .MinimumLength(1)
             .MaximumLength(10)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.Organisation)
             .WithName(n => localizer[nameof(n.ShortName)]);
 
         RuleFor(group => group.FullName)

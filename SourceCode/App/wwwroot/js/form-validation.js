@@ -35,8 +35,8 @@
     }
 
     // As TextRules.IsOrdinaryText (App): only Latin letters, digits and some punctuation and symbols.
-    const permittedPunctuationOrSymbols = ' (),.:;-+*!?%&§#±°²³/«»£€´\'"';
-    const latinRanges = [[0x0061, 0x007A], [0x0041, 0x005A], [0x00C0, 0x00FF], [0x0100, 0x0148], [0x014A, 0x01BF], [0x1E00, 0x1E9B]];
+    const permittedPunctuationOrSymbols = ' (),.:;-+*!?%&§#±°²³/«»£€´\'"ºª';
+    const latinRanges = [[0x0061, 0x007A], [0x0041, 0x005A], [0x00C0, 0x00FF], [0x0100, 0x0148], [0x014A, 0x01BF], [0x1E00, 0x1E9E]];
 
     function isOrdinaryText(text) {
         if (!text) return true;

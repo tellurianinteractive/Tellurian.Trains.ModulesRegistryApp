@@ -28,14 +28,14 @@ public static class TextRules
     {
         private bool IsDigit() => c.IsInRange(0x0030, 0x0039);
 
-        private bool IsPermittedPunctuationOrSymbol() => " (),.:;-+*!?%&§#±°²³/«»£€´'\"".Contains(c);
+        private bool IsPermittedPunctuationOrSymbol() => " (),.:;-+*!?%&§#±°²³/«»£€´'\"ºª".Contains(c);
         private bool IsLatinChar() =>
             c.IsInRange(0x0061, 0x007A) ||
             c.IsInRange(0x0041, 0x005A) ||
             c.IsInRange(0x00C0, 0x00FF) ||
             c.IsInRange(0x0100, 0x0148) ||
             c.IsInRange(0x014A, 0x01BF) ||
-            c.IsInRange(0x1E00, 0x1E9B);
+            c.IsInRange(0x1E00, 0x1E9E); // Up to the capital sharp s, ẞ.
         private bool IsInRange(int firstCodePoint, int lastCodePoint) => c >= firstCodePoint && c <= lastCodePoint;
     }
 }

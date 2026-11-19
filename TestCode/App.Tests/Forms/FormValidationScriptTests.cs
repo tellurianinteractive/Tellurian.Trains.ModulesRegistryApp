@@ -47,6 +47,10 @@ public sealed class FormValidationScriptTests
         ["<script>", "<script>", false],
         ["e-post@exempel.se", "e-post@exempel.se", false],
         ["under_streck", "under_streck", false],
+        ["STRAẞE", "STRAẞE", true],
+        ["1º piano, 2ª", "1º piano, 2ª", true],
+        ["Łódź, Žilina, Hőmérséklet, Œuvre, IJmuiden", "Łódź, Žilina, Hőmérséklet, Œuvre, IJmuiden", true],
+        ["Gro\u00DFe \u201EStra\u00DFe\u201C", "Große \"Straße\"", true],
     ];
 
     [TestMethod]

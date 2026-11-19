@@ -5,6 +5,9 @@ The release notes are summaries of important changes and fixes in each release.
 Released 2026-11-19
 - In the region form, typographic quotes, dashes and pasted spaces are accepted and corrected when saved; the browser checks name and description as you type, and refuses letters other than Latin ones.
 - Names with jumbled capitals, such as "SÖdeR", are corrected when saved; name forms such as "McDonald" and "O'Brien" are kept.
+- Names are capitalised correctly in more languages: elisions such as "Cortina d'Ampezzo" and "Pont-l'Évêque", Dutch "IJmuiden", "McDonald", and connecting words such as Polish "przy" and Czech "v".
+- Station signatures in capitals, such as "FF", and group short names such as "MEC" are accepted again.
+- The letters ẞ, º and ª are accepted as ordinary text.
 ## Release 1.15.13
 Released 2026-11-19
 - Security fix: meetings, layouts and registrations can only be changed by those responsible for them.

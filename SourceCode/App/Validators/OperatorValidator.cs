@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Validators;
 
@@ -13,7 +14,7 @@ public class OperatorValidator : AbstractValidator<Operator>
             .NotEmpty()
             .MinimumLength(1)
             .MaximumLength(6)
-            .MustBeCapitalizedCorrectly(localizer, true)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter)
             .WithName(n => localizer[nameof(n.Signature)]);
 
         RuleFor(m => m.FullName)

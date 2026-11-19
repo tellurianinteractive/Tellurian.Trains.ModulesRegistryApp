@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Validators;
 
@@ -21,7 +22,7 @@ public class StationValidator : AbstractValidator<Station>
             .MinimumLength(1)
             .MaximumLength(5)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
+            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter)
             .WithName(n => localizer[nameof(n.Signature)]);
         RuleFor(m => m)
             .IsRegionRequired(localizer)
