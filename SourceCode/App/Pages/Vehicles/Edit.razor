@@ -142,7 +142,7 @@ else
         NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         Vehicle = result.Entity;
         await Task.Delay(3000);
-        Navigator.NavigateTo(ListHref);
+        Navigator.NavigateTo(ListHref, forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
     }
 
     // The vehicle lists are static, so this page may have no history (Migration step 3.3).

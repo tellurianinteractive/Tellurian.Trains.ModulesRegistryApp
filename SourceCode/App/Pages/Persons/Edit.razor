@@ -126,7 +126,7 @@ else
             }
             NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(3000);
-            Navigator.NavigateTo(AfterSaveHref);
+            Navigator.NavigateTo(AfterSaveHref, forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
         }
     }
 

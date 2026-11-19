@@ -48,7 +48,7 @@ else
             var result = await MeetingService.DeleteAsync(Principal, Meeting);
             NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
             await Task.Delay(2000);
-            Navigator.NavigateTo("/Meetings/Index");
+            Navigator.NavigateTo("/Meetings/Index", forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
         }
     }
 }
