@@ -9,7 +9,7 @@ public static class UserExtensions
     public const int MaxFailedLoginAttempts = 3;
     public static string? PreferredLanguage(this User user) =>
         user.Person is null || user.Person.Country is null ? null :
-        user.Person.Country.Languages.Items()[0];
+        user.Person.Country.Languages.ToItems()[0];
 
     public static string ConfirmationLink(this User? user, string baseUri) =>
         user is null || user.Person is null ? string.Empty :
@@ -21,7 +21,7 @@ public static class UserExtensions
 
     public static string PrimaryEmail(this User? user) =>
         user is null ? string.Empty :
-        user.EmailAddress.HasValue() ? user.EmailAddress :
+        user.EmailAddress.HasValue ? user.EmailAddress :
         user.Person.PrimaryEmail();
 
     public static string ApiKey(this User? user) =>
@@ -32,13 +32,13 @@ public static class UserExtensions
         !string.IsNullOrWhiteSpace(user.PrimaryEmail());
 
     public static bool HasPassword([NotNullWhen(true)] this User? user) =>
-        user is not null && user.HashedPassword.HasValue();
+        user is not null && user.HashedPassword.HasValue;
 
     public static bool IsNeverLoggedIn([NotNullWhen(true)] this User? user) =>
         user is null || user.LastSignInTime is null;
 
     public static bool HasCreatedPassword([NotNullWhen(true)] this User? user) =>
-        user is not null && user.HashedPassword.HasValue() && !user.LastSignInTime.HasValue;
+        user is not null && user.HashedPassword.HasValue && !user.LastSignInTime.HasValue;
 
     public static bool HasNotAcceptedTermsOfUse([NotNullWhen(true)] this User? user) =>
         user is not null && user.LastSignInTime.HasValue && !user.LastTermsOfUseAcceptTime.HasValue;

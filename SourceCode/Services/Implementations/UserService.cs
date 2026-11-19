@@ -27,7 +27,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user is null) return null;
-        var address = emailAddress.FirstItem(delimiter: ';').Trim().ToLowerInvariant();
+        var address = emailAddress.ToItems(';').FirstOrDefault().OrEmpty.Trim().ToLowerInvariant();
         // A sign-in address belongs to one user and their own person only (Migration step 3.5).
         if (await dbContext.IsSignInAddressTakenAsync(address, user.Id)) return null;
         user.EmailAddress = address;
@@ -37,7 +37,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     public async Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password)
     {
-        if (!emailAddress.IsEmailAddress() || password.HasNoValue()) return null;
+        if (!emailAddress.IsEmailAddress() || password.IsEmpty) return null;
         var objectGuid = objectId.AsGuid(); if (objectGuid is null) return null;
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.EmailAddress == emailAddress && u.ObjectId == objectGuid);

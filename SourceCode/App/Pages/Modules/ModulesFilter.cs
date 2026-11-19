@@ -13,8 +13,8 @@ public class ModulesFilter
     public string? OwnerName { get; set; }
     public string? ModuleName { get; set; }
     public string? Scale { get; set; }
-    public bool HasFilter => OwnerName.HasValue() || ModuleName.HasValue() || Scale.HasValue();
-    public override string ToString() => string.Join(' ', new[] { ModuleName, OwnerName, Scale }.Where(v => v.HasValue()));
+    public bool HasFilter => OwnerName.HasValue || ModuleName.HasValue || Scale.HasValue;
+    public override string ToString() => string.Join(' ', new[] { ModuleName, OwnerName, Scale }.Where(v => v.HasValue));
 
     public IEnumerable<Module> Apply(IEnumerable<Module> modules) =>
         modules.Where(m =>
@@ -24,5 +24,5 @@ public class ModulesFilter
 
     // A module without the value doesn't match a filter on it.
     static bool Matches(string? value, string? filter) =>
-        filter.HasNoValue() || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
+        filter.IsEmpty || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
 }

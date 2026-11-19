@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.21.0" />
-    <PackageReference Include="Markdig" Version="1.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="11.0.0" />
@@ -18,5 +17,10 @@
     <ProjectReference Include="..\Data.Api\Data.Api.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Resources\Resources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Tellurian.Utilities" />
+    <Using Include="Tellurian.Utilities.Web" />
+    <Using Include="Tellurian.Utilities.Printing" />
   </ItemGroup>
 </Project>

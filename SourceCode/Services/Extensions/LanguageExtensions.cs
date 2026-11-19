@@ -17,7 +17,7 @@ public static class LanguageExtensions
     {
         if (string.IsNullOrWhiteSpace(resourceName)) return string.Empty;
         var culture = CurrentCulture; 
-        if (language.HasValue())
+        if (language.HasValue)
         {
             try
             {

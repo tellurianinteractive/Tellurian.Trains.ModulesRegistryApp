@@ -13,17 +13,17 @@ public class GroupsFilter
     public string? FullName { get; set; }
     public string? CountryName { get; set; }
 
-    public bool HasFilter => ShortName.HasValue() || FullName.HasValue() || CountryName.HasValue();
-    public override string ToString() => string.Join(' ', new[] { ShortName, FullName, CountryName }.Where(v => v.HasValue()));
+    public bool HasFilter => ShortName.HasValue || FullName.HasValue || CountryName.HasValue;
+    public override string ToString() => string.Join(' ', new[] { ShortName, FullName, CountryName }.Where(v => v.HasValue));
 
     /// <param name="countryName">The group's country name as shown in the list.</param>
     public IEnumerable<(Group Value, bool MayEdit)> Apply(IEnumerable<(Group Value, bool MayEdit)> groups, Func<Group, string?> countryName) =>
         groups.Where(g =>
             Matches(g.Value.ShortName, ShortName) &&
             Matches(g.Value.FullName, FullName) &&
-            (CountryName.HasNoValue() || Matches(countryName(g.Value), CountryName)));
+            (CountryName.IsEmpty || Matches(countryName(g.Value), CountryName)));
 
     // A group without the value doesn't match a filter on it.
     static bool Matches(string? value, string? filter) =>
-        filter.HasNoValue() || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
+        filter.IsEmpty || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
 }

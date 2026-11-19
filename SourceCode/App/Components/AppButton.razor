@@ -4,7 +4,7 @@
 <span class="noprint">
 
     <span style="margin-left: 4px; display: @Display">
-        @if (Href.HasValue())
+        @if (Href.HasValue)
         {
             @* A plain link, also for a new tab, so it works in static SSR pages too (Migration step 3.1). *@
             <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" target="@(OpenInNewTab ? "_blank" : null)" rel="@(OpenInNewTab ? "noopener" : null)" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
@@ -46,8 +46,8 @@
     {
         get
         {
-            //if (Type.HasValue()) Debugger.Break();
-            return (Type.HasValue() ? Type.ToLowerInvariant() : Labels?.First().ToLowerInvariant()) switch
+            //if (Type.HasValue) Debugger.Break();
+            return (Type.HasValue ? Type.ToLowerInvariant() : Labels?.First().ToLowerInvariant()) switch
             {
                 "add" => "primary",
                 "edit" => "primary",
@@ -66,8 +66,8 @@
     }
 
     string LabelText => Labels is not null ? Labels.Select(l => Localizer[l].Value).ToArray().ToFirstUpperInvariant() : string.Empty;
-    string TitleText => Title.HasValue() ? Localizer[Title] : LabelText;
-    string[]? Labels => Label.HasValue() ? Label.Split("-") : Type.HasValue() ? Type.AsArray() : "Button".AsArray();
+    string TitleText => Title.HasValue ? Localizer[Title] : LabelText;
+    string[]? Labels => Label.HasValue ? Label.Split("-") : Type.HasValue ? Type.AsArray() : "Button".AsArray();
     string LabelOrType => Label ?? Type ?? "Button";
     string? DisablePointerEvents => IsDisabled ? "pointer-events: none" : null;
     string? Disabled => IsDisabled ? "disabled" : null;
@@ -75,7 +75,7 @@
 
     string IconClass =>
         IconName.StartsWith("fa ") ? IconName : 
-        Type.HasValue() && FontAwesome.ButtonIcons.ContainsKey(Type) ? FontAwesome.ButtonIcons[Type] :
+        Type.HasValue && FontAwesome.ButtonIcons.ContainsKey(Type) ? FontAwesome.ButtonIcons[Type] :
         FontAwesome.ButtonIcons.ContainsKey(Label) ? FontAwesome.ButtonIcons[Label] :
         FontAwesome.ButtonIcons.ContainsKey(IconName) ? FontAwesome.ButtonIcons[IconName] :
         FontAwesome.Info;
@@ -84,9 +84,9 @@
     {
         get
         {
-            if (ObjectName.HasNoValue()) return string.Empty;
+            if (ObjectName.IsEmpty) return string.Empty;
             var localizedText = Localizer[ObjectName].ToString();
-            if (localizedText.HasValue()) return localizedText;
+            if (localizedText.HasValue) return localizedText;
             return ObjectName;
         }
     }

@@ -84,6 +84,8 @@ public sealed class CorrectedInputRulesTests
         var invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "f80" });
         CollectionAssert.DoesNotContain(invalid, nameof(StationCustomer.TrackOrAreaColor));
         invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "red" });
+        CollectionAssert.DoesNotContain(invalid, nameof(StationCustomer.TrackOrAreaColor), "A colour name is corrected to its hex code.");
+        invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "reddish" });
         CollectionAssert.Contains(invalid, nameof(StationCustomer.TrackOrAreaColor));
     }
 

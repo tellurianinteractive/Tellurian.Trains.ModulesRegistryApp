@@ -16,7 +16,7 @@
 
         <span>@Localizer["Scale"]: <strong>@Station.PrimaryModule.Scale.Display()</strong>, </span>
         <span>@Localizer["Standard"]: <strong>@Station.PrimaryModule.Standard.ShortName, </strong></span>
-        @if (Station.PrimaryModule.Theme.HasValue())
+        @if (Station.PrimaryModule.Theme.HasValue)
         {
             <span>@Localizer["Theme"]: <strong>@Station.PrimaryModule.Theme</strong>, </span>
         }
@@ -24,7 +24,7 @@
         <span>@Localizer["IsShadowStation"]: <strong>@Station.IsShadow.AsYesOrNo()</strong>, </span>
         <span>@Localizer["IsTerminus"]: <strong>@Station.IsTerminus.AsYesOrNo()</strong>.</span>
 
-        @if(Station.OperationInstructionsMarkdown.HasValue())
+        @if(Station.OperationInstructionsMarkdown.HasValue)
         {
             <MarkdownView Label="OperatingInstructions" Markdown="@Station.OperationInstructionsMarkdown" BackgroundColor="#f2f2f2" />
         }

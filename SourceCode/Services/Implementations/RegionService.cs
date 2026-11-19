@@ -14,8 +14,7 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
                 .Where(r => countryId == 0 || r.CountryId == countryId)
                 .Include(r => r.Country).ToReadOnlyListAsync();
             return items.Select(r => new ListboxItem(r.Id, Description(r, maybeCountryId > 0)))
-                .OrderBy(l => l.Description)
-                .AsEnumerable();
+                .OrderBy(l => l.Description);
 
         }
         return Enumerable.Empty<ListboxItem>();
@@ -64,7 +63,7 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
             var color = RegionColors.Permitted(entity.BackColor);
             if (color is null) return Resources.Strings.SaveFailed.SaveResult(entity);
             entity.BackColor = color;
-            entity.ForeColor = color.TextColor();
+            entity.ForeColor = color.TextColor;
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.Regions.FindAsync(entity.Id);
             if (existing is not null && !principal.IsCountryAdministratorInCountry(existing.CountryId)) return principal.SaveNotAuthorised<Region>();

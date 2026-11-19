@@ -57,7 +57,7 @@ else
         <SubRowsTemplate Context="participant">
             @if (participant.LayoutModules.Any())
             {
-                @if (participant.NoteToOrganiserMarkdown.HasValue())
+                @if (participant.NoteToOrganiserMarkdown.HasValue)
                 {
                     <tr>
                         <td colspan="4">

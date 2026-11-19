@@ -82,7 +82,10 @@ public sealed class InputCorrectionExtensionsTests
     [DataRow("ff8800", "#FF8800")]
     [DataRow("#f80", "#FF8800")]
     [DataRow(" f80 ", "#FF8800")]
-    [DataRow("red", "red")]
+    [DataRow("red", "#FF0000")]
+    [DataRow("DarkBlue", "#00008B")]
+    [DataRow("white", "#FFFFFF")]
+    [DataRow("reddish", "reddish")]
     [DataRow("#ff88", "#ff88")]
     public void HexColor(string? text, string? expected) => Assert.AreEqual(expected, text.AsHexColor());
 

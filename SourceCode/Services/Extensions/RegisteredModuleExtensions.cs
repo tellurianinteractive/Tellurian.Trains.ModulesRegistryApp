@@ -3,7 +3,7 @@
 namespace ModulesRegistry.Services.Extensions;
 internal static class RegisteredModuleExtensions
 {
-    public static string PackageName(this RegisteredModule module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.Name;
+    public static string PackageName(this RegisteredModule module) => module.PackageLabel.HasValue ? module.PackageLabel : module.Name;
 
     public static RegisteredModule MapRegisteredModule(this IDataRecord record) =>
         new()

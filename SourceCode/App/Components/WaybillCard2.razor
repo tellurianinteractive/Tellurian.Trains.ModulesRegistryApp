@@ -47,7 +47,7 @@
                             </td>
                         </tr>
 
-                        @if (Item.Destination.TrackOrArea.HasValue())
+                        @if (Item.Destination.TrackOrArea.HasValue)
                         {
                             <tr>
                                 <td colspan="2">
@@ -113,7 +113,7 @@
                             </tr>
                         }
 
-                        @if (Item.Destination.DisplayReadyTime && Item.Destination.ReadyTimeResourceKey.HasValue())
+                        @if (Item.Destination.DisplayReadyTime && Item.Destination.ReadyTimeResourceKey.HasValue)
                         {
                             <tr>
                                 <td colspan="2">
@@ -146,7 +146,7 @@
                             <div class="customer"> @Item.Origin.CustomerName() </div>
                         </td>
                     </tr>
-                    @if (Item.Origin.TrackOrArea.HasValue())
+                    @if (Item.Origin.TrackOrArea.HasValue)
                     {
                         <tr>
                             <td colspan="2">
@@ -190,7 +190,7 @@
                         </tr>
 
                     }
-                    @if (Item.Origin.DisplayReadyTime && Item.Origin.ReadyTimeResourceKey.HasValue())
+                    @if (Item.Origin.DisplayReadyTime && Item.Origin.ReadyTimeResourceKey.HasValue)
                     {
                         <tr>
                             <td colspan="2">
@@ -201,7 +201,7 @@
                             </td>
                         </tr>
                     }
-                    @if (Item.OperatorName.HasValue())
+                    @if (Item.OperatorName.HasValue)
                     {
                         <tr>
                             <td colspan="2">

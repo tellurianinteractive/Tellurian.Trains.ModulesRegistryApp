@@ -52,7 +52,7 @@
                             <div class="label">@Item.Destination.DualLanguageLabel("Instructions")</div>
                             <div class="instruction">
                                 <span>@Item.UnloadingReady()</span>
-                                @if (Item.Destination.TrackOrArea.HasValue())
+                                @if (Item.Destination.TrackOrArea.HasValue)
                                 {
                                     <span>&commat;</span>
                                     <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Destination.TrackOrAreaBackColor(); color: @Item.Destination.TrackOrAreaTextColor()"> @Item.Destination.TrackOrAreaDesignation() </span>
@@ -117,7 +117,7 @@
                             <div class="label">@Item.Origin.DualLanguageLabel("Instructions")</div>
                             <div class="instruction">
                                 <span>@Item.LoadingReady()</span>
-                                @if (Item.Origin.TrackOrArea.HasValue())
+                                @if (Item.Origin.TrackOrArea.HasValue)
                                 {
                                     <span>&commat;</span>
                                     <span style="padding-left: 1px; padding-right: 1px; background-color: @Item.Origin.TrackOrAreaBackColor(); color: @Item.Origin.TrackOrAreaTextColor()">@Item.Origin.TrackOrAreaDesignation()</span>

@@ -35,7 +35,7 @@ public static class PersonUserStatusExtensions
         var user = person.User;
         if (user.IsLockedOut()) return PersonUserState.LockedOut;
         if (user.HasNotAcceptedTermsOfUse()) return PersonUserState.NotAcceptedTermsOfUse;
-        if (person.PrimaryEmail().HasNoValue()) return PersonUserState.NoEmail;
+        if (person.PrimaryEmail().IsEmpty) return PersonUserState.NoEmail;
         if (user.HasCreatedPassword()) return PersonUserState.PasswordCreated;
         if (person.IsInvited()) return PersonUserState.Invited;
         if (user?.LastSignInTime is not null) return PersonUserState.SignedIn;

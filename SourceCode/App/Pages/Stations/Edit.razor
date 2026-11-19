@@ -110,7 +110,7 @@
 
     async Task TrySetDefaultStationName()
     {
-        if (Station is not null && ModuleId > 0 && Station.FullName.HasNoValue())
+        if (Station is not null && ModuleId > 0 && Station.FullName.IsEmpty)
         {
             var module = await ModuleService.FindByIdAsync(Principal, ModuleId);
             Station.FullName = module is null ? string.Empty : module.FullName;

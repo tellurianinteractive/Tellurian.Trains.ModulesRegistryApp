@@ -14,7 +14,7 @@
 <hr/>
 
 <form id="vehicles-filter" method="get" data-auto-submit data-enhance class="noprint">
-    @if (Sort.HasValue())
+    @if (Sort.HasValue)
     {
         <input type="hidden" name="sort" value="@Sort" />
         <input type="hidden" name="direction" value="@Direction" />

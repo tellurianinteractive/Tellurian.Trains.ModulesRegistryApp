@@ -48,7 +48,7 @@
         }
     }
     string ContentPathName => ContentName?.Replace('-', '/') ?? string.Empty;
-    string Padding => BackgroundColour.HasValue() ? "5pt" : "0px";
+    string Padding => BackgroundColour.HasValue ? "5pt" : "0px";
     bool IsVisible => !IsHidden;
     bool IsEmpty => (string.IsNullOrWhiteSpace(ContentName) && string.IsNullOrWhiteSpace(Href)) || string.IsNullOrWhiteSpace(Content?.Text);
 }

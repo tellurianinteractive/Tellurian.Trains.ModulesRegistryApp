@@ -100,7 +100,7 @@ public static partial class PersonExtensions
 
     public static string PrimaryEmail(this Person? person) =>
          person is null || string.IsNullOrWhiteSpace(person.EmailAddresses) ? string.Empty :
-         person.EmailAddresses.Items()[0];
+         person.EmailAddresses.ToItems()[0];
 
     public static bool IsInvited([NotNullWhen(true)] this Person? person) =>
         person is not null && person.User is not null && person.User.LastSignInTime is null;

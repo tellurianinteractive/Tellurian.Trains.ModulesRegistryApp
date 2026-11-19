@@ -120,6 +120,6 @@
 
     string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
     string NameBadgesHref(int meetingId) => $"meetings/{meetingId}/namebadges";
-    string MeetingHref(int meetingId, string? function) => function.HasNoValue() ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";
+    string MeetingHref(int meetingId, string? function) => function.IsEmpty ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";
 
 }

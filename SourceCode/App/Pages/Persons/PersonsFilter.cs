@@ -12,8 +12,8 @@ public class PersonsFilter
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? CityName { get; set; }
-    public bool HasFilter => FirstName.HasValue() || LastName.HasValue() || CityName.HasValue();
-    public override string ToString() => string.Join(' ', Values.Where(v => v.HasValue()));
+    public bool HasFilter => FirstName.HasValue || LastName.HasValue || CityName.HasValue;
+    public override string ToString() => string.Join(' ', Values.Where(v => v.HasValue));
     IEnumerable<string?> Values => [FirstName, LastName, CityName];
 
     public IEnumerable<Person> Apply(IEnumerable<Person> people) =>
@@ -24,5 +24,5 @@ public class PersonsFilter
 
     // A person without the value doesn't match a filter on it.
     static bool Matches(string? value, string? filter) =>
-        filter.HasNoValue() || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
+        filter.IsEmpty || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
 }

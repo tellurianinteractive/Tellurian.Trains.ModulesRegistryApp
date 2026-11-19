@@ -136,37 +136,38 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
     {
-        if (vehicle.PrototypeLength == 0) return 0;
+        // The captured vehicle is checked before the query: extension properties can't be in a query (CS9296).
+        if (vehicle.PrototypeLength is null or 0 || vehicle.KeeperSignature.IsEmpty || vehicle.VehicleClass.IsEmpty) return 0;
         return await FillInForSameKeeperAsync(
             v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeLength == null &&
-                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+                v.KeeperSignature == vehicle.KeeperSignature && v.VehicleClass == vehicle.VehicleClass,
             v => v.PrototypeLength = vehicle.PrototypeLength);
     }
 
     public async Task<int> AddPrototypeWeightForSameKeeperAndClass(Vehicle vehicle)
     {
-        if (vehicle.PrototypeWeight == null) return 0;
+        if (vehicle.PrototypeWeight == null || vehicle.KeeperSignature.IsEmpty || vehicle.VehicleClass.IsEmpty) return 0;
         return await FillInForSameKeeperAsync(
             v => v.OwningPersonId == vehicle.OwningPersonId && v.PrototypeWeight == null &&
-                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+                v.KeeperSignature == vehicle.KeeperSignature && v.VehicleClass == vehicle.VehicleClass,
             v => v.PrototypeWeight = vehicle.PrototypeWeight);
     }
 
     public async Task<int> AddEnginePowerForSameKeeperAndClass(Vehicle vehicle)
     {
-        if (vehicle.EnginePower == null) return 0;
+        if (vehicle.EnginePower == null || vehicle.KeeperSignature.IsEmpty || vehicle.VehicleClass.IsEmpty) return 0;
         return await FillInForSameKeeperAsync(
             v => v.OwningPersonId == vehicle.OwningPersonId && v.EnginePower == null &&
-                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature && vehicle.VehicleClass.HasValue() && v.VehicleClass == vehicle.VehicleClass,
+                v.KeeperSignature == vehicle.KeeperSignature && v.VehicleClass == vehicle.VehicleClass,
             v => v.EnginePower = vehicle.EnginePower);
     }
 
     public async Task<int> AddKeeperCountryForSameKeeper(Vehicle vehicle)
     {
-        if (vehicle.KeeperCountryId == null || vehicle.KeeperCountryId.Value == 0) return 0;
+        if (vehicle.KeeperCountryId is null or 0 || vehicle.KeeperSignature.IsEmpty) return 0;
         return await FillInForSameKeeperAsync(
             v => v.OwningPersonId == vehicle.OwningPersonId && v.KeeperCountryId == null &&
-                vehicle.KeeperSignature.HasValue() && v.KeeperSignature == vehicle.KeeperSignature,
+                v.KeeperSignature == vehicle.KeeperSignature,
             v => v.KeeperCountryId = vehicle.KeeperCountryId);
     }
 

@@ -595,4 +595,9 @@
 		</None>
 	</ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Tellurian.Utilities" />
+    <Using Include="Tellurian.Utilities.Web" />
+    <Using Include="Tellurian.Utilities.Printing" />
+  </ItemGroup>
 </Project>

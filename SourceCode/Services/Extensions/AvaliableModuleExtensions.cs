@@ -12,13 +12,13 @@ public static class AvaliableModuleExtensions
         {
             foreach (var module in scale.OrderBy(m => m.FullName))
             {
-                if (module.PackageLabel.HasValue())
+                if (module.PackageLabel.HasValue)
                 {
                     var key = module.PackageLabel;
                     if (!packages.ContainsKey(key)) packages.Add(key, new List<(AvailableModule, int, ModulePackageType)>());
                     packages[key].Add((module, scale.Key, ModulePackageType.Package));
                 }
-                else if (module.ConfigurationLabel.HasValue())
+                else if (module.ConfigurationLabel.HasValue)
                 {
                     var key = module.FullName;
                     if (!packages.ContainsKey(key)) packages.Add(key, new List<(AvailableModule, int, ModulePackageType)>());
@@ -35,7 +35,7 @@ public static class AvaliableModuleExtensions
             }
         }
         return packages.Select((p, i) =>
-    new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value), OwnersPersonId(p.Value), p.Value.Select(v => v.Module).AsEnumerable()) { ScaleId = p.Value.First().ScaleId });
+    new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value), OwnersPersonId(p.Value), p.Value.Select(v => v.Module)) { ScaleId = p.Value.First().ScaleId });
 
         static ModulePackageType PackageType(IEnumerable<(AvailableModule Module, int Scale, ModulePackageType Type)> items) => items.First().Type;
         static string PackageName(IEnumerable<(AvailableModule Module, int Scale, ModulePackageType Type)> items) =>

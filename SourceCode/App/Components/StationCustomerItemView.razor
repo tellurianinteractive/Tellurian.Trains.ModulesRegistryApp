@@ -9,7 +9,7 @@ else
     <div style="display:flex; flex-direction:row; justify-content: space-between; align-items:end">
         <div style="font-size:18pt; font-weight: bold">
             @Customer.CustomerName
-            @if (Customer.Comment.HasValue())
+            @if (Customer.Comment.HasValue)
             {
                 <span style="font-size:12pt; font-weight: normal">
                     ,

@@ -32,7 +32,7 @@ public static class PersonDuplicateExtensions
         public async Task<string?> AnotherUsersSignInAddressAsync(Person person)
         {
             var userId = person.UserId ?? person.User?.Id ?? 0;
-            foreach (var address in person.EmailAddresses.Items())
+            foreach (var address in person.EmailAddresses.ToItems())
             {
                 if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == address)) return address;
             }

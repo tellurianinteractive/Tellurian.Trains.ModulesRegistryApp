@@ -14,13 +14,13 @@ public class CargoFilter
     public string? Name { get; set; }
     public string? Code { get; set; }
     public string? WagonClass { get; set; }
-    public bool HasFilter => Name.HasValue() || Code.HasValue() || WagonClass.HasValue();
-    public override string ToString() => string.Join(' ', Values.Where(v => v.HasValue()));
+    public bool HasFilter => Name.HasValue || Code.HasValue || WagonClass.HasValue;
+    public override string ToString() => string.Join(' ', Values.Where(v => v.HasValue));
     IEnumerable<string?> Values => [Code, Name, WagonClass];
 
     public IEnumerable<Data.Cargo> Apply(IEnumerable<Data.Cargo> cargos) =>
         cargos.Where(c =>
             c.NhmCodeOrEmpty().StartsWithCaseInsensitive(Code?.Trim()) &&
             c.LocalizedName().Value.ContainsCaseInsensitive(Name?.Trim()) &&
-            (WagonClass.HasNoValue() || c.DefaultClasses?.Contains(WagonClass.Trim(), StringComparison.OrdinalIgnoreCase) == true));
+            (WagonClass.IsEmpty || c.DefaultClasses?.Contains(WagonClass.Trim(), StringComparison.OrdinalIgnoreCase) == true));
 }

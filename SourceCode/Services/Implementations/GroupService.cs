@@ -155,7 +155,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
 
             var memberships = dbContext.GroupMembers.AsNoTracking().Include(gm => gm.Group)
                 .Where(gm => gm.Group.GroupDomainId > 0 && (gm.PersonId == ownershipRef.PersonId || gm.PersonId == principal.PersonId()))
-                .AsEnumerable()
+                .ToList()
                 .GroupBy(gm => gm.Group.GroupDomainId)
                 .ToList();
             return memberships.Any(m => m.Count(gm => gm.PersonId == ownershipRef.PersonId || gm.PersonId == principal.PersonId()) > 1);

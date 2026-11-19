@@ -19,7 +19,7 @@
 }
 <form id="cargo-filter" method="get" data-auto-submit data-enhance class="noprint">
     @* The filter fields are in the column headers (FilterColumn), joined to this form by its id; Clear filter is in the Actions header. *@
-    @if (Sort.HasValue())
+    @if (Sort.HasValue)
     {
         <input type="hidden" name="sort" value="@Sort" />
         <input type="hidden" name="direction" value="@Direction" />
@@ -70,7 +70,7 @@
 
     CargoFilter Filter => new() { Code = Code, Name = Name, WagonClass = WagonClass };
     string EditHref(Cargo cargo) => $"Cargo/{cargo.Id}/Edit";
-    string ClearFilterHref => Sort.HasValue() ? $"Cargo/Index?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : "Cargo/Index";
+    string ClearFilterHref => Sort.HasValue ? $"Cargo/Index?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : "Cargo/Index";
 
     IQueryable<Cargo> FilteredItems => Cargos is null ? Enumerable.Empty<Cargo>().AsQueryable() : Filter.Apply(Cargos).AsQueryable();
 

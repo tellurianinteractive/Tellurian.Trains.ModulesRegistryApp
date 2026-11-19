@@ -47,7 +47,7 @@ public static partial class InputCorrectionExtensions
         }
 
         /// <summary>Trimmed, or null when empty or only spaces; for optional text fields.</summary>
-        public string? AsNullIfEmpty() => string.IsNullOrWhiteSpace(text) ? null : text.Trim();
+        public string? AsNullIfEmpty() => text.IsEmpty ? null : text.Trim();
 
         /// <summary>
         /// Email addresses separated by semicolons: any of <c>; , space</c> or a line break separates them; each is trimmed and
@@ -68,7 +68,7 @@ public static partial class InputCorrectionExtensions
         /// </summary>
         public string? AsLocoAddresses()
         {
-            if (string.IsNullOrWhiteSpace(text)) return text?.Trim();
+            if (text.IsEmpty) return text?.Trim();
             var addresses = new SortedSet<int>();
             foreach (var part in AroundHyphen().Replace(text, "-").Split([',', ';', ' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
             {
@@ -84,20 +84,29 @@ public static partial class InputCorrectionExtensions
         /// <summary>A MAC address in any common notation (<c>AABBCCDDEEFF</c>, with <c>: - .</c> or spaces) as <c>AA:BB:CC:DD:EE:FF</c>.</summary>
         public string? AsMacAddress()
         {
-            if (string.IsNullOrWhiteSpace(text)) return text?.Trim();
+            if (text.IsEmpty) return text?.Trim();
             var digits = MacSeparators().Replace(text, "");
             if (digits.Length != 12 || !digits.All(char.IsAsciiHexDigit)) return text.Trim();
             return string.Join(':', digits.ToUpperInvariant().Chunk(2).Select(pair => new string(pair)));
         }
 
-        /// <summary>A colour as <c>#RRGGBB</c> in capitals: a missing <c>#</c> is added and the short form <c>#RGB</c> expanded.</summary>
+        /// <summary>
+        /// A colour as <c>#RRGGBB</c> in capitals: a missing <c>#</c> is added, the short form <c>#RGB</c> expanded, and a colour name
+        /// such as "red" becomes its hex code (Tellurian.Utilities' <c>HexColor</c>, 70+ names). An unknown name is kept, to be refused.
+        /// </summary>
         public string? AsHexColor()
         {
-            if (string.IsNullOrWhiteSpace(text)) return text?.Trim();
-            var digits = text.Trim().TrimStart('#');
-            if (!digits.All(char.IsAsciiHexDigit) || digits.Length is not (3 or 6)) return text.Trim();
-            if (digits.Length == 3) digits = string.Concat(digits.Select(d => $"{d}{d}"));
-            return "#" + digits.ToUpperInvariant();
+            if (text.IsEmpty) return text?.Trim();
+            var trimmed = text.Trim();
+            var digits = trimmed.TrimStart('#');
+            if (digits.All(char.IsAsciiHexDigit) && digits.Length is 3 or 6)
+            {
+                if (digits.Length == 3) digits = string.Concat(digits.Select(d => $"{d}{d}"));
+                return "#" + digits.ToUpperInvariant();
+            }
+            // HexColor gives white for an unknown name too, so white itself is told apart by its name.
+            var named = trimmed.HexColor;
+            return named != "#FFFFFF" || trimmed.EqualsCaseInsensitive("white") ? named : trimmed;
         }
     }
 

@@ -30,7 +30,7 @@ public abstract partial class AppInputBase<TValue>
 
     public string LabelText(IStringLocalizer<Strings> localizer)
     {
-        if (Label.HasNoValue()) return string.Empty;
+        if (Label.IsEmpty) return string.Empty;
         return localizer.FromParts(Label);
     }
 }

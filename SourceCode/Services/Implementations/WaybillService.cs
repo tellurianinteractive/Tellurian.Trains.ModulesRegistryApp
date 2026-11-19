@@ -107,7 +107,7 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
             if (connection is not null)
             {
                 var sql = getSql(receiving, sending);
-                if (sql.HasNoValue()) return waybills;
+                if (sql.IsEmpty) return waybills;
                 var command = new SqlCommand(sql, connection)
                 {
                     CommandType = CommandType.Text,

@@ -14,7 +14,7 @@ public abstract record UserMessage(User Recipient, string Subject, TextContent M
     {
         if (!message.IsValid) return null;
         var body = message.MessageHtml;
-        if (body.HasNoValue()) return null;
+        if (body.IsEmpty) return null;
         var mail = new MailMessage();
         mail.To.Add(new MailAddress(message.Recipient.EmailAddress, $"{message.Recipient.Person.FirstName} {message.Recipient.Person.LastName}"));
         mail.Subject = message.Subject;

@@ -29,7 +29,7 @@ else
                 @foreach (var item in Items)
                 {
                     var rowHeader = RowDividerHeading?.Invoke(item);
-                    @if (rowHeader.HasValue())
+                    @if (rowHeader.HasValue)
                     {
                         @if (RowHeaderTemplate is not null)
                         {

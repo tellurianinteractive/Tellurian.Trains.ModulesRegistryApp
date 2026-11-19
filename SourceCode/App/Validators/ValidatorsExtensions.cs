@@ -58,7 +58,7 @@ public static partial class ValidatorsExtensions
 
     /// <summary>A colour, after the correction when saving (<see cref="InputCorrectionExtensions.AsHexColor"/>): "f80" is accepted.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value is null || value.AsHexColor().IsHexColor()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
+        builder.Must(value => value is null || value.AsHexColor().IsHexColor).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
 
     /// <summary>A MAC address, after the correction when saving (<see cref="InputCorrectionExtensions.AsMacAddress"/>): any common notation.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
@@ -71,7 +71,7 @@ public static partial class ValidatorsExtensions
     extension(string? value)
     {
         internal bool IsEmailAddressesWhenCorrected() =>
-            value.AsEmailAddresses().Items().All(EmailRegex().IsMatch);
+            value.AsEmailAddresses().ToItems().All(EmailRegex().IsMatch);
 
         internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
 

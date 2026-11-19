@@ -50,7 +50,7 @@ public static class EnumExtensions
     public static string ToEnumLocalized<T>(this int value) where T : struct
     {
         var resourceKey = Enum.GetName(typeof(T), value);
-        return resourceKey.HasValue() ? AppTexts.Find(resourceKey) ?? resourceKey : resourceKey ?? string.Empty;
+        return resourceKey.HasValue ? AppTexts.Find(resourceKey) ?? resourceKey : resourceKey ?? string.Empty;
     }
 
 }

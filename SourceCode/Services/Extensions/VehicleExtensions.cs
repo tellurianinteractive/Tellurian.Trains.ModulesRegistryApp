@@ -27,7 +27,7 @@ public static class VehicleExtensions
     {
         var markup = new StringBuilder(200);
         if (vehicle.DccAddress.HasValue) markup.Append($""" <span>DCC {vehicle.DccAddress.Value}<span>""");
-        if (vehicle.DecoderType.HasValue()) markup.Append($""" <span>{vehicle.DecoderType} <span>""");
+        if (vehicle.DecoderType.HasValue) markup.Append($""" <span>{vehicle.DecoderType} <span>""");
         if (vehicle.HasSound) markup.Append(""" <i class="fa fa-volume-up"></span>""");
         return new MarkupString(markup.ToString());
     }

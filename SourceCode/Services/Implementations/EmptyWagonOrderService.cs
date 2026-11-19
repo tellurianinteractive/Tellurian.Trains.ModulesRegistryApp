@@ -92,7 +92,7 @@ internal static class EmptyWagonOrderMapper
         {
             index = record.GetOrdinal(languages);
             var value = record.GetString(index);
-            if (value.HasValue()) return value;
+            if (value.HasValue) return value;
         }
         catch (IndexOutOfRangeException)
         {

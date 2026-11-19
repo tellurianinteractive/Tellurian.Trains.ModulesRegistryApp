@@ -14,7 +14,7 @@ public static class MarkupStringExtensions
         string.IsNullOrWhiteSpace(markupText) ? new() : new(markupText);
 
     public static MarkupString EmailIcon(this Person? person) =>
-        person is null || person.EmailAddresses.HasNoValue() ? new MarkupString() :
+        person is null || person.EmailAddresses.IsEmpty ? new MarkupString() :
         new MarkupString($"""<a class="fa fa-envelope" href="mailto:{person.EmailAddresses}"></a>""");
 
 

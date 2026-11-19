@@ -37,8 +37,8 @@ static public class ModuleExtensions
     public static MarkupString Name(this Module? module) =>
         module is null ? new(""):
         new(
-            module.ConfigurationLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" :
-            module.PackageLabel.HasValue() ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" :
+            module.ConfigurationLabel.HasValue ? $"{module.FullName} <span class=\"fa fa-ruler\" /> {module.ConfigurationLabel}" :
+            module.PackageLabel.HasValue ? $"{module.FullName} <span class=\"fa fa-truck-loading\" /> {module.PackageLabel}" :
             module.FullName);
     public static MarkupString StatusIcon(this Module? module) => new($"<span title=\"{module.StatusTitle()}\" class=\"{module.StatusSymbol()}\"/>");
     private static string StatusTitle(this Module? module) => 

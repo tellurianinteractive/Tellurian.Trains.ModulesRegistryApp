@@ -41,7 +41,7 @@
 }
 
 <form id="groups-filter" method="get" data-auto-submit data-enhance class="noprint">
-    @if (Sort.HasValue())
+    @if (Sort.HasValue)
     {
         <input type="hidden" name="sort" value="@Sort" />
         <input type="hidden" name="direction" value="@Direction" />
@@ -148,7 +148,7 @@
     static string CountryNameOf(Group group) => group.Country.EnglishName.GetLocalizedString(null);
     string CityName(Group? group) => group is null ? string.Empty : group.CountryId == CountryId ? group.CityName : $"{group.CityName} ({group.Country.DomainSuffix.ToUpperInvariant()})";
     string GroupDomain(Group? group) => group?.GroupDomain is not null ? group.GroupDomain.Name : string.Empty;
-    string ClearFilterHref => Sort.HasValue() ? $"Groups/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Groups/Country/{CountryId}";
+    string ClearFilterHref => Sort.HasValue ? $"Groups/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Groups/Country/{CountryId}";
     string EditHref(int groupId) => $"groups/{groupId}/edit";
     string MembersHref(int groupId) => $"groups/{groupId}/members";
     string ModulesHref(int groupId) => $"groups/{groupId}/modules";

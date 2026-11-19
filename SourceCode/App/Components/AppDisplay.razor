@@ -5,7 +5,7 @@
     {
         <label class="form-control-label" for="@Label">@Localizer[Label]: </label>
     }
-    @if (Value.HasValue())
+    @if (Value.HasValue)
     {
         <div class="form-control" style="font-weight:bold; color: @TextColor; background-color: @BackColor"> @Value</div>
 
@@ -24,5 +24,5 @@
 
     string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
-    bool ShowLabel => Label.HasValue() && (!HideLabelIfValueIsEmpty || Value.HasValue());
+    bool ShowLabel => Label.HasValue && (!HideLabelIfValueIsEmpty || Value.HasValue);
 }

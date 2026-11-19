@@ -34,7 +34,7 @@ else
     @Item("Status", Meeting.Status.MeetingStatus())
     @if (!Meeting.IsCancelled())
     {
-        @if (Meeting.ExternalLink.HasValue())
+        @if (Meeting.ExternalLink.HasValue)
         {
           <AppButton Label="Details" Href="@Meeting.ExternalLink" AlwaysShowLabel=true />
         }
@@ -106,5 +106,5 @@ else
         new(string.IsNullOrWhiteSpace(text) ? "" : $"<{element}>{Localizer[label]}: <strong>{text}</strong></{element}>");
 
     string MeetingHref(Meeting meeting, string? function) =>
-        function.HasNoValue() ? $"meetings/{meeting.Id}" : $"meetings/{meeting.Id}/{function}";
+        function.IsEmpty ? $"meetings/{meeting.Id}" : $"meetings/{meeting.Id}/{function}";
 }

@@ -147,7 +147,7 @@ public static class ModuleExtensions
         {
             text.Append($", {Duckunder}");
         }
-        if (!compact && me.Note.HasValue())
+        if (!compact && me.Note.HasValue)
         {
             text.Append(", ");
             text.Append(me.Note);
@@ -212,8 +212,8 @@ public static class ModuleExtensions
     public static string FullNameAndConfiguration(this Module module) =>
         module.FremoNumber.HasValue && module.IsOperationsPlace() ? $"{module?.FremoName()} {module?.Station.FullName}" :
         module.FremoNumber.HasValue ? module?.FremoName() ?? string.Empty :
-        module.ConfigurationLabel.HasValue() ? $"{module.FullName} {module.ConfigurationLabel.ToLowerInvariant()}" : module.FullName;
-    public static string PackageName(this Module module) => module.PackageLabel.HasValue() ? module.PackageLabel : module.FullName;
+        module.ConfigurationLabel.HasValue ? $"{module.FullName} {module.ConfigurationLabel.ToLowerInvariant()}" : module.FullName;
+    public static string PackageName(this Module module) => module.PackageLabel.HasValue ? module.PackageLabel : module.FullName;
     public static ModuleOwnership? ModuleOwnership(this Module module, ModuleOwnershipRef ownershipRef) =>
         module.ModuleOwnerships.SingleOrDefault(mo => mo.GroupId == ownershipRef.GroupId || mo.PersonId == ownershipRef.PersonId);
 
@@ -267,7 +267,7 @@ public static class ModuleExtensionsForFremoName
     }
 
     public static bool HasAnyFremoName(this IEnumerable<Module>? modules) =>
-        modules?.Any(m => m.FremoNumber.HasValue && m.ModuleOwnerships.Any(mo => (mo.Person?.FremoOwnerSignature.HasValue() == true) || (mo.Group?.ShortName.HasValue() == true))) == true;
+        modules?.Any(m => m.FremoNumber.HasValue && m.ModuleOwnerships.Any(mo => (mo.Person?.FremoOwnerSignature.HasValue == true) || (mo.Group?.ShortName.HasValue == true))) == true;
 }
 
 public static class ModuleMapping

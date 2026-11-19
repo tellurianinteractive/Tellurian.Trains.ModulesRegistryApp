@@ -5,6 +5,7 @@ The release notes are summaries of important changes and fixes in each release.
 Released 2026-11-19
 - Security fix: none of a person's email addresses can be another user's sign-in address, and a user's sign-in address can't be changed to an address another person uses.
 - Signing up with an address shared by several persons, or matching only part of an address, no longer creates a user for the wrong person.
+- Colours can also be given by name, such as "red", and are saved as their hex code; orange and pink backgrounds get white text.
 ## Release 1.15.15
 Released 2026-11-19
 - A person can have a nickname, shown in quotation marks, also on name badges; quotation marks in names are moved to the nickname when saved.

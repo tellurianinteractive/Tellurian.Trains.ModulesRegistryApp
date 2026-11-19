@@ -69,7 +69,7 @@ public static class LayoutExtensions
 
     public static string DescriptionWithTheme(this Layout? me) =>
         me is null ? string.Empty :
-        me.Theme.HasValue() ? $"{me.Meeting.Name} {me.Description()}-{me.Theme}" :
+        me.Theme.HasValue ? $"{me.Meeting.Name} {me.Description()}-{me.Theme}" :
         me.Meeting is not null ? $"{me.Meeting.Name} {me.Description()} - {me.Theme}" :
         $"{me.Description} {me.Theme}";
 

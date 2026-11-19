@@ -12,7 +12,7 @@ public static class StationCustomerCargoExtensions
 
     public static string CargoType(this StationCustomerCargo? cargo) =>
         cargo is null ? string.Empty :
-        cargo.SpecialCargoName.HasValue() ? cargo.SpecialCargoName :
+        cargo.SpecialCargoName.HasValue ? cargo.SpecialCargoName :
         cargo.Cargo.Localized() ??
         Resources.Strings.None;
 

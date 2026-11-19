@@ -1,5 +1,4 @@
 ﻿using ModulesRegistry.Resources;
-using Markdig;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ModulesRegistry.Services.Implementations;
 using System.Diagnostics.CodeAnalysis;
@@ -20,16 +19,6 @@ public static partial class StringExtensions
 
 
 
-    public static string HtmlFromMarkdown(this string? markdown)
-    {
-        if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
-        return Markdown.ToHtml(markdown, Pipeline());
-
-        static MarkdownPipeline Pipeline() => 
-            new MarkdownPipelineBuilder()
-            .UseAdvancedExtensions()
-            .Build();
-    }
 
     public static string? ValueOrNull(this string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value;
@@ -38,7 +27,7 @@ public static partial class StringExtensions
     private static partial Regex EmailRegex();
 
     public static bool IsEmailAddress([NotNullWhen(true)] this string? me) =>
-        me.HasValue() && EmailRegex().IsMatch(me);
+        me.HasValue && EmailRegex().IsMatch(me);
 
     public static bool IsPermittedFileExtension(this string? it) =>
         it is not null && DocumentService.PermittedFileExtenstions.Contains(it.ToLowerInvariant());

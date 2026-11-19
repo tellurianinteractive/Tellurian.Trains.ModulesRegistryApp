@@ -11,12 +11,12 @@ public class FreightCustomersFilter
 {
     public string? StationName { get; set; }
     public string? CustomerName { get; set; }
-    public bool HasFilter => StationName.HasValue() || CustomerName.HasValue();
+    public bool HasFilter => StationName.HasValue || CustomerName.HasValue;
 
     public IEnumerable<FreightCustomerInfo> Apply(IEnumerable<FreightCustomerInfo> customers) =>
         customers.Where(c => Matches(c.Station?.FullName, StationName) && Matches(c.CustomerName, CustomerName));
 
     // A customer without the value doesn't match a filter on it.
     static bool Matches(string? value, string? filter) =>
-        filter.HasNoValue() || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
+        filter.IsEmpty || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
 }

@@ -20,6 +20,6 @@ public static class StationCustomerCargoNameExtensions
  
     public static string WagonClasses(this StationCustomerCargo? it) =>
        it is null || it.Cargo is null ? string.Empty :
-       it.SpecificWagonClass.HasValue() ? it.SpecificWagonClass :
+       it.SpecificWagonClass.HasValue ? it.SpecificWagonClass :
        it.Cargo.DefaultClasses ?? string.Empty;
 }

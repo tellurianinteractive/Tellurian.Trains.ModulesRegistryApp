@@ -3,7 +3,7 @@
 
 <div class="row" style="margin-top: 1em">
     <div class="col-6">
-        @if (Label.HasValue())
+        @if (Label.HasValue)
         {
             <label class="form-control-label" for="@Label"><strong>@LabelText(Localizer) (@Localizer["Markdown"])</strong></label>
         }
@@ -17,7 +17,7 @@
         @if (IsVisible)
         {
             <div class="markdown">
-                @if (Label.HasValue())
+                @if (Label.HasValue)
                 {
                 <h1>@Localizer[Label]</h1>
                     

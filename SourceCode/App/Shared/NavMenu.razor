@@ -205,7 +205,7 @@
     }
 
     private string FastclockHref =>
-        Principal is not null && Principal.GivenName().HasValue() ? $"https://fastclock.azurewebsites.net/user/{System.Web.HttpUtility.UrlEncode(Principal.GivenName())}" :
+        Principal is not null && Principal.GivenName().HasValue ? $"https://fastclock.azurewebsites.net/user/{System.Web.HttpUtility.UrlEncode(Principal.GivenName())}" :
         "https://fastclock.azurewebsites.net/";
 
     string PersonsHref => $"Persons/Country/{AppService.LastCountryId}";

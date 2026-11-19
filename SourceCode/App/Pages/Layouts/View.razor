@@ -59,7 +59,7 @@ else
     string OperatingPeriod(Layout layout) => layout.FirstYear.HasValue || layout.LastYear.HasValue ? $"{layout.FirstYear} - {layout.LastYear}" : string.Empty;
     string LayoutModulesLink(int id) => $"layouts/{id}/modules";
     string LayoutDescription(Layout layout) =>
-        layout.Theme.HasNoValue() ? $"{layout.PrimaryModuleStandard.ShortName}" :
+        layout.Theme.IsEmpty ? $"{layout.PrimaryModuleStandard.ShortName}" :
         $"{layout.Theme}";
 
 }

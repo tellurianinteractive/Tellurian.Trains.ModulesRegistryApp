@@ -21,7 +21,7 @@
 <ListboxForm Id="customers-country" Action="FreightCustomers" Name="country" Items="CountryItems" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
 
 <form id="customers-filter" method="get" data-auto-submit data-enhance class="noprint">
-    @if (Sort.HasValue())
+    @if (Sort.HasValue)
     {
         <input type="hidden" name="sort" value="@Sort" />
         <input type="hidden" name="direction" value="@Direction" />

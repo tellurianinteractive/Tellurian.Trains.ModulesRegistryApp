@@ -26,20 +26,20 @@ public class EmptyWagonOrder
 public static class EmptyWagonOrderExtensions
 {
     public static string WagonClasses(this EmptyWagonOrder order) =>
-        order.SpecificWagonClasses.HasValue() ? order.SpecificWagonClasses :
+        order.SpecificWagonClasses.HasValue ? order.SpecificWagonClasses :
         order.DefaultClasses;
 
     public static string TrackOrArea(this EmptyWagonOrder order) =>
-        order.CargoTrackOrArea.HasValue() ? order.CargoTrackOrArea :
+        order.CargoTrackOrArea.HasValue ? order.CargoTrackOrArea :
         order.CustomerTrackOrArea ?? string.Empty;
 
     public static string TrackOrAreaColor(this EmptyWagonOrder order) =>
-        order.CargoTrackOrAreaColor.HasValue() ? order.CargoTrackOrAreaColor :
+        order.CargoTrackOrAreaColor.HasValue ? order.CargoTrackOrAreaColor :
         order.CustomerTrackOrAreaColor ?? "#ffffff";
 
     public static string TrackOrAreaTextColor(this EmptyWagonOrder order) =>
-        order.CargoTrackOrAreaColor.HasValue() ? order.CargoTrackOrAreaColor.TextColor() :
-        order.CustomerTrackOrAreaColor.TextColor() ?? "#000000";
+        order.CargoTrackOrAreaColor.HasValue ? order.CargoTrackOrAreaColor.TextColor :
+        order.CustomerTrackOrAreaColor.TextColor ?? "#000000";
 
     public static string EmptyWagonForCargo(this EmptyWagonOrder order) =>
         string.Format(Resources.Strings.EmptyWagonForCargo, order.CargoName.ToLowerLanguageSensitive());

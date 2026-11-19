@@ -61,7 +61,7 @@ else if (Principal.IsAuthorisedInCountry(Person.CountryId))
                 {
                     <AppDisplay Width="6" Label="ApiKey" Value="@Person.User.ApiKey()" BackColor="#e9ecef" />
                 }
-                @if (Person.User.AdministratorAreaOfResposibility.HasValue())
+                @if (Person.User.AdministratorAreaOfResposibility.HasValue)
                 {
                     <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Person.User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
                 }

@@ -33,7 +33,7 @@ else
                 {
                     <AppButton Label="Delete" IsSubmit="false" OnClickCallback="OnDeleteCallback" />
                 }
-                else if (DeleteHref.HasValue())
+                else if (DeleteHref.HasValue)
                 {
                     <AppButton Label="Delete" IsSubmit="false" Href="@DeleteHref" />
                 }
@@ -60,5 +60,5 @@ else
     /// <summary>The form's name on a static SSR page, matching the page's <c>[SupplyParameterFromForm(FormName = ...)]</c>.</summary>
     [Parameter] public string? FormName { get; set; }
 
-    bool IsStatic => FormName.HasValue();
+    bool IsStatic => FormName.HasValue;
 }

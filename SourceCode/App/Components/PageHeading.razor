@@ -21,7 +21,7 @@
                     <label for="page-help-state" class="fa fa-question-circle page-help-toggle" title="@Localizer["Help"]" aria-label="@Localizer["Help"]"></label>
                 }
                 @* There is no page history without a circuit, so a static page only has a back arrow when it says where back is. *@
-                @if (BackHref.HasValue())
+                @if (BackHref.HasValue)
                 {
                     <a href="@BackHref" class="fa fa-arrow-alt-circle-left page-back" title="@Localizer["Back"]" aria-label="@Localizer["Back"]"></a>
                 }
@@ -36,7 +36,7 @@
             }
         </div>
     </div>
-    @if (HelpContentName.HasValue())
+    @if (HelpContentName.HasValue)
     {
         @if (IsStatic)
         {
@@ -67,7 +67,7 @@
 
     bool IsStatic => !RendererInfo.IsInteractive;
     bool HelpIsHidden => PageHistory.IsShowningHelp != true;
-    bool IsHelpAvailable => HelpContext.HasValue();
+    bool IsHelpAvailable => HelpContext.HasValue;
     string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help/{HelpContext}";
 
     protected override void OnParametersSet()

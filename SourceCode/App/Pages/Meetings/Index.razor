@@ -58,10 +58,10 @@
     private int DefaultCountryId => CountryId > 0 ? CountryId : Principal.CountryId();
 
     string MeetingHref(Meeting meeting, string? function) =>
-        //meeting.ExternalLink.HasValue() && function=="view" ? meeting.ExternalLink :
-        function.HasNoValue() ? $"meetings/{meeting.Id}/view" : $"meetings/{meeting.Id}/{function}";
+        //meeting.ExternalLink.HasValue && function=="view" ? meeting.ExternalLink :
+        function.IsEmpty ? $"meetings/{meeting.Id}/view" : $"meetings/{meeting.Id}/{function}";
 
-    string MeetingLinkTarget(Meeting meeting) => meeting.ExternalLink.HasValue() ? "_blank" : "_self";
+    string MeetingLinkTarget(Meeting meeting) => meeting.ExternalLink.HasValue ? "_blank" : "_self";
 
     protected override async Task OnInitializedAsync()
     {

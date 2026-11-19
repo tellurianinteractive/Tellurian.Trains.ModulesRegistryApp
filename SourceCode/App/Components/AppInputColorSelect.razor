@@ -39,7 +39,7 @@
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
     bool IsSelected(NamedColor color) => color.Hex.Equals(CurrentValue, StringComparison.OrdinalIgnoreCase);
     string? SelectedStyle => Colors?.Any(IsSelected) == true ? Style(CurrentValue) : null;
-    static string Style(string? hex) => $"background-color: {hex}; color: {hex.TextColor()}";
+    static string Style(string? hex) => $"background-color: {hex}; color: {hex.TextColor}";
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {

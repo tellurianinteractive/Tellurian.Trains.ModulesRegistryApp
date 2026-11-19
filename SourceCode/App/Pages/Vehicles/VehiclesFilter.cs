@@ -13,8 +13,8 @@ public class VehiclesFilter
     public string? PrototypeInfo { get; set; }
     public string? ModelInfo { get; set; }
     public string? OwnerName { get; set; }
-    public bool HasFilter => PrototypeInfo.HasValue() || ModelInfo.HasValue() || OwnerName.HasValue();
-    public override string ToString() => string.Join(' ', new[] { OwnerName, PrototypeInfo, ModelInfo }.Where(v => v.HasValue()));
+    public bool HasFilter => PrototypeInfo.HasValue || ModelInfo.HasValue || OwnerName.HasValue;
+    public override string ToString() => string.Join(' ', new[] { OwnerName, PrototypeInfo, ModelInfo }.Where(v => v.HasValue));
 
     public IEnumerable<Vehicle> Apply(IEnumerable<Vehicle> vehicles) =>
         vehicles.Where(v =>
@@ -24,5 +24,5 @@ public class VehiclesFilter
 
     // A vehicle without the value doesn't match a filter on it.
     static bool Matches(string? value, string? filter) =>
-        filter.HasNoValue() || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
+        filter.IsEmpty || value?.Contains(filter.Trim(), StringComparison.OrdinalIgnoreCase) == true;
 }

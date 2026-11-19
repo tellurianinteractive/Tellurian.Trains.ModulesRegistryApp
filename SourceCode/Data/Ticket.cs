@@ -23,7 +23,7 @@ public static class TicketBuilder
                 }
             }
         }
-        if (onlyFromOrToStationSignature.HasValue())
+        if (onlyFromOrToStationSignature.HasValue)
         {
             foreach (var fromStation in layoutStations)
             {

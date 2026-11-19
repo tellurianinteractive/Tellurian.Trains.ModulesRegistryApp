@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<Strings> Localizer
 @inject HttpClient Http
-@if (Html.HasValue())
+@if (Html.HasValue)
 {
     <div class="markdown">
-        @if (Label.HasValue())
+        @if (Label.HasValue)
         {
             <h1>@Localizer[Label]</h1>
         }
@@ -19,13 +19,13 @@
     [Parameter] public string? Label { get; set; }
     [Parameter] public string? Href { get; set; }
 
-    string Padding => BackgroundColor.HasValue() ? "5pt" : "0px";
+    string Padding => BackgroundColor.HasValue ? "5pt" : "0px";
 
     string Html = string.Empty ;
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Href?.Length > 7 && Html.HasNoValue())
+        if (Href?.Length > 7 && Html.IsEmpty)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, Href);
             var response = await Http.SendAsync(request);

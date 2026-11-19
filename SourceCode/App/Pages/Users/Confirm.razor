@@ -84,7 +84,7 @@ else if (User.IsLockedOut())
 
 
 
-    private bool HasPassword => User is not null && User.HashedPassword.HasValue();
+    private bool HasPassword => User is not null && User.HashedPassword.HasValue;
     private bool PasswordReset => User is not null && User.PasswordResetAttempts > 0;
     private bool IsLockedOut => User is not null && User.PasswordResetAttempts > 3;
 }

@@ -90,7 +90,7 @@
 
     private string CountryName => LanguageExtensions.GetLocalizedString(CurrentCountry?.EnglishName);
     private string MailSubject => LanguageExtensions.GetLocalizedString("ModuleRegistry", Language);
-    private string Language => CurrentCountry is null ? "en" : CurrentCountry.Languages.Items().First();
+    private string Language => CurrentCountry is null ? "en" : CurrentCountry.Languages.ToItems().First();
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,8 +112,8 @@
         if (CurrentCountry is null) return;
         AppService.LastCountryId = CountryId;
         People = await PersonService.GetAllInCountryAsync(Principal, CountryId);
-        PeopleWithEmail = [.. People.Where(p => p.EmailAddresses.HasValue())];
-        PeopleWithoutMail = [.. People.Where(p => p.EmailAddresses.HasNoValue())];
+        PeopleWithEmail = [.. People.Where(p => p.EmailAddresses.HasValue)];
+        PeopleWithoutMail = [.. People.Where(p => p.EmailAddresses.IsEmpty)];
         PeopleWithUserAccount = [.. People.Where(p => p.IsActiveUser())];
         PeopleNotSignedInSince = [.. People.NotSignedInSince(new DateTimeOffset(NotSignedInSinceDate.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero))];
     }

@@ -31,7 +31,7 @@
 }
 
 <form id="persons-filter" method="get" data-auto-submit data-enhance class="noprint">
-    @if (Sort.HasValue())
+    @if (Sort.HasValue)
     {
         <input type="hidden" name="sort" value="@Sort" />
         <input type="hidden" name="direction" value="@Direction" />
@@ -139,7 +139,7 @@
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
-    string ClearFilterHref => Sort.HasValue() ? $"Persons/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Persons/Country/{CountryId}";
+    string ClearFilterHref => Sort.HasValue ? $"Persons/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Persons/Country/{CountryId}";
     string AddHref(int countryId) => countryId > 0 ? $"persons/0/edit/{countryId}" : string.Empty;
     string EditHref(Person person) => $"persons/{person.Id}/edit";
     string ModulesHref(Person person) => $"persons/{person.Id}/modules";

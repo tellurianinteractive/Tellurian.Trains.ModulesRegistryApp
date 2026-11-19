@@ -32,7 +32,7 @@ public static class RegionFormExtensions
             entity.RepresentativeExternalStationId = form.RepresentativeExternalStationId;
             entity.LocalName = form.LocalName.Trim();
             entity.BackColor = form.BackColor;
-            entity.ForeColor = entity.BackColor.TextColor();
+            entity.ForeColor = entity.BackColor.TextColor;
             entity.Description = string.IsNullOrWhiteSpace(form.Description) ? null : form.Description.Trim();
             return entity;
         }

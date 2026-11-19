@@ -17,7 +17,7 @@ public static class LocalizedStringExtensions
         isAdd ? localizer["Add"].Value : localizer["Edit"].Value;
 
     public static string ActionText(this IStringLocalizer localizer, string? label, string? objectName, PageAction action) =>
-        label.HasValue() ? $"{localizer.ActionName(action)} {localizer.ObjectName(label, !action.IsEmpty())}" :
+        label.HasValue ? $"{localizer.ActionName(action)} {localizer.ObjectName(label, !action.IsEmpty())}" :
         $"{localizer.ActionName(action)} {localizer.ObjectName(objectName, !action.IsEmpty())}";
 
     private static string ActionName(this IStringLocalizer localizer, PageAction action) =>
@@ -75,7 +75,7 @@ public static class LocalizedStringExtensions
 
     public static string FromParts(this IStringLocalizer localizer, string resourceName)
     {
-        if (resourceName.HasNoValue()) return string.Empty;
+        if (resourceName.IsEmpty) return string.Empty;
         var parts = resourceName.Split(['-', '/', '=', ',', '&']);
         if (parts.Length == 1) return localizer[parts[0]];
         var localized = parts.Select(p => (localizer[p] ?? p).ToLowerInvariant());

@@ -54,7 +54,7 @@
     protected override async Task OnParametersSetAsync()
     {
         Id = SelectedId;
-        if (IsStoredSelectionApplied || !LocalStorageKey.HasValue() || Items is null) return;
+        if (IsStoredSelectionApplied || !LocalStorageKey.HasValue || Items is null) return;
         IsStoredSelectionApplied = true;
         var stored = await LocalStorage.GetItemAsStringAsync(LocalStorageKey);
         if (int.TryParse(stored, out var storedId) && storedId != SelectedId && Items.Any(item => item.Id == storedId))
@@ -72,7 +72,7 @@
     private async Task OnSelectedItem()
     {
         SelectedId = Id;
-        if (LocalStorageKey.HasValue())
+        if (LocalStorageKey.HasValue)
         {
             await LocalStorage.SetItemAsStringAsync(LocalStorageKey, Id.ToString());
         }

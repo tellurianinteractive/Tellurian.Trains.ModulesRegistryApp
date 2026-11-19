@@ -112,9 +112,9 @@ public static class WaybillExtensions
 
     public static string DestinationQuantity(this Waybill waybill) =>
         waybill is null || waybill.Destination is null ? string.Empty :
-        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.HasValue("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
-        waybill.Destination.QuantityUnitResourceKey.HasValue("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
-        waybill.Destination.QuantityUnitResourceKey.HasValue("Piece", "Pieces") ? $"{waybill.Quantity} " :
+        waybill.IsEmptyReturn && waybill.Origin!.QuantityUnitResourceKey.IsAnyOf("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
+        waybill.Destination.QuantityUnitResourceKey.IsAnyOf("Wagon", "Wagons") ? waybill.DestinationWagonQuantity() :
+        waybill.Destination.QuantityUnitResourceKey.IsAnyOf("Piece", "Pieces") ? $"{waybill.Quantity} " :
         $"{waybill.Quantity} {waybill.Destination.QuantityUnit()}";
 
     public static string OriginQuantity(this Waybill waybill) =>
@@ -172,7 +172,7 @@ public static class WaybillExtensions
 
     public static string WagonClass(this Waybill? me) =>
         me is null ? string.Empty :
-        me.SpecialWagonClass.HasValue() ? me.SpecialWagonClass :
+        me.SpecialWagonClass.HasValue ? me.SpecialWagonClass :
         me.DefaultWagonClass;
 
     public static bool HasReturn(this Waybill? me) => me is not null && (me.HasSameCargoReturn || me.HasEmptyReturn);
@@ -182,7 +182,7 @@ public static class CargoCustomerExtensions
 {
     public static string StationName(this CargoCustomer? me) =>
         me is null ? string.Empty :
-        me.Waybill.IsCrossBorder() && me.InternationalStationName.HasValue() ? me.InternationalStationName :
+        me.Waybill.IsCrossBorder() && me.InternationalStationName.HasValue ? me.InternationalStationName :
         me.StationName;
 
     public static string CargoName(this CargoCustomer? me) =>
@@ -193,12 +193,12 @@ public static class CargoCustomerExtensions
         me is not null && me.PackagingUnitResourceKey.HasValueExcept("NotApplicable");
 
     public static string PackagingUnit(this CargoCustomer? me) =>
-         me is null || me.PackagingUnitResourceKey.HasValue("NotApplicable") ? string.Empty :
+         me is null || me.PackagingUnitResourceKey.IsAnyOf("NotApplicable") ? string.Empty :
          $"{me.PackagingUnitResourceKey.GetLocalizedString(me.Language())}";
 
     public static string PackagingUnitWithPreposition(this CargoCustomer? me) =>
-         me is null || me.PackagingUnitResourceKey.HasValue("NotApplicable") ? string.Empty :
-         me.QuantityUnitResourceKey.HasValue("Piece", "Pieces") ? $"{me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
+         me is null || me.PackagingUnitResourceKey.IsAnyOf("NotApplicable") ? string.Empty :
+         me.QuantityUnitResourceKey.IsAnyOf("Piece", "Pieces") ? $"{me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}" :
             $"{me.PackagingPrepositionResourceCode.GetLocalizedString(me.Language())} {me.PackagingUnitResourceKey.GetLocalizedString(me.Language()).ToLowerInvariant()}";
 
     public static string CustomerName(this CargoCustomer? me) =>
@@ -238,7 +238,7 @@ public static class CargoCustomerExtensions
         var culture = new CultureInfo(languageTwoLetterISOCode);
         var localizedText = AppTexts.Find(resourceKey, culture);
         var englishText = otherEnglishText ?? resourceKey;
-        if (localizedText.HasValue() && englishText != localizedText) return $"{englishText}/{localizedText}";
+        if (localizedText.HasValue && englishText != localizedText) return $"{englishText}/{localizedText}";
         return englishText;
     }
 
@@ -263,7 +263,7 @@ public static class CargoCustomerExtensions
     //(me.IsOrigin && waybill.Origin.StationId == waybill.OwnerStationId && waybill.IsEmptyReturn));
 
     internal static string QuantityUnit(this CargoCustomer me, string? otherLanguage = null) =>
-        me.Waybill.QuantityShortUnit.HasValue() ? me.Waybill.QuantityShortUnit :
+        me.Waybill.QuantityShortUnit.HasValue ? me.Waybill.QuantityShortUnit :
         me.QuantityUnitResourceKey.GetLocalizedString(otherLanguage ?? me.Language());
 
     internal static string PackagingUnit(this CargoCustomer me, string? otherLanguage = null) =>
@@ -285,25 +285,25 @@ public static class CargoCustomerExtensions
         me.ReadyTimeResourceKey.GetLocalizedString(me.Languages).ToLowerInvariant();
 
     public static bool HasReadyTime([NotNullWhen(true)] this CargoCustomer? me) =>
-        me is not null && me.DisplayReadyTime && me.ReadyTimeResourceKey.HasValue() && me.ReadyTimeResourceKey != "n/a";
+        me is not null && me.DisplayReadyTime && me.ReadyTimeResourceKey.HasValue && me.ReadyTimeResourceKey != "n/a";
 
     public static string TrackOrAreaColor(this CargoCustomer? me) =>
-        me is null || me.TrackOrAreaColor.HasNoValue() || me.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
+        me is null || me.TrackOrAreaColor.IsEmpty || me.TrackOrAreaColor.Equals("#ffffff", StringComparison.OrdinalIgnoreCase) ? "#fffff0" :
         me.TrackOrAreaColor;
 
     public static string TrackOrAreaBackColor(this CargoCustomer item) =>
     item == null ? string.Empty :
-    item.CargoTrackOrAreaColor.IsHexColor() && !item.CargoTrackOrAreaColor.IsWhiteColor() ? item.CargoTrackOrAreaColor :
-    item.TrackOrAreaColor.IsHexColor() ? item.TrackOrAreaColor :
+    item.CargoTrackOrAreaColor.IsHexColor && !item.CargoTrackOrAreaColor.IsWhite ? item.CargoTrackOrAreaColor :
+    item.TrackOrAreaColor.IsHexColor ? item.TrackOrAreaColor :
     "#808080";
 
     public static string TrackOrAreaTextColor(this CargoCustomer item) =>
-        item.TrackOrAreaBackColor().TextColor();
+        item.TrackOrAreaBackColor().TextColor;
 
     public static string TrackOrAreaDesignation(this CargoCustomer item) =>
         item is null ? string.Empty :
-        item.CargoTrackOrArea.HasValue() ? item.CargoTrackOrArea :
-        item.TrackOrArea.HasValue() ? item.TrackOrArea :
+        item.CargoTrackOrArea.HasValue ? item.CargoTrackOrArea :
+        item.TrackOrArea.HasValue ? item.TrackOrArea :
         string.Empty;
 
 }

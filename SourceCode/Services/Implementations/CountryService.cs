@@ -15,7 +15,7 @@ public sealed class CountryService(IDbContextFactory<ModulesDbContext> factory)
         if (principal is null) return Array.Empty<ListboxItem>();
         using var dbContext = Factory.CreateDbContext();
         var countries = await dbContext.Countries.ToReadOnlyListAsync();
-        return countries.AsEnumerable()
+        return countries
             .Where(c => allCountries || (c.IsFullySupported && allSupportedCountries) || (principal.IsGlobalAdministrator() || principal.IsAuthorisedInCountry(c.Id)))
             .Select(c => new ListboxItem(c.Id, c.EnglishName.AsLocalized()))
             .OrderBy(l => l.Description)

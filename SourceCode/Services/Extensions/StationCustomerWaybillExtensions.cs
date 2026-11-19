@@ -44,8 +44,8 @@ public static class StationCustomerWaybillExtensions
          $"{waybill.StationCustomerCargo.Quantity} {waybill.StationCustomerCargo.UnitOfCargo().ToLowerInvariant()}";
 
     private static string UnitOfCargo(this StationCustomerCargo cargo) =>
-        cargo.QuantityUnit.SingularResourceCode.HasValue("Piece") ? cargo.PackageUnitName() :
-        cargo.QuantityUnit.Designation.HasValue() ? cargo.QuantityUnit.Designation :
+        cargo.QuantityUnit.SingularResourceCode.IsAnyOf("Piece") ? cargo.PackageUnitName() :
+        cargo.QuantityUnit.Designation.HasValue ? cargo.QuantityUnit.Designation :
         cargo.QuantityUnitName();
 
     private static string PackageUnitName(this StationCustomerCargo cargo) =>

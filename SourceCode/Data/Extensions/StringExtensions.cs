@@ -1,35 +1,24 @@
 ﻿using ModulesRegistry.Resources;
+using Tellurian.Utilities;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data.Extensions;
 
+/// <summary>
+/// The app's own string helpers that Tellurian.Utilities doesn't have; prefer the package's (HasValue, IsEmpty, OrEmpty, ToItems,
+/// IsAnyOf, ...). <see cref="HasValueExcept"/> compares case-insensitively against several values, unlike the package's on object.
+/// </summary>
 public static class StringExtensions
 {
-    public static string[]? AsArray(this string? value) =>
-        value is null ? null : new string[] { value };
-
     public static bool ContainsCaseInsensitive(this string? value, string? find) =>
-        value is null || find.HasNoValue() || value.Contains(find, StringComparison.OrdinalIgnoreCase);
+        value is null || find.IsEmpty || value.Contains(find, StringComparison.OrdinalIgnoreCase);
 
     public static bool StartsWithCaseInsensitive(this string? value, string? start) =>
-        value is null || start.HasNoValue() || start.Length > 0 && value.StartsWith(start, StringComparison.OrdinalIgnoreCase);
-
-    public static bool HasValue([NotNullWhen(true)] this string? value) =>
-        !string.IsNullOrWhiteSpace(value);
-
-    public static bool HasValue(this string? value, params string[] any) =>
-        any is not null && !string.IsNullOrEmpty(value) && any.Contains(value, StringComparer.OrdinalIgnoreCase);
+        value is null || start.IsEmpty || start.Length > 0 && value.StartsWith(start, StringComparison.OrdinalIgnoreCase);
 
     public static bool HasValueExcept([NotNullWhen(true)] this string? value, params string[] except) =>
         except is not null ? !string.IsNullOrEmpty(value) && !except.Contains(value, StringComparer.OrdinalIgnoreCase) :
         !string.IsNullOrWhiteSpace(value);
-
-    public static bool HasNoValue([NotNullWhen(false)] this string? value) =>
-        string.IsNullOrWhiteSpace(value);
-
-    public static string FirstItem(this string? value, string defaultValue = "", char delimiter = ',') =>
-        value is null || value.Length == 0 ? defaultValue :
-        value.Split(delimiter)[0] ?? defaultValue;
 
     public static string ToFirstLowerInvariant(this string? value) =>
         string.IsNullOrWhiteSpace(value) ? string.Empty :
@@ -47,10 +36,6 @@ public static class StringExtensions
         values.Length == 1 ? values[0] :
         $"{values[0]} {string.Join(' ',values.Skip(1)).ToLowerInvariant()}";
     
-
-    public static string[] Items(this string? value, char separator = ';') =>
-        string.IsNullOrWhiteSpace(value) ? [] :
-        value.Trim().Split(separator);
 
     public static string ToLowerLanguageSensitive(this string? value) =>
         value is null ? string.Empty :

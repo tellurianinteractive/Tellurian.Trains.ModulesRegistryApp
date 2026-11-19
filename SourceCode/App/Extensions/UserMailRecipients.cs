@@ -20,7 +20,7 @@ public static class UserMailRecipientsExtensions
             administrators
                 .Where(u => u.IsGlobalAdministrator || (u.IsCountryAdministrator && (principal.IsGlobalAdministrator() || u.Person?.CountryId == principal.CountryId())))
                 .Select(u => u.Person)
-                .Where(p => p is not null && p.PrimaryEmail().HasValue())
+                .Where(p => p is not null && p.PrimaryEmail().HasValue)
                 .OrderBy(p => p.FirstName).ThenBy(p => p.LastName);
     }
 
@@ -30,7 +30,7 @@ public static class UserMailRecipientsExtensions
         /// Persons with an email address whose user has signed in or created a password, but has not been active since <paramref name="date"/>.
         /// </summary>
         public IEnumerable<Person> NotSignedInSince(DateTimeOffset date) =>
-            people.Where(p => p.PrimaryEmail().HasValue() && p.User.LastActivityTime() < date);
+            people.Where(p => p.PrimaryEmail().HasValue && p.User.LastActivityTime() < date);
     }
 
     extension(User? user)
