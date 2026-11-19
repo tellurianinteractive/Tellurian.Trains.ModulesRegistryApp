@@ -14,7 +14,6 @@ public class OperatorValidator : AbstractValidator<Operator>
             .NotEmpty()
             .MinimumLength(1)
             .MaximumLength(6)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter)
             .WithName(n => localizer[nameof(n.Signature)]);
 
         RuleFor(m => m.FullName)
@@ -22,16 +21,15 @@ public class OperatorValidator : AbstractValidator<Operator>
             .MinimumLength(3)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
         RuleFor(m => m.PrimaryOperatingCountryId)
             .MustBeSelected(localizer)
             .WithName(n => localizer[nameof(n.PrimaryOperatingCountry)]);
         RuleFor(m => m.FirstYearInOperation)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FirstYearInOperation)]);
         RuleFor(m => m.FinalYearInOperation)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FinalYearInOperation)]);
     }
 }

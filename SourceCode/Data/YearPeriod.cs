@@ -36,6 +36,13 @@ public readonly record struct YearPeriod(int? From, int? Upto)
         return from > upto ? new(upto, from) : new(from, upto);
     }
 
+    /// <summary>The corrected period of two stored years (<see cref="AsCorrected"/>), to assign back: <c>(e.From, e.Upto) = YearPeriod.Corrected(e.From, e.Upto)</c>.</summary>
+    public static (short? From, short? Upto) Corrected(short? from, short? upto)
+    {
+        var corrected = new YearPeriod(from, upto).AsCorrected();
+        return (corrected.FromAsShort, corrected.UptoAsShort);
+    }
+
     public short? FromAsShort => (short?)From;
     public short? UptoAsShort => (short?)Upto;
 

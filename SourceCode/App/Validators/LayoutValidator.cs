@@ -36,10 +36,10 @@ public class LayoutValidator : AbstractValidator<Layout>
             .MaximumLength(MaxNoteLength)
             .WithName(n => localizer[nameof(n.Details)]);
         RuleFor(m => m.FirstYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FirstYear)]);
         RuleFor(m => m.LastYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.LastYear)]);
         RuleFor(m => m.MaxNumberOfParticipants)
             .Empty().When(m => m.MaxNumberOfParticipants is null)

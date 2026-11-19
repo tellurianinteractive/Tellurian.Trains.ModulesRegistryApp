@@ -14,13 +14,12 @@ public class ExternalStationCustomerValidator : AbstractValidator<ExternalStatio
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer["Name"]);
         RuleFor(m => m.OpenedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.OpenedYear)]);
         RuleFor(m => m.ClosedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.ClosedYear)]);
     }
 }

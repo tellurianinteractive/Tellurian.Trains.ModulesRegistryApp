@@ -18,25 +18,22 @@ public class ExternalStationValidator : AbstractValidator<ExternalStation>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
         RuleFor(m => m.InternationalName)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
         RuleFor(m => m.Signature)
             .NotEmpty()
             .MinimumLength(1)
             .MaximumLength(5)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter)
             .WithName(n => localizer[nameof(n.Signature)]);
         RuleFor(m => m.OpenedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.OpenedYear)]);
         RuleFor(m => m.ClosedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.ClosedYear)]);
     }
 }

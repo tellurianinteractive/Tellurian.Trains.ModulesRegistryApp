@@ -142,6 +142,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
 
     public async Task<(int Count, string Message, Cargo? Entity)> SaveAsync(ClaimsPrincipal? principal, Cargo entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal is null) return principal.SaveNotAuthorised<Cargo>();
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Cargos.FindAsync(entity.Id).ConfigureAwait(false);

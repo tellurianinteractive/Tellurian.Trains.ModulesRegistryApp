@@ -12,7 +12,7 @@ public class VehicleValidator : AbstractValidator<Vehicle>
     {
         RuleFor(x => x.InventoryNumber).InclusiveBetween(1, 9999).WithName(x => localizer[nameof(x.InventoryNumber)]);
         RuleFor(x => x.PrototypeManufacturerName).Length(1, 20).MustBeOrdinaryText(localizer).WithName(localizer["Manufacturer"]);
-        RuleFor(x => x.PrototypeManufactureYear).IsEmptyOrInclusiveBetween(1850, DateTime.Now.Year, localizer);
+        RuleFor(x => x.PrototypeManufactureYear).MustBeYearOrEmpty(localizer, YearPeriod.MinVehicleYear);
         RuleFor(x => x.PrototypeImageHref).Length(0, 256);
         RuleFor(x => x.KeeperSignature).Length(1, 10).WithName(x => localizer[nameof(x.KeeperSignature)]);
         RuleFor(x => x.VehicleClass).NotEmpty().Length(1, 10).WithName(x => localizer[nameof(x.VehicleClass)]);
@@ -20,8 +20,8 @@ public class VehicleValidator : AbstractValidator<Vehicle>
         RuleFor(x => x.Theme).NotEmpty().Length(1, 10).WithName(x => localizer[nameof(x.Theme)]);
         RuleFor(x => x.ModelManufacturerName).NotEmpty().Length(1, 20).MustBeOrdinaryText(localizer).WithName(localizer.FromParts("Model-Manufacturer"));
         RuleFor(x => x.ModelNumber).Length(0, 16).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.ModelNumber)]);
-        RuleFor(x => x.ThisEmbodiementFromYear).MustBeValidYear(localizer).WithName(localizer.FromParts("PeriodInThisVersion-FromYear"));
-        RuleFor(x => x.ThisEmbodiementUptoYear).MustBeValidYear(localizer).WithName(localizer.FromParts("PeriodInThisVersion-UptoYear"));
+        RuleFor(x => x.ThisEmbodiementFromYear).MustBeYearOrEmpty(localizer).WithName(localizer.FromParts("PeriodInThisVersion-FromYear"));
+        RuleFor(x => x.ThisEmbodiementUptoYear).MustBeYearOrEmpty(localizer).WithName(localizer.FromParts("PeriodInThisVersion-UptoYear"));
         RuleFor(x => x.ScaleId).MustBeSelected(localizer).WithName(x => localizer[nameof(x.Scale)]);
         RuleFor(x => x.DecoderType).Length(0, 20).MustBeOrdinaryText(localizer).WithName(x => localizer[nameof(x.DecoderType)]);
 

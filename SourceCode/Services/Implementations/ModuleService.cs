@@ -193,6 +193,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
 
     public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         ownerRef = principal.UpdateFrom(ownerRef);
         entity.Length = entity.TotalLength();
         using var dbContext = Factory.CreateDbContext();

@@ -1,104 +1,91 @@
 ﻿using FluentValidation;
-using FluentValidation.Validators;
 using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Forms.Validation;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
 
+/// <summary>
+/// Rules of the interactive forms' FluentValidation validators, until each form moves to static SSR with DataAnnotations
+/// (Migration step 3.6). Since step 3.5 (decided 2026-11-19), what the service corrects when saving
+/// (<c>CorrectInput</c> in Data's <see cref="EntityCorrectionExtensions"/>) is not validated: names aren't checked for capitals,
+/// and the address, year, MAC address and colour rules check the value as it will be after the correction. Ordinary text is
+/// still checked as typed, until each form's service also corrects it (step 3.6).
+/// </summary>
 public static partial class ValidatorsExtensions
 {
-
-    public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, bool allWordsWithInitialCapitals = true) =>
-        builder.MustBeCapitalizedCorrectly(localizer, allWordsWithInitialCapitals ? NameStyle.AllWords : NameStyle.FirstLetter);
-
-    // The same rules as the correction when saving (NameCapitalizationExtensions): valid when the correction wouldn't change the name.
-    public static IRuleBuilderOptions<T, string> MustBeCapitalizedCorrectly<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer, NameStyle style) =>
-        builder.Must(value => value.IsCapitalizedName(style)).WithMessage(Message(localizer, style != NameStyle.FirstLetter));
-
-
-
-    private static string Message(IStringLocalizer localizer, bool allWordsWithInitialCapitals) =>
-        allWordsWithInitialCapitals ?
-        $"\"{{PropertyName}}\" {localizer["AllWordsMustBeginWithCapitalLetter"]}" :
-        $"\"{{PropertyName}}\" {localizer["MustBeginWithCapitalLetter"]}";
-
-
     public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
        builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
 
     public static IRuleBuilderOptions<T, string> MustBeOrdinaryText<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
 
+    /// <summary>Loco addresses, after the correction when saving (<see cref="InputCorrectionExtensions.AsLocoAddresses"/>).</summary>
     public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.TryParseLocoAdresses(out var _)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
+        builder.Must(value => value.IsLocoAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
 
+    /// <summary>Email addresses, after the correction when saving (<see cref="InputCorrectionExtensions.AsEmailAddresses"/>).</summary>
     public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-     builder.Must(value => string.IsNullOrEmpty(value) || value.Split(';').All(email => email.IsValidEmailAddress())).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
+        builder.Must(value => value.IsEmailAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
 
     public static IRuleBuilderOptions<T, Station> IsRegionRequired<T>(this IRuleBuilder<T, Station> builder, IStringLocalizer localizer) =>
         builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
+
+    // Zero means "not given" and is saved as empty (AsNullIfZero when saving).
     public static IRuleBuilderOptions<T, double?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, double?> builder, double min, double max, IStringLocalizer localizer) =>
-    builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"],min,max)}");
+        builder.Must(d => d.HasValue == false || d.Value == 0 || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"], min, max)}");
 
     public static IRuleBuilderOptions<T, decimal?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, decimal?> builder, decimal min, decimal max, IStringLocalizer localizer) =>
-        builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"], min, max)}");
+        builder.Must(d => d.HasValue == false || d.Value == 0 || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"], min, max)}");
+
     public static IRuleBuilderOptions<T, short?> IsEmptyOrInclusiveBetween<T>(this IRuleBuilder<T, short?> builder, int min, int max, IStringLocalizer localizer) =>
-        builder.Must(d => d.HasValue == false || (min > 0 && d.Value == 0) || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"], min, max)}");
-    private static bool IsValidEmailAddress(this string? email)
-    {
-        if (email == null) return false;
-        return EmailRegex().IsMatch(email);
-    }
-    private static bool IsMacAddress(this string? text)
-    {
-        if (string.IsNullOrEmpty(text)) return false;
-        if (text.Length != 17) return false;
-        foreach (var c in text)
-        {
-            if (c.IsHexDigit()) continue;
-            if (c == ':') continue;
-            return false;
-        }
-        return true;
-    }
-
-    private static bool IsDccAddress(this short? value) => value.HasValue && value.Value >= 1 && value.Value <= 9999;
-
-    private static bool IsDigit(this char c) => c.IsInRange(0x0030, 0x0039);
-    private static bool IsHexDigit(this char c) => c.IsDigit() || c.IsInRange(0x0041, 0x0046) || c.IsInRange(0x0061, 0x066);
-    private static bool IsInRange(this char c, int firstCodePoint, int lastCodePoint) =>
-        c >= firstCodePoint && c <= lastCodePoint;
-
+        builder.Must(d => d.HasValue == false || d.Value == 0 || (d.Value >= min && d.Value <= max)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetween"], min, max)}");
 
     public static IRuleBuilderOptions<T, int> MustBeSelected<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, bool orZero = false) =>
-        builder.Must(value => value.IsSelected(orZero)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
-    private static bool IsSelected(this int id, bool zero) => id > 0 || zero;
+        builder.Must(value => value > 0 || orZero).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
 
     public static IRuleBuilderOptions<T, int> MustBeEnumValue<T>(this IRuleBuilder<T, int> builder, IStringLocalizer localizer, Type enumType) =>
-        builder.Must(value => value.IsValidEnum(enumType)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAnyOf"].Value, string.Join(",", EnumExtensions.StationTrackDirections()))}");
-    private static bool IsValidEnum(this int value, Type enumType) => Enum.IsDefined(enumType, value);
+        builder.Must(value => Enum.IsDefined(enumType, value)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeAnyOf"].Value, string.Join(",", EnumExtensions.StationTrackDirections()))}");
 
-    public static IRuleBuilderOptions<T, short?> MustBeValidYear<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsValidYear()).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, MinYear, MaxYear)}");
-    private static bool IsValidYear(this short? year) => year is null || year >= MinYear && year <= MaxYear;
-    private static int MinYear => 1900;
-    private static int MaxYear => DateTimeOffset.Now.Year;
+    /// <summary>
+    /// A year of a period (<see cref="YearPeriod"/>), or empty: between <paramref name="minimum"/> and <see cref="YearPeriod.MaxYear"/>.
+    /// Zero or less is accepted, since it is saved as empty; reversed years are swapped when saving, so they are accepted too.
+    /// </summary>
+    public static IRuleBuilderOptions<T, short?> MustBeYearOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer, int minimum = YearPeriod.MinYear) =>
+        builder.Must(year => year.IsYearOrEmpty(minimum)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, minimum, YearPeriod.MaxYear)}");
 
-
+    /// <summary>A colour, after the correction when saving (<see cref="InputCorrectionExtensions.AsHexColor"/>): "f80" is accepted.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-         builder.Must(value => value.IsHexColorOrNull()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
+        builder.Must(value => value is null || value.AsHexColor().IsHexColor()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
 
+    /// <summary>A MAC address, after the correction when saving (<see cref="InputCorrectionExtensions.AsMacAddress"/>): any common notation.</summary>
     public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsMacAddress()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAMacAddress"].Value}");
+        builder.Must(value => value.IsMacAddressWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAMacAddress"].Value}");
+
+    /// <summary>A DCC address, 1 to 9999, or empty; zero is saved as empty.</summary>
     public static IRuleBuilderOptions<T, short?> MustBeDccAddressOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value is null || value.IsDccAddress()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeADccAddress"].Value}");
-    private static bool IsHexColorOrNull(this string? value) =>
-        value is null || value.IsHexColor();
+        builder.Must(value => value is null or 0 or (>= 1 and <= 9999)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeADccAddress"].Value}");
+
+    extension(string? value)
+    {
+        internal bool IsEmailAddressesWhenCorrected() =>
+            value.AsEmailAddresses() is not { Length: > 0 } addresses || addresses.Split(';').All(EmailRegex().IsMatch);
+
+        internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
+
+        internal bool IsMacAddressWhenCorrected() => value.AsMacAddress() is { } address && MacAddressRegex().IsMatch(address);
+    }
+
+    extension(short? year)
+    {
+        internal bool IsYearOrEmpty(int minimum) => year is null || year <= 0 || (year >= minimum && year <= YearPeriod.MaxYear);
+    }
 
     [GeneratedRegex("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
     private static partial Regex EmailRegex();
+
+    [GeneratedRegex("^([0-9A-F]{2}:){5}[0-9A-F]{2}$")]
+    private static partial Regex MacAddressRegex();
 }

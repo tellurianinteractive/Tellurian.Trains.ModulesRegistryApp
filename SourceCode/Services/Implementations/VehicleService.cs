@@ -108,6 +108,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<(int Count, string Message, Vehicle? Entity)> SaveAsync(ClaimsPrincipal? principal, Vehicle entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Vehicle>();
 
         entity.FormatData();

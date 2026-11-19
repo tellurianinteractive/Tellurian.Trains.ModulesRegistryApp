@@ -14,7 +14,6 @@ public class ModuleValidator : AbstractValidator<Module>
             .MinimumLength(3)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
          RuleFor(m => m.ConfigurationLabel)
             .MaximumLength(10)
@@ -35,10 +34,10 @@ public class ModuleValidator : AbstractValidator<Module>
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Theme)]);
         RuleFor(m => m.RepresentsFromYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer["FromYear"]);
         RuleFor(m => m.RepresentsUptoYear)
-           .MustBeValidYear(localizer)
+           .MustBeYearOrEmpty(localizer)
            .WithName(n => localizer["UptoYear"]);
         RuleFor(m => m.Radius)
             .InclusiveBetween(300.0, 10000.0).When(m => m.Radius is not null)

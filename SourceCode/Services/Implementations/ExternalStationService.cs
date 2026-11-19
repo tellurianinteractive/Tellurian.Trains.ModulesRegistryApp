@@ -47,6 +47,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
     public async Task<(int Count, string Message, ExternalStation? Entity)> SaveAsync(ClaimsPrincipal? principal, ExternalStation entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
@@ -138,6 +139,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
     public async Task<(int Count, string Message, ExternalStationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, ExternalStationCustomer entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();

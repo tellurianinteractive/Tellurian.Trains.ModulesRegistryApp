@@ -13,17 +13,16 @@ public class StationCustomerValidator : AbstractValidator<StationCustomer>
             .NotEmpty()
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer["Name"]);
         RuleFor(m => m.Comment)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.Comment)]);
         RuleFor(m => m.OpenedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.OpenedYear)]);
         RuleFor(m => m.ClosedYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.ClosedYear)]);
         RuleFor(m => m.TrackOrArea)
             .MaximumLength(20)

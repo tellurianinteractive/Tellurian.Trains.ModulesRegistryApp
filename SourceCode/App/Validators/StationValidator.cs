@@ -15,14 +15,12 @@ public class StationValidator : AbstractValidator<Station>
             .MinimumLength(3)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, false)
             .WithName(n => localizer[nameof(n.FullName)]);
         RuleFor(m => m.Signature)
             .NotEmpty()
             .MinimumLength(1)
             .MaximumLength(5)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter)
             .WithName(n => localizer[nameof(n.Signature)]);
         RuleFor(m => m)
             .IsRegionRequired(localizer)

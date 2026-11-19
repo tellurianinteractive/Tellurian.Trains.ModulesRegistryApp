@@ -115,6 +115,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownershipRef, int moduleId)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             ownershipRef = principal.UpdateFrom(ownershipRef);

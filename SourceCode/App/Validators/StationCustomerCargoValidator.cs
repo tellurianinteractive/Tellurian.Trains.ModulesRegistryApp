@@ -38,10 +38,10 @@ public class StationCustomerCargoValidator : AbstractValidator<StationCustomerCa
             .MustBeSelected(localizer, orZero: true)
             .WithName(n => localizer[ReadyTimeLabel(n)]);
         RuleFor(m => m.FromYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FromYear)]);
         RuleFor(m => m.UptoYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.UptoYear)]);
         RuleFor(m => m.TrackOrArea)
             .MaximumLength(20).

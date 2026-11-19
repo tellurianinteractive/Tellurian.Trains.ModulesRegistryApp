@@ -21,11 +21,11 @@ public class CargoValidator : AbstractValidator<Cargo>
            .WithName(n => localizer[nameof(n.NhmCode)]);
 
         RuleFor(m => m.FromYear)
-            .InclusiveBetween((short)1900, (short)(DateTime.Now.Year))
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FromYear)]);
 
         RuleFor(m => m.UptoYear)
-            .InclusiveBetween((short)1900, (short)(DateTime.Now.Year))
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.UptoYear)]);
 
         RuleFor(m => m.EN).NotEmpty().MaximumLength(TranslatedLength).MustBeOrdinaryText(localizer).WithName(localizer["English"]);

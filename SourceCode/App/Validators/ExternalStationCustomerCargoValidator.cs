@@ -33,10 +33,10 @@ public class ExternalStationCustomerCargoValidator : AbstractValidator<ExternalS
             .MustBeOrdinaryText(localizer)
             .WithName(n => localizer[nameof(n.SpecialCargoName)]);
         RuleFor(m => m.FromYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.FromYear)]);
         RuleFor(m => m.UptoYear)
-            .MustBeValidYear(localizer)
+            .MustBeYearOrEmpty(localizer)
             .WithName(n => localizer[nameof(n.UptoYear)]);
     }
 }

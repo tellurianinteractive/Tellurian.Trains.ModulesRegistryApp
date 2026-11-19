@@ -165,6 +165,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
 
     public async Task<(int Count, string Message, Group? Entity)> SaveAsync(ClaimsPrincipal? principal, Group group)
     {
+        group.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.MaySave() || await IsGroupMemberAdministratorAsync(principal, group.Id))
         {
             using var dbContext = Factory.CreateDbContext();

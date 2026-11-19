@@ -65,6 +65,7 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
 
     public async Task<(int Count, string Message, WiFredThrottle? Entity)> SaveAsync(ClaimsPrincipal? principal, WiFredThrottle entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();

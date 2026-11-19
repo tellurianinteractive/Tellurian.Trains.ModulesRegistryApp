@@ -109,6 +109,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
     }
     public async Task<(int Count, string Message, Layout? Entity)> SaveAsync(ClaimsPrincipal? principal, Layout entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();

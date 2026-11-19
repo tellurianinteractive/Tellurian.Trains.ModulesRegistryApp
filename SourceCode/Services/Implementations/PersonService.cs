@@ -116,8 +116,8 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         var ownerRef = ModuleOwnershipRef.Person(entity.Id);
         if (principal.MaySave(ownerRef, isGroupAdministrator))
         {
-            // Names are corrected, not validated: capitals, ordinary text, and a nickname in quotation marks moved to its own field.
-            entity.CorrectNames();
+            // Corrected, not validated: names (capitals, ordinary text, a quoted nickname to its own field), email and loco addresses.
+            entity.CorrectInput();
             using var dbContext = Factory.CreateDbContext();
             if (entity.EmailAddresses.HasValue() && entity.User is not null)
             {

@@ -133,6 +133,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
     /// </summary>
     public async Task<(int Count, string Message, Meeting? Entity)> SaveAsync(ClaimsPrincipal? principal, Meeting entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal is not null)
         {
             using var dbContext = Factory.CreateDbContext();

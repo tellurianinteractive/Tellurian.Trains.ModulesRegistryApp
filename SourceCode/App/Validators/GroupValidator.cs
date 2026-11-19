@@ -15,7 +15,6 @@ public class GroupValidator : AbstractValidator<Group>
             .MinimumLength(1)
             .MaximumLength(10)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer, NameStyle.FirstLetter) // An abbreviation, such as "MEC", "KdMJK" or "FREMOsued".
             .WithName(n => localizer[nameof(n.ShortName)]);
 
         RuleFor(group => group.FullName)
@@ -30,7 +29,6 @@ public class GroupValidator : AbstractValidator<Group>
             .MinimumLength(1)
             .MaximumLength(50)
             .MustBeOrdinaryText(localizer)
-            .MustBeCapitalizedCorrectly(localizer)
             .WithName(n => localizer[nameof(n.CityName)]);
 
         RuleFor(group => group.Category)

@@ -104,6 +104,7 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
     /// </summary>
     public async Task<(int Count, string Message, StationCustomer? Entity)> SaveAsync(ClaimsPrincipal? principal, int stationId, StationCustomer entity)
     {
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         using var dbContext = Factory.CreateDbContext();
         if (!await dbContext.MayEditStationAsync(principal, stationId)) return principal.SaveNotAuthorised<StationCustomer>();
         var station = await dbContext.Stations.FindAsync(stationId);
