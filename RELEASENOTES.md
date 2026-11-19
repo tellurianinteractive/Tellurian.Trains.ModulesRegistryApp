@@ -1,4 +1,4 @@
-﻿# Release Notes
+# Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
 ## Release 1.15.17
