@@ -11,6 +11,7 @@ Released 2026-11-19
 - Names are capitalised correctly in more languages: elisions such as "Cortina d'Ampezzo" and "Pont-l'Évêque", Dutch "IJmuiden", "McDonald", and connecting words such as Polish "przy" and Czech "v".
 - Station signatures in capitals, such as "FF", and group short names such as "MEC" are accepted again.
 - The letters ẞ, º and ª are accepted as ordinary text.
+- After saving or deleting a person, deleting a meeting or saving a vehicle, and with the back arrow, the list opens again.
 ## Release 1.15.13
 Released 2026-11-19
 - Security fix: meetings, layouts and registrations can only be changed by those responsible for them.
