@@ -93,7 +93,7 @@ else
                         <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
                         @if (item.CancellationTime.HasValue)
                         {
-                            <AppButton Label="Register" OnClickCallback="() =>OnReRegister(item.PersonId)" IconName="@FontAwesome.Register" />
+                            <AppButton Label="Register" OnClickCallback="() =>OnReRegister(item.Id)" IconName="@FontAwesome.Register" />
                         }
                         else
                         {

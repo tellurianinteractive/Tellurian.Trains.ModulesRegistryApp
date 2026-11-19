@@ -8,6 +8,7 @@ Released 2026-11-19
 - A layout group's meeting administrators can handle their own layout, and register and cancel meeting participants.
 - Meeting organisers can find and register persons from any country.
 - The help texts describe who can manage meetings, layouts and registrations.
+- Registering a cancelled participant again from the participant list registered the wrong person or nobody.
 ## Release 1.15.12
 Released 2026-11-18
 - The region form checks the entries as you type, and stays open after saving so you can see what was saved.
