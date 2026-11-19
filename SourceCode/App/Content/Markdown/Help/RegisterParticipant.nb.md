@@ -13,8 +13,9 @@ Hvis du tar med moduler, må du vanligvis møte alle dager.
 > MERK: Du kan ikke avbryte din deltakelse henne, du må kontakte arrangøren og be dem om å avbryte din deltakelse.
 
 #### Som treffarrangør
-Hvis du er administrator for arrangørgruppen kan du
-registrer enhver *person* for deltakelse i treffet.
+Hvis du er treffarrangør, eller møteadministrator i en gruppe som er ansvarlig for en bane, kan du
+registrere enhver *person* fra alle land for deltakelse i treffet, også etter at påmeldingen er stengt.
+Baneadministratorer kan bare registrere deltakere til sin egen bane.
 Etter å ha valgt en person, følger prosedyren de samme trinnene som ovenfor.
 
 > MERK: Du kan ikke kansellere en persons treffdeltakelse hvis denne personen har registrert moduler til en hvilken som helst bane.

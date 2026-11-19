@@ -4,7 +4,17 @@ Das Modultreffen wird von einer *Gruppe* organisiert und kann von einem *Gruppen
 Das Treffen wird im Treffenkalender angezeigt.
 Das Treffen kann als gruppenintern markiert werden und ist dann nur für angemeldete Gruppenmitglieder sichtbar.
 > HINWEIS: Du kannst die Treffendaten nicht ändern, wenn Module registriert sind oder später als sieben Tage vor dem ersten Termin des Treffens.
-> Dies kann nur von Länderadministratoren vorgenommen werden.
+> Dies kann nur von Länderadministratoren im Land der organisierenden Gruppe vorgenommen werden.
+### Wer das Treffen verwalten kann
+- **Treffen-Organisatoren** können alles im Treffen verwalten: seine Daten, Layouts, alle Teilnehmer und ihre Module, auch nach Anmeldeschluss.
+Sie können das Treffen auch löschen, solange niemand für ein Layout angemeldet ist.
+Treffen-Organisatoren sind *globale Administratoren*, *Länderadministratoren* im Land der organisierenden Gruppe
+und Mitglieder mit *Treffenadministratorrechten* in der organisierenden Gruppe.
+- **Treffenadministratoren der verantwortlichen Gruppe eines Layouts** können ihr eigenes Layout, seine Teilnehmer und deren Module verwalten
+und Teilnehmer am Treffen an- und abmelden.
+- **Teilnehmer** können ihre eigene Anmeldung ändern, solange die Anmeldung offen ist.
+
+Treffen-Organisatoren und Layout-Administratoren können Personen aus allen Ländern anmelden.
 ### Gleislayouts
 Ein *Gleislayout* ist ein vollständiger Satz von Gleise, die als eine Einheit und getrennt von anderen Gleislayouts betrieben werden.
 Du kannst einer Treffen beliebig viele Gleislayouts hinzufügen.

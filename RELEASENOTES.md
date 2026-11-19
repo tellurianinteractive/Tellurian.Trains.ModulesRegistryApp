@@ -7,6 +7,7 @@ Released 2026-11-19
 - The arranging group's meeting administrators can handle all of a meeting, including deleting it while nobody is registered.
 - A layout group's meeting administrators can handle their own layout, and register and cancel meeting participants.
 - Meeting organisers can find and register persons from any country.
+- The help texts describe who can manage meetings, layouts and registrations.
 ## Release 1.15.12
 Released 2026-11-18
 - The region form checks the entries as you type, and stays open after saving so you can see what was saved.

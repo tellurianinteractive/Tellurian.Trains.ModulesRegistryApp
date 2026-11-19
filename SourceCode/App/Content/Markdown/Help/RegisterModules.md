@@ -15,6 +15,6 @@ If you need to change or withdraw modules after the registration is closed,
 you must contact the person responible for planning the track layout.
 
 #### As Meeting Organiser
-The administrators of the meeting can register and cancel modules also after the registration is closed.
+The meeting organisers, and the meeting administrators of the group responsible for the layout, can register and withdraw modules also after the registration is closed.
 
 

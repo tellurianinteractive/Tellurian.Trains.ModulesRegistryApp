@@ -13,8 +13,9 @@ If you bring modules, usually you must attend all days.
 > NOTE: You cannot cancel your participation her, you must contact the organiser and ask them to cancel your participation.
 
 #### As Meeting Organiser
-If you are an administrator of the organising group you can
-register any *person* for participation in the meeting. 
+If you are a meeting organiser, or a meeting administrator of a group responsible for a layout, you can
+register any *person* from any country for participation in the meeting, also after registration has closed.
+Layout administrators can only register participants for their own layout.
 After selecting a person, the procedure follows the same steps as above.
 
 > NOTE: You cannot cancel a person's meeting participation if that person have submitted modules to any layout.

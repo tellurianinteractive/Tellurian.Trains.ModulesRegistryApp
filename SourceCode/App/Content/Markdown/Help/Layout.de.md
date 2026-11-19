@@ -5,7 +5,7 @@ Jedes Gleisanlage sollte einen *Maßstab* und ein *Thema* darstellen.
 > HINWEIS: Füge *nicht* mehrere Gleisanlage für denselben *Maßstab* und dasselbe *Thema* hinzu, wenn Du beabsichtigst, Operationen zu haben, die sie übergreifen.
 Die Aufteilung der Anlage in Haupt- und Nebenbahn erfolgt später bei der Zuordnung von Modulen zu verschiedenen Bahnen.
  
-- **Verantwortliche Gruppe** ist nicht notwendigerweise dieselbe Gruppe, die das Gesamttreffen organisiert.
+- **Verantwortliche Gruppe** ist nicht notwendigerweise dieselbe Gruppe, die das Gesamttreffen organisiert. Ihre Mitglieder mit *Treffenadministratorrechten* können dieses Layout, seine Teilnehmer und deren Module verwalten.
 - **Ansprechpartner** muss Mitglied der *zuständigen Gruppe* sein.
 - **Thema**, **Erstes**- und **Letztes Jahr** sollen Art und Zeitraum des Betriebs der Anlage beschreiben. Diese Felder sind optional.
 - **Is Registration Permitted** ist anzukreuzen, wenn Nutzer der Modulregistrierung sich und ihre Module registrieren dürfen.

@@ -15,6 +15,6 @@ Hvis du trenger å endre eller trekke tilbake moduler etter at registreringen er
 du må kontakte den som er ansvarlig for planlegging av sporoppsettet.
 
 #### Som treffarrangør
-Administratorene for møtet kan registrere og kansellere moduler også etter at registreringen er stengt.
+Treffarrangørene og møteadministratorene i gruppen som er ansvarlig for banen kan registrere og kansellere moduler også etter at registreringen er stengt.
 
 

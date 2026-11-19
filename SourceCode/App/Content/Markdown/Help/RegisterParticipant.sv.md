@@ -12,10 +12,11 @@ If you bring modules, usually you must attend all days.
 
 > NOTE: You cannot cancel your participation her, you must contact the organiser and ask them to cancel your participation.
 
-#### As Meeting Organiser
-If you are an administrator of the organising group you can
-register any *person* for participation in the meeting. 
-After selecting a person, the procedure follows the same steps as above.
+#### Som mötesarrangör
+Om du är träffarrangör, eller mötesadministratör i en grupp som ansvarar för en bana, kan du
+anmäla vilken *person* som helst från alla länder till träffen, även efter att anmälan har stängt.
+Banadministratörer kan bara anmäla deltagare till sin egen bana.
+När du har valt en person följer du samma steg som ovan.
 
 > NOTE: You cannot cancel a person's meeting participation if that person have submitted modules to any layout.
 > These modules first have to be removed by an administrator of the group that is responsible for planning the layout.

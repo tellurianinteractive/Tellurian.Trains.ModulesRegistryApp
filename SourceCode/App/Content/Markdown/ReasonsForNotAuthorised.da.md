@@ -4,7 +4,7 @@ Du er ikke autoriseret til at se denne side. Denne side kræver yderligere retti
 ### Administratorroller
 - **Administrer gruppemedlemmer og deres rettigheder** kræver *gruppeadministratorrettigheder* for den specifikke gruppe.
 - **Administrer grupper og gruppemedlemsmoduler** kræver *dataadministratorrettigheder* for den specifikke gruppe.
-- **Administrer træf**, som gruppen arrangerer, kræver *mødeadministratorrettigheder* for den specifikke gruppe.
+- **Administrer træf**, som gruppen arrangerer, kræver *mødeadministratorrettigheder* for den specifikke gruppe. **Administrer en bane** i et træf kræver *mødeadministratorrettigheder* i banens ansvarlige gruppe. Landeadministratorer kan administrere træf, der arrangeres af grupper i deres eget land.
 - **Administrer personer/brugere** kræver *landeadministratorrettigheder* eller *globale administratorrettigheder*.
 - **API-dataadgang** kræver særlig adgang og en *API-nøgle*.
 - **Verifikation af WiFreds** kræver særlig adgang.

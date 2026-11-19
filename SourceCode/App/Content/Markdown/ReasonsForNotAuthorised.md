@@ -4,7 +4,7 @@ You are not authorized to view this page.This page requires additional rights th
 ### Administrator roles
 - **Administer group members and their rights** requires *group administrator rights* for the specific group.
 - **Manage groups and group members modules** requires *data administrator rights* for the specific group.
-- **Manage meetings** that the group arranges requires *meeting administrator rights* for the specific group.
+- **Manage meetings** that the group arranges requires *meeting administrator rights* for the specific group. **Manage a layout** in a meeting requires *meeting administrator rights* in the layout's responsible group. Country administrators can manage meetings arranged by groups in their own country.
 - **Manage persons/users** requires *country administrator rights* or *global administrator rights*.
 - **API data access** requires special access and an *API-key*.
 - **Verification of WiFreds** requires special access.

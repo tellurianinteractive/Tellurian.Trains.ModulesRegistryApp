@@ -6,7 +6,7 @@ Et modultræf har en arrangørgruppe og kan oprettes og administreres af medlemm
 Du kan indstille tidspunkterne for, hvornår deltagere med moduler skal være på stedet.
 - Tilføj baner, der vil blive betjent, med første og sidste registreringsdatoer.
 Brugere kan derefter tilmelde sig træffet og registrere moduler til baner.
-Træfadministratorerne kan også tilføje og ændre deltagere og deres modulregistreringer.
+Mødeadministratorerne i den arrangerende gruppe og i den gruppe, der er ansvarlig for en bane, kan også tilføje og ændre deltagere og deres modulregistreringer, også efter at tilmeldingen er lukket.
 Det er muligt at indstille deltagelsesdage med seneste ankomsttid første dag og tidligste afgangstid sidste dag.
 Deltagere kan kun tilmelde moduler, hvis de er til stede hele det påkrævede tidinterval, der er angivet for mødet.
 - Træfadministratoren kan liste mødedeltagere og hvilke baner de er registreret til at deltage i.

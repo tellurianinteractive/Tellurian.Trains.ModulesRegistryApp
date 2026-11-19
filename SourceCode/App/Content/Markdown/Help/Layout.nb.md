@@ -5,7 +5,7 @@ Hver sporoppsett skal representere en *skala* og et *tema*.
 > MERK: *Ikke* legg til flere sporoppsett for samme *skala* og *tema* hvis du har tenkt å ha operasjoner som går på tvers av dem.
 Oppdelingen av oppsettet i hoved- og stikkledninger gjøres senere ved tildeling av moduler til ulike linjer.
  
-- **Ansvarsgruppe** er ikke nødvendigvis den samme gruppen som organiserer det samlede treff.
+- **Ansvarsgruppe** er ikke nødvendigvis den samme gruppen som organiserer det samlede treff. Medlemmene med *møteadministratorrettigheter* kan administrere denne banen, dens deltakere og modulene deres.
 - **Kontaktperson** må være medlem av den *ansvarlige gruppen*.
 - **Tema**, **Første**- og **Første år** skal beskrive typen og driftsperioden som skal kjøres for oppsettet. Disse feltene er valgfrie.
 - **Er registrering tillatt** bør sjekkes om brukere av modulregisteret kan registrere seg selv og sine moduler.

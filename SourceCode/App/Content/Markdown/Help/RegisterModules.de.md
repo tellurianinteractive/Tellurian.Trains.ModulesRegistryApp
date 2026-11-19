@@ -16,6 +16,6 @@ Wenn Du Module ändern oder zurückziehen musst, nachdem die Registrierung gesch
 musst Du Dich an den Verantwortlichen für die Planung der Gleisanlage wenden.
 
 #### Als Treffen-Organisator
-Die Administratoren des Treffen können Module auch nach Abschluss der Registrierung an- und abmelden.
+Die Treffen-Organisatoren und die Treffenadministratoren der für das Layout verantwortlichen Gruppe können Module auch nach Abschluss der Registrierung an- und abmelden.
 
 

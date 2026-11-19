@@ -13,8 +13,9 @@ Hvis du medbringer moduler, skal du normalt deltage alle dage.
 > OBS: Du kan ikke aflyse din deltagelse hende, du skal kontakte arrangøren og bede dem om at aflyse din deltagelse.
 
 #### Som træfarrangør
-Hvis du er administrator af den organiserende gruppe, kan du
-tilmeld enhver *person* til deltagelse i træffet.
+Hvis du er træfarrangør eller mødeadministrator i en gruppe, der er ansvarlig for en bane, kan du
+tilmelde enhver *person* fra ethvert land til deltagelse i træffet, også efter at tilmeldingen er lukket.
+Baneadministratorer kan kun tilmelde deltagere til deres egen bane.
 Efter at have valgt en person, følger proceduren de samme trin som ovenfor.
 
 > BEMÆRK: Du kan ikke annullere en persons mødedeltagelse, hvis denne person har tilmeldt moduler til en bane.

@@ -6,7 +6,17 @@ Træffet vises i træfkalenderen.
 Træffet kan markeres som internt i gruppen og er så kun synligt for loggede gruppemedlemmer.
 > BEMÆRK: Du vil ikke kunne ændre træfdatoerne, når moduler er tilmeldt
 > eller senere end syv dage før den første træfdato.
-> Dette kan kun laves af landeadministratorer.
+> Dette kan kun laves af landeadministratorer i den arrangerende gruppes land.
+### Hvem kan administrere træffet
+- **Træfarrangører** kan administrere alt i træffet: dets data, baner, alle deltagere og deres moduler, også efter at tilmeldingen er lukket.
+De kan også slette træffet, så længe ingen er tilmeldt nogen bane.
+Træfarrangører er *globale administratorer*, *landeadministratorer* i den arrangerende gruppes land
+og medlemmer med *mødeadministratorrettigheder* i den arrangerende gruppe.
+- **Mødeadministratorer i en banes ansvarlige gruppe** kan administrere deres egen bane, dens deltagere og deres moduler,
+og kan tilmelde og afmelde deltagere i træffet.
+- **Deltagere** kan ændre deres egen tilmelding, så længe tilmeldingen er åben.
+
+Træfarrangører og baneadministratorer kan tilmelde personer fra alle lande.
 ### Baner
 En *bane* er et komplet sæt spor, der drives som én enhed og adskilt fra andre baner.
 Du kan tilføje et vilkårligt antal baner til et træf.

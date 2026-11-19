@@ -15,6 +15,6 @@ Hvis du har brug for at ændre eller trække moduler tilbage efter tilmeldingen 
 du skal kontakte den ansvarlige for planlægning af banelayoutet.
 
 #### Som træfarrangør
-Mødets administratorer kan tilmelde og annullere moduler også efter at tilmeldingen er lukket.
+Træfarrangørerne og mødeadministratorerne i den gruppe, der er ansvarlig for banen, kan tilmelde og afmelde moduler også efter at tilmeldingen er lukket.
 
 

@@ -6,7 +6,7 @@ Et modultreff har en arrangørgruppe, og kan opprettes og administreres av medle
 Du kan sette tidspunkt for når deltakere med moduler må være på stedet.
 - Legg til baneoppsett som skal betjenes, med første og siste registreringsdato.
 Brukere kan deretter registrere seg på treffet og registrere moduler til valgt sporoppsett.
-Treffadministratorene kan også legge til og endre deltakere og deres modulregistreringer.
+Møteadministratorene i arrangørgruppen og i gruppen som er ansvarlig for et sporoppsett kan også legge til og endre deltakere og deres modulregistreringer, også etter at påmeldingen er stengt.
 Det er mulig å sette deltakerdager med siste ankomsttid første dag og tidligste avgangstid siste dag.
 Deltakere kan kun registrere moduler hvis de er tilstede den nødvendige tiden som er spesifisert for treffet.
 - Treffadministrator kan liste opp deltakere og hvilke sporoppsett de er registrert for å delta på.

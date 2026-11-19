@@ -6,7 +6,17 @@ Träffen visas i träffkalendern.
 Träffen kan markeras som intern i gruppen och är då endast synligt för inloggade gruppmedlemmar.
 > OBS: Du kommer inte att kunna ändra träffsdatumen när moduler registreras
 > eller senare än sju dagar före träffens första datum.
-> Detta kan endast göras av landsadministratörer.
+> Detta kan endast göras av landsadministratörer i den arrangerande gruppens land.
+### Vem kan hantera träffen
+- **Träffarrangörer** kan hantera allt i träffen: dess uppgifter, banor, alla deltagare och deras moduler, även efter att anmälan har stängt.
+De kan också ta bort träffen så länge ingen är anmäld till någon bana.
+Träffarrangörer är *globala administratörer*, *landsadministratörer* i den arrangerande gruppens land
+och medlemmar med *mötesadministratörsrättigheter* i den arrangerande gruppen.
+- **Mötesadministratörer i en banas ansvariga grupp** kan hantera sin egen bana, dess deltagare och deras moduler,
+och kan anmäla och avanmäla deltagare till träffen.
+- **Deltagare** kan ändra sin egen anmälan så länge anmälan är öppen.
+
+Träffarrangörer och banadministratörer kan anmäla personer från alla länder.
 ### Banor
 En *bana* är en komplett uppsättning spår som drivs som en enhet och separat från andra banor.
 Du kan lägga till valfritt antal banor till ett möte.

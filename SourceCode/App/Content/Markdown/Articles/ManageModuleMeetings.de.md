@@ -6,7 +6,7 @@ Ein Modultreffen hat eine Organisationsgruppe und kann von Mitgliedern dieser Gr
 Du kannst die Zeiten festlegen, zu denen Teilnehmer mit Modulen am Veranstaltungsort sein müssen.
 - Füge Streckenlayouts hinzu, die betrieben werden, mit dem ersten und letzten Registrierungsdatum.
 Benutzer können sich dann für das Treffen registrieren und Module für Streckenlayouts registrieren.
-Die Treffenadministratoren können auch Teilnehmer und ihre Modulregistrierungen hinzufügen und ändern.
+Die Treffenadministratoren der organisierenden Gruppe und der für ein Streckenlayout verantwortlichen Gruppe können auch Teilnehmer und ihre Modulregistrierungen hinzufügen und ändern, auch nach Anmeldeschluss.
 Es ist möglich, Teilnahmetage mit der spätesten Ankunftszeit am ersten Tag und der frühesten Abfahrtszeit am letzten Tag festzulegen.
 Teilnehmer können Module nur registrieren, wenn sie zur für das Treffen angegebenen erforderlichen Zeit anwesend sind.
 - Der Treffenadministrator kann Teilnehmer auflisten und angeben, für welche Streckenlayouts sie registriert sind.

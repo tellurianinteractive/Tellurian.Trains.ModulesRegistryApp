@@ -5,7 +5,7 @@ Hvert banelayout skal repræsentere en *skala* og et *tema*.
 > BEMÆRK: Tilføj *ikke* flere banelayouts for samme *skala* og *tema*, hvis du har til hensigt at have operationer, der går på tværs af dem.
 Opdelingen af layoutet i hoved- og stikledninger sker senere ved tildeling af moduler til forskellige linjer.
  
-- **Ansvarlig gruppe** er ikke nødvendigvis den samme gruppe, som organiserer det samlede træf.
+- **Ansvarlig gruppe** er ikke nødvendigvis den samme gruppe, som organiserer det samlede træf. Dens medlemmer med *mødeadministratorrettigheder* kan administrere denne bane, dens deltagere og deres moduler.
 - **Kontaktperson** skal være medlem af den *ansvarlige gruppe*.
 - **Tema**, **Første**- og **Sidste år** skal beskrive den type og driftsperiode, der skal køre for layoutet. Disse felter er valgfrie.
 - **Er registrering tilladt** skal krydses i, hvis brugere af modulregistret må registrere sig selv og deres moduler.

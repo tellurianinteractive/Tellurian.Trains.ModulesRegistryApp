@@ -6,7 +6,7 @@ A module meeting has an organising group, and can be created and managed by memb
 You can set the times for when participants with modules must be at the venue.
 - Add track layouts that will be operated, with first and last registration dates.
 Users can then register to the meeting and register modules to track layouts. 
-The meeting administrators can also add and change participants and their module registrations.
+The meeting administrators of the organising group, and of the group responsible for a track layout, can also add and change participants and their module registrations, also after registration has closed.
 It is possible to set days of participation with latest arrival time the first day and earliest departure time the last day.
 Participants can only register modules if they are present the required time specified for the meeting.
 - The meeting administrator can list meeting participants and which track layouts they are registered to participate in.

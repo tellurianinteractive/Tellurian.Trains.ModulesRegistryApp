@@ -13,8 +13,9 @@ Wenn Du Module mitbringst, musst Du in der Regel an allen Tagen teilnehmen.
 > HINWEIS: Du kannst Deine Teilnahme hier nicht stornieren, Du musst den Veranstalter kontaktieren und ihn bitten, Deine Teilnahme zu stornieren.
 
 #### Als Treffen-Organisator
-Wenn Du ein Administrator der organisierenden Gruppe bist, kannst Du
-eine beliebige *Person* für die Teilnahme an dem Treffen registrieren.
+Wenn Du Treffen-Organisator oder Treffenadministrator einer für ein Layout verantwortlichen Gruppe bist, kannst Du
+eine beliebige *Person* aus jedem Land für die Teilnahme an dem Treffen registrieren, auch nach Anmeldeschluss.
+Layout-Administratoren können Teilnehmer nur für ihr eigenes Layout anmelden.
 Nach der Auswahl einer Person folgt das Verfahren den gleichen Schritten wie oben.
 
 > HINWEIS: Du kannst die Treffen-Teilnahme einer Person nicht stornieren, wenn diese Person Module zu einem beliebigen Layout eingereicht hat.

@@ -4,7 +4,7 @@ Du bist nicht berechtigt, diese Seite anzuzeigen. Für diese Seite sind zusätzl
 ### Administratorrollen
 - **Gruppenmitglieder und ihre Rechte verwalten** erfordert *Gruppenadministratorrechte* für die jeweilige Gruppe.
 - **Gruppen und Gruppenmitgliedermodule verwalten** erfordert *Datenadministratorrechte* für die jeweilige Gruppe.
-- **Treffen verwalten**, die von der Gruppe organisiert werden, erfordert *Treffenadministratorrechte* für die jeweilige Gruppe.
+- **Treffen verwalten**, die von der Gruppe organisiert werden, erfordert *Treffenadministratorrechte* für die jeweilige Gruppe. **Ein Layout verwalten** in einem Treffen erfordert *Treffenadministratorrechte* in der verantwortlichen Gruppe des Layouts. Länderadministratoren können Treffen verwalten, die von Gruppen in ihrem eigenen Land organisiert werden.
 - **Personen/Benutzer verwalten** erfordert *Länderadministratorrechte* oder *Globale Administratorrechte*.
 - **API-Datenzugriff** erfordert spezielle Zugriffsrechte und einen *API-Schlüssel*.
 - **Verifizierung von WiFreds** erfordert spezielle Zugriffsrechte.

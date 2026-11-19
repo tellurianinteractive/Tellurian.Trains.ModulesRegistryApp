@@ -4,7 +4,7 @@ Du er ikke autorisert til å se denne siden. Denne siden krever ytterligere rett
 ### Administratorroller
 - **Administrere gruppemedlemmer og deres rettigheter** krever *gruppeadministratorrettigheter* for den spesifikke gruppen.
 - **Administrere grupper og gruppemedlemsmoduler** krever *dataadministratorrettigheter* for den spesifikke gruppen.
-- **Administrere treff** som gruppen arrangerer krever *møteadministratorrettigheter* for den spesifikke gruppen.
+- **Administrere treff** som gruppen arrangerer krever *møteadministratorrettigheter* for den spesifikke gruppen. **Administrere en bane** på et treff krever *møteadministratorrettigheter* i banens ansvarlige gruppe. Landsadministratorer kan administrere treff som arrangeres av grupper i sitt eget land.
 - **Administrere personer/brukere** krever *landsadministratorrettigheter* eller *globale administratorrettigheter*.
 - **API-datatilgang** krever spesiell tilgang og en *API-nøkkel*.
 - **Verifisering av WiFreds** krever spesiell tilgang.
