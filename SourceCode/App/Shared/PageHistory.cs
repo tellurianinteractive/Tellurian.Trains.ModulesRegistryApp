@@ -25,13 +25,14 @@ public class PageHistory : IDisposable
 
     /// <summary>
     /// Goes to the previous page in this circuit, or to <paramref name="fallbackUrl"/> when there is none: a page reached
-    /// from a static SSR page starts a new circuit with no history (Migration step 3.3). The fallback is usually a static
-    /// page, so it is a full page load: the interactive router would otherwise handle the address itself, and an address
-    /// that the static page only redirects from (such as /FreightCustomers to the user's country) shows "nothing to display".
+    /// from a static SSR page starts a new circuit with no history (Migration step 3.3). Always a full page load: the page
+    /// to go back to is often static (the start page, and the lists since step 3.3), and the interactive router would
+    /// otherwise handle the address itself, so a static page fails, and an address that the static page only redirects from
+    /// (such as /FreightCustomers to the user's country) shows "nothing to display".
     /// </summary>
     public void NavigateBack(string? fallbackUrl = null)
     {
-        if (CanNavigateBack) Navigator.NavigateTo(History[^2].Url);
+        if (CanNavigateBack) Navigator.NavigateTo(History[^2].Url, forceLoad: true);
         else if (fallbackUrl is not null) Navigator.NavigateTo(fallbackUrl, forceLoad: true);
     }
     public bool IsShowningHelp
