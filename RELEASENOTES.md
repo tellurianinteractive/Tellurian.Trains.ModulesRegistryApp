@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.16
+Released 2026-11-19
+- Security fix: none of a person's email addresses can be another user's sign-in address, and a user's sign-in address can't be changed to an address another person uses.
+- Signing up with an address shared by several persons, or matching only part of an address, no longer creates a user for the wrong person.
 ## Release 1.15.15
 Released 2026-11-19
 - A person can have a nickname, shown in quotation marks, also on name badges; quotation marks in names are moved to the nickname when saved.

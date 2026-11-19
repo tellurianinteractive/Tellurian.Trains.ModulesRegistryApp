@@ -65,7 +65,7 @@ public sealed class PersonSaveTests
     }
 
     [TestMethod]
-    public async Task TheFirstEmailAddressIsNotAnotherUsersSignInAddress()
+    public async Task NoEmailAddressIsAnotherUsersSignInAddress()
     {
         var target = new PersonService(_factory, new SystemTimeProvider());
         await _factory.SeedAsync(new User { Id = 5, ObjectId = Guid.NewGuid(), EmailAddress = "anna@example.se", RegistrationTime = DateTimeOffset.Now });
@@ -76,8 +76,8 @@ public sealed class PersonSaveTests
         var herself = await target.SaveAsync(GlobalAdministrator, new Person { Id = 10, FirstName = "Anna", LastName = "Berg", CityName = "Göteborg", CountryId = 1, UserId = 5, EmailAddresses = "anna@example.se", MiddleName = "Maria" });
 
         Assert.AreEqual(0, other.Count);
-        Assert.AreEqual(ModulesRegistry.Resources.Strings.EmailAddressIsAnotherUsersSignIn, other.Message);
-        Assert.AreEqual(1, shared.Count, "Other addresses may be shared, for example by a family.");
+        Assert.AreEqual(string.Format(ModulesRegistry.Resources.Strings.EmailAddressIsAnotherUsersSignIn, "anna@example.se"), other.Message);
+        Assert.AreEqual(0, shared.Count, "Not as a second address either.");
         Assert.AreEqual(1, herself.Count, herself.Message);
     }
 }

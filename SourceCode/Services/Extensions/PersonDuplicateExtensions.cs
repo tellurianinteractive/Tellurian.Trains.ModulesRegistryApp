@@ -1,9 +1,11 @@
 namespace ModulesRegistry.Services.Extensions;
 
 /// <summary>
-/// Rules for a person that need the database (Migration step 3.5, decided 2026-11-19), checked when saving, after the input is
-/// corrected. They run on the server only: the interactive form shows the message after saving, and a static SSR form will show
-/// it beside the form.
+/// Rules for persons and users that need the database (Migration step 3.5, decided 2026-11-19), checked when saving, after the
+/// input is corrected. A user has one email address, the sign-in address; a person may have several, separated by semicolons.
+/// None of a person's addresses may be another user's sign-in address, and a sign-in address must belong to its own person only.
+/// They run on the server only: the interactive form shows the message after saving, and a static SSR form will show it beside
+/// the form.
 /// </summary>
 public static class PersonDuplicateExtensions
 {
@@ -24,15 +26,41 @@ public static class PersonDuplicateExtensions
         }
 
         /// <summary>
-        /// The person's first email address, which is their sign-in address as a user and is used for invitations, is already
-        /// another user's sign-in address. Other addresses may be shared, for example by a family.
+        /// The first of the person's email addresses that is another user's sign-in address, or null when none is. The addresses
+        /// are already corrected (trimmed, in lower case) when saving.
         /// </summary>
-        public Task<bool> IsAnotherUsersSignInAddressAsync(Person person)
+        public async Task<string?> AnotherUsersSignInAddressAsync(Person person)
         {
-            var address = person.EmailAddresses?.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault()?.ToLower();
-            if (string.IsNullOrEmpty(address)) return Task.FromResult(false);
             var userId = person.UserId ?? person.User?.Id ?? 0;
-            return dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == address);
+            foreach (var address in person.EmailAddresses.Items())
+            {
+                if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == address)) return address;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The address can't be the sign-in address of the user: it is another user's sign-in address, or it is among the email
+        /// addresses of a person, not deleted, other than the user's own person.
+        /// </summary>
+        public async Task<bool> IsSignInAddressTakenAsync(string address, int userId)
+        {
+            var lowerAddress = address.Trim().ToLower();
+            if (await dbContext.Users.AnyAsync(u => u.Id != userId && u.EmailAddress.ToLower() == lowerAddress)) return true;
+            return await dbContext.People.WithEmailAddress(lowerAddress).AnyAsync(p => p.UserId != userId || p.UserId == null);
+        }
+    }
+
+    extension(IQueryable<Person> persons)
+    {
+        /// <summary>
+        /// Persons, not deleted, with the address among their email addresses: the whole address, ignoring case and spaces around
+        /// the semicolons, so "a@b.se" doesn't match "aa@b.se".
+        /// </summary>
+        public IQueryable<Person> WithEmailAddress(string address)
+        {
+            var item = ";" + address.Trim().ToLower() + ";";
+            return persons.Where(p => p.DeletedTimestamp == null && p.EmailAddresses != null && (";" + p.EmailAddresses.Replace(" ", "") + ";").ToLower().Contains(item));
         }
     }
 }

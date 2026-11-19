@@ -71,7 +71,7 @@ public static partial class ValidatorsExtensions
     extension(string? value)
     {
         internal bool IsEmailAddressesWhenCorrected() =>
-            value.AsEmailAddresses() is not { Length: > 0 } addresses || addresses.Split(';').All(EmailRegex().IsMatch);
+            value.AsEmailAddresses().Items().All(EmailRegex().IsMatch);
 
         internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
 

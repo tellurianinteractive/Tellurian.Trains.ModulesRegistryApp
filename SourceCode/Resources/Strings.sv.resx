@@ -1360,7 +1360,7 @@
     <value>Det finns redan en person med samma namn och ort.</value>
   </data>
   <data name="EmailAddressIsAnotherUsersSignIn" xml:space="preserve">
-    <value>Den första e-postadressen är redan en annan användares inloggningsadress.</value>
+    <value>E-postadressen {0} är redan en annan användares inloggningsadress.</value>
   </data>
   <data name="NickName" xml:space="preserve">
     <value>Smeknamn</value>

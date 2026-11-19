@@ -1360,7 +1360,7 @@
     <value>A person with the same name and city already exists.</value>
   </data>
   <data name="EmailAddressIsAnotherUsersSignIn" xml:space="preserve">
-    <value>The first email address is already another user's sign-in address.</value>
+    <value>The email address {0} is already another user's sign-in address.</value>
   </data>
   <data name="NickName" xml:space="preserve">
     <value>Nickname</value>

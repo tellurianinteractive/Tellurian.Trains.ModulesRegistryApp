@@ -27,7 +27,10 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user is null) return null;
-        user.EmailAddress = emailAddress.FirstItem(delimiter: ';');
+        var address = emailAddress.FirstItem(delimiter: ';').Trim().ToLowerInvariant();
+        // A sign-in address belongs to one user and their own person only (Migration step 3.5).
+        if (await dbContext.IsSignInAddressTakenAsync(address, user.Id)) return null;
+        user.EmailAddress = address;
         await dbContext.SaveChangesAsync();
         return await FindByObjectIdAsync(dbContext, user.ObjectId.ToString().ToUpperInvariant());
     }
@@ -98,8 +101,9 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
         if (!emailAddress.IsEmailAddress()) return null;
         var objectGuid = objectId.AsGuidOrNew();
 
-        var person = dbContext.People.SingleOrDefault(p => p.EmailAddresses.Contains(emailAddress));
-        if (person is null) return null;
+        // The whole address of exactly one person, who isn't a user yet: a shared address, as in a family, can't be a sign-in address.
+        var persons = await dbContext.People.WithEmailAddress(emailAddress!).Take(2).ToListAsync();
+        if (persons is not [{ UserId: null } person]) return null;
 
         User user = new() { ObjectId = objectGuid, EmailAddress = emailAddress, RegistrationTime = DateTimeOffset.Now, IsReadOnly = isReadOnly };
         dbContext.Users.Add(user);
