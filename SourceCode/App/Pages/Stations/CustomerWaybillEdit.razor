@@ -1,0 +1,95 @@
+@page "/Stations/{StationId:int}/Customers/{CustomerId:int}/Waybills/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): the print settings of one of a freight customer's waybills, a POST of
+   StationCustomerWaybillFormData. The ids come from the address: the waybill must belong to the customer, and the customer to the
+   station. Only those who may edit the station get the form. After saving, a redirect to the waybills list; the result is a
+   one-time message. *@
+
+@using ModulesRegistry.Forms.StationCustomers
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject StationCustomerService StationCustomerService
+@inject StationCustomerWaybillsService WaybillService
+@inject OperatingDayService OperatingDayService
+
+<PageHeading Label="Waybills" Context="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.Edit" BackHref="@WaybillsHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+@if (Existing is not null)
+{
+    <p>
+        <strong>@Existing.StationCustomerCargo.Direction.LongNameLocalized()</strong>
+        @Existing.CargoName(), @Existing.QuantityAndUnit() –
+        <span style="@Existing.OtherRegion.Style()">@Existing.OtherStationName()</span> @Existing.OtherCustomerName()
+    </p>
+}
+
+<EditTemplate Item="Form" FormName="waybill" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
+        <AppInputNumber TValue="int" Width="2" Label="PrintCount" @bind-Value="Form!.PrintCount" />
+        <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Form!.PrintPerOperatingDay" />
+        <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Form!.HasEmptyReturn" />
+        <AppInputCheck Width="2" Label="HasSameCargoReturn" @bind-Value="Form!.HasSameCargoReturn" />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int CustomerId { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [SupplyParameterFromForm(FormName = "waybill")] private StationCustomerWaybillFormData? Form { get; set; }
+
+    ClaimsPrincipal? Principal;
+    StationCustomer? Customer;
+    StationCustomerWaybill? Existing;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Customer = await StationCustomerService.FindByIdAsync(Principal, CustomerId);
+        if (Customer is null || Customer.StationId != StationId || !await StationCustomerService.MayEditAsync(Principal, StationId))
+        {
+            Customer = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        Existing = (await WaybillService.GetStationCustomerWaybillsAsync(Principal, CustomerId)).FirstOrDefault(w => w.Id == Id);
+        if (Existing is null)
+        {
+            Form = null;
+            return;
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= Existing.AsFormData();
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+    }
+
+    string WaybillsHref => $"Stations/{StationId}/Customers/{CustomerId}/Waybills";
+
+    async Task SaveAsync()
+    {
+        if (Form is null || Existing is null) return;
+        // Only the form's fields change on the loaded waybill (Migration section 3.4, the data-loss rule).
+        var (count, message, _) = await WaybillService.SaveAsync(Principal, CustomerId, Form.AsEntity(Existing));
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(WaybillsHref);
+    }
+}

@@ -387,3 +387,26 @@ blockquote {
     cursor: default;
     opacity: 0.65;
 }
+
+/* A form being posted (busy-form.js): its buttons dimmed, their icons spinning. */
+.form-busy button {
+    cursor: progress;
+    opacity: 0.65;
+}
+
+.form-busy button .fa {
+    display: inline-block;
+    animation: busy-spin 1s linear infinite;
+}
+
+@keyframes busy-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-busy button .fa {
+        animation: none;
+    }
+}

@@ -309,6 +309,39 @@ public sealed class StationCustomerPermissionTests
         Assert.IsEmpty(await target.MoveToStationItemsAsync(Principal(Stranger, OtherCountryId, new Claim(AppClaimTypes.CountryAdministrator, "true")), CountryId));
     }
 
+    private async Task SeedWaybillsAsync()
+    {
+        await SeedCargoFlowAsync();
+        await _factory.SeedAsync(
+            new StationCustomerWaybill { Id = 20, StationCustomerId = PersonStationCustomer, StationCustomerCargoId = 13, OperatingDayId = 8, PrintCount = 1 },
+            new StationCustomerWaybill { Id = 21, StationCustomerId = OtherPersonStationCustomer, StationCustomerCargoId = 12, OperatingDayId = 8, PrintCount = 1 });
+    }
+
+    private static StationCustomerWaybill Waybill(int id, int customerId) => new() { Id = id, StationCustomerId = customerId, OperatingDayId = 8, PrintCount = 3 };
+
+    [TestMethod]
+    public async Task OwnerSavesTheCustomersOwnWaybill()
+    {
+        await SeedWaybillsAsync();
+        var target = new StationCustomerWaybillsService(_factory);
+
+        Assert.IsGreaterThan(0, (await target.SaveAsync(Principal(Owner), PersonStationCustomer, Waybill(20, PersonStationCustomer))).Count);
+        var saved = (await _factory.FindAsync<StationCustomerWaybill>(20))!;
+        Assert.AreEqual(3, saved.PrintCount);
+        Assert.AreEqual(13, saved.StationCustomerCargoId, "A waybill stays with its cargo flow.");
+    }
+
+    [TestMethod]
+    public async Task AnotherCustomersWaybillIsNotSaved()
+    {
+        await SeedWaybillsAsync();
+        var target = new StationCustomerWaybillsService(_factory);
+
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(Owner), PersonStationCustomer, Waybill(21, PersonStationCustomer))).Count, "Waybill 21 belongs to the other station's customer.");
+        Assert.AreEqual(0, (await target.SaveAsync(Principal(Stranger), OtherPersonStationCustomer, Waybill(21, OtherPersonStationCustomer))).Count, "Another user.");
+        Assert.AreEqual(1, (await _factory.FindAsync<StationCustomerWaybill>(21))!.PrintCount);
+    }
+
     private static Group NewGroup(int id) => new() { Id = id, CountryId = CountryId, FullName = $"Group {id}", ShortName = $"G{id}", Category = "Club", CityName = "City" };
     private static Module NewModule(int id) => new() { Id = id, FullName = $"Module {id}", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1 };
     private static Station NewStation(int id) => new() { Id = id, FullName = $"Station {id}", Signature = $"S{id}", RegionId = 1, PrimaryModuleId = id };

@@ -1,44 +1,41 @@
 ﻿@page "/Stations/{stationId:int}/Customers/{id:int}/Waybills"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): a freight customer's waybills. Update generates the missing waybills from the cargo flows (the
+   AddGenerated*Waybills procedures) as a POST form; each waybill's print settings are edited on CustomerWaybillEdit. Only those
+   who may edit the station get Update and Edit. While Update runs, busy-form.js shows "Updating waybills". The customer must be at the station in the address. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject PageHistory PageHistory
-
-@inject StationCustomerService StationCustomerService
-@inject CargoService CargoService
-@inject RegionService RegionService
-@inject OperatingDayService OperatingDayService
+@inject NavigationManager Navigator
 @inject StationService StationService
+@inject StationCustomerService StationCustomerService
 @inject StationCustomerWaybillsService WaybillService
 
-<PageHeading Label="Waybills" Context="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
+<PageHeading Label="Waybills" Context="Customer" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" BackHref="@CustomersHref" />
 
-@if (!IsGeneratingWaybills)
+@if (Customer is null)
 {
-    <div class="col-12" style="border-bottom: 1px solid gray; padding-bottom: 3px">
-        <AppButton Label="Update" OnClickCallback="GenerateWaybills" IconName="@FontAwesome.Sync" />
-        <AppButton Label="Preview" Href="@PreviewHref" />
-    </div>
-}
-
-@if (IsGeneratingWaybills)
-{
-    <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
-
-}
-else if (IsLoadingData)
-{
-    <ActionMessage Label="LoadingData" AlertType="Wait" />
-}
-else if (HasNoData)
-{
-    <ActionMessage Label="NoRecordsToDisplay" />
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
 }
 else
 {
-    <TableTemplate Items="Waybills" EditColspan="9" MayEdit=true ShowRowTemplateWhenEditing=true>
+    <div class="col-12" style="display: flex; gap: 5px; border-bottom: 1px solid gray; padding-bottom: 3px">
+        @if (MayEdit)
+        {
+            <form method="post" @formname="generate" @onsubmit="GenerateAsync" data-enhance data-busy="updating-waybills">
+                <AntiforgeryToken />
+                <AppButton Label="Update" IsSubmit="true" IconName="@FontAwesome.Sync" AlwaysShowLabel="true" />
+            </form>
+        }
+        <AppButton Label="Preview" Href="@PreviewHref" AlwaysShowLabel="true" />
+    </div>
+    @* Shown by busy-form.js while the waybills are generated; the page that comes back has it hidden again. *@
+    <div id="updating-waybills" hidden>
+        <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
+    </div>
+
+    <TableTemplate Items="Waybills">
         <TableHeader>
             <th>@Localizer["Id"]</th>
             <th>@Localizer["Direction"]</th>
@@ -50,84 +47,64 @@ else
             <th>@Localizer["PrintPerOperatingDay"]</th>
             <th>@Localizer["HasEmptyReturn"]</th>
             <th style="text-align: center">@Localizer["PrintCount"]</th>
+            @if (MayEdit)
+            {
+                <th>@Localizer["Actions"]</th>
+            }
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.Id</td>
             <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
-            <td style="@item.OtherRegion.Style()">
-                @item.OtherStationName()
-            </td>
-            <td>
-                @item.OtherCustomerName()
-            </td>
-            <td>
-                @item.CargoName()
-            </td>
+            <td style="@item.OtherRegion.Style()">@item.OtherStationName()</td>
+            <td>@item.OtherCustomerName()</td>
+            <td>@item.CargoName()</td>
             <td>@item.QuantityAndUnit()</td>
             <td>@item.OperatingDay.ShortNameLocalized()</td>
             <td align="center">@item.PrintPerOperatingDay.AsYesOrNo()</td>
             <td align="center">@item.HasEmptyReturn()</td>
             <td align="center">@item.PrintCount</td>
+            @if (MayEdit)
+            {
+                <td><AppButton Label="Edit" Href="@($"Stations/{StationId}/Customers/{Id}/Waybills/{item.Id}/Edit")" /></td>
+            }
         </RowTemplate>
-        <RowEditTemplate Context="item">
-            <CustomerWaybillEdit Waybill="@item" OperatingDayItems="OperationDayItems" RegionItems="RegionItems" OnSaveCallBack="SaveAsync" />
-        </RowEditTemplate>
     </TableTemplate>
 }
 
-
-
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int StationId { get; set; }
 
     ClaimsPrincipal? Principal;
     StationCustomer? Customer;
-
     IEnumerable<StationCustomerWaybill>? Waybills;
-    IEnumerable<ListboxItem>? OperationDayItems;
-    IEnumerable<ListboxItem>? RegionItems;
-
-    bool IsGeneratingWaybills;
-    bool IsLoadingData => Waybills is null && !IsGeneratingWaybills;
-    bool HasNoData => Waybills?.Count() == 0 && !IsGeneratingWaybills;
+    bool MayEdit;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        OperationDayItems = await OperatingDayService.AllDaysItemsAsync();
-        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Id > 0 && StationId > 0)
+        if (await StationService.FindByIdAsync(Principal, StationId) is null) return;
+        Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
+        if (Customer is null || Customer.StationId != StationId)
         {
-            Customer = await StationCustomerService.FindByIdAsync(Principal, Id);
-            Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
+            Customer = null;
+            return;
         }
-    }
-
-    async Task GenerateWaybills()
-    {
-        IsGeneratingWaybills = true;
-        StateHasChanged();
-        var result = await WaybillService.AddGeneratedCustomerWaybills(Principal, Id);
+        MayEdit = await StationCustomerService.MayEditAsync(Principal, StationId);
         Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
-        IsGeneratingWaybills = false;
-        StateHasChanged();
     }
 
+    string SelfHref => $"Stations/{StationId}/Customers/{Id}/Waybills";
+    string CustomersHref => $"Stations/{StationId}/Customers";
+    string PreviewHref => $"reports/waybills/station/{StationId}/customer/{Id}";
 
-    async Task SaveAsync(StationCustomerWaybill item)
+    async Task GenerateAsync()
     {
-        var result = await WaybillService.SaveAsync(Principal, item);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
+        if (Customer is null || !MayEdit) return;
+        await WaybillService.AddGeneratedCustomerWaybills(Principal, Id);
+        HttpContext.SetFlashMessage("UpdatedSuccessfully", FlashMessageLevel.Success);
+        Navigator.NavigateTo(SelfHref);
     }
-
-    string PreviewHref => StationId > 0 && Id > 0 ? $"reports/waybills/station/{StationId}/customer/{Id}" : string.Empty;
 }
-
-

@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.23
+Released 2026-11-20
+- A freight customer's waybills: each waybill's print settings are edited on their own page, Update and Edit are shown only to those who may edit the station, and Update shows a spinning icon and a message while the waybills are created.
 ## Release 1.15.22
 Released 2026-11-20
 - The freight customer form of a module station checks the entries as you type and stays open after saving. Its cargo flows are listed below the customer, each edited on its own page, can be cloned, and are deleted only after you confirm; deleting the customer is also confirmed.

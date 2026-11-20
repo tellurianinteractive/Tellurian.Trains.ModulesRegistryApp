@@ -55,10 +55,14 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
         return await dbContext.Database.ExecuteSqlAsync($"EXEC [AddGeneratedShadowYardWaybills] @StationCustomerId={stationCustomerId}");
     }
 
-    public async Task<(int Count, string Message, StationCustomerWaybill? Entity)> SaveAsync(ClaimsPrincipal? principal, StationCustomerWaybill entity)
+    /// <summary>
+    /// Saves a waybill's print settings, if the user may edit the customer's station. The waybill must belong to the customer the
+    /// page is for (<paramref name="customerId"/>, Migration step 3.6); it stays with its customer and cargo flow.
+    /// </summary>
+    public async Task<(int Count, string Message, StationCustomerWaybill? Entity)> SaveAsync(ClaimsPrincipal? principal, int customerId, StationCustomerWaybill entity)
     {
         using var dbContext = Factory.CreateDbContext();
-        var existing = await dbContext.StationCustomerWaybills.FirstOrDefaultAsync(x => x.Id == entity.Id).ConfigureAwait(false);
+        var existing = await dbContext.StationCustomerWaybills.FirstOrDefaultAsync(x => x.Id == entity.Id && x.StationCustomerId == customerId).ConfigureAwait(false);
         if (existing is null || !await dbContext.MayEditStationOfCustomerAsync(principal, existing.StationCustomerId).ConfigureAwait(false))
             return principal.SaveNotAuthorised<StationCustomerWaybill>();
         // A waybill stays with its customer and its cargo flow.
