@@ -1422,6 +1422,9 @@
   <data name="Morning" xml:space="preserve">
     <value>Morgon</value>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Flytta</value>
+  </data>
   <data name="MoveCustomerToOtherStation" xml:space="preserve">
     <value>Flytta kunden till en annan station?</value>
   </data>

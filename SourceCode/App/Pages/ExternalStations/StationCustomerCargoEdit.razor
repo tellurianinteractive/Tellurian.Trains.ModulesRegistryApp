@@ -1,0 +1,105 @@
+@page "/ExternalStations/{stationid:int}/Customers/{customerid:int}/Cargos/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): one cargo flow of an external station customer, a POST of
+   ExternalStationCustomerCargoFormData; the ids come from the address, and the flow must belong to the customer, and the customer
+   to the station, in the address. After saving, a redirect to the customer's page, which lists the flows as saved, including
+   corrections; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.ExternalStationCustomers
+
+@inject NavigationManager Navigator
+@inject ExternalStationService ExternalStationService
+@inject OperatingDayService OperatingDayService
+@inject CargoService CargoService
+
+<PageHeading ObjectName="CargoFlow" Context="Customer" IconClass="@FontAwesome.Cargo" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStationCustomer" ShowHelpInitially="false" BackHref="@CustomerHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="cargo-flow" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="3" Label="CargoType" Items="CargoTypeItems" ShowPleaseSelect="true" @bind-Value="Form!.CargoId" />
+        <AppInputSelect Width="3" Label="PackagingUnit" Items="PackagingUnitItems" ShowPleaseSelect="false" @bind-Value="Form!.PackageUnitId" />
+        <AppInputFill Width="6" />
+        <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
+        <AppInputSelect Width="2" Label="Direction" Items="DirectionItems" ShowPleaseSelect="true" @bind-Value="Form!.DirectionId" />
+        <AppInputNumber TValue="int" Width="2" Label="Quantity" @bind-Value="Form!.Quantity" />
+        <AppInputSelect Width="2" Label="QuantityUnit" Items="QuantityUnitItems" ShowPleaseSelect="true" @bind-Value="Form!.QuantityUnitId" />
+        <AppInputFill Width="4" />
+        <AppInputText Width="2" Label="OtherWagonClass" @bind-Value="Form!.SpecificWagonClass" />
+        <AppInputText Width="3" Label="OtherName" @bind-Value="Form!.SpecialCargoName" />
+        <AppInputNumber TValue="int?" Width="2" Label="FromYear" @bind-Value="Form!.FromYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" @bind-Value="Form!.UptoYear" />
+        <AppYearPeriodHint />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int CustomerId { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [SupplyParameterFromForm(FormName = "cargo-flow")] private ExternalStationCustomerCargoFormData? Form { get; set; }
+
+    ClaimsPrincipal? Principal;
+    ExternalStationCustomer? Customer;
+    ExternalStationCustomerCargo? Existing;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? PackagingUnitItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Customer = await ExternalStationService.FindCustomerByIdAsync(Principal, CustomerId);
+        if (Customer is null || Customer.ExternalStationId != StationId)
+        {
+            Customer = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = Customer.ExternalStationCustomerCargos.FirstOrDefault(c => c.Id == Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? ExternalStationCustomerCargo.Default(CustomerId)).AsFormData();
+        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
+        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+    }
+
+    string CustomerHref => $"ExternalStations/{StationId}/Customers/{CustomerId}/Edit";
+
+    async Task SaveAsync()
+    {
+        if (Form is null || Customer is null) return;
+        // Edit: only the form's fields change on the loaded flow (Migration section 3.4, the data-loss rule).
+        var cargo = Form.AsEntity(Existing, CustomerId);
+        var (count, message, _) = await ExternalStationService.SaveCargoAsync(Principal, CustomerId, cargo);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(CustomerHref);
+    }
+}

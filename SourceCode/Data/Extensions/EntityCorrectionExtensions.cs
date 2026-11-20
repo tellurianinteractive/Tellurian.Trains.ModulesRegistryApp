@@ -50,7 +50,12 @@ public static class EntityCorrectionExtensions
 
     extension(ExternalStationCustomerCargo cargo)
     {
-        public void CorrectInput() => (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
+        public void CorrectInput()
+        {
+            (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
+            cargo.SpecificWagonClass = cargo.SpecificWagonClass.Corrected(TextCase.AsTyped, Optional);
+            cargo.SpecialCargoName = cargo.SpecialCargoName.Corrected(TextCase.Sentence, Optional); // A cargo name, as the cargo types'.
+        }
     }
 
     extension(StationCustomer customer)

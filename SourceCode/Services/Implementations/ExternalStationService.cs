@@ -180,6 +180,41 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         return principal.SaveNotAuthorised<ExternalStationCustomer>();
     }
 
+    /// <summary>
+    /// Saves one cargo flow of a customer (Migration step 3.6: each flow has its own form). An edited flow must belong to the
+    /// customer the page is for (<paramref name="customerId"/>); a new flow is added to that customer.
+    /// </summary>
+    public async Task<(int Count, string Message, ExternalStationCustomerCargo? Entity)> SaveCargoAsync(ClaimsPrincipal? principal, int customerId, ExternalStationCustomerCargo entity)
+    {
+        if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<ExternalStationCustomerCargo>();
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.ExternalStationCustomers.AnyAsync(esc => esc.Id == customerId)) return (0, Resources.Strings.SaveFailed, null);
+        if (entity.Id == 0)
+        {
+            entity.ExternalStationCustomerId = customerId;
+            dbContext.ExternalStationCustomerCargos.Add(entity);
+            return (await dbContext.SaveChangesAsync()).SaveResult(entity);
+        }
+        var existing = await dbContext.ExternalStationCustomerCargos.SingleOrDefaultAsync(escc => escc.Id == entity.Id && escc.ExternalStationCustomerId == customerId);
+        if (existing is null) return (0, Resources.Strings.SaveFailed, null);
+        entity.ExternalStationCustomerId = customerId;
+        dbContext.Entry(existing).CurrentValues.SetValues(entity);
+        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+        return (await dbContext.SaveChangesAsync()).SaveResult(existing);
+    }
+
+    /// <summary>Deletes one cargo flow, only of the customer the page is for.</summary>
+    public async Task<(int Count, string Message)> DeleteCargoAsync(ClaimsPrincipal? principal, int customerId, int cargoId)
+    {
+        if (!principal.IsAuthenticated()) return principal.NotAuthorized<ExternalStationCustomerCargo>();
+        using var dbContext = Factory.CreateDbContext();
+        var existing = await dbContext.ExternalStationCustomerCargos.SingleOrDefaultAsync(escc => escc.Id == cargoId && escc.ExternalStationCustomerId == customerId);
+        if (existing is null) return (0, Resources.Strings.NothingToDelete);
+        dbContext.Remove(existing);
+        return (await dbContext.SaveChangesAsync()).DeleteResult();
+    }
+
     public async Task<(int Count, string Message)> MoveCustomerAsync(ClaimsPrincipal? principal, ExternalStationCustomer? customer, int toStationId)
     {
         if (principal.IsSuperUser())

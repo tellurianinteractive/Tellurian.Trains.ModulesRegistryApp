@@ -8,6 +8,9 @@ should only be fill in if it historically relevant.
 In particular, don't fill in the *closed year* if you want your customer to stay in business *until further notice*.
 Only *freight customers* in business under any of the operating years of the *layout* will be used for *cargo matching*.
 ### Cargo flow
+The cargo flows are listed below the customer when it has been saved. **Add** or **Edit** opens a page for one cargo flow,
+and **Delete** asks you to confirm before the cargo flow is deleted.
+
 Defines any cargo that is relevant that the customer supply or consume:
 - **Cargo type** is from a predefined list. You may not find the cargo that your looking for. 
 Administrators can add new cargo, so ask any of them to help you with that.

@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.21
+Released 2026-11-20
+- The external station customer form checks the entries as you type and stays open after saving. Its cargo flows are listed below the customer, each edited on its own page, and a cargo flow is deleted only after you confirm.
 ## Release 1.15.20
 Released 2026-11-20
 - The external station form checks the entries as you type and stays open after saving; a saved station's region is shown but can't be changed.
