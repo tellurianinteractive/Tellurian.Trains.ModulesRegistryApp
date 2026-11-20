@@ -428,6 +428,18 @@
 		<None Update="Content\Markdown\Help\ExternalStationCustomer.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Content\Markdown\Help\ExternalStationCustomer.da.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStationCustomer.de.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStationCustomer.nb.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Content\Markdown\Help\ExternalStationCustomer.sv.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Content\Markdown\Help\StationCustomer.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
