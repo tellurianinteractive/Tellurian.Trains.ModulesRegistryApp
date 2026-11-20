@@ -1,102 +1,135 @@
-﻿@page "/Groups/{groupid:int}/Members/{memberid:int}/edit"
+﻿@page "/Groups/{groupid:int}/Members/{memberid:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a member's rights, a POST of GroupMemberFormData; the ids come from the address, and the
+   member must belong to the group. Only the group's member administrators get the page. Below, the member's modules in the
+   group's layout modules and the member's other modules: each table is one POST form whose Add or Remove buttons post the module's
+   id. After each action, a redirect, and the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Groups
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 @inject GroupLayoutModuleService GroupLayoutModuleService
 
-<PageHeading ObjectName="Member" Context="GroupMember?.Person" IconClass="@FontAwesome.Group" PageAction="PageAction.Edit" />
+<PageHeading ObjectName="Member" Context="Member?.Person" IconClass="@FontAwesome.Group" PageAction="PageAction.Edit" BackHref="@MembersHref" />
 
-@if (GroupMember is null)
+@if (FailureMessage is not null)
 {
-
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else
-{
-    <EditTemplate Item="GroupMember" OnValidSubmit="OnValidSubmit">
-        <Inputs>
-            <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-            <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-            <AppInputCheck Width="3" Label="IsMeetingAdministrator" @bind-Value="GroupMember.IsMeetingAdministrator" />
-            <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="GroupMember.MayBorrowGroupsModules" />
-            <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="GroupMember.MemberMayBorrowMyModules" />
-        </Inputs>
-    </EditTemplate>
 
+<EditTemplate Item="Form" FormName="member" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <input type="hidden" name="Form.PersonId" value="@Member?.PersonId" />
+        <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="Form!.IsGroupAdministrator" />
+        <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="Form!.IsDataAdministrator" />
+        <AppInputCheck Width="3" Label="IsMeetingAdministrator" @bind-Value="Form!.IsMeetingAdministrator" />
+        <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="Form!.MayBorrowGroupsModules" />
+        <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="Form!.MemberMayBorrowMyModules" />
+    </Inputs>
+</EditTemplate>
+
+@if (Member is not null)
+{
     <h2>@Localizer["LayoutModules"]</h2>
-    <TableTemplate Items="GroupLayoutModules">
-        <RowHeaderTemplate>
-            <th>@Localizer["Name"]</th>
-            <th>@Localizer["Actions"]</th>
-        </RowHeaderTemplate>
-        <RowTemplate Context="item">
-            <td>@item.Module.Name()</td>
-            <td>
-                <AppButton Label="Remove" OnClickCallback="RemoveGroupLayoutModule" OnClickParameter="@item.ModuleId"/>
-            </td>
-        </RowTemplate>
-    </TableTemplate>
+    <form method="post" @formname="remove-module" @onsubmit="RemoveModuleAsync" data-enhance>
+        <AntiforgeryToken />
+        <TableTemplate Items="LayoutModules">
+            <TableHeader>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Actions"]</th>
+            </TableHeader>
+            <RowTemplate Context="item">
+                <td>@item.Module.Name()</td>
+                <td><AppButton Label="Remove" IsSubmit="true" Name="RemoveModuleId" Value="@item.ModuleId.ToString()" /></td>
+            </RowTemplate>
+        </TableTemplate>
+    </form>
+
     <h2>@Localizer["AvailableModules"]</h2>
-    <TableTemplate Items="PossibleModules">
-        <RowHeaderTemplate>
-            <th>@Localizer["Name"]</th>
-            <th>@Localizer["Actions"]</th>
-        </RowHeaderTemplate>
-        <RowTemplate Context="item">
-            <td>@item.Name()</td>
-            <td>
-                <AppButton Label="Add" OnClickCallback="AddGroupLayoutModule" OnClickParameter="@item.Id" />
-            </td>
-        </RowTemplate>
-    </TableTemplate>
+    <form method="post" @formname="add-module" @onsubmit="AddModuleAsync" data-enhance>
+        <AntiforgeryToken />
+        <TableTemplate Items="PossibleModules">
+            <TableHeader>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Actions"]</th>
+            </TableHeader>
+            <RowTemplate Context="item">
+                <td>@item.Name()</td>
+                <td><AppButton Label="Add" IsSubmit="true" Name="AddModuleId" Value="@item.Id.ToString()" /></td>
+            </RowTemplate>
+        </TableTemplate>
+    </form>
 }
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int GroupId { get; set; }
     [Parameter] public int MemberId { get; set; }
+    [SupplyParameterFromForm(FormName = "member")] private GroupMemberFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "add-module")] private int AddModuleId { get; set; }
+    [SupplyParameterFromForm(FormName = "remove-module")] private int RemoveModuleId { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private GroupMember? GroupMember; 
-    private IEnumerable<GroupLayoutModule>? GroupLayoutModules;
-    private IEnumerable<Module>? PossibleModules;
+    ClaimsPrincipal? Principal;
+    GroupMember? Member;
+    IEnumerable<GroupLayoutModule>? LayoutModules;
+    IEnumerable<Module>? PossibleModules;
+    string? FailureMessage;
 
-    protected override async Task OnParametersSetAsync()
+    string SelfHref => $"Groups/{GroupId}/Members/{MemberId}/Edit";
+    string MembersHref => $"Groups/{GroupId}/Members";
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        GroupMember = await GroupService.FindMemberByIdAsync(Principal, MemberId);
-        await UpdateModules();
-    }
-    private async Task OnValidSubmit()
-    {
-        if (GroupMember is null) return;
-        var result = await GroupService.SaveMemberAsync(Principal, GroupMember);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
-        if (result.Count != 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
-    }
-
-    private async Task AddGroupLayoutModule(int moduleId)
-    {
-        var result = await GroupLayoutModuleService.AddModule(Principal, GroupId, moduleId, MemberId);
-        await UpdateModules();
-        NotificationService.ShowSuccessOrFailure(Localizer, result, "Add");
-    }
-
-    private async Task RemoveGroupLayoutModule(int moduleId)
-    {
-        var result = await GroupLayoutModuleService.RemoveModule(Principal, GroupId, moduleId);
-        await UpdateModules();
-        NotificationService.ShowSuccessOrFailure(Localizer, result, "Remove");
-    }
-
-    private async Task UpdateModules()
-    {
-        GroupLayoutModules = await GroupLayoutModuleService.GetGroupMembersLayoutModulesAsync(Principal, MemberId);
+        // Found only for the group's member administrators.
+        Member = await GroupService.FindMemberByIdAsync(Principal, MemberId);
+        if (Member is null || Member.GroupId != GroupId)
+        {
+            Member = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= Member.AsFormData();
+        LayoutModules = await GroupLayoutModuleService.GetGroupMembersLayoutModulesAsync(Principal, MemberId);
         PossibleModules = await GroupLayoutModuleService.GetGroupMemberModulesAsync(Principal, MemberId);
+    }
+
+    async Task SaveAsync()
+    {
+        if (Form is null || Member is null) return;
+        // Only the rights change on the loaded member (Migration section 3.4, the data-loss rule).
+        var member = Form.AsEntity(Member);
+        member.Group = null!; member.Person = null!; // Loaded for display only.
+        var (count, message, _) = await GroupService.SaveMemberAsync(Principal, member);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(MembersHref);
+    }
+
+    async Task AddModuleAsync()
+    {
+        if (Member is null) return;
+        var added = await GroupLayoutModuleService.AddModule(Principal, GroupId, AddModuleId, MemberId) > 0;
+        HttpContext.SetFlashMessage(added ? "Saved" : "SaveFailed", added);
+        Navigator.NavigateTo(SelfHref);
+    }
+
+    async Task RemoveModuleAsync()
+    {
+        if (Member is null) return;
+        var removed = await GroupLayoutModuleService.RemoveModule(Principal, GroupId, RemoveModuleId) > 0;
+        HttpContext.SetFlashMessage(removed ? "DeletedSuccessfully" : "DeleteFailed", removed);
+        Navigator.NavigateTo(SelfHref);
     }
 }

@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.26
+Released 2026-11-20
+- Adding and editing group members uses the new forms; a new member can also be made meeting administrator right away.
 ## Release 1.15.25
 Released 2026-11-20
 - The group form checks the entries as you type and stays open after saving; a group's administrators can now edit it, but only administrators can change its country (global) and domain. Removing a member is confirmed first.

@@ -1,98 +1,92 @@
 ﻿@page "/Groups/{groupid:int}/Members/Add"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of GroupMemberFormData, the person chosen with the person search (person-search.js
+   writes the id to its hidden input, which is posted). The country to search in is a GET form (?country=), initially the group's.
+   Only the group's member administrators get the form. After adding, a redirect to the members list; the result is a one-time
+   message. *@
+
+@using ModulesRegistry.Forms.Groups
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
 @inject NavigationManager Navigator
 @inject GroupService GroupService
 @inject CountryService CountryService
+@inject PersonService PersonService
 
-<PageHeading Label="AddMemberIn" Context="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" HelpContext="AddGroupMember" ShowHelpInitially="true"/>
+<PageHeading Label="AddMemberIn" Context="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" HelpContext="AddGroupMember" ShowHelpInitially="true" BackHref="@MembersHref" />
 
-@if (MayEdit)
+@if (FailureMessage is not null)
 {
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="true" SelectedId="@CountryId" LocalStorageKey="Country" ApplyOnChange="true" />
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
 
-    <EditForm Model="@GroupMember" OnValidSubmit="@OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
-        @if (Group is not null)
-        {
-            <AppSearchPerson @bind-Value="GroupMember.PersonId"
-                             SearchLabel="@SearchLabel"
-                             MinimumSearchCharacters="MinimumSearchCharacters"
-                             CountryId="CountryId"
-                             ExcludeGroupId="Group.Id"
-                             AddPersonHref="@AddPersonHref(GroupId)"
-                             ValidationFor="@(() => GroupMember.Person)" />
-        }
+@if (Group is not null && Form is not null)
+{
+    <ListboxForm Id="member-country" Action="@($"Groups/{GroupId}/Members/Add")" Name="country" Items="CountryItems" ItemType="Country" SelectedId="SearchCountryId" />
+}
+
+<EditTemplate Item="Form" FormName="add-member" OnValidSubmit="AddAsync">
+    <Inputs>
+        <AppSearchPerson @bind-Value="Form!.PersonId" Name="Form.PersonId" SelectedName="@SelectedPersonName"
+                         SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
+                         MinimumSearchCharacters="MinimumSearchCharacters"
+                         CountryId="SearchCountryId"
+                         ExcludeGroupId="GroupId"
+                         AddPersonHref="@($"persons/0/editgroup/{GroupId}")" />
         <AppInputFill Width="8" />
-        <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="GroupMember.IsGroupAdministrator" />
-        <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="GroupMember.IsDataAdministrator" />
-        <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="GroupMember.MayBorrowGroupsModules" />
-        <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="GroupMember.MemberMayBorrowMyModules" />
-        <div class="col-12">
-            <AppButton IsSubmit=true Label="Save"  />
-        </div>
-    </EditForm>
-}
-else
-{
-    <ActionMessage Label="NotAuthorised" />
-}
+        <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="Form!.IsGroupAdministrator" />
+        <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="Form!.IsDataAdministrator" />
+        <AppInputCheck Width="3" Label="IsMeetingAdministrator" @bind-Value="Form!.IsMeetingAdministrator" />
+        <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="Form!.MayBorrowGroupsModules" />
+        <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="Form!.MemberMayBorrowMyModules" />
+    </Inputs>
+</EditTemplate>
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? GroupId { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int GroupId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] private int? CountryId { get; set; }
+    [SupplyParameterFromForm(FormName = "add-member")] private GroupMemberFormData? Form { get; set; }
 
+    const int MinimumSearchCharacters = 3;
     ClaimsPrincipal? Principal;
     Group? Group;
-    GroupMember GroupMember = new GroupMember();
-    IEnumerable<ListboxItem>? Countries;
-    int CountryId;
-    bool MayEdit;
-    const int MinimumSearchCharacters = 3;
+    IEnumerable<ListboxItem>? CountryItems;
+    string? SelectedPersonName;
+    string? FailureMessage;
+
+    int SearchCountryId => CountryId > 0 ? CountryId.Value : Group?.CountryId ?? 0;
+    string MembersHref => $"Groups/{GroupId}/Members";
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    protected async override Task OnParametersSetAsync()
-    {
-        MayEdit = GroupId.HasValue ? await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value) : false;
-        Countries = await CountryService.ListboxItemsAsync(Principal, MayEdit);
-        await RefreshData();
-    }
-
-    protected async Task RefreshData()
-    {
-        if (GroupId.IsSet())
+        Group = await GroupService.FindByIdAsync(Principal, GroupId);
+        if (Group is null || !await GroupService.IsGroupMemberAdministratorAsync(Principal, Group.Id, Group.CountryId))
         {
-            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value);
-            if (Group is not null)
-            {
-                if (CountryId == 0) CountryId = Group.CountryId;
-                GroupMember.GroupId = Group.Id;
-            }
+            Group = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= new GroupMemberFormData();
+        if (Form.PersonId > 0) SelectedPersonName = (await PersonService.FindByIdAsync(Principal, Form.PersonId))?.Name();
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, allSupportedCountries: true);
     }
 
-    async Task OnValidSubmit()
+    async Task AddAsync()
     {
-        var result = await GroupService.AddMemberAsync(Principal, GroupMember);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
-        if (result.Count > 0) Navigator.NavigateTo($"/Groups/{GroupMember.GroupId}/Members");
+        if (Form is null || Group is null) return;
+        var (count, message, _) = await GroupService.AddMemberAsync(Principal, Form.AsEntity(groupId: GroupId));
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        Navigator.NavigateTo(MembersHref);
     }
-
-    void OnSelectedCountry(int countryId)
-    {
-        CountryId = countryId;
-    }
-
-    string AddPersonHref(int? groupId) => $"persons/0/editgroup/{groupId}";
-
-    string SearchLabel => Localizer.SearchObject("Person", MinimumSearchCharacters);
 }
