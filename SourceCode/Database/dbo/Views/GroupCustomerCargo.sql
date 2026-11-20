@@ -2,7 +2,7 @@
 SELECT 
 	G.Id AS GroupId,
 	MON.Names AS OwnerNames,
-	MS.MainTheme,
+	MS.MainThemeId,
 	SCC.Id,
 	SCC.StationCustomerId,
 	S.Id AS StationId,

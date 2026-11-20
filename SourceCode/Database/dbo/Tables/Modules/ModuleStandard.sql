@@ -10,7 +10,6 @@
     [Electricity]    NVARCHAR (20)  NULL,
     [PreferredTheme] NVARCHAR (50)  NULL,
     [AcceptedNorm]   NVARCHAR (255) NULL,
-    [MainTheme] NVARCHAR(10) NULL, 
     [MainThemeId] INT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_ModuleStandard] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_ModuleStandard_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id])

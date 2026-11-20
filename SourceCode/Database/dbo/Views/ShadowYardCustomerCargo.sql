@@ -50,7 +50,7 @@ SELECT
 	CAST (1 AS BIT) AS IsShadowYard,
 	0 AS ScaleId,
 	0 AS StandardId,
-	COALESCE(SS.MainTheme, 'EUROPE') AS MainTheme,
+	CASE WHEN SS.MainThemeId = 2 THEN 2 ELSE 1 END AS MainThemeId, -- US = 2, otherwise Europe
 	CO.NHMCode
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId

@@ -64,7 +64,7 @@ BEGIN
 		AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply AND ME.IsSupply = 0
 		--AND ME.QuantityUnitId = OTHER.QuantityUnitId -- Is not used, because it causes too few matches.
-		AND ME.MainTheme = OTHER.MainTheme
+		AND ME.MainThemeId = OTHER.MainThemeId
 		AND (ME.ScaleId = OTHER.ScaleId OR ME.ScaleId = 0 OR OTHER.ScaleId = 0)
 		AND ((ME.CountryId = OTHER.CountryId) OR (ME.IsInternational <> 0 AND OTHER.IsInternational <>0)) 
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )

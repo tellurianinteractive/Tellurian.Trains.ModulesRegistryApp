@@ -50,7 +50,7 @@ SELECT
 	CAST (0 AS BIT) AS IsShadowYard,
 	0 AS ScaleId,
 	0 AS StandardId,
-	'EUROPE' AS MainTheme,
+	1 AS MainThemeId, -- Europe
 	CO.NHMCode
 FROM 
 	[ExternalStation] AS S INNER JOIN Region AS R ON R.Id = S.RegionId

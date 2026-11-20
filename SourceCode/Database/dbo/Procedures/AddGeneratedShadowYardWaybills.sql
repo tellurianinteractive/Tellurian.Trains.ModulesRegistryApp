@@ -60,7 +60,7 @@ BEGIN
 		--AND ME.StationCustomerId <> OTHER.StationCustomerId
 		AND ME.IsSupply <> OTHER.IsSupply
 		-- AND ME.QuantityUnitId = OTHER.QuantityUnitId
-		AND ME.MainTheme = OTHER.MainTheme
+		AND ME.MainThemeId = OTHER.MainThemeId
 		AND (ME.ScaleId = OTHER.ScaleId OR ME.ScaleId = 0 OR OTHER.ScaleId = 0)
 		AND (ME.CountryId = OTHER.CountryId) 
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
