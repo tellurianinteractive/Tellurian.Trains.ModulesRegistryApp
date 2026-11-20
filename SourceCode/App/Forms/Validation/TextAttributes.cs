@@ -9,7 +9,7 @@ namespace ModulesRegistry.Forms.Validation;
 // "<AttributeName>_Error", found by convention by Microsoft.Extensions.Validation (AddValidation in Program.cs). Each one also
 // emits a client rule (IClientValidationRuleProvider) whose JavaScript validator of the same name is in wwwroot/js/form-validation.js.
 // What the service corrects when saving (<c>Tellurian.Utilities.Text</c>) is accepted, so the user is only told about what
-// can't be corrected. Names are not validated for capitals but corrected when saved (<c>AsCapitalizedName</c> in Tellurian.Utilities.Text).
+// can't be corrected. Names are not validated for capitals but corrected when saved (<c>Corrected(TextCase)</c> in Tellurian.Utilities.Text).
 
 /// <summary>
 /// Only Latin letters, digits and some punctuation and symbols (<see cref="TextRules"/>), after the correction made when saving

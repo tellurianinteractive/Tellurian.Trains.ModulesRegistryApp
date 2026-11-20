@@ -11,17 +11,32 @@ public sealed class EntityCorrectionExtensionsTests
     public void Station()
     {
         var station = new Station { FullName = "nedre Ullerud C", Signature = "nu", StationTracks = [new StationTrack { PlatformLength = 0 }] };
-        station.CorrectInput();
+        station.CorrectInput(new TextCasings());
         Assert.AreEqual("Nedre Ullerud C", station.FullName, "Only the first letter: the rest may be abbreviations.");
-        Assert.AreEqual("Nu", station.Signature);
+        Assert.AreEqual("Nu", station.Signature, "A country without a rule: only the first letter.");
         Assert.IsNull(station.StationTracks.Single().PlatformLength);
+    }
+
+    [TestMethod]
+    [DataRow("CST", TextCase.Capitalized, "Cst", DisplayName = "Swedish")]
+    [DataRow("ff", TextCase.UpperCase, "FF", DisplayName = "German")]
+    [DataRow(" Hbf ", TextCase.UpperCase, "HBF", DisplayName = "German, trimmed")]
+    public void TheSignatureFollowsTheRuleOfTheCountry(string signature, TextCase rule, string expected)
+    {
+        var casings = new TextCasings { [TextKinds.StationSignature] = rule };
+        var station = new Station { FullName = "Station", Signature = signature };
+        var external = new ExternalStation { FullName = "Station", Signature = signature };
+        station.CorrectInput(casings);
+        external.CorrectInput(casings);
+        Assert.AreEqual(expected, station.Signature);
+        Assert.AreEqual(expected, external.Signature);
     }
 
     [TestMethod]
     public void SignatureInCapitalsIsKept()
     {
         var station = new ExternalStation { FullName = "Frankfurt Hbf", InternationalName = "frankfurt", Signature = "FF", OpenedYear = 1912, ClosedYear = 1888 };
-        station.CorrectInput();
+        station.CorrectInput(new TextCasings());
         Assert.AreEqual("FF", station.Signature);
         Assert.AreEqual("Frankfurt", station.InternationalName);
         Assert.AreEqual((short)1888, station.OpenedYear, "Reversed years are swapped.");

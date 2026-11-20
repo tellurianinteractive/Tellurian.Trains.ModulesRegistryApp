@@ -115,7 +115,9 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
 
     public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownershipRef, int moduleId)
     {
-        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
+        // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5); the signature by the country's language.
+        await using (var casingContext = await Factory.CreateDbContextAsync())
+            entity.CorrectInput(await casingContext.CountryCasingsAsync(entity.RegionId, principal));
         if (principal.IsAuthenticated())
         {
             ownershipRef = principal.UpdateFrom(ownershipRef);

@@ -47,10 +47,11 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
 
     public async Task<(int Count, string Message, ExternalStation? Entity)> SaveAsync(ClaimsPrincipal? principal, ExternalStation entity)
     {
-        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
+            // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5); the signature by the country's language.
+            entity.CorrectInput(await dbContext.CountryCasingsAsync(entity.RegionId, principal));
             var existing = await dbContext.ExternalStations
                 .Include(es => es.Region)
                 .Include(es => es.ExternalStationCustomers)

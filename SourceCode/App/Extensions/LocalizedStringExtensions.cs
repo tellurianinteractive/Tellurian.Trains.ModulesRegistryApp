@@ -2,6 +2,7 @@
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Extensions;
+using ModulesRegistry.Services.Localization;
 using ModulesRegistry.Shared;
 using System.Globalization;
 using System.Text;
@@ -70,8 +71,9 @@ public static class LocalizedStringExtensions
     private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
         string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToFirstLowerInvariant() : localizer[objectName].ToString();
 
+    /// <summary>The text as a noun inside a sentence: lower case, except in a language that capitalises nouns (German).</summary>
     public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) =>
-        localizer["_CASING"] == "_LOWER" ? localizer[resourceName].Value.ToLowerInvariant() : localizer[resourceName].Value;
+        AppLanguages.Current.CapitalizesNouns ? localizer[resourceName].Value : localizer[resourceName].Value.ToLowerInvariant();
 
     public static string FromParts(this IStringLocalizer localizer, string resourceName)
     {

@@ -1,9 +1,12 @@
+using ModulesRegistry.Data.Extensions;
+using System.Globalization;
 using Tellurian.Localization;
 
 namespace ModulesRegistry.Services.Localization;
 
 /// <summary>
-/// The app's languages, in one place, as Tellurian.Localization <see cref="Language"/> records (Migration step 2B.3).
+/// The app's languages, in one place, as Tellurian.Localization <see cref="Language"/> records (Migration step 2B.3), with the
+/// casing rules of each language's texts (<see cref="AppLanguage.Casings"/>).
 /// </summary>
 /// <remarks>
 /// Three tiers, in this order (the order is used for lists and choices):
@@ -17,13 +20,13 @@ namespace ModulesRegistry.Services.Localization;
 /// </remarks>
 public static class AppLanguages
 {
-    public static IReadOnlyList<Language> All { get; } =
+    public static IReadOnlyList<AppLanguage> All { get; } =
     [
         new("en", true) { CultureCode = "GB" },
-        new("de", true) { CultureCode = "DE", CapitalizesNouns = true },
-        new("da", true) { CultureCode = "DK" },
-        new("sv", true) { CultureCode = "SE" },
-        new("nb", true) { CultureCode = "NO" },
+        new("de", true) { CultureCode = "DE", CapitalizesNouns = true, Casings = { [TextKinds.StationSignature] = TextCase.UpperCase } },
+        new("da", true) { CultureCode = "DK", Casings = { [TextKinds.StationSignature] = TextCase.Capitalized } },
+        new("sv", true) { CultureCode = "SE", Casings = { [TextKinds.StationSignature] = TextCase.Capitalized } },
+        new("nb", true) { CultureCode = "NO", Casings = { [TextKinds.StationSignature] = TextCase.Capitalized } },
         new("nl", false) { CultureCode = "NL" },
         new("pl", false) { CultureCode = "PL" },
         new("it", false) { CultureCode = "IT" },
@@ -35,9 +38,34 @@ public static class AppLanguages
 
     private static readonly HashSet<string> CargoNameLanguageCodes = ["en", "de", "da", "sv", "nb", "nl", "pl", "it", "fr"];
 
-    public static IReadOnlyList<Language> FullySupported { get; } = [.. All.Where(l => l.IsFullySupported)];
+    public static IReadOnlyList<AppLanguage> FullySupported { get; } = [.. All.Where(l => l.IsFullySupported)];
 
-    public static IReadOnlyList<Language> WithCargoNames { get; } = [.. All.Where(l => CargoNameLanguageCodes.Contains(l.TwoLetterCode))];
+    public static IReadOnlyList<AppLanguage> WithCargoNames { get; } = [.. All.Where(l => CargoNameLanguageCodes.Contains(l.TwoLetterCode))];
 
-    public static Language Default => All[0];
+    public static AppLanguage Default => All[0];
+
+    /// <summary>The user interface language of the current request, or <see cref="Default"/>.</summary>
+    public static AppLanguage Current => Find(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName) ?? Default;
+
+    /// <summary>
+    /// The casing rules of a country's texts, from its first language (<see cref="ModulesRegistry.Data.Country.Languages"/>, such as "sv" or
+    /// "de,fr"); none for an unknown country or language.
+    /// </summary>
+    public static TextCasings CasingsOf(string? countryLanguages) => Find(countryLanguages.FirstItem(separator: ','))?.Casings ?? new();
+
+    private static AppLanguage? Find(string? twoLetterCode) =>
+        !string.IsNullOrWhiteSpace(twoLetterCode) ? All.FirstOrDefault(l => l.TwoLetterCode.EqualsCaseInsensitive(twoLetterCode)) : null;
+}
+
+/// <summary>
+/// A <see cref="Language"/> with the casing rules of its texts (Tellurian.Utilities <see cref="TextCasings"/>): the two packages
+/// don't know each other, the app joins them here.
+/// </summary>
+public sealed record AppLanguage(string TwoLetterCode, bool IsFullySupported) : Language(TwoLetterCode, IsFullySupported)
+{
+    /// <summary>The <see cref="TextCase"/> per kind of text (<see cref="TextKinds"/>); an undeclared kind gets the caller's default.</summary>
+    public TextCasings Casings { get; init; } = new();
+
+    // A derived record would otherwise print its properties instead of the culture name, such as "de-DE".
+    public override string ToString() => base.ToString();
 }

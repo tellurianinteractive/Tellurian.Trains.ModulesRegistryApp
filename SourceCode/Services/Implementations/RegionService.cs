@@ -57,8 +57,8 @@ public class RegionService(IDbContextFactory<ModulesDbContext> factory)
         if (principal.IsCountryAdministratorInCountry(entity.CountryId))
         {
             // Corrected, not validated (Migration step 3.5): ordinary text and capitals.
-            entity.LocalName = entity.LocalName.AsOrdinaryText().AsCapitalizedName();
-            entity.Description = entity.Description.AsOrdinaryText().OrNullIfEmpty;
+            entity.LocalName = entity.LocalName.Corrected(TextCase.Place);
+            entity.Description = entity.Description.Corrected(TextCase.AsTyped, TextCleanup.OrdinaryText | TextCleanup.NullIfEmpty);
             // Only the permitted colours (RegionColors, decided 2026-11-18); the text colour follows.
             var color = RegionColors.Permitted(entity.BackColor);
             if (color is null) return Resources.Strings.SaveFailed.SaveResult(entity);

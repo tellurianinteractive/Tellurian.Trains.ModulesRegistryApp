@@ -77,4 +77,20 @@ public sealed class CargoSaveTests
         Assert.AreEqual((short)1950, saved.FromYear, "Reversed years are swapped.");
         Assert.AreEqual((short)1990, saved.UptoYear);
     }
+
+    [TestMethod]
+    public async Task AnEditedCargoIsCapitalised()
+    {
+        var target = new CargoService(_factory, _cache);
+        var existing = (await target.FindByIdAsync(GlobalAdministrator, 1))!;
+        existing.EN = "hard coal";
+        existing.SV = "stenkol";
+
+        var result = await target.SaveAsync(GlobalAdministrator, existing);
+
+        Assert.IsGreaterThan(0, result.Count);
+        var saved = (await _factory.FindAsync<Cargo>(1))!;
+        Assert.AreEqual("Hard coal", saved.EN);
+        Assert.AreEqual("Stenkol", saved.SV);
+    }
 }
