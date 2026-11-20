@@ -49,4 +49,26 @@ public sealed class RegionColorsTests
         Assert.AreEqual("#000000", RegionColors.All.Single(c => c.Name == "Orange").TextColor);
         Assert.AreEqual("#000000", RegionColors.All.Single(c => c.Name == "Pink").TextColor);
     }
+
+    [TestMethod]
+    [DataRow(null, RegionColors.White, DisplayName = "No colour")]
+    [DataRow("", RegionColors.White)]
+    [DataRow("not a colour", RegionColors.White)]
+    [DataRow("#ffff00", RegionColors.Yellow, DisplayName = "A permitted colour")]
+    [DataRow("#FF8000", RegionColors.Orange, DisplayName = "An earlier shade")]
+    [DataRow("#FA0000", RegionColors.Red)]
+    [DataRow("#E20808", RegionColors.Red)]
+    [DataRow("#050505", RegionColors.Black)]
+    [DataRow("#333438", RegionColors.Black)]
+    [DataRow("#0080FF", RegionColors.Blue)]
+    [DataRow("#1202F2", RegionColors.Blue)]
+    [DataRow("#09BA08", RegionColors.Green)]
+    [DataRow("#F9E406", RegionColors.Yellow)]
+    [DataRow("#FFA046", RegionColors.Orange)]
+    [DataRow("#9900CC", RegionColors.Purple)]
+    [DataRow("#FF80D5", RegionColors.Pink)]
+    [DataRow("#7F4040", RegionColors.Brown)]
+    [DataRow("#F2DDC0", RegionColors.White)]
+    [DataRow("red", RegionColors.Red, DisplayName = "A colour name")]
+    public void TheNearestPermittedColour(string? hex, string expected) => Assert.AreEqual(expected, RegionColors.Nearest(hex));
 }

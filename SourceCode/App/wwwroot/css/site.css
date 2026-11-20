@@ -355,7 +355,7 @@ blockquote {
 .color-swatch-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 0.5rem;
 }
 
 .color-swatch-input {
@@ -366,17 +366,17 @@ blockquote {
 }
 
 .color-swatch {
-    padding: 0.3rem 0.7rem;
-    border: 1px solid #adb5bd;
-    border-radius: 0.3rem;
+    display: inline-block;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid #6c757d;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 0.875rem;
 }
 
 .color-swatch-input:checked + .color-swatch {
     outline: 3px solid #0d6efd;
     outline-offset: 2px;
-    font-weight: bold;
 }
 
 .color-swatch-input:focus-visible + .color-swatch {

@@ -1962,6 +1962,9 @@
   <data name="Radius" xml:space="preserve">
     <value>Radie</value>
   </data>
+  <data name="ReadyTime" xml:space="preserve">
+    <value>Lastning/lossning klar</value>
+  </data>
   <data name="ReadyToTest" xml:space="preserve">
     <value>Redo att testa</value>
   </data>

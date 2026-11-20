@@ -1,0 +1,117 @@
+@page "/Stations/{StationId:int}/Customers/{CustomerId:int}/Cargos/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): one cargo flow of a module station's freight customer, a POST of
+   StationCustomerCargoFormData; the ids come from the address, and the flow must belong to the customer, and the customer to the
+   station, in the address. Only those who may edit the station get the form. A new flow may start from the values of another
+   (?clone={id}). After saving, a redirect to the customer's page, which lists the flows as saved, including corrections; the
+   result is a one-time message. *@
+
+@using ModulesRegistry.Forms.StationCustomers
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject StationCustomerService StationCustomerService
+@inject OperatingDayService OperatingDayService
+@inject CargoService CargoService
+
+<PageHeading ObjectName="CargoFlow" Context="Customer" IconClass="@FontAwesome.Cargo" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="StationCustomer" ShowHelpInitially="false" BackHref="@CustomerHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="cargo-flow" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
+        <AppInputSelect Width="2" Label="Direction" Items="DirectionItems" ShowPleaseSelect="true" @bind-Value="Form!.DirectionId" />
+        <AppInputSelect Width="2" Label="QuantityUnit" Items="QuantityUnitItems" ShowPleaseSelect="true" @bind-Value="Form!.QuantityUnitId" />
+        <AppInputNumber TValue="int" Width="2" Label="Quantity" @bind-Value="Form!.Quantity" />
+        <AppInputSelect Width="2" Label="ReadyTime" Items="ReadyTimeItems" ShowPleaseSelect="false" @bind-Value="Form!.ReadyTimeId" />
+        <AppInputNumber TValue="int?" Width="2" Label="MaxTrainsetLength" @bind-Value="Form!.MaxTrainsetLength" />
+        <AppInputSelect Width="3" Label="CargoType" Items="CargoTypeItems" ShowPleaseSelect="true" @bind-Value="Form!.CargoId" />
+        <AppInputText Width="2" Label="OtherWagonClass" @bind-Value="Form!.SpecificWagonClass" />
+        <AppInputSelect Width="3" Label="PackagingUnit" Items="PackagingUnitItems" ShowPleaseSelect="false" @bind-Value="Form!.PackageUnitId" />
+        <AppInputFill Width="4" />
+        <h3>@Localizer["Change below only if it differs from the customer above"]</h3>
+        <AppInputText Width="2" Label="OtherTrackOrArea" @bind-Value="Form!.TrackOrArea" BackColor="@OtherColor" TextColor="@OtherColor.TextColor" />
+        <AppInputColorSelect Width="4" Label="OtherColor" Colors="RegionColors.All" @bind-Value="Form!.TrackOrAreaColor" />
+        <AppInputNumber TValue="int?" Width="2" Label="OtherFromYear" @bind-Value="Form!.FromYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="OtherUptoYear" @bind-Value="Form!.UptoYear" />
+        <AppYearPeriodHint />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int CustomerId { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [SupplyParameterFromForm(FormName = "cargo-flow")] private StationCustomerCargoFormData? Form { get; set; }
+    [SupplyParameterFromQuery(Name = "clone")] private int? CloneId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    StationCustomer? Customer;
+    StationCustomerCargo? Existing;
+    IEnumerable<ListboxItem>? CargoTypeItems;
+    IEnumerable<ListboxItem>? PackagingUnitItems;
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    IEnumerable<ListboxItem>? ReadyTimeItems;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Customer = await StationCustomerService.FindByIdAsync(Principal, CustomerId);
+        if (Customer is null || Customer.StationId != StationId || !await StationCustomerService.MayEditAsync(Principal, StationId))
+        {
+            Customer = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = Customer.Cargos.FirstOrDefault(c => c.Id == Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        var template = Id == 0 && CloneId > 0 ? Customer.Cargos.FirstOrDefault(c => c.Id == CloneId) : null;
+        Form ??= (Existing ?? template ?? StationCustomerCargo.Default(CustomerId)).AsFormData();
+        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
+        PackagingUnitItems = await CargoService.CargoPackagingUnitListboxItemsAsync(Principal);
+        DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+        QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+        ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+    }
+
+    // As in the lists: white is "as the customer".
+    string OtherColor => Form is null || Form.TrackOrAreaColor.IsWhite ? RegionColors.Nearest(Customer?.TrackOrAreaColor) : Form.TrackOrAreaColor;
+
+    string CustomerHref => $"Stations/{StationId}/Customers/{CustomerId}/Edit";
+
+    async Task SaveAsync()
+    {
+        if (Form is null || Customer is null) return;
+        // Edit: only the form's fields change on the loaded flow (Migration section 3.4, the data-loss rule).
+        var cargo = Form.AsEntity(Existing, CustomerId);
+        var (count, message, _) = await StationCustomerService.SaveCargoAsync(Principal, CustomerId, cargo);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(CustomerHref);
+    }
+}

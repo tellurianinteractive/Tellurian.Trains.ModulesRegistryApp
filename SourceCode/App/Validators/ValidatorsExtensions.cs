@@ -56,10 +56,6 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, short?> MustBeYearOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer, int minimum = YearPeriod.MinYear) =>
         builder.Must(year => year.IsYearOrEmpty(minimum)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, minimum, YearPeriod.MaxYear)}");
 
-    /// <summary>A colour, after the correction when saving (<c>NormalizedHexColor</c>): "f80" and colour names are accepted.</summary>
-    public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value is null || value.IsKnownColor).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
-
     extension(string? value)
     {
         internal bool IsEmailAddressesWhenCorrected() =>

@@ -9,7 +9,8 @@ namespace ModulesRegistry.Services.Tests;
 /// <summary>
 /// A station's freight customers and their waybills may be changed only by those who may edit the station: its module's
 /// owners, data administrators of an owning group or of a group an owner is a member of, and administrators (release
-/// 1.15.10; before, any signed-in user could). Moving a customer to another station requires both stations.
+/// 1.15.10; before, any signed-in user could). Moving a customer to another station requires both stations. Each cargo flow
+/// is saved and deleted on its own, only as a flow of the customer it belongs to (1.15.22).
 /// </summary>
 [TestClass]
 public sealed class StationCustomerPermissionTests
@@ -184,6 +185,128 @@ public sealed class StationCustomerPermissionTests
         Assert.IsTrue(await dbContext.MayEditStationOfCustomerAsync(Principal(Owner), PersonStationCustomer));
         Assert.IsFalse(await dbContext.MayEditStationOfCustomerAsync(Principal(Owner), OtherPersonStationCustomer));
         Assert.IsFalse(await dbContext.MayEditStationOfCustomerAsync(Principal(Owner), 999), "A customer that doesn't exist.");
+    }
+
+    private async Task SeedCargoFlowAsync()
+    {
+        await _factory.SeedAsync(new NHM { Id = 1, Code = "1", LevelDigits = 2 });
+        await _factory.SeedAsync(new Cargo { Id = 5, NhmCode = 1, EN = "Paper", DE = "Papier", DA = "Papir", SV = "Papper", NB = "Papir" });
+        await _factory.SeedAsync(
+            new CargoDirection { Id = 1, FullName = "Receive", ShortName = "R" },
+            new OperatingDay { Id = 8, Flag = 127, FullName = "Daily", ShortName = "Daily" },
+            new CargoQuantityUnit { Id = 4, FullName = "Wagons", Designation = "wg", SingularResourceCode = "Wagon", PluralResourceCode = "Wagons" },
+            new CargoReadyTime { Id = 1, FullName = "Unspecified", ShortName = "-" },
+            new CargoPackagingUnit { Id = 0, SingularResourceCode = "Unspecified", PluralResourceCode = "Unspecified", PrepositionResourceCode = "" });
+        await _factory.SeedAsync(new StationCustomerCargo { Id = 12, StationCustomerId = OtherPersonStationCustomer, CargoId = 5, DirectionId = 1, OperatingDayId = 8, QuantityUnitId = 4, Quantity = 1, ReadyTimeId = 1 });
+        await _factory.SeedAsync(new StationCustomerCargo { Id = 13, StationCustomerId = PersonStationCustomer, CargoId = 5, DirectionId = 1, OperatingDayId = 8, QuantityUnitId = 4, Quantity = 1, ReadyTimeId = 1 });
+    }
+
+    private static StationCustomerCargo Flow(int id = 0) => new()
+    {
+        Id = id, CargoId = 5, DirectionId = 1, OperatingDayId = 8, QuantityUnitId = 4, Quantity = 2, ReadyTimeId = 1, TrackOrAreaColor = "#fffffe",
+        SpecificWagonClass = " ", TrackOrArea = "", MaxTrainsetLength = 0, FromYear = 1990, UptoYear = 1960,
+    };
+
+    [TestMethod]
+    public async Task OwnerAddsACorrectedCargoFlow()
+    {
+        await SeedCargoFlowAsync();
+        var target = new StationCustomerService(_factory);
+
+        var (count, _, entity) = await target.SaveCargoAsync(Principal(Owner), PersonStationCustomer, Flow());
+
+        Assert.IsGreaterThan(0, count);
+        var saved = (await _factory.FindAsync<StationCustomerCargo>(entity!.Id))!;
+        Assert.AreEqual(PersonStationCustomer, saved.StationCustomerId);
+        Assert.IsNull(saved.SpecificWagonClass, "An empty optional text is saved as empty.");
+        Assert.IsNull(saved.TrackOrArea);
+        Assert.IsNull(saved.MaxTrainsetLength, "Zero is no limit.");
+        Assert.AreEqual(RegionColors.White, saved.TrackOrAreaColor);
+        Assert.AreEqual((short)1960, saved.FromYear, "Reversed years are swapped.");
+    }
+
+    [TestMethod]
+    public async Task OwnerChangesAndDeletesTheCustomersOwnCargoFlow()
+    {
+        await SeedCargoFlowAsync();
+        var target = new StationCustomerService(_factory);
+
+        Assert.IsGreaterThan(0, (await target.SaveCargoAsync(Principal(Owner), PersonStationCustomer, Flow(13))).Count);
+        Assert.AreEqual(2, (await _factory.FindAsync<StationCustomerCargo>(13))!.Quantity);
+        Assert.AreEqual(-1, (await target.SaveCargoAsync(Principal(Owner), PersonStationCustomer, Flow(13))).Count, "Unchanged.");
+        Assert.IsGreaterThan(0, (await target.DeleteCargoAsync(Principal(Owner), PersonStationCustomer, 13)).Count);
+        Assert.IsNull(await _factory.FindAsync<StationCustomerCargo>(13));
+    }
+
+    [TestMethod]
+    public async Task AnotherCustomersCargoFlowIsNotChangedOrDeleted()
+    {
+        await SeedCargoFlowAsync();
+        var target = new StationCustomerService(_factory);
+
+        Assert.AreEqual(0, (await target.SaveCargoAsync(Principal(Owner), PersonStationCustomer, Flow(12))).Count, "Flow 12 belongs to the other station's customer.");
+        Assert.AreEqual(0, (await target.DeleteCargoAsync(Principal(Owner), PersonStationCustomer, 12)).Count);
+        var flow = (await _factory.FindAsync<StationCustomerCargo>(12))!;
+        Assert.AreEqual(OtherPersonStationCustomer, flow.StationCustomerId);
+        Assert.AreEqual(1, flow.Quantity);
+    }
+
+    [TestMethod]
+    public async Task AnotherUserMayNotAddChangeOrDeleteCargoFlows()
+    {
+        await SeedCargoFlowAsync();
+        var target = new StationCustomerService(_factory);
+
+        Assert.AreEqual(0, (await target.SaveCargoAsync(Principal(Stranger), OtherPersonStationCustomer, Flow())).Count);
+        Assert.AreEqual(0, (await target.SaveCargoAsync(Principal(Stranger), OtherPersonStationCustomer, Flow(12))).Count);
+        Assert.AreEqual(0, (await target.DeleteCargoAsync(Principal(Stranger), OtherPersonStationCustomer, 12)).Count);
+        Assert.AreEqual(1, (await _factory.FindAsync<StationCustomerCargo>(12))!.Quantity);
+    }
+
+    [TestMethod]
+    public async Task SavingTheCustomerKeepsItsCargoFlows()
+    {
+        await SeedCargoFlowAsync();
+        var target = new StationCustomerService(_factory);
+        var customer = (await target.FindByIdAsync(Principal(Owner), PersonStationCustomer))!;
+        customer.CustomerName = "Renamed";
+        customer.Cargos.Clear();
+
+        Assert.IsGreaterThan(0, (await target.SaveAsync(Principal(Owner), PersonStation, customer)).Count);
+        Assert.IsNotNull(await _factory.FindAsync<StationCustomerCargo>(13));
+    }
+
+    [TestMethod]
+    public async Task AdministratorMovesCustomerWithMoveCustomer()
+    {
+        var target = new StationCustomerService(_factory);
+        var administrator = Principal(Stranger, extra: new Claim(AppClaimTypes.CountryAdministrator, "true"));
+
+        var (count, _) = await target.MoveCustomerAsync(administrator, PersonStationCustomer, GroupStation);
+
+        Assert.AreEqual(1, count);
+        Assert.AreEqual(GroupStation, (await _factory.FindAsync<StationCustomer>(PersonStationCustomer))!.StationId);
+    }
+
+    [TestMethod]
+    public async Task OwnerMayNotMoveCustomerToAStationTheyMayNotEdit()
+    {
+        var target = new StationCustomerService(_factory);
+
+        Assert.AreEqual(0, (await target.MoveCustomerAsync(Principal(Owner), PersonStationCustomer, OtherPersonStation)).Count);
+        Assert.AreEqual(0, (await target.MoveCustomerAsync(Principal(Owner), OtherPersonStationCustomer, PersonStation)).Count, "Nor take another station's customer.");
+        Assert.AreEqual(PersonStation, (await _factory.FindAsync<StationCustomer>(PersonStationCustomer))!.StationId);
+        Assert.AreEqual(OtherPersonStation, (await _factory.FindAsync<StationCustomer>(OtherPersonStationCustomer))!.StationId);
+    }
+
+    [TestMethod]
+    public async Task OnlyAdministratorsOfTheCountryGetStationsToMoveTo()
+    {
+        var target = new StationCustomerService(_factory);
+
+        Assert.HasCount(3, await target.MoveToStationItemsAsync(Principal(Stranger, extra: new Claim(AppClaimTypes.CountryAdministrator, "true")), CountryId));
+        Assert.IsEmpty(await target.MoveToStationItemsAsync(Principal(Owner), CountryId));
+        Assert.IsEmpty(await target.MoveToStationItemsAsync(Principal(Stranger, OtherCountryId, new Claim(AppClaimTypes.CountryAdministrator, "true")), CountryId));
     }
 
     private static Group NewGroup(int id) => new() { Id = id, CountryId = CountryId, FullName = $"Group {id}", ShortName = $"G{id}", Category = "Club", CityName = "City" };

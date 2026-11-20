@@ -7,7 +7,7 @@ namespace ModulesRegistry.AppTests.Validators;
 
 /// <summary>
 /// The interactive forms' rules since Migration step 3.5 (decided 2026-11-19): what the service corrects when saving is not
-/// refused. Names aren't checked for capitals, and the address, year, MAC address, DCC address and colour rules check the value
+/// refused. Names aren't checked for capitals, and the address, year, MAC address and DCC address rules check the value
 /// as it will be after the correction.
 /// </summary>
 [TestClass]
@@ -58,17 +58,6 @@ public sealed class CorrectedInputRulesTests
         var invalid = InvalidMembers(new LayoutValidator(Localizer), new Layout { FirstYear = 1970, LastYear = 1950 });
         CollectionAssert.DoesNotContain(invalid, nameof(Layout.FirstYear));
         CollectionAssert.DoesNotContain(invalid, nameof(Layout.LastYear));
-    }
-
-    [TestMethod]
-    public void ColourInShortForm()
-    {
-        var invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "f80" });
-        CollectionAssert.DoesNotContain(invalid, nameof(StationCustomer.TrackOrAreaColor));
-        invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "red" });
-        CollectionAssert.DoesNotContain(invalid, nameof(StationCustomer.TrackOrAreaColor), "A colour name is corrected to its hex code.");
-        invalid = InvalidMembers(new StationCustomerValidator(Localizer), new StationCustomer { CustomerName = "Ica", TrackOrAreaColor = "reddish" });
-        CollectionAssert.Contains(invalid, nameof(StationCustomer.TrackOrAreaColor));
     }
 
     private sealed class KeyLocalizer : IStringLocalizer<Strings>

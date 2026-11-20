@@ -1,112 +1,212 @@
 ﻿@page "/Stations/{StationId:int}/Customers/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the external station customer form: a POST of StationCustomerFormData; the ids come
+   from the address, and the customer must be at the station in the address. Only those who may edit the station get the form.
+   Below it, the customer's cargo flows: each has its own form (CustomerCargoEdit), Clone opens a new flow with the values of
+   another, and Delete is a link that adds ?delete={id}, which shows a confirmation with a POST form. Deleting the customer is
+   confirmed the same way (?deletecustomer=true). An administrator may move the customer to another station of the country with a
+   POST form. After each action, a redirect, and the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.StationCustomers
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject PageHistory PageHistory
-
+@inject NavigationManager Navigator
 @inject StationService StationService
 @inject StationCustomerService StationCustomerService
-
 @inject OperatingDayService OperatingDayService
 @inject CargoService CargoService
 
-<PageHeading Label="FreightCustomer" Context="StationCustomer" IconClass="@FontAwesome.Customer" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="StationCustomer" />
+<PageHeading Label="FreightCustomer" Context="Station" IconClass="@FontAwesome.Customer" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="StationCustomer" ShowHelpInitially="false" BackHref="@CustomersHref" />
 
-@if (DeleteDialogOpen)
+@if (FailureMessage is not null)
 {
-    <AppModalDialog Title="@DeleteTitle"
-                 Text="@Localizer["ClickOKToDelete"]"
-                 OnClose="@OnDeleteDialogClose">
-    </AppModalDialog>
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
 
-<EditTemplate Item="StationCustomer" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+@if (Existing is not null && DeleteCustomer)
+{
+    <div class="alert alert-warning" role="alert">
+        <form method="post" @formname="delete-customer" @onsubmit="DeleteCustomerAsync" data-enhance>
+            <AntiforgeryToken />
+            <strong>@Localizer["Delete"] @Existing.CustomerName?</strong>
+            <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+            <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+        </form>
+    </div>
+}
+
+@if (Existing is not null && MoveToStationItems.Any())
+{
+    <form id="customer-move" method="post" @formname="move" @onsubmit="MoveAsync" data-enhance class="noprint" style="display: flex; align-items: center; gap: 10px; padding-bottom: 5px;">
+        <AntiforgeryToken />
+        <label for="move-to-station">@Localizer["MoveCustomerToOtherStation"]</label>
+        <select id="move-to-station" name="MoveToStationId" class="form-select" style="width: auto">
+            @foreach (var item in MoveToStationItems)
+            {
+                <option value="@item.Id" selected="@(item.Id == StationId)">@item.Description</option>
+            }
+        </select>
+        <AppButton Label="Move" IsSubmit="true" AlwaysShowLabel="true" />
+    </form>
+}
+
+<EditTemplate Item="Form" FormName="customer" OnValidSubmit="SaveAsync" MayDelete="@(Existing is not null)" DeleteHref="@($"{SelfHref}?deletecustomer=true")">
     <Inputs>
-        <AppInputText Width="4" @bind-Value="StationCustomer.CustomerName" Label="Name" />
-        <AppInputText Width="8" @bind-Value="StationCustomer.Comment" Label="Comment" />
-        <AppInputText Width="3" @bind-Value="StationCustomer.TrackOrArea" Label="TrackOrArea" BackColor="@StationCustomer.TrackOrAreaColor" TextColor="@StationCustomer.TrackOrAreaColor.TextColor" />
-        <AppInputColor Width="3" @bind-Value="StationCustomer.TrackOrAreaColor" Label="Color" />
-        <AppInputNumber Width="2" @bind-Value="StationCustomer.OpenedYear" Label="OpenedYear" />
-        <AppInputNumber Width="2" @bind-Value="StationCustomer.ClosedYear" Label="ClosedYear" />
+        <AppInputText Width="4" Label="Name" @bind-Value="Form!.CustomerName" />
+        <AppInputText Width="8" Label="Comment" @bind-Value="Form!.Comment" />
+        <AppInputText Width="3" Label="TrackOrArea" @bind-Value="Form!.TrackOrArea" BackColor="@Form!.TrackOrAreaColor" TextColor="@Form!.TrackOrAreaColor.TextColor" />
+        <AppInputColorSelect Width="5" Label="Color" Colors="RegionColors.All" @bind-Value="Form!.TrackOrAreaColor" />
+        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" @bind-Value="Form!.OpenedYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" @bind-Value="Form!.ClosedYear" />
+        <AppYearPeriodHint />
     </Inputs>
-    <Buttons>
-        @if (StationCustomer.Id > 0)
-        {
-            <AppButton Label="Delete" OnClickCallback="( () => OpenDeleteDialog(StationCustomer.Id))"/>
-        }
-    </Buttons>
-    <SubInputs>
-        <CustomerCargoesEdit Customer="StationCustomer" CargoTypeItems="CargoTypeItems"  OperatingDayItems="OperatingDayItems"  />
-    </SubInputs>
 </EditTemplate>
+
+@if (Existing is not null)
+{
+    <h3 class="mt-3">@Localizer["CargoFlow"]</h3>
+    <AppButton Label="Add" ObjectName="CargoFlow" Href="@CargoEditHref(0)" AlwaysShowLabel="true" />
+
+    @if (CargoToDelete is not null)
+    {
+        <div class="alert alert-warning mt-2" role="alert">
+            <form method="post" @formname="delete-cargo" @onsubmit="DeleteCargoAsync" data-enhance>
+                <AntiforgeryToken />
+                <input type="hidden" name="DeleteCargoId" value="@CargoToDelete.Id" />
+                <strong>@Localizer["Delete"] @CargoToDelete.CargoTypeName(CargoTypeItems)?</strong>
+                <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+                <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+            </form>
+        </div>
+    }
+
+    <TableTemplate Items="Existing.Cargos.OrderBy(c => c.DirectionId)" RowStyle="RowStyle">
+        <TableHeader>
+            <th>@Localizer["CargoType"]</th>
+            <th>@Localizer["Direction"]</th>
+            <th>@Localizer["Days"]</th>
+            <th>@Localizer["Quantity"]</th>
+            <th>@Localizer["Finished"]</th>
+            <th>@Localizer["Place"]</th>
+            <th>@Localizer["OperatingPeriod"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="cargo">
+            <td>@cargo.CargoTypeName(CargoTypeItems)</td>
+            <td>@cargo.CargoDirection(DirectionItems)</td>
+            <td>@cargo.OperatingDays(OperatingDayItems)</td>
+            <td>@cargo.Quantity @cargo.QuantityUnit(QuantityUnitItems)</td>
+            <td>@cargo.ReadyLoadingOrUnloading(Localizer, ReadyTimeItems)</td>
+            <td style="color: @cargo.TrackOrAreaForeColor(); background-color: @cargo.TrackOrAreaBackColour()">@cargo.TrackOrArea()</td>
+            <td>@((cargo.FromYear ?? Existing.OpenedYear, cargo.UptoYear ?? Existing.ClosedYear).AsPeriod())</td>
+            <td>
+                <AppButton Label="Edit" Href="@CargoEditHref(cargo.Id)" />
+                <AppButton Label="Clone" Href="@($"{CargoEditHref(0)}?clone={cargo.Id}")" />
+                <AppButton Label="Delete" Href="@($"{SelfHref}?delete={cargo.Id}")" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int StationId { get; set; }
+    [SupplyParameterFromForm(FormName = "customer")] private StationCustomerFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-cargo")] private int DeleteCargoId { get; set; }
+    [SupplyParameterFromForm(FormName = "move")] private int MoveToStationId { get; set; }
+    [SupplyParameterFromQuery(Name = "delete")] private int? DeleteId { get; set; }
+    [SupplyParameterFromQuery(Name = "deletecustomer")] private bool DeleteCustomer { get; set; }
 
     ClaimsPrincipal? Principal;
     Station? Station;
-    StationCustomer StationCustomer = new StationCustomer();
-    IEnumerable<ListboxItem>? OperatingDayItems;
+    StationCustomer? Existing;
     IEnumerable<ListboxItem>? CargoTypeItems;
-
-    bool DeleteDialogOpen { get; set; }
-    int DeletedId;
-    string DeleteTitle => $"{Localizer["Delete"]} {StationCustomer?.CustomerName}?";
+    IEnumerable<ListboxItem>? DirectionItems;
+    IEnumerable<ListboxItem>? OperatingDayItems;
+    IEnumerable<ListboxItem>? QuantityUnitItems;
+    IEnumerable<ListboxItem>? ReadyTimeItems;
+    IEnumerable<ListboxItem> MoveToStationItems = [];
+    string? FailureMessage;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
-        OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (StationId > 0)
-        {
-            Station = await StationService.FindByIdAsync(Principal, StationId);
-            StationCustomer = Id > 0 ? await StationCustomerService.FindByIdAsync(Principal, Id) ?? Default : Default;
-        }
-    }
-
-    async Task OnValidSubmit()
-    {
-        if (StationId > 0 && StationCustomer is not null)
-        {
-            var result = await StationCustomerService.SaveAsync(Principal, StationId, StationCustomer);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
-
-    private void OpenDeleteDialog(int id)
-    {
-        DeletedId = id;
-        DeleteDialogOpen = true;
-        StateHasChanged();
-    }
-
-    private async Task OnDeleteDialogClose(bool accepted)
-    {
-        DeleteDialogOpen = false;
-        if (accepted && DeletedId > 0)
+        Station = await StationService.FindByIdAsync(Principal, StationId);
+        if (Station is null || !await StationCustomerService.MayEditAsync(Principal, StationId))
         {
             Station = null;
-            StationCustomer = Default;
-            var result = await StationCustomerService.DeleteAsync(Principal, DeletedId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(3000);
-            PageHistory.NavigateBack();
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
         }
-        StateHasChanged();
+        if (Id > 0)
+        {
+            Existing = await StationCustomerService.FindByIdAsync(Principal, Id);
+            if (Existing is null || Existing.StationId != StationId)
+            {
+                Existing = null;
+                Form = null;
+                return;
+            }
+            foreach (var cargo in Existing.Cargos) cargo.StationCustomer = Existing; // For the track or area and its colours.
+            CargoTypeItems = await CargoService.CargoListboxItemsAsync(Principal);
+            DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
+            OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
+            QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
+            ReadyTimeItems = await CargoService.ReadyTimeListboxItemsAsync(Principal);
+            if (Station.Region is not null) MoveToStationItems = await StationCustomerService.MoveToStationItemsAsync(Principal, Station.Region.CountryId);
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new StationCustomer()).AsFormData();
     }
 
-    private StationCustomer Default => new StationCustomer
+    StationCustomerCargo? CargoToDelete => DeleteId > 0 ? Existing?.Cargos.FirstOrDefault(c => c.Id == DeleteId) : null;
+
+    string SelfHref => $"Stations/{StationId}/Customers/{Id}/Edit";
+    string CustomersHref => $"Stations/{StationId}/Customers";
+    string CargoEditHref(int cargoId) => $"Stations/{StationId}/Customers/{Id}/Cargos/{cargoId}/Edit";
+    static string RowStyle(StationCustomerCargo item) => item.RowStyle();
+
+    async Task SaveAsync()
     {
-        StationId = StationId,
-        TrackOrAreaColor = "#FFFFFF"
-    };
+        if (Form is null || Station is null) return;
+        // Edit: only the form's fields change on the loaded customer, its cargo flows stay (Migration section 3.4, the data-loss rule).
+        var customer = Form.AsEntity(Existing, StationId);
+        var (count, message, saved) = await StationCustomerService.SaveAsync(Principal, StationId, customer);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Stations/{StationId}/Customers/{(saved ?? customer).Id}/Edit");
+    }
+
+    async Task DeleteCustomerAsync()
+    {
+        if (Existing is null) return;
+        var deleted = (await StationCustomerService.DeleteAsync(Principal, Existing.Id)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(deleted ? CustomersHref : SelfHref);
+    }
+
+    async Task DeleteCargoAsync()
+    {
+        if (Existing is null) return;
+        var deleted = (await StationCustomerService.DeleteCargoAsync(Principal, Existing.Id, DeleteCargoId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(SelfHref);
+    }
+
+    async Task MoveAsync()
+    {
+        if (Existing is null || MoveToStationId < 1 || MoveToStationId == StationId) return;
+        var moved = (await StationCustomerService.MoveCustomerAsync(Principal, Existing.Id, MoveToStationId)).Count > 0;
+        HttpContext.SetFlashMessage(moved ? "Saved" : "SaveFailed", moved);
+        Navigator.NavigateTo(moved ? $"Stations/{MoveToStationId}/Customers/{Id}/Edit" : SelfHref);
+    }
 }

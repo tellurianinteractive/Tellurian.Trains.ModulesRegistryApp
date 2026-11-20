@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.22
+Released 2026-11-20
+- The freight customer form of a module station checks the entries as you type and stays open after saving. Its cargo flows are listed below the customer, each edited on its own page, can be cloned, and are deleted only after you confirm; deleting the customer is also confirmed.
+- Administrators can move a freight customer to another station of the country.
+- Colours are chosen by clicking a round swatch. A freight customer's track or area colour, and a cargo flow's other colour, are now one of the same ten colours as the regions; a colour outside them is shown as the nearest one and saved as that.
 ## Release 1.15.21
 Released 2026-11-20
 - The external station customer form checks the entries as you type and stays open after saving. Its cargo flows are listed below the customer, each edited on its own page, and a cargo flow is deleted only after you confirm.

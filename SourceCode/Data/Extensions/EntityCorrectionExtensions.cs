@@ -9,9 +9,6 @@ namespace ModulesRegistry.Data.Extensions;
 /// </summary>
 public static class EntityCorrectionExtensions
 {
-    // A colour as #RRGGBB, also from a name or #RGB; anything else is kept, to be refused.
-    private static string? Color(string? color) => color.NormalizedHexColor ?? color?.Trim();
-
     // An optional text: ordinary text, null when empty.
     private const TextCleanup Optional = TextCleanup.OrdinaryText | TextCleanup.NullIfEmpty;
 
@@ -63,8 +60,10 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             customer.CustomerName = customer.CustomerName.Corrected(TextCase.InitialCapital);
+            customer.Comment = customer.Comment.Corrected(TextCase.AsTyped, Optional);
+            customer.TrackOrArea = customer.TrackOrArea.Corrected(TextCase.AsTyped, Optional);
             (customer.OpenedYear, customer.ClosedYear) = YearPeriod.Corrected(customer.OpenedYear, customer.ClosedYear);
-            customer.TrackOrAreaColor = Color(customer.TrackOrAreaColor);
+            customer.TrackOrAreaColor = RegionColors.Nearest(customer.TrackOrAreaColor); // One of the ten colours, since 1.15.22.
             foreach (var cargo in customer.Cargos ?? []) cargo.CorrectInput();
         }
     }
@@ -74,7 +73,11 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             (cargo.FromYear, cargo.UptoYear) = YearPeriod.Corrected(cargo.FromYear, cargo.UptoYear);
-            cargo.TrackOrAreaColor = Color(cargo.TrackOrAreaColor);
+            cargo.TrackOrArea = cargo.TrackOrArea.Corrected(TextCase.AsTyped, Optional);
+            cargo.TrackOrAreaColor = RegionColors.Nearest(cargo.TrackOrAreaColor); // White is "as the customer".
+            cargo.SpecificWagonClass = cargo.SpecificWagonClass.Corrected(TextCase.AsTyped, Optional);
+            cargo.SpecialCargoName = cargo.SpecialCargoName.Corrected(TextCase.Sentence, Optional); // A cargo name, as the cargo types'.
+            cargo.MaxTrainsetLength = cargo.MaxTrainsetLength.OrNullIfZero();
         }
     }
 

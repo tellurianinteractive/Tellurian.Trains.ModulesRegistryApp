@@ -3,9 +3,10 @@
 @inherits AppInputBase<string>
 @inject IStringLocalizer<Strings> Localizer
 
-@* A choice among named colours as swatches: radio buttons whose labels show the colour, with its name in a contrasting text
-   colour. Coloured in every browser (the options of a native drop-down aren't, in Safari) and usable with the keyboard; works
-   without JavaScript in static SSR forms (name attribute, field message) and in interactive ones. The value is the hex code. *@
+@* A choice among named colours as round swatches (since 1.15.22 without visible names): radio buttons whose labels are circles
+   in the colour; the name is the tooltip and is read by screen readers. Coloured in every browser (the options of a native
+   drop-down aren't, in Safari) and usable with the keyboard; works without JavaScript in static SSR forms (name attribute, field
+   message) and in interactive ones. The value is the hex code. *@
 
 <div class="@WidthCss">
     <fieldset class="color-swatches" disabled="@IsDisabled">
@@ -18,7 +19,7 @@
             {
                 var id = $"{Label}-{color.Name}";
                 <input type="radio" class="color-swatch-input" id="@id" name="@NameAttributeValue" value="@color.HexColor" checked="@IsSelected(color)" @onchange="() => Select(color)" />
-                <label class="color-swatch" for="@id" style="background-color: @color.HexColor; color: @color.TextColor">@Localizer[color.Name]</label>
+                <label class="color-swatch" for="@id" style="background-color: @color.HexColor" title="@Localizer[color.Name]"><span class="visually-hidden">@Localizer[color.Name]</span></label>
             }
         </div>
     </fieldset>

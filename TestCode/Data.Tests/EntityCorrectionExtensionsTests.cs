@@ -51,11 +51,11 @@ public sealed class EntityCorrectionExtensionsTests
         Assert.AreEqual("Ica Maxi", customer.CustomerName);
         Assert.IsNull(customer.OpenedYear, "Zero is not given.");
         Assert.AreEqual((short)1990, customer.ClosedYear);
-        Assert.AreEqual("#FF8800", customer.TrackOrAreaColor);
+        Assert.AreEqual(RegionColors.Orange, customer.TrackOrAreaColor, "The nearest of the palette.");
         var cargo = customer.Cargos.Single();
         Assert.AreEqual((short)1970, cargo.FromYear);
         Assert.AreEqual((short)1995, cargo.UptoYear);
-        Assert.AreEqual("#00FF00", cargo.TrackOrAreaColor);
+        Assert.AreEqual(RegionColors.Green, cargo.TrackOrAreaColor);
     }
 
     [TestMethod]

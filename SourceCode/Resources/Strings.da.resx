@@ -1962,6 +1962,9 @@
   <data name="Radius" xml:space="preserve">
     <value>Radius</value>
   </data>
+  <data name="ReadyTime" xml:space="preserve">
+    <value>Lastning/aflæsning klar</value>
+  </data>
   <data name="ReadyToTest" xml:space="preserve">
     <value>Klar til test</value>
   </data>
