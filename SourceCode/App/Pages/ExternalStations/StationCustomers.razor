@@ -1,10 +1,12 @@
 ﻿@page "/ExternalStations/{id:int}/StationCustomers"
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
 
 @inject ExternalStationService ExternalStationService
 
-<PageHeading ObjectName="FreightCustomers" Context="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" />
+<PageHeading ObjectName="FreightCustomers" Context="Station" IconClass="@FontAwesome.Customer" PageAction="PageAction.List" BackHref="ExternalStations" />
 @if (MayEdit)
 {
     <AppButton Label="Add" Href="@CustomerAddHref(Station)" />

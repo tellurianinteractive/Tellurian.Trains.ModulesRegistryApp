@@ -1,4 +1,6 @@
 ﻿@page "/Stations/{Id:int}/View"
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject StationService StationService
@@ -6,7 +8,7 @@
 @inject OperatingDayService OperatingDayService
 
 <div class="print50percent">
-    <PageHeading ObjectName="OperationLocation" Context="Station" IconClass="@FontAwesome.Station" PageAction="PageAction.List" />
+    <PageHeading ObjectName="OperationLocation" Context="Station" IconClass="@FontAwesome.Station" PageAction="PageAction.List" BackHref="Stations/Index" />
 
     @if (Station is not null)
     {

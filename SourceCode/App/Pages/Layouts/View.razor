@@ -1,4 +1,6 @@
 ﻿@page "/Meetings/{id:int}/Layouts/View"
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject INotificationService NotificationService
@@ -6,7 +8,7 @@
 @inject MeetingService MeetingService
 @inject GroupService GroupService
 
-<PageHeading Label="Layouts" Context="@Meeting" IconClass="Layout" />
+<PageHeading Label="Layouts" Context="@Meeting" IconClass="Layout" BackHref="@($"Meetings/{Id}/View")" />
 
 @if (Meeting is null)
 {

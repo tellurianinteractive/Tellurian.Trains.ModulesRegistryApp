@@ -33,8 +33,9 @@ public sealed partial class HostingTests
     {
         using var client = CreateClient();
 
-        // Any page not yet moved to static SSR (the start page until Migration step 3.2b, the meetings list until 3.3).
-        var response = await client.GetAsync("/Meetings/1/View");
+        // Any page not yet moved to static SSR and not requiring sign-in (the start page until Migration step 3.2b, the meetings
+        // list until 3.3, a meeting's page until 3.6).
+        var response = await client.GetAsync("/Meetings/1/Register");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();
@@ -188,6 +189,16 @@ public sealed partial class HostingTests
             .Select(p => p.PropertyType.Name);
         Assert.DoesNotContain("ILocalStorageService", injected);
     }
+
+    [TestMethod]
+    [DataRow(typeof(ModulesRegistry.Pages.Country.Statistics))]
+    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.StationCustomers))]
+    [DataRow(typeof(ModulesRegistry.Pages.Stations.View))]
+    [DataRow(typeof(ModulesRegistry.Pages.Meetings.View))]
+    [DataRow(typeof(ModulesRegistry.Pages.Layouts.View))]
+    public void ReadOnlyPageIsStatic(Type page) =>
+        // Migration step 3.6 (1.15.27): pages with only text and links that were still interactive.
+        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.FullName} is not static.");
 
     [TestMethod]
     public void PagesOnPrintLayoutAreStatic()
