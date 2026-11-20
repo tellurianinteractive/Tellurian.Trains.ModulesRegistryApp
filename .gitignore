@@ -340,5 +340,54 @@ ASALocalRun/
 healthchecksdb
 # Daily log review: query results and agent output (.github/workflows/log-review.yml)
 .log-review/
-# Documents for the board and other private material are kept outside the repository.
+# Office documents are kept outside the repository: published documents are Markdown and images.
+# Microsoft Office (Word, Excel, PowerPoint, Visio, Project, OneNote, Publisher, Access) and rich text
+*.doc
 *.docx
+*.docm
+*.dot
+*.dotx
+*.dotm
+*.xls
+*.xlsx
+*.xlsm
+*.xlsb
+*.xlt
+*.xltx
+*.xltm
+*.ppt
+*.pptx
+*.pptm
+*.pot
+*.potx
+*.potm
+*.pps
+*.ppsx
+*.ppsm
+*.vsd
+*.vsdx
+*.vsdm
+*.mpp
+*.one
+*.pub
+*.accdb
+*.mdb
+*.rtf
+# Office lock files
+~$*
+# LibreOffice and OpenOffice (OpenDocument, also flat XML and templates) and lock files
+*.odt
+*.ods
+*.odp
+*.odg
+*.odf
+*.odb
+*.ott
+*.ots
+*.otp
+*.otg
+*.fodt
+*.fods
+*.fodp
+*.fodg
+.~lock.*#
