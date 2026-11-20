@@ -10,4 +10,8 @@ public record ListboxItem(int Id, string Description)
     public int DisplayOrder { get; set; }
 }
 
-public record TextboxItem(string Description);
+/// <summary>An option of a text list: shown as <paramref name="Description"/>, with <paramref name="Value"/> as its value (the description when not given).</summary>
+public record TextboxItem(string Description, string? Value = null)
+{
+    public string OptionValue => Value ?? Description;
+}

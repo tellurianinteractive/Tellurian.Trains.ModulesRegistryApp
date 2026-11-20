@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.25
+Released 2026-11-20
+- The group form checks the entries as you type and stays open after saving; a group's administrators can now edit it, but only administrators can change its country (global) and domain. Removing a member is confirmed first.
+- Security fix: only a group's administrators, and country and global administrators, can change the group, add members and change its layout modules.
 ## Release 1.15.24
 Released 2026-11-20
 - The module standard and end profile forms check the entries as you type and stay open after saving.

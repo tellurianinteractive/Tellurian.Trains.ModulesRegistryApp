@@ -93,11 +93,6 @@ public static class ClaimsPrincipalExtensions
             principal.IsCountryAdministratorInCountry(meeting?.OrganiserGroup?.CountryId) ||
             principal.IsAnyGroupAdministrator(meeting?.OrganiserGroup)
         );
-    public static bool IsGroupMemberAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, IEnumerable<GroupMember> members) =>
-        principal is not null && (principal.IsAuthorisedInCountry(principal.CountryId()) || principal.IsGlobalAdministrator() || members.Any(m => m.PersonId == principal.PersonId() && m.IsGroupAdministrator));
-
-    public static bool IsGroupDataAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, IEnumerable<GroupMember> members) =>
-        principal is not null && (principal.IsAuthorisedInCountry(principal.CountryId()) || principal.IsGlobalAdministrator() || members.Any(m => m.PersonId == principal.PersonId() && m.IsDataAdministrator));
 
     public static bool IsMemberOfGroupSpecificGroupDomainOrNone([NotNullWhen(true)] this ClaimsPrincipal? principal, int? groupDomainId) =>
         groupDomainId is null || principal.None(AppClaimTypes.DomainId) || principal.IsGlobalAdministrator() || principal.GroupDomainIds().Contains(groupDomainId.Value);

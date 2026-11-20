@@ -9,16 +9,16 @@
     {
         <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
     }
-    <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" @bind="CurrentValueAsString">
+    <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString">
         @if (ShowPleaseSelect)
         {
-            <option value="0">@PleaseSelectText</option>
+            <option value="">@PleaseSelectText</option>
         }
         @if (Items is not null)
         {
             foreach (var item in Items)
             {
-                <option selected="@Selected(item)" value="@item.Description">@item.Description</option>
+                <option selected="@Selected(item)" value="@item.OptionValue">@item.Description</option>
             }
         }
     </select>
@@ -27,6 +27,10 @@
         <div class="form-control-validation">
             <ValidationMessage For="@ValidationFor" />
         </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
     }
 </div>
 
@@ -39,13 +43,14 @@
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
 
+    // An empty value is "not selected" ("Select ..."), refused by [Required] on the form model.
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        if (value.HasValue) { result = value; validationErrorMessage = null; return true; }
-        result = ""; validationErrorMessage = Localizer["ValueMayNotBeNull"]; return false;
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
+    }
 
-    } 
-
-    string? Selected(TextboxItem item) => item.Description == CurrentValue ? "selected" : null;
+    string? Selected(TextboxItem item) => item.OptionValue == CurrentValue ? "selected" : null;
     string? Style => ItemHeight > 0 ? $"height: {ItemHeight}px; white-space: pre-wrap;" : null;
 }

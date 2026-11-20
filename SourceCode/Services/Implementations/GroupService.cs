@@ -106,15 +106,14 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
                 .AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == pricipal.PersonId() && gm.IsDataAdministrator);
         }
     }
+    /// <summary>
+    /// Whether the user administers the group's members: a global administrator, a country administrator in the group's country
+    /// (<paramref name="countryId"/>, looked up when not given), or one of the group's administrators. Never a read-only user.
+    /// </summary>
     public async ValueTask<bool> IsGroupMemberAdministratorAsync(ClaimsPrincipal? pricipal, int groupId, int? countryId = null)
     {
-        if (pricipal.IsCountryAdministratorInCountry(countryId)) return true;
-        else
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.GroupMembers.AsNoTracking()
-                .AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == pricipal.PersonId() && gm.IsGroupAdministrator);
-        }
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayAdministerGroupMembersAsync(pricipal, groupId, countryId);
     }
 
     public async ValueTask<bool> IsDataAdministratorInSameGroupAsMember(ClaimsPrincipal? pricipal, int memberPersonId)
@@ -163,28 +162,40 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         return false;
     }
 
+    /// <summary>
+    /// Whether the user may edit the group's own fields: a global administrator, a country administrator in the group's country,
+    /// or one of the group's group or data administrators (the same rule as Edit in the groups list). Never a read-only user.
+    /// </summary>
+    public static bool MayEdit(ClaimsPrincipal? principal, Group group) =>
+        principal is not null && !principal.IsReadOnly() &&
+        (principal.IsCountryAdministratorInCountry(group.CountryId) || principal.IsAnyGroupAdministrator(group));
+
+    /// <summary>
+    /// Adds or updates a group (Migration step 3.6; before, any user who wasn't read-only could save any group). A new group is
+    /// added by a global administrator, or a country administrator in its country. An existing group is saved by those who
+    /// <see cref="MayEdit"/> it; only a global administrator moves it to another country, and only global and country
+    /// administrators change its domain (which decides whose modules its members see).
+    /// </summary>
     public async Task<(int Count, string Message, Group? Entity)> SaveAsync(ClaimsPrincipal? principal, Group group)
     {
+        if (principal is null || principal.IsReadOnly()) return principal.SaveNotAuthorised<Group>();
         group.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
-        if (principal.MaySave() || await IsGroupMemberAdministratorAsync(principal, group.Id))
+        using var dbContext = Factory.CreateDbContext();
+        if (group.Id == 0)
         {
-            using var dbContext = Factory.CreateDbContext();
-            if (group.Id > 0)
-            {
-                var existing = await dbContext.Groups.FindAsync(group.Id);
-                if (existing is null) return principal.NothingToUpdate<Group>();
-                dbContext.Entry(existing).CurrentValues.SetValues(group);
-                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(group);
-            }
-            else
-            {
-                dbContext.Groups.Attach(group);
-                dbContext.Entry(group).State = EntityState.Added;
-            }
-            var count = await dbContext.SaveChangesAsync();
-            return count.SaveResult(group);
+            if (!principal.IsCountryAdministratorInCountry(group.CountryId)) return principal.SaveNotAuthorised<Group>();
+            group.Country = null!; group.GroupDomain = null!; // Only the ids are saved.
+            dbContext.Groups.Add(group);
+            return (await dbContext.SaveChangesAsync()).SaveResult(group);
         }
-        return principal.SaveNotAuthorised<Group>();
+        var existing = await dbContext.Groups.Include(g => g.GroupMembers).SingleOrDefaultAsync(g => g.Id == group.Id);
+        if (existing is null) return principal.NothingToUpdate<Group>();
+        if (!MayEdit(principal, existing)) return principal.SaveNotAuthorised<Group>();
+        if (!principal.IsGlobalAdministrator()) group.CountryId = existing.CountryId;
+        if (!principal.IsCountryAdministratorInCountry(existing.CountryId)) group.GroupDomainId = existing.GroupDomainId;
+        dbContext.Entry(existing).CurrentValues.SetValues(group);
+        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+        return (await dbContext.SaveChangesAsync()).SaveResult(existing);
     }
 
     public async Task<(int Count, string Message, GroupMember? Entity)> SaveMemberAsync(ClaimsPrincipal? principal, GroupMember entity)
@@ -195,8 +206,10 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         {
             if (entity.Id > 0)
             {
-                var existing = await dbContext.GroupMembers.FindAsync(entity.Id);
+                // Only a member of the group the user administers; its group and person stay (Migration step 3.6).
+                var existing = await dbContext.GroupMembers.SingleOrDefaultAsync(gm => gm.Id == entity.Id && gm.GroupId == entity.GroupId);
                 if (existing is null) return principal.NothingToUpdate<GroupMember>();
+                entity.PersonId = existing.PersonId;
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
                 if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
             }
@@ -257,8 +270,10 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
     public async Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember)
     {
         using var dbContext = Factory.CreateDbContext();
-        if (principal.IsGroupMemberAdministrator(dbContext.GroupMembers.Where(gm => gm.GroupId == groupMember.GroupId)))
+        // Only the group's member administrators (before, any user could: the extension's country check was always true).
+        if (groupMember.PersonId > 0 && await IsGroupMemberAdministratorAsync(principal, groupMember.GroupId))
         {
+            groupMember.Group = null!; groupMember.Person = null!; // Only the ids are saved.
             var existing = dbContext.GroupMembers.SingleOrDefault(gm => gm.PersonId == groupMember.PersonId && gm.GroupId == groupMember.GroupId);
             if (existing is not null) return existing.AlreadyExists();
             dbContext.GroupMembers.Add(groupMember);
@@ -273,7 +288,8 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.GroupMembers.Include(gm => gm.Group).SingleOrDefaultAsync(gm => gm.Id == membershipId);
         if (existing is null) return existing.NotFound();
-        if (await IsGroupDataAdministratorAsync(principal, existing.GroupId, existing.Group.CountryId))
+        // The group's member administrators, who see Remove (before, data administrators; Migration step 3.6).
+        if (await IsGroupMemberAdministratorAsync(principal, existing.GroupId, existing.Group.CountryId))
         {
             dbContext.GroupMembers.Remove(existing);
             var result = await dbContext.SaveChangesAsync();

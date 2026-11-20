@@ -1,91 +1,99 @@
 ﻿@page "/Groups/{id:int}/Edit"
 
-@attribute [Authorize(Policy = "Admin")]
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of GroupFormData; the id comes from the address. A new group is added by a global
+   administrator or a country administrator (in their own country); a group is edited by those who may edit it in the groups list
+   (also its group and data administrators). Only a global administrator selects the country, and only global and country
+   administrators the domain; for others these fields are shown disabled, and the page sets their stored values before the posted
+   form is validated, since a disabled field isn't posted. After saving, a redirect to the form's own address. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.Groups
+
+@inject NavigationManager Navigator
 @inject GroupService GroupService
 @inject CountryService CountryService
 @inject GroupCategoryService GroupCategoryService
 
 <PageHeading ObjectName="Group" IconClass="@FontAwesome.Group" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Group" BackHref="@BackHref" />
 
-@if (Group is null)
+@if (FailureMessage is not null)
 {
-
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else
-{
-<EditForm Model="@Group" OnValidSubmit="@OnValidSumbit" Class="row g-3">
-    <FluentValidationValidator />
-    <ValidationSummary />
 
-    <AppInputText Width="2" Label="ShortName" @bind-Value="Group.ShortName" />
-    <AppInputText Width="4" Label="FullName" @bind-Value="Group.FullName" />
-    <AppInputText Width="2" Label="CityName" @bind-Value="Group.CityName" />
-    <AppInputSelect Width="2" Label="Country" @bind-Value="Group.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
-    <AppInputFill Width="2" />
-
-    <div class="col-md-2">
-        <label class="form-control-label" for="category">@SelectCategoryLabel</label>
-        <InputSelect class="form-select" id="category" TValue="string" @bind-Value="@Group.Category">
-            <option value="">@Localizer["Select"] </option>
-            @foreach (var item in GroupCategories ?? Array.Empty<(string, string)>())
-            {
-                if (item.Value.Equals(Group.Category))
-                {
-                    <option selected value="@item.Value">@item.Desciption</option>
-                }
-                else
-                {
-                    <option value="@item.Value">@item.Desciption</option>
-                }
-            }
-        </InputSelect>
-        <ValidationMessage For="@(() => Group.Category)" />
-    </div>
-    <AppInputSelectNullable Width="2" Label="Domain" @bind-Value="Group.GroupDomainId" Items="DomainItems" ShowNoneOption="true" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" aria-hidden="true" /> @Localizer["Save"]</button>
-    </div>
-</EditForm>
-}
+<EditTemplate Item="Form" FormName="group" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputText Width="2" Label="ShortName" @bind-Value="Form!.ShortName" />
+        <AppInputText Width="4" Label="FullName" @bind-Value="Form!.FullName" />
+        <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+        <AppInputSelect Width="2" Label="Country" Items="CountryItems" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" @bind-Value="Form!.CountryId" />
+        <AppInputFill Width="2" />
+        <AppInputSelectText Width="2" Label="Category" Items="CategoryItems" ShowPleaseSelect="true" @bind-Value="Form!.Category" />
+        <AppInputSelectNullable Width="2" Label="Domain" Items="DomainItems" ShowNoneOption="true" IsDisabled="@(!MaySelectDomain)" @bind-Value="Form!.GroupDomainId" />
+    </Inputs>
+</EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "group")] private GroupFormData? Form { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private Group? Group;
-    private IEnumerable<ListboxItem>? CountriesItems;
-    private IEnumerable<ListboxItem>? DomainItems;
-    private IEnumerable<(string Value, string Desciption)>? GroupCategories;
+    ClaimsPrincipal? Principal;
+    Group? Existing;
+    IEnumerable<ListboxItem>? CountryItems;
+    IEnumerable<ListboxItem>? DomainItems;
+    IEnumerable<TextboxItem>? CategoryItems;
+    string? FailureMessage;
 
-    protected async override Task OnParametersSetAsync()
+    bool MaySelectCountry => Principal.IsGlobalAdministrator();
+    bool MaySelectDomain => Principal.IsCountryAdministratorInCountry(Existing?.CountryId ?? Principal.CountryId());
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        GroupCategories = await GroupCategoryService.AllAsync();
-        CountriesItems = await CountryService.ListboxItemsAsync(await AuthenticationStateTask.GetClaimsPrincipalAsync());
+        if (Id > 0)
+        {
+            Existing = await GroupService.FindByIdAsync(Principal, Id);
+            if (Existing is null || !GroupService.MayEdit(Principal, Existing))
+            {
+                Existing = null;
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        else if (!Principal.IsGlobalOrCountryAdministrator(Principal.CountryId()) || Principal.IsReadOnly())
+        {
+            Form = null;
+            return;
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Group { CountryId = Principal.CountryId() }).AsFormData();
+        // Disabled fields aren't posted: their values are the stored ones (or the user's country for a new group).
+        if (!MaySelectCountry) Form.CountryId = Existing?.CountryId ?? Principal.CountryId();
+        if (!MaySelectDomain) Form.GroupDomainId = Existing?.GroupDomainId;
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
         DomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
-        Group = await GetOrCreateAsync();
+        CategoryItems = (await GroupCategoryService.AllAsync()).Select(c => new TextboxItem(c.Item2, c.Item1)).ToList();
     }
 
-
-    private async Task OnValidSumbit()
-    {
-        if (Group is null) return;
-        var result = await GroupService.SaveAsync(Principal, Group);
-        Group = result.Entity;
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-    }
-
-    private async Task<Group> GetOrCreateAsync() =>
-        Id > 0 ? await GroupService.FindByIdAsync(Principal, Id) ?? NewGroup : NewGroup;
     // The groups list is static, so this page may have no history (Migration step 3.3).
-    private string BackHref => Group is null || Group.CountryId < 1 ? "Groups/Index" : $"Groups/Country/{Group.CountryId}";
-    private Group NewGroup => new Group { CountryId = DefaultCountryId };
+    string BackHref => Existing is null ? "Groups/Index" : $"Groups/Country/{Existing.CountryId}";
 
-    private string SelectCategoryLabel => $"{Localizer["Select"]} {Localizer["Category"].Value.ToLowerInvariant()}";
-    private int DefaultCountryId => CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
-
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded group, its members stay (Migration section 3.4, the data-loss rule).
+        var group = Form.AsEntity(Existing);
+        var (count, message, saved) = await GroupService.SaveAsync(Principal, group);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Groups/{(saved ?? group).Id}/Edit");
+    }
 }

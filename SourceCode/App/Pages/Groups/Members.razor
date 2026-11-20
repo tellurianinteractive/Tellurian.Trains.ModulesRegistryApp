@@ -1,98 +1,111 @@
 ﻿@page "/Groups/{groupid:int}/Members"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): a group's members. The group's member administrators get Add, Edit, Invite and Remove; Remove is
+   a link that adds ?remove={id}, which shows a confirmation with a POST form, as Delete on the groups list. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
+@inject NavigationManager Navigator
 @inject GroupService GroupService
-@inject CountryService CountryService
-@inject MeetingService MeetingService
 
 <PageHeading Label="MembersIn" Context="Group" IconClass="@FontAwesome.Group" PageAction="PageAction.List" BackHref="@BackHref" />
 
-@if (IsGroupAdministrator && Group.Id > 0)
+@if (Group is null)
 {
-    <AppButton Label="Add" Href="@MemberAddHref(Group.Id)" ></AppButton>
-    @if (Principal is not null)
-    {
-        <MailToButton Sender="Principal.Sender()" Recipients="@Group.GroupMembers.MailHolders()" Subject="@Group.Name()"/>
-    }
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
 }
+else
+{
+    @if (IsGroupAdministrator)
+    {
+        <AppButton Label="Add" Href="@($"Groups/{Group.Id}/Members/Add")" AlwaysShowLabel="true" />
+        @if (Principal is not null)
+        {
+            <MailToButton Sender="Principal.Sender()" Recipients="@Group.GroupMembers.MailHolders()" Subject="@Group.Name()" />
+        }
+    }
 
-<TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.Name())">
-    <TableHeader>
-        <th>@Localizer["Name"]</th>
-        <th align="center">@Localizer["IsGroupAdministrator"]</th>
-        <th align="center">@Localizer["IsDataAdministrator"]</th>
-        <th align="center">@Localizer["IsMeetingAdministrator"]</th>
-        <th align="center">@Localizer["MayBorrowGroupsModules"]</th>
-        <th align="center">@Localizer["MemberMayBorrowMyModules"]</th>
-        <th align="center">@Localizer["Status"]</th>
-        <th>@Localizer["Actions"]</th>
+    @if (MemberToRemove is not null)
+    {
+        <div class="alert alert-warning mt-2" role="alert">
+            <form method="post" @formname="remove-member" @onsubmit="RemoveAsync" data-enhance>
+                <AntiforgeryToken />
+                <input type="hidden" name="RemoveMemberId" value="@MemberToRemove.Id" />
+                <strong>@Localizer["Remove"] @MemberToRemove.Person.Name()?</strong>
+                <AppButton Label="Remove" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+                <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+            </form>
+        </div>
+    }
 
-    </TableHeader>
-    <RowTemplate Context="member">
-        <td>@member.Person.Name()</td>
-        <td align="center">@member.IsGroupAdministrator.AsYesOrNo()</td>
-        <td align="center">@member.IsDataAdministrator.AsYesOrNo()</td>
-        <td align="center">@member.IsMeetingAdministrator.AsYesOrNo()</td>
-        <td align="center">@member.MayBorrowGroupsModules.AsYesOrNo()</td>
-        <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
-        <td align="center"><PersonStatusIcon Person="member.Person" /></td>
-        <td style="white-space: nowrap !important;">
-            <AppButton Label="Modules" Href="@ModulesHref(member)"  />
-            <AppButton Label="Stations" Href="@StationsHref(member)" />
-            @if (IsGroupAdministrator)
-            {
-                <AppButton Label="Edit" Href="@MemberEditHref(member)" />
-                <AppButton Label="Remove" OnClickCallback="(async () => await RemoveMember(member.Id))" />
-                @if (member.Person.MayBeInvited())
+    <TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.Name())">
+        <TableHeader>
+            <th>@Localizer["Name"]</th>
+            <th align="center">@Localizer["IsGroupAdministrator"]</th>
+            <th align="center">@Localizer["IsDataAdministrator"]</th>
+            <th align="center">@Localizer["IsMeetingAdministrator"]</th>
+            <th align="center">@Localizer["MayBorrowGroupsModules"]</th>
+            <th align="center">@Localizer["MemberMayBorrowMyModules"]</th>
+            <th align="center">@Localizer["Status"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="member">
+            <td>@member.Person.Name()</td>
+            <td align="center">@member.IsGroupAdministrator.AsYesOrNo()</td>
+            <td align="center">@member.IsDataAdministrator.AsYesOrNo()</td>
+            <td align="center">@member.IsMeetingAdministrator.AsYesOrNo()</td>
+            <td align="center">@member.MayBorrowGroupsModules.AsYesOrNo()</td>
+            <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
+            <td align="center"><PersonStatusIcon Person="member.Person" /></td>
+            <td style="white-space: nowrap !important;">
+                <AppButton Label="Modules" Href="@($"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}")" />
+                <AppButton Label="Stations" Href="@($"Persons/{member.PersonId}/Stations/InGroup/{member.GroupId}")" />
+                @if (IsGroupAdministrator)
                 {
-                    <AppButton Label="Invite" Href="@InviteHref(member)"  />
+                    <AppButton Label="Edit" Href="@($"Groups/{member.GroupId}/Members/{member.Id}/Edit")" />
+                    <AppButton Label="Remove" Href="@($"{SelfHref}?remove={member.Id}")" />
+                    @if (member.Person.MayBeInvited())
+                    {
+                        <AppButton Label="Invite" Href="@($"Persons/{member.PersonId}/Invite")" />
+                    }
                 }
-            }
-        </td>
-    </RowTemplate>
-</TableTemplate>
-
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? GroupId { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int GroupId { get; set; }
+    [SupplyParameterFromQuery(Name = "remove")] private int? RemoveId { get; set; }
+    [SupplyParameterFromForm(FormName = "remove-member")] private int RemoveMemberId { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private Group Group = new Group();
-    // The groups list is static, so this page may have no history (Migration step 3.3).
-    private string BackHref => Group.CountryId < 1 ? "Groups/Index" : $"Groups/Country/{Group.CountryId}";
-    private bool IsGroupAdministrator;
-    private ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
+    ClaimsPrincipal? Principal;
+    Group? Group;
+    bool IsGroupAdministrator;
 
-
-    protected async override Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (GroupId.IsSet())
-        {
-            Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
-            IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, GroupId.Value, Group?.CountryId);
-        }
+        Group = await GroupService.FindByIdAsync(Principal, GroupId);
+        if (Group is not null) IsGroupAdministrator = await GroupService.IsGroupMemberAdministratorAsync(Principal, Group.Id, Group.CountryId);
     }
 
-    async Task RemoveMember(int membershipId)
+    GroupMember? MemberToRemove => IsGroupAdministrator && RemoveId > 0 ? Group?.GroupMembers.FirstOrDefault(gm => gm.Id == RemoveId) : null;
+
+    string SelfHref => $"Groups/{GroupId}/Members";
+    // The groups list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => Group is null ? "Groups/Index" : $"Groups/Country/{Group.CountryId}";
+
+    async Task RemoveAsync()
     {
-        if (membershipId > 0)
-        {
-            var result = await GroupService.RemoveMemberAsync(Principal, membershipId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            if (GroupId.IsSet()) Group = await GroupService.FindByIdAsync(Principal, GroupId.Value) ?? new Group();
-        }
+        if (Group is null || !IsGroupAdministrator) return;
+        // Only a member of this group (the service checks the user's rights for the member's group).
+        if (!Group.GroupMembers.Any(gm => gm.Id == RemoveMemberId)) return;
+        var removed = (await GroupService.RemoveMemberAsync(Principal, RemoveMemberId)).Count > 0;
+        HttpContext.SetFlashMessage(removed ? "DeletedSuccessfully" : "DeleteFailed", removed);
+        Navigator.NavigateTo(SelfHref);
     }
-
-    string ModulesHref(GroupMember member) => $"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}";
-    string StationsHref(GroupMember member) => $"Persons/{member.PersonId}/Stations/InGroup/{member.GroupId}";
-    string MemberEditHref(GroupMember member) => $"Groups/{member.GroupId}/Members/{member.Id}/edit";
-    string MemberAddHref(int groupId) => $"groups/{groupId}/members/add";
-    string InviteHref(GroupMember member) => $"Persons/{member.PersonId}/Invite";
-
 }

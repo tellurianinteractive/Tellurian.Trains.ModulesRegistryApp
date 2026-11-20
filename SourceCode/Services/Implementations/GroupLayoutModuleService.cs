@@ -35,34 +35,32 @@ public class GroupLayoutModuleService(IDbContextFactory<ModulesDbContext> factor
         return [];
     }
 
+    /// <summary>
+    /// Adds one of a member's own modules to the group's layout modules, if the user administers the group's members
+    /// (Migration step 3.6; before, any signed-in user could). The member must belong to the group and own the module.
+    /// </summary>
     public async Task<int> AddModule(ClaimsPrincipal? principal, int groupId, int moduleId, int? groupMemberId = null)
     {
-        if (principal.IsAuthenticated())
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayAdministerGroupMembersAsync(principal, groupId)) return 0;
+        if (groupMemberId.HasValue)
         {
-            using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.GroupLayoutModules.SingleOrDefaultAsync(x => x.GroupId == groupId && x.ModuleId == moduleId);
-            if (existing is null)
-            {
-                var entity = new GroupLayoutModule { GroupId = groupId, GroupMemberId = groupMemberId, ModuleId = moduleId };
-                dbContext.GroupLayoutModules.Add(entity);
-                return await dbContext.SaveChangesAsync();
-            }
+            var personId = await dbContext.GroupMembers.Where(gm => gm.Id == groupMemberId && gm.GroupId == groupId).Select(gm => (int?)gm.PersonId).SingleOrDefaultAsync();
+            if (personId is null || !await dbContext.ModuleOwnerships.AnyAsync(mo => mo.ModuleId == moduleId && mo.PersonId == personId)) return 0;
         }
-        return 0;
-    }
-    public async Task<int> RemoveModule(ClaimsPrincipal? principal, int groupId, int moduleId)
-    {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.GroupLayoutModules.SingleOrDefaultAsync(x => x.GroupId == groupId && x.ModuleId == moduleId);
-            if (existing is not null)
-            {
-                dbContext.GroupLayoutModules.Remove(existing);
-                return await dbContext.SaveChangesAsync();
-            }
-        }
-        return 0;
+        if (await dbContext.GroupLayoutModules.AnyAsync(x => x.GroupId == groupId && x.ModuleId == moduleId)) return 0;
+        dbContext.GroupLayoutModules.Add(new GroupLayoutModule { GroupId = groupId, GroupMemberId = groupMemberId, ModuleId = moduleId });
+        return await dbContext.SaveChangesAsync();
     }
 
+    /// <summary>Removes a module from the group's layout modules, if the user administers the group's members.</summary>
+    public async Task<int> RemoveModule(ClaimsPrincipal? principal, int groupId, int moduleId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayAdministerGroupMembersAsync(principal, groupId)) return 0;
+        var existing = await dbContext.GroupLayoutModules.SingleOrDefaultAsync(x => x.GroupId == groupId && x.ModuleId == moduleId);
+        if (existing is null) return 0;
+        dbContext.GroupLayoutModules.Remove(existing);
+        return await dbContext.SaveChangesAsync();
+    }
 }
