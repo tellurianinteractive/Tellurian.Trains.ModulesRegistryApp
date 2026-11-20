@@ -43,15 +43,6 @@ public sealed class CorrectedInputRulesTests
     public void LocoAddresses(string? value, bool expected) => Assert.AreEqual(expected, value.IsLocoAddressesWhenCorrected());
 
     [TestMethod]
-    [DataRow("aabbccddeeff", true)]
-    [DataRow("aa-bb-cc-dd-ee-ff", true)]
-    [DataRow("AA:BB:CC:DD:EE:FF", true)]
-    [DataRow("::::::::::::::::0", false, DisplayName = "Colons in the wrong places, accepted before")]
-    [DataRow("aa:bb:cc:dd:ee", false)]
-    [DataRow(null, false)]
-    public void MacAddress(string? value, bool expected) => Assert.AreEqual(expected, value.IsMacAddressWhenCorrected());
-
-    [TestMethod]
     [DataRow(null, 1900, true)]
     [DataRow((short)0, 1900, true, DisplayName = "Zero is saved as empty")]
     [DataRow((short)1900, 1900, true)]
@@ -67,15 +58,6 @@ public sealed class CorrectedInputRulesTests
         var invalid = InvalidMembers(new LayoutValidator(Localizer), new Layout { FirstYear = 1970, LastYear = 1950 });
         CollectionAssert.DoesNotContain(invalid, nameof(Layout.FirstYear));
         CollectionAssert.DoesNotContain(invalid, nameof(Layout.LastYear));
-    }
-
-    [TestMethod]
-    public void ThrottleAddressesAsTheyAreCorrected()
-    {
-        var invalid = InvalidMembers(new WiThrottleValidator(Localizer), new WiFredThrottle { MacAddress = "aabb.ccdd.eeff", LocoAddress1 = 0, LocoAddress2 = 10000 });
-        CollectionAssert.DoesNotContain(invalid, nameof(WiFredThrottle.MacAddress));
-        CollectionAssert.DoesNotContain(invalid, nameof(WiFredThrottle.LocoAddress1));
-        CollectionAssert.Contains(invalid, nameof(WiFredThrottle.LocoAddress2));
     }
 
     [TestMethod]

@@ -60,22 +60,12 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, string?> MustBeColor<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
         builder.Must(value => value is null || value.IsKnownColor).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAColor"].Value}");
 
-    /// <summary>A MAC address, after the correction when saving (<c>AsMacAddress</c>): any common notation.</summary>
-    public static IRuleBuilderOptions<T, string?> MustBeMacAddress<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsMacAddressWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeAMacAddress"].Value}");
-
-    /// <summary>A DCC address, 1 to 9999, or empty; zero is saved as empty.</summary>
-    public static IRuleBuilderOptions<T, short?> MustBeDccAddressOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value is null or 0 or (>= 1 and <= 9999)).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeADccAddress"].Value}");
-
     extension(string? value)
     {
         internal bool IsEmailAddressesWhenCorrected() =>
             value.AsEmailAddresses().ToItems().All(EmailRegex().IsMatch);
 
         internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
-
-        internal bool IsMacAddressWhenCorrected() => value.AsMacAddress().IsMacAddress;
     }
 
     extension(short? year)

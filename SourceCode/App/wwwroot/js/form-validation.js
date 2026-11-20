@@ -51,23 +51,32 @@
         return true;
     }
 
-    // As YearOrEmptyAttribute.IsValid (App).
-    function isYearOrEmpty(value, min, max) {
+    // As WholeNumberOrEmptyAttribute.IsValid (App): empty, zero or less (saved as empty), or a whole number from min to max.
+    function isWholeNumberOrEmpty(value, min, max) {
         const text = (value || '').trim();
         if (!text) return true;
         if (!/^-?\d+$/.test(text)) return false;
-        const year = Number(text);
-        return year <= 0 || (year >= min && year <= max);
+        const number = Number(text);
+        return number <= 0 || (number >= min && number <= max);
+    }
+
+    // As MacAddressAttribute.IsValid (App), after AsMacAddress: twelve hex digits, separated by : - . or spaces, or not at all.
+    function isMacAddressWhenCorrected(value) {
+        const text = (value || '').trim();
+        if (!text) return true;
+        return /^[0-9A-Fa-f]{12}$/.test(text.replace(/[\s:.\-]/g, ''));
     }
 
     const validators = {
         // [OrdinaryText]: valid when the text, as corrected when saving, is ordinary text. Empty is valid: [Required] decides.
         ordinarytext: context => ({ success: !context.value || isOrdinaryText(asOrdinaryText(context.value)) }),
-        // [YearOrEmpty]: empty, zero or less (saved as empty), or a whole year from min to max.
-        yearorempty: context => ({ success: isYearOrEmpty(context.value, Number(context.params.min), Number(context.params.max)) })
+        // [YearOrEmpty], [DccAddressOrEmpty]: empty, zero or less (saved as empty), or a whole number from min to max.
+        numberorempty: context => ({ success: isWholeNumberOrEmpty(context.value, Number(context.params.min), Number(context.params.max)) }),
+        // [MacAddress]: a MAC address in any notation the correction understands. Empty is valid: [Required] decides.
+        macaddress: context => ({ success: isMacAddressWhenCorrected(context.value) })
     };
 
-    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isYearOrEmpty, validators };
+    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isWholeNumberOrEmpty, isMacAddressWhenCorrected, validators };
 
     if (global.Blazor && global.Blazor.formValidation) {
         for (const name of Object.keys(validators)) global.Blazor.formValidation.addValidator(name, validators[name]);

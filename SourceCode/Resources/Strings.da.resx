@@ -2253,6 +2253,12 @@
   <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" skal være et år fra 1900 til 2100 eller tomt</value>
   </data>
+  <data name="MacAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være en MAC-adresse, for eksempel AA:BB:CC:DD:EE:FF</value>
+  </data>
+  <data name="DccAddressOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være en DCC-adresse fra 1 til 9999 eller tom</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" må højst have {1} tegn</value>
   </data>

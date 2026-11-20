@@ -140,6 +140,7 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             throttle.MacAddress = throttle.MacAddress.AsMacAddress();
+            throttle.Name = throttle.Name.AsOrdinaryText().AsCapitalizedName(NameStyle.FirstLetter);
             throttle.LocoAddress1 = throttle.LocoAddress1.OrNullIfZero();
             throttle.LocoAddress2 = throttle.LocoAddress2.OrNullIfZero();
             throttle.LocoAddress3 = throttle.LocoAddress3.OrNullIfZero();

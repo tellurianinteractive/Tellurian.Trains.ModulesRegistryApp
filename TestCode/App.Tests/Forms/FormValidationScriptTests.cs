@@ -82,12 +82,44 @@ public sealed class FormValidationScriptTests
     {
         int? year = typed is { Length: > 0 } ? int.Parse(typed, System.Globalization.CultureInfo.InvariantCulture) : null;
         Assert.AreEqual(valid, new YearOrEmptyAttribute().IsValid(year), "C#");
-        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{YearOrEmptyAttribute.ClientRuleName}({{ value: {Js(typed)}, params: {{ min: '1900', max: '2100' }} }}).success").AsBoolean(), "JavaScript");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{WholeNumberOrEmptyAttribute.ClientRuleName}({{ value: {Js(typed)}, params: {{ min: '1900', max: '2100' }} }}).success").AsBoolean(), "JavaScript");
+    }
+
+    // A DCC address as typed, and whether [DccAddressOrEmpty] accepts it.
+    public static IEnumerable<object?[]> DccAddressValues =>
+    [
+        [null, true], ["", true], ["0", true], ["1", true], ["3", true], ["9999", true], ["10000", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(DccAddressValues))]
+    public void DccAddressOrEmptyIsTheSame(string? typed, bool valid)
+    {
+        int? address = typed is { Length: > 0 } ? int.Parse(typed, System.Globalization.CultureInfo.InvariantCulture) : null;
+        var attribute = new DccAddressOrEmptyAttribute();
+        var rule = attribute.GetClientValidationRules().Single();
+        Assert.AreEqual(valid, attribute.IsValid(address), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{rule.Name}({{ value: {Js(typed)}, params: {{ min: '{rule.Parameters["min"]}', max: '{rule.Parameters["max"]}' }} }}).success").AsBoolean(), "JavaScript");
     }
 
     [TestMethod]
     public void TheJavaScriptRefusesWhatIsNoWholeNumber() =>
-        Assert.IsFalse(Script.Evaluate("modulesRegistryValidation.isYearOrEmpty('19.5', 1900, 2100)").AsBoolean());
+        Assert.IsFalse(Script.Evaluate("modulesRegistryValidation.isWholeNumberOrEmpty('19.5', 1900, 2100)").AsBoolean());
+
+    // A MAC address as typed, and whether [MacAddress] accepts it (after the correction when saving).
+    public static IEnumerable<object?[]> MacAddressValues =>
+    [
+        [null, true], ["", true], ["aabbccddeeff", true], ["aa-bb-cc-dd-ee-ff", true], ["aabb.ccdd.eeff", true], ["AA:BB:CC:DD:EE:FF", true], [" aa bb cc dd ee ff ", true],
+        ["::::::::::::::::0", false], ["aa:bb:cc:dd:ee", false], ["gg:bb:cc:dd:ee:ff", false], ["aa:bb:cc:dd:ee:ff:00", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(MacAddressValues))]
+    public void MacAddressIsTheSame(string? typed, bool valid)
+    {
+        Assert.AreEqual(valid, new MacAddressAttribute().IsValid(typed), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{MacAddressAttribute.ClientRuleName}({{ value: {Js(typed)} }}).success").AsBoolean(), "JavaScript");
+    }
 
     [TestMethod]
     public void TheAttributeEmitsTheRuleTheScriptRegisters()
@@ -100,5 +132,6 @@ public sealed class FormValidationScriptTests
 
         CollectionAssert.Contains(registered, new OrdinaryTextAttribute().GetClientValidationRules().Single().Name);
         CollectionAssert.Contains(registered, new YearOrEmptyAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new MacAddressAttribute().GetClientValidationRules().Single().Name);
     }
 }

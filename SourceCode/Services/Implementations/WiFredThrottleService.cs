@@ -63,23 +63,37 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
         return Enumerable.Empty<WiFredThrottle>();
     }
 
+    /// <summary>
+    /// Saves a throttle (Migration step 3.6): a throttle manager any throttle; others only their own, to themselves. An edited throttle
+    /// is found by its id; a new one by its MAC address, which may re-register a deleted throttle, but not take over an active one.
+    /// </summary>
     public async Task<(int Count, string Message, WiFredThrottle? Entity)> SaveAsync(ClaimsPrincipal? principal, WiFredThrottle entity)
     {
-        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
-        if (principal.IsAuthenticated())
+        if (principal.IsAuthenticated() && !principal.IsReadOnly())
         {
+            var mayManage = principal.MayManageWiFreds();
+            if (!mayManage && entity.OwningPersonId != principal.PersonId()) return principal.SaveNotAuthorised<WiFredThrottle>();
+            entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
             using var dbContext = Factory.CreateDbContext();
             entity.SetDccAddressOrNull();
             entity.SetMacAddressUppercase();
             entity.UpdatedDateTime = TimeProvider.Now;
 
-            var existing = await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.Id == entity.Id || w.MacAddress == entity.MacAddress).ConfigureAwait(false);
+            var existing = entity.Id > 0 ?
+                await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.Id == entity.Id).ConfigureAwait(false) :
+                await dbContext.WiFredThrottles.SingleOrDefaultAsync(w => w.MacAddress == entity.MacAddress).ConfigureAwait(false);
+            if (entity.Id > 0 && existing is null) return principal.NothingToUpdate<WiFredThrottle>();
+            if (entity.Id > 0 && !mayManage && existing!.OwningPersonId != principal.PersonId()) return principal.SaveNotAuthorised<WiFredThrottle>();
             if (existing is null)
             {
                 entity.RegistrationDateTime = TimeProvider.Now;
                 dbContext.WiFredThrottles.Add(entity);
             }
-            else if(entity.Id == 0 && existing.DeletedDateTime.HasValue) // re-registration
+            else if (entity.Id == 0 && !existing.DeletedDateTime.HasValue) // An active throttle has this MAC address.
+            {
+                return DbContextExtensions.SaveResult<WiFredThrottle>($"{"Error".Localized()}: {"Duplicated".Localized()} '{"MacAddress".Localized()}'");
+            }
+            else if (entity.Id == 0) // re-registration of a deleted throttle
             {
                 existing.OwningPersonId = entity.OwningPersonId;
                 existing.RegistrationDateTime = TimeProvider.Now;

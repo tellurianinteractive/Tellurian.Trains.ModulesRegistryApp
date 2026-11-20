@@ -2253,6 +2253,12 @@
   <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" must be a year from 1900 to 2100, or empty</value>
   </data>
+  <data name="MacAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be a MAC address, such as AA:BB:CC:DD:EE:FF</value>
+  </data>
+  <data name="DccAddressOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be a DCC address from 1 to 9999, or empty</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" can have at most {1} characters</value>
   </data>

@@ -1,99 +1,111 @@
 ﻿@page "/Throttles/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the region and cargo forms: a POST of WiFredThrottleFormData, validated in the browser
+   and again on the server; the id comes from the address. Throttle managers choose the owner among FREMO members of a country,
+   chosen with the GET form above the form (?country=); others register throttles for themselves. A validated throttle's MAC
+   address is locked: the field is shown disabled, and a disabled field isn't posted, so the stored value is set before the form
+   is validated. After saving, a redirect to this form, which reads the throttle back; the result is a one-time message. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.WiFredThrottles
+
 @inject NavigationManager Navigator
 @inject WiFredThrottleService ThrottleService
 @inject PersonService PersonService
 @inject CountryService CountryService
 
-<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially=ShowHelpInitially BackHref="@BackHref" />
+<PageHeading ObjectName="WiFredThrottle" IconClass="@FontAwesome.Wifi" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="WiFredThrottles" ShowHelpInitially="Form is not null" BackHref="@BackHref" />
 
-@if (Throttle is null)
+@if (FailureMessage is not null)
 {
-    if (NotFound)
-    {
-        <ActionMessage Label="NoRecordsToDisplay" AlertType="Warning" />
-    }
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else
-{
-    <ListboxSelector OnSelected="OnSelectedCountry" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId=CountryId LocalStorageKey="Country" />
 
-    <EditTemplate Item="Throttle" OnValidSubmit="OnValidSubmit">
-        <Inputs>
-            <AppInputSelect Width="4" Label="Owner" Items="Owners" ShowPleaseSelect=ShowPleaseSelect @bind-Value=Throttle.OwningPersonId />
-            <AppInputText Width="3" Label="MacAddress" Placeholder="xx:xx:xx:xx:xx:xx" @bind-Value="Throttle.MacAddress" IsDisabled=Throttle.IsMacAddressLocked() />
-            <AppInputText Width="3" Label="Name" @bind-Value="Throttle.Name" />
-            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value=Throttle.InventoryNumber />
-            <AppInputFill Width="1" />
-            <AppInputNumber Width="2" Label="DccAddress1" @bind-Value=Throttle.LocoAddress1 />
-            <AppInputNumber Width="2" Label="DccAddress2" @bind-Value=Throttle.LocoAddress2 />
-            <AppInputNumber Width="2" Label="DccAddress3" @bind-Value=Throttle.LocoAddress3 />
-            <AppInputNumber Width="2" Label="DccAddress4" @bind-Value=Throttle.LocoAddress4 />
-        </Inputs>
-    </EditTemplate>
+@if (Form is not null)
+{
+    <ListboxForm Id="throttle-country" Action="@($"Throttles/{Id}/Edit")" Name="country" Items="Countries" ItemType="Country" IsVisible="MayManage" SelectedId="CountryId" />
 }
+
+<EditTemplate Item="Form" FormName="throttle" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="4" Label="Owner" Items="Owners" ShowPleaseSelect="true" @bind-Value="Form!.OwningPersonId" />
+        <AppInputText Width="3" Label="MacAddress" Placeholder="xx:xx:xx:xx:xx:xx" @bind-Value="Form!.MacAddress" IsDisabled="IsMacAddressLocked" />
+        <AppInputText Width="3" Label="Name" @bind-Value="Form!.Name" />
+        <AppInputNumber TValue="int" Width="2" Label="InventoryNumber" @bind-Value="Form!.InventoryNumber" />
+        <AppInputNumber TValue="int?" Width="2" Label="DccAddress1" @bind-Value="Form!.LocoAddress1" />
+        <AppInputNumber TValue="int?" Width="2" Label="DccAddress2" @bind-Value="Form!.LocoAddress2" />
+        <AppInputNumber TValue="int?" Width="2" Label="DccAddress3" @bind-Value="Form!.LocoAddress3" />
+        <AppInputNumber TValue="int?" Width="2" Label="DccAddress4" @bind-Value="Form!.LocoAddress4" />
+    </Inputs>
+</EditTemplate>
 
 @code {
-    // The throttles lists are static, so this page may have no history (Migration step 3.3).
-    string BackHref => Throttle is not null && Throttle.OwningPersonId == Principal.PersonId() ? $"Throttles/{Throttle.OwningPersonId}" : "Throttles";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "throttle")] private WiFredThrottleFormData? Form { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] private int? SelectedCountryId { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private WiFredThrottle? Throttle;
-    private IEnumerable<ListboxItem>? Owners;
-    private IEnumerable<ListboxItem>? Countries;
-    private int CountryId;
-    private bool NotFound;
+    ClaimsPrincipal? Principal;
+    WiFredThrottle? Existing;
+    IEnumerable<ListboxItem>? Owners;
+    IEnumerable<ListboxItem>? Countries;
+    int CountryId;
+    string? FailureMessage;
 
-
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    protected async override Task OnParametersSetAsync()
-    {
-        Throttle = Id > 0 ? await ThrottleService.FindById(Principal, Id) : new WiFredThrottle() { OwningPersonId = Principal.PersonId() };
-        if (IsSelectCountryVisible)
+        if (Id > 0)
+        {
+            Existing = await ThrottleService.FindById(Principal, Id); // Only the owner's own throttles, or any for a manager.
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new WiFredThrottle { OwningPersonId = Principal.PersonId() }).AsFormData();
+        if (IsMacAddressLocked) Form.MacAddress = Existing!.MacAddress;
+        if (MayManage)
         {
             Countries = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
-            CountryId = Principal.CountryId();
-            await OnSelectedCountry(CountryId);
+            CountryId = SelectedCountryId ?? Existing?.OwningPerson?.CountryId ?? Principal.CountryId();
+            Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, countryId: CountryId);
+            if (Existing is not null && !Owners.Any(o => o.Id == Existing.OwningPersonId))
+                Owners = [new ListboxItem(Existing.OwningPersonId, Existing.OwningPerson.NameWithCityAndCountry()), .. Owners];
         }
-        else if (Throttle?.Id > 0 == true)
+        else if (Existing is not null)
         {
-            Owners = new List<ListboxItem>() { new ListboxItem(Throttle.OwningPersonId, Throttle.OwningPerson.NameWithCityAndCountry()) };
-        }
-        else if (Id == 0)
-        {
-            Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, personId: Principal.PersonId());
+            Owners = [new ListboxItem(Existing.OwningPersonId, Existing.OwningPerson.NameWithCityAndCountry())];
         }
         else
         {
-            NotFound = true;
+            Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, personId: Principal.PersonId());
         }
     }
 
-    private async Task OnValidSubmit()
-    {
-        if (Principal is null || Throttle is null) return;
-        var result = await ThrottleService.SaveAsync(Principal, Throttle);
-        if (result.Count == 1) Throttle = result.Entity;
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-    }
+    bool MayManage => Principal.MayManageWiFreds();
+    bool IsMacAddressLocked => Existing?.IsMacAddressLocked() == true;
 
-    private async Task OnSelectedCountry(int id)
-    {
-        CountryId = id;
-        Owners = await PersonService.FremoMembersListboxItemsAsync(Principal, countryId: id);
-    }
+    // The throttles lists are static, so this page may have no history (Migration step 3.3).
+    string BackHref => Existing is not null && Existing.OwningPersonId == Principal.PersonId() ? $"Throttles/{Existing.OwningPersonId}" : "Throttles";
 
-    bool ShowPleaseSelect => Owners is not null && Owners.Count() > 0;
-    bool IsSelectCountryVisible => Principal.MayManageWiFreds();
-    bool ShowHelpInitially => !NotFound;
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded throttle (Migration section 3.4, the data-loss rule).
+        var throttle = Form.AsEntity(Existing);
+        var (count, message, saved) = await ThrottleService.SaveAsync(Principal, throttle);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Throttles/{(saved ?? throttle).Id}/Edit");
+    }
 }

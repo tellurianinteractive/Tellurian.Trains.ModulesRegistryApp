@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.19
+Released 2026-11-20
+- Security fix: a WiFRED throttle can only be changed by its owner or a throttle manager, and a new throttle can't take over the MAC address of an active one.
+- The WiFRED throttle form checks the entries as you type and stays open after saving; a MAC address may be written with or without separators.
 ## Release 1.15.18
 Released 2026-11-19
 - Security fix: cargo types can only be changed by global administrators.
