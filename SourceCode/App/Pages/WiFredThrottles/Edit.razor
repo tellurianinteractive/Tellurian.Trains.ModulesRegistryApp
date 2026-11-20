@@ -68,6 +68,7 @@
         }
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
         Form ??= (Existing ?? new WiFredThrottle { OwningPersonId = Principal.PersonId() }).AsFormData();
+        Form.ThrottleId = Id; // For the unique MAC address; from the address, whatever was posted.
         if (IsMacAddressLocked) Form.MacAddress = Existing!.MacAddress;
         if (MayManage)
         {

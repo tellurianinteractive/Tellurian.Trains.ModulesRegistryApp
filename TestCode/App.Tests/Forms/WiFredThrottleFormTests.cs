@@ -1,10 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
+using ModulesRegistry.Services.Implementations;
 using ModulesRegistry.Data;
 using ModulesRegistry.Forms.WiFredThrottles;
 
 namespace ModulesRegistry.AppTests.Forms;
 
-/// <summary>The WiFRED throttle form model (Migration step 3.6): the mapping to and from the entity, and its DataAnnotations.</summary>
+/// <summary>
+/// The WiFRED throttle form model (Migration step 3.6): the mapping to and from the entity, and its DataAnnotations, validated
+/// asynchronously as the form is, since the MAC address is checked for uniqueness in the database (a test double here).
+/// </summary>
 [TestClass]
 public sealed class WiFredThrottleFormTests
 {
@@ -41,32 +46,32 @@ public sealed class WiFredThrottleFormTests
     }
 
     [TestMethod]
-    public void ValidFormHasNoErrors() => Assert.IsEmpty(InvalidMembers(ValidForm()));
+    public async Task ValidFormHasNoErrors() => Assert.IsEmpty(await InvalidMembers(ValidForm()));
 
     [TestMethod]
     [DataRow("aabb.ccdd.eeff")]
     [DataRow("aa-bb-cc-dd-ee-ff")]
-    public void MacAddressInAnyNotationIsValid(string mac) => Assert.IsEmpty(InvalidMembers(Change(f => f.MacAddress = mac)));
+    public async Task MacAddressInAnyNotationIsValid(string mac) => Assert.IsEmpty(await InvalidMembers(Change(f => f.MacAddress = mac)));
 
     [TestMethod]
     [DataRow("")]
     [DataRow("aa:bb:cc:dd:ee")]
-    public void InvalidMacAddressIsInvalid(string mac) => AssertInvalid(f => f.MacAddress = mac, nameof(WiFredThrottleFormData.MacAddress));
+    public async Task InvalidMacAddressIsInvalid(string mac) => await AssertInvalid(f => f.MacAddress = mac, nameof(WiFredThrottleFormData.MacAddress));
 
     [TestMethod]
-    public void NoOwnerIsInvalid() => AssertInvalid(f => f.OwningPersonId = 0, nameof(WiFredThrottleFormData.OwningPersonId));
+    public async Task NoOwnerIsInvalid() => await AssertInvalid(f => f.OwningPersonId = 0, nameof(WiFredThrottleFormData.OwningPersonId));
 
     [TestMethod]
-    public void InventoryNumberZeroIsInvalid() => AssertInvalid(f => f.InventoryNumber = 0, nameof(WiFredThrottleFormData.InventoryNumber));
+    public async Task InventoryNumberZeroIsInvalid() => await AssertInvalid(f => f.InventoryNumber = 0, nameof(WiFredThrottleFormData.InventoryNumber));
 
     [TestMethod]
-    public void DccAddressZeroIsAcceptedSinceItIsSavedAsEmpty() => Assert.IsEmpty(InvalidMembers(Change(f => f.LocoAddress3 = 0)));
+    public async Task DccAddressZeroIsAcceptedSinceItIsSavedAsEmpty() => Assert.IsEmpty(await InvalidMembers(Change(f => f.LocoAddress3 = 0)));
 
     [TestMethod]
-    public void DccAddressAbove9999IsInvalid() => AssertInvalid(f => f.LocoAddress4 = 10000, nameof(WiFredThrottleFormData.LocoAddress4));
+    public async Task DccAddressAbove9999IsInvalid() => await AssertInvalid(f => f.LocoAddress4 = 10000, nameof(WiFredThrottleFormData.LocoAddress4));
 
     [TestMethod]
-    public void NameIsOrdinaryText() => AssertInvalid(f => f.Name = "Пульт", nameof(WiFredThrottleFormData.Name));
+    public async Task NameIsOrdinaryText() => await AssertInvalid(f => f.Name = "Пульт", nameof(WiFredThrottleFormData.Name));
 
     private static WiFredThrottleFormData Change(Action<WiFredThrottleFormData> change)
     {
@@ -75,13 +80,41 @@ public sealed class WiFredThrottleFormTests
         return form;
     }
 
-    private static void AssertInvalid(Action<WiFredThrottleFormData> change, string member) =>
-        CollectionAssert.AreEqual(new[] { member }, InvalidMembers(Change(change)));
+    [TestMethod]
+    public async Task ATakenMacAddressIsInvalid() =>
+        CollectionAssert.AreEqual(new[] { nameof(WiFredThrottleFormData.MacAddress) }, await InvalidMembers(ValidForm(), taken: true));
 
-    private static string[] InvalidMembers(WiFredThrottleFormData form)
+    [TestMethod]
+    public async Task TheEditedThrottleIsAskedAbout()
     {
+        var macAddresses = new MacAddresses(taken: false);
+        var form = ValidForm();
+        form.ThrottleId = 9;
+
+        await InvalidMembers(form, macAddresses: macAddresses);
+
+        Assert.AreEqual(9, macAddresses.AskedThrottleId, "The throttle may keep its own address.");
+    }
+
+    private static async Task AssertInvalid(Action<WiFredThrottleFormData> change, string member) =>
+        CollectionAssert.AreEqual(new[] { member }, await InvalidMembers(Change(change)));
+
+    private static async Task<string[]> InvalidMembers(WiFredThrottleFormData form, bool taken = false, MacAddresses? macAddresses = null)
+    {
+        using var services = new ServiceCollection().AddSingleton<IWiFredMacAddresses>(macAddresses ?? new MacAddresses(taken)).BuildServiceProvider();
         var results = new List<ValidationResult>();
-        Validator.TryValidateObject(form, new ValidationContext(form), results, validateAllProperties: true);
+        await Validator.TryValidateObjectAsync(form, new ValidationContext(form, services, null), results, validateAllProperties: true);
         return [.. results.SelectMany(r => r.MemberNames).Distinct()];
+    }
+
+    private sealed class MacAddresses(bool taken) : IWiFredMacAddresses
+    {
+        public int? AskedThrottleId { get; private set; }
+
+        public Task<bool> IsMacAddressTakenAsync(string? macAddress, int throttleId, CancellationToken cancellationToken = default)
+        {
+            AskedThrottleId = throttleId;
+            return Task.FromResult(taken);
+        }
     }
 }

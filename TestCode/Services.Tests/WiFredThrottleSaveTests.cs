@@ -86,6 +86,15 @@ public sealed class WiFredThrottleSaveTests
     }
 
     [TestMethod]
+    [DataRow("aa-bb-cc-dd-ee-01", 0, true, DisplayName = "A new throttle with an active throttle's address, in another notation")]
+    [DataRow("AA:BB:CC:DD:EE:02", 0, false, DisplayName = "A new throttle with a deleted throttle's address: registered again")]
+    [DataRow("AA:BB:CC:DD:EE:02", 1, true, DisplayName = "An edited throttle with a deleted throttle's address: the address is unique")]
+    [DataRow("AA:BB:CC:DD:EE:01", 1, false, DisplayName = "The throttle's own address")]
+    [DataRow("11:22:33:44:55:66", 0, false, DisplayName = "A free address")]
+    public async Task MacAddressTaken(string macAddress, int throttleId, bool expected) =>
+        Assert.AreEqual(expected, await Target.IsMacAddressTakenAsync(macAddress, throttleId));
+
+    [TestMethod]
     public async Task TheMacAddressAndNameAreCorrected()
     {
         var result = await Target.SaveAsync(Principal(Owner), Throttle(0, Owner, "11-22-33-44-55-66", "  kitchen throttle ", 7));

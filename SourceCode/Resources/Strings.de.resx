@@ -2259,6 +2259,9 @@
   <data name="DccAddressOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" muss eine DCC-Adresse von 1 bis 9999 sein oder leer</value>
   </data>
+  <data name="UniqueMacAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" wird bereits von einem anderen wiFRED Handregler verwendet</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" darf höchstens {1} Zeichen haben</value>
   </data>

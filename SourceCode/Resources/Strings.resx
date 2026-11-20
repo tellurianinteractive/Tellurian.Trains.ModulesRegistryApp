@@ -2259,6 +2259,9 @@
   <data name="DccAddressOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" must be a DCC address from 1 to 9999, or empty</value>
   </data>
+  <data name="UniqueMacAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" is already used by another wiFRED throttle</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" can have at most {1} characters</value>
   </data>

@@ -62,6 +62,26 @@ public sealed class FormValidationLocalizationTests
     }
 
     [TestMethod]
+    [DataRow("sv", "\"MAC-adress\" används redan av ett annat wiFRED körhandtag")]
+    [DataRow("en", "\"MAC-address\" is already used by another wiFRED throttle")]
+    public async Task ATakenMacAddressIsShownAtTheField(string language, string message)
+    {
+        // The asynchronous rule asks IWiFredMacAddresses; a test double instead of the database.
+        using var factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+            services.AddScoped<ModulesRegistry.Services.Implementations.IWiFredMacAddresses, TakenMacAddresses>()));
+        var form = new ModulesRegistry.Forms.WiFredThrottles.WiFredThrottleFormData { OwningPersonId = 1, MacAddress = "aa-bb-cc-dd-ee-ff", Name = "Test", InventoryNumber = 1 };
+
+        var errors = await ValidateAsync(form, language, factory);
+
+        CollectionAssert.AreEqual(new[] { message }, errors[nameof(form.MacAddress)]);
+    }
+
+    private sealed class TakenMacAddresses : ModulesRegistry.Services.Implementations.IWiFredMacAddresses
+    {
+        public Task<bool> IsMacAddressTakenAsync(string? macAddress, int throttleId, CancellationToken cancellationToken = default) => Task.FromResult(true);
+    }
+
+    [TestMethod]
     public void AllDisplayNamesAndMessagesOfFormModelsAreResourceKeys()
     {
         var keys = ResourceKeys();
@@ -93,13 +113,13 @@ public sealed class FormValidationLocalizationTests
             yield return attribute.ErrorMessage ?? $"{attribute.GetType().Name}_Error";
     }
 
-    private static async Task<Dictionary<string, string[]>> ValidateAsync(object form, string language)
+    private static async Task<Dictionary<string, string[]>> ValidateAsync(object form, string language, WebApplicationFactory<Program>? factory = null)
     {
         var current = CultureInfo.CurrentUICulture;
         CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
         try
         {
-            using var scope = _factory.Services.CreateScope();
+            using var scope = (factory ?? _factory).Services.CreateScope();
             var options = scope.ServiceProvider.GetRequiredService<IOptions<ValidationOptions>>().Value;
             Assert.IsTrue(options.TryGetValidatableTypeInfo(form.GetType(), out var info), "The form model needs [ValidatableType].");
             var context = new ValidateContext { ValidationOptions = options, ServiceProvider = scope.ServiceProvider };

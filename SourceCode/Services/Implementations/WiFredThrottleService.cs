@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ModulesRegistry.Services.Implementations;
 
-public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<WiFredThrottleService> logger)
+public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<WiFredThrottleService> logger) : IWiFredMacAddresses
 {
     private IDbContextFactory<ModulesDbContext> Factory { get; } = factory;
     public ITimeProvider TimeProvider { get; } = timeProvider;
@@ -29,6 +29,16 @@ public class WiFredThrottleService(IDbContextFactory<ModulesDbContext> factory, 
                 .ConfigureAwait(false);
         }
         return null;
+    }
+
+    public async Task<bool> IsMacAddressTakenAsync(string? macAddress, int throttleId, CancellationToken cancellationToken = default)
+    {
+        var address = macAddress.AsMacAddress()?.ToUpperInvariant();
+        if (address.IsEmpty) return false;
+        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        return throttleId > 0 ?
+            await dbContext.WiFredThrottles.AnyAsync(w => w.Id != throttleId && w.MacAddress == address, cancellationToken) :
+            await dbContext.WiFredThrottles.AnyAsync(w => w.MacAddress == address && w.DeletedDateTime == null, cancellationToken);
     }
 
     public async Task<IEnumerable<WiFredThrottle>> GetThrottles(ClaimsPrincipal? principal, bool onlyMyThrottles = false)

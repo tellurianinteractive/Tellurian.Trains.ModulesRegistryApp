@@ -2259,6 +2259,9 @@
   <data name="DccAddressOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" måste vara en DCC-adress från 1 till 9999, eller tom</value>
   </data>
+  <data name="UniqueMacAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" används redan av ett annat wiFRED körhandtag</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" får ha högst {1} tecken</value>
   </data>

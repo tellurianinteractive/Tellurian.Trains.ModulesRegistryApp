@@ -179,6 +179,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
+builder.Services.AddScoped<IWiFredMacAddresses>(services => services.GetRequiredService<WiFredThrottleService>());
 builder.Services.AddPublicApi();
 builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 builder.Services.AddScoped<IDocumentSource, DocumentSource>();
