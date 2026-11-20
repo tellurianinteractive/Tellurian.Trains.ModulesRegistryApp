@@ -6,7 +6,7 @@ and incorrect data will wrongly match customers or cargo from different periods*
 
 - **Name** must be a name of a real station, current or historical.
 - You can add an **Internaltional name** if the station's domestic name differs from international use, e.g. *Copenhagen/København*.
-- **Signature** must be the correct short abbreviation for the station.
+- **Signature** must be the correct short abbreviation for the station. When saved, it is written as is customary in the country, for example *FF* in Germany and *Cst* in Sweden.
 - **Opened year** must be the year when the station was opened for train operation. 
 If this is before 1900 or you don't find any relevant data, leave it empty.
 - **Closed year** is the year that trains were no longer served at the station.

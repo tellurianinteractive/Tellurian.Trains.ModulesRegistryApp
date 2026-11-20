@@ -6,7 +6,7 @@ og forkerte data vil forkert matche kunder eller last fra forskellige perioder**
 
 - **Navn** skal være et navn på en rigtig station, aktuel eller historisk.
 - Du kan tilføje et **internationalt navn**, hvis stationens hjemlige navn afviger fra international brug, f.eks. *København/Copenhagen*.
-- **Signatur** skal være den korrekte korte forkortelse for stationen.
+- **Signatur** skal være den korrekte korte forkortelse for stationen. Når den gemmes, skrives den som det er almindeligt i landet, for eksempel *FF* i Tyskland og *Cst* i Sverige.
 - **Åbnet år** skal være det år, hvor stationen blev åbnet for togdrift.
 Hvis dette er før 1900, eller du ikke finder nogen relevante data, så lad det stå tomt.
 - **Lukket år** er det år, hvor der ikke længere blev kørt tog på stationen.

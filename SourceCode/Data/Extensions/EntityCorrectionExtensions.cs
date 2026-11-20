@@ -32,7 +32,7 @@ public static class EntityCorrectionExtensions
         public void CorrectInput(TextCasings countryCasings)
         {
             station.FullName = station.FullName.Corrected(TextCase.InitialCapital);
-            station.InternationalName = station.InternationalName.Corrected(TextCase.InitialCapital);
+            station.InternationalName = station.InternationalName.Corrected(TextCase.InitialCapital, Optional);
             station.Signature = station.Signature.Corrected(countryCasings.Of(TextKinds.StationSignature, TextCase.InitialCapital));
             (station.OpenedYear, station.ClosedYear) = YearPeriod.Corrected(station.OpenedYear, station.ClosedYear);
         }

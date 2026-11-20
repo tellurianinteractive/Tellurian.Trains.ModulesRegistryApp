@@ -1,68 +1,95 @@
 ﻿@page "/ExternalStations/{id:int}/edit"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the region, cargo and throttle forms: a POST of ExternalStationFormData, validated in
+   the browser and again on the server; the id comes from the address. Any user may add and edit external stations. A saved
+   station's region can't be changed (ExternalStationService): the list is shown disabled, and a disabled field isn't posted, so
+   the stored region is set before the form is validated. After saving, a redirect to this form, which reads the station back,
+   so the user sees what was saved, including corrections such as the signature's capitals; the result is a one-time message. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
- 
+@using ModulesRegistry.Forms.ExternalStations
+
+@inject NavigationManager Navigator
 @inject ExternalStationService ExternalStationService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="ExternalStation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false" BackHref="@BackHref" />
-<ContentView ContentName="ExternalStationNote"/>
+<PageHeading ObjectName="ExternalStation" Context="@Existing" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="ExternalStation" ShowHelpInitially="false" BackHref="@BackHref" />
+<ContentView ContentName="ExternalStationNote" />
 
-<EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="external-station" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="3" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowPleaseSelect="true" IsDisabled="false" />
-        <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
-        <AppInputText Width="3" Label="InternationalName" @bind-Value="Station.InternationalName" />
-        <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
-        <AppInputFill Width="2"/>
-        <AppInputNumber Width="2" @bind-Value="Station.OpenedYear" Label="OpenedYear" />
-        <AppInputNumber Width="2" @bind-Value="Station.ClosedYear" Label="ClosedYear" />
+        <AppInputSelect Width="3" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowPleaseSelect="true" IsDisabled="IsRegionLocked" />
+        <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
+        <AppInputText Width="3" Label="InternationalName" @bind-Value="Form!.InternationalName" />
+        <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
+        <AppInputFill Width="2" />
+        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" @bind-Value="Form!.OpenedYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" @bind-Value="Form!.ClosedYear" />
+        <AppYearPeriodHint />
     </Inputs>
     <Buttons>
-        @if (Station?.Id > 0)
+        @if (Existing is not null)
         {
-            <AppButton Href="@CustomersHref" ObjectName="FreightCustomers" Label="Edit"/>
+            <AppButton Href="@CustomersHref" ObjectName="FreightCustomers" Label="Edit" />
         }
     </Buttons>
 </EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "external-station")] private ExternalStationFormData? Form { get; set; }
 
     ClaimsPrincipal? Principal;
-
-    ExternalStation Station = new ExternalStation();
+    ExternalStation? Existing;
     IEnumerable<ListboxItem>? RegionItems;
+    string? FailureMessage;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        RegionItems = await RegionService.ListboxItemsAsync(Principal);
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        Station = Id > 0 ? await ExternalStationService.FindByIdAsync(Principal, Id) ?? new ExternalStation () : new ExternalStation();
-    }
-
-    async Task OnValidSubmit()
-    {
-        if (Station is not null)
+        if (Id > 0)
         {
-            var result = await ExternalStationService.SaveAsync(Principal, Station);
-            if (result.Entity is not null) Station = result.Entity;
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            Existing = await ExternalStationService.FindByIdAsync(Principal, Id);
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new ExternalStation()).AsFormData();
+        if (IsRegionLocked) Form.RegionId = Existing!.RegionId;
+        // A saved station's regions are those of its own country, so its region is always in the list.
+        RegionItems = await RegionService.ListboxItemsAsync(Principal, Existing?.Region?.CountryId);
     }
 
-    
+    bool IsRegionLocked => Existing is not null;
 
     // The external stations list is static, so this page may have no history (Migration step 3.3).
-    string BackHref => Station.Region is null ? "ExternalStations" : $"ExternalStations/Country/{Station.Region.CountryId}";
-    string CustomersHref => $"ExternalStations/{Station.Id}/StationCustomers";
+    string BackHref => Existing?.Region is null ? "ExternalStations" : $"ExternalStations/Country/{Existing.Region.CountryId}";
+    string CustomersHref => $"ExternalStations/{Id}/StationCustomers";
 
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded station (Migration section 3.4, the data-loss rule).
+        var station = Form.AsEntity(Existing);
+        var (count, message, saved) = await ExternalStationService.SaveAsync(Principal, station);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"ExternalStations/{(saved ?? station).Id}/edit");
+    }
 }

@@ -6,7 +6,7 @@ Falsche Daten führen fälschlicherweise zu Kunden oder Fracht aus unterschiedli
 
 - **Name** muss der Name einer echten Station sein, aktuell oder historisch.
 - Du kannst einen **Internationalen Namen** hinzufügen, wenn der inländische Name des Senders von der internationalen Verwendung abweicht, z. B. *Copenhagen/København*.
-- **Signatur** muss die korrekte Kurzabkürzung für den Sender sein.
+- **Signatur** muss die korrekte Kurzabkürzung für den Bahnhof sein. Beim Speichern wird sie so geschrieben, wie es im Land üblich ist, zum Beispiel *FF* in Deutschland und *Cst* in Schweden.
 - **Eröffnungsjahr** muss das Jahr sein, in dem der Bahnhof für den Zugbetrieb geöffnet wurde.
 Wenn dies vor 1900 liegt oder Du keine relevanten Daten findest, lass das Feld leer.
 - **Schließungsjahr** ist das Jahr, in dem am Bahnhof keine Züge mehr bedient wurden.

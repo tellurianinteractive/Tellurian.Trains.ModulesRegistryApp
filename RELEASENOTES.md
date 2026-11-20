@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.20
+Released 2026-11-20
+- The external station form checks the entries as you type and stays open after saving; a saved station's region is shown but can't be changed.
 ## Release 1.15.19
 Released 2026-11-20
 - Security fix: a WiFRED throttle can only be changed by its owner or a throttle manager, and a new throttle can't take over the MAC address of an active one.

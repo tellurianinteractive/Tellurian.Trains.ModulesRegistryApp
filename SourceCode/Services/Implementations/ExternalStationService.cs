@@ -66,7 +66,7 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
             {
                 var regionId = existing.RegionId;
                 dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                if (!principal.IsSuperUser() && dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
                 if (existing.RegionId != regionId) { return (0, Resources.Strings.NotAuthorized, entity); }
                 var result = await dbContext.SaveChangesAsync();
                 return result.SaveResult(existing);
