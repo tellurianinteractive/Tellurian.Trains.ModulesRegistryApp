@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.24
+Released 2026-11-20
+- The module standard and end profile forms check the entries as you type and stay open after saving.
+- Security fix: module standards can only be changed by global administrators.
+- Leaving a form with unsaved changes asks whether to ignore them.
 ## Release 1.15.23
 Released 2026-11-20
 - A freight customer's waybills: each waybill's print settings are edited on their own page, Update and Edit are shown only to those who may edit the station, and Update shows a spinning icon and a message while the waybills are created.

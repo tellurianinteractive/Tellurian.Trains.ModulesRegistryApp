@@ -61,28 +61,26 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
         return null;
     }
 
+    /// <summary>
+    /// Adds or updates a module standard. Module standards are shared by all countries, so only global administrators save them
+    /// (Migration step 3.6; before, any user who wasn't read-only could, and country administrators could open the form).
+    /// </summary>
     public async Task<(int Count, string Message, ModuleStandard? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleStandard entity)
     {
-        if (principal.MaySave())
+        if (!principal.IsGlobalAdministrator() || principal.IsReadOnly()) return principal.SaveNotAuthorised<ModuleStandard>();
+        entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
+        using var dbContext = Factory.CreateDbContext();
+        if (entity.Id > 0)
         {
-            if (entity.Scale is not null && entity.ScaleId != entity.Scale.Id) entity.Scale = null;
-            using var dbContext = Factory.CreateDbContext();
-            if (entity.Id > 0)
-            {
-                var existing = await dbContext.ModuleStandards.FindAsync(entity.Id).ConfigureAwait(false);
-                if (existing is null) return principal.NothingToUpdate<ModuleStandard>();
-                dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
-            }
-            else
-            {
-                dbContext.ModuleStandards.Attach(entity);
-                dbContext.Entry(entity).State = EntityState.Added;
-            }
-            var count = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return count.SaveResult(entity);
+            var existing = await dbContext.ModuleStandards.FindAsync(entity.Id).ConfigureAwait(false);
+            if (existing is null) return principal.NothingToUpdate<ModuleStandard>();
+            dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+            return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(existing);
         }
-        return principal.SaveNotAuthorised<ModuleStandard>();
+        entity.Scale = null!; // Only the id is saved.
+        dbContext.ModuleStandards.Add(entity);
+        return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(entity);
     }
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)

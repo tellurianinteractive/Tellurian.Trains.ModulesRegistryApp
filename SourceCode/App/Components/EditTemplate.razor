@@ -10,7 +10,9 @@ else
 {
     @* With a FormName, the form is a static SSR form (Migration step 3.4): a POST with antiforgery, validated with DataAnnotations
        on a form model, in the browser and again on the server; each input shows its own message. *@
-    <EditForm Model="Item" OnValidSubmit="OnValidSubmit" Class="row g-3" FormName="@FormName" Enhance="@IsStatic">
+    @* A static form also asks before leaving it with unsaved changes (leave-guard.js): the texts of its dialog are attributes, and a
+       form shown again after a POST (an invalid or failed save; a successful one redirects) is unsaved from the start. *@
+    <EditForm Model="Item" OnValidSubmit="OnValidSubmit" FormName="@FormName" Enhance="@IsStatic" @attributes="FormAttributes">
         @if (IsStatic)
         {
             <DataAnnotationsValidator />
@@ -60,5 +62,17 @@ else
     /// <summary>The form's name on a static SSR page, matching the page's <c>[SupplyParameterFromForm(FormName = ...)]</c>.</summary>
     [Parameter] public string? FormName { get; set; }
 
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
     bool IsStatic => FormName.HasValue;
+
+    // The form's class, and on a static form the leave guard's texts (EditForm takes other attributes only as a splat).
+    Dictionary<string, object> FormAttributes => !IsStatic ? new() { ["class"] = "row g-3" } : new()
+    {
+        ["class"] = "row g-3",
+        ["data-leave-guard"] = Localizer["IgnoreUnsavedChanges"].Value,
+        ["data-leave-yes"] = Localizer["Yes"].Value,
+        ["data-leave-no"] = Localizer["No"].Value,
+        ["data-leave-unsaved"] = HttpMethods.IsPost(HttpContext?.Request.Method ?? "") ? "true" : "false",
+    };
 }

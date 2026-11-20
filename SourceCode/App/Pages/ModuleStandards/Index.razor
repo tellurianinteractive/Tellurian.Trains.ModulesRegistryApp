@@ -1,15 +1,17 @@
 ﻿@page "/ModuleStandards"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): the module standards, only text and links; Add and Edit for global administrators. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject ModuleStandardService ModuleStandardService
 
-<PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List"/>
+<PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List" />
 
-@if (Principal.IsGlobalOrCountryAdministrator() && ModuleStandards is not null)
+@if (MayEdit)
 {
-    <a class="btn btn-sm btn-secondary" href="modulestandards/0/edit"><span class="@FontAwesome.Add" /> @Localizer["Add"]</a>
+    <AppButton Label="Add" Href="ModuleStandards/0/Edit" AlwaysShowLabel="true" />
 }
 
 <TableTemplate Items="ModuleStandards?.OrderBy(ms => ms.Scale.Denominator)">
@@ -20,24 +22,21 @@
         <th>@Localizer["TrackSystem"]</th>
         <th>@Localizer["ElectricSystem"]</th>
         <th>@Localizer["Couplings"]</th>
-        @if (Principal.IsGlobalOrCountryAdministrator())
+        @if (MayEdit)
         {
             <th>@Localizer["Actions"]</th>
-
         }
     </TableHeader>
     <RowTemplate Context="standard">
-        <td>@Scale(standard.Scale)</td>
+        <td>@standard.Scale.ShortName 1:@standard.Scale.Denominator</td>
         <td>@standard.ShortName</td>
         <td>@((Theme)standard.MainThemeId) @standard.PreferredTheme</td>
         <td>@standard.TrackSystem</td>
         <td>@standard.Electricity</td>
         <td>@standard.Couplings</td>
-        @if (Principal.IsGlobalOrCountryAdministrator())
+        @if (MayEdit)
         {
-            <td>
-                <a class="btn btn-sm btn-primary" href="modulestandards/@standard.Id/edit"><span class="@FontAwesome.Edit" />@Localizer["Edit"]</a>
-            </td>
+            <td><AppButton Label="Edit" Href="@($"ModuleStandards/{standard.Id}/Edit")" /></td>
         }
     </RowTemplate>
 </TableTemplate>
@@ -45,18 +44,13 @@
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
-    private ClaimsPrincipal? Principal;
-    private IEnumerable<ModuleStandard>? ModuleStandards;
+    ClaimsPrincipal? Principal;
+    IEnumerable<ModuleStandard>? ModuleStandards;
+    bool MayEdit => Principal.IsGlobalAdministrator();
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is not null)
-        {
-            ModuleStandards = await ModuleStandardService.All(Principal);
-        }
+        ModuleStandards = await ModuleStandardService.All(Principal);
     }
-
-    private string Scale(Scale it) => $"{it.ShortName} 1:{it.Denominator}";
-    private string Gauge(double? it) => it.HasValue ? string.Format("{0:F1} mm", it) : string.Empty;
 }

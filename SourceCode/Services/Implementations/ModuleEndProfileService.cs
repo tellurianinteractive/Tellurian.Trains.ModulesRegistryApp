@@ -6,7 +6,7 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
 
     public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(int? scaleId)
     {
-        var dbContext = Factory.CreateDbContext();
+        using var dbContext = Factory.CreateDbContext();
         return await dbContext.ModuleEndProfiles.AsNoTracking()
             .Where(mgt => !scaleId.HasValue || mgt.ScaleId == scaleId)
             .Select(mgt => new ListboxItem(mgt.Id, mgt.Designation))
@@ -16,28 +16,31 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
 
     public async Task<IEnumerable<ModuleEndProfile>> GetAllAsync()
     {
-        var dbContext = Factory.CreateDbContext();
+        using var dbContext = Factory.CreateDbContext();
         return await dbContext.ModuleEndProfiles.AsNoTracking()
             .Include(mgt => mgt.Scale)
             .ToListAsync()
             .ConfigureAwait(false);
     }
 
+    /// <summary>An end profile to edit; only global administrators edit end profiles.</summary>
     public async Task<ModuleEndProfile?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsGlobalOrCountryAdministrator())
+        if (principal.IsGlobalAdministrator())
         {
-            var dbContext = Factory.CreateDbContext();
+            using var dbContext = Factory.CreateDbContext();
             return await dbContext.ModuleEndProfiles.FindAsync(id).ConfigureAwait(false);
         }
         return null;
     }
 
+    /// <summary>Adds or updates an end profile; only global administrators (as before: <c>IsGlobalOrCountryAdministrator()</c> without a country).</summary>
     public async Task<(int Count, string Message, ModuleEndProfile? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleEndProfile entity)
     {
-        if (principal.IsGlobalOrCountryAdministrator())
+        if (principal.IsGlobalAdministrator() && !principal.IsReadOnly())
         {
-            var dbContext = Factory.CreateDbContext();
+            entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
+            using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.ModuleEndProfiles.FindAsync(entity.Id).ConfigureAwait(false);
             if (existing is null)
             {

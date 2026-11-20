@@ -81,6 +81,27 @@ public static class EntityCorrectionExtensions
         }
     }
 
+    extension(ModuleStandard standard)
+    {
+        public void CorrectInput()
+        {
+            standard.ShortName = standard.ShortName.Corrected(TextCase.AsTyped); // An abbreviation, "FREMO/H0-RE".
+            standard.TrackSystem = standard.TrackSystem.Corrected(TextCase.AsTyped, Optional);
+            standard.Wheelset = standard.Wheelset.Corrected(TextCase.AsTyped, Optional);
+            standard.Couplings = standard.Couplings.Corrected(TextCase.AsTyped, Optional);
+            standard.Electricity = standard.Electricity.Corrected(TextCase.AsTyped, Optional);
+            standard.PreferredTheme = standard.PreferredTheme.Corrected(TextCase.AsTyped, Optional);
+            standard.AcceptedNorm = standard.AcceptedNorm.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty); // Often a link, kept as typed.
+            standard.NormalGauge = standard.NormalGauge is > 0 ? standard.NormalGauge : null;
+            standard.NarrowGauge = standard.NarrowGauge is > 0 ? standard.NarrowGauge : null;
+        }
+    }
+
+    extension(ModuleEndProfile profile)
+    {
+        public void CorrectInput() => profile.Designation = profile.Designation.Corrected(TextCase.AsTyped);
+    }
+
     extension(Cargo cargo)
     {
         public void CorrectInput()

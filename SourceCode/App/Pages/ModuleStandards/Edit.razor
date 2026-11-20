@@ -1,68 +1,89 @@
 ﻿@page "/ModuleStandards/{id:int}/Edit"
 
-@attribute [Authorize(Policy = "Admin")]
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of ModuleStandardFormData; the id comes from the address. Module standards are
+   shared by all countries, so only global administrators get the form. After saving, a redirect to the form's own address (a new
+   standard to its new id), which reads it back; the result is a one-time message. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.ModuleStandards
 
+@inject NavigationManager Navigator
 @inject ScaleService ScaleService
 @inject ModuleStandardService ModuleStandardService
 
-<PageHeading ObjectName="ModuleStandard"  IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" />
+<PageHeading ObjectName="ModuleStandard" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" BackHref="ModuleStandards" />
 
-@if (ModuleStandard is null)
+@if (FailureMessage is not null)
 {
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
 
-}
-else
-{
-    <EditForm Model="ModuleStandard" OnValidSubmit="OnValidSubmit" Class="row g-3">
-        <FluentValidationValidator />
-        <ValidationSummary />
-        <AppInputText Width="2" Label="ShortName" @bind-Value="ModuleStandard.ShortName" />
-        <AppInputSelect Width="2" Label="Scale" @bind-Value="ModuleStandard.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
-        <AppInputSelect Width="2" Label="MainTheme" @bind-Value="ModuleStandard.MainThemeId" Items="EnumExtensions.ThemesListboxItems()" ShowPleaseSelect="true" />
-        <AppInputText Width="3" Label="PreferredTheme" @bind-Value="@ModuleStandard.PreferredTheme" />
-        <AppInputFill Width="5" />
-        <AppInputText Width="2" Label="TrackSystem" @bind-Value="ModuleStandard.TrackSystem" />
-        <AppInputNumber Width="2" Label="NormalGauge" TValue="double?" @bind-Value="ModuleStandard.NormalGauge" Format="F1" Step="0.1" Unit="mm" />
-        <AppInputNumber Width="2" Label="NarrowGauge" TValue="double?" @bind-Value="ModuleStandard.NarrowGauge" Format="F1" Step="0.1" Unit="mm" />
-        <AppInputText Width="4" Label="Wheelset" @bind-Value="ModuleStandard.Wheelset" />
-        <AppInputText Width="3" Label="Couplings" @bind-Value="ModuleStandard.Couplings" />
-        <AppInputText Width="2" Label="ElectricSystem" @bind-Value="ModuleStandard.Electricity" />
-        <AppInputText Width="12" Label="AcceptedNorm" @bind-Value="ModuleStandard.AcceptedNorm" Placeholder="LinkToExternalContent" />
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary"><span class="@FontAwesome.Save" />@Localizer["Save"]</button>
-        </div>
-    </EditForm>
-}
+<EditTemplate Item="Form" FormName="module-standard" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputText Width="2" Label="ShortName" @bind-Value="Form!.ShortName" />
+        <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId" />
+        <AppInputSelect Width="2" Label="MainTheme" Items="ThemeItems" ShowPleaseSelect="true" @bind-Value="Form!.MainThemeId" />
+        <AppInputText Width="3" Label="PreferredTheme" @bind-Value="Form!.PreferredTheme" />
+        <AppInputFill Width="3" />
+        <AppInputText Width="2" Label="TrackSystem" @bind-Value="Form!.TrackSystem" />
+        <AppInputNumber TValue="double?" Width="2" Label="NormalGauge" Format="F1" Step="0.1" Unit="mm" @bind-Value="Form!.NormalGauge" />
+        <AppInputNumber TValue="double?" Width="2" Label="NarrowGauge" Format="F1" Step="0.1" Unit="mm" @bind-Value="Form!.NarrowGauge" />
+        <AppInputText Width="4" Label="Wheelset" @bind-Value="Form!.Wheelset" />
+        <AppInputText Width="3" Label="Couplings" @bind-Value="Form!.Couplings" />
+        <AppInputText Width="2" Label="ElectricSystem" @bind-Value="Form!.Electricity" />
+        <AppInputText Width="12" Label="AcceptedNorm" Placeholder="LinkToExternalContent" @bind-Value="Form!.AcceptedNorm" />
+    </Inputs>
+</EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
-    ClaimsPrincipal? Principal;
-    ModuleStandard? ModuleStandard;
-    IEnumerable<ListboxItem>? ScaleItems;
+    [SupplyParameterFromForm(FormName = "module-standard")] private ModuleStandardFormData? Form { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    ClaimsPrincipal? Principal;
+    ModuleStandard? Existing;
+    IEnumerable<ListboxItem>? ScaleItems;
+    // "Undefined" (0) is the "select" option.
+    static readonly IEnumerable<ListboxItem> ThemeItems = EnumExtensions.ThemesListboxItems().Where(i => i.Id > 0).ToList();
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is not null)
+        if (!Principal.IsGlobalAdministrator())
         {
-            ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
-            ModuleStandard = Id > 0 ? await ModuleStandardService.FindByIdAsync(Principal, Id) : new ModuleStandard() { NormalGauge = 16.5 };
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
         }
+        if (Id > 0)
+        {
+            Existing = await ModuleStandardService.FindByIdAsync(Principal, Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new ModuleStandard { NormalGauge = 16.5, MainThemeId = (int)Theme.Europe }).AsFormData();
+        ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
     }
 
-    private async Task OnValidSubmit()
+    async Task SaveAsync()
     {
-        if (ModuleStandard is not null)
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded standard (Migration section 3.4, the data-loss rule).
+        var standard = Form.AsEntity(Existing);
+        var (count, message, saved) = await ModuleStandardService.SaveAsync(Principal, standard);
+        if (count == 0)
         {
-            var result = await ModuleStandardService.SaveAsync(Principal, ModuleStandard);
-            ModuleStandard = result.Entity;
-            Id = ModuleStandard?.Id ?? 0;
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            FailureMessage = message;
+            return;
         }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"ModuleStandards/{(saved ?? standard).Id}/Edit");
     }
-    private string SelectScaleLabel => $"{Localizer["Select"]} {Localizer["Scale"].Value.ToLowerInvariant()}";
 }

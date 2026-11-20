@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Include="..\..\SourceCode\App\wwwroot\js\form-validation.js" Link="Forms\form-validation.js" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\SourceCode\App\wwwroot\js\busy-form.js" Link="Forms\busy-form.js" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\SourceCode\App\wwwroot\js\leave-guard.js" Link="Forms\leave-guard.js" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SourceCode\App\App.csproj" />

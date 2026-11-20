@@ -410,3 +410,21 @@ blockquote {
         animation: none;
     }
 }
+
+/* The question before leaving a form with unsaved changes (leave-guard.js). */
+.leave-guard-dialog {
+    max-width: 26rem;
+    border: 1px solid #adb5bd;
+    border-radius: 0.4rem;
+    padding: 1rem 1.25rem;
+}
+
+.leave-guard-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.leave-guard-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}

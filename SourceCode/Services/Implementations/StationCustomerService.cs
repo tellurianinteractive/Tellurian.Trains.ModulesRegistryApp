@@ -20,27 +20,6 @@ public class StationCustomerService(IDbContextFactory<ModulesDbContext> factory)
         return Array.Empty<StationCustomer>();
     }
 
-    // SELECT * FROM ModuleCustomerCargo WHERE CountryId = 1 AND CargoId = 4 AND MainTheme = 'EUROPE' ORDER BY StationName
-    public async Task<IEnumerable<StationCustomerCargo>> GetGetCustomerCargoAsync(ClaimsPrincipal? principal, int cargoId, string mainTheme = "EUROPE", int countryId = 0 )
-    {
-        if (principal.IsAuthenticated())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            return await dbContext.StationCustomerCargos
-                .Where(scc => scc.CargoId == cargoId && scc.StationCustomer.Station.PrimaryModule.Standard.MainTheme == mainTheme && (countryId == 0 || scc.StationCustomer.Station.Region.CountryId == countryId))
-                .Include(c => c.Cargo)
-                .Include(scc => scc.Direction)
-                .Include(scc => scc.QuantityUnit)
-                .Include(sc => sc.StationCustomer)
-                    .ThenInclude(s => s.Station)
-                    .ThenInclude(s => s.Region)
-                    .ThenInclude(r => r.Country)
-                .ToReadOnlyListAsync();
-        }
-        return Array.Empty<StationCustomerCargo>();
-    }
-
-
     public async Task<StationCustomer?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
         if (principal.IsAuthenticated())

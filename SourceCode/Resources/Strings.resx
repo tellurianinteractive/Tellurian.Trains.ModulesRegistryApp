@@ -444,6 +444,12 @@
   <data name="CouplingNotFixed" xml:space="preserve">
     <value>Coupling not fixed</value>
   </data>
+  <data name="AcceptedNorm" xml:space="preserve">
+    <value>Norm document (link)</value>
+  </data>
+  <data name="Wheelset" xml:space="preserve">
+    <value>Wheelset</value>
+  </data>
   <data name="Couplings" xml:space="preserve">
     <value>Couplings</value>
   </data>
@@ -968,6 +974,9 @@
   </data>
   <data name="Hydrogen" xml:space="preserve">
     <value>Hydrogen</value>
+  </data>
+  <data name="IgnoreUnsavedChanges" xml:space="preserve">
+    <value>You have unsaved changes. Ignore them?</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>

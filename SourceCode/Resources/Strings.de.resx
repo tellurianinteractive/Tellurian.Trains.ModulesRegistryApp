@@ -444,6 +444,12 @@
   <data name="CouplingNotFixed" xml:space="preserve">
     <value>Kupplung nicht fest</value>
   </data>
+  <data name="AcceptedNorm" xml:space="preserve">
+    <value>Normdokument (Link)</value>
+  </data>
+  <data name="Wheelset" xml:space="preserve">
+    <value>Radsatz</value>
+  </data>
   <data name="Couplings" xml:space="preserve">
     <value>Kupplungen</value>
   </data>
@@ -968,6 +974,9 @@
   </data>
   <data name="Hydrogen" xml:space="preserve">
     <value>Wasserstoff</value>
+  </data>
+  <data name="IgnoreUnsavedChanges" xml:space="preserve">
+    <value>Sie haben nicht gespeicherte Änderungen. Wollen Sie sie verwerfen?</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>ID</value>

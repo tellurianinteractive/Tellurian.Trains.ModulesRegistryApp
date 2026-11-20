@@ -444,6 +444,12 @@
   <data name="CouplingNotFixed" xml:space="preserve">
     <value>Kobling ikke fikset</value>
   </data>
+  <data name="AcceptedNorm" xml:space="preserve">
+    <value>Normdokument (link)</value>
+  </data>
+  <data name="Wheelset" xml:space="preserve">
+    <value>Hjulsæt</value>
+  </data>
   <data name="Couplings" xml:space="preserve">
     <value>Koblinger</value>
   </data>
@@ -968,6 +974,9 @@
   </data>
   <data name="Hydrogen" xml:space="preserve">
     <value>Brint</value>
+  </data>
+  <data name="IgnoreUnsavedChanges" xml:space="preserve">
+    <value>Du har ændringer, der ikke er gemt. Vil du se bort fra dem?</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>

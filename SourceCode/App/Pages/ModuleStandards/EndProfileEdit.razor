@@ -1,48 +1,75 @@
 ﻿@page "/ModuleStandards/EndProfiles/{id:int}/Edit"
 
-@attribute [Authorize(Policy = "Admin")]
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of ModuleEndProfileFormData; the id comes from the address. Only global
+   administrators get the form. After saving, a redirect to the form's own address; the result is a one-time message. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.ModuleStandards
 
+@inject NavigationManager Navigator
 @inject ModuleEndProfileService ModuleEndProfileService
 @inject ScaleService ScaleService
 
-<PageHeading ObjectName="EndProfile" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" />
+<PageHeading ObjectName="EndProfile" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" BackHref="ModuleStandards/EndProfiles" />
 
-<EditTemplate Item="EndProfile" OnValidSubmit="OnValidSubmit" ShowSaveButton="true">
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="end-profile" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="2" Label="Scale" @bind-Value="EndProfile.ScaleId" Items="ScaleItems" />
-        <AppInputText Width="8" Label="Designation" @bind-Value="EndProfile.Designation" />
+        <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId" />
+        <AppInputText Width="8" Label="Designation" @bind-Value="Form!.Designation" />
     </Inputs>
 </EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
-    ClaimsPrincipal? Principal;
-    ModuleEndProfile EndProfile = Default;
-    IEnumerable<ListboxItem>? ScaleItems;
+    [SupplyParameterFromForm(FormName = "end-profile")] private ModuleEndProfileFormData? Form { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    ClaimsPrincipal? Principal;
+    ModuleEndProfile? Existing;
+    IEnumerable<ListboxItem>? ScaleItems;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is not null)
+        if (!Principal.IsGlobalAdministrator())
         {
-            ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
-            EndProfile = Id > 0 ? await ModuleEndProfileService.FindByIdAsync(Principal, Id) ?? Default : Default;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
         }
+        if (Id > 0)
+        {
+            Existing = await ModuleEndProfileService.FindByIdAsync(Principal, Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new ModuleEndProfile { ScaleId = 3 }).AsFormData();
+        ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
     }
 
-    static ModuleEndProfile Default => new ModuleEndProfile { ScaleId = 3 };
-
-    async Task OnValidSubmit()
+    async Task SaveAsync()
     {
-        if (EndProfile is not null)
+        if (Form is null) return;
+        var profile = Form.AsEntity(Existing);
+        var (count, message, saved) = await ModuleEndProfileService.SaveAsync(Principal, profile);
+        if (count == 0)
         {
-            var result = await ModuleEndProfileService.SaveAsync(Principal, EndProfile);
-            if (result.Entity is not null) EndProfile = result.Entity;
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            FailureMessage = message;
+            return;
         }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"ModuleStandards/EndProfiles/{(saved ?? profile).Id}/Edit");
     }
 }
