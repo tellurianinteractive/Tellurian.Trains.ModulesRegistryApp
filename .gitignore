@@ -340,3 +340,5 @@ ASALocalRun/
 healthchecksdb
 # Daily log review: query results and agent output (.github/workflows/log-review.yml)
 .log-review/
+# Documents for the board and other private material are kept outside the repository.
+*.docx
