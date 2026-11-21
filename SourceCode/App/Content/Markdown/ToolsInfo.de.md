@@ -1,4 +1,5 @@
-﻿Diese Seite enthält einige nützliche Links zu Tools und Hilfsmitteln für vorbereitung die Modultreffen.
+﻿<!-- LastModified: 2026-11-21T14:00:00Z -->
+Diese Seite enthält einige nützliche Links zu Tools und Hilfsmitteln für vorbereitung die Modultreffen.
 
 #### Anleitung zur Lokomotivvorbereitung
 In diesem [Leitfaden](/tools/locopreparationguide) erfährst Du, wie Du Deine Lokomotiven zu Hause oder im Verein vorbereitest, bevor Du zum Treffen reist.
@@ -21,6 +22,12 @@ um bei einem Modultreffen mehr über alle Funktionen zu erfahren und wie Du Dein
 - Sieh Dir die [Richtlinien für offene APIs](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/API-Guidelines) an,
 wie Du die Uhr in Deine eigenen Anwendungen integrierst.
 
+
+#### Module Draw
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) ist eine App zum Zeichnen von Modulen und ihren Endprofilen, direkt im Browser.
+
+#### Timetable Planner
+[Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) ist eine App zur Planung des Fahrplans für die Anlage eines Modultreffens, direkt im Browser.
 
 #### Wagenfehlerkarte
 Wenn ein Waggon die geforderten Standards nicht erfüllt, wird der Waggon oft außer Betrieb genommen.

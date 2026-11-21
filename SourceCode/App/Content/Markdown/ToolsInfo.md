@@ -1,4 +1,5 @@
-﻿This page contains some useful links to tools and utilities for the module meeting preparation.
+﻿<!-- LastModified: 2026-11-21T14:00:00Z -->
+This page contains some useful links to tools and utilities for the module meeting preparation.
 
 #### Loco Preparation Guide
 This [guide](/tools/locopreparationguide) tells how to prepare your locos at home or club before travelling to the meeting.
@@ -21,6 +22,12 @@ to learm more about all features and how to run your own clock at a module meeti
 - Check out the [open API guidelines](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/API-Guidelines) 
 how to integrate the clock with your own applications.
 
+
+#### Module Draw
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) is an app for drawing modules and their end profiles, directly in the browser.
+
+#### Timetable Planner
+[Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) is an app for planning the timetable of a module meeting's layout, directly in the browser.
 
 #### Wagon Error Card
 When a wagon does not meet the required standards, the wagon is often taken out of operation.

@@ -1,4 +1,5 @@
-﻿Denne siden inneholder noen nyttige lenker til dokumenter og verktøy for forberedelse av modultreffet.
+﻿<!-- LastModified: 2026-11-21T14:00:00Z -->
+Denne siden inneholder noen nyttige lenker til dokumenter og verktøy for forberedelse av modultreffet.
 
 #### Forberede lokomotiver
 Denne [guiden](/tools/locopreparationguide) forteller hvordan du forbereder lokomotivene hjemme eller i klubben før du reiser til treffet.
@@ -21,6 +22,12 @@ for å lære mer om alle funksjoner og hvordan du kjører din egen klokke på et
 - Sjekk ut [åpne API-retningslinjer](https://github.com/tellurianinteractive/Tellurian.Trains.ModuleMeetingApp/wiki/API-Guidelines)
 hvordan du integrerer klokken med dine egne applikasjoner.
 
+
+#### Module Draw
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) er en app for å tegne moduler og endeprofilene deres, direkte i nettleseren.
+
+#### Timetable Planner
+[Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) er en app for å planlegge ruteplanen for et modultreffs anlegg, direkte i nettleseren.
 
 #### Vognfeilkort
 Når en vogn ikke oppfyller de påkrevde standardene, tas vognen ofte ut av drift.
