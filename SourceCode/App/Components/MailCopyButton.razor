@@ -1,24 +1,16 @@
-﻿@inject IJSRuntime JSRuntime
-@inject IStringLocalizer<Strings> Localizer
+﻿@inject IStringLocalizer<Strings> Localizer
 
-@* Copies the recipients' email addresses, as an AppButton. Interactive: through JS interop. Static (Migration step 3.6): the text to
-   copy is in data-copy-text, handled by a click listener in App.razor (only on static pages, so it isn't copied twice). *@
-<AppButton OnClickCallback="CopyToClipboard" Label="@(Label ?? "CopyAllMailAddresses")" IconName="@FontAwesome.Mail" AdditionalAttributes="StaticAttributes" />
+@* Copies the recipients' email addresses, as an AppButton: the text to copy is in data-copy-text, handled by a click listener in
+   App.razor (every page is static SSR since Migration step 3.7). *@
+<AppButton Label="@(Label ?? "CopyAllMailAddresses")" IconName="@FontAwesome.Mail" AdditionalAttributes="CopyAttributes" />
 
 @code {
     [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
     [Parameter] public string? Label { get; set; } = "CopyAllMailAddresses";
 
-    string Text => string.Join(';', Recipients.Select(r => r.EmailAddresses));
-
-    Dictionary<string, object>? StaticAttributes => RendererInfo.IsInteractive ? null : new()
+    Dictionary<string, object> CopyAttributes => new()
     {
-        ["data-copy-text"] = Text,
+        ["data-copy-text"] = string.Join(';', Recipients.Select(r => r.EmailAddresses)),
         ["data-copied"] = Localizer["Copied"].Value,
     };
-
-    private async Task CopyToClipboard()
-    {
-        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", Text, Localizer["Copied"].ToString());
-    }
 }

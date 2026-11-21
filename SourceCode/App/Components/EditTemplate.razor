@@ -26,16 +26,9 @@ else
                 <AppButton Label="Save" IsSubmit="true" />
             }
             @Buttons
-            @if (MayDelete)
+            @if (MayDelete && DeleteHref.HasValue)
             {
-                @if (OnDeleteCallback.HasDelegate)
-                {
-                    <AppButton Label="Delete" IsSubmit="false" OnClickCallback="OnDeleteCallback" />
-                }
-                else if (DeleteHref.HasValue)
-                {
-                    <AppButton Label="Delete" IsSubmit="false" Href="@DeleteHref" />
-                }
+                <AppButton Label="Delete" IsSubmit="false" Href="@DeleteHref" />
             }
             @InputsBelowButtons
         </div>
@@ -52,7 +45,6 @@ else
     [Parameter] public RenderFragment? InputsBelowButtons { get; set; }
     [Parameter] public RenderFragment? SubInputs { get; set; }
     [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
-    [Parameter] public EventCallback OnDeleteCallback { get; set; }
     [Parameter] public bool ShowSaveButton { get; set; } = true;
     [Parameter] public string? DeleteHref { get; set; }
     [Parameter] public bool MayDelete { get; set; }

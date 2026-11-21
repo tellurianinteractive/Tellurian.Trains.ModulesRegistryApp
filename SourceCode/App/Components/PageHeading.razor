@@ -1,10 +1,11 @@
 ﻿@inject IStringLocalizer<Strings> Localizer
-@inject PageHistory PageHistory
 
+@* A page's heading with its help and back icons, for static SSR (Migration step 3.3; every page since step 3.7). The help toggle is
+   a checkbox with a label, as the menu toggle, and CSS shows the help when it is checked. There is no page history on the server, so
+   the back arrow is shown only when the page says where back is. *@
 <div>
-    @if (IsStatic && IsHelpAvailable)
+    @if (IsHelpAvailable)
     {
-        @* Static SSR (Migration step 3.3): the help toggle is a checkbox with a label, as the menu toggle; CSS shows the help when checked. *@
         <input type="checkbox" id="page-help-state" class="page-help-state" checked="@ShowHelpInitially" />
     }
     <div class="flex-container">
@@ -12,42 +13,23 @@
             <span class="@IconClass" /><span>@Localizer.HeadingText(Label, ObjectName, Context, PageAction)</span>
         </div>
         <div class="noprint" style="flex-grow: 1; text-align:right">
-            @if (IsStatic)
+            @* A one-time message (FlashMessage) is moved here by wwwroot/js/flash-message.js, beside the icons, where it is seen. *@
+            <span class="flash-message-slot"></span>
+            @if (IsHelpAvailable)
             {
-                @* A one-time message (FlashMessage) is moved here by wwwroot/js/flash-message.js, beside the icons, where it is seen. *@
-                <span class="flash-message-slot"></span>
-                @if (IsHelpAvailable)
-                {
-                    <label for="page-help-state" class="fa fa-question-circle page-help-toggle" title="@Localizer["Help"]" aria-label="@Localizer["Help"]"></label>
-                }
-                @* There is no page history without a circuit, so a static page only has a back arrow when it says where back is. *@
-                @if (BackHref.HasValue)
-                {
-                    <a href="@BackHref" class="fa fa-arrow-alt-circle-left page-back" title="@Localizer["Back"]" aria-label="@Localizer["Back"]"></a>
-                }
+                <label for="page-help-state" class="fa fa-question-circle page-help-toggle" title="@Localizer["Help"]" aria-label="@Localizer["Help"]"></label>
             }
-            else
+            @if (BackHref.HasValue)
             {
-                @if (IsHelpAvailable)
-                {
-                    <span class="fa fa-question-circle" @onclick="ToggleHelp" />
-                }
-                <span class="fa fa-arrow-alt-circle-left" @onclick="@Back" />
+                <a href="@BackHref" class="fa fa-arrow-alt-circle-left page-back" title="@Localizer["Back"]" aria-label="@Localizer["Back"]"></a>
             }
         </div>
     </div>
-    @if (HelpContentName.HasValue)
+    @if (HelpContentName is not null)
     {
-        @if (IsStatic)
-        {
-            <div class="page-help">
-                <ContentView ContentName="@HelpContentName" BackgroundColour="#ffffcc" />
-            </div>
-        }
-        else
-        {
-            <ContentView ContentName="@HelpContentName" IsHidden="@HelpIsHidden" BackgroundColour="#ffffcc" />
-        }
+        <div class="page-help">
+            <ContentView ContentName="@HelpContentName" BackgroundColour="#ffffcc" />
+        </div>
     }
     <hr />
 </div>
@@ -59,29 +41,9 @@
     [Parameter] public PageAction PageAction { get; set; }
     [Parameter] public string? HelpContext { get; set; }
     [Parameter] public bool ShowHelpInitially { get; set; }
-    /// <summary>
-    /// Where the back arrow goes when there is no page history: always on a static page, and on an interactive page
-    /// reached from a static one (a new circuit). Without it, a static page has no back arrow.
-    /// </summary>
+    /// <summary>Where the back arrow goes; without it, the page has no back arrow.</summary>
     [Parameter] public string? BackHref { get; set; }
 
-    bool IsStatic => !RendererInfo.IsInteractive;
-    bool HelpIsHidden => PageHistory.IsShowningHelp != true;
     bool IsHelpAvailable => HelpContext.HasValue;
     string? HelpContentName => string.IsNullOrWhiteSpace(HelpContext) ? null : $"Help/{HelpContext}";
-
-    protected override void OnParametersSet()
-    {
-        PageHistory.IsShowningHelp = ShowHelpInitially;
-    }
-
-    void ToggleHelp()
-    {
-        PageHistory.IsShowningHelp = !PageHistory.IsShowningHelp;
-    }
-
-    void Back()
-    {
-        PageHistory.NavigateBack(BackHref);
-    }
 }

@@ -1,26 +1,21 @@
 ﻿@typeparam TItem
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
+@* A table of items, with optional divider headings and sub rows per item. Static SSR (Migration step 3.7): actions are links and
+   POST buttons in the row template; the interactive inline edit mode was removed. *@
 @if (Items is null)
 {
     <ActionMessage Label="GettingData" AlertType="Wait" />
 }
-else if (Items.Count() == 0 && !HideNoRecordsToDisplay)
+else if (!Items.Any() && !HideNoRecordsToDisplay)
 {
     <ActionMessage Label="NoRecordsToDisplay" />
 }
 else
 {
-    <table class="table table-sm" >
+    <table class="table table-sm">
         <thead>
             <tr>
                 @TableHeader
-                @if (RowEditTemplate is not null)
-                {
-                    <th>@Localizer["Actions"]</th>
-                }
             </tr>
         </thead>
         <tbody>
@@ -42,44 +37,9 @@ else
                             </tr>
                         }
                     }
-                    @if (IsEditItem(item))
-                    {
-                        @if (ShowEditTemplate)
-                        {
-                            <tr @key="@EditItemKey(item)" style="background-color: lightgoldenrodyellow">
-                                <td colspan="@EditColspan">
-                                    @RowEditTemplate(item)
-                                    <br />
-                                    @if (SaveAsync is not null)
-                                    {
-                                        <AppButton Label="Save" OnClickCallback="@(async() => await TrySaveAsync(item))" />
-                                    }
-                                    <AppButton Label="Close" OnClickCallback="OnClose" />
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
-                            @RowTemplate(item)
-                            @if (ShowEditTemplateAndButtoms)
-                            {
-                                <td>
-                                    @if (ShowEditTemplate)
-                                    {
-                                        <AppButton Label="Edit" OnClickCallback="(() => Edit(item))" IsDisabled="IsReadOnly" />
-                                    }
-                                    @if (ShowDeleteButton)
-                                    {
-                                        <AppButton Label="Delete" OnClickCallback="(async () => await TryDeleteAsync(item))" IsDisabled="IsReadOnly" />
-                                    }
-                                </td>
-                            }
-                        </tr>
-
-                    }
-                   
+                    <tr @key="@ItemKey(item)" style="@ItemStyle(item)">
+                        @RowTemplate(item)
+                    </tr>
                     @if (SubRowsTemplate is not null)
                     {
                         @SubRowsTemplate(item)
@@ -94,58 +54,13 @@ else
     [Parameter] public RenderFragment? TableHeader { get; set; }
     [Parameter] public RenderFragment<string>? RowHeaderTemplate { get; set; }
     [Parameter] public RenderFragment<TItem>? RowTemplate { get; set; }
-    [Parameter] public RenderFragment<TItem>? RowEditTemplate { get; set; }
     [Parameter] public IEnumerable<TItem>? Items { get; set; }
     [Parameter] public bool HideNoRecordsToDisplay { get; set; }
     [Parameter] public Func<TItem, string>? Key { get; set; }
     [Parameter] public Func<TItem, string>? RowStyle { get; set; }
     [Parameter] public Func<TItem, string>? RowDividerHeading { get; set; }
-    [Parameter] public int EditColspan { get; set; } = 2;
-    [Parameter] public bool MayEdit { get; set; } = true;
-    [Parameter] public bool ShowRowTemplateWhenEditing { get; set; }
-    [Parameter] public Func<TItem, Task>? DeleteAsync { get; set; }
-    [Parameter] public Func<TItem, Task>? SaveAsync { get; set; }
     [Parameter] public RenderFragment<TItem>? SubRowsTemplate { get; set; }
 
-    bool ShowEditTemplateAndButtoms => ShowDeleteButton || ShowEditTemplate || ShowRowTemplateWhenEditing;
-    [MemberNotNullWhen(true, nameof(RowEditTemplate))] bool ShowEditTemplate => RowEditTemplate is not null;
-    bool ShowDeleteButton => DeleteAsync is not null;
-    bool IsReadOnly => !MayEdit;
-    bool CanSave => MayEdit;
     string ItemKey(TItem item) => Key is null ? item?.GetHashCode().ToString() ?? string.Empty : Key(item);
-    string EditItemKey(TItem item) => ItemKey(item) + "E";
     string ItemStyle(TItem item) => RowStyle is null ? string.Empty : RowStyle(item);
-
-
-    string? EditedKey = null;
-    bool IsEditItem(TItem item) {
-        var key = EditItemKey(item);
-
-        return key == EditedKey; }
-
-    void Edit(TItem item)
-    {
-        EditedKey = EditItemKey(item);
-    }
-
-    void OnClose()
-    {
-        EditedKey = null;
-    }
-
-    async Task TryDeleteAsync(TItem item)
-    {
-        if (DeleteAsync is not null)
-        {
-            await DeleteAsync(item);
-        }
-    }
-
-    async Task TrySaveAsync(TItem item)
-    {
-        if (SaveAsync is not null)
-        {
-            await SaveAsync(item);
-        }
-    }
 }

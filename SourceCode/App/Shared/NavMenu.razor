@@ -4,7 +4,7 @@
 @* The menu drops down from the top bar (MainLayout) at all widths. Its toggle is a checkbox with labels, so it works also
    in static SSR pages (Migration step 3.1): the toggler, and the backdrop that closes the menu on a click outside it.
    In interactive pages, a click in the menu also closes it (through the binding). *@
-<input type="checkbox" id="nav-menu-state" class="nav-menu-state" @bind="expanded" />
+<input type="checkbox" id="nav-menu-state" class="nav-menu-state" />
 <label for="nav-menu-state" class="nav-menu-backdrop" aria-hidden="true"></label>
 
 <div class="app-bar-start navbar navbar-dark">
@@ -17,7 +17,7 @@
     </a>
 </div>
 
-<nav class="nav-menu" @onclick="CloseNavMenu">
+<nav class="nav-menu">
     <ul class="nav flex-column">
         <AuthorizeView>
             <li class="nav-item px-3 nav-menu-user narrow-only">
@@ -192,8 +192,6 @@
 
 @code {
 
-    private bool expanded;
-    private void CloseNavMenu() => expanded = false;
 
     [CascadingParameter] private Task<AuthenticationState>? authenticationStateTask { get; set; }
     ClaimsPrincipal? Principal;

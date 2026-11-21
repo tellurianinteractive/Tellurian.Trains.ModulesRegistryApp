@@ -300,8 +300,7 @@ blockquote {
 
 /* FlashMessage (Migration step 3.3): with JavaScript it moves into the page heading, just left of the help and back icons, and
    fades out (wwwroot/js/flash-message.js); on a page without a heading slot it is a pop-up under the top bar. */
-/* The slot takes no space; the message is anchored at its right edge and grows to the left over the title, as wide as the
-   interactive notifications (NotificationArea), without moving the heading. */
+/* The slot takes no space; the message is anchored at its right edge and grows to the left over the title, without moving the heading. */
 .flash-message-slot {
     position: relative;
     display: inline-block;
@@ -334,7 +333,7 @@ blockquote {
     position: fixed;
     top: 4rem;
     right: 1rem;
-    z-index: 1050; /* As the notifications: above the top bar. */
+    z-index: 1050; /* Above the top bar. */
     max-width: min(90vw, 30rem);
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
     transition: opacity 0.5s ease-in;

@@ -10,7 +10,6 @@ using ModulesRegistry.Data;
 using ModulesRegistry.Data.ChangeTracking;
 using ModulesRegistry.Diagnostics;
 using ModulesRegistry.Endpoints;
-using ModulesRegistry.Notifications;
 using ModulesRegistry.Security;
 using ModulesRegistry.Services;
 using ModulesRegistry.Services.Implementations;
@@ -120,13 +119,11 @@ builder.Services.AddDbContextFactory<ModulesDbContext>((sp, options) =>
         .EnableSensitiveDataLogging(builder.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("EnableSensitiveDataLogging"));
 }, ServiceLifetime.Scoped);
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 builder.Services.AddLanguageService(AppLanguages.All);
 builder.Services.AddScoped<ITimeProvider, SystemTimeProvider>();
 
-builder.Services.AddScoped<PageHistory>();
 if (builder.Environment.IsProduction())
     builder.Services.AddScoped<IMailSender, CloudMailSender>();
 if (builder.Environment.IsDevelopment())

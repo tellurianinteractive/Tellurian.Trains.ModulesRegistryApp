@@ -34,7 +34,7 @@
     {
         <ValidationMessage For="ValidationFor" />
     }
-    else if (!RendererInfo.IsInteractive && ValueExpression is not null)
+    else if (ValueExpression is not null)
     {
         @* A static form: the message of the bound field, where the browser's validation also puts it. *@
         <ValidationMessage For="ValueExpression" />
