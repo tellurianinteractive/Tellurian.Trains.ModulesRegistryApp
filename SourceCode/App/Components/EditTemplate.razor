@@ -70,7 +70,7 @@ else
     Dictionary<string, object> FormAttributes => !IsStatic ? new() { ["class"] = "row g-3" } : new()
     {
         ["class"] = "row g-3",
-        ["data-leave-guard"] = Localizer["IgnoreUnsavedChanges"].Value,
+        ["data-leave-guard"] = Localizer["StayOnPageWithUnsavedChanges"].Value,
         ["data-leave-yes"] = Localizer["Yes"].Value,
         ["data-leave-no"] = Localizer["No"].Value,
         ["data-leave-unsaved"] = HttpMethods.IsPost(HttpContext?.Request.Method ?? "") ? "true" : "false",

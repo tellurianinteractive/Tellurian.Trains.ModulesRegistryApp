@@ -975,9 +975,6 @@
   <data name="Hydrogen" xml:space="preserve">
     <value>Brint</value>
   </data>
-  <data name="IgnoreUnsavedChanges" xml:space="preserve">
-    <value>Du har ændringer, der ikke er gemt. Vil du se bort fra dem?</value>
-  </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>
@@ -2804,5 +2801,8 @@
   </data>
   <data name="StartDateTooEarly_Error" xml:space="preserve">
     <value>Startdatoen kan ikke ligge mere end en uge tilbage</value>
+  </data>
+  <data name="StayOnPageWithUnsavedChanges" xml:space="preserve">
+    <value>Du har ændringer, der ikke er gemt. Vil du blive på siden?</value>
   </data>
 </root>

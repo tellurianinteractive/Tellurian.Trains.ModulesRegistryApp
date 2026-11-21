@@ -3,7 +3,7 @@
 // A form is unsaved when a field differs from the value the page was rendered with (the browser keeps it as defaultValue,
 // defaultChecked and defaultSelected), or when the server says so (a form shown again after a POST: a successful save redirects).
 // - A click on a link (Blazor's enhanced navigation, or a full load) is stopped in the capture phase and a dialog asks the
-//   question with Yes and No; Yes follows the link, No (or Escape) stays.
+//   question "stay on the page?" with Yes and No; Yes (the default, or Escape) stays, No follows the link and drops the changes.
 // - Closing the tab, reloading or typing an address gets the browser's own warning (beforeunload); its text can't be set.
 // - Not covered: the browser's back and forward buttons within enhanced navigation (Blazor handles them; they can't be cancelled).
 (function () {
@@ -35,18 +35,18 @@
         return true;
     }
 
-    function ask(form, onYes) {
+    function ask(form, onLeave) {
         const dialog = document.createElement('dialog');
         dialog.className = 'leave-guard-dialog';
         const question = document.createElement('p');
         question.textContent = form.dataset.leaveGuard;
         const yes = document.createElement('button');
         yes.type = 'button';
-        yes.className = 'btn btn-sm btn-warning';
+        yes.className = 'btn btn-sm btn-primary';
         yes.textContent = form.dataset.leaveYes || 'Yes';
         const no = document.createElement('button');
         no.type = 'button';
-        no.className = 'btn btn-sm btn-primary';
+        no.className = 'btn btn-sm btn-warning';
         no.textContent = form.dataset.leaveNo || 'No';
         const buttons = document.createElement('div');
         buttons.className = 'leave-guard-buttons';
@@ -54,10 +54,10 @@
         dialog.append(question, buttons);
         document.body.appendChild(dialog);
         dialog.addEventListener('close', function () { dialog.remove(); });
-        yes.addEventListener('click', function () { dialog.close(); onYes(); });
-        no.addEventListener('click', function () { dialog.close(); });
+        yes.addEventListener('click', function () { dialog.close(); });
+        no.addEventListener('click', function () { dialog.close(); onLeave(); });
         dialog.showModal();
-        no.focus(); // Staying is the safe default.
+        yes.focus(); // Staying is the safe default.
     }
 
     document.addEventListener('click', function (event) {

@@ -9,7 +9,7 @@
     {
         <label class="form-control-label text-end" for="@Label">@LabelText(Localizer)</label>
     }
-    <input disabled=@IsDisabled type="time" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" />
+    <input disabled=@IsDisabled type="time" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" @bind:format="HH:mm" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">

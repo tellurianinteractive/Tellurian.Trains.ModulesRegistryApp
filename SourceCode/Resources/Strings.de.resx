@@ -975,9 +975,6 @@
   <data name="Hydrogen" xml:space="preserve">
     <value>Wasserstoff</value>
   </data>
-  <data name="IgnoreUnsavedChanges" xml:space="preserve">
-    <value>Sie haben nicht gespeicherte Änderungen. Wollen Sie sie verwerfen?</value>
-  </data>
   <data name="Id" xml:space="preserve">
     <value>ID</value>
   </data>
@@ -2804,5 +2801,8 @@
   </data>
   <data name="StartDateTooEarly_Error" xml:space="preserve">
     <value>Das Startdatum darf nicht mehr als eine Woche zurückliegen</value>
+  </data>
+  <data name="StayOnPageWithUnsavedChanges" xml:space="preserve">
+    <value>Sie haben nicht gespeicherte Änderungen. Möchten Sie auf der Seite bleiben?</value>
   </data>
 </root>

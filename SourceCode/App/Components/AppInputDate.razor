@@ -11,7 +11,7 @@
     }
     @if (ShowTime)
     {
-        <input disabled=@IsDisabled type="datetime-local" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" @onfocusout="OnChange" />
+        <input disabled=@IsDisabled type="datetime-local" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" @bind:format="yyyy-MM-ddTHH:mm" @onfocusout="OnChange" />
     }
     else
     {
