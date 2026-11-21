@@ -2805,4 +2805,7 @@
   <data name="StayOnPageWithUnsavedChanges" xml:space="preserve">
     <value>You have changes that are not saved. Do you want to stay on the page?</value>
   </data>
+  <data name="InvitationInvalid" xml:space="preserve">
+    <value>The invitation link has expired or is not valid. Ask the one who invited you for a new invitation.</value>
+  </data>
 </root>

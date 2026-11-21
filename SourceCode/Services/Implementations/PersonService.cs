@@ -111,6 +111,13 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         return null;
     }
 
+    /// <summary>Who may invite the person to become a user (<see cref="PersonPermissionExtensions.MayInvitePersonAsync"/>).</summary>
+    public async Task<bool> MayInviteAsync(ClaimsPrincipal? principal, Person person)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayInvitePersonAsync(principal, person);
+    }
+
     /// <summary>
     /// Whether the user may edit the stored <paramref name="person"/> (or add a new one): a global administrator, a country
     /// administrator in the person's country, the person themselves, or, with <paramref name="groupId"/>, one who administers that

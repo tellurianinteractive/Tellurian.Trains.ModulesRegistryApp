@@ -29,21 +29,31 @@ public sealed partial class HostingTests
     private static HttpClient CreateClient() => _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
     [TestMethod]
-    public async Task InteractivePageIsTheAppDocumentWithAnInteractiveRoot()
+    public async Task StaticPageIsTheAppDocumentWithoutAnInteractiveRoot()
     {
         using var client = CreateClient();
 
-        // Any page not yet moved to static SSR and not requiring sign-in (the start page until Migration step 3.2b, the meetings
-        // list until 3.3, a meeting's page and registration until 3.6, then the user confirmation page).
-        var response = await client.GetAsync("/Users/Confirm/");
+        // Since Migration step 3.6 every page is static SSR; the About page needs no sign-in, database or mail.
+        var response = await client.GetAsync("/About");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();
         StringAssert.Matches(html, BlazorScript());
         Assert.DoesNotContain("blazor.server.js", html);
-        StringAssert.Contains(html, "<!--Blazor:", "The interactive root component marker.");
         StringAssert.Contains(html, "<base href=\"/\">");
         StringAssert.Contains(html, "id=\"blazor-error-ui\"");
+    }
+
+    [TestMethod]
+    public void EveryPageIsStatic()
+    {
+        // Migration step 3.6 done: no page is interactive; step 3.7 makes the router static and removes the attribute.
+        var interactive = typeof(Shared.PrintLayout).Assembly.GetTypes()
+            .Where(t => t.GetCustomAttributes(typeof(RouteAttribute), false).Length > 0)
+            .Where(t => t.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).Length == 0)
+            .Select(t => t.FullName)
+            .ToList();
+        Assert.IsEmpty(interactive, string.Join(", ", interactive));
     }
 
     [TestMethod]

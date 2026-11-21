@@ -184,6 +184,7 @@ builder.Services.AddPublicApi();
 builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 builder.Services.AddSingleton<PublicDocumentKeys>();
+builder.Services.AddSingleton<ModulesRegistry.Security.InvitationTokens>();
 
 builder.Services.AddLocalization();
 // Form models (App/Forms, Migration step 3.4): DataAnnotations whose display names and messages are keys in Strings.resx.

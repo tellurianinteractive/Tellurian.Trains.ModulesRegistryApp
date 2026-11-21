@@ -12,6 +12,11 @@
     {
         <textarea style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" rows="@NumberOfRows"/>
     }      
+    else if (Type == "password" && !RendererInfo.IsInteractive)
+    {
+        @* A static page never writes a typed password back into the page, also when the form is shown again after a POST. *@
+        <input disabled="@IsDisabled" type="password" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" autocomplete="new-password" />
+    }
     else
     {
         <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" placeholder="@PlaceholderText" />

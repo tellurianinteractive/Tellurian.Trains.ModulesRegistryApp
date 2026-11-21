@@ -1,90 +1,121 @@
 ﻿@page "/Users/Confirm/"
 
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): setting a password from a link in a mail, without signing in.
+   - ?invitation={token}: an invitation (InvitationTokens). The user account is created when the password is saved
+     (UserService.CreateFromInvitationAsync, decided 2026-11-21); opening the link writes nothing. An answered invitation says so.
+   - ?email=…&objectid=…: an existing user's link (password reset, or an invitation sent before 2026-11-21); the user is never
+     created here any more. Saving a password changes the object id, so the link works once.
+   The password is posted twice as NewPasswordFormData; the result is shown on this page (the user then signs in). *@
+
+@using ModulesRegistry.Forms.Persons
+
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject NavigationManager Navigator
 @inject UserService UserService
 @inject IMailSender MailSender
 @inject ContentService ContentService
+@inject ModulesRegistry.Security.InvitationTokens InvitationTokens
 @inject ILogger<Confirm> Logger
 
-@if (User is null)
+@if (IsPasswordAssigned)
 {
-    <PageHeading Label="UserConfirmationFailed" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
-    @if (EmailAddress is null)
+    <PageHeading Label="UserConfirmed" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
+    <p>@string.Format(Localizer["UserWelcome"].Value, FirstName)</p>
+    <p>@Localizer["YouMayNowLogin"].</p>
+}
+else if (Invitation is not null)
+{
+    @if (InvitedPerson is null)
     {
-        <p>@Localizer["NoEmailProvided"].</p>
+        <PageHeading Label="UserConfirmationFailed" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
+        <p>@Localizer["InvitationInvalid"]</p>
+    }
+    else if (InvitedPerson.UserId.HasValue)
+    {
+        <PageHeading Label="UserConfirmed" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
+        <p>@Localizer["YouMayNowLogin"].</p>
     }
     else
     {
-        <p>@Localizer["PasswordResetFailed"].</p>
+        <PageHeading Label="CreatePassword" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
+        @PasswordForm
     }
 }
-else if (IsPasswordAssigned)
+else if (InvitationToken is not null)
 {
-    <PageHeading Label="UserConfirmed" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
-    <p>@string.Format(Localizer["UserWelcome"].Value, User.Person.FirstName)</p>
-    <p>@Localizer["YouMayNowLogin"].</p>
+    <PageHeading Label="UserConfirmationFailed" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
+    <p>@Localizer["InvitationInvalid"]</p>
 }
-else if (User.IsPasswordReset() || User.IsNeverLoggedIn())
+else if (User is null)
 {
-    <PageHeading Label="CreatePassword" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
-    <PasswordPolicyView />
-    <EditForm Model="@Password" OnValidSubmit="@OnValidSubmit" Class="row g-3">
-        <DataAnnotationsValidator />
-        <AppInputText Width="2" Label="Password" @bind-Value="Password.Value" InputType="password" />
-        <AppInputText Width="2" Label="ConfirmPassword" @bind-Value="Password.ConfirmValue" InputType="password" />
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
-        </div>
-    </EditForm>
+    <PageHeading Label="UserConfirmationFailed" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
+    <p>@(EmailAddress is null ? Localizer["NoEmailProvided"] : Localizer["PasswordResetFailed"]).</p>
 }
 else if (User.IsLockedOut())
 {
     <PageHeading Label="YouAreLockedOut" IconClass="@FontAwesome.User" PageAction="PageAction.Error" />
     <p>@Localizer["TooManyPasswordResetAttempts"]</p>
 }
+else if (User.IsPasswordReset() || User.IsNeverLoggedIn())
+{
+    <PageHeading Label="CreatePassword" IconClass="@FontAwesome.User" PageAction="PageAction.List" />
+    @PasswordForm
+}
 
 @code {
-    private string? ObjectId;
-    private string? EmailAddress;
-    private User? User;
-    private Password Password = new Password();
-    private PasswordPolicy Policy = new PasswordPolicy();
-    private bool IsPasswordAssigned;
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [SupplyParameterFromQuery(Name = "invitation")] private string? InvitationToken { get; set; }
+    [SupplyParameterFromQuery(Name = "email")] private string? EmailAddress { get; set; }
+    [SupplyParameterFromQuery(Name = "objectid")] private string? ObjectId { get; set; }
+    [SupplyParameterFromForm(FormName = "new-password")] private NewPasswordFormData? Form { get; set; }
 
+    ModulesRegistry.Security.InvitationClaim? Invitation;
+    Person? InvitedPerson;
+    User? User;
+    bool IsPasswordAssigned;
+    string? FirstName;
 
     protected override async Task OnInitializedAsync()
     {
-        IsPasswordAssigned = false;
-        var hasObjectId = Navigator.TryGetQueryStringValue<string?>("objectid", out ObjectId);
-        var hasEmail = Navigator.TryGetQueryStringValue<string?>("email", out EmailAddress);
-        if (hasEmail && hasObjectId)
+        if (InvitationToken is not null)
         {
-            User = await UserService.FindOrCreateAsync(EmailAddress, ObjectId);
-        }
-    }
-
-    private async Task OnValidSubmit()
-    {
-        if (Password.IsConfirmed)
-        {
-            User = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Password.Value);
-            IsPasswordAssigned = User is not null;
-            if (IsPasswordAssigned)
-            {
-                await LoginLogoutHandler.SendSecurityNotification(User!, "PasswordChangedMail", "PasswordChangedMailSubject", MailSender, ContentService, Logger);
-            }
+            Invitation = InvitationTokens.Read(InvitationToken);
+            if (Invitation is not null) InvitedPerson = await UserService.FindInvitedPersonAsync(Invitation.PersonId, Invitation.EmailAddress);
         }
         else
         {
-            NotificationService.ShowError(Localizer["PasswordConfirmationDoesNotMatch"]);
+            User = await UserService.FindForConfirmationAsync(EmailAddress, ObjectId);
         }
+        Form ??= new NewPasswordFormData();
     }
 
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        if (Invitation is not null && InvitedPerson is { UserId: null })
+        {
+            var created = await UserService.CreateFromInvitationAsync(Invitation.PersonId, Invitation.EmailAddress, Invitation.IsReadOnly, Form.Value);
+            IsPasswordAssigned = created is not null;
+            FirstName = InvitedPerson.FirstName;
+        }
+        else if (User is not null && !User.IsLockedOut() && (User.IsPasswordReset() || User.IsNeverLoggedIn()))
+        {
+            var user = await UserService.SetPasswordAsync(EmailAddress, ObjectId, Form.Value);
+            IsPasswordAssigned = user is not null;
+            FirstName = user?.Person?.FirstName;
+            if (user is not null) await LoginLogoutHandler.SendSecurityNotification(user, "PasswordChangedMail", "PasswordChangedMailSubject", MailSender, ContentService, Logger);
+        }
+        Form = new NewPasswordFormData(); // The password is never rendered back.
+    }
 
-
-    private bool HasPassword => User is not null && User.HashedPassword.HasValue;
-    private bool PasswordReset => User is not null && User.PasswordResetAttempts > 0;
-    private bool IsLockedOut => User is not null && User.PasswordResetAttempts > 3;
+    RenderFragment PasswordForm => __builder =>
+    {
+        <PasswordPolicyView />
+        <EditTemplate Item="Form" FormName="new-password" OnValidSubmit="SaveAsync">
+            <Inputs>
+                <AppInputText Width="3" Label="Password" @bind-Value="Form!.Value" InputType="password" />
+                <AppInputText Width="3" Label="ConfirmPassword" @bind-Value="Form!.ConfirmValue" InputType="password" />
+            </Inputs>
+        </EditTemplate>
+    };
 }

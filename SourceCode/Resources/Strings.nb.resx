@@ -2805,4 +2805,7 @@
   <data name="StayOnPageWithUnsavedChanges" xml:space="preserve">
     <value>Du har endringer som ikke er lagret. Vil du bli på siden?</value>
   </data>
+  <data name="InvitationInvalid" xml:space="preserve">
+    <value>Invitasjonslenken er utløpt eller ikke gyldig. Be den som inviterte deg om en ny invitasjon.</value>
+  </data>
 </root>

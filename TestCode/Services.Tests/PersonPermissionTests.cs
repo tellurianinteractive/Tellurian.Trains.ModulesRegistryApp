@@ -66,6 +66,18 @@ public sealed class PersonPermissionTests
     }
 
     [TestMethod]
+    public async Task WhoMayInvite()
+    {
+        // Migration step 3.6: before, any signed-in user could invite anyone.
+        var member = await StoredAsync(Member);
+        Assert.IsTrue(await Target.MayInviteAsync(CountryAdministrator(), member), "A country administrator in the person's country.");
+        Assert.IsFalse(await Target.MayInviteAsync(CountryAdministrator(Norway), member), "A country administrator in another country.");
+        Assert.IsTrue(await Target.MayInviteAsync(Principal(GroupAdministrator), member), "Administers the members of the person's group.");
+        Assert.IsFalse(await Target.MayInviteAsync(Principal(GroupAdministrator), await StoredAsync(Stranger)), "A person outside the group.");
+        Assert.IsFalse(await Target.MayInviteAsync(Principal(Stranger), member), "Another user.");
+    }
+
+    [TestMethod]
     public async Task WhoMaySave()
     {
         Assert.AreEqual(1, await RenameAsync(GlobalAdministrator(), Norwegian));

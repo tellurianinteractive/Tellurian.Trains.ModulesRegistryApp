@@ -1,98 +1,119 @@
 ﻿@page "/Persons/{id:int}/Invite"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): inviting a person to become a user, for a country administrator in the person's country or one
+   who administers a group the person is a member of (MayInvitePersonAsync), when the person has an email address and has never
+   signed in. The message is previewed; the personal message and read-only are posted as InvitationFormData and the mail is sent.
+   A person without a user gets a link with a signed invitation token (InvitationTokens): the user account is created when the
+   invitation is answered (Users/Confirm), so sending an invitation writes nothing (decided 2026-11-21). A person who already has
+   a user (an earlier invitation) gets that user's confirmation link, and read-only is updated. *@
+
+@using ModulesRegistry.Forms.Persons
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject IMailSender MailSender
-@inject ITimeProvider TimeProvider
 @inject NavigationManager Navigator
-
+@inject IMailSender MailSender
 @inject PersonService PersonService
 @inject UserService UserService
 @inject ContentService ContentService
-@inject CountryService CountryService
+@inject ModulesRegistry.Security.InvitationTokens InvitationTokens
 
-<PageHeading Label="Invite" Context="Invitation?.Recipient.Person" PageAction="PageAction.Unknown" BackHref="@BackHref" />
+<PageHeading Label="Invite" Context="InvitedPerson" PageAction="PageAction.Unknown" BackHref="@BackHref" />
 
-@if (CanSend)
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+@if (InvitedPerson is not null && Form is not null && !InvitedPerson.HasEmail())
+{
+    <p>@Localizer["InvitedPersonHasNoEmail"]</p>
+}
+else if (Invitation is not null)
 {
     <h2>@Localizer["Message"]</h2>
     <hr />
-    @((MarkupString)DisplayedMessage)
+    @((MarkupString)Invitation.MessageHtml)
     <hr />
-    <input class="form-control" type="text" @bind="@PersonalMessage" @bind:event="oninput" @onkeyup="@UpdateMessage" />
-    <div>
-        <input class="form-check" type="checkbox" @bind="@IsReadOnly" />
-        <label class="form-check-label">@Localizer["UserIsReadOnly"]</label>
-    </div>
-    <div class="col-12">
-        <button class="btn btn-primary" @onclick="Send"><span class="@FontAwesome.Invite" />@Localizer["Send"]</button>
-    </div>
 }
-else
-{
-    @Localizer["InvitedPersonHasNoEmail"]
-}
+
+<EditTemplate Item="MayInvite ? Form : null" FormName="invitation" OnValidSubmit="SendAsync" ShowSaveButton="false">
+    <Inputs>
+        <AppInputText Width="12" Label="Message" @bind-Value="Form!.PersonalMessage" />
+        <AppInputCheck Width="4" Label="UserIsReadOnly" @bind-Value="Form!.IsReadOnly" />
+    </Inputs>
+    <Buttons>
+        <AppButton Label="Send" IsSubmit="true" IconName="@FontAwesome.Invite" AlwaysShowLabel="true" />
+    </Buttons>
+</EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
-    ClaimsPrincipal? Principal;
-    UserInvitation? Invitation;
-    // The persons list is static, so this page may have no history (Migration step 3.3).
-    string? BackHref => Invitation?.Recipient.Person is { } person ? $"Persons/Country/{person.CountryId}" : null;
-    private string DisplayedMessage = string.Empty;
-    private string? PersonalMessage;
-    private bool IsReadOnly;
-    private bool CanSend;
+    [SupplyParameterFromForm(FormName = "invitation")] private InvitationFormData? Form { get; set; }
 
-    override protected async Task OnInitializedAsync()
+    ClaimsPrincipal? Principal;
+    Person? InvitedPerson;
+    Person? Inviter;
+    UserInvitation? Invitation;
+    bool MayInvite;
+    string? FailureMessage;
+
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    string? BackHref => InvitedPerson is { } person ? $"Persons/Country/{person.CountryId}" : null;
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is null) return;
-        var userId = Principal.UserId();
-        var inviter = await PersonService.FindByUserIdAsync(Principal, userId);
-        if (inviter is null) return;
-        var invitedPerson = await PersonService.FindByIdAsync(Principal, Id);
-        if (invitedPerson.HasEmail())
+        InvitedPerson = await PersonService.FindByIdAsync(Principal, Id);
+        Inviter = await PersonService.FindByUserIdAsync(Principal, Principal.UserId());
+        if (InvitedPerson is null || Inviter is null) return;
+        MayInvite = InvitedPerson.MayBeInvited() && await PersonService.MayInviteAsync(Principal, InvitedPerson);
+        if (!MayInvite)
         {
-            CanSend = true;
-            var userCountry = await CountryService.FindById(invitedPerson.CountryId);
-            if (userCountry is null) return;
-            var invited = await UserService.FindOrCreateAsync(invitedPerson.PrimaryEmail(), null, IsReadOnly);
-            if (invited is null) return;
-            var message = await ContentService.GetTextContent("Invitation", invited.PreferredLanguage());
-            Invitation = new UserInvitation(invited, inviter, Localizer["InvitationToModuleRegistry"].ToString(), message, Navigator.BaseUri) { PersonalMessage = PersonalMessage };
-            DisplayedMessage = Invitation.MessageHtml;
+            if (InvitedPerson.HasEmail()) FailureMessage = "NotAuthorized";
+            return;
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= new InvitationFormData { IsReadOnly = InvitedPerson.User?.IsReadOnly == true };
+        Invitation = await CreateInvitationAsync(Form);
     }
 
-    void UpdateMessage()
+    /// <summary>The invitation to the person's user, or to a user not yet created (the token link).</summary>
+    async Task<UserInvitation?> CreateInvitationAsync(InvitationFormData form)
     {
-        if (Invitation is not null)
+        if (InvitedPerson is null || Inviter is null) return null;
+        var recipient = InvitedPerson.User ?? new User { EmailAddress = InvitedPerson.PrimaryEmail() };
+        recipient.Person = InvitedPerson; // For the name and the preferred language.
+        var message = await ContentService.GetTextContent("Invitation", recipient.PreferredLanguage());
+        var link = InvitedPerson.User is null
+            ? ModulesRegistry.Security.InvitationTokens.Link(Navigator.BaseUri, InvitationTokens.Create(new(InvitedPerson.Id, recipient.EmailAddress, form.IsReadOnly)))
+            : null;
+        return new UserInvitation(recipient, Inviter, Localizer["InvitationToModuleRegistry"].ToString(), message, Navigator.BaseUri)
         {
-            Invitation = Invitation with { PersonalMessage = PersonalMessage };
-            DisplayedMessage = Invitation.MessageHtml;
-            StateHasChanged();
-        }
+            PersonalMessage = form.PersonalMessage?.Trim(),
+            ConfirmationLink = link,
+        };
     }
 
-    private async Task Send()
+    async Task SendAsync()
     {
-        var count = 0;
-        if (Invitation is not null)
+        if (Form is null || !MayInvite || InvitedPerson is null) return;
+        var mail = (await CreateInvitationAsync(Form))?.MailMessage;
+        if (InvitedPerson.User is { } user && user.IsReadOnly != Form.IsReadOnly)
         {
-            Invitation.Recipient.IsReadOnly = IsReadOnly;
-            Invitation.Recipient.RegistrationTime = TimeProvider.Now;
-            _ = await UserService.UpdateAsync(Invitation.Recipient);
-
-            var message = Invitation.MailMessage;
-            if (message is not null)
-            {
-                count = await MailSender.SendMailMessageAsync(message);
-            }
-            NotificationService.ShowSuccessOrFailure(Localizer, count, "InvitationSent");
+            user.IsReadOnly = Form.IsReadOnly;
+            await UserService.UpdateAsync(user); // Only the user's own values are saved.
         }
+        var count = mail is null ? 0 : await MailSender.SendMailMessageAsync(mail);
+        if (count <= 0)
+        {
+            FailureMessage = "SaveFailed";
+            return;
+        }
+        HttpContext.SetFlashMessage("InvitationSent", FlashMessageLevel.Success);
+        Navigator.NavigateTo($"Persons/{Id}/Invite");
     }
 }

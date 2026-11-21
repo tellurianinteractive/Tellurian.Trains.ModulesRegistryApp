@@ -32,9 +32,16 @@ public abstract record UserMessage(User Recipient, string Subject, TextContent M
     }
 }
 
+/// <summary>
+/// An invitation to the app. <paramref name="Recipient"/> is the person's user, or, for a person without one, an unsaved user with the
+/// invited address and the person (the account is created when the invitation is answered); <see cref="ConfirmationLink"/> is then the
+/// link with the invitation's token.
+/// </summary>
 public record UserInvitation(User Recipient, Person Inviter, string Subject, TextContent Message, string BaseUri) : UserMessage(Recipient, Subject, Message)
 {
     public string? PersonalMessage { get; init; }
+    /// <summary>The link to answer the invitation; when null, the existing user's confirmation link.</summary>
+    public string? ConfirmationLink { get; init; }
     public bool HasPersonalMessage => !string.IsNullOrWhiteSpace(PersonalMessage);
     public override string MessageHtml => GetMessageHtml(this);
 
@@ -44,9 +51,10 @@ public record UserInvitation(User Recipient, Person Inviter, string Subject, Tex
         var preferredLanguage = invitation.Recipient.PreferredLanguage();
         var text = new StringBuilder(1000);
         invitation.AppendHelloPhrase(text);
-        if (invitation.HasPersonalMessage) text.Append($"<p>{invitation.PersonalMessage}</p>");
+        if (invitation.HasPersonalMessage) text.Append($"<p>{System.Net.WebUtility.HtmlEncode(invitation.PersonalMessage)}</p>"); // Typed by the inviter: text, not HTML.
         text.AppendLine(invitation.Message.AsHtml);
-        text.AppendLine(invitation.Recipient.ConfirmationLinkTag(invitation.BaseUri));
+        text.AppendLine(invitation.ConfirmationLink is null ? invitation.Recipient.ConfirmationLinkTag(invitation.BaseUri) :
+            $"<p><a href=\"{invitation.ConfirmationLink}\">{LanguageExtensions.GetLocalizedString("CreatePassword", preferredLanguage)}</a></p>");
         text.Append($"<p>{LanguageExtensions.GetLocalizedString("BestRegards", preferredLanguage)}</p>");
         text.Append($"<p>{invitation.Inviter.FirstName} {invitation.Inviter.LastName}</p>");
         return text.ToString();

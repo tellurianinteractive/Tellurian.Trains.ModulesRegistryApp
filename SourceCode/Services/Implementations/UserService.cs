@@ -89,27 +89,52 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
         return null;
     }
 
-    public async Task<User?> FindOrCreateAsync(string? emailAddress, string? objectId, bool isReadOnly = false)
+    /// <summary>
+    /// Creates the user account of an invited person who answers the invitation by setting a password (decided 2026-11-21: the account
+    /// is created then, not when the invitation is sent). The address must be the whole address of exactly one person, the invited one,
+    /// who has no user yet; otherwise null (also when the invitation was already answered).
+    /// </summary>
+    public async Task<User?> CreateFromInvitationAsync(int personId, string? emailAddress, bool isReadOnly, string? password)
     {
+        if (!emailAddress.IsEmailAddress || password.IsEmpty) return null;
         using var dbContext = Factory.CreateDbContext();
-        User? existing = null;
-        if (emailAddress.IsEmailAddress) existing = await FindByEmailAsync(emailAddress);
-        existing ??= await FindByObjectIdAsync(dbContext, objectId);
-        if (existing is not null) return existing;
-
-        if (!emailAddress.IsEmailAddress) return null;
-        var objectGuid = objectId.ToGuidOrNew();
-
-        // The whole address of exactly one person, who isn't a user yet: a shared address, as in a family, can't be a sign-in address.
         var persons = await dbContext.People.WithEmailAddress(emailAddress!).Take(2).ToListAsync();
-        if (persons is not [{ UserId: null } person]) return null;
-
-        User user = new() { ObjectId = objectGuid, EmailAddress = emailAddress, RegistrationTime = DateTimeOffset.Now, IsReadOnly = isReadOnly };
+        if (persons is not [{ UserId: null } person] || person.Id != personId) return null;
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+        var now = DateTimeOffset.Now;
+        User user = new()
+        {
+            ObjectId = Guid.NewGuid(), EmailAddress = emailAddress, RegistrationTime = now, IsReadOnly = isReadOnly,
+            HashedPassword = password.AsHashedPassword(), LastEmailConfirmationTime = now,
+        };
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
         person.UserId = user.Id;
         await dbContext.SaveChangesAsync();
-        return dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(p => p.Person).ThenInclude(p => p.Country).Single();
+        await transaction.CommitAsync();
+        return await FindByObjectIdAsync(dbContext, user.ObjectId.ToString().ToUpperInvariant());
+    }
+
+    /// <summary>
+    /// The invited person of an invitation link with the person's country, when the address is still the whole address of exactly that
+    /// person; null otherwise. <see cref="Person.UserId"/> tells whether the invitation is already answered.
+    /// </summary>
+    public async Task<Person?> FindInvitedPersonAsync(int personId, string? emailAddress)
+    {
+        if (!emailAddress.IsEmailAddress) return null;
+        using var dbContext = Factory.CreateDbContext();
+        var persons = await dbContext.People.AsNoTracking().WithEmailAddress(emailAddress!).Include(p => p.Country).Take(2).ToListAsync();
+        return persons is [var person] && person.Id == personId ? person : null;
+    }
+
+    /// <summary>The user of a confirmation link (password reset, or an invitation sent before 2026-11-21): the address and object id must match; never created.</summary>
+    public async Task<User?> FindForConfirmationAsync(string? emailAddress, string? objectId)
+    {
+        if (!emailAddress.IsEmailAddress) return null;
+        var objectGuid = objectId.ToGuidOrNull; if (objectGuid is null) return null;
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.Users.Include(u => u.Person).ThenInclude(p => p.Country)
+            .SingleOrDefaultAsync(u => u.EmailAddress == emailAddress && u.ObjectId == objectGuid);
     }
 
     public async Task<User?> UpdateAsync(User user)

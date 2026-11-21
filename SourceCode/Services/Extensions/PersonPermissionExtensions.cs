@@ -21,6 +21,21 @@ public static class PersonPermissionExtensions
             if (groupId < 1 || !await dbContext.MayAdministerGroupMembersAsync(principal, groupId).ConfigureAwait(false)) return false;
             return person.Id == 0 || await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == person.Id).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Who invites a person to become a user (Migration step 3.6): a global administrator, a country administrator in the person's
+        /// country, or one who administers the members of a group the person is a member of, as the persons and group members pages show
+        /// Invite. Never a read-only user. Before, any signed-in user could invite anyone.
+        /// </summary>
+        public async Task<bool> MayInvitePersonAsync(ClaimsPrincipal? principal, Person person)
+        {
+            if (principal is null || principal.IsReadOnly() || !principal.IsAuthenticated()) return false;
+            if (principal.IsCountryAdministratorInCountry(person.CountryId)) return true;
+            var groupIds = await dbContext.GroupMembers.AsNoTracking().Where(gm => gm.PersonId == person.Id).Select(gm => gm.GroupId).ToListAsync().ConfigureAwait(false);
+            foreach (var groupId in groupIds)
+                if (await dbContext.MayAdministerGroupMembersAsync(principal, groupId).ConfigureAwait(false)) return true;
+            return false;
+        }
     }
 
     extension(ClaimsPrincipal? principal)

@@ -57,14 +57,38 @@ public sealed class UserSignInAddressTests
     }
 
     [TestMethod]
-    public async Task AUserIsCreatedOnlyForTheOnePersonWithTheWholeAddress()
+    public async Task AnInvitationCreatesAUserOnlyForTheInvitedPersonWithTheWholeAddress()
     {
-        var erik = await Target.FindOrCreateAsync("erik@example.se", null);
-        var family = await Target.FindOrCreateAsync("familjen@example.se", null);
+        // Since 2026-11-21 the account is created when the invitation is answered (CreateFromInvitationAsync).
+        Assert.IsNull(await Target.CreateFromInvitationAsync(13, "erik@example.se", false, "Secret#2026abc"), "Not Olle with \"aerik@example.se\".");
+        Assert.IsNull(await Target.CreateFromInvitationAsync(12, "familjen@example.se", false, "Secret#2026abc"), "An address shared by two persons can't be a sign-in address.");
+
+        var erik = await Target.CreateFromInvitationAsync(11, "erik@example.se", true, "Secret#2026abc");
 
         Assert.IsNotNull(erik);
-        Assert.AreEqual(11, (await _factory.FindAsync<Person>(11))!.UserId == erik.Id ? 11 : 0, "Erik's person, not Olle's with \"aerik@example.se\".");
+        Assert.IsTrue(erik.IsReadOnly);
+        Assert.IsNotNull(erik.HashedPassword);
+        Assert.AreEqual(erik.Id, (await _factory.FindAsync<Person>(11))!.UserId);
         Assert.IsNull((await _factory.FindAsync<Person>(13))!.UserId);
-        Assert.IsNull(family, "An address shared by two persons can't be a sign-in address.");
+        Assert.IsNull(await Target.CreateFromInvitationAsync(11, "erik@example.se", false, "Secret#2026abc"), "An answered invitation creates no second user.");
+    }
+
+    [TestMethod]
+    public async Task TheInvitedPersonIsFoundOnlyByTheWholeAddress()
+    {
+        Assert.AreEqual(11, (await Target.FindInvitedPersonAsync(11, "erik@example.se"))?.Id);
+        Assert.IsNull(await Target.FindInvitedPersonAsync(13, "erik@example.se"));
+        Assert.IsNull(await Target.FindInvitedPersonAsync(12, "familjen@example.se"), "A shared address.");
+        Assert.IsNotNull((await Target.FindInvitedPersonAsync(10, "anna@example.se"))?.UserId, "Already a user: the invitation is answered.");
+    }
+
+    [TestMethod]
+    public async Task AConfirmationLinkNeedsTheAddressAndObjectIdAndCreatesNoUser()
+    {
+        var objectId = (await _factory.FindAsync<User>(5))!.ObjectId;
+        Assert.AreEqual(5, (await Target.FindForConfirmationAsync("anna@example.se", objectId.ToString()))?.Id);
+        Assert.IsNull(await Target.FindForConfirmationAsync("anna@example.se", Guid.NewGuid().ToString()));
+        Assert.IsNull(await Target.FindForConfirmationAsync("erik@example.se", Guid.NewGuid().ToString()));
+        Assert.IsNull((await _factory.FindAsync<Person>(11))!.UserId);
     }
 }
