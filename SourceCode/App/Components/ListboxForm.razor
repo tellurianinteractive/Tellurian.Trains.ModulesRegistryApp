@@ -16,6 +16,10 @@
                 <option value="@item.Id" selected="@(item.Id == SelectedId)">@item.Description</option>
             }
         </select>
+        @foreach (var field in HiddenFields ?? new Dictionary<string, string>())
+        {
+            <input type="hidden" name="@field.Key" value="@field.Value" />
+        }
         <noscript><AppButton Label="Ok" IsSubmit="true" /></noscript>
     </form>
 }
@@ -30,6 +34,8 @@
     [Parameter] public int SelectedId { get; set; }
     [Parameter] public string? ItemType { get; set; }
     [Parameter] public bool IsVisible { get; set; } = true;
+    /// <summary>Other query parameters to keep, since a GET form replaces the query string of its action.</summary>
+    [Parameter] public IReadOnlyDictionary<string, string>? HiddenFields { get; set; }
 
     private string Label => $"{Localizer["Select"]} {LocalizedItemType.ToLowerInvariant()}";
     private string LocalizedItemType => ItemType is null ? string.Empty : Localizer[ItemType].Value;

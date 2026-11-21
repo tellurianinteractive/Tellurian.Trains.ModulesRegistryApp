@@ -113,4 +113,27 @@ public sealed class ModuleFormTests
         Validator.TryValidateObject(form, new ValidationContext(form), results, validateAllProperties: true);
         return [.. results.SelectMany(r => r.MemberNames).Distinct()];
     }
+
+    [TestMethod]
+    public void ATransferHasOneNewOwner()
+    {
+        Assert.IsEmpty(InvalidMembers(new ModuleTransferFormData { OriginId = 1, ShareIndex = 2, NewPersonId = 5 }));
+        Assert.IsEmpty(InvalidMembers(new ModuleTransferFormData { OriginId = 1, ShareIndex = 1, NewGroupId = 3 }));
+        CollectionAssert.AreEquivalent(new[] { nameof(ModuleTransferFormData.NewPersonId), nameof(ModuleTransferFormData.NewGroupId) },
+            InvalidMembers(new ModuleTransferFormData { OriginId = 1, ShareIndex = 1, NewPersonId = 5, NewGroupId = 3 }));
+        CollectionAssert.AreEquivalent(new[] { nameof(ModuleTransferFormData.NewPersonId), nameof(ModuleTransferFormData.NewGroupId) },
+            InvalidMembers(new ModuleTransferFormData { OriginId = 1, ShareIndex = 1 }));
+    }
+
+    [TestMethod]
+    public void OnlyAPersonIsAnAssistant() =>
+        CollectionAssert.AreEqual(new[] { nameof(ModuleTransferFormData.NewGroupId) },
+            InvalidMembers(new ModuleTransferFormData { OriginId = 1, ShareIndex = ModuleTransferFormData.AssistantIndex, NewGroupId = 3 }));
+
+    [TestMethod]
+    [DataRow(1, 1.0)]
+    [DataRow(3, 1.0 / 3.0)]
+    [DataRow(ModuleTransferFormData.AssistantIndex, 0.0)]
+    public void TheShareIndexGivesThePercentage(int index, double expected) =>
+        Assert.AreEqual(expected, new ModuleTransferFormData { ShareIndex = index }.Percentage, 0.0001);
 }

@@ -150,4 +150,29 @@ public sealed class ModuleSaveTests
         Assert.IsNotNull(await Target.FindForEditAsync(Principal(Assistant), OwnersModule));
         Assert.IsNull(await Target.FindForEditAsync(Principal(Stranger), OwnersModule));
     }
+
+    [TestMethod]
+    public async Task OnlyTheSoleOwnerOrAnAdministratorInTheCountryDeletesAModule()
+    {
+        Assert.IsLessThanOrEqualTo(0, (await Target.DeleteAsync(Principal(Assistant), OwnersModule)).Count, "An assistant");
+        Assert.IsLessThanOrEqualTo(0, (await Target.DeleteAsync(Principal(Stranger), OwnersModule)).Count, "Another user");
+        Assert.IsLessThanOrEqualTo(0, (await Target.DeleteAsync(CountryAdministrator(OtherCountryId), OwnersModule)).Count, "A country administrator in another country");
+        Assert.IsNotNull(await _factory.FindAsync<Module>(OwnersModule));
+
+        Assert.IsGreaterThan(0, (await Target.DeleteAsync(Principal(Owner), OwnersModule)).Count);
+        Assert.IsNull(await _factory.FindAsync<Module>(OwnersModule));
+        Assert.IsNull(await _factory.FindAsync<ModuleExit>(Exit));
+    }
+
+    [TestMethod]
+    public async Task AModuleOfAStationIsNotDeleted()
+    {
+        await using (var dbContext = _factory.CreateDbContext())
+        {
+            var module = await dbContext.Modules.FindAsync(StrangersStationModule);
+            module!.StationId = 1;
+            await dbContext.SaveChangesAsync();
+        }
+        Assert.IsLessThanOrEqualTo(0, (await Target.DeleteAsync(Principal(Stranger), StrangersStationModule)).Count);
+    }
 }

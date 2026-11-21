@@ -2,72 +2,83 @@
 @page "/Modules/{id:int}/Delete/GroupOwned/{ownerGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): deleting a module is a POST form, for a user who may delete it (its sole owner, or an
+   administrator: MayDeleteModuleAsync), when it is not part of a station and not registered for a meeting that has not ended (all
+   also checked by ModuleService). Afterwards, a redirect to the modules list. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject PageHistory PageHistory
-
+@inject NavigationManager Navigator
 @inject ModuleService ModuleService
 
-<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" />
+<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="PageAction.Delete" BackHref="@BackHref" />
 
-<ul>
-    <li>@Localizer["IsOnlyOwner"]: @IsFullOwner.AsYesOrNoWithColor()</li>
-    <li>@Localizer["IsPartOfStation"]: @IsReferringStation.AsYesOrNoWithColor(true)</li>
-    <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>
-</ul>
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
 @if (Module is null)
 {
     <ActionMessage AlertType="stop" Label="NothingToDelete" />
 }
-else if (IsFullOwner && !IsReferringStation && !IsRegisteredInUpcomingMeeting)
-{
-    <AppButton Label="ConfirmDelete" IconName="@FontAwesome.Delete" OnClickCallback="OnDelete" />
-}
 else
 {
-    <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+    <ul>
+        <li>@Localizer["IsOnlyOwner"]: @MayDelete.AsYesOrNoWithColor()</li>
+        <li>@Localizer["IsPartOfStation"]: @IsReferringStation.AsYesOrNoWithColor(true)</li>
+        <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>
+    </ul>
+    @if (MayDelete && !IsReferringStation && !IsRegisteredInUpcomingMeeting)
+    {
+        <form method="post" @formname="delete-module" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <AppButton Label="ConfirmDelete" IconName="@FontAwesome.Delete" IsSubmit="true" AlwaysShowLabel="true" />
+        </form>
+    }
+    else
+    {
+        <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+    }
 }
 
-
 @code {
+    // The modules list is static, so this page may have no history (Migration step 3.3).
+    const string BackHref = "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerPersonId { get; set; }
     [Parameter] public int OwnerGroupId { get; set; }
 
     ClaimsPrincipal? Principal;
     Module? Module;
-
-    bool IsFullOwner;
+    bool MayDelete;
     bool IsReferringStation;
     bool IsRegisteredInUpcomingMeeting;
+    string? FailureMessage;
 
-    override protected async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    override protected async Task OnParametersSetAsync()
-    {
         var ownershipRef = ModuleOwnershipRef.PersonAndOrGroup(Principal, OwnerPersonId, OwnerGroupId);
         Module = await ModuleService.FindByIdAsync(Principal, Id, ownershipRef);
-        if (Module is not null)
-        {
-            IsReferringStation = ModuleService.IsReferringStation(Module);
-            IsFullOwner = ModuleService.IsFullOwner(Module, ownershipRef);
-            IsRegisteredInUpcomingMeeting = await ModuleService.IsSubmittedToUpcomingMeeting(Module);
-        }
+        if (Module is null) return;
+        MayDelete = await ModuleService.MayDeleteAsync(Principal, Module.Id);
+        IsReferringStation = ModuleService.IsReferringStation(Module);
+        IsRegisteredInUpcomingMeeting = await ModuleService.IsSubmittedToUpcomingMeeting(Module);
     }
 
-    async Task OnDelete()
+    async Task DeleteAsync()
     {
-        if (Module is not null)
+        if (Module is null || !MayDelete || IsReferringStation || IsRegisteredInUpcomingMeeting) return;
+        var (count, message) = await ModuleService.DeleteAsync(Principal, Module.Id);
+        if (count <= 0)
         {
-            var result = await ModuleService.DeleteAsync(Principal, Module.Id);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(3000);
-            PageHistory.NavigateBack();
+            FailureMessage = message;
+            return;
         }
+        HttpContext.SetFlashMessage("DeletedSuccessfully", FlashMessageLevel.Success);
+        Navigator.NavigateTo(BackHref);
     }
 }

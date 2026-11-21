@@ -32,5 +32,26 @@ public static class ModulePermissionExtensions
             }
             return false;
         }
+
+        /// <summary>
+        /// Who may delete a module (Migration step 3.6): its sole owner (a person owning 1/1, or a data administrator of a group owning it
+        /// 1/1), a global administrator, or a country administrator in the country of an owner. Not assistants. A read-only user may not.
+        /// Before, any country administrator could delete any module, and a group's module only an administrator.
+        /// </summary>
+        public async Task<bool> MayDeleteModuleAsync(ClaimsPrincipal? principal, int moduleId)
+        {
+            if (!principal.IsAuthenticated() || principal.IsReadOnly()) return false;
+            if (principal.IsGlobalAdministrator()) return true;
+            var owners = await dbContext.ModuleOwnerships.AsNoTracking()
+                .Where(mo => mo.ModuleId == moduleId && mo.OwnedShare > 0)
+                .Select(mo => new { mo.PersonId, mo.GroupId, mo.OwnedShare, CountryId = mo.PersonId.HasValue ? mo.Person.CountryId : mo.Group.CountryId })
+                .ToListAsync().ConfigureAwait(false);
+            if (principal.IsCountryAdministrator() && owners.Any(o => o.CountryId == principal.CountryId())) return true;
+            if (owners.Count != 1 || owners[0].OwnedShare < 1) return false;
+            var owner = owners[0];
+            var personId = principal.PersonId();
+            if (owner.PersonId.HasValue) return owner.PersonId == personId;
+            return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == owner.GroupId && gm.PersonId == personId && gm.IsDataAdministrator).ConfigureAwait(false);
+        }
     }
 }

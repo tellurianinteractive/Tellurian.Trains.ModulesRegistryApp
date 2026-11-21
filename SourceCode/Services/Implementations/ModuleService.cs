@@ -316,27 +316,30 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         return (await dbContext.SaveChangesAsync()).DeleteResult();
     }
 
+    /// <summary>
+    /// Deletes a module with its owners, exits and documents, by a user who may delete it (<c>MayDeleteModuleAsync</c>), when it is not
+    /// part of a station and not registered for a meeting that has not ended.
+    /// </summary>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int moduleId)
     {
-        var ownershipRef = principal.AsModuleOwnershipRef();
-        if (principal.MayDelete(ownershipRef))
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var entity = await dbContext.Modules.Include(m => m.ModuleOwnerships.Where(mo => mo.OwnedShare > 0)).Include(m => m.ModuleExits).SingleOrDefaultAsync(m => m.Id == moduleId);
-            if (entity is not null)
-            {
-                if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
-                if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
-                if (!principal.IsGlobalOrCountryAdministrator() && !IsFullOwner(entity, ownershipRef)) return Strings.NotFullOwner.DeleteResult();
-                await DocumentService.RemoveDocumentsAsync(dbContext, entity.DocumentIds());
-                foreach (var ownership in entity.ModuleOwnerships) dbContext.ModuleOwnerships.Remove(ownership);
-                foreach (var exit in entity.ModuleExits) dbContext.ModuleExits.Remove(exit);
-                dbContext.Modules.Remove(entity);
-                var result = await dbContext.SaveChangesAsync();
-                return result.DeleteResult();
-            }
-        }
-        return Strings.NothingToDelete.DeleteResult();
+        using var dbContext = Factory.CreateDbContext();
+        var entity = await dbContext.Modules.Include(m => m.ModuleOwnerships).Include(m => m.ModuleExits).SingleOrDefaultAsync(m => m.Id == moduleId);
+        if (entity is null) return Strings.NothingToDelete.DeleteResult();
+        if (!await dbContext.MayDeleteModuleAsync(principal, moduleId)) return Strings.NotFullOwner.DeleteResult();
+        if (IsReferringStation(entity)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.DeleteResult();
+        if (await IsSubmittedToUpcomingMeeting(entity)) return Strings.ModuleIsRegisteredForUpcomingMeeting.DeleteResult();
+        await DocumentService.RemoveDocumentsAsync(dbContext, entity.DocumentIds());
+        dbContext.ModuleOwnerships.RemoveRange(entity.ModuleOwnerships);
+        dbContext.ModuleExits.RemoveRange(entity.ModuleExits);
+        dbContext.Modules.Remove(entity);
+        var result = await dbContext.SaveChangesAsync();
+        return result.DeleteResult();
+    }
+
+    public async Task<bool> MayDeleteAsync(ClaimsPrincipal? principal, int moduleId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayDeleteModuleAsync(principal, moduleId);
     }
 
     public static bool IsReferringStation(Module? module) => module is not null && module.StationId.HasValue;
@@ -353,7 +356,8 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
     public async Task<bool> IsSubmittedToUpcomingMeeting(Module module)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.LayoutModules.AnyAsync(lm => lm.ModuleId == module.Id && lm.LayoutParticipant.Layout.Meeting.EndDate > TimeProvider.Now);
+        var today = TimeProvider.Today.ToDateTime(TimeOnly.MinValue); // A meeting has not ended until its last day is over, as in PersonDeletionPlan.
+        return await dbContext.LayoutModules.AnyAsync(lm => lm.ModuleId == module.Id && lm.LayoutParticipant.Layout.Meeting.EndDate >= today);
     }
 
     public async Task<(int Count, string Message)> CloneAsync(ClaimsPrincipal? principal, int id, ModuleOwnershipRef ownerRef)

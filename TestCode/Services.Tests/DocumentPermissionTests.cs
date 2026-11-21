@@ -244,7 +244,7 @@ public sealed class DocumentPermissionTests
     [TestMethod]
     public async Task ModuleDeleteDeletesItsDocuments()
     {
-        // As ModuleService.DeleteAsync, which can't run on SQLite (its meeting check compares DateTimeOffset).
+        // The document part of ModuleService.DeleteAsync (ModuleSaveTests deletes through the service).
         await using var dbContext = _factory.CreateDbContext();
         var module = await dbContext.Modules.Include(m => m.ModuleOwnerships).SingleAsync(m => m.Id == MemberModule);
 
