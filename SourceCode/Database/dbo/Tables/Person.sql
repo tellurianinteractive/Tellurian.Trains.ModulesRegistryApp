@@ -11,7 +11,6 @@
     [FremoOwnerSignature]   NVARCHAR (10) NULL,
     [FremoReservedAdresses] NVARCHAR(200) NULL,
     [FremoMemberNumber]     INT NULL, 
-    [DeletedTimestamp] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Person_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id]),
     CONSTRAINT [FK_Person_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id]) ON DELETE SET NULL

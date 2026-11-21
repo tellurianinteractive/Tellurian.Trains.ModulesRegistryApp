@@ -27,7 +27,6 @@ public partial class Person
     public string FremoOwnerSignature { get; set; }
     public string FremoReservedAdresses { get; set; }
     public int? FremoMemberNumber { get; set; }
-    public DateTimeOffset? DeletedTimestamp { get; set; }
     /// <summary>What the person is called, shown in quotation marks between first and middle name: Karl "Kalle" Svensson.</summary>
     public string NickName { get; set; }
 
