@@ -1,6 +1,14 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.0
+Released 2026-11-21
+- All pages are now plain web pages without a live connection: every form checks the entries as you type and stays open after saving, and lists, deletions and module registrations work with ordinary links and buttons.
+- Registering modules: joining a layout is now a button, and the days between the first and last checked day are filled in when saved.
+- An invited person's user account is created when the invitation is answered; the link works for 30 days.
+- Leaving a form with unsaved changes asks whether to stay on the page; a form just opened no longer counts as changed.
+- Security fix: vehicles, stations, tracks, modules, exits and their documents can only be changed by their owners and assistants, data administrators of the owning groups and administrators in the country; deleting a module requires its sole owner or an administrator.
+- Security fix: only administrators in the person's country or of the person's group can invite a person.
 ## Release 1.15.29
 Released 2026-11-21
 - Deleting a person now removes everything that belongs to the person, after a page shows what is deleted and what is changed. Modules the person owns alone can first be transferred or deleted. Only country administrators in the person's country can delete persons.
