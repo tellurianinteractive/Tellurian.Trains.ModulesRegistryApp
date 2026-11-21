@@ -2805,4 +2805,10 @@
   <data name="InvitationInvalid" xml:space="preserve">
     <value>Inbjudningslänken har gått ut eller är inte giltig. Be den som bjöd in dig om en ny inbjudan.</value>
   </data>
+  <data name="IsLockable" xml:space="preserve">
+    <value>Kan låsas?</value>
+  </data>
+  <data name="LockKeyName" xml:space="preserve">
+    <value>Nyckelns namn</value>
+  </data>
 </root>

@@ -15,7 +15,7 @@ public sealed class StationFormTests
     {
         Id = 5, PrimaryModuleId = 9, PdfInstructionId = 3, TypeOfSwitchgearId = 2, BoosterTypes = "DCC", HasTurntable = true,
         RegionId = 4, FullName = "Nedre Ullerud", Signature = "Nu", HasCargoCustomers = true, IsJunction = true, IsTerminus = false,
-        IsShadow = false, IsHarbour = true, IsKeyRequired = false, OperationInstructionsMarkdown = "# Instructions",
+        IsShadow = false, IsHarbour = true, LockKeyName = "A", OperationInstructionsMarkdown = "# Instructions",
     };
 
     private static StationTrack ExistingTrack() => new()

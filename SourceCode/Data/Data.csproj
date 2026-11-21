@@ -25,4 +25,9 @@
     <Using Include="Tellurian.Utilities.Printing" />
     <Using Include="Tellurian.Utilities.Text" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Tests set internal members, such as Station.IsKeyRequired (kept for compatibility, not set by the app). -->
+    <InternalsVisibleTo Include="ModulesRegistry.Data.Tests" />
+    <InternalsVisibleTo Include="ModulesRegistry.Services.Tests" />
+  </ItemGroup>
 </Project>

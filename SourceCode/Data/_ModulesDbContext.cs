@@ -204,6 +204,8 @@ public partial class ModulesDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(5);
 
+            entity.Property(e => e.LockKeyName).HasMaxLength(5);
+
             entity.HasOne(d => d.Region)
                 .WithMany(p => p.Stations)
                 .HasForeignKey(d => d.RegionId);

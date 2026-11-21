@@ -48,4 +48,7 @@ public class StationTrackFormData
 
     [Display(Name = "IsSiding")]
     public bool IsSiding { get; set; }
+
+    [Display(Name = "IsLockable")]
+    public bool IsLockable { get; set; }
 }

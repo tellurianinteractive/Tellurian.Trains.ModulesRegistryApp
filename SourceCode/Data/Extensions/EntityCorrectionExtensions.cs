@@ -19,6 +19,7 @@ public static class EntityCorrectionExtensions
         {
             station.FullName = station.FullName.Corrected(TextCase.InitialCapital);
             station.Signature = station.Signature.Corrected(countryCasings.Of(TextKinds.StationSignature, TextCase.InitialCapital));
+            station.LockKeyName = station.LockKeyName.Corrected(TextCase.AsTyped, Optional);
             foreach (var track in station.StationTracks ?? []) track.CorrectInput();
         }
     }

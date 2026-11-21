@@ -2805,4 +2805,10 @@
   <data name="InvitationInvalid" xml:space="preserve">
     <value>The invitation link has expired or is not valid. Ask the one who invited you for a new invitation.</value>
   </data>
+  <data name="IsLockable" xml:space="preserve">
+    <value>Is lockable?</value>
+  </data>
+  <data name="LockKeyName" xml:space="preserve">
+    <value>Lock key name</value>
+  </data>
 </root>

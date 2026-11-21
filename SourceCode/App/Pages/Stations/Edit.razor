@@ -43,7 +43,7 @@
         <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Form!.IsTerminus" />
         <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Form!.IsShadow" />
         <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Form!.IsHarbour" />
-        <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Form!.IsKeyRequired" />
+        <AppInputText Width="2" Label="LockKeyName" @bind-Value="Form!.LockKeyName" />
         <AppInputText Width="12" Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Form!.OperationInstructionsMarkdown" NumberOfRows="10" />
     </Inputs>
 </EditTemplate>
@@ -74,6 +74,7 @@
             <th>@Localizer["PlatformLength"]</th>
             <th>@Localizer["SpeedLimit"]</th>
             <th>@Localizer["Usage"]</th>
+            <th>@Localizer["IsLockable"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="track">
@@ -83,6 +84,7 @@
             <td>@track.PlatformLengthText()</td>
             <td>@track.SpeedLimitText()</td>
             <td>@track.UsageText()</td>
+            <td>@track.IsLockable.AsYesOrNo()</td>
             <td style="white-space: nowrap !important;">
                 <AppButton Label="Edit" Href="@TrackHref(track.Id)" />
                 <AppButton Label="Delete" Href="@($"{SelfHref}?deleteTrack={track.Id}")" />

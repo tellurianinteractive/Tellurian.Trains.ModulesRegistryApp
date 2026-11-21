@@ -18,7 +18,7 @@ public static class StationFormExtensions
             IsTerminus = entity.IsTerminus,
             IsShadow = entity.IsShadow,
             IsHarbour = entity.IsHarbour,
-            IsKeyRequired = entity.IsKeyRequired,
+            LockKeyName = entity.LockKeyName,
             OperationInstructionsMarkdown = entity.OperationInstructionsMarkdown,
         };
     }
@@ -41,7 +41,7 @@ public static class StationFormExtensions
             entity.IsTerminus = form.IsTerminus;
             entity.IsShadow = form.IsShadow;
             entity.IsHarbour = form.IsHarbour;
-            entity.IsKeyRequired = form.IsKeyRequired;
+            entity.LockKeyName = form.LockKeyName;
             entity.OperationInstructionsMarkdown = form.OperationInstructionsMarkdown;
             return entity;
         }
@@ -61,6 +61,7 @@ public static class StationFormExtensions
             UsageNote = entity.UsageNote,
             IsThroughTrack = entity.IsThroughTrack,
             IsSiding = entity.IsSiding,
+            IsLockable = entity.IsLockable,
         };
     }
 
@@ -82,6 +83,7 @@ public static class StationFormExtensions
             entity.UsageNote = form.UsageNote;
             entity.IsThroughTrack = form.IsThroughTrack;
             entity.IsSiding = form.IsSiding;
+            entity.IsLockable = form.IsLockable;
             return entity;
         }
     }

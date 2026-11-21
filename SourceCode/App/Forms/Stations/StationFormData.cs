@@ -48,8 +48,11 @@ public class StationFormData : IValidatableObject
     [Display(Name = "IsHarbour")]
     public bool IsHarbour { get; set; }
 
-    [Display(Name = "IsKeyRequired")]
-    public bool IsKeyRequired { get; set; }
+    // The old IsKeyRequired flag is not in the form (2026-11-22): a lock key name and lockable tracks say that a key is required.
+    [Display(Name = "LockKeyName")]
+    [StringLength(5)]
+    [OrdinaryText]
+    public string? LockKeyName { get; set; }
 
     [Display(Name = "OperatingInstructions")]
     public string? OperationInstructionsMarkdown { get; set; }

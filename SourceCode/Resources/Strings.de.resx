@@ -2805,4 +2805,10 @@
   <data name="InvitationInvalid" xml:space="preserve">
     <value>Der Einladungslink ist abgelaufen oder ungültig. Bitten Sie die Person, die Sie eingeladen hat, um eine neue Einladung.</value>
   </data>
+  <data name="IsLockable" xml:space="preserve">
+    <value>Abschließbar?</value>
+  </data>
+  <data name="LockKeyName" xml:space="preserve">
+    <value>Schlüsselname</value>
+  </data>
 </root>

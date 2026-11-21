@@ -136,6 +136,28 @@ public sealed class StationSaveTests
     }
 
     [TestMethod]
+    public async Task TheOldKeyFlagIsClearedWhenALockKeyNameAndALockableTrackSayIt()
+    {
+        // 2026-11-22: IsKeyRequired is kept for compatibility, but a lock key name and a lockable track say it instead.
+        await using (var dbContext = _factory.CreateDbContext())
+        {
+            (await dbContext.Stations.FindAsync(OwnersStation))!.IsKeyRequired = true;
+            await dbContext.SaveChangesAsync();
+        }
+        var named = Changed("Station");
+        named.LockKeyName = "A";
+        await Stations.SaveAsync(Principal(Owner), named);
+        Assert.IsTrue((await _factory.FindAsync<Station>(OwnersStation))!.IsKeyRequired, "A name alone, without a lockable track.");
+
+        var lockable = new StationTrack { Id = Track, StationId = OwnersStation, Designation = "1", DisplayOrder = 1, MaxTrainLength = 3, DirectionId = 10, IsLockable = true };
+        Assert.IsGreaterThan(0, (await Tracks.SaveOrUpdateAsync(Principal(Owner), lockable)).Count, "The track, and the station's flag.");
+
+        var stored = (await _factory.FindAsync<Station>(OwnersStation))!;
+        Assert.AreEqual("A", stored.LockKeyName);
+        Assert.IsFalse(stored.IsKeyRequired);
+    }
+
+    [TestMethod]
     public async Task AUserMayNotAddATrackToSomeonesStation() =>
         Assert.AreEqual(0, (await Tracks.SaveOrUpdateAsync(Principal(Stranger), new StationTrack { StationId = OwnersStation, Designation = "9", DisplayOrder = 9, MaxTrainLength = 3, DirectionId = 10 })).Count);
 

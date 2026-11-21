@@ -20,6 +20,8 @@ public partial class StationTrack
     public short? SpeedLimit { get; set; }
     public bool IsSiding { get; set; }
     public bool IsThroughTrack { get; set; }
+    /// <summary>The track can be locked and unlocked by a key, or released and revoked by the controlling station.</summary>
+    public bool IsLockable { get; set; }
     public string UsageNote { get; set; }
 
     public virtual Station Station { get; set; }
