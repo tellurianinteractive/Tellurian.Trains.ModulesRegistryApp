@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.4
+Released 2026-11-22
+- Tracks can be marked as lockable: locked and unlocked with a key, or released and revoked by the controlling station.
+- A station can have the name of its lock key, the key held at the controlling station. This replaces the checkbox "Is key required?": a key is required when the station has a lock key name and at least one lockable track (stations that had the checkbox set still count as requiring a key).
 ## Release 1.16.3
 Released 2026-11-22
 - Maintenance update.
