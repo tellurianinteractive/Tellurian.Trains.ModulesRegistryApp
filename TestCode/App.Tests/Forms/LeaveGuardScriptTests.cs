@@ -51,5 +51,14 @@ public sealed class LeaveGuardScriptTests
     public void AChangedSelectionIsUnsaved() => Assert.IsTrue(IsDirty("select('Form.CountryId', 0, 1)"));
 
     [TestMethod]
+    public void AListWithNoOptionMarkedSelectedShowsItsFirstOptionUnchanged() =>
+        // As "In partnership with" when empty: the browser selects the first option itself (Migration step 3.6).
+        Assert.IsFalse(IsDirty("{ name: 'Form.GroupDomainId', type: 'select-one', options: [{ selected: true, defaultSelected: false }, { selected: false, defaultSelected: false }] }"));
+
+    [TestMethod]
+    public void AListWithNoOptionMarkedSelectedIsChangedWhenAnotherIsChosen() =>
+        Assert.IsTrue(IsDirty("{ name: 'Form.GroupDomainId', type: 'select-one', options: [{ selected: false, defaultSelected: false }, { selected: true, defaultSelected: false }] }"));
+
+    [TestMethod]
     public void AFormShownAgainAfterAPostIsUnsaved() => Assert.IsTrue(IsDirty("text('Form.Name', 'Ica', 'Ica')", unsaved: true));
 }

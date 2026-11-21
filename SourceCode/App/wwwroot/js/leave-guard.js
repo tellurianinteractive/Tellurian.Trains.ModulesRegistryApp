@@ -15,7 +15,12 @@
         const type = (element.type || '').toLowerCase();
         if (type === 'hidden' || type === 'submit' || type === 'button' || type === 'reset') return false;
         if (type === 'checkbox' || type === 'radio') return element.checked !== element.defaultChecked;
-        if (element.options) return Array.prototype.some.call(element.options, function (o) { return o.selected !== o.defaultSelected; });
+        if (element.options) {
+            const options = Array.prototype.slice.call(element.options);
+            // A single list with no option marked selected shows its first option: the browser's default, not a change.
+            if (!element.multiple && options.length > 0 && !options.some(function (o) { return o.defaultSelected; })) return !options[0].selected;
+            return options.some(function (o) { return o.selected !== o.defaultSelected; });
+        }
         return element.value !== element.defaultValue;
     }
 

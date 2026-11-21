@@ -12,7 +12,7 @@
     <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString">
         @if (ShowPleaseSelect)
         {
-            <option value="">@PleaseSelectText</option>
+            <option value="" selected="@string.IsNullOrEmpty(CurrentValue)">@PleaseSelectText</option>
         }
         @if (Items is not null)
         {
