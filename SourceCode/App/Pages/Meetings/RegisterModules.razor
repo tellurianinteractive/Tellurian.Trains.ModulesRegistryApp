@@ -1,256 +1,244 @@
 ﻿@page "/MeetingParticipants/{MeetingParticipantId:int}/Layouts/{LayoutId:int}/RegisterModules"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): a participant's registration for a layout and its modules. Joining the layout is a POST button
+   (before, opening this page joined it: a GET must not change anything); the registration's fields are posted as
+   LayoutParticipantFormData; adding a package of modules and removing a module are POST buttons. LayoutParticipantService and
+   LayoutService decide what is allowed. After each POST, a redirect to this page; a failure is shown here. *@
+
+@using ModulesRegistry.Forms.Meetings
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@inject NavigationManager Navigator
 @inject ITimeProvider TimeProvider
-
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
 @inject LayoutParticipantService LayoutParticipantService
-@inject CountryService CountryService
-@inject GroupService GroupService
-@inject ModuleService ModuleService
 
-<PageHeading Label="RegisterModules" Context="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" />
+<PageHeading Label="RegisterModules" Context="Meeting" IconClass="@FontAwesome.Layout" PageAction="PageAction.List" HelpContext="RegisterModules" BackHref="@BackHref" />
 <div>
     <h2>@Localizer["Participant"]: @MeetingParticipant?.Person.Name()</h2>
 </div>
-@if (LayoutParticipant is null)
+
+@if (FailureMessage is not null)
 {
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else
+
+@if (MeetingParticipant is null || Layout is null)
 {
-    @if (IsAdministratorOrMeetingOrganiser || LayoutParticipant.Layout.IsOpenForRegistration(TimeProvider.LocalTime))
-    {
-        <EditTemplate Item="LayoutParticipant" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
-            <Inputs>
-                @if (MeetingParticipant.MayRegisterModules())
-                {
-                    <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="@LayoutParticipant.BringsModulesAfterAgreement" AlignWithFields="true" />
-                }
-                <AppInputText Label="Comment" @bind-Value="@LayoutParticipant.NoteToOrganiserMarkdown" />
-            </Inputs>
-        </EditTemplate>
-        @if (MeetingParticipant.MayRegisterModules())
-        {
-            <div style="margin-top: 12pt">
-                @if (Layout is not null)
-                {
-                    <div style="background-color: lightgoldenrodyellow">
-                        <h3>@Localizer["RegisteredModules"]</h3>
-
-
-                        <TableTemplate Items="ParticipantsRegisteredModules">
-                            <TableHeader>
-                                <th>@Localizer["Package"]</th>
-                                <th>@Localizer["Module"]</th>
-                                <th>@Localizer["Owner"]</th>
-                                <th>@Localizer["RegistrationTime"]</th>
-                                <th>@Localizer["Actions"]</th>
-                            </TableHeader>
-                            <RowTemplate Context="item">
-                                <td>@item.Module.PackageName()</td>
-                                <td>@item.Module.FullName</td>
-                                <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
-                                <td>@item.RegisteredTime.ToString("g")</td>
-                                <td>
-                                    @if (MayRemove)
-                                    {
-                                        <AppButton Label="Remove" OnClickCallback="(() => OnRemove(item.Id))" IconName="@FontAwesome.Modules" />
-                                    }
-                                    @if (item.HasCargoCustomers())
-                                    {
-                                        <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
-                                    }
-                                </td>
-                            </RowTemplate>
-                        </TableTemplate>
-                    </div>
-                    <h3>@Localizer["MyAvailableModules"]</h3>
-                    @if (AvailablePackages?.Any() == false)
-                    {
-                        <ActionMessage Label="NoModulesAvailable" AlertType="Info" />
-                    }
-                    else
-                    {
-                        <TableTemplate Items="AvailablePackages" Key="Key" HideNoRecordsToDisplay=true >
-                            <TableHeader>
-                                <th>@Localizer["Package"]</th>
-                                <th>@Localizer["Owner"]</th>
-                                <th>@Localizer["Modules"]</th>
-                                <th style="width: 120px">@Localizer["Actions"]</th>
-                            </TableHeader>
-                            <RowTemplate Context="item">
-                                <td style="white-space: nowrap">@item.Name</td>
-                                <td style="white-space: nowrap">@item.OwnerName</td>
-                                <td>@item.ToString()</td>
-                                <td align="right">
-                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterOwnedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
-                                </td>
-                            </RowTemplate>
-                        </TableTemplate>
-                    }
-                    @if (BorrowablePackages?.Any() == true)
-                    {
-                        <h3>@Localizer["OtherAvailableModules"]</h3>
-                        <TableTemplate Items="BorrowablePackages" Key="Key" HideNoRecordsToDisplay=true>
-                            <TableHeader>
-                                <th>@Localizer["Package"]</th>
-                                <th>@Localizer["Owner"]</th>
-                                <th>@Localizer["Modules"]</th>
-                                <th style="width: 120px">@Localizer["Actions"]</th>
-                            </TableHeader>
-                            <RowTemplate Context="item">
-                                <td style="white-space: nowrap">@item.Name</td>
-                                <td style="white-space: nowrap">@item.OwnerName</td>
-                                <td>@item.ToString()</td>
-                                <td align="right">
-                                    <AppButton Label="Add" OnClickCallback="@(() => OnRegisterBorrowedPackage(item.Id))" IsDisabled="!MeetingParticipant.MayRegisterModules()" />
-                                </td>
-                            </RowTemplate>
-                        </TableTemplate>
-                    }
-                }
-            </div>
-        }
-        else
-        {
-            <ActionMessage AlertType="Warning" Label="You are not present long enough to be able to register modules" />
-        }
-    }
-    else if (Layout.IsClosedForRegistration(TimeProvider.LocalTime))
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else if (!MayRegister)
+{
+    @if (Layout.IsClosedForRegistration(TimeProvider.LocalTime))
     {
         <ActionMessage AlertType="Warning" Label="MeetingIsClosedForRegistration" />
     }
 }
+else if (LayoutParticipant is null)
+{
+    <p>@Layout.DescriptionWithName()</p>
+    <form method="post" @formname="join-layout" @onsubmit="JoinAsync" data-enhance>
+        <AntiforgeryToken />
+        <AppButton Label="Participate" IsSubmit="true" IconName="@FontAwesome.Register" AlwaysShowLabel="true" />
+    </form>
+}
+else
+{
+    <EditTemplate Item="Form" FormName="layout-participant" ShowSaveButton="true" OnValidSubmit="SaveAsync">
+        <Inputs>
+            @if (MeetingParticipant.MayRegisterModules())
+            {
+                <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="Form!.BringsModulesAfterAgreement" AlignWithFields="true" />
+            }
+            <AppInputText Label="Comment" @bind-Value="Form!.NoteToOrganiserMarkdown" />
+        </Inputs>
+    </EditTemplate>
+    @if (MeetingParticipant.MayRegisterModules())
+    {
+        <form id="module-actions" method="post" @formname="module-actions" @onsubmit="ModuleActionAsync" data-enhance>
+            <AntiforgeryToken />
+        </form>
+        <div style="margin-top: 12pt">
+            <div style="background-color: lightgoldenrodyellow">
+                <h3>@Localizer["RegisteredModules"]</h3>
+                <TableTemplate Items="RegisteredModules">
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Module"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["RegistrationTime"]</th>
+                        <th>@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td>@item.Module.PackageName()</td>
+                        <td>@item.Module.FullName</td>
+                        <td>@item.Module.ModuleOwnerships.OwnerNames()</td>
+                        <td>@item.RegisteredTime.ToString("g")</td>
+                        <td>
+                            @if (MayRemove)
+                            {
+                                <AppButton Label="Remove" IsSubmit="true" Form="module-actions" Name="RemoveLayoutModuleId" Value="@item.Id.ToString()" IconName="@FontAwesome.Modules" />
+                            }
+                            @if (item.HasCargoCustomers())
+                            {
+                                <AppButton Label="Waybills" Title="InternalWaybills" Href="@WaybillsHref(item)" />
+                            }
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            </div>
+            <h3>@Localizer["MyAvailableModules"]</h3>
+            @if (!OwnedPackages.Any())
+            {
+                <ActionMessage Label="NoModulesAvailable" AlertType="Info" />
+            }
+            else
+            {
+                <TableTemplate Items="OwnedPackages" Key="Key" HideNoRecordsToDisplay="true">
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["Modules"]</th>
+                        <th style="width: 120px">@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td style="white-space: nowrap">@item.Name</td>
+                        <td style="white-space: nowrap">@item.OwnerName</td>
+                        <td>@item.ToString()</td>
+                        <td align="right">
+                            <AppButton Label="Add" IsSubmit="true" Form="module-actions" Name="AddOwnedPackageId" Value="@item.Id.ToString()" />
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
+            @if (BorrowablePackages.Any())
+            {
+                <h3>@Localizer["OtherAvailableModules"]</h3>
+                <TableTemplate Items="BorrowablePackages" Key="Key" HideNoRecordsToDisplay="true">
+                    <TableHeader>
+                        <th>@Localizer["Package"]</th>
+                        <th>@Localizer["Owner"]</th>
+                        <th>@Localizer["Modules"]</th>
+                        <th style="width: 120px">@Localizer["Actions"]</th>
+                    </TableHeader>
+                    <RowTemplate Context="item">
+                        <td style="white-space: nowrap">@item.Name</td>
+                        <td style="white-space: nowrap">@item.OwnerName</td>
+                        <td>@item.ToString()</td>
+                        <td align="right">
+                            <AppButton Label="Add" IsSubmit="true" Form="module-actions" Name="AddBorrowedPackageId" Value="@item.Id.ToString()" />
+                        </td>
+                    </RowTemplate>
+                </TableTemplate>
+            }
+        </div>
+    }
+    else
+    {
+        <ActionMessage AlertType="Warning" Label="You are not present long enough to be able to register modules" />
+    }
+}
 
 @code {
-
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int MeetingParticipantId { get; set; }
     [Parameter] public int LayoutId { get; set; }
+    [SupplyParameterFromForm(FormName = "layout-participant")] private LayoutParticipantFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "module-actions")] private int RemoveLayoutModuleId { get; set; }
+    [SupplyParameterFromForm(FormName = "module-actions")] private int AddOwnedPackageId { get; set; }
+    [SupplyParameterFromForm(FormName = "module-actions")] private int AddBorrowedPackageId { get; set; }
 
     ClaimsPrincipal? Principal;
-
     Meeting? Meeting;
     Layout? Layout;
     MeetingParticipant? MeetingParticipant;
     LayoutParticipant? LayoutParticipant;
-    ModuleOwnershipRef? OwnershipRef;
-
-    IEnumerable<LayoutModule> ParticipantsRegisteredModules = Enumerable.Empty<LayoutModule>();
-    IEnumerable<AvailableModule> ParticipantsAvailableModules = Enumerable.Empty<AvailableModule>();
-    IEnumerable<AvailableModule> ParticipantsBorrowableModules = Enumerable.Empty<AvailableModule>();
-
-    IEnumerable<ModulePackage>? AvailablePackages = Array.Empty<ModulePackage>();
-    IEnumerable<ModulePackage>? BorrowablePackages = Array.Empty<ModulePackage>();
-
+    IEnumerable<LayoutModule> RegisteredModules = [];
+    IEnumerable<ModulePackage> OwnedPackages = [];
+    IEnumerable<ModulePackage> BorrowablePackages = [];
     bool MayRemove;
-    bool IsAdministratorOrMeetingOrganiser;
+    bool IsLayoutOrganiser;
+    string? FailureMessage;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (MeetingParticipantId > 0)
+        MeetingParticipant = MeetingParticipantId > 0 ? await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId) : null;
+        if (MeetingParticipant is null) return;
+        Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
+        Layout = Meeting?.Layouts.SingleOrDefault(l => l.Id == LayoutId);
+        if (Layout is null) return;
+        IsLayoutOrganiser = await MeetingService.IsLayoutOrganiser(Principal, LayoutId);
+        MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider) || IsLayoutOrganiser;
+        LayoutParticipant = await LayoutParticipantService.GetByIdAsync(Principal, MeetingParticipant.Id, LayoutId);
+        if (LayoutParticipant is null)
         {
-            MeetingParticipant = await MeetingService.FindParticipantAsync(Principal, MeetingParticipantId);
-            if (MeetingParticipant is not null)
-            {
-                Meeting = await MeetingService.FindByIdWithLayoutsAsync(MeetingParticipant.MeetingId);
-                MayRemove = MeetingParticipant.MayUnregisterModules(Principal, Meeting, TimeProvider);
-                IsAdministratorOrMeetingOrganiser = LayoutId > 0 ?
-                    await MeetingService.IsLayoutOrganiser(Principal, LayoutId) :
-                    await MeetingService.MayManageMeetingParticipants(Principal, MeetingParticipant.MeetingId);
-                if (!MayRemove) MayRemove = IsAdministratorOrMeetingOrganiser;
-                if (Meeting is not null && LayoutId > 0)
-                {
-                    Layout = Meeting.Layouts.SingleOrDefault(l => l.Id == LayoutId);
-                    LayoutParticipant = await LayoutParticipantService.GetByIdAsync(Principal, MeetingParticipant.Id, LayoutId);
-                    if (LayoutParticipant is null && Layout is not null)
-                    {
-                        await RegisterParticipation(MeetingParticipant, Layout);
-                    }
-                    if (LayoutParticipant is not null)
-                    {
-                        OwnershipRef = ModuleOwnershipRef.Person(LayoutParticipant.PersonId);
-                        await Update();
-                    }
-                }
-            }
+            Form = null;
+            return;
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= LayoutParticipant.AsFormData();
+        RegisteredModules = await LayoutService.GetLayoutModulesAsync(Principal, LayoutId, MeetingParticipant.PersonId);
+        OwnedPackages = (await LayoutService.GetsAvailableModules(Principal, LayoutId, MeetingParticipant.PersonId)).AsModulePackages() ?? [];
+        BorrowablePackages = (await LayoutService.GetBorrowableModules(Principal, LayoutId, MeetingParticipant.PersonId)).AsModulePackages() ?? [];
     }
 
-    async Task RegisterParticipation(MeetingParticipant? meetingParticipant, Layout? layout)
+    bool MayRegister => Layout is not null && (IsLayoutOrganiser || Layout.IsOpenForRegistration(TimeProvider.LocalTime));
+    string SelfHref => $"MeetingParticipants/{MeetingParticipantId}/Layouts/{LayoutId}/RegisterModules";
+    string BackHref => MeetingParticipant is null ? "Meetings/Index" : $"Meetings/{MeetingParticipant.MeetingId}/Edit/{MeetingParticipant.PersonId}";
+    static string Key(ModulePackage package) => package.Name;
+    static string WaybillsHref(LayoutModule it) => $"Reports/Waybills/Layout/{it.LayoutParticipant.LayoutId}/Station/{it.LayoutStation.StationId}";
+
+    async Task JoinAsync()
     {
-        if (meetingParticipant is not null && layout is not null)
+        if (MeetingParticipant is null || Layout is null || LayoutParticipant is not null) return;
+        var participant = new LayoutParticipant { LayoutId = Layout.Id, MeetingParticipantId = MeetingParticipant.Id, PersonId = MeetingParticipant.PersonId };
+        var (count, message, _) = await LayoutParticipantService.SaveAsync(Principal, participant);
+        if (count <= 0)
         {
-            var participant = new LayoutParticipant { LayoutId = layout.Id, MeetingParticipantId = meetingParticipant.Id, PersonId = meetingParticipant.PersonId };
-            await SaveAsync(participant);
+            FailureMessage = message;
+            return;
         }
+        HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        Navigator.NavigateTo(SelfHref);
     }
 
-    async Task OnValidSubmit()
+    async Task SaveAsync()
     {
-        if (LayoutParticipant is not null) await SaveAsync(LayoutParticipant);
-    }
-
-    async Task SaveAsync(LayoutParticipant participant)
-    {
-        var result = await LayoutParticipantService.SaveAsync(Principal, participant);
-        LayoutParticipant = result.Entity;
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-    }
-
-    async Task OnRegisterOwnedPackage(int packageId)
-    {
-        var package = AvailablePackages?.SingleOrDefault(p => p.Id == packageId);
-        if (package is not null && Layout is not null && LayoutParticipant is not null)
+        if (Form is null || LayoutParticipant is null) return;
+        var participant = Form.AsEntity(LayoutParticipant);
+        var (count, message, _) = await LayoutParticipantService.SaveAsync(Principal, participant);
+        if (count == 0)
         {
-            var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Update();
+            FailureMessage = message;
+            return;
         }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(SelfHref);
     }
 
-    async Task OnRegisterBorrowedPackage(int packageId)
+    async Task ModuleActionAsync()
     {
-        var package = BorrowablePackages?.SingleOrDefault(p => p.Id == packageId);
-        if (package is not null && Layout is not null && LayoutParticipant is not null)
+        if (LayoutParticipant is null) return;
+        (int Count, string Message) result = (0, "SaveFailed");
+        // Only a module of this registration, or a package the page offers the participant (the services also check the rights).
+        if (RemoveLayoutModuleId > 0 && MayRemove && RegisteredModules.Any(m => m.Id == RemoveLayoutModuleId))
+            result = await LayoutService.RemoveModuleWithStationAsync(Principal, RemoveLayoutModuleId);
+        else if (AddOwnedPackageId > 0 && OwnedPackages.SingleOrDefault(p => p.Id == AddOwnedPackageId) is { } owned)
+            result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, owned);
+        else if (AddBorrowedPackageId > 0 && BorrowablePackages.SingleOrDefault(p => p.Id == AddBorrowedPackageId) is { } borrowed)
+            result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, borrowed);
+        if (result.Count <= 0)
         {
-            var result = await LayoutService.AddPackageModulesAsync(Principal, LayoutParticipant.Id, package);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Update();
+            FailureMessage = result.Message;
+            return;
         }
+        HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        Navigator.NavigateTo(SelfHref);
     }
-
-    async Task OnRemove(int layoutModuleId)
-    {
-        if (Layout is not null && LayoutParticipant is not null)
-        {
-            var result = await LayoutService.RemoveModuleWithStationAsync(Principal, layoutModuleId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Update();
-        }
-    }
-
-    async Task Update()
-    {
-        if (LayoutId > 0 && MeetingParticipant is not null)
-        {
-            ParticipantsRegisteredModules = await LayoutService.GetLayoutModulesAsync(Principal, LayoutId, MeetingParticipant.PersonId);
-            ParticipantsAvailableModules = await LayoutService.GetsAvailableModules(Principal, LayoutId, MeetingParticipant.PersonId);
-            ParticipantsBorrowableModules = await LayoutService.GetBorrowableModules(Principal, LayoutId, MeetingParticipant.PersonId);
-            AvailablePackages = ParticipantsAvailableModules.AsModulePackages();
-            BorrowablePackages = ParticipantsBorrowableModules.AsModulePackages();
-        }
-    }
-
-    string Key(ModulePackage package) => package.Name;
-    IEnumerable<Module> Available(IEnumerable<Module>? modules, int scaleId) => modules is null ? Array.Empty<Module>() : modules.Where(m => !m.IsUnavailable && m.ScaleId == scaleId && !AllRegisteredModuleIds.Contains(m.Id));
-    IEnumerable<int> AllRegisteredModuleIds => ParticipantsRegisteredModules.Select(m => m.ModuleId);
-    IEnumerable<ListboxItem> LayoutItems => Meeting is null ? Array.Empty<ListboxItem>() : Meeting.Layouts.Select(l => new ListboxItem(l.Id, l.DescriptionWithName())).ToList();
-    string WaybillsHref(LayoutModule it) => $"reports/waybills/layout/{it.LayoutParticipant.LayoutId}/station/{it.LayoutStation.StationId}";
-
 }

@@ -34,8 +34,8 @@ public sealed partial class HostingTests
         using var client = CreateClient();
 
         // Any page not yet moved to static SSR and not requiring sign-in (the start page until Migration step 3.2b, the meetings
-        // list until 3.3, a meeting's page until 3.6).
-        var response = await client.GetAsync("/Meetings/1/Register");
+        // list until 3.3, a meeting's page and registration until 3.6, then the user confirmation page).
+        var response = await client.GetAsync("/Users/Confirm/");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         var html = await response.Content.ReadAsStringAsync();

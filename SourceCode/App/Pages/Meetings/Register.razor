@@ -1,20 +1,29 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
 @page "/Meetings/{MeetingId:int}/Edit/{PersonId:int}"
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject ITimeProvider TimeProvider
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): registering for a meeting. Not signed in, the page tells how to attend. Those who manage the
+   meeting's participants choose a person with a GET form (country and person search, ?country= and ?person=, which opens
+   /Meetings/{id}/Edit/{person}) and see the participants, with Edit links and Unregister / Register again as POST buttons. Others
+   see their own registration. The days and times are posted as MeetingParticipantFormData (the days between the first and last
+   checked day are filled in when saved); leaving a layout is a POST button, joining one is on the module registration page.
+   MeetingService and LayoutParticipantService decide what is allowed. After each POST, a redirect to this page; the result is a
+   one-time message. *@
 
+@using ModulesRegistry.Forms.Meetings
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject ITimeProvider TimeProvider
 @inject MeetingService MeetingService
 @inject LayoutParticipantService LayoutParticipantService
 @inject CountryService CountryService
-@inject GroupService GroupService
 
 <PageHeading Label="Registration" Context="Meeting" IconClass="@FontAwesome.Register" PageAction="PageAction.Unknown" HelpContext="RegisterParticipant" BackHref="@BackHref" />
 
 @if (Meeting is null)
 {
-    <ActionMessage Label="@Localizer["GettingData"]" />
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
 }
 else if (Meeting.IsNotPermittingRegistrations())
 {
@@ -27,37 +36,41 @@ else if (Meeting.IsNotYetOpenForRegistration(TimeProvider.LocalTime))
 else
 {
     <PrincipalContentView Principal="Principal" NotAuthenticatedContent="AttendToMeeting">
-        <h4>
-            @Meeting.ParticipationSummary()
-        </h4>
+        <h4>@Meeting.ParticipationSummary()</h4>
         <hr />
-        @if (IsAdministratorOrMeetingOrganiser)
+        @if (FailureMessage is not null)
+        {
+            <ActionMessage Label="@FailureMessage" AlertType="stop" />
+        }
+        @if (MayManageParticipants)
         {
             <div class="noprint">
                 <h3>@Localizer["SelectPersonToRegister"]</h3>
-                <ListboxSelector ItemType="Country" OnSelected="OnSelectedCountry" Items="CountryItems" IsVisible="true" SelectedId="CountryId" LocalStorageKey="Country" ApplyOnChange="true" />
-                <div class="row g-3">
-                    <AppSearchPerson @bind-Value:get="SearchedPersonId" @bind-Value:set="OnSearchedPerson"
-                                     SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
-                                     MinimumSearchCharacters="MinimumSearchCharacters"
-                                     CountryId="CountryId" MeetingId="Meeting.Id" />
-                </div>
+                <ListboxForm Id="register-country" Action="@RegisterHref" Name="country" Items="CountryItems" ItemType="Country" SelectedId="CountryId" />
+                <form method="get" action="@RegisterHref" class="row g-3 align-items-end" data-enhance>
+                    <input type="hidden" name="country" value="@CountryId" />
+                    <AppSearchPerson Name="person" SearchLabel="@Localizer.SearchObject("Person", MinimumSearchCharacters)"
+                                     MinimumSearchCharacters="MinimumSearchCharacters" CountryId="CountryId" MeetingId="Meeting.Id" />
+                    <div class="col-md-2"><AppButton Label="Select" IsSubmit="true" AlwaysShowLabel="true" /></div>
+                </form>
                 <hr />
             </div>
         }
 
-        @if (IsAdministratorOrMeetingOrganiser && Participant is null)
+        @if (MayManageParticipants && Participant is null)
         {
             <div style="padding: 10px 0px">
                 <MailToButton Recipients="Meeting.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Meeting.Name" />
                 <MailCopyButton Recipients="Meeting.ParticipantsMails()" />
-
                 @foreach (var layout in Meeting.Layouts.Where(l => l.IsRegistrationPermitted))
                 {
-                    <AppButton Href="@($"layouts/{layout.Id}/modules")" ObjectName="@(layout.DescriptionWithName())" Label="Participants" IconName="@FontAwesome.Layout" />
+                    <AppButton Href="@($"Layouts/{layout.Id}/Modules")" ObjectName="@(layout.DescriptionWithName())" Label="Participants" IconName="@FontAwesome.Layout" />
                 }
             </div>
 
+            <form id="participant-actions" method="post" @formname="participant-actions" @onsubmit="ParticipantActionAsync" data-enhance>
+                <AntiforgeryToken />
+            </form>
             <TableTemplate Items="Meeting.Participants.OrderBy(p => p.Person.FirstName).ThenBy(p => p.Person.LastName)">
                 <TableHeader>
                     <th>@Localizer["Participant"]</th>
@@ -89,15 +102,15 @@ else
                     <td>@item.RegistrationTime.ToString("g")</td>
                     <td>@item.Participates(Localizer)</td>
                     <td>@item.ParticipatesInLayouts(Localizer)</td>
-                    <td class="noprint">
-                        <AppButton Label="Edit" OnClickCallback="() =>OnSelectedPerson(item.PersonId)" />
+                    <td class="noprint" style="white-space: nowrap;">
+                        <AppButton Label="Edit" Href="@EditHref(item.PersonId)" />
                         @if (item.CancellationTime.HasValue)
                         {
-                            <AppButton Label="Register" OnClickCallback="() =>OnReRegister(item.Id)" IconName="@FontAwesome.Register" />
+                            <AppButton Label="Register" IsSubmit="true" Form="participant-actions" Name="ReRegisterParticipantId" Value="@item.Id.ToString()" IconName="@FontAwesome.Register" />
                         }
                         else
                         {
-                            <AppButton Label="Unregister" OnClickCallback="() =>OnCancelledParticipation(item.PersonId)" IconName="@FontAwesome.Unregister" />
+                            <AppButton Label="Unregister" IsSubmit="true" Form="participant-actions" Name="CancelParticipantId" Value="@item.Id.ToString()" IconName="@FontAwesome.Unregister" />
                         }
                     </td>
                 </RowTemplate>
@@ -120,28 +133,30 @@ else
 
         @if (Participant is not null && !Meeting.IsFullyRegistered())
         {
-            <EditTemplate Item="Participant" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit(Participant)">
+            <EditTemplate Item="Form" FormName="participant" OnValidSubmit="SaveAsync" ShowSaveButton="MayEdit">
                 <Inputs>
                     <h3>@Localizer["Days"]</h3>
-                    <div class="col-md-2">
-                        <AppButton Label="AllDays" IconName="@FontAwesome.Verify" OnClickCallback="OnAllDays" />
-                    </div>
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay1" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(1).AsLocalized()" IsVisible="Meeting.DaysCount() > 0" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay2" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(2).AsLocalized()" IsVisible="Meeting.DaysCount() > 1" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay3" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(3).AsLocalized()" IsVisible="Meeting.DaysCount() > 2" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay4" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(4).AsLocalized()" IsVisible="Meeting.DaysCount() > 3" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay5" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(5).AsLocalized()" IsVisible="Meeting.DaysCount() > 4" />
-                    <AppInputCheck Width="1" @bind-Value="Participant.ParticipateDay6" @bind-Value:after="OnParticipationDaysChanged" Label="@Meeting.Day(6).AsLocalized()" IsVisible="Meeting.DaysCount() > 5" />
-                    <AppInputFill Width="@(Math.Max(0, 10 - Meeting.DaysCount()))" />
-                    <AppInputTimeOnly Width="2" @bind-Value="Participant.LatestArrivalTime" Label="@LatestArrivalTimeLabel(Participant)" />
-                    <AppInputTimeOnly Width="2" @bind-Value="Participant.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel(Participant)" />
+                    @if (Meeting.DaysCount() > 0) { <AppInputCheck Width="1" @bind-Value="Form!.Day1" Label="@Meeting.Day(1).AsLocalized()" /> }
+                    @if (Meeting.DaysCount() > 1) { <AppInputCheck Width="1" @bind-Value="Form!.Day2" Label="@Meeting.Day(2).AsLocalized()" /> }
+                    @if (Meeting.DaysCount() > 2) { <AppInputCheck Width="1" @bind-Value="Form!.Day3" Label="@Meeting.Day(3).AsLocalized()" /> }
+                    @if (Meeting.DaysCount() > 3) { <AppInputCheck Width="1" @bind-Value="Form!.Day4" Label="@Meeting.Day(4).AsLocalized()" /> }
+                    @if (Meeting.DaysCount() > 4) { <AppInputCheck Width="1" @bind-Value="Form!.Day5" Label="@Meeting.Day(5).AsLocalized()" /> }
+                    @if (Meeting.DaysCount() > 5) { <AppInputCheck Width="1" @bind-Value="Form!.Day6" Label="@Meeting.Day(6).AsLocalized()" /> }
+                    <AppInputFill Width="@(Math.Max(0, 12 - Meeting.DaysCount()))" />
+                    <ValidationMessage For="() => Form!.Day1" />
+                    <AppInputTimeOnly Width="2" @bind-Value="Form!.LatestArrivalTime" Label="@LatestArrivalTimeLabel" />
+                    <AppInputTimeOnly Width="2" @bind-Value="Form!.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel" />
                 </Inputs>
             </EditTemplate>
         }
-        @if (Participant?.Id > 0 && (IsAdministratorOrMeetingOrganiser || Meeting.PermitsRegistrations()))
+
+        @if (Participant?.Id > 0 && (MayManageParticipants || Meeting.PermitsRegistrations()))
         {
             <h4>@Localizer["SelectOrModifyLayoutParticipation"]</h4>
-            <TableTemplate Items="@LayoutParticipation(Meeting.Layouts.Where(l => l.IsRegistrationPermitted), Participant)">
+            <form id="layout-actions" method="post" @formname="layout-actions" @onsubmit="LeaveLayoutAsync" data-enhance>
+                <AntiforgeryToken />
+            </form>
+            <TableTemplate Items="@LayoutParticipations">
                 <TableHeader>
                     <th width="15%">@Localizer["Layout"]</th>
                     <th>@Localizer["Organiser"]</th>
@@ -158,15 +173,17 @@ else
                         }
                     </td>
                     <td>
-                        @if (IsAdministratorOrMeetingOrganiser || (item.Layout?.IsOpenForRegistration(TimeProvider.LocalTime) == true) && !item.Layout.IsFullyRegistered())
+                        @if (MayManageParticipants || (item.Layout.IsOpenForRegistration(TimeProvider.LocalTime) && !item.Layout.IsFullyRegistered()))
                         {
-                            <AppButton IconName="@RegisterModulesIconName(item)" Label="@RegisterModulesLabel(item)" Href="@RegisterModulesHref(item)" />
-                            <AppButton Label="Unregister" IconName="@FontAwesome.Cancel" Type="Danger" OnClickCallback="@(async () => await OnCancelLayoutParticipation(item))" />
+                            <AppButton IconName="@(item.IsParticipating ? FontAwesome.Edit : FontAwesome.Register)" Label="@(item.IsParticipating ? "Edit" : "Participate")" Href="@RegisterModulesHref(item)" />
+                            @if (item.LayoutParticipant is { } layoutParticipant)
+                            {
+                                <AppButton Label="Unregister" IconName="@FontAwesome.Cancel" Type="Danger" IsSubmit="true" Form="layout-actions" Name="LeaveLayoutParticipantId" Value="@layoutParticipant.Id.ToString()" />
+                            }
                         }
-
                         @if (item.LayoutParticipant?.LayoutStations.Any() == true)
                         {
-                            <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@($"layouts/{item.Layout?.Id}/waybills/{item.Participant.PersonId}")" />
+                            <AppButton Label="InternalWaybills" IconName="@FontAwesome.Waybills" Href="@($"Layouts/{item.Layout.Id}/Waybills/{item.Participant.PersonId}")" />
                         }
                     </td>
                 </RowTemplate>
@@ -175,204 +192,134 @@ else
     </PrincipalContentView>
 }
 
-
 @code {
     // The meetings list is static, so this page may have no history (Migration step 3.3).
-    string BackHref => "Meetings/Index";
+    const string BackHref = "Meetings/Index";
+    const int MinimumSearchCharacters = 3;
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int MeetingId { get; set; }
     [Parameter] public int PersonId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] private int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "person")] private int? SelectedPersonId { get; set; }
+    [SupplyParameterFromForm(FormName = "participant")] private MeetingParticipantFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "participant-actions")] private int CancelParticipantId { get; set; }
+    [SupplyParameterFromForm(FormName = "participant-actions")] private int ReRegisterParticipantId { get; set; }
+    [SupplyParameterFromForm(FormName = "layout-actions")] private int LeaveLayoutParticipantId { get; set; }
 
     ClaimsPrincipal? Principal;
-
-    int CountryId;
-    MeetingParticipant? Participant;
     Meeting? Meeting;
+    MeetingParticipant? Participant;
     IEnumerable<ListboxItem>? CountryItems;
-    int SearchedPersonId;
-    const int MinimumSearchCharacters = 3;
-
-    IEnumerable<LayoutParticipation> PersonsLayoutParticipation = LayoutParticipation(null, null);
-    bool IsAdministratorOrMeetingOrganiser;
+    IEnumerable<LayoutParticipation> LayoutParticipations = [];
+    int CountryId;
+    bool MayManageParticipants;
     bool HasParticipantsFromSeveralCountries;
+    string? FailureMessage;
 
-    bool MayEdit(MeetingParticipant mp) => Meeting?.Id > 0 && (
-        IsAdministratorOrMeetingOrganiser ||
-        (!mp.CancellationTime.HasValue && mp.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.Now.Date)));
-
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (MeetingId > 0)
+        Meeting = MeetingId > 0 ? await MeetingService.FindByIdAsync(MeetingId) : null;
+        if (Meeting is null || !Principal.IsAuthenticated()) return;
+        HasParticipantsFromSeveralCountries = Meeting.HasParticipantsFromSeveralCountries();
+        // Global administrators, country administrators in the arranging group's country, and the meeting administrators of the
+        // arranging group or of a layout's group register participants from any country.
+        MayManageParticipants = await MeetingService.MayManageMeetingParticipants(Principal, Meeting.Id);
+        if (SelectedPersonId > 0 && PersonId == 0 && MayManageParticipants)
         {
-            Meeting = await MeetingService.FindByIdAsync(MeetingId);
-            if (Meeting is not null)
-            {
-                HasParticipantsFromSeveralCountries = Meeting.HasParticipantsFromSeveralCountries();
-                // Global administrators, country administrators in the arranging group's country, and the meeting administrators
-                // of the arranging group or of a layout's group register participants from any country.
-                IsAdministratorOrMeetingOrganiser = await MeetingService.MayManageMeetingParticipants(Principal, Meeting.Id);
-                if (PersonId > 0 && (IsAdministratorOrMeetingOrganiser || PersonId == Principal.PersonId()))
-                {
-                    await OnSelectedPerson(PersonId);
-                }
-                else
-                {
-                    if (IsAdministratorOrMeetingOrganiser)
-                    {
-                        CountryItems = await CountryService.ListboxItemsAsync(Principal, IsAdministratorOrMeetingOrganiser);
-                        if (CountryId == 0) CountryId = Principal.CountryId();
-                    }
-                    else
-                    {
-                        await OnSelectedPerson(Principal.PersonId());
-                    }
-                }
-            }
+            Navigator.NavigateTo(EditHref(SelectedPersonId.Value)); // The chosen person's registration has its own address.
+            return;
+        }
+        if (MayManageParticipants)
+        {
+            CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+            CountryId = SelectedCountryId ?? Principal.CountryId();
+        }
+        var personId = PersonId > 0 && (MayManageParticipants || PersonId == Principal.PersonId()) ? PersonId : MayManageParticipants ? 0 : Principal.PersonId();
+        if (personId > 0)
+        {
+            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId) ?? Meeting.DefaultParticipant(personId);
+            LayoutParticipations = Participant.Id > 0 ? Meeting.Layouts.Where(l => l.IsRegistrationPermitted).Select(l => new LayoutParticipation(l, Participant)).ToList() : [];
+            // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+            Form ??= Participant.AsFormData();
+        }
+        else
+        {
+            Form = null;
         }
     }
 
-    void OnSelectedCountry(int countryId)
+    bool MayEdit => Meeting?.Id > 0 && Participant is not null && (
+        MayManageParticipants ||
+        (!Participant.CancellationTime.HasValue && Participant.PersonId == Principal.PersonId() && Meeting.IsOpenForRegistration(TimeProvider.LocalTime)));
+
+    string RegisterHref => $"Meetings/{MeetingId}/Register";
+    string EditHref(int personId) => $"Meetings/{MeetingId}/Edit/{personId}";
+    string SelfHref => PersonId > 0 ? EditHref(PersonId) : RegisterHref;
+    string RegisterModulesHref(LayoutParticipation it) => $"MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
+
+    async Task SaveAsync()
     {
-        if (MeetingId > 0 && countryId > 0)
+        if (Form is null || Participant is null || !MayEdit) return;
+        // Only the days and times change on the loaded registration; saving also registers again a cancelled one.
+        var participant = Form.AsEntity(Participant);
+        participant.CancellationTime = null;
+        var (count, message, _) = await MeetingService.SaveAsync(Principal, participant);
+        if (count == 0)
         {
-            CountryId = countryId;
-            PersonId = 0;
-            SearchedPersonId = 0;
+            FailureMessage = message;
+            return;
         }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(SelfHref);
     }
 
-    /// <summary>
-    /// Opens the person's existing registration, or a new registration if the person isn't a participant yet.
-    /// </summary>
-    async Task OnSearchedPerson(int personId)
+    async Task ParticipantActionAsync()
     {
-        SearchedPersonId = personId;
-        await OnSelectedPerson(personId);
-    }
-
-    async Task OnSelectedPerson(int personId)
-    {
-        if (Meeting is not null && personId > 0)
+        if (Meeting is null || !MayManageParticipants) return;
+        (int Count, string? Message) result = (0, null);
+        if (CancelParticipantId > 0 && Meeting.Participants.Any(p => p.Id == CancelParticipantId))
+            result = await MeetingService.CancelMeetingParticipaction(Principal, CancelParticipantId);
+        else if (ReRegisterParticipantId > 0 && Meeting.Participants.Any(p => p.Id == ReRegisterParticipantId))
         {
-            PersonId = personId;
-            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
-            if (Participant is null)
-            {
-                Participant = Meeting.DefaultParticipant(personId);
-            }
-            else
-            {
-                PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
-            }
+            var (count, message, _) = await MeetingService.ReRegisterMeetingParticipaction(Principal, ReRegisterParticipantId);
+            result = (count, message);
         }
-    }
-
-    async Task OnCancelledParticipation(int personId)
-    {
-        if (MeetingId > 0 && personId > 0)
+        if (result.Count <= 0)
         {
-            PersonId = personId;
-            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
-            if (Participant is null) return;
-            await OnCancel(Participant.Id);
+            FailureMessage = result.Message ?? "SaveFailed"; // A service message is a text, not a key: shown here, not after a redirect.
+            return;
         }
+        HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        Navigator.NavigateTo(SelfHref);
     }
 
-    async Task OnCancelLayoutParticipation(LayoutParticipation? participant)
+    async Task LeaveLayoutAsync()
     {
-        if (participant is null) return;
-        var result = await LayoutParticipantService.DeleteAsync(Principal, participant.LayoutParticipant?.Id);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await OnSelectedPerson(participant.Participant.PersonId);
-    }
-
-
-    async Task OnValidSubmit()
-    {
-        if (Meeting is not null && Participant is not null)
+        // Only a layout registration of this participant (the service also checks the rights).
+        if (Participant is null || !Participant.LayoutParticipations.Any(lp => lp.Id == LeaveLayoutParticipantId)) return;
+        var (count, message) = await LayoutParticipantService.DeleteAsync(Principal, LeaveLayoutParticipantId);
+        if (count <= 0)
         {
-            var personId = Participant.PersonId;
-            Participant.CancellationTime = null;
-            var result = await MeetingService.SaveAsync(Principal, Participant);
-            Meeting = await MeetingService.FindByIdAsync(MeetingId);
-            Participant = await MeetingService.FindParticipantAsync(Principal, MeetingId, personId);
-            PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            FailureMessage = message ?? "DeleteFailed";
+            return;
         }
+        HttpContext.SetFlashMessage("DeletedSuccessfully", FlashMessageLevel.Success);
+        Navigator.NavigateTo(SelfHref);
     }
-
-    async Task OnCancel(int particpantId)
-    {
-        var result = await MeetingService.CancelMeetingParticipaction(Principal, particpantId);
-        Participant = await MeetingService.FindParticipantAsync(Principal, particpantId);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-    }
-
-    async Task OnReRegister(int participantId)
-    {
-        if (MeetingId > 0 && participantId > 0)
-        {
-            var result = await MeetingService.ReRegisterMeetingParticipaction(Principal, participantId);
-            Participant = await MeetingService.FindParticipantAsync(Principal, participantId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
-
-
-    void OnParticipateInLayout(int layoutId)
-    {
-        if (Participant is null) return;
-        var added = Meeting?.Layouts.SingleOrDefault(l => l.Id == layoutId);
-        if (added is null) return;
-        if (Participant.LayoutParticipations.Any(l => l.Id == layoutId)) return;
-        LayoutParticipant layoutParticipant = new() { LayoutId = layoutId, MeetingParticipantId = Participant.Id, PersonId = Participant.PersonId };
-        Participant.LayoutParticipations.Add(layoutParticipant);
-        PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
-    }
-
-
-    void OnCancelParticipateInLayout(int layoutId)
-    {
-        if (Participant is null) return;
-        var removed = Participant.LayoutParticipations.SingleOrDefault(l => l.LayoutId == layoutId);
-        if (removed is not null) Participant.LayoutParticipations.Remove(removed);
-        PersonsLayoutParticipation = LayoutParticipation(Meeting?.Layouts, Participant);
-    }
-
-
-    static IEnumerable<LayoutParticipation> LayoutParticipation(IEnumerable<Layout>? meetingLayouts, MeetingParticipant? participant)
-    {
-        if (meetingLayouts is null || meetingLayouts.Count() == 0 || participant is null) return [];
-        return meetingLayouts.Select(meetingLayout => new LayoutParticipation(meetingLayout, participant)).ToList();
-    }
-
-    string CancelParticipateButtonLabel(Layout layout) => $"{Localizer["Cancel"]} {layout.Description}";
-    string ParticipateButtonLabel(Layout layout) => $"{Localizer["Participate"]} {layout.Description}";
-    string RegisterModulesHref(LayoutParticipation it) => $"/MeetingParticipants/{it.Participant.Id}/Layouts/{it.Layout.Id}/RegisterModules";
-    string RegisterModulesLabel(LayoutParticipation it) => it.IsParticipating ? Localizer["Edit"] : Localizer["Participate"];
-    string RegisterModulesIconName(LayoutParticipation it) => it.IsParticipating ? FontAwesome.Edit : FontAwesome.Register;
 
     string ParticipantStatusStyle(MeetingParticipant? it) => it is null ? string.Empty : it.CancellationTime.HasValue ? "color: red; text-decoration: line-through;" : string.Empty;
 
-    /// <summary>Checks the days between the first and last checked day, so participation is continuous.</summary>
-    void OnParticipationDaysChanged() => Participant?.FillParticipationDaysBetween();
-
-    void OnAllDays()
-    {
-        if (Meeting is not null) Participant?.ParticipateAllDays(Meeting.DaysCount());
-    }
-
-    // The labels name the first and last checked day; built from the page's meeting, since a new participant has no Meeting yet.
-    string LatestArrivalTimeLabel(MeetingParticipant? it) => WithDay(Localizer["LatestArrivalTime"], it?.FirstParticipationDayNumber() ?? 0);
-    string EarliestDepartureTimeLabel(MeetingParticipant? it) => WithDay(Localizer["EarliestDepartureTime"], it?.LastParticipationDayNumber() ?? 0);
+    // The labels name the first and last checked day of the stored registration.
+    string LatestArrivalTimeLabel => WithDay(Localizer["LatestArrivalTime"], Participant?.FirstParticipationDayNumber() ?? 0);
+    string EarliestDepartureTimeLabel => WithDay(Localizer["EarliestDepartureTime"], Participant?.LastParticipationDayNumber() ?? 0);
     string WithDay(string label, int day) => Meeting is null || day == 0 ? label : $"{label} {DayInText(Meeting.Day(day).AsLocalized())}";
 
     // Day names are written in lower case in running text in Swedish, Danish and Norwegian, but capitalised in English and German.
     static string DayInText(string dayName) =>
         LanguageExtensions.CurrentCulture.TwoLetterISOLanguageName is "sv" or "da" or "nb" ? dayName.ToLower(LanguageExtensions.CurrentCulture) : dayName;
-    string MeetingOpensForRegistration(Meeting? it) =>
-        it is null ? string.Empty :
-        string.Format(Localizer["MeetingOpensForRegistrationAtDate"], it.RegistrationOpensDate());
 
+    string MeetingOpensForRegistration(Meeting it) => string.Format(Localizer["MeetingOpensForRegistrationAtDate"], it.RegistrationOpensDate());
 }

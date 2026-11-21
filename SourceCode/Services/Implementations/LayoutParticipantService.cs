@@ -9,7 +9,7 @@
         {
             if (principal.IsAuthenticated())
             {
-                var dbContect = Factory.CreateDbContext();
+                using var dbContect = Factory.CreateDbContext();
 
                 return await dbContect.LayoutParticipants.AsNoTracking()
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
@@ -20,7 +20,7 @@
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(x => x.Station).ThenInclude(x => x.StationTracks)
                     .Include(x => x.Person).ThenInclude(p => p.Country)
                     .Include(x => x.MeetingParticipant).ThenInclude(x => x.Meeting)
-                    .Where(x => x.LayoutId == layoutId && x.MeetingParticipant.CancellationTime == null && x.MeetingParticipant.Person.DeletedTimestamp.HasValue == false)
+                    .Where(x => x.LayoutId == layoutId && x.MeetingParticipant.CancellationTime == null)
                     .ToListAsync().ConfigureAwait(false);
             }
             return [];
@@ -30,9 +30,9 @@
         {
             if (principal.IsAuthenticated())
             {
-                var dbContect = Factory.CreateDbContext();
+                using var dbContect = Factory.CreateDbContext();
                 return await dbContect.LayoutParticipants.AsNoTracking()
-                    .Where(x => x.LayoutId == layoutId && x.MeetingParticipantId == meetingPartictipantId && x.MeetingParticipant.Person.DeletedTimestamp.HasValue == false)
+                    .Where(x => x.LayoutId == layoutId && x.MeetingParticipantId == meetingPartictipantId)
                     .Include(x => x.Layout).ThenInclude(x => x.Meeting)
                     .Include(x => x.LayoutModules).ThenInclude(x => x.Module).ThenInclude(m => m.Standard)
                     .Include(x => x.LayoutStations).ThenInclude(ls => ls.Station)
