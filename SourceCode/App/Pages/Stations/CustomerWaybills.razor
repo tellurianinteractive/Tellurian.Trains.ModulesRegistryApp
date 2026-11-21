@@ -1,7 +1,6 @@
 ﻿@page "/Stations/{stationId:int}/Customers/{id:int}/Waybills"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a freight customer's waybills. Update generates the missing waybills from the cargo flows (the
    AddGenerated*Waybills procedures) as a POST form; each waybill's print settings are edited on CustomerWaybillEdit. Only those
    who may edit the station get Update and Edit. While Update runs, busy-form.js shows "Updating waybills". The customer must be at the station in the address. *@

@@ -1,7 +1,6 @@
 ﻿@page "/Throttles/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the region and cargo forms: a POST of WiFredThrottleFormData, validated in the browser
    and again on the server; the id comes from the address. Throttle managers choose the owner among FREMO members of a country,
    chosen with the GET form above the form (?country=); others register throttles for themselves. A validated throttle's MAC

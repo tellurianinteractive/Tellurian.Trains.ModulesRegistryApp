@@ -1,6 +1,5 @@
 ﻿@page "/Users/Settings"
 
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6). Signed in: the user's own settings, a POST of UserSettingsFormData saved by PersonService (the
    person themselves may save; names, country and rights are kept). Not signed in: the password reset, where "I have read" is a link
    to ?read=true and Send a POST form. Each POST is followed by a redirect with a one-time message. *@

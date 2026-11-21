@@ -4,7 +4,6 @@
 @page "/Persons/Country/{CountryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3), as the cargo list: the filter fields are in the column headers (FilterColumn), joined to
    the GET form persons-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
    /Persons?country=..., which redirects to the country's address. Unlock is a POST form (antiforgery) with the user's id

@@ -1,6 +1,5 @@
 ﻿@page "/Users/Confirm/"
 
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): setting a password from a link in a mail, without signing in.
    - ?invitation={token}: an invitation (InvitationTokens). The user account is created when the password is saved
      (UserService.CreateFromInvitationAsync, decided 2026-11-21); opening the link writes nothing. An answered invitation says so.

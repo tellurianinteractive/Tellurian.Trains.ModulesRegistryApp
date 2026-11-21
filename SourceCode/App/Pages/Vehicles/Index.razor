@@ -4,7 +4,6 @@
 @page "/vehicles/country/{CountryId:int}"
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3): the country is chosen with a GET form to /vehicles/admin?country=..., which redirects to
    the country's address; the list and its filter are in VehiclesList. The addresses start with /vehicles/admin, so the
    menu's Vehicles link doesn't also light up for My vehicles (/vehicles/my); the old /vehicles addresses redirect. *@

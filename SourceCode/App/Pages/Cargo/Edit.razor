@@ -1,7 +1,6 @@
 ﻿@page "/Cargo/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the region form: a POST of CargoFormData, validated with its DataAnnotations in the
    browser and again on the server; the id comes from the address. After saving, a redirect to this form, which reads the cargo
    back, so the user sees what was saved, including corrections; the result is a one-time message. A failed save shows the posted

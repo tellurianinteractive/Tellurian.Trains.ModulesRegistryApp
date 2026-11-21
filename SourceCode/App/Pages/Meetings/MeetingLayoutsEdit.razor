@@ -1,7 +1,6 @@
 ﻿@page "/Meetings/{id:int}/Layouts/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a meeting's layouts, with Add, Edit and the layout's pages for its organisers. Delete is a link
    that adds ?delete={layout id}, which shows a confirmation with a POST form; MeetingService deletes only for meeting organisers. *@
 

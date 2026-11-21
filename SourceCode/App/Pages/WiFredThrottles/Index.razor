@@ -2,7 +2,6 @@
 @page "/Throttles/{personId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
    the GET form throttles-filter, so filter, sort and page are in the query string. Validate is a POST form (antiforgery)
    with the throttle's id in the row's button. Delete is a link that adds ?delete={id}, which shows Confirm delete in that

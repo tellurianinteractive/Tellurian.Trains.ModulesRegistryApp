@@ -1,7 +1,6 @@
 ﻿@page "/layouts/{LayoutId:int}/waybills/{PersonId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a participant's stations in a layout, with links to their internal waybills and freight customers. *@
 
 @inject IStringLocalizer<Strings> Localizer

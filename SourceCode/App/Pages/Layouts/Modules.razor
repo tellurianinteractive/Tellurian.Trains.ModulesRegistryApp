@@ -1,7 +1,6 @@
 ﻿@page "/layouts/{id:int}/modules"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a layout's participants and their modules. The organisers' filters are a GET form (?modules=true,
    ?places=true) submitted when a box is checked (filter-form.js), or with Ok without JavaScript. *@
 

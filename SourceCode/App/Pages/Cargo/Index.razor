@@ -1,7 +1,6 @@
 ﻿@page "/Cargo/Index"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3): the filter is a GET form and QuickGrid pages and sorts by URL, so the query string holds
    the whole list state (shareable, back button). The current sort goes along with the filter as hidden fields.
    wwwroot/js/filter-form.js submits the form on a pause in typing (data-auto-submit); Enter works without JavaScript. *@

@@ -3,7 +3,6 @@
 @page "/Modules/{id:int}/Edit/PersonOwned/{PersonId:int}/InGroup/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the station form: a POST of ModuleFormData, validated in the browser and again on the
    server; the id comes from the address. A new module is added for the owner in the address (person or group) by a user who may
    add modules for that owner; an existing module is edited by a user who may edit it (MayEditModuleAsync, assistants included).

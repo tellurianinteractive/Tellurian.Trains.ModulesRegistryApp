@@ -1,7 +1,6 @@
 ﻿@page "/Groups/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a POST of GroupFormData; the id comes from the address. A new group is added by a global
    administrator or a country administrator (in their own country); a group is edited by those who may edit it in the groups list
    (also its group and data administrators). Only a global administrator selects the country, and only global and country

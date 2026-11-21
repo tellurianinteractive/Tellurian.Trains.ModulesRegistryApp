@@ -1,7 +1,6 @@
 ﻿@page "/Groups/{groupid:int}/Members/Add"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a POST of GroupMemberFormData, the person chosen with the person search (person-search.js
    writes the id to its hidden input, which is posted). The country to search in is a GET form (?country=), initially the group's.
    Only the group's member administrators get the form. After adding, a redirect to the members list; the result is a one-time

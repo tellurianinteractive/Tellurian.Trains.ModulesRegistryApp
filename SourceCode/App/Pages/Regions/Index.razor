@@ -3,7 +3,6 @@
 @page "/Regions/Country/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3): the country is chosen with a GET form to /Regions/Index?country=..., which redirects to
    the country's address. *@
 

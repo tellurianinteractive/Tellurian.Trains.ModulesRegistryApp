@@ -1,7 +1,6 @@
 ﻿@page "/ModuleStandards/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a POST of ModuleStandardFormData; the id comes from the address. Module standards are
    shared by all countries, so only global administrators get the form. After saving, a redirect to the form's own address (a new
    standard to its new id), which reads it back; the result is a one-time message. *@

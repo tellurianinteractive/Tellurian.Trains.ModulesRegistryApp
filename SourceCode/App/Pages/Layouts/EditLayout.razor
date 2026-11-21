@@ -1,7 +1,6 @@
 ﻿@page "/Meetings/{meetingid:int}/Layouts/{id:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a meeting's layout, posted as LayoutFormData. A new layout or another organising group by the
    meeting's organisers, the rest also by the layout's organisers (LayoutService); others see the form without Save. The contact
    person is chosen among the members of the stored (or posted) organising group. The maximum number of participants is always

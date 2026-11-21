@@ -1,7 +1,6 @@
 ﻿@page "/Persons/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR: deleting a person and everything that belongs to the person (decided 2026-11-21). The page lists what is deleted
    and what is changed (PersonDeletionPlan), or why the person may not be deleted now, and deletes with a POST form. Only a
    country administrator in the person's country gets here (PersonPermissionExtensions.MayDeletePerson); others see nothing. *@

@@ -1,7 +1,6 @@
 ﻿@page "/Modules/{ModuleId:int}/Exits/{Id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a module exit, posted as ModuleExitFormData, for a user who may edit the module
    (ModuleService). The end profiles are those of the module's scale. A new exit (id 0) is named after the number of exits, as Add did
    on the module page. After saving, a redirect back to the module form (?back=, only an address within the app); the result is a

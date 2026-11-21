@@ -1,7 +1,6 @@
 ﻿@page "/Groups/{groupid:int}/Members"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a group's members. The group's member administrators get Add, Edit, Invite and Remove; Remove is
    a link that adds ?remove={id}, which shows a confirmation with a POST form, as Delete on the groups list. *@
 

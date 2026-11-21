@@ -2,7 +2,6 @@
 @page "/Meetings/Create/{OrganiserGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a POST of MeetingFormData, validated in the browser and again on the server; the id comes
    from the address. Meeting organisers save (MeetingService); others see the form without Save. The dates are locked a week before
    the start or when modules are registered, except for a country administrator in the meeting's country: the fields are disabled, so

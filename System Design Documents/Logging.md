@@ -52,7 +52,7 @@ Only the path is logged, never the query string (it can hold an API key).
 |---|---|---|
 | 3001 | Warning | Upload refused because the file is over the size limit: document kind (`DwgDrawing`, `PdfDocumentation`, `SkpDrawing`, `PdfInstruction`), file size and limit in kB, user id, module or station id. Logged only for users who may upload, to learn what sizes are needed (SKP drawings can often be shrunk by purging unused objects). |
 
-`appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop; `Microsoft.Azure.SignalR` from *Error*). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
+`appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
 ## Reading the logs
 **Portal:** Application Insights `ModuleRegistry` → *Failures*, *Transaction search*, *Live metrics* and *Logs*. In *Logs* the tables are `requests`, `traces` (log entries), `exceptions` and `dependencies`; in the workspace the same data is in `AppRequests`, `AppTraces`, `AppExceptions` and `AppDependencies`.

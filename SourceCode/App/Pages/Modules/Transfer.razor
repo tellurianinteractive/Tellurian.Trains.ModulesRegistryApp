@@ -2,7 +2,6 @@
 @page "/Modules/{id:int}/Transfer/GroupOwned/{owningGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a module's owners. Transfer is a link that adds ?transfer={ownership id} and shows the transfer
    form: the country of the new owner is a GET form (?country=, keeping transfer and back), and the share and new owner are posted
    as ModuleTransferFormData; "assistant only" adds the person as an assistant. Remove (an assistant) is ?remove={id} with a POST

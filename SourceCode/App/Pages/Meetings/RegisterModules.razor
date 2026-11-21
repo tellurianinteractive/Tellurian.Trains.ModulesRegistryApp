@@ -1,7 +1,6 @@
 ﻿@page "/MeetingParticipants/{MeetingParticipantId:int}/Layouts/{LayoutId:int}/RegisterModules"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): a participant's registration for a layout and its modules. Joining the layout is a POST button
    (before, opening this page joined it: a GET must not change anything); the registration's fields are posted as
    LayoutParticipantFormData; adding a package of modules and removing a module are POST buttons. LayoutParticipantService and

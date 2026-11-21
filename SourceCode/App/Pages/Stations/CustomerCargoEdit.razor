@@ -1,7 +1,6 @@
 @page "/Stations/{StationId:int}/Customers/{CustomerId:int}/Cargos/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): one cargo flow of a module station's freight customer, a POST of
    StationCustomerCargoFormData; the ids come from the address, and the flow must belong to the customer, and the customer to the
    station, in the address. Only those who may edit the station get the form. A new flow may start from the values of another

@@ -1,7 +1,6 @@
 ﻿@page "/Groups/{groupid:int}/Members/{memberid:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a member's rights, a POST of GroupMemberFormData; the ids come from the address, and the
    member must belong to the group. Only the group's member administrators get the page. Below, the member's modules in the
    group's layout modules and the member's other modules: each table is one POST form whose Add or Remove buttons post the module's

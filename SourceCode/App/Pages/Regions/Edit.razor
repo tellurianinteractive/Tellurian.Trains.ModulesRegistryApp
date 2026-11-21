@@ -1,7 +1,6 @@
 ﻿@page "/Regions/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.4, the forms pilot): a POST of RegionFormData, validated with its DataAnnotations in the
    browser and again on the server; the region's id comes from the address, never from the form. After saving, a redirect to
    this form (a new region gets its own address), which reads the region back, so the user sees what was saved, including

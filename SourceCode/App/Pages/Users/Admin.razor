@@ -4,7 +4,6 @@
 @using System.Net.Mail
 
 @attribute [Authorize(Policy = "Admin")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3), as the persons list: the country is chosen with a GET form to /admin/users?country=...,
    which redirects to the country's address; the date for users not signed in is a GET form (?since=yyyy-MM-dd). The test
    mail is a POST form (antiforgery), followed by a redirect with the result as a one-time message (SetFlashMessage). *@

@@ -1,7 +1,6 @@
 ﻿@page "/ExternalStations/{stationid:int}/Customers/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the external station form: a POST of ExternalStationCustomerFormData with the name and
    years; the ids come from the address, and the customer must be at the station in the address. Below it, the customer's cargo
    flows: each has its own form (StationCustomerCargoEdit), and Delete is a link that adds ?delete={id}, which shows a confirmation

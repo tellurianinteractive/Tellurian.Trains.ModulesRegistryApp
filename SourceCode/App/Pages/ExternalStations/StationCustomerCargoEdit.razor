@@ -1,7 +1,6 @@
 @page "/ExternalStations/{stationid:int}/Customers/{customerid:int}/Cargos/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): one cargo flow of an external station customer, a POST of
    ExternalStationCustomerCargoFormData; the ids come from the address, and the flow must belong to the customer, and the customer
    to the station, in the address. After saving, a redirect to the customer's page, which lists the flows as saved, including

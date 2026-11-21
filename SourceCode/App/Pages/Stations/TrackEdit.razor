@@ -1,7 +1,6 @@
 ﻿@page "/Stations/{StationId:int}/Tracks/{Id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a station track, posted as StationTrackFormData, for a user who may edit the station
    (StationTrackService). A new track (id 0) starts as a copy of the last track, numbered after it (CreateTrack), as Add did on the
    station page. After saving, a redirect back to the station form, which lists the tracks; the result is a one-time message. *@

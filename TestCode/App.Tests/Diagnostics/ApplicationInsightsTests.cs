@@ -69,7 +69,6 @@ public sealed class ApplicationInsightsTests
     [DataRow("Microsoft.Hosting.Lifetime", LogLevel.Information)]
     [DataRow("System.Net.Http.HttpClient.Default", LogLevel.Warning)]
     [DataRow("Azure.Core", LogLevel.Warning)]
-    [DataRow("Microsoft.Azure.SignalR.NegotiateHandler", LogLevel.Error)]
     public void ProductionLogLevels(string category, LogLevel expectedMinimum)
     {
         // Only a provider without rules of its own, like the OpenTelemetry provider in production. On Windows the default

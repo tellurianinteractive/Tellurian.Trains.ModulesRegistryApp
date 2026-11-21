@@ -1,7 +1,6 @@
 ﻿@page "/Meetings/{MeetingId:int}/Register"
 @page "/Meetings/{MeetingId:int}/Edit/{PersonId:int}"
 
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): registering for a meeting. Not signed in, the page tells how to attend. Those who manage the
    meeting's participants choose a person with a GET form (country and person search, ?country= and ?person=, which opens
    /Meetings/{id}/Edit/{person}) and see the participants, with Edit links and Unregister / Register again as POST buttons. Others

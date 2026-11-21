@@ -7,9 +7,8 @@
 @inject IHostEnvironment Environment
 
 @* The HTML document, rendered per request on the server (it replaced _Host.cshtml in Migration step 2.2).
-   Pages run interactively over SignalR (InteractiveServer, without prerendering, as the old render-mode="Server"), except
-   pages marked [ExcludeFromInteractiveRouting], which are rendered as static SSR, layout included (Migration step 3.1).
-   The interactive router loads such a page with a full page load. *@
+   Every page is static SSR (Migration step 3.7): no interactive render mode, no circuits, no SignalR. blazor.web.js gives
+   enhanced navigation and form posts, and the browser's form validation. *@
 
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
@@ -23,10 +22,10 @@
     <link href="@Assets["css/fontawesome/css/all.css"]" rel="stylesheet">
     <link href="@Assets["css/site.css"]" rel="stylesheet" />
     <link href="@Assets["ModulesRegistry.styles.css"]" rel="stylesheet" />
-    <HeadOutlet @rendermode="PageRenderMode" />
+    <HeadOutlet />
 </head>
 <body>
-    <Routes @rendermode="PageRenderMode"AntiforgeryFieldName="@AntiforgeryFieldName" AntiforgeryRequestToken="@AntiforgeryRequestToken" />
+    <Routes AntiforgeryFieldName="@AntiforgeryFieldName" AntiforgeryRequestToken="@AntiforgeryRequestToken" />
     <div id="blazor-error-ui">
         @if (Environment.IsDevelopment())
         {
@@ -67,12 +66,7 @@
 </html>
 
 @code {
-    private static readonly IComponentRenderMode InteractiveRenderMode = new InteractiveServerRenderMode(prerender: false);
-
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
-
-    /// <summary>Interactive, unless the requested page is marked <c>[ExcludeFromInteractiveRouting]</c>: then static SSR.</summary>
-    private IComponentRenderMode? PageRenderMode => HttpContext.AcceptsInteractiveRouting() ? InteractiveRenderMode : null;
 
     private string? AntiforgeryFieldName;
     private string? AntiforgeryRequestToken;
@@ -84,7 +78,7 @@
             CookieRequestCultureProvider.DefaultCookieName,
             CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture)));
 
-        // The token for forms posted from interactive components to endpoints, such as the login form.
+        // The token for forms posted to endpoints, such as the login form.
         var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
         AntiforgeryFieldName = tokens.FormFieldName;
         AntiforgeryRequestToken = tokens.RequestToken;

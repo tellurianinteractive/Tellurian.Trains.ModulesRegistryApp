@@ -1,7 +1,6 @@
 @page "/Stations/{StationId:int}/Customers/{CustomerId:int}/Waybills/{id:int}/Edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): the print settings of one of a freight customer's waybills, a POST of
    StationCustomerWaybillFormData. The ids come from the address: the waybill must belong to the customer, and the customer to the
    station. Only those who may edit the station get the form. After saving, a redirect to the waybills list; the result is a

@@ -1,7 +1,6 @@
 ﻿@page "/Persons/{id:int}/Invite"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): inviting a person to become a user, for a country administrator in the person's country or one
    who administers a group the person is a member of (MayInvitePersonAsync), when the person has an email address and has never
    signed in. The message is previewed; the personal message and read-only are posted as InvitationFormData and the mail is sent.

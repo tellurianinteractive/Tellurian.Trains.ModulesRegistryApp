@@ -1,7 +1,6 @@
 ﻿using Azure.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
@@ -88,22 +87,9 @@ builder.Services.AddOpenApi(options =>
 });
 
 
-// Blazor Web App hosting model (Migration step 2.2). App.razor sets global InteractiveServer without prerendering.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents(options =>
-    {
-        options.DetailedErrors = true;
-        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(20);
-    });
-
-if (builder.Environment.IsProduction())
-{
-    builder.Services.AddSignalR(AzureSignalRHubOptions.Configure).AddAzureSignalR(options =>
-    {
-        options.ServerStickyMode = Microsoft.Azure.SignalR.ServerStickyMode.Required;
-    }
-    );
-}
+// Blazor Web App hosting model (Migration step 2.2), static SSR only since step 3.7: no interactive render mode, so no circuits,
+// no SignalR and no Azure SignalR Service.
+builder.Services.AddRazorComponents();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContextAccessor>();
 builder.Services.AddHttpClient();
@@ -112,7 +98,6 @@ builder.Services.AddAuthorizationPolicies();
 builder.Services.Configure<ChangeLogOptions>(builder.Configuration.GetSection(ChangeLogOptions.SectionName));
 builder.Services.AddScoped<CurrentUser>();
 builder.Services.AddScoped<ICurrentUser>(sp => sp.GetRequiredService<CurrentUser>());
-builder.Services.AddScoped<CircuitHandler, CurrentUserCircuitHandler>();
 builder.Services.AddSingleton<ChangeLogCleanupSchedule>();
 builder.Services.AddScoped(sp => new ChangeLogInterceptor(
     sp.GetRequiredService<ICurrentUser>(),
@@ -229,7 +214,6 @@ app.MapDocumentDownload();
 // Short-circuited: served right after routing, without localization, authentication (whose claims transformation queries
 // the database for every request from a signed-in user), authorization or antiforgery. Security headers come before routing.
 app.MapStaticAssets().ShortCircuit();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>();
 
 app.Run();

@@ -1,7 +1,6 @@
 ﻿@page "/Meetings/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): deleting a meeting is a POST form, for its organisers while nobody is registered for any of its
    layouts (MeetingService.MayDeleteAsync, also checked when deleting). Afterwards, a redirect to the meetings list. *@
 

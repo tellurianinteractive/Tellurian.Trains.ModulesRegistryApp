@@ -7,7 +7,6 @@
 @page "/Stations/Create/{moduleId:int}/GroupOwned/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the freight customer form: a POST of StationFormData, validated in the browser and again
    on the server; the id comes from the address. A new station is added to a module of the owner in the address (person or group)
    that has no station; an existing station is edited by a user who may edit it (MayEditStationAsync), whatever owner the address

@@ -2,7 +2,6 @@
 @page "/Modules/{id:int}/Delete/GroupOwned/{ownerGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): deleting a module is a POST form, for a user who may delete it (its sole owner, or an
    administrator: MayDeleteModuleAsync), when it is not part of a station and not registered for a meeting that has not ended (all
    also checked by ModuleService). Afterwards, a redirect to the modules list. *@

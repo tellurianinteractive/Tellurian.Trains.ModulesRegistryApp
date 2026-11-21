@@ -21,7 +21,7 @@ The web application is developed using *.NET* and *Blazor* server-side rendering
 It is a cloud application running as an *Microsoft Azure App Service*, 
 and uses a *Microsoft Azure SQL* database.
 *Azure Key Vault* is used for storing secrets.
-*Azure SignalR* is used for server-client communication.
+Every page is rendered on the server as plain HTML (static server-side rendering, since 2026); no SignalR connection is used.
 
 To access the runtime environment, you need an *Azure* account and
 also apply for rights to administer the application's features in *Azure Portal*.

@@ -1,7 +1,6 @@
 ﻿@page "/Stations/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): deleting a station is a POST form, for a user who may edit the station, when it is not
    registered for a meeting that has not ended (both also checked by StationService). Afterwards, a redirect to the modules list. *@
 

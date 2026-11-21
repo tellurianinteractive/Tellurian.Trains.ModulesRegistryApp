@@ -1,5 +1,4 @@
 ﻿@page "/Content/{contentName}"
-@attribute [ExcludeFromInteractiveRouting]
 <ContentView ContentName="@ContentName" />
 @code {
     [Parameter] public string? ContentName { get; set; }

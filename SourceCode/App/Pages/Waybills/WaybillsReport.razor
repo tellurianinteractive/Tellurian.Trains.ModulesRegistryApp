@@ -5,7 +5,6 @@
 @page "/reports/waybills/group/{groupId:int}"
 
 @layout PrintLayout
-@attribute [ExcludeFromInteractiveRouting]
 @attribute [StreamRendering]
 @* Static SSR (Migration step 3.3a): pure print output. Streaming shows "Creating report" until the waybills are ready. *@
 @inject IStringLocalizer<Strings> Localizer

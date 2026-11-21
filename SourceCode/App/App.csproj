@@ -13,7 +13,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="11.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="8.6.1" />
-		<PackageReference Include="Microsoft.Azure.SignalR" Version="1.33.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

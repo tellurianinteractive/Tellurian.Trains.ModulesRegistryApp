@@ -1,7 +1,6 @@
 ﻿@page "/ModuleStandards/EndProfiles"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.6): the module end profiles, only text and links; Add and Edit for global administrators. *@
 
 @inject IStringLocalizer<Strings> Localizer

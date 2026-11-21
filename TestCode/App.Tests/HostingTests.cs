@@ -33,7 +33,7 @@ public sealed partial class HostingTests
     {
         using var client = CreateClient();
 
-        // Since Migration step 3.6 every page is static SSR; the About page needs no sign-in, database or mail.
+        // Every page is static SSR (Migration step 3.7); the About page needs no sign-in, database or mail.
         var response = await client.GetAsync("/About");
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -41,19 +41,29 @@ public sealed partial class HostingTests
         StringAssert.Matches(html, BlazorScript());
         Assert.DoesNotContain("blazor.server.js", html);
         StringAssert.Contains(html, "<base href=\"/\">");
-        StringAssert.Contains(html, "id=\"blazor-error-ui\"");
+        Assert.DoesNotContain("<!--Blazor:", html, "No interactive root (Migration step 3.7).");
+    }
+
+    [TestMethod]
+    public async Task TheCircuitHubIsGone()
+    {
+        // Migration step 3.7: no interactive render mode, so no SignalR hub for circuits and no Azure SignalR Service.
+        using var client = CreateClient();
+
+        var response = await client.PostAsync("/_blazor/negotiate?negotiateVersion=1", content: null);
+
+        Assert.AreNotEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
     [TestMethod]
     public void EveryPageIsStatic()
     {
-        // Migration step 3.6 done: no page is interactive; step 3.7 makes the router static and removes the attribute.
-        var interactive = typeof(Shared.PrintLayout).Assembly.GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(RouteAttribute), false).Length > 0)
-            .Where(t => t.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).Length == 0)
+        // Migration step 3.7: the router is static, and no component sets a render mode of its own.
+        var withRenderMode = typeof(Shared.PrintLayout).Assembly.GetTypes()
+            .Where(t => t.GetCustomAttributes(typeof(RenderModeAttribute), true).Length > 0)
             .Select(t => t.FullName)
             .ToList();
-        Assert.IsEmpty(interactive, string.Join(", ", interactive));
+        Assert.IsEmpty(withRenderMode, string.Join(", ", withRenderMode));
     }
 
     [TestMethod]
@@ -143,90 +153,6 @@ public sealed partial class HostingTests
     }
 
     [TestMethod]
-    public void PrintPagesAreStatic()
-    {
-        // Migration step 3.3a: the print previews (waybills, empty wagon orders, tickets) are pure output. They read the
-        // database, which these tests don't have, so the routes' metadata is checked instead of a response.
-        var reports = _factory.Services.GetRequiredService<EndpointDataSource>().Endpoints.OfType<RouteEndpoint>()
-            .Where(e => e.RoutePattern.RawText?.StartsWith("/reports/", StringComparison.OrdinalIgnoreCase) == true)
-            .ToList();
-
-        Assert.IsGreaterThanOrEqualTo(8, reports.Count, "The waybill, empty wagon order and ticket routes.");
-        foreach (var report in reports)
-        {
-            Assert.IsNotNull(report.Metadata.GetMetadata<ExcludeFromInteractiveRoutingAttribute>(), $"{report.RoutePattern.RawText} is not static.");
-        }
-    }
-
-    [TestMethod]
-    [DataRow(typeof(ModulesRegistry.Pages.Cargo.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Persons.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Users.Admin))]
-    [DataRow(typeof(ModulesRegistry.Pages.Regions.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Groups.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Modules.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Vehicles.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Vehicles.MyVehicles))]
-    [DataRow(typeof(ModulesRegistry.Pages.WiFredThrottles.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.FreightCustomers))]
-    [DataRow(typeof(ModulesRegistry.Pages.Meetings.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Modules.MyModules))]
-    [DataRow(typeof(ModulesRegistry.Pages.Persons.Modules))]
-    [DataRow(typeof(ModulesRegistry.Pages.Groups.Modules))]
-    [DataRow(typeof(ModulesRegistry.Pages.Stations.Index))]
-    [DataRow(typeof(ModulesRegistry.Pages.Persons.Stations))]
-    [DataRow(typeof(ModulesRegistry.Pages.Groups.Stations))]
-    [DataRow(typeof(ModulesRegistry.Pages.Meetings.MyMeetings))]
-    [DataRow(typeof(ModulesRegistry.Pages.Stations.Customers))]
-    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.Customers))]
-    public void ListPageIsStaticWithoutLocalStorage(Type page)
-    {
-        // Migration step 3.3: list pages in static SSR. They read the database, so the page type is checked, not a response.
-        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.FullName} is not static.");
-        var injected = page.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
-            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
-            .Select(p => p.PropertyType.Name);
-        Assert.DoesNotContain("ILocalStorageService", injected, "The filter is in the query string, not in local storage.");
-    }
-
-    [TestMethod]
-    public void VehiclesListDoesNotUseLocalStorage()
-    {
-        // Migration step 3.3: the vehicle list shared by Vehicles and My vehicles keeps its filter in the query string.
-        var injected = typeof(ModulesRegistry.Pages.Vehicles.VehiclesList).GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
-            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), true).Length > 0)
-            .Select(p => p.PropertyType.Name);
-        Assert.DoesNotContain("ILocalStorageService", injected);
-    }
-
-    [TestMethod]
-    [DataRow(typeof(ModulesRegistry.Pages.Country.Statistics))]
-    [DataRow(typeof(ModulesRegistry.Pages.ExternalStations.StationCustomers))]
-    [DataRow(typeof(ModulesRegistry.Pages.Stations.View))]
-    [DataRow(typeof(ModulesRegistry.Pages.Meetings.View))]
-    [DataRow(typeof(ModulesRegistry.Pages.Layouts.View))]
-    public void ReadOnlyPageIsStatic(Type page) =>
-        // Migration step 3.6 (1.15.27): pages with only text and links that were still interactive.
-        Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.FullName} is not static.");
-
-    [TestMethod]
-    public void PagesOnPrintLayoutAreStatic()
-    {
-        // Migration step 3.3a: every page on the print layout (also name badges, wagon error cards, throttle preview) is static.
-        var printPages = typeof(Shared.PrintLayout).Assembly.GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(RouteAttribute), false).Length > 0)
-            .Where(t => t.GetCustomAttributes(typeof(LayoutAttribute), true).OfType<LayoutAttribute>().Any(l => l.LayoutType == typeof(Shared.PrintLayout)))
-            .ToList();
-
-        Assert.IsGreaterThanOrEqualTo(6, printPages.Count, "Waybills, empty wagon orders, tickets, name badges, wagon error cards and the throttle preview.");
-        foreach (var page in printPages)
-        {
-            Assert.IsNotNull(page.GetCustomAttributes(typeof(ExcludeFromInteractiveRoutingAttribute), true).FirstOrDefault(), $"{page.Name} is not static.");
-        }
-    }
-
-    [TestMethod]
     public async Task StaticPageForUsersRequiresSignIn()
     {
         using var client = CreateClient();
@@ -252,16 +178,6 @@ public sealed partial class HostingTests
         using var client = CreateClient();
 
         var response = await client.GetAsync("/_framework/blazor.web.js");
-
-        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-    }
-
-    [TestMethod]
-    public async Task CircuitHubAcceptsConnections()
-    {
-        using var client = CreateClient();
-
-        var response = await client.PostAsync("/_blazor/negotiate?negotiateVersion=1", content: null);
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }

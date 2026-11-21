@@ -3,7 +3,6 @@
 @page "/Persons/{id:int}/EditGroup/{groupId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a POST of PersonFormData; the id, the country of a new person and the group come from the
    address. The form is shown to those who may edit the person (PersonService.MayEditAsync): global administrators, country
    administrators in the person's country, the person themselves, and those who administer the group's members, for a new person or a

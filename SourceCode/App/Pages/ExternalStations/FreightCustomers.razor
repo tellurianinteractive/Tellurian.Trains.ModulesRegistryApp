@@ -4,7 +4,6 @@
 @page "/FreightCustomers/{countryId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3), as the persons list: the filter fields are in the column headers (FilterColumn), joined to
    the GET form customers-filter, so filter, sort and page are in the query string. The country is chosen with a GET form to
    /FreightCustomers?country=..., which redirects to the country's address. *@

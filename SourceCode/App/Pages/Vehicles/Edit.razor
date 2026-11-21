@@ -2,7 +2,6 @@
 @page "/vehicles/{VehicleId:int}/country/{CountryId:int}/edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the cargo form: a POST of VehicleFormData, validated in the browser and again on the
    server; the id comes from the address. The owner edits their own vehicles (/vehicles/my/{id}), and a country administrator
    those of owners in the administrator's country (/vehicles/{id}/country/{countryId}/edit); a new vehicle is the user's own.

@@ -1,7 +1,6 @@
 ﻿@page "/LayoutStations/{id:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6): a station's settings in a layout, posted as LayoutStationFormData, for its participant while
    the layout is open or a layout organiser (LayoutService). The dependent settings are made consistent when saved, so no field is
    disabled. After saving, a redirect to the layout's modules; the result is a one-time message. *@

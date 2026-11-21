@@ -1,7 +1,6 @@
 ﻿@page "/Groups/{id:int}/Modules"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3): ModulesList, whose Clone is a POST form. *@
 
 @inject IStringLocalizer<Strings> Localizer

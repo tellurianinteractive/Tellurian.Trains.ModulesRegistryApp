@@ -2,7 +2,6 @@
 @page "/ExternalStations/{stationid:int}/Customers/{customerId:int}"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR (Migration step 3.3): ExternalStationCustomerItemView has only text and links. *@
 
 @inject IStringLocalizer<Strings> Localizer

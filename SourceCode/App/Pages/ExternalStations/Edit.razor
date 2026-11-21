@@ -1,7 +1,6 @@
 ﻿@page "/ExternalStations/{id:int}/edit"
 
 @attribute [Authorize(Policy = "User")]
-@attribute [ExcludeFromInteractiveRouting]
 @* Static SSR form (Migration step 3.6), as the region, cargo and throttle forms: a POST of ExternalStationFormData, validated in
    the browser and again on the server; the id comes from the address. Any user may add and edit external stations. A saved
    station's region can't be changed (ExternalStationService): the list is shown disabled, and a disabled field isn't posted, so
