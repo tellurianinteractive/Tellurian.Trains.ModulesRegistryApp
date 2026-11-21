@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.1
+Released 2026-11-21
+- Maintenance update.
 ## Release 1.16.0
 Released 2026-11-21
 - All pages are now plain web pages without a live connection: every form checks the entries as you type and stays open after saving, and lists, deletions and module registrations work with ordinary links and buttons.
