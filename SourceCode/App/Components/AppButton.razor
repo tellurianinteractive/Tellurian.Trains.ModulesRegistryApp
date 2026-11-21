@@ -7,15 +7,15 @@
         @if (Href.HasValue)
         {
             @* A plain link, also for a new tab, so it works in static SSR pages too (Migration step 3.1). *@
-            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" target="@(OpenInNewTab ? "_blank" : null)" rel="@(OpenInNewTab ? "noopener" : null)" title="@TitleText"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
+            <a class="@ButtonClass" style="@DisablePointerEvents" href="@Href" target="@(OpenInNewTab ? "_blank" : null)" rel="@(OpenInNewTab ? "noopener" : null)" title="@TitleText" @attributes="AdditionalAttributes"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></a>
         }
         else if (IsSubmit)
         {
-            <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText" form="@Form" name="@Name" value="@Value"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            <button type="submit" class="@ButtonClass" disabled="@Disabled" title="@TitleText" form="@Form" name="@Name" value="@Value" @attributes="AdditionalAttributes"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
         }
         else
         {
-            <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
+            <button type="button" class="@ButtonClass" disabled="@Disabled" title="@TitleText" @onclick="@(() => OnClickCallback.InvokeAsync(OnClickParameter))" @attributes="AdditionalAttributes"><span class="@IconClass" /><span class="@HideLabelCss">&nbsp;@LabelText&nbsp;@ObjectNameLocalized</span></button>
         }
     </span>
 </span>
@@ -40,6 +40,8 @@
     [Parameter] public bool IsHidden { get; set; }
     [Parameter] public bool AlwaysShowLabel { get; set; }
     [Parameter] public string? Title { get; set; }
+    /// <summary>Other HTML attributes for the link or button, such as <c>data-copy-text</c> for a script on a static page.</summary>
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
 
     string ButtonClassType
