@@ -166,7 +166,19 @@ public static class EntityCorrectionExtensions
 
     extension(Meeting meeting)
     {
-        public void CorrectInput() => meeting.CityName = meeting.CityName.Corrected(TextCase.Place);
+        public void CorrectInput()
+        {
+            meeting.CityName = meeting.CityName.Corrected(TextCase.Place);
+            meeting.Name = meeting.Name.Corrected(TextCase.AsTyped);
+            meeting.VenueName = meeting.VenueName.Corrected(TextCase.AsTyped, Optional);
+            meeting.ExternalLink = meeting.ExternalLink.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty);
+            meeting.Details = meeting.Details.OrNullIfEmpty;
+            meeting.Accomodation = meeting.Accomodation.OrNullIfEmpty;
+            meeting.Food = meeting.Food.OrNullIfEmpty;
+            if (meeting.EndDate < meeting.StartDate) meeting.EndDate = meeting.StartDate; // Corrected, not refused.
+            if (!Enum.IsDefined((MeetingType)meeting.MeetingType)) meeting.MeetingType = default;
+            if (!Enum.IsDefined((MeetingStatus)meeting.Status)) meeting.Status = (int)MeetingStatus.Preliminary;
+        }
     }
 
     extension(Layout layout)

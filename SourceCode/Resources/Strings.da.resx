@@ -2802,4 +2802,7 @@
   <data name="VariantOrBoxLabel_Error" xml:space="preserve">
     <value>Angiv en variant eller en boksmærkning, ikke begge</value>
   </data>
+  <data name="StartDateTooEarly_Error" xml:space="preserve">
+    <value>Startdatoen kan ikke ligge mere end en uge tilbage</value>
+  </data>
 </root>

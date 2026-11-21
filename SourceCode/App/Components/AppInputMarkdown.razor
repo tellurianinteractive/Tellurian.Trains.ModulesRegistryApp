@@ -9,7 +9,11 @@
         }
         @if (IsVisible)
         {
-            <textarea rows="5" id="@Label" class="form-control" @bind-value="CurrentValue" @bind-value:event="oninput"></textarea>
+            <textarea rows="5" id="@Label" name="@NameAttributeValue" class="form-control" @bind-value="CurrentValue" @bind-value:event="oninput"></textarea>
+            @if (ShowFieldValidationMessage)
+            {
+                <ValidationMessage For="@ValueExpression" />
+            }
         }
     </div>
     <div class="col-6" style="@PreviewCss">

@@ -11,17 +11,21 @@
     }
     @if (ShowTime)
     {
-        <input disabled=@IsDisabled type="datetime-local" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" @onfocusout="OnChange" />
+        <input disabled=@IsDisabled type="datetime-local" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" @onfocusout="OnChange" />
     }
     else
     {
-        <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" @onfocusout="OnChange" />        
+        <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" @onfocusout="OnChange" />        
     }
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
             <ValidationMessage For="@ValidationFor" />
         </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
     }
 </div>
 

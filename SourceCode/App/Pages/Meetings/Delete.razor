@@ -1,17 +1,15 @@
 ﻿@page "/Meetings/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): deleting a meeting is a POST form, for its organisers while nobody is registered for any of its
+   layouts (MeetingService.MayDeleteAsync, also checked when deleting). Afterwards, a redirect to the meetings list. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject ITimeProvider TimeProvider
 @inject NavigationManager Navigator
-
+@inject IStringLocalizer<Strings> Localizer
 @inject MeetingService MeetingService
-@inject LayoutService LayoutService
-@inject GroupService GroupService
 
-<PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@PageAction.Delete" />
+<PageHeading Context="Meeting" ObjectName="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@PageAction.Delete" BackHref="@($"Meetings/{Id}/Edit")" />
 
 @if (Meeting is null)
 {
@@ -19,7 +17,10 @@
 }
 else if (MayBeDeleted)
 {
-    <AppButton Label="ConfirmDelete" OnClickCallback="OnDelete" AlwaysShowLabel=true/>
+    <form method="post" @formname="delete-meeting" @onsubmit="DeleteAsync" data-enhance>
+        <AntiforgeryToken />
+        <AppButton Label="ConfirmDelete" IconName="@FontAwesome.Delete" IsSubmit="true" AlwaysShowLabel="true" />
+    </form>
 }
 else
 {
@@ -28,27 +29,24 @@ else
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     ClaimsPrincipal? Principal;
     Meeting? Meeting;
-
     bool MayBeDeleted;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) : null;
         MayBeDeleted = Meeting is not null && await MeetingService.MayDeleteAsync(Principal, Meeting.Id);
     }
 
-    private async Task OnDelete()
+    async Task DeleteAsync()
     {
-        if (Meeting is not null)
-        {
-            var result = await MeetingService.DeleteAsync(Principal, Meeting);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(2000);
-            Navigator.NavigateTo("/Meetings/Index", forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
-        }
+        if (Meeting is null || !MayBeDeleted) return;
+        var (count, _) = await MeetingService.DeleteAsync(Principal, Meeting);
+        HttpContext.SetFlashMessage(count > 0 ? "DeletedSuccessfully" : "DeleteFailed", count > 0);
+        Navigator.NavigateTo(count > 0 ? "Meetings/Index" : $"Meetings/{Id}/Delete");
     }
 }

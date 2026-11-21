@@ -178,6 +178,28 @@ public sealed class MeetingParticipantPermissionTests
     }
 
     [TestMethod]
+    public async Task SavingAMeetingWithoutItsLayoutsKeepsThemAndTheAccessKey()
+    {
+        // The static meeting form (Migration step 3.6) posts only the meeting's fields; layouts are saved by LayoutService.
+        var target = new MeetingService(_factory, _time);
+        var stored = (await target.FindByIdWithLayoutsAsync(TheMeeting))!;
+        var accessKey = stored.AccessKey;
+        var changed = new Meeting
+        {
+            Id = TheMeeting, OrganiserGroupId = OrganiserGroup, Name = "Changed", CityName = "Karlstad", Status = stored.Status,
+            StartDate = stored.StartDate, EndDate = stored.StartDate.AddDays(-1), AccessKey = Guid.NewGuid(),
+        };
+
+        Assert.IsGreaterThan(0, (await target.SaveAsync(Principal(OrganiserGroupMeetingAdministrator), changed)).Count);
+
+        var saved = (await target.FindByIdWithLayoutsAsync(TheMeeting))!;
+        Assert.AreEqual("Changed", saved.Name);
+        Assert.AreEqual(accessKey, saved.AccessKey);
+        Assert.HasCount(2, saved.Layouts);
+        Assert.AreEqual(saved.StartDate, saved.EndDate, "An end date before the start date is corrected.");
+    }
+
+    [TestMethod]
     public async Task DeletingLayoutsAndMeetings()
     {
         var target = new MeetingService(_factory, _time);

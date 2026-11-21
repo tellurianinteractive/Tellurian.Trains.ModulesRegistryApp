@@ -2,50 +2,61 @@
 @page "/Meetings/Create/{OrganiserGroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of MeetingFormData, validated in the browser and again on the server; the id comes
+   from the address. Meeting organisers save (MeetingService); others see the form without Save. The dates are locked a week before
+   the start or when modules are registered, except for a country administrator in the meeting's country: the fields are disabled, so
+   the stored dates are set before validation. Whether the dates have times follows the stored meeting type (a module meeting has
+   days only). The markdown previews show the stored texts. After saving, a redirect to this form; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Meetings
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@inject NavigationManager Navigator
 @inject ITimeProvider TimeProvider
-
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
 @inject GroupService GroupService
 
-<PageHeading Context="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" BackHref="@BackHref" />
+<PageHeading Context="Existing" ObjectName="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" BackHref="@BackHref" />
 
-<EditTemplate Item="Meeting" ShowSaveButton="MayEdit" OnValidSubmit="OnValidSubmit" DeleteHref="@MeetingHref(Meeting.Id, "delete")" MayDelete="MayDelete">
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="meeting" ShowSaveButton="MayEdit" OnValidSubmit="SaveAsync" DeleteHref="@($"Meetings/{Id}/Delete")" MayDelete="MayDelete">
     <Inputs>
-        <AppInputSelect Width="2" @bind-Value="Meeting.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
-        <AppInputSelect Width="2" @bind-Value="Meeting.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
-        <AppInputText Width="3" Label="Name" @bind-Value="Meeting.Name" />
-        <AppInputSelect Width="3" @bind-Value="Meeting.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
-        <AppInputCheck Width="2" Label="IsOrganisingGroupInternal" @bind-Value="Meeting.IsOrganiserInternal" AlignWithFields="true" />
+        <AppInputSelect Width="2" @bind-Value="Form!.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
+        <AppInputSelect Width="2" @bind-Value="Form!.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
+        <AppInputText Width="3" Label="Name" @bind-Value="Form!.Name" />
+        <AppInputSelect Width="3" @bind-Value="Form!.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
+        <AppInputCheck Width="2" Label="IsOrganisingGroupInternal" @bind-Value="Form!.IsOrganiserInternal" AlignWithFields="true" />
 
-        <AppInputText Width="3" Label="City" @bind-Value="Meeting.CityName" />
-        <AppInputText Width="3" Label="Venue" @bind-Value="Meeting.VenueName" />
-        <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="@Meeting.GroupDomainId" ShowNoneOption=true />
+        <AppInputText Width="3" Label="City" @bind-Value="Form!.CityName" />
+        <AppInputText Width="3" Label="Venue" @bind-Value="Form!.VenueName" />
+        <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="Form!.GroupDomainId" ShowNoneOption="true" />
         <AppInputFill Width="2" />
-        <AppInputDate Width="2" @bind-Value="Meeting.StartDate" Label="StartDate" IsDisabled="@DatesIsLocked(Meeting)" OnChangeNotifier="OnStartDateChanged" ShowTime="@Meeting.ShowTime()" />
-        <AppInputDate Width="2" @bind-Value="Meeting.EndDate" Label="EndDate" IsDisabled="@DatesIsLocked(Meeting)" ShowTime="@Meeting.ShowTime()" />
-        <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Meeting.LatestArrivalTimeWithModules"/>
-        <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Meeting.EarliestDepartureTimeWithModules" />
+        <AppInputDate Width="2" @bind-Value="Form!.StartDate" Label="StartDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
+        <AppInputDate Width="2" @bind-Value="Form!.EndDate" Label="EndDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
+        <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Form!.LatestArrivalTimeWithModules" />
+        <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Form!.EarliestDepartureTimeWithModules" />
 
-        <AppInputText Width="12" Label="ExternalLink" @bind-Value="Meeting.ExternalLink"/>
+        <AppInputText Width="12" Label="ExternalLink" @bind-Value="Form!.ExternalLink" />
     </Inputs>
     <Buttons>
-        @if(Meeting.Id > 0)
+        @if (Existing is not null)
         {
-            <AppButton Label="Layouts" Href="@LayoutsHref(Id)" IconName="Layout" />
-            <AppButton Label="NameBadges" Href="@NameBadgesHref(Id)" IconName="Badge" />
+            <AppButton Label="Layouts" Href="@($"Meetings/{Id}/Layouts/Edit")" IconName="Layout" />
+            <AppButton Label="NameBadges" Href="@($"Meetings/{Id}/NameBadges")" IconName="Badge" />
         }
-       
     </Buttons>
     <InputsBelowButtons>
         <h2 style="margin-top: 20px">@Localizer["GeneralMeetingInformation"]</h2>
         <ActionMessage AlertType="Warning" Label="DO NOT describe what applies to individual track layouts below" />
-        <AppInputMarkdown Label="Details" @bind-Value="@Meeting.Details" MaxNumberOfCharacters="MeetingValidator.DetailsMaxLength" />
-        <AppInputMarkdown Label="Accomodation" @bind-Value="@Meeting.Accomodation" MaxNumberOfCharacters="MeetingValidator.AccomodationMaxLenght" />
-        <AppInputMarkdown Label="Food" @bind-Value="@Meeting.Food" MaxNumberOfCharacters="MeetingValidator.FoodMaxLength" />
+        <AppInputMarkdown Label="Details" @bind-Value="Form!.Details" MaxNumberOfCharacters="MeetingFormData.DetailsMaxLength" />
+        <AppInputMarkdown Label="Accomodation" @bind-Value="Form!.Accomodation" MaxNumberOfCharacters="MeetingFormData.AccomodationMaxLength" />
+        <AppInputMarkdown Label="Food" @bind-Value="Form!.Food" MaxNumberOfCharacters="MeetingFormData.FoodMaxLength" />
     </InputsBelowButtons>
 </EditTemplate>
 
@@ -53,73 +64,77 @@
     // The meetings and groups lists are static, so this page may have no history (Migration step 3.3).
     string BackHref => OrganiserGroupId > 0 ? "Groups/Index" : "Meetings/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OrganiserGroupId { get; set; }
+    [SupplyParameterFromForm(FormName = "meeting")] private MeetingFormData? Form { get; set; }
 
     ClaimsPrincipal? Principal;
-    Meeting Meeting = new Meeting();
+    Meeting? Existing;
     IEnumerable<ListboxItem>? OrganiserItems;
     IEnumerable<ListboxItem>? GroupDomainItems;
     bool MayEdit;
     bool MayDelete;
-    int RegisteredModulesCount;
+    bool DatesAreLocked;
+    string? FailureMessage;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        Meeting = Id > 0 ? await MeetingService.FindByIdAsync(Id) ?? CreateMeeting : CreateMeeting;
-        if (Meeting is not null)
+        if (Id > 0)
         {
-            OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId, OrganiserGroupId);
-            MayEdit = (Id == 0 && Principal.IsAuthenticated()) || (Id > 0 && await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting));
-            MayDelete = Id > 0 && await MeetingService.MayDeleteAsync(Principal, Id);
-            RegisteredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
-            GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
+            Existing = await MeetingService.FindByIdAsync(Id);
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+            MayEdit = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Existing.Id);
+            MayDelete = await MeetingService.MayDeleteAsync(Principal, Existing.Id);
+            var registeredModulesCount = await LayoutService.ModulesRegisteredCountAsync(Principal, Id);
+            DatesAreLocked = !Principal.IsCountryAdministratorInCountry(Existing.CountryId()) &&
+                (Existing.StartDate < TimeProvider.Now.Date.AddDays(MeetingFormData.DaysBackForStartDate) || registeredModulesCount > 0);
         }
+        else
+        {
+            // A new meeting: for the group in the address, or a group chosen in the form (the service checks the right for it).
+            MayEdit = OrganiserGroupId > 0 ? await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, new Meeting { OrganiserGroupId = OrganiserGroupId }) : Principal.IsAuthenticated();
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Meeting { OrganiserGroupId = OrganiserGroupId }).AsFormData();
+        Form.StoredStartDate = Existing?.StartDate;
+        Form.Today = TimeProvider.Now.Date;
+        if (DatesAreLocked)
+        {
+            Form.StartDate = Existing!.StartDate; // The disabled fields aren't posted.
+            Form.EndDate = Existing.EndDate;
+        }
+        if (OrganiserGroupId > 0 && Existing is null) Form.OrganiserGroupId = OrganiserGroupId;
+        OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Existing?.OrganiserGroup?.CountryId, OrganiserGroupId);
+        GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
     }
 
-    Meeting CreateMeeting => OrganiserGroupId > 0 ? new Meeting { OrganiserGroupId = OrganiserGroupId } : new Meeting();
-
-    async Task OnValidSubmit()
-    {
-        if (Meeting is not null)
-        {
-            var result = await MeetingService.SaveAsync(Principal, Meeting);
-            if (result.Entity is not null)
-            {
-                Meeting = result.Entity;
-                Id = Meeting.Id;
-            }
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
-
-    void OnStartDateChanged()
-    {
-        if ((Meeting.EndDate - Meeting.StartDate).TotalDays > 7)
-        {
-            if (Meeting.ShowTime())
-            {
-                Meeting.EndDate = Meeting.StartDate.AddDays(0);
-            }
-            else
-            {
-                Meeting.EndDate = Meeting.StartDate.AddDays(3);
-            }
-            StateHasChanged();            
-        }
-    }
-
-    bool DatesIsLocked(Meeting meeting) =>
-        !Principal.IsCountryAdministratorInCountry(meeting.CountryId()) &&
-        (meeting.StartDate < TimeProvider.Now.Date.AddDays(7) ||
-          RegisteredModulesCount > 0);
-
+    bool ShowTime => (Existing ?? new Meeting { MeetingType = Form?.MeetingType ?? 0 }).ShowTime();
     bool MaySelectOrganiserGroup => OrganiserGroupId == 0;
 
-
-    string LayoutsHref(int meetingId) => $"meetings/{meetingId}/layouts/edit";
-    string NameBadgesHref(int meetingId) => $"meetings/{meetingId}/namebadges";
-    string MeetingHref(int meetingId, string? function) => function.IsEmpty ? $"meetings/{meetingId}" : $"meetings/{meetingId}/{function}";
-
+    async Task SaveAsync()
+    {
+        if (Form is null || !MayEdit) return;
+        // Edit: only the form's fields change on the loaded meeting (Migration section 3.4, the data-loss rule).
+        var meeting = Form.AsEntity(Existing);
+        if (!ShowTime)
+        {
+            meeting.StartDate = meeting.StartDate.Date;
+            meeting.EndDate = meeting.EndDate.Date;
+        }
+        var (count, message, saved) = await MeetingService.SaveAsync(Principal, meeting);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Meetings/{(saved ?? meeting).Id}/Edit");
+    }
 }

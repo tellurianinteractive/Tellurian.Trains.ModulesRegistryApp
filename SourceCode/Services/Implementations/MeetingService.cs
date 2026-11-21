@@ -150,51 +150,22 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         }
         return principal.SaveNotAuthorised<Meeting>();
 
+        // Only the meeting's own fields; layouts are saved by LayoutService (since Migration step 3.6), and the access key stays.
         static async Task<(int Count, string Message, Meeting? Entity)> AddOrUpdate(ModulesDbContext dbContext, Meeting entity)
         {
-            var existing = await dbContext.Meetings
-                .Include(m => m.Layouts)
-                .SingleOrDefaultAsync(m => m.Id == entity.Id)
-                .ConfigureAwait(false);
-
-            return (existing is null) ?
-                await AddNew(dbContext, entity).ConfigureAwait(false) :
-                await UpdateExisting(dbContext, entity, existing).ConfigureAwait(false);
-        }
-
-        static async Task<(int Count, string Message, Meeting? Entity)> AddNew(ModulesDbContext dbContext, Meeting entity)
-        {
-            dbContext.Add(entity);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(entity);
-        }
-        static async Task<(int Count, string Message, Meeting? Entity)> UpdateExisting(ModulesDbContext dbContext, Meeting entity, Meeting existing)
-        {
+            var existing = await dbContext.Meetings.SingleOrDefaultAsync(m => m.Id == entity.Id).ConfigureAwait(false);
+            if (existing is null)
+            {
+                entity.Layouts.Clear();
+                entity.Participants.Clear();
+                dbContext.Add(entity);
+                return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(entity);
+            }
+            entity.AccessKey = existing.AccessKey;
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            AddOrRemoveLayouts(dbContext, entity, existing);
-            if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(existing);
+            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+            return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(existing);
         }
-
-        static void AddOrRemoveLayouts(ModulesDbContext dbContext, Meeting entity, Meeting existing)
-        {
-            foreach (var layout in entity.Layouts)
-            {
-                layout.RegistrationClosingDate = layout.RegistrationClosingDate.Date.AddMinutes(1439);
-                var existingLayout = existing.Layouts.FirstOrDefault(g => g.Id == layout.Id);
-                if (existingLayout is null) existing.Layouts.Add(layout);
-                else dbContext.Entry(existingLayout).CurrentValues.SetValues(layout);
-            }
-            foreach (var layout in existing.Layouts)
-            {
-                if (!entity.Layouts.Any(mg => mg.Id == layout.Id)) dbContext.Remove(layout);
-            }
-        }
-
-        static bool IsUnchanged(ModulesDbContext dbContext, Meeting entity) =>
-                dbContext.Entry(entity).State == EntityState.Unchanged &&
-                (entity.Layouts.Count == 0 || entity.Layouts.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged));
     }
 
     public async Task<(int Count, string? Message)> DeleteLayoutAsync(ClaimsPrincipal? principal, int meetingId, int layoutId)
