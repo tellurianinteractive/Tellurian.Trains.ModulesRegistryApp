@@ -20,10 +20,11 @@ using ModulesRegistry.StatusPages;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsProduction())
+// Azure Key Vault only when the App Service has the setting VaultUri; without it, the connection string and the mail settings
+// come from the App Service's connection strings and app settings (decided 2026-11-21, so the vault can be removed).
+if (builder.Environment.IsProduction() && Environment.GetEnvironmentVariable("VaultUri") is { Length: > 0 } vaultUri)
 {
-    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
-    builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+    builder.Configuration.AddAzureKeyVault(new Uri(vaultUri), new DefaultAzureCredential());
 }
 
 builder.AddApplicationInsights();

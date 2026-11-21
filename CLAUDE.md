@@ -58,7 +58,7 @@ The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Us
 }
 ```
 
-In production, secrets come from Azure Key Vault via the `VaultUri` environment variable (`App/Program.cs`). Logs and telemetry go to Application Insights only when the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` is set (`App/Diagnostics/ApplicationInsights.cs`); log levels and saved queries are in `System Design Documents/Logging.md`. The app must stay on Azure free tiers, so check the cost of any change in Azure first. `DefaultUser` is registered as a singleton — populated from `TestUsername`/`TestPassword` in development, empty in production.
+In production, the connection string and the `Brevo:*` mail settings come from the App Service's connection strings and app settings; Azure Key Vault is used only when the App Service setting `VaultUri` is set (`App/Program.cs`), and is being removed (2026-11-21). Logs and telemetry go to Application Insights only when the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` is set (`App/Diagnostics/ApplicationInsights.cs`); log levels and saved queries are in `System Design Documents/Logging.md`. The app must stay on Azure free tiers, so check the cost of any change in Azure first. `DefaultUser` is registered as a singleton — populated from `TestUsername`/`TestPassword` in development, empty in production.
 
 ## Database workflow (important)
 

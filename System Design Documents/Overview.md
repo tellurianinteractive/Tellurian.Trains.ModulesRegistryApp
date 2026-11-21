@@ -20,7 +20,7 @@ You need to know how to create a [*pull request*](https://docs.github.com/en/pul
 The web application is developed using *.NET* and *Blazor* server-side rendering of the user interface.
 It is a cloud application running as an *Microsoft Azure App Service*, 
 and uses a *Microsoft Azure SQL* database.
-*Azure Key Vault* is used for storing secrets.
+Secrets (the database connection string and the mail settings) are stored in the App Service's connection strings and app settings.
 Every page is rendered on the server as plain HTML (static server-side rendering, since 2026); no SignalR connection is used.
 
 To access the runtime environment, you need an *Azure* account and
