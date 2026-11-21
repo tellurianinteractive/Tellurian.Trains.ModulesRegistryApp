@@ -2,157 +2,165 @@
 @page "/vehicles/{VehicleId:int}/country/{CountryId:int}/edit"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the cargo form: a POST of VehicleFormData, validated in the browser and again on the
+   server; the id comes from the address. The owner edits their own vehicles (/vehicles/my/{id}), and a country administrator
+   those of owners in the administrator's country (/vehicles/{id}/country/{countryId}/edit); a new vehicle is the user's own.
+   The coupling and wheels lists depend on the scale: they show the features of the stored (or posted) scale, and the service
+   removes a feature that is not for the saved scale, so after a change of scale the form is shown again with the new lists.
+   After saving, a redirect to this form, which reads the vehicle back; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Vehicles
 
 @inject NavigationManager Navigator
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
 @inject VehicleService VehicleService
 @inject ScaleService ScaleService
 @inject CountryService CountryService
 
-<PageHeading Context="@Vehicle" PageAction="@PageAction" ObjectName="Vehicle" BackHref="@ListHref" />
+<PageHeading Context="@Existing" PageAction="@VehicleId.ToAddOrEditPageAction()" ObjectName="Vehicle" BackHref="@ListHref" />
 
-@if (Vehicle is null)
+@if (FailureMessage is not null)
 {
-
-}
-else
-{
-    @if (Vehicle.PrototypeImageHref.HasValue)
-    {
-        <Image Href="@Vehicle.PrototypeImageHref" CssClass="image vehicle"/>
-    }
-    <EditTemplate Item="@Vehicle" ShowSaveButton="true" OnValidSubmit="OnValidSubmit">
-        <Inputs>
-            <h3>@Localizer["PrototypeData"]</h3>
-
-            <AppInputSelectNullable Width="2" Label="Keeper-Country" @bind-Value="@Vehicle.KeeperCountryId" Items="CountryItems" ShowNoneOption="true" />
-            <AppInputText Width="1" Label="KeeperSignature" @bind-Value="@Vehicle.KeeperSignature" />
-            <AppInputText Width="1" Label="Class" @bind-Value="@Vehicle.VehicleClass" />
-            <AppInputText Width="2" Label="VehicleNumber" @bind-Value="@Vehicle.VehicleNumber" />
-            <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="@Vehicle.Theme" ShowPleaseSelect=true />
-            <AppInputText Width="2" Label="Manufacturer" @bind-Value="@Vehicle.PrototypeManufacturerName" />
-            <AppInputNumber Width="1" Label="ManufacturedYear" @bind-Value="@Vehicle.PrototypeManufactureYear" />
-            <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="@Vehicle.TractionFeatureId" ShowNoneOption="true" />
-            <AppInputNumber Width="1" Label="Length" Unit="m" @bind-Value="@Vehicle.PrototypeLength" Step="0.01" />
-            <AppInputNumber Width="1" Label="Weight" Unit="t" @bind-Value="@Vehicle.PrototypeWeight" Step="0.01" />
-            <AppInputNumber Width="1" Label="EnginePower" Unit="kW" @bind-Value="@Vehicle.EnginePower" />
-            <AppInputText Width="12" Label="Prototype-ImageLink" @bind-Value="@Vehicle.PrototypeImageHref" />
-
-            <h4>@Localizer["PeriodInThisVersion"]</h4>
-            <AppInputNumber Width="1" Label="FromYear" @bind-Value="@Vehicle.ThisEmbodiementFromYear" />
-            <AppInputNumber Width="1" Label="UptoYear" @bind-Value="@Vehicle.ThisEmbodiementUptoYear" />
-            <h3>@Localizer["ModelData"]</h3>
-            <AppInputNumber Width="1" Label="InventoryNumber" @bind-Value="@Vehicle.InventoryNumber" />
-            <AppInputSelect Width="1" Label="Scale" @bind-Value="@Vehicle.ScaleId" Items="ScaleItems" OnChangeNotifier="@( async () => await ScaleHasChanged(Vehicle.ScaleId))" />
-            <AppInputText Width="2" Label="Model=Manufacturer" @bind-Value="@Vehicle.ModelManufacturerName" />
-            <AppInputText Width="1" Label="ArticleNumber" @bind-Value="@Vehicle.ModelNumber" />
-            <AppInputSelectNullable Width="1" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="@Vehicle.CouplingFeatureId" ShowNoneOption="true" />
-            <AppInputSelectNullable Width="1" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="@Vehicle.WheelsFeatureId" ShowNoneOption="true" />
-            <AppInputText Width="2" Label="DecoderType" @bind-Value="@Vehicle.DecoderType" />
-            <AppInputNumber Width="1" Label="DccAddress" @bind-Value="@Vehicle.DccAddress" />
-            <div />
-            <AppInputCheck Width="2" Label="HasSound" @bind-Value="@Vehicle.HasSound" />
-            <AppInputCheck Width="2" Label="HasRemoteCouplings" @bind-Value="@Vehicle.HasRemoteCouplings" />
-            <AppInputCheck Width="2" Label="IsWeathered" @bind-Value="@Vehicle.IsWeathered" />
-            <div />
-            <AppInputText Width="10" Label="Note" @bind-Value="@Vehicle.Note" Placeholder="@Localizer.MaxChars(200)" />
-            <h3>@Localizer["Functions"]</h3>
-            <AppInputText Width="1" Label="F0" @bind-Value="@Vehicle.F0" />
-            <AppInputText Width="1" Label="F1" @bind-Value="@Vehicle.F1" />
-            <AppInputText Width="1" Label="F2" @bind-Value="@Vehicle.F2" />
-            <AppInputText Width="1" Label="F3" @bind-Value="@Vehicle.F3" />
-            <AppInputText Width="1" Label="F4" @bind-Value="@Vehicle.F4" />
-            <AppInputText Width="1" Label="F5" @bind-Value="@Vehicle.F5" />
-            <AppInputText Width="1" Label="F6" @bind-Value="@Vehicle.F6" />
-            <AppInputText Width="1" Label="F7" @bind-Value="@Vehicle.F7" />
-            <AppInputText Width="1" Label="F8" @bind-Value="@Vehicle.F8" />
-            <AppInputText Width="1" Label="F9" @bind-Value="@Vehicle.F9" />
-            <AppInputText Width="1" Label="F10" @bind-Value="@Vehicle.F10" />
-            <AppInputText Width="1" Label="F11" @bind-Value="@Vehicle.F11" />
-            <AppInputText Width="1" Label="F12" @bind-Value="@Vehicle.F12" />
-            <AppInputText Width="1" Label="F13" @bind-Value="@Vehicle.F13" />
-            <AppInputText Width="1" Label="F14" @bind-Value="@Vehicle.F14" />
-            <AppInputText Width="1" Label="F15" @bind-Value="@Vehicle.F15" />
-            <AppInputText Width="1" Label="F16" @bind-Value="@Vehicle.F16" />
-            <AppInputText Width="1" Label="F17" @bind-Value="@Vehicle.F17" />
-            <AppInputText Width="1" Label="F18" @bind-Value="@Vehicle.F18" />
-            <AppInputText Width="1" Label="F19" @bind-Value="@Vehicle.F19" />
-            <AppInputText Width="1" Label="F20" @bind-Value="@Vehicle.F20" />
-            <AppInputText Width="1" Label="F21" @bind-Value="@Vehicle.F21" />
-            <AppInputText Width="1" Label="F22" @bind-Value="@Vehicle.F22" />
-            <AppInputText Width="1" Label="F23" @bind-Value="@Vehicle.F23" />
-            <AppInputText Width="1" Label="F24" @bind-Value="@Vehicle.F24" />
-            <AppInputText Width="1" Label="F25" @bind-Value="@Vehicle.F25" />
-            <AppInputText Width="1" Label="F26" @bind-Value="@Vehicle.F26" />
-            <AppInputText Width="1" Label="F27" @bind-Value="@Vehicle.F27" />
-            <AppInputText Width="1" Label="F28" @bind-Value="@Vehicle.F28" />
-            <AppInputText Width="1" Label="F29" @bind-Value="@Vehicle.F29" />
-        </Inputs>
-    </EditTemplate>
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
 
+@if (Existing?.PrototypeImageHref.HasValue == true)
+{
+    <Image Href="@Existing.PrototypeImageHref" CssClass="image vehicle" />
+}
+
+<EditTemplate Item="Form" FormName="vehicle" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <h3>@Localizer["PrototypeData"]</h3>
+
+        <AppInputSelectNullable Width="2" Label="Keeper-Country" @bind-Value="Form!.KeeperCountryId" Items="CountryItems" ShowNoneOption="true" />
+        <AppInputText Width="1" Label="KeeperSignature" @bind-Value="Form!.KeeperSignature" />
+        <AppInputText Width="1" Label="Class" @bind-Value="Form!.VehicleClass" />
+        <AppInputText Width="2" Label="VehicleNumber" @bind-Value="Form!.VehicleNumber" />
+        <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="Form!.Theme" ShowPleaseSelect="true" />
+        <AppInputText Width="2" Label="Manufacturer" @bind-Value="Form!.PrototypeManufacturerName" />
+        <AppInputNumber TValue="int?" Width="1" Label="ManufacturedYear" @bind-Value="Form!.PrototypeManufactureYear" />
+        <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="Form!.TractionFeatureId" ShowNoneOption="true" />
+        <AppInputNumber TValue="decimal?" Width="1" Label="Length" Unit="m" @bind-Value="Form!.PrototypeLength" Step="0.01" />
+        <AppInputNumber TValue="decimal?" Width="1" Label="Weight" Unit="t" @bind-Value="Form!.PrototypeWeight" Step="0.01" />
+        <AppInputNumber TValue="int?" Width="1" Label="EnginePower" Unit="kW" @bind-Value="Form!.EnginePower" />
+        <AppInputText Width="12" Label="Prototype-ImageLink" @bind-Value="Form!.PrototypeImageHref" />
+
+        <h4>@Localizer["PeriodInThisVersion"]</h4>
+        <AppInputNumber TValue="int?" Width="1" Label="FromYear" @bind-Value="Form!.ThisEmbodiementFromYear" />
+        <AppInputNumber TValue="int?" Width="1" Label="UptoYear" @bind-Value="Form!.ThisEmbodiementUptoYear" />
+        <AppYearPeriodHint />
+
+        <h3>@Localizer["ModelData"]</h3>
+        <AppInputNumber TValue="int" Width="1" Label="InventoryNumber" @bind-Value="Form!.InventoryNumber" />
+        <AppInputSelect Width="1" Label="Scale" @bind-Value="Form!.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+        <AppInputText Width="2" Label="Model=Manufacturer" @bind-Value="Form!.ModelManufacturerName" />
+        <AppInputText Width="1" Label="ArticleNumber" @bind-Value="Form!.ModelNumber" />
+        <AppInputSelectNullable Width="1" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="Form!.CouplingFeatureId" ShowNoneOption="true" />
+        <AppInputSelectNullable Width="1" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="Form!.WheelsFeatureId" ShowNoneOption="true" />
+        <AppInputText Width="2" Label="DecoderType" @bind-Value="Form!.DecoderType" />
+        <AppInputNumber TValue="int?" Width="1" Label="DccAddress" @bind-Value="Form!.DccAddress" />
+        <div />
+        <AppInputCheck Width="2" Label="HasSound" @bind-Value="Form!.HasSound" />
+        <AppInputCheck Width="2" Label="HasRemoteCouplings" @bind-Value="Form!.HasRemoteCouplings" />
+        <AppInputCheck Width="2" Label="IsWeathered" @bind-Value="Form!.IsWeathered" />
+        <div />
+        <AppInputText Width="10" Label="Note" @bind-Value="Form!.Note" Placeholder="@Localizer.MaxChars(200)" />
+
+        @* The inputs are placed directly in the form, so the browser gets their validation rules (Migration step 3.6). *@
+        <h3>@Localizer["Functions"]</h3>
+        <AppInputText Width="1" Label="F0" @bind-Value="Form!.F0" />
+        <AppInputText Width="1" Label="F1" @bind-Value="Form!.F1" />
+        <AppInputText Width="1" Label="F2" @bind-Value="Form!.F2" />
+        <AppInputText Width="1" Label="F3" @bind-Value="Form!.F3" />
+        <AppInputText Width="1" Label="F4" @bind-Value="Form!.F4" />
+        <AppInputText Width="1" Label="F5" @bind-Value="Form!.F5" />
+        <AppInputText Width="1" Label="F6" @bind-Value="Form!.F6" />
+        <AppInputText Width="1" Label="F7" @bind-Value="Form!.F7" />
+        <AppInputText Width="1" Label="F8" @bind-Value="Form!.F8" />
+        <AppInputText Width="1" Label="F9" @bind-Value="Form!.F9" />
+        <AppInputText Width="1" Label="F10" @bind-Value="Form!.F10" />
+        <AppInputText Width="1" Label="F11" @bind-Value="Form!.F11" />
+        <AppInputText Width="1" Label="F12" @bind-Value="Form!.F12" />
+        <AppInputText Width="1" Label="F13" @bind-Value="Form!.F13" />
+        <AppInputText Width="1" Label="F14" @bind-Value="Form!.F14" />
+        <AppInputText Width="1" Label="F15" @bind-Value="Form!.F15" />
+        <AppInputText Width="1" Label="F16" @bind-Value="Form!.F16" />
+        <AppInputText Width="1" Label="F17" @bind-Value="Form!.F17" />
+        <AppInputText Width="1" Label="F18" @bind-Value="Form!.F18" />
+        <AppInputText Width="1" Label="F19" @bind-Value="Form!.F19" />
+        <AppInputText Width="1" Label="F20" @bind-Value="Form!.F20" />
+        <AppInputText Width="1" Label="F21" @bind-Value="Form!.F21" />
+        <AppInputText Width="1" Label="F22" @bind-Value="Form!.F22" />
+        <AppInputText Width="1" Label="F23" @bind-Value="Form!.F23" />
+        <AppInputText Width="1" Label="F24" @bind-Value="Form!.F24" />
+        <AppInputText Width="1" Label="F25" @bind-Value="Form!.F25" />
+        <AppInputText Width="1" Label="F26" @bind-Value="Form!.F26" />
+        <AppInputText Width="1" Label="F27" @bind-Value="Form!.F27" />
+        <AppInputText Width="1" Label="F28" @bind-Value="Form!.F28" />
+        <AppInputText Width="1" Label="F29" @bind-Value="Form!.F29" />
+    </Inputs>
+</EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int VehicleId { get; set; }
     [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromForm(FormName = "vehicle")] private VehicleFormData? Form { get; set; }
+
+    private const int DefaultScaleId = 3; // H0, as before.
+
     ClaimsPrincipal? Principal;
-    Vehicle? Vehicle;
+    Vehicle? Existing;
     IEnumerable<ListboxItem> CountryItems = [];
     IEnumerable<ListboxItem> CouplingFeatureItems = [];
     IEnumerable<ListboxItem> TractionFeatureItems = [];
     IEnumerable<ListboxItem> WheelsFeatureItems = [];
     IEnumerable<ListboxItem> ScaleItems = [];
-
+    string? FailureMessage;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (VehicleId > 0)
+        {
+            Existing = await VehicleService.GetVehicleAsync(Principal, VehicleId, CountryId); // The user's own, or in the administrator's country.
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Vehicle { ScaleId = DefaultScaleId }).AsFormData();
         ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
         TractionFeatureItems = await VehicleService.GetTractionFeaturesListboxDataAsync();
         CountryItems = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
+        var scaleId = Form.ScaleId > 0 ? Form.ScaleId : DefaultScaleId;
+        CouplingFeatureItems = await VehicleService.GetCouplingFeaturesListboxDataAsync(scaleId);
+        WheelsFeatureItems = await VehicleService.GetWheelsFeaturesListboxDataAsync(scaleId);
     }
 
-    protected override async Task OnParametersSetAsync()
+    async Task SaveAsync()
     {
-        if (VehicleId > 0)
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded vehicle (Migration section 3.4, the data-loss rule).
+        var vehicle = Form.AsEntity(Existing, owningPersonId: Principal.PersonId());
+        var (count, message, saved) = await VehicleService.SaveAsync(Principal, vehicle);
+        if (count == 0)
         {
-            Vehicle = await VehicleService.GetVehicleAsync(Principal, VehicleId, CountryId);
+            FailureMessage = message;
+            return;
         }
-        else
-        {
-            Vehicle = new Vehicle() { OwningPersonId = Principal.PersonId(), ScaleId = 3 };
-        }
-        await LoadScaleRelatedListboxes(Vehicle?.ScaleId);
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(EditHref((saved ?? vehicle).Id));
     }
 
-    private async Task LoadScaleRelatedListboxes(int? scaleId)
-    {
-        if (scaleId.HasValue)
-        {
-            CouplingFeatureItems = await VehicleService.GetCouplingFeaturesListboxDataAsync(scaleId.Value);
-            WheelsFeatureItems = await VehicleService.GetWheelsFeaturesListboxDataAsync(scaleId.Value);
-        }
-    }
-
-    async Task OnValidSubmit()
-    {
-        var result = await VehicleService.SaveAsync(Principal, Vehicle!);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        Vehicle = result.Entity;
-        await Task.Delay(3000);
-        Navigator.NavigateTo(ListHref, forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
-    }
+    string EditHref(int id) => CountryId > 0 ? $"vehicles/{id}/country/{CountryId}/edit" : $"vehicles/my/{id}";
 
     // The vehicle lists are static, so this page may have no history (Migration step 3.3).
     string ListHref => CountryId > 0 ? $"/vehicles/admin/country/{CountryId}" : "/vehicles/my";
-
-    async Task ScaleHasChanged(int scaleId)
-    {
-        await LoadScaleRelatedListboxes(scaleId);
-    }
-
-    string Label => VehicleId == 0 ? "Add" : "Edit";
-    PageAction PageAction => VehicleId == 0 ? PageAction.Add : PageAction.Edit;
 }

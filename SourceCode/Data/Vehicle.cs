@@ -76,11 +76,6 @@ public class Vehicle
     public string F27 { get; set; }
     public string F28 { get; set; }
     public string F29 { get; set; }
-    public void FormatData()
-    {
-        KeeperSignature = KeeperSignature.ToUpperInvariant();
-        Theme = Theme.ToUpperInvariant();
-    }
 }
 
 

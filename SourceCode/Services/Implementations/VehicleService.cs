@@ -55,7 +55,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.Vehicles
-                .Where(v => v.Id == vehicleId)
+                .Where(v => v.Id == vehicleId && v.OwningPerson.CountryId == countryId) // Only vehicles of owners in the administrator's country.
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
         }
@@ -106,14 +106,25 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
             .ToReadOnlyListAsync();
     }
 
+    /// <summary>
+    /// Saves a vehicle. The owner saves their own vehicles, and a country administrator those of owners in the administrator's country;
+    /// a new vehicle is always the user's own. The owner is never changed here. A coupling or wheels feature that is not for the
+    /// vehicle's scale (or not of its kind) is removed, since the lists depend on the scale (Migration step 3.6).
+    /// </summary>
     public async Task<(int Count, string Message, Vehicle? Entity)> SaveAsync(ClaimsPrincipal? principal, Vehicle entity)
     {
         entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
         if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Vehicle>();
 
-        entity.FormatData();
         using var dbContext = Factory.CreateDbContext();
-        var existing = await dbContext.Vehicles.FindAsync(entity.Id).ConfigureAwait(false);
+        var existing = entity.Id > 0 ? await dbContext.Vehicles.Include(v => v.OwningPerson).SingleOrDefaultAsync(v => v.Id == entity.Id).ConfigureAwait(false) : null;
+        if (entity.Id > 0 && existing is null) return principal.SaveNotAuthorised<Vehicle>();
+        if (existing is null ? entity.OwningPersonId != principal.PersonId() : !MaySave(principal, existing)) return principal.SaveNotAuthorised<Vehicle>();
+        if (existing is not null) entity.OwningPersonId = existing.OwningPersonId;
+        entity.CouplingFeatureId = await FeatureForScaleOrNullAsync(dbContext, "COUPLINGS", entity.CouplingFeatureId, entity.ScaleId);
+        entity.WheelsFeatureId = await FeatureForScaleOrNullAsync(dbContext, "WHEELS", entity.WheelsFeatureId, entity.ScaleId);
+        entity.TractionFeatureId = await FeatureForScaleOrNullAsync(dbContext, "TRACTION", entity.TractionFeatureId, entity.ScaleId);
+
         int result;
         if (existing is null)
         {
@@ -133,6 +144,13 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         await AddEnginePowerForSameKeeperAndClass(vehicle);
         return result.SaveResult(vehicle);
     }
+
+    private static bool MaySave(ClaimsPrincipal principal, Vehicle existing) =>
+        existing.OwningPersonId == principal.PersonId() || principal.IsCountryAdministratorInCountry(existing.OwningPerson.CountryId);
+
+    private static async Task<int?> FeatureForScaleOrNullAsync(ModulesDbContext dbContext, string category, int? featureId, int scaleId) =>
+        featureId is null ? null :
+        await dbContext.VehicleFeatures.AnyAsync(vf => vf.Id == featureId && vf.Category == category && (vf.OnlyScaleId == null || vf.OnlyScaleId == scaleId)) ? featureId : null;
 
     public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
     {

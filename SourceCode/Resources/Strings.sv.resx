@@ -2790,4 +2790,10 @@
   <data name="OwnedShare" xml:space="preserve">
     <value>Ägd andel</value>
   </data>
+  <data name="DecoderType" xml:space="preserve">
+    <value>Dekodertyp</value>
+  </data>
+  <data name="ModelManufacturer" xml:space="preserve">
+    <value>Modelltillverkare</value>
+  </data>
 </root>

@@ -160,6 +160,25 @@ public static class EntityCorrectionExtensions
             vehicle.EnginePower = vehicle.EnginePower.OrNullIfZero();
             vehicle.PrototypeLength = vehicle.PrototypeLength.OrNullIfZero();
             vehicle.PrototypeWeight = vehicle.PrototypeWeight.OrNullIfZero();
+            vehicle.KeeperSignature = vehicle.KeeperSignature.Corrected(TextCase.UpperCase);
+            vehicle.Theme = vehicle.Theme.Corrected(TextCase.UpperCase);
+            vehicle.VehicleClass = vehicle.VehicleClass.Corrected(TextCase.AsTyped);
+            vehicle.VehicleNumber = vehicle.VehicleNumber.Corrected(TextCase.AsTyped);
+            vehicle.ModelManufacturerName = vehicle.ModelManufacturerName.Corrected(TextCase.AsTyped);
+            vehicle.PrototypeManufacturerName = Typed(vehicle.PrototypeManufacturerName);
+            vehicle.PrototypeImageHref = vehicle.PrototypeImageHref.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty);
+            vehicle.ModelNumber = Typed(vehicle.ModelNumber);
+            vehicle.DecoderType = Typed(vehicle.DecoderType);
+            vehicle.Note = Typed(vehicle.Note);
+            // The function keys' names, as typed.
+            (vehicle.F0, vehicle.F1, vehicle.F2, vehicle.F3, vehicle.F4, vehicle.F5, vehicle.F6, vehicle.F7, vehicle.F8, vehicle.F9) =
+                (Typed(vehicle.F0), Typed(vehicle.F1), Typed(vehicle.F2), Typed(vehicle.F3), Typed(vehicle.F4), Typed(vehicle.F5), Typed(vehicle.F6), Typed(vehicle.F7), Typed(vehicle.F8), Typed(vehicle.F9));
+            (vehicle.F10, vehicle.F11, vehicle.F12, vehicle.F13, vehicle.F14, vehicle.F15, vehicle.F16, vehicle.F17, vehicle.F18, vehicle.F19) =
+                (Typed(vehicle.F10), Typed(vehicle.F11), Typed(vehicle.F12), Typed(vehicle.F13), Typed(vehicle.F14), Typed(vehicle.F15), Typed(vehicle.F16), Typed(vehicle.F17), Typed(vehicle.F18), Typed(vehicle.F19));
+            (vehicle.F20, vehicle.F21, vehicle.F22, vehicle.F23, vehicle.F24, vehicle.F25, vehicle.F26, vehicle.F27, vehicle.F28, vehicle.F29) =
+                (Typed(vehicle.F20), Typed(vehicle.F21), Typed(vehicle.F22), Typed(vehicle.F23), Typed(vehicle.F24), Typed(vehicle.F25), Typed(vehicle.F26), Typed(vehicle.F27), Typed(vehicle.F28), Typed(vehicle.F29));
+
+            static string? Typed(string? text) => text.Corrected(TextCase.AsTyped, Optional);
         }
     }
 
