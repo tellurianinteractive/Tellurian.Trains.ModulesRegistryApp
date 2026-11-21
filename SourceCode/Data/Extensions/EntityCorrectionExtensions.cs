@@ -128,6 +128,29 @@ public static class EntityCorrectionExtensions
         {
             module.FullName = module.FullName.Corrected(TextCase.InitialCapital);
             (module.RepresentsFromYear, module.RepresentsUptoYear) = YearPeriod.Corrected(module.RepresentsFromYear, module.RepresentsUptoYear);
+            module.ConfigurationLabel = module.ConfigurationLabel.Corrected(TextCase.AsTyped, Optional);
+            module.PackageLabel = module.PackageLabel.Corrected(TextCase.AsTyped, Optional);
+            module.Theme = module.Theme.Corrected(TextCase.AsTyped, Optional);
+            module.Note = module.Note.Corrected(TextCase.AsTyped, Optional);
+            module.FremoNumber = module.FremoNumber.OrNullIfZero();
+            module.NumberOfSections = module.NumberOfSections.OrNullIfZero();
+            module.SpeedLimit = module.SpeedLimit.OrNullIfZero();
+            // The lists offer only valid values; anything else is the default.
+            if (!Enum.IsDefined((ObjectVisibility)module.ObjectVisibilityId)) module.ObjectVisibilityId = (int)ObjectVisibility.GroupMembers;
+            if (!Enum.IsDefined((ModuleFunctionalState)module.FunctionalState)) module.FunctionalState = default;
+            if (!Enum.IsDefined((ModuleLandscapeState)module.LandscapeState)) module.LandscapeState = default;
+            if (!Enum.IsDefined((LandscapeSeason)module.LandscapeSeason)) module.LandscapeSeason = default;
+            if (!Enum.IsDefined((SignalFeature)module.SignalFeature)) module.SignalFeature = default;
+            if (!Enum.IsDefined((OverheadLineFeature)module.OverheadLineFeature)) module.OverheadLineFeature = default;
+        }
+    }
+
+    extension(ModuleExit exit)
+    {
+        public void CorrectInput()
+        {
+            exit.Label = exit.Label.Corrected(TextCase.AsTyped);
+            if (!Enum.IsDefined((ModuleExitDirection)exit.Direction)) exit.Direction = default;
         }
     }
 

@@ -2796,4 +2796,10 @@
   <data name="ModelManufacturer" xml:space="preserve">
     <value>Model manufacturer</value>
   </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="VariantOrBoxLabel_Error" xml:space="preserve">
+    <value>Give a variant or a box label, not both</value>
+  </data>
 </root>

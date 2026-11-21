@@ -2,171 +2,226 @@
 @page "/Modules/{id:int}/Edit/GroupOwned/{GroupId:int}"
 @page "/Modules/{id:int}/Edit/PersonOwned/{PersonId:int}/InGroup/{GroupId:int}"
 
-@using System.Diagnostics.CodeAnalysis
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the station form: a POST of ModuleFormData, validated in the browser and again on the
+   server; the id comes from the address. A new module is added for the owner in the address (person or group) by a user who may
+   add modules for that owner; an existing module is edited by a user who may edit it (MayEditModuleAsync, assistants included).
+   The length is calculated from radius, angle and straight when saved. The exits are listed below, each edited on its own form
+   (ExitEdit.razor); Delete is ?deleteExit={id} with a POST confirmation. The documents are uploaded with static forms
+   (DocumentUploadForm). After saving, a redirect to this form, which reads the module back; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Modules
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
-@inject PersonService PersonService
-@inject GroupService GroupService
+@inject NavigationManager Navigator
 @inject ModuleService ModuleService
-@inject ScaleService ScaleService
 @inject StationService StationService
 @inject ModuleStandardService ModuleStandardService
 
-<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" BackHref="@BackHref" />
+<PageHeading ObjectName="Module" Context="@Existing" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" BackHref="@BackHref" />
 
-@if (Module is null)
+@if (FailureMessage is not null)
 {
-
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else
+
+<EditTemplate Item="Form" FormName="module" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="3" Label="Standard&Scale" @bind-Value="Form!.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+        <AppInputText Width="4" Label="Name" @bind-Value="Form!.FullName" />
+        <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Form!.ConfigurationLabel" />
+        <AppInputText Width="1" Label="PackageLabel" @bind-Value="Form!.PackageLabel" />
+        <AppInputNumber TValue="int?" Width="1" Label="FremoNumber" @bind-Value="Form!.FremoNumber" />
+        <AppInputNumber TValue="int?" Width="2" Label="NumberOfSections" @bind-Value="Form!.NumberOfSections" />
+
+        <AppInputSelect Width="2" Label="Visibility" @bind-Value="Form!.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
+        <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Form!.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="false" />
+        <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Form!.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="false" />
+        <AppInputSelect Width="2" Label="LandscapeSeason" @bind-Value="Form!.LandscapeSeason" Items="EnumExtensions.LandscapeSeasonListboxItems()" ShowPleaseSelect="false" />
+        <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Form!.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
+        <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Form!.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
+
+        <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
+        <AppInputNumber TValue="int?" Width="2" Label="RepresentsFromYear" @bind-Value="Form!.RepresentsFromYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="RepresentsToYear" @bind-Value="Form!.RepresentsUptoYear" />
+        <AppInputText Width="4" Label="ThemeNote" @bind-Value="Form!.Theme" />
+
+        <AppInputNumber TValue="double?" Width="1" Label="Radius" @bind-Value="Form!.Radius" Unit="mm" />
+        <AppInputNumber TValue="double?" Width="1" Label="Angle" @bind-Value="Form!.Angle" Unit="°" Step=".1" />
+        <AppInputNumber TValue="double?" Width="1" Label="Straight" @bind-Value="Form!.Straight" Unit="mm" Step="1" />
+        <div class="col-md-1">
+            <label class="form-control-label text-end">@Localizer["Length"]&nbsp;(mm)</label>
+            <div class="form-control text-end" aria-readonly="true">@(Existing?.Length.ToString("0") ?? "")</div>
+        </div>
+        <AppInputNumber TValue="double?" Width="1" Label="Width" @bind-Value="Form!.Width" Unit="mm" Step="1" />
+        <AppInputNumber TValue="int?" Width="2" Label="MaxSpeed" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
+        <AppInputNumber TValue="int" Width="2" Label="NumberOfThroughTracks" @bind-Value="Form!.NumberOfThroughTracks" />
+        <AppInputFill Width="3" />
+
+        <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Form!.IsUnavailable" />
+        <AppInputCheck Width="2" Label="IsStandAlone" @bind-Value="Form!.IsStandAlone" />
+        <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Form!.IsTurntable" />
+        <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Form!.IsDuckunder" />
+        <AppInputCheck Width="2" Label="IsSignalModule" @bind-Value="Form!.IsSignalModule" />
+        <AppInputCheck Width="2" Label="IsEndProfileSwitcher" @bind-Value="Form!.IsEndProfileSwitcher" />
+        <AppInputCheck Width="2" Label="IsEndOfLine" @bind-Value="Form!.IsEndOfLine" />
+        <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Form!.HasNormalGauge" />
+        <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Form!.HasNarrowGauge" />
+        <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Form!.HasIntegratedLocoNet" />
+        @* Always shown: a hidden checkbox isn't posted, and would be saved as unchecked. *@
+        <AppInputCheck Width="2" Label="Is2R" @bind-Value="Form!.Is2R" />
+        <AppInputCheck Width="2" Label="Is3R" @bind-Value="Form!.Is3R" />
+
+        <AppInputText Width="12" Label="Note" @bind-Value="Form!.Note" />
+    </Inputs>
+    <Buttons>
+        @if (Existing?.StationId is int stationId)
+        {
+            <AppButton Label="@Localizer.EditObject("OperationLocation")" Href="@OwnershipRef.Href("Stations", stationId, "Edit")" IconName="@FontAwesome.Station" />
+        }
+        else if (Existing is not null)
+        {
+            <AppButton Label="@Localizer["MakeAsOperationsLocation"]" Href="@StationMakeLink" IconName="@FontAwesome.Station" />
+        }
+    </Buttons>
+</EditTemplate>
+
+@if (Existing is not null && Form is not null)
 {
-    <EditTemplate Item="Module" OnValidSubmit="OnValidSubmit">
-        <Inputs>
-            <AppInputSelect Width="3" Label="Standard&Scale" @bind-Value="Module.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-            <AppInputText Width="4" Label="Name" @bind-Value="Module.FullName" />
-            <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Module.ConfigurationLabel" IsDisabled="Module.PackageLabel.HasValue" />
-            <AppInputText Width="1" Label="PackageLabel" @bind-Value="Module.PackageLabel" IsDisabled="Module.ConfigurationLabel.HasValue" />
-            <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Module.FremoNumber" />
-            <AppInputNumber Width="2" Label="NumberOfSections" @bind-Value="Module.NumberOfSections" />
-
-            <AppInputSelect Width="2" Label="Visibility" @bind-Value="Module.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
-            <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Module.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="true" />
-            <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Module.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="true" />
-            <AppInputSelect Width="2" Label="LandscapeSeason" @bind-Value="Module.LandscapeSeason" Items="EnumExtensions.LandscapeSeasonListboxItems()" ShowPleaseSelect="true" />
-            <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Module.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
-            <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Module.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
-
-            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Module.StationId" Items="StationItems" ShowNoneOption="true" />
-            <AppInputNumber Width="2" Label="RepresentsFromYear" @bind-Value="Module.RepresentsFromYear" />
-            <AppInputNumber Width="2" Label="RepresentsToYear" @bind-Value="Module.RepresentsUptoYear" />
-            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Module.Theme" />
-
-            <AppInputNumber Width="1" Label="Radius" @bind-Value="Module.Radius" Unit="mm" OnChangedValue="UpdateLength" />
-            <AppInputNumber Width="1" Label="Angle" @bind-Value="Module.Angle" Unit="°" Step=".1" OnChangedValue="UpdateLength" />
-            <AppInputNumber Width="1" Label="Straight" @bind-Value="Module.Straight" Unit="mm" Step="1" OnChangedValue="UpdateLength" />
-            <AppInputNumber Width="1" Label="Length" @bind-Value="Module.Length" Unit="mm" Step="1" IsDisabled="true" />
-            <AppInputNumber Width="1" Label="Width" @bind-Value="Module.Width" Unit="mm" Step="1" />
-            <AppInputNumber Width="2" Label="MaxSpeed" @bind-Value="Module.SpeedLimit" Unit="km/h" Step="5" />
-            <AppInputNumber Width="2" Label="NumberOfThroughTracks" @bind-Value="Module.NumberOfThroughTracks" />
-            <AppInputFill Width="3" />
-
-            <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Module.IsUnavailable" />
-            <AppInputCheck Width="2" Label="IsStandAlone" @bind-Value="Module.IsStandAlone" />
-            <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Module.IsTurntable" />
-            <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Module.IsDuckunder" />
-            <AppInputCheck Width="2" Label="IsSignalModule" @bind-Value="Module.IsSignalModule" />
-            <AppInputCheck Width="2" Label="IsEndProfileSwitcher" @bind-Value="Module.IsEndProfileSwitcher" />
-            <AppInputCheck Width="2" Label="IsEndOfLine" @bind-Value="Module.IsEndOfLine" />
-            <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Module.HasNormalGauge" />
-            <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Module.HasNarrowGauge" />
-            <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Module.HasIntegratedLocoNet" />
-            <AppInputCheck Width="2" Label="Is2R" @bind-Value="Module.Is2R" IsVisible="Show2RAnd3R" />
-            <AppInputCheck Width="2" Label="Is3R" @bind-Value="Module.Is3R" IsVisible="Show2RAnd3R" />
-
-            <AppInputText Width="12" Label="Note" @bind-Value="Module.Note" />
-
-            <ModuleExitsEdit Module="Module" />
-        </Inputs>
-        <Buttons>
-            @if (Module.StationId.HasValue)
-            {
-                <AppButton Label="@Localizer.EditObject("OperationLocation")" Href="@StationEditLink" IconName="@FontAwesome.Station" />
-            }
-            else if (Module.Id > 0)
-            {
-                <AppButton Label="@Localizer["MakeAsOperationsLocation"]" Href="@StationMakeLink" IconName="@FontAwesome.Station" />
-            }
-        </Buttons>
-    </EditTemplate>
-    @if (Id > 0)
+    <h3 class="mt-3">@Localizer["Exits"]</h3>
+    @if (ExitToDelete is not null)
     {
-        <DocumentsUpload DocumentedObject="Module">
-            <Uploads>
-                <DocumentUpload FileExtension="pdf" DocumentedObject="Module" Label="Documentation" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
-                <DocumentUpload FileExtension="dwg" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
-                @if (Principal.MayUploadSkpDrawing())
-                {
-                    <DocumentUpload FileExtension="skp" DocumentedObject="Module" Label="Drawing" MaxFileSizeKb="500" OnUpdatedAsync="OnDocumentUpdated" />
-                }
-            </Uploads>
-        </DocumentsUpload>
+        <div class="alert alert-warning mt-2" role="alert">
+            <form method="post" @formname="delete-exit" @onsubmit="DeleteExitAsync" data-enhance>
+                <AntiforgeryToken />
+                <input type="hidden" name="DeleteExitId" value="@ExitToDelete.Id" />
+                <strong>@Localizer["Delete"] @ExitToDelete.Label?</strong>
+                <AppButton Label="Delete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+                <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+            </form>
+        </div>
     }
+    <div class="col-12">
+        <AppButton Label="Add" ObjectName="Exit" Href="@ExitHref(0)" />
+    </div>
+    <TableTemplate Items="Existing.ModuleExits.OrderBy(me => me.Label)">
+        <TableHeader>
+            <th>@Localizer["Direction"]</th>
+            <th>@Localizer["Designation"]</th>
+            <th>@Localizer["EndProfile"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="exit">
+            <td>@DirectionText(exit.Direction)</td>
+            <td>@exit.Label</td>
+            <td>@exit.EndProfile?.Designation</td>
+            <td style="white-space: nowrap !important;">
+                <AppButton Label="Edit" Href="@ExitHref(exit.Id)" />
+                <AppButton Label="Delete" Href="@($"{SelfHref}?deleteExit={exit.Id}")" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
+    <DocumentsUpload DocumentedObject="Existing">
+        <Uploads>
+            <DocumentUploadForm FileExtension="pdf" DocumentedObject="Existing" Label="Documentation" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
+            <DocumentUploadForm FileExtension="dwg" DocumentedObject="Existing" Label="Drawing" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
+            @if (Principal.MayUploadSkpDrawing())
+            {
+                <DocumentUploadForm FileExtension="skp" DocumentedObject="Existing" Label="Drawing" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
+            }
+        </Uploads>
+    </DocumentsUpload>
 }
 
 @code {
     // Reached from the static modules list, this page may have no history (Migration step 3.3).
     const string BackHref = "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int GroupId { get; set; }
     [Parameter] public int PersonId { get; set; }
+    [SupplyParameterFromForm(FormName = "module")] private ModuleFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-exit")] private int DeleteExitId { get; set; }
+    [SupplyParameterFromQuery(Name = "deleteExit")] private int? DeleteExitQueryId { get; set; }
+
     ClaimsPrincipal? Principal;
-    Person? OwningPerson;
-    Group? OwningGroup;
-    Module? Module;
     ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
-    IEnumerable<ListboxItem>? ScaleItems;
+    Module? Existing;
     IEnumerable<ListboxItem>? ModuleStandardItems;
     IEnumerable<ListboxItem>? StationItems;
+    string? FailureMessage;
 
-    int? ScaleIdFor3R;
-
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is not null)
+        OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
+        if (Id > 0)
         {
-            OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
-            if (OwnershipRef.IsPerson || OwnershipRef.IsPersonInGroup)
-                OwningPerson = await PersonService.FindByIdAsync(Principal, PersonId);
-            else if (OwnershipRef.IsGroup)
-                OwningGroup = await GroupService.FindByIdAsync(Principal, GroupId);
-            ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
-            ScaleIdFor3R = ScaleItems.SingleOrDefault(i => i.Description.Contains("H0"))?.Id;
-            ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
-            StationItems = await StationService.StationItemsAsync(Principal, OwnershipRef);
-            Module = Id > 0 ? await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef) : new Module() { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, Length = 1000, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers };
+            Existing = await ModuleService.FindForEditAsync(Principal, Id);
+            if (Existing is null)
+            {
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        else if (!await ModuleService.MayAddForAsync(Principal, OwnershipRef))
+        {
+            Form = null;
+            return;
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Module { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers }).AsFormData();
+        ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
+        StationItems = await StationService.StationItemsAsync(Principal, OwnershipRef);
+        if (Existing?.StationId is int stationId && !StationItems.Any(s => s.Id == stationId))
+        {
+            var station = await StationService.FindByIdAsync(Principal, stationId);
+            if (station is not null) StationItems = [new ListboxItem(station.Id, station.FullName), .. StationItems];
         }
     }
 
-    private async Task OnValidSubmit()
-    {
-        if (Module is not null)
-        {
-            Module.Length = Module.TotalLength();
-            Module.ModuleExits = Module.ModuleExits.Where(mg => mg.EndProfileId > 0 && mg.Label.Length > 0).ToList(); // Fix because validation not works as expected.
-            var result = await ModuleService.SaveAsync(Principal, Module, OwnershipRef);
-            Module = result.Entity;
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
+    ModuleExit? ExitToDelete => DeleteExitQueryId > 0 ? Existing?.ModuleExits.FirstOrDefault(e => e.Id == DeleteExitQueryId) : null;
 
-    private async Task OnDocumentUpdated()
-    {
-        Module = await ModuleService.FindByIdAsync(Principal, Id, OwnershipRef);
-    }
+    string OwnerSuffix =>
+        PersonId > 0 && GroupId > 0 ? $"PersonOwned/{PersonId}/InGroup/{GroupId}" :
+        GroupId > 0 ? $"GroupOwned/{GroupId}" : $"PersonOwned/{PersonId}";
 
-    void UpdateLength()
-    {
-        if (Module is not null) Module.Length = Module.TotalLength();
-    }
-
-    object? Owner => OwningGroup is not null ? OwningGroup : OwningPerson;
-    private string Heading => Localizer.HeadingText(null, "Module", OwningGroup is null ? OwningPerson : OwningGroup, Id.ToAddOrEditPageAction());
-
-    bool HasStation([NotNullWhen(true)] Module? module) => module is not null && module.StationId.HasValue;
-
-    bool Show2RAnd3R => Module is not null && (ScaleIdFor3R is null || ScaleIdFor3R == Module.ScaleId);
-
-    string StationEditLink => HasStation(Module) && Module.StationId.HasValue ?
-        OwnershipRef.Href("Stations", Module.StationId.Value, "Edit") :
-        "";
+    string EditHref(int moduleId) => $"Modules/{moduleId}/Edit/{OwnerSuffix}";
+    string SelfHref => EditHref(Id);
+    string ExitHref(int exitId) => $"Modules/{Id}/Exits/{exitId}/Edit?back={Uri.EscapeDataString(SelfHref)}";
 
     string StationMakeLink =>
-        Module is null ? string.Empty :
-        OwnershipRef.IsGroup ? $"Stations/Create/{Module.Id}/GroupOwned/{OwnershipRef.GroupId}" :
-        $"Stations/Create/{Module.Id}/PersonOwned/{OwnershipRef.PersonId}";
+        OwnershipRef.IsGroup ? $"Stations/Create/{Id}/GroupOwned/{OwnershipRef.GroupId}" :
+        $"Stations/Create/{Id}/PersonOwned/{OwnershipRef.PersonId}";
+
+    static string DirectionText(int direction) =>
+        EnumExtensions.StationEntryDirectionsListboxItems().FirstOrDefault(i => i.Id == direction)?.Description ?? string.Empty;
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded module (Migration section 3.4, the data-loss rule).
+        var module = Form.AsEntity(Existing);
+        var (count, message, saved) = await ModuleService.SaveAsync(Principal, module, OwnershipRef);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(EditHref((saved ?? module).Id));
+    }
+
+    async Task DeleteExitAsync()
+    {
+        // Only an exit of this module (the service also checks the user's rights for the exit's module).
+        if (Existing is null || !Existing.ModuleExits.Any(e => e.Id == DeleteExitId)) return;
+        var deleted = (await ModuleService.DeleteExitAsync(Principal, DeleteExitId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(SelfHref);
+    }
 }

@@ -187,124 +187,133 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         }
         return null;
     }
-    public Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity) =>
-        SaveAsync(principal, entity, ModuleOwnershipRef.None);
-
+    /// <summary>
+    /// Saves a module's own fields; its exits are saved one by one (<see cref="SaveExitAsync"/>). An existing module by a user who may
+    /// edit it (<c>MayEditModuleAsync</c>, assistants included); a new module for the owner in <paramref name="ownerRef"/> by a user
+    /// who may add modules for that owner (<c>MayAddModuleForAsync</c>). The scale follows the standard and the length is calculated;
+    /// documents, exits and owners are never changed here. A changed station must be one the user may edit, and a station keeps at
+    /// least one module.
+    /// </summary>
+    /// <remarks>
+    /// Before Migration step 3.6 the rights came from the owner in the page's address, whatever module id was posted.
+    /// </remarks>
     public async Task<(int Count, string Message, Module? Entity)> SaveAsync(ClaimsPrincipal? principal, Module entity, ModuleOwnershipRef ownerRef)
     {
         entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
+        if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Module>();
         ownerRef = principal.UpdateFrom(ownerRef);
         entity.Length = entity.TotalLength();
         using var dbContext = Factory.CreateDbContext();
         entity.ScaleId = await dbContext.ModuleStandards // This statement replaces the need to enter this in the user interface.
             .Where(ms => ms.Id == entity.StandardId)
             .Select(ms => ms.ScaleId).SingleOrDefaultAsync();
-        var isGroupAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
-        if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef))
+        if (entity.ScaleId == 0) return principal.SaveNotAuthorised<Module>();
+
+        var existing = entity.Id > 0 ? await dbContext.Modules.FirstOrDefaultAsync(m => m.Id == entity.Id) : null;
+        if (entity.Id > 0 && (existing is null || !await dbContext.MayEditModuleAsync(principal, existing.Id))) return principal.SaveNotAuthorised<Module>();
+        if (existing is null && !await dbContext.MayAddModuleForAsync(principal, ownerRef)) return principal.SaveNotAuthorised<Module>();
+        if (entity.StationId.HasValue && entity.StationId != existing?.StationId && !await dbContext.MayEditStationAsync(principal, entity.StationId.Value)) return principal.SaveNotAuthorised<Module>();
+        if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef)) return Strings.ModuleNameIsAlreadyTaken.SaveResult(entity);
+
+        if (existing is null)
         {
-            return Strings.ModuleNameIsAlreadyTaken.SaveResult(entity);
+            entity.ModuleOwnerships.Clear();
+            entity.ModuleOwnerships.Add(ownerRef.IsGroup ? new ModuleOwnership { GroupId = ownerRef.GroupId, OwnedShare = 1 } : new ModuleOwnership { PersonId = ownerRef.PersonId, OwnedShare = 1 });
+            entity.ModuleExits.Clear();
+            entity.DwgDrawingId = null;
+            entity.PdfDocumentationId = null;
+            entity.SkpDrawingId = null;
+            dbContext.Add(entity);
+            return (await dbContext.SaveChangesAsync()).SaveResult(entity);
         }
-        if (principal.MaySave(ownerRef, isGroupAdministrator))
-        {
-            return await AddOrUpdate(dbContext, entity, ownerRef);
-        }
-        else if (ownerRef.IsGroup)
-        {
-            bool isPrincipalGroupsDataAdministrator = await IsPrincipalGroupsDataAdministrator(dbContext, principal, ownerRef);
-            return isPrincipalGroupsDataAdministrator ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
-        }
-        else if (ownerRef.IsPersonInGroup)
-        {
-            var isMember = await IsOwnerMemberOfGroup(ownerRef, dbContext);
-            return isGroupAdministrator && isMember ? await AddOrUpdate(dbContext, entity, ownerRef) : principal.SaveNotAuthorised<Module>();
-        }
-        return principal.SaveNotAuthorised<Module>();
+        if (await IfStationWillHaveNoReferringModules(dbContext, entity, existing)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.SaveResult(entity);
+        entity.DwgDrawingId = existing.DwgDrawingId;
+        entity.PdfDocumentationId = existing.PdfDocumentationId;
+        entity.SkpDrawingId = existing.SkpDrawingId;
+        dbContext.Entry(existing).CurrentValues.SetValues(entity);
+        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+        return (await dbContext.SaveChangesAsync()).SaveResult(existing);
 
         static async Task<bool> IsSameNameAlreadyExisting(ModulesDbContext dbContext, Module module, ModuleOwnershipRef ownerRef)
         {
             var existing = await dbContext.Modules.Where(m =>
                 m.Id != module.Id &&
                 m.ModuleOwnerships.Any(mo => mo.PersonId == ownerRef.PersonId || mo.GroupId == ownerRef.GroupId)).ToListAsync();
-            if (existing is null) return false;
             return existing.Any(m =>
                 m.FullName.Equals(module.FullName, StringComparison.OrdinalIgnoreCase) &&
                 (m.ConfigurationLabel is null || m.ConfigurationLabel.Equals(module.ConfigurationLabel, StringComparison.OrdinalIgnoreCase)));
         }
 
-        static async Task<(int Count, string Message, Module? Entity)> AddOrUpdate(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
+        static async Task<bool> IfStationWillHaveNoReferringModules(ModulesDbContext dbContext, Module entity, Module existing)
         {
-            var existing = await dbContext.Modules
-                .Include(m => m.ModuleExits)
-                .FirstOrDefaultAsync(m => m.Id == entity.Id);
-
-            return (existing is null) ?
-                await AddNew(dbContext, entity, ownerRef) :
-                await UpdateExisting(dbContext, entity, existing);
+            if (existing.StationId.HasValue && (entity.StationId is null || entity.StationId != existing.StationId))
+                return !await dbContext.Modules.AnyAsync(m => m.Id != existing.Id && m.StationId == existing.StationId);
+            return false;
         }
+    }
 
-        static async Task<(int Count, string Message, Module? Entity)> AddNew(ModulesDbContext dbContext, Module entity, ModuleOwnershipRef ownerRef)
+    public async Task<bool> MayEditAsync(ClaimsPrincipal? principal, int moduleId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayEditModuleAsync(principal, moduleId);
+    }
+
+    public async Task<bool> MayAddForAsync(ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayAddModuleForAsync(principal, principal.UpdateFrom(ownerRef));
+    }
+
+    /// <summary>A module with its owners and exits, for a user who may edit it (assistants included), whatever owner a page's address names; or null.</summary>
+    public async Task<Module?> FindForEditAsync(ClaimsPrincipal? principal, int id)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditModuleAsync(principal, id)) return null;
+        return await dbContext.Modules.AsNoTracking()
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+            .Include(m => m.ModuleExits).ThenInclude(me => me.EndProfile)
+            .SingleOrDefaultAsync(m => m.Id == id);
+    }
+
+    /// <summary>An exit of a module the user may edit, or null.</summary>
+    public async Task<ModuleExit?> FindExitAsync(ClaimsPrincipal? principal, int moduleId, int exitId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditModuleAsync(principal, moduleId)) return null;
+        return await dbContext.ModuleExits.AsNoTracking().SingleOrDefaultAsync(me => me.Id == exitId && me.ModuleId == moduleId);
+    }
+
+    /// <summary>
+    /// Saves an exit, by a user who may edit its module; an exit never moves to another module, its end profile must exist, and an
+    /// unknown direction is corrected. Before Migration step 3.6 exits were saved with the module.
+    /// </summary>
+    public async Task<(int Count, string Message, ModuleExit? Entity)> SaveExitAsync(ClaimsPrincipal? principal, ModuleExit entity)
+    {
+        entity.CorrectInput();
+        using var dbContext = Factory.CreateDbContext();
+        var existing = entity.Id > 0 ? await dbContext.ModuleExits.FindAsync(entity.Id) : null;
+        if (entity.Id > 0 && existing is null) return principal.SaveNotAuthorised<ModuleExit>();
+        if (existing is not null) entity.ModuleId = existing.ModuleId;
+        if (!await dbContext.MayEditModuleAsync(principal, entity.ModuleId)) return principal.SaveNotAuthorised<ModuleExit>();
+        if (!await dbContext.ModuleEndProfiles.AnyAsync(ep => ep.Id == entity.EndProfileId)) return principal.SaveNotAuthorised<ModuleExit>();
+        if (existing is null)
         {
-            if (entity.ModuleOwnerships.Count == 0) entity.ModuleOwnerships.Add(CreateModuleOwnership(ownerRef));
-            dbContext.Add(entity);
-            var result = await dbContext.SaveChangesAsync();
-            return result.SaveResult(entity);
-
-            static ModuleOwnership CreateModuleOwnership(ModuleOwnershipRef ownerRef)
-            {
-                if (ownerRef.IsGroup) return new ModuleOwnership { GroupId = ownerRef.GroupId, OwnedShare = 1 };
-                return new ModuleOwnership { PersonId = ownerRef.PersonId, OwnedShare = 1 };
-            }
+            dbContext.ModuleExits.Add(entity);
+            return (await dbContext.SaveChangesAsync()).SaveResult(entity);
         }
+        dbContext.Entry(existing).CurrentValues.SetValues(entity);
+        if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+        return (await dbContext.SaveChangesAsync()).SaveResult(existing);
+    }
 
-        static async Task<(int Count, string Message, Module? Entity)> UpdateExisting(ModulesDbContext dbContext, Module entity, Module existing)
-        {
-            if (await IfStationWillHaveNoReferringModules(dbContext, entity, existing)) return Strings.StationMustHaveAtLeastOneModuleReferringToIt.SaveResult(entity);
-            dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            AddOrRemoveExits(dbContext, entity, existing);
-            if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync();
-            return result.SaveResult(existing);
-
-            static void AddOrRemoveExits(ModulesDbContext dbContext, Module entity, Module existing)
-            {
-                foreach (var exit in entity.ModuleExits)
-                {
-                    var existingExit = existing.ModuleExits.AsQueryable().FirstOrDefault(g => g.Id == exit.Id);
-                    if (existingExit is null) existing.ModuleExits.Add(exit);
-                    else dbContext.Entry(existingExit).CurrentValues.SetValues(exit);
-                }
-                foreach (var exit in existing.ModuleExits) if (!entity.ModuleExits.Any(mg => mg.Id == exit.Id)) dbContext.Remove(exit);
-            }
-
-            static bool IsUnchanged(ModulesDbContext dbContext, Module entity) =>
-                dbContext.Entry(entity).State == EntityState.Unchanged &&
-                entity.ModuleExits.All(mg => dbContext.Entry(mg).State == EntityState.Unchanged) &&
-                entity.ModuleOwnerships.All(mo => dbContext.Entry(mo).State == EntityState.Unchanged);
-
-
-            static async Task<bool> IfStationWillHaveNoReferringModules(ModulesDbContext dbContext, Module entity, Module existing)
-            {
-                if (existing.StationId.HasValue)
-                {
-                    if (entity.StationId is null || entity.StationId != existing.StationId)
-                    {
-                        return !await dbContext.Modules.AnyAsync(m => m.Id != existing.Id && m.StationId == existing.StationId);
-                    }
-                }
-                return false;
-            }
-        }
-
-        static async Task<bool> IsPrincipalGroupsDataAdministrator(ModulesDbContext dbContext, ClaimsPrincipal? principal, ModuleOwnershipRef ownerRef)
-        {
-            return await dbContext.GroupMembers.AsNoTracking()
-                .AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownerRef.GroupId && gm.PersonId == principal.PersonId());
-        }
-
-        static async Task<bool> IsOwnerMemberOfGroup(ModuleOwnershipRef ownerRef, ModulesDbContext dbContext)
-        {
-            return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == ownerRef.GroupId && gm.PersonId == ownerRef.PersonId);
-        }
+    public async Task<(int Count, string Message)> DeleteExitAsync(ClaimsPrincipal? principal, int exitId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var existing = await dbContext.ModuleExits.FindAsync(exitId);
+        if (existing is null || !await dbContext.MayEditModuleAsync(principal, existing.ModuleId)) return principal.NotAuthorized<ModuleExit>();
+        dbContext.ModuleExits.Remove(existing);
+        return (await dbContext.SaveChangesAsync()).DeleteResult();
     }
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int moduleId)

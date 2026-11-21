@@ -1,0 +1,87 @@
+﻿@page "/Modules/{ModuleId:int}/Exits/{Id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a module exit, posted as ModuleExitFormData, for a user who may edit the module
+   (ModuleService). The end profiles are those of the module's scale. A new exit (id 0) is named after the number of exits, as Add did
+   on the module page. After saving, a redirect back to the module form (?back=, only an address within the app); the result is a
+   one-time message. *@
+
+@using ModulesRegistry.Forms.Modules
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject ModuleService ModuleService
+@inject ModuleEndProfileService ModuleEndProfileService
+
+<PageHeading ObjectName="Exit" Context="@Module" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@ModuleHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="exit" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="2" Label="Direction" @bind-Value="Form!.Direction" Items="EnumExtensions.StationEntryDirectionsListboxItems()" />
+        <AppInputText Width="2" Label="Designation" @bind-Value="Form!.Label" />
+        <AppInputSelect Width="3" Label="EndProfile" @bind-Value="Form!.EndProfileId" Items="EndProfileItems" ShowPleaseSelect="true" />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int ModuleId { get; set; }
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "exit")] private ModuleExitFormData? Form { get; set; }
+    /// <summary>The module form to go back to, with its owner in the address; only an address within the app.</summary>
+    [SupplyParameterFromQuery(Name = "back")] private string? Back { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Module? Module;
+    ModuleExit? Existing;
+    IEnumerable<ListboxItem>? EndProfileItems;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Module = await ModuleService.FindForEditAsync(Principal, ModuleId);
+        if (Module is null)
+        {
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = await ModuleService.FindExitAsync(Principal, ModuleId, Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new ModuleExit { Label = $"{Localizer["EndProfile"]}-{Module.ModuleExits.Count + 1}" }).AsFormData();
+        EndProfileItems = (await ModuleEndProfileService.ListboxItemsAsync(Module.ScaleId)).OrderBy(i => i.Description);
+    }
+
+    string ModuleHref => Back is { Length: > 0 } back && back[0] is not ('/' or '\\') && !back.Contains(':') ? back : "Modules/Index";
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded exit (Migration section 3.4, the data-loss rule).
+        var exit = Form.AsEntity(Existing, moduleId: ModuleId);
+        var (count, message, _) = await ModuleService.SaveExitAsync(Principal, exit);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(ModuleHref);
+    }
+}

@@ -2796,4 +2796,10 @@
   <data name="ModelManufacturer" xml:space="preserve">
     <value>Modelproducent</value>
   </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Udkørsel</value>
+  </data>
+  <data name="VariantOrBoxLabel_Error" xml:space="preserve">
+    <value>Angiv en variant eller en boksmærkning, ikke begge</value>
+  </data>
 </root>
