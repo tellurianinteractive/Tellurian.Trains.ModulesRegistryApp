@@ -1770,9 +1770,6 @@
   <data name="OwnedBy" xml:space="preserve">
     <value>von</value>
   </data>
-  <data name="OwnedPercent" xml:space="preserve">
-    <value>Besitz %</value>
-  </data>
   <data name="Owner" xml:space="preserve">
     <value>Eigentümer</value>
   </data>
@@ -2720,5 +2717,77 @@
   </data>
   <data name="EnterSearchValue" xml:space="preserve">
     <value>Suchwert eingeben</value>
+  </data>
+  <data name="YouMayNotDeleteYourself" xml:space="preserve">
+    <value>Sie dürfen sich nicht selbst löschen.</value>
+  </data>
+  <data name="PersonIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Angemeldet zu {0}, das noch nicht beendet ist.</value>
+  </data>
+  <data name="StationIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Der Bahnhof ist für ein Treffen angemeldet, das noch nicht beendet ist</value>
+  </data>
+  <data name="PersonMayNotBeDeletedBecause" xml:space="preserve">
+    <value>Die Person darf jetzt nicht gelöscht werden:</value>
+  </data>
+  <data name="PersonDeletionIntro" xml:space="preserve">
+    <value>Alles unten Aufgeführte wird zusammen mit der Person gelöscht oder geändert. Das kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="WillBeDeleted" xml:space="preserve">
+    <value>Wird gelöscht</value>
+  </data>
+  <data name="WillBeChanged" xml:space="preserve">
+    <value>Wird geändert</value>
+  </data>
+  <data name="UserAccountWithSignIn" xml:space="preserve">
+    <value>Benutzerkonto, Anmeldung mit {0}</value>
+  </data>
+  <data name="MembershipInGroups" xml:space="preserve">
+    <value>Mitgliedschaft in Gruppen</value>
+  </data>
+  <data name="ParticipationInMeetings" xml:space="preserve">
+    <value>Teilnahme an Treffen, mit angemeldeten Modulen und Bahnhöfen</value>
+  </data>
+  <data name="ModulesOwnedAlone" xml:space="preserve">
+    <value>Module, die die Person allein besitzt, auch wo andere sie angemeldet haben</value>
+  </data>
+  <data name="StationsOfDeletedModules" xml:space="preserve">
+    <value>Bahnhöfe dieser Module, mit Güterkunden</value>
+  </data>
+  <data name="SharedModulesShareRemoved" xml:space="preserve">
+    <value>Geteilte Module: der Anteil der Person geht an die anderen Eigentümer</value>
+  </data>
+  <data name="AssistantRoleRemoved" xml:space="preserve">
+    <value>Module, bei denen die Person Assistent ist: die Rolle wird entfernt</value>
+  </data>
+  <data name="StationsKeptForOtherModules" xml:space="preserve">
+    <value>Bahnhöfe, zu denen andere Module gehören: sie bleiben bei diesen</value>
+  </data>
+  <data name="LayoutsContactCleared" xml:space="preserve">
+    <value>Bahnen mit der Person als Kontakt: der Kontakt wird entfernt</value>
+  </data>
+  <data name="MarkedAsDeletedPersons" xml:space="preserve">
+    <value>Früher als gelöscht markiert, aber nicht gelöscht</value>
+  </data>
+  <data name="ModulesOwnedAloneHelp" xml:space="preserve">
+    <value>Übertragen Sie jedes Modul an einen neuen Eigentümer oder löschen Sie es. Module, die hier bleiben, werden mit der Person gelöscht. Ein Modul, das für ein noch nicht beendetes Treffen angemeldet ist, kann nur übertragen werden.</value>
+  </data>
+  <data name="TransferBetweenGroupsIsNotSupported" xml:space="preserve">
+    <value>Ein Modul kann nicht von einer Gruppe auf eine andere übertragen werden.</value>
+  </data>
+  <data name="GroupOwnsWholeModuleAlone" xml:space="preserve">
+    <value>Eine Gruppe besitzt ein ganzes Modul allein, nie zusammen mit Personen.</value>
+  </data>
+  <data name="AllOwnersMustBeGroupMembers" xml:space="preserve">
+    <value>Alle Eigentümer des Moduls müssen Mitglieder der Gruppe sein.</value>
+  </data>
+  <data name="NewOwnerMustBeGroupMember" xml:space="preserve">
+    <value>Der neue Eigentümer muss Mitglied der Gruppe sein.</value>
+  </data>
+  <data name="OnlyGlobalAdministratorTransfersBetweenCountries" xml:space="preserve">
+    <value>Nur ein globaler Administrator darf ein Modul an einen Eigentümer in einem anderen Land übertragen.</value>
+  </data>
+  <data name="OwnedShare" xml:space="preserve">
+    <value>Eigentumsanteil</value>
   </data>
 </root>

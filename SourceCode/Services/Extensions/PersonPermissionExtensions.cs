@@ -46,6 +46,13 @@ public static class PersonPermissionExtensions
         /// or a country administrator in the person's country.
         /// </summary>
         public bool MayChangeUserRights(int personCountryId) => principal.IsCountryAdministratorInCountry(personCountryId);
+
+        /// <summary>
+        /// Only a country administrator in the person's country deletes a person (decided 2026-11-21); being a global administrator
+        /// isn't enough. Never a read-only user.
+        /// </summary>
+        public bool MayDeletePerson(int personCountryId) =>
+            principal is not null && !principal.IsReadOnly() && principal.IsCountryAdministrator() && principal.CountryId() == personCountryId;
     }
 
     extension(User user)

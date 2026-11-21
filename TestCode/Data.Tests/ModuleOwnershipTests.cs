@@ -88,6 +88,14 @@ public class ModuleOwnershipTestsKD
 
     }
 
+    [TestMethod]
+    [DataRow(1.0, "1/1")]
+    [DataRow(0.5, "1/2")]
+    [DataRow(1.0 / 3.0, "1/3")]
+    [DataRow(0.6667, "2/3")]
+    public void ShareIsShownAsFractionWithoutPercent(double share, string expected) =>
+        Assert.AreEqual(expected, new ModuleOwnership { OwnedShare = share }.OwnedShare().AsFractionText());
+
     private static ModuleOwnership OriginalFullOwnership =>
         new()
         {

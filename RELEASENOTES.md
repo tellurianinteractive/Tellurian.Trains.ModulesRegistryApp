@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.29
+Released 2026-11-21
+- Deleting a person now removes everything that belongs to the person, after a page shows what is deleted and what is changed. Modules the person owns alone can first be transferred or deleted. Only country administrators in the person's country can delete persons.
+- Security fix: module ownership can only be transferred by the owner, a data administrator of the owning group or a country administrator in the owner's country, and only global administrators transfer to another country. A group always owns a whole module.
+- Owned shares are shown as fractions (1/1, 1/2) without percentages.
 ## Release 1.15.28
 Released 2026-11-21
 - The person form and your user settings check the entries as you type and stay open after saving; email and reserved loco addresses are tidied up when saved. Requesting a new password no longer needs a live connection.

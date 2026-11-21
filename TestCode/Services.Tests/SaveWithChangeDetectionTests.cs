@@ -235,7 +235,7 @@ public sealed class SaveWithChangeDetectionTests
         var target = new ModuleOwnershipService(_factory);
         var origin = await _factory.FindAsync<ModuleOwnership>(1);
 
-        var (count, _, module) = await target.TransferOwnershipAsync(GlobalAdministrator, origin!, new ModuleOwnership { ModuleId = 1, PersonId = 2, OwnedShare = 0.5 });
+        var (count, _, module) = await target.TransferOwnershipAsync(GlobalAdministrator, origin!.Id, new ModuleOwnership { ModuleId = 1, PersonId = 2, OwnedShare = 0.5 });
 
         Assert.AreEqual(2, count);
         Assert.HasCount(2, module!.ModuleOwnerships);
@@ -250,7 +250,7 @@ public sealed class SaveWithChangeDetectionTests
         var target = new ModuleOwnershipService(_factory);
         var origin = await _factory.FindAsync<ModuleOwnership>(1);
 
-        var (count, _, module) = await target.TransferOwnershipAsync(GlobalAdministrator, origin!, new ModuleOwnership { ModuleId = 1, PersonId = 2, OwnedShare = 0.5 });
+        var (count, _, module) = await target.TransferOwnershipAsync(GlobalAdministrator, origin!.Id, new ModuleOwnership { ModuleId = 1, PersonId = 2, OwnedShare = 0.5 });
 
         Assert.AreEqual(2, count);
         var ownership = module!.ModuleOwnerships.Single();

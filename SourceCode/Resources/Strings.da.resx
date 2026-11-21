@@ -1770,9 +1770,6 @@
   <data name="OwnedBy" xml:space="preserve">
     <value>ejet af</value>
   </data>
-  <data name="OwnedPercent" xml:space="preserve">
-    <value>Ejet %</value>
-  </data>
   <data name="Owner" xml:space="preserve">
     <value>Ejer</value>
   </data>
@@ -2720,5 +2717,77 @@
   </data>
   <data name="EnterSearchValue" xml:space="preserve">
     <value>Indtast søgeværdi</value>
+  </data>
+  <data name="YouMayNotDeleteYourself" xml:space="preserve">
+    <value>Du må ikke slette dig selv.</value>
+  </data>
+  <data name="PersonIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Tilmeldt {0}, som ikke er slut.</value>
+  </data>
+  <data name="StationIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Stationen er tilmeldt et træf, som ikke er slut</value>
+  </data>
+  <data name="PersonMayNotBeDeletedBecause" xml:space="preserve">
+    <value>Personen må ikke slettes nu:</value>
+  </data>
+  <data name="PersonDeletionIntro" xml:space="preserve">
+    <value>Alt nedenfor slettes eller ændres sammen med personen. Det kan ikke fortrydes.</value>
+  </data>
+  <data name="WillBeDeleted" xml:space="preserve">
+    <value>Slettes</value>
+  </data>
+  <data name="WillBeChanged" xml:space="preserve">
+    <value>Ændres</value>
+  </data>
+  <data name="UserAccountWithSignIn" xml:space="preserve">
+    <value>Brugerkonto, logger ind med {0}</value>
+  </data>
+  <data name="MembershipInGroups" xml:space="preserve">
+    <value>Medlemskab af grupper</value>
+  </data>
+  <data name="ParticipationInMeetings" xml:space="preserve">
+    <value>Deltagelse i træf, med tilmeldte moduler og stationer</value>
+  </data>
+  <data name="ModulesOwnedAlone" xml:space="preserve">
+    <value>Moduler, som personen ejer alene, også hvor andre har tilmeldt dem</value>
+  </data>
+  <data name="StationsOfDeletedModules" xml:space="preserve">
+    <value>Stationer for disse moduler, med godskunder</value>
+  </data>
+  <data name="SharedModulesShareRemoved" xml:space="preserve">
+    <value>Delte moduler: personens andel går til de andre ejere</value>
+  </data>
+  <data name="AssistantRoleRemoved" xml:space="preserve">
+    <value>Moduler, hvor personen er assistent: rollen fjernes</value>
+  </data>
+  <data name="StationsKeptForOtherModules" xml:space="preserve">
+    <value>Stationer, som andre moduler hører til: de bliver ved dem</value>
+  </data>
+  <data name="LayoutsContactCleared" xml:space="preserve">
+    <value>Baner med personen som kontakt: kontakten fjernes</value>
+  </data>
+  <data name="MarkedAsDeletedPersons" xml:space="preserve">
+    <value>Tidligere markeret som slettet, men ikke slettet</value>
+  </data>
+  <data name="ModulesOwnedAloneHelp" xml:space="preserve">
+    <value>Overfør hvert modul til en ny ejer, eller slet det. Moduler, der er tilbage her, slettes sammen med personen. Et modul, der er tilmeldt et træf, som ikke er slut, kan kun overføres.</value>
+  </data>
+  <data name="TransferBetweenGroupsIsNotSupported" xml:space="preserve">
+    <value>Et modul kan ikke overføres fra en gruppe til en anden.</value>
+  </data>
+  <data name="GroupOwnsWholeModuleAlone" xml:space="preserve">
+    <value>En gruppe ejer et helt modul alene, aldrig sammen med personer.</value>
+  </data>
+  <data name="AllOwnersMustBeGroupMembers" xml:space="preserve">
+    <value>Alle ejere af modulet skal være medlemmer af gruppen.</value>
+  </data>
+  <data name="NewOwnerMustBeGroupMember" xml:space="preserve">
+    <value>Den nye ejer skal være medlem af gruppen.</value>
+  </data>
+  <data name="OnlyGlobalAdministratorTransfersBetweenCountries" xml:space="preserve">
+    <value>Kun en global administrator må overføre et modul til en ejer i et andet land.</value>
+  </data>
+  <data name="OwnedShare" xml:space="preserve">
+    <value>Ejet andel</value>
   </data>
 </root>

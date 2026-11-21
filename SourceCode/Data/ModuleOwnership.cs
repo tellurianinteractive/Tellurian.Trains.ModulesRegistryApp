@@ -88,14 +88,15 @@ public static class ModuleOwnershipExtensionsk
         me.PersonId is not null ? $"Person {me.PersonId}" :
         "?";
 
-    public static string OwnedShareAndPercentage(this ModuleOwnership? me, IStringLocalizer localizer) =>
+    /// <summary>The share as a fraction, 1/1, 1/2, 2/3..., or assistant only; no percentages (decided 2026-11-21).</summary>
+    public static string OwnedShareText(this ModuleOwnership? me, IStringLocalizer localizer) =>
         me is null ? string.Empty :
         me.OwnedShare == 0 ? localizer["AssistantOnly"].Value :
-        $"{me.OwnedShare()} ({me.OwnedPercent() * 100:F1}%)";
+        me.OwnedShare().AsFractionText();
 
-    public static double OwnedPercent(this ModuleOwnership? me) =>
-        me is null || me.OwnedShare == 0 ? 0.0 :
-        me.OwnedShare;
+    /// <summary>Always numerator and denominator, also for a whole: 1/1.</summary>
+    public static string AsFractionText(this Rational share) =>
+        $"{share.CanonicalForm.Numerator}/{share.CanonicalForm.Denominator}";
 
     public static Rational OwnedShare(this ModuleOwnership? me) =>
         me is null || me.OwnedShare == 0 ? Rational.Zero :

@@ -96,7 +96,7 @@
     bool MaySelectCountry => Principal.IsGlobalAdministrator() || GroupId > 0;
     // The rights of a stored user, for global administrators and the country administrators of the person's country.
     bool ShowsUserRights => Existing?.User is not null && Principal.MayChangeUserRights(Existing.CountryId);
-    bool MayDelete => Existing is not null && Principal.IsCountryAdministratorInCountry(Existing.CountryId) && !Principal.IsReadOnly();
+    bool MayDelete => Existing is not null && Principal.MayDeletePerson(Existing.CountryId);
     string? DeleteHref => Existing is null ? null : $"Persons/{Existing.Id}/Delete";
 
     protected override async Task OnInitializedAsync()

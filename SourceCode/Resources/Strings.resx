@@ -1770,9 +1770,6 @@
   <data name="OwnedBy" xml:space="preserve">
     <value>owned by</value>
   </data>
-  <data name="OwnedPercent" xml:space="preserve">
-    <value>Owned %</value>
-  </data>
   <data name="Owner" xml:space="preserve">
     <value>Owner</value>
   </data>
@@ -2720,5 +2717,77 @@
   </data>
   <data name="EnterSearchValue" xml:space="preserve">
     <value>Enter search value</value>
+  </data>
+  <data name="YouMayNotDeleteYourself" xml:space="preserve">
+    <value>You may not delete yourself.</value>
+  </data>
+  <data name="PersonIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>Registered for {0}, which has not ended.</value>
+  </data>
+  <data name="StationIsRegisteredForUpcomingMeeting" xml:space="preserve">
+    <value>The station is registered for a meeting that has not ended</value>
+  </data>
+  <data name="PersonMayNotBeDeletedBecause" xml:space="preserve">
+    <value>The person may not be deleted now:</value>
+  </data>
+  <data name="PersonDeletionIntro" xml:space="preserve">
+    <value>Everything below is deleted or changed together with the person. It cannot be undone.</value>
+  </data>
+  <data name="WillBeDeleted" xml:space="preserve">
+    <value>Will be deleted</value>
+  </data>
+  <data name="WillBeChanged" xml:space="preserve">
+    <value>Will be changed</value>
+  </data>
+  <data name="UserAccountWithSignIn" xml:space="preserve">
+    <value>User account, signs in with {0}</value>
+  </data>
+  <data name="MembershipInGroups" xml:space="preserve">
+    <value>Membership in groups</value>
+  </data>
+  <data name="ParticipationInMeetings" xml:space="preserve">
+    <value>Participation in meetings, with registered modules and stations</value>
+  </data>
+  <data name="ModulesOwnedAlone" xml:space="preserve">
+    <value>Modules the person owns alone, also where others have registered them</value>
+  </data>
+  <data name="StationsOfDeletedModules" xml:space="preserve">
+    <value>Stations of these modules, with freight customers</value>
+  </data>
+  <data name="SharedModulesShareRemoved" xml:space="preserve">
+    <value>Shared modules: the person's share goes to the other owners</value>
+  </data>
+  <data name="AssistantRoleRemoved" xml:space="preserve">
+    <value>Modules where the person is assistant: the role is removed</value>
+  </data>
+  <data name="StationsKeptForOtherModules" xml:space="preserve">
+    <value>Stations that other modules refer to: they stay with those modules</value>
+  </data>
+  <data name="LayoutsContactCleared" xml:space="preserve">
+    <value>Layouts with the person as contact: the contact is removed</value>
+  </data>
+  <data name="MarkedAsDeletedPersons" xml:space="preserve">
+    <value>Marked as deleted earlier, but not deleted</value>
+  </data>
+  <data name="ModulesOwnedAloneHelp" xml:space="preserve">
+    <value>Transfer each module to a new owner, or delete it. Modules left here are deleted with the person. A module registered for a meeting that has not ended can only be transferred.</value>
+  </data>
+  <data name="TransferBetweenGroupsIsNotSupported" xml:space="preserve">
+    <value>A module cannot be transferred from one group to another.</value>
+  </data>
+  <data name="GroupOwnsWholeModuleAlone" xml:space="preserve">
+    <value>A group owns a whole module, alone, never together with persons.</value>
+  </data>
+  <data name="AllOwnersMustBeGroupMembers" xml:space="preserve">
+    <value>All owners of the module must be members of the group.</value>
+  </data>
+  <data name="NewOwnerMustBeGroupMember" xml:space="preserve">
+    <value>The new owner must be a member of the group.</value>
+  </data>
+  <data name="OnlyGlobalAdministratorTransfersBetweenCountries" xml:space="preserve">
+    <value>Only a global administrator may transfer a module to an owner in another country.</value>
+  </data>
+  <data name="OwnedShare" xml:space="preserve">
+    <value>Owned share</value>
   </data>
 </root>

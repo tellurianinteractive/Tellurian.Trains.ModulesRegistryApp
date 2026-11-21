@@ -5,6 +5,7 @@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject INotificationService NotificationService
+@inject NavigationManager Navigator
 
 @inject ModuleService ModuleService
 @inject ModuleOwnershipService ModuleOwnershipService
@@ -14,24 +15,24 @@
 
 @if (Module is null)
 {
-    <PageHeading Label="TransferOwnership" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+    <PageHeading Label="TransferOwnership" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
     <ActionMessage Label="ModuleOwnershipsNotFound" AlertType="´Warning" />
 }
 else
 {
-    <PageHeading Label="TransferOwnership" ObjectName="@Module.FullName" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+    <PageHeading Label="TransferOwnership" ObjectName="@Module.FullName" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
 
     <h2>@Module.FullName</h2>
 
     <TableTemplate Items="Module.ModuleOwnerships">
         <TableHeader>
             <th>@Localizer["Owner"]</th>
-            <th>@Localizer["OwnedPercent"]</th>
+            <th>@Localizer["OwnedShare"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
         <RowTemplate Context="item">
             <td>@item.OwnerName()</td>
-            <td>@item.OwnedShareAndPercentage(Localizer)</td>
+            <td>@item.OwnedShareText(Localizer)</td>
             <td>
                 @if (item.ISOwnedByPerson(OwningPersonId) || item.IsOwnedByGroup(OwningGroupId))
                 {
@@ -65,6 +66,8 @@ else
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
+    /// <summary>A page to go back to, as the person's delete page; only an address within the app.</summary>
+    [SupplyParameterFromQuery(Name = "back")] public string? Back { get; set; }
 
 
     ClaimsPrincipal? Principal;
@@ -109,6 +112,8 @@ else
         return countryId;
     }
 
+    string? BackHref => Back is { Length: > 0 } back && back[0] is not ('/' or '\\') && !back.Contains(':') ? back : null;
+
     ModuleOwnershipRef GetOwnershipRef =>
         OwningGroupId > 0 ? ModuleOwnershipRef.Group(OwningGroupId) :
         OwningPersonId > 0 ? ModuleOwnershipRef.Person(OwningPersonId) :
@@ -127,7 +132,8 @@ else
             NotificationService.ShowError(Localizer["OwnerMustBeEitherAPersonOrAGroup"]);
             return;
         }
-        NewOwnership.OwnedShare = TransferredShare.Percentage;
+        // A group always gets the whole module (ModuleOwnershipService).
+        NewOwnership.OwnedShare = NewOwnership.GroupId > 0 ? 1 : TransferredShare.Percentage;
         if (NewOwnership.IsAssistantOnly())
         {
             var result = await ModuleOwnershipService.AddAssistantAsync(Principal, NewOwnership);
@@ -136,18 +142,25 @@ else
         }
         else if (OwnershipToTransfer.HasPersonOrGroupOwner() && NewOwnership.HasPersonOrGroupOwner() && OwnershipRef is not null && SelectedTransferShare >= 0)
         {
-            var result = await ModuleOwnershipService.TransferOwnershipAsync(Principal, OwnershipToTransfer, NewOwnership);
+            var result = await ModuleOwnershipService.TransferOwnershipAsync(Principal, OwnershipToTransfer.Id, NewOwnership);
             if (result.Entity is not null) Module = result.Entity;
+            if (result.Count > 0 && BackHref is not null)
+            {
+                // Back to where the transfer began, as a person's delete page. It may be a static SSR page, so a full page load.
+                Navigator.NavigateTo(BackHref, forceLoad: true);
+                return;
+            }
             NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         }
         StateHasChanged();
     }
 
-    (int Index, double Percentage) TransferredShare => TransferShares.Single(ts => ts.Index == SelectedTransferShare);
+    (int Index, double Percentage) TransferredShare => TransferShares.Where(ts => ts.Index == SelectedTransferShare).DefaultIfEmpty((0, -1.0)).First();
 
     async Task RemoveAssistant(ModuleOwnership ownership)
     {
         var result = await ModuleOwnershipService.RemoveAssistantAsync(Principal, ownership);
+        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
         await GetModule();
     }
 
@@ -155,16 +168,18 @@ else
     {
         PersonsCountryId = countryId;
         Persons = await PersonService.ListboxItemsAsync(Principal, PersonsCountryId);
+        Groups = await GroupService.ListboxItemsAsync(Principal, PersonsCountryId);
     }
 
     IEnumerable<ListboxItem> TransferSharesItems(ModuleOwnership? ownership) =>
         ownership is null ? Array.Empty<ListboxItem>() :
-        TransferShares.Where(ts => ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, ts.Percentage > 0 ? $"1/{ts.Index} ({ts.Percentage * 100:F0}%)" : Localizer["AssistantOnly"].Value));
+        TransferShares.Where(ts => ownership.GroupId > 0 ? ts.Index == 1 : ts.Percentage <= ownership.OwnedShare).Select(ts => new ListboxItem(ts.Index, ts.Percentage > 0 ? $"1/{ts.Index}" : Localizer["AssistantOnly"].Value));
 
     int SelectedTransferShare;
     static (int Index, double Percentage)[] TransferShares => new[] { (1, 1.00), (2, 0.50), (3, 1.0 / 3.0), (4, 0.25), (5, 0.20), (6, 0) };
 
     bool IsPersonOwnerNotSelectable(ModuleOwnership ownership) => ownership.GroupId.HasValue || SelectedTransferShare == 0 || (OwnershipToTransfer?.GroupId > 0 && SelectedTransferShare != 1);
-    bool IsGroupOwnerNotSelectable(ModuleOwnership ownership) => ownership.PersonId.HasValue || SelectedTransferShare != 1;
+    // A group is owner of a whole module only, and only when transferred from persons: the whole module goes, whatever share is chosen.
+    bool IsGroupOwnerNotSelectable(ModuleOwnership ownership) => ownership.PersonId.HasValue || OwnershipToTransfer?.GroupId > 0 || TransferredShare.Percentage == 0;
 
 }

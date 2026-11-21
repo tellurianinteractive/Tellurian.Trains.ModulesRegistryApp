@@ -174,28 +174,72 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         return count.SaveResult(existing ?? entity);
     }
 
-    public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
+    /// <summary>
+    /// What deleting the person removes and changes (<see cref="PersonDeletionPlan"/>), or null when there is no such person or
+    /// the user may not delete it (<see cref="PersonPermissionExtensions.MayDeletePerson"/>).
+    /// </summary>
+    public async Task<PersonDeletion?> GetDeletionAsync(ClaimsPrincipal? principal, int id, CancellationToken cancellationToken = default)
     {
-        if (principal.MayDelete(principal.OwnerRef()))
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var person = await dbContext.People
-                .Include(p => p.User)
-                .SingleOrDefaultAsync(p => p.Id == id);
-            if (person is null) return (0, Strings.NothingToDelete);
-            // Add check rules before any delete here
-            if (dbContext.MeetingParticipants.Any(mp => mp.PersonId == person.Id && mp.CancellationTime.HasValue == false && mp.Meeting.EndDate >= TimeProvider.LocalTime)) return (0, Strings.MayNotBeDeleted);
-            if (dbContext.Meetings.Any(m => m.EndDate >= TimeProvider.LocalTime && m.OrganiserGroup.GroupMembers.Any(gm => gm.PersonId == id))) return (0, Strings.MayNotBeDeleted);
+        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        if (!await MayDeleteAsync(dbContext, principal, id, cancellationToken)) return null;
+        var plan = await PersonDeletionPlan.LoadAsync(dbContext, id, principal.PersonId(), TimeProvider.LocalTime, cancellationToken);
+        return plan?.AsPersonDeletion();
+    }
 
+    /// <summary>
+    /// Deletes the person and everything that belongs to the person (<see cref="PersonDeletionPlan"/>), in one transaction.
+    /// </summary>
+    /// <remarks>
+    /// Before release 1.15.29 a person was only marked as deleted (<see cref="Person.DeletedTimestamp"/>), with its user, and
+    /// everything that referred to it stayed; such persons are deleted here too.
+    /// </remarks>
+    public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id, CancellationToken cancellationToken = default)
+    {
+        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        if (!await MayDeleteAsync(dbContext, principal, id, cancellationToken)) return principal.NotAuthorized<Person>();
+        var plan = await PersonDeletionPlan.LoadAsync(dbContext, id, principal.PersonId(), TimeProvider.LocalTime, cancellationToken);
+        if (plan is null) return Strings.NothingToDelete.DeleteResult();
+        if (plan.Obstacles.Count > 0) return string.Join(" ", plan.Obstacles).DeleteResult();
+        var count = await plan.ApplyAsync(dbContext, cancellationToken);
+        return count.DeleteResult();
+    }
 
-            if (principal.IsAuthorisedInCountry(person.CountryId))
-            {
-                person.DeletedTimestamp = TimeProvider.Now;
-                if (person.User is not null) person.User.DeletedTimestamp = TimeProvider.Now;
-                var count = await dbContext.SaveChangesAsync();
-                return count.DeleteResult();
-            }
-        }
-        return principal.NotAuthorized<Person>();
+    /// <summary>
+    /// Deletes one module the person owns alone, from the person's delete page, with its station unless another module refers to
+    /// it (<see cref="PersonDeletionPlan.LoadForModuleAsync"/>). Not when it, or its station, is registered for a meeting that has
+    /// not ended.
+    /// </summary>
+    public async Task<(int Count, string Message)> DeleteOwnedModuleAsync(ClaimsPrincipal? principal, int id, int moduleId, CancellationToken cancellationToken = default)
+    {
+        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        if (!await MayDeleteAsync(dbContext, principal, id, cancellationToken)) return principal.NotAuthorized<Person>();
+        var plan = await PersonDeletionPlan.LoadForModuleAsync(dbContext, id, moduleId, TimeProvider.LocalTime, cancellationToken);
+        if (plan is null) return Strings.NothingToDelete.DeleteResult();
+        if (plan.Obstacles.Count > 0) return string.Join(" ", plan.Obstacles).DeleteResult();
+        var count = await plan.ApplyAsync(dbContext, cancellationToken);
+        return count.DeleteResult();
+    }
+
+    /// <summary>
+    /// The persons in the country that were only marked as deleted before release 1.15.29, for the country administrator to
+    /// delete for real. Remove this when there are none left in production, together with the query filter on persons.
+    /// </summary>
+    public async Task<IReadOnlyList<Person>> GetMarkedAsDeletedInCountryAsync(ClaimsPrincipal? principal, int countryId, CancellationToken cancellationToken = default)
+    {
+        if (!principal.MayDeletePerson(countryId)) return [];
+        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
+        return await dbContext.People.IgnoreQueryFilters().AsNoTracking()
+            .Where(p => p.CountryId == countryId && p.DeletedTimestamp != null)
+            .OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
+            .ToListAsync(cancellationToken);
+    }
+
+    private static async Task<bool> MayDeleteAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, int id, CancellationToken cancellationToken)
+    {
+        var countryId = await dbContext.People.IgnoreQueryFilters().AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(p => (int?)p.CountryId)
+            .SingleOrDefaultAsync(cancellationToken);
+        return countryId.HasValue && principal.MayDeletePerson(countryId.Value);
     }
 }

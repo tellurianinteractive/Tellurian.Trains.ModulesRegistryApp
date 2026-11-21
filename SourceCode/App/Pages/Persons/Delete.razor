@@ -1,52 +1,170 @@
 ﻿@page "/Persons/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "Admin")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR: deleting a person and everything that belongs to the person (decided 2026-11-21). The page lists what is deleted
+   and what is changed (PersonDeletionPlan), or why the person may not be deleted now, and deletes with a POST form. Only a
+   country administrator in the person's country gets here (PersonPermissionExtensions.MayDeletePerson); others see nothing. *@
 
-@inject NavigationManager Navigator
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@inject NavigationManager Navigator
 @inject PersonService PersonService
 
-@inject PageHistory PageHistory
+<PageHeading ObjectName="Person" Context="@Deletion?.Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" BackHref="@BackHref" />
 
-<PageHeading ObjectName="Person" Context="@Person" IconClass="@FontAwesome.User" PageAction="PageAction.Delete" BackHref="@BackHref" />
-
-@if (Person is null)
+@if (Deletion is null)
 {
-
+    <ActionMessage Label="NothingToDelete" AlertType="warning" />
 }
 else
 {
-    <div>
-        @Person.FirstName @Person.LastName, @Person.CityName
-    </div>
+    <p><strong>@Deletion.Person.NameWithCityAndCountry()</strong></p>
+
+    @if (ErrorMessage.HasValue)
+    {
+        <div class="alert alert-danger" role="alert">@ErrorMessage</div>
+    }
+
+    @if (Deletion.ModulesDeleted.Count > 0)
+    {
+        <h5>@Localizer["ModulesOwnedAlone"]</h5>
+        <p>@Localizer["ModulesOwnedAloneHelp"]</p>
+        <form id="delete-module" method="post" @formname="delete-module" @onsubmit="DeleteModuleAsync" data-enhance>
+            <AntiforgeryToken />
+        </form>
+        <TableTemplate Items="Deletion.ModulesDeleted">
+            <TableHeader>
+                <th>@Localizer["Module"]</th>
+                <th>@Localizer["Station"]</th>
+                <th>@Localizer["Actions"]</th>
+            </TableHeader>
+            <RowTemplate Context="module">
+                <td>@module.Name</td>
+                <td>@module.StationName</td>
+                <td style="white-space: nowrap">
+                    <AppButton Label="Transfer" Href="@TransferHref(module)" />
+                    @if (!module.IsRegisteredForUpcomingMeeting)
+                    {
+                        <AppButton Label="Delete" IsSubmit="true" Form="delete-module" Name="DeleteModuleId" Value="@module.Id.ToString()" />
+                    }
+                </td>
+            </RowTemplate>
+        </TableTemplate>
+    }
+
+    @if (!Deletion.MayDelete)
+    {
+        <div class="alert alert-warning" role="alert">
+            <strong>@Localizer["PersonMayNotBeDeletedBecause"]</strong>
+            <ul class="mb-0">
+                @foreach (var obstacle in Deletion.Obstacles)
+                {
+                    <li>@obstacle</li>
+                }
+            </ul>
+        </div>
+        <AppButton Label="Cancel" Href="@BackHref" AlwaysShowLabel="true" />
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">@Localizer["PersonDeletionIntro"]</div>
+
+        <h5>@Localizer["WillBeDeleted"]</h5>
+        <ul>
+            <li>@Deletion.Person.Name()</li>
+            @if (Deletion.UserSignInAddress.HasValue)
+            {
+                <li>@string.Format(Localizer["UserAccountWithSignIn"], Deletion.UserSignInAddress)</li>
+            }
+            @Item("MembershipInGroups", Deletion.Groups)
+            @Item("ParticipationInMeetings", Deletion.Meetings)
+            @(Item("ModulesOwnedAlone", [.. Deletion.ModulesDeleted.Select(m => m.Name)]))
+            @Item("StationsOfDeletedModules", Deletion.StationsDeleted)
+            @if (Deletion.Vehicles > 0)
+            {
+                <li>@Localizer["Vehicles"]: @Deletion.Vehicles</li>
+            }
+            @if (Deletion.WiFredThrottles > 0)
+            {
+                <li>@Localizer["WiFredThrottles"]: @Deletion.WiFredThrottles</li>
+            }
+        </ul>
+
+        @if (Deletion.HasChanges)
+        {
+            <h5>@Localizer["WillBeChanged"]</h5>
+            <ul>
+                @Item("SharedModulesShareRemoved", Deletion.ModulesShared)
+                @Item("AssistantRoleRemoved", Deletion.ModulesAssisted)
+                @Item("StationsKeptForOtherModules", Deletion.StationsKept)
+                @Item("LayoutsContactCleared", Deletion.LayoutsAsContact)
+            </ul>
+        }
+
+        <form method="post" @formname="delete-person" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <input type="hidden" name="ConfirmedId" value="@Deletion.Person.Id" />
+            <AppButton Label="Delete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+            <AppButton Label="Cancel" Href="@BackHref" AlwaysShowLabel="true" />
+        </form>
+    }
 }
-<div class="col-12">
-    <button class="btn btn-danger" @onclick="OnDelete"><span class="@FontAwesome.Delete" />@Localizer["Delete"]</button>
-</div>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
-    [Parameter] public int? Id { get; set; }
-    private ClaimsPrincipal? Principal;
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-person")] private int ConfirmedId { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-module")] private int DeleteModuleId { get; set; }
 
-    private Person? Person;
-    // The persons list is static, so this page may have no history (Migration step 3.3).
-    private string? BackHref => Person is null ? null : $"Persons/Country/{Person.CountryId}";
+    ClaimsPrincipal? Principal;
+    PersonDeletion? Deletion;
+    string? ErrorMessage;
 
-    protected async override Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal is null || Id.IsNotSet()) return;
-        Person = await PersonService.FindByIdAsync(Principal, Id.Value);
+        Deletion = await PersonService.GetDeletionAsync(Principal, Id);
     }
 
-    private async Task OnDelete()
+    // The persons list is static, so this page may have no history (Migration step 3.3).
+    string BackHref => Deletion is null ? "Persons" : $"Persons/Country/{Deletion.Person.CountryId}";
+
+    async Task DeleteAsync()
     {
-        if (Id.IsNotSet()) return;
-        var result = await PersonService.DeleteAsync(Principal, Id.Value);
-        NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        await Task.Delay(3000);
-        Navigator.NavigateTo("/Persons", forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
+        if (Deletion is null || ConfirmedId != Id) return;
+        var (count, message) = await PersonService.DeleteAsync(Principal, Id);
+        if (count > 0)
+        {
+            HttpContext.SetFlashMessage("DeletedSuccessfully", true);
+            Navigator.NavigateTo(BackHref);
+            return;
+        }
+        ErrorMessage = message;
+        Deletion = await PersonService.GetDeletionAsync(Principal, Id);
     }
+
+    async Task DeleteModuleAsync()
+    {
+        if (Deletion is null || !Deletion.ModulesDeleted.Any(m => m.Id == DeleteModuleId)) return;
+        var (count, message) = await PersonService.DeleteOwnedModuleAsync(Principal, Id, DeleteModuleId);
+        if (count > 0)
+        {
+            HttpContext.SetFlashMessage("DeletedSuccessfully", true);
+            Navigator.NavigateTo(SelfHref);
+            return;
+        }
+        ErrorMessage = message;
+        Deletion = await PersonService.GetDeletionAsync(Principal, Id);
+    }
+
+    string SelfHref => $"Persons/{Id}/Delete";
+    // The transfer page comes back here, where the module is no longer listed once the person doesn't own it alone.
+    string TransferHref(PersonDeletion.OwnedModule module) => $"Modules/{module.Id}/Transfer/PersonOwned/{Id}?back={Uri.EscapeDataString(SelfHref)}";
+
+    RenderFragment Item(string labelKey, IReadOnlyList<string> names) => __builder =>
+    {
+        if (names.Count == 0) return;
+        <li>@Localizer[labelKey]: @string.Join(", ", names)</li>
+    };
 }
