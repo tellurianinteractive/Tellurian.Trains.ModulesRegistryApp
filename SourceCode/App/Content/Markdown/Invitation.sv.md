@@ -6,6 +6,7 @@ Du kan underhålla dina egna moduler och hjälpa andra genom att ha moduler för
 Du är inbjuden att bli användare.
 För att slutföra registreringen av ditt användarkonto kan du klicka på skapa lösenord i detta meddelande.
 Det tar dig till en sida där du skapar ditt lösenord.
+Länken gäller i 30 dagar, och ditt användarkonto skapas när du skapar ditt lösenord.
 Efter det är du redo att köra igång.
 
 #### NOTERA

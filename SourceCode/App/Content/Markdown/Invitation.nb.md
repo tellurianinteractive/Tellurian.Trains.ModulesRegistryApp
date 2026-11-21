@@ -6,6 +6,7 @@ Du kan vedlikeholde dine egne moduler og hjelpe andre ved å vedlikeholde module
 Du blir invitert til å bli bruker.
 For å fullføre registreringen av brukerkontoen din, kan du klikke på linken Opprett passord i denne meldingen.
 Det tar deg til en side der du oppretter passordet ditt.
+Lenken gjelder i 30 dager, og brukerkontoen din opprettes når du oppretter passordet ditt.
 Da er du klar til å begynne å bruke nettstedet.
 
 #### MERK

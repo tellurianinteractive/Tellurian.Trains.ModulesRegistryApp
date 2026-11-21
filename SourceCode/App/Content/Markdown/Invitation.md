@@ -6,6 +6,7 @@ You can maintain your own modules and help others by maintaining modules for mem
 You are invited to become a user. 
 To finalize the registration of your user account, you can click on the create password link in this message.
 It will take you to a page where you create your password. 
+The link works for 30 days, and your user account is created when you create your password.
 Then you are ready to go.
 
 #### NOTE
