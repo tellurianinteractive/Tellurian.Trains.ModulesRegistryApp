@@ -196,10 +196,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
     /// <summary>
     /// Deletes the person and everything that belongs to the person (<see cref="PersonDeletionPlan"/>), in one transaction.
     /// </summary>
-    /// <remarks>
-    /// Before release 1.15.29 a person was only marked as deleted (<see cref="Person.DeletedTimestamp"/>), with its user, and
-    /// everything that referred to it stayed; such persons are deleted here too.
-    /// </remarks>
+    /// <remarks>Before release 1.15.29 a person was only marked as deleted, and everything that referred to it stayed.</remarks>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
@@ -227,23 +224,9 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         return count.DeleteResult();
     }
 
-    /// <summary>
-    /// The persons in the country that were only marked as deleted before release 1.15.29, for the country administrator to
-    /// delete for real. Remove this when there are none left in production, together with the query filter on persons.
-    /// </summary>
-    public async Task<IReadOnlyList<Person>> GetMarkedAsDeletedInCountryAsync(ClaimsPrincipal? principal, int countryId, CancellationToken cancellationToken = default)
-    {
-        if (!principal.MayDeletePerson(countryId)) return [];
-        await using var dbContext = await Factory.CreateDbContextAsync(cancellationToken);
-        return await dbContext.People.IgnoreQueryFilters().AsNoTracking()
-            .Where(p => p.CountryId == countryId && p.DeletedTimestamp != null)
-            .OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.CityName)
-            .ToListAsync(cancellationToken);
-    }
-
     private static async Task<bool> MayDeleteAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, int id, CancellationToken cancellationToken)
     {
-        var countryId = await dbContext.People.IgnoreQueryFilters().AsNoTracking()
+        var countryId = await dbContext.People.AsNoTracking()
             .Where(p => p.Id == id)
             .Select(p => (int?)p.CountryId)
             .SingleOrDefaultAsync(cancellationToken);

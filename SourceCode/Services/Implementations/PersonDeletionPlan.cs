@@ -236,7 +236,7 @@ internal sealed class PersonDeletionPlan
         }
     }
 
-    // Also a person removed only by a timestamp before release 1.15.29, and their user.
+    // Also the person's user when it is marked as deleted (the query filter on users).
     private static Task<Person?> FindPersonAsync(ModulesDbContext dbContext, int personId, CancellationToken cancellationToken) =>
         dbContext.People.IgnoreQueryFilters()
             .Include(p => p.Country)

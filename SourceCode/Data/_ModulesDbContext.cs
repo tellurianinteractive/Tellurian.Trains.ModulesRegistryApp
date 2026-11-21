@@ -138,7 +138,6 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.Entity<Person>(entity =>
         {
             entity.ToTable("Person");
-            entity.HasQueryFilter(p => p.DeletedTimestamp.HasValue == false);
 
             entity.Property(e => e.CityName).HasMaxLength(50);
 

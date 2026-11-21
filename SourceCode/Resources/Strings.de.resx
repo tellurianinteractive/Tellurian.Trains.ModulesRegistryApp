@@ -2763,9 +2763,6 @@
   <data name="LayoutsContactCleared" xml:space="preserve">
     <value>Bahnen mit der Person als Kontakt: der Kontakt wird entfernt</value>
   </data>
-  <data name="MarkedAsDeletedPersons" xml:space="preserve">
-    <value>Früher als gelöscht markiert, aber nicht gelöscht</value>
-  </data>
   <data name="ModulesOwnedAloneHelp" xml:space="preserve">
     <value>Übertragen Sie jedes Modul an einen neuen Eigentümer oder löschen Sie es. Module, die hier bleiben, werden mit der Person gelöscht. Ein Modul, das für ein noch nicht beendetes Treffen angemeldet ist, kann nur übertragen werden.</value>
   </data>

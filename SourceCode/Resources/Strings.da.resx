@@ -2763,9 +2763,6 @@
   <data name="LayoutsContactCleared" xml:space="preserve">
     <value>Baner med personen som kontakt: kontakten fjernes</value>
   </data>
-  <data name="MarkedAsDeletedPersons" xml:space="preserve">
-    <value>Tidligere markeret som slettet, men ikke slettet</value>
-  </data>
   <data name="ModulesOwnedAloneHelp" xml:space="preserve">
     <value>Overfør hvert modul til en ny ejer, eller slet det. Moduler, der er tilbage her, slettes sammen med personen. Et modul, der er tilmeldt et træf, som ikke er slut, kan kun overføres.</value>
   </data>

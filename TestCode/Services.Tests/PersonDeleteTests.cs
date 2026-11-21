@@ -100,7 +100,7 @@ public sealed class PersonDeleteTests
 
         Assert.IsGreaterThan(0, count, message);
         await using var dbContext = _factory.CreateDbContext();
-        Assert.IsFalse(dbContext.People.IgnoreQueryFilters().Any(p => p.Id == ThePerson));
+        Assert.IsFalse(dbContext.People.Any(p => p.Id == ThePerson));
         Assert.IsFalse(dbContext.Users.IgnoreQueryFilters().Any(u => u.Id == TheUser));
         Assert.IsFalse(dbContext.GroupMembers.Any());
         Assert.IsFalse(dbContext.MeetingParticipants.Any());
@@ -189,28 +189,6 @@ public sealed class PersonDeleteTests
 
         Assert.AreEqual(ModulesRegistry.Resources.Strings.YouMayNotDeleteYourself, deletion.Obstacles.Single());
         Assert.AreEqual(0, (await target.DeleteAsync(CountryAdministrator, Administrator)).Count);
-    }
-
-    [TestMethod]
-    public async Task PersonOnlyMarkedAsDeletedIsDeletedForReal()
-    {
-        await using (var dbContext = _factory.CreateDbContext())
-        {
-            var person = dbContext.People.Single(p => p.Id == ThePerson);
-            person.DeletedTimestamp = DateTimeOffset.Now;
-            dbContext.Users.Single(u => u.Id == TheUser).DeletedTimestamp = DateTimeOffset.Now;
-            await dbContext.SaveChangesAsync();
-        }
-        var target = NewService();
-
-        var marked = await target.GetMarkedAsDeletedInCountryAsync(CountryAdministrator, Sweden);
-        var (count, message) = await target.DeleteAsync(CountryAdministrator, ThePerson);
-
-        Assert.AreEqual(ThePerson, marked.Single().Id);
-        Assert.IsGreaterThan(0, count, message);
-        await using var check = _factory.CreateDbContext();
-        Assert.IsFalse(check.People.IgnoreQueryFilters().Any(p => p.Id == ThePerson));
-        Assert.IsFalse(check.Users.IgnoreQueryFilters().Any(u => u.Id == TheUser));
     }
 
     [TestMethod]

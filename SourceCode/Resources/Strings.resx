@@ -2763,9 +2763,6 @@
   <data name="LayoutsContactCleared" xml:space="preserve">
     <value>Layouts with the person as contact: the contact is removed</value>
   </data>
-  <data name="MarkedAsDeletedPersons" xml:space="preserve">
-    <value>Marked as deleted earlier, but not deleted</value>
-  </data>
   <data name="ModulesOwnedAloneHelp" xml:space="preserve">
     <value>Transfer each module to a new owner, or delete it. Modules left here are deleted with the person. A module registered for a meeting that has not ended can only be transferred.</value>
   </data>

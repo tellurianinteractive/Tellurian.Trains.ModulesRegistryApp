@@ -22,7 +22,7 @@ public static class PersonDuplicateExtensions
             var lastName = person.LastName?.ToLower() ?? string.Empty;
             var cityName = person.CityName?.ToLower() ?? string.Empty;
             return dbContext.People.AnyAsync(p =>
-                p.Id != person.Id && p.DeletedTimestamp == null && p.CountryId == person.CountryId &&
+                p.Id != person.Id && p.CountryId == person.CountryId &&
                 p.FirstName.ToLower() == firstName && p.LastName.ToLower() == lastName && (p.CityName ?? string.Empty).ToLower() == cityName);
         }
 
@@ -55,7 +55,7 @@ public static class PersonDuplicateExtensions
     extension(IQueryable<User> users)
     {
         /// <summary>
-        /// The accounts that can sign in with the address: not deleted (the query filter) and belonging to a person, not deleted.
+        /// The accounts that can sign in with the address: not deleted (the query filter) and belonging to a person.
         /// The newest first, so a sign-in address used twice, as by an account left over from a removed person
         /// (production 2026-11-19: 8 accounts without a person, two of them with the same address), can't make the lookup fail.
         /// </summary>
@@ -72,7 +72,7 @@ public static class PersonDuplicateExtensions
         public IQueryable<Person> WithEmailAddress(string address)
         {
             var item = ";" + address.Trim().ToLower() + ";";
-            return persons.Where(p => p.DeletedTimestamp == null && p.EmailAddresses != null && (";" + p.EmailAddresses.Replace(" ", "") + ";").ToLower().Contains(item));
+            return persons.Where(p => p.EmailAddresses != null && (";" + p.EmailAddresses.Replace(" ", "") + ";").ToLower().Contains(item));
         }
     }
 }

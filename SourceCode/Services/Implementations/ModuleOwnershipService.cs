@@ -170,11 +170,10 @@ public class ModuleOwnershipService(IDbContextFactory<ModulesDbContext> factory)
     private static Task<bool> IsDataAdministratorAsync(ModulesDbContext dbContext, ClaimsPrincipal principal, int groupId) =>
         dbContext.GroupMembers.AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == principal.PersonId() && gm.IsDataAdministrator);
 
-    // Also an owner only marked as deleted, whose module still counts as theirs until the person is deleted for real.
     private static async Task<List<int>> PersonCountryIdsAsync(ModulesDbContext dbContext, IEnumerable<int> personIds)
     {
         var ids = personIds.ToList();
-        return await dbContext.People.IgnoreQueryFilters().Where(p => ids.Contains(p.Id)).Select(p => p.CountryId).ToListAsync();
+        return await dbContext.People.Where(p => ids.Contains(p.Id)).Select(p => p.CountryId).ToListAsync();
     }
 
     private static List<ModuleOwnership> Owners(Module module) => [.. module.ModuleOwnerships.Where(mo => mo.OwnedShare > 0)];
