@@ -46,7 +46,7 @@ public static class StationPermissionExtensions
         private async Task<bool> IsOwnerOrDataAdministratorOfModuleAsync(ClaimsPrincipal principal, int moduleId)
         {
             var owners = await dbContext.ModuleOwnerships.AsNoTracking()
-                .Where(mo => mo.ModuleId == moduleId && mo.OwnedShare > 0) // An assistant (no share) is not an owner.
+                .Where(mo => mo.ModuleId == moduleId) // Also assistants (no share): they help the owners edit everything about the module.
                 .Select(mo => new { mo.PersonId, mo.GroupId })
                 .ToListAsync().ConfigureAwait(false);
             var personId = principal.PersonId();

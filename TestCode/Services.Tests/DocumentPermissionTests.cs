@@ -73,6 +73,7 @@ public sealed class DocumentPermissionTests
     [DataRow(GroupDataAdministrator, GroupModuleDocument, DisplayName = "Data administrator, group's module")]
     [DataRow(GroupDataAdministrator, MemberModuleDocument, DisplayName = "Data administrator, a member's module")]
     [DataRow(Owner, StationDocument, DisplayName = "Owner of a station's module, station document")]
+    [DataRow(Assistant, PersonModuleDocument, DisplayName = "Assistant (no share): helps the owners edit the module")]
     public async Task DeleteIsAllowed(int personId, int documentId)
     {
         var (count, _) = await Target.DeleteAsync(Person(personId), documentId);
@@ -83,7 +84,6 @@ public sealed class DocumentPermissionTests
 
     [TestMethod]
     [DataRow(Other, PersonModuleDocument, DisplayName = "Another person")]
-    [DataRow(Assistant, PersonModuleDocument, DisplayName = "Assistant (no share)")]
     [DataRow(GroupDataAdministrator, PersonModuleDocument, DisplayName = "Data administrator, a non-member's module")]
     [DataRow(Other, StationDocument, DisplayName = "Another person, station document")]
     [DataRow(Owner, EndProfileDocument, DisplayName = "Owner, end profile document")]

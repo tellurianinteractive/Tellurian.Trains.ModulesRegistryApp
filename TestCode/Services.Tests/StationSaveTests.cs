@@ -14,7 +14,7 @@ namespace ModulesRegistry.Services.Tests;
 public sealed class StationSaveTests
 {
     private const int CountryId = 1, OtherCountryId = 2;
-    private const int Owner = 1, Stranger = 2;
+    private const int Owner = 1, Stranger = 2, Assistant = 3;
     private const int OwnersStation = 1, FreeModule = 2, StrangersFreeModule = 3;
     private const int Track = 1;
     private SqliteDbContextFactory _factory = null!;
@@ -45,12 +45,14 @@ public sealed class StationSaveTests
         await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo" });
         await _factory.SeedAsync(
             new Person { Id = Owner, FirstName = "Anna", LastName = "Berg", CityName = "City", CountryId = CountryId },
-            new Person { Id = Stranger, FirstName = "Erik", LastName = "Ek", CityName = "City", CountryId = CountryId });
+            new Person { Id = Stranger, FirstName = "Erik", LastName = "Ek", CityName = "City", CountryId = CountryId },
+            new Person { Id = Assistant, FirstName = "Lisa", LastName = "Lund", CityName = "City", CountryId = CountryId });
         await _factory.SeedAsync(NewModule(OwnersStation), NewModule(FreeModule), NewModule(StrangersFreeModule));
         await _factory.SeedAsync(
             new ModuleOwnership { Id = 1, ModuleId = OwnersStation, PersonId = Owner, OwnedShare = 1 },
             new ModuleOwnership { Id = 2, ModuleId = FreeModule, PersonId = Owner, OwnedShare = 1 },
-            new ModuleOwnership { Id = 3, ModuleId = StrangersFreeModule, PersonId = Stranger, OwnedShare = 1 });
+            new ModuleOwnership { Id = 3, ModuleId = StrangersFreeModule, PersonId = Stranger, OwnedShare = 1 },
+            new ModuleOwnership { Id = 4, ModuleId = OwnersStation, PersonId = Assistant, OwnedShare = 0 });
         await _factory.SeedAsync(new Station { Id = OwnersStation, FullName = "Station", Signature = "S", RegionId = 1, PrimaryModuleId = OwnersStation });
         await _factory.SeedAsync(new StationTrack { Id = Track, StationId = OwnersStation, Designation = "1", DisplayOrder = 1, MaxTrainLength = 3, DirectionId = 10 });
     }
@@ -76,6 +78,14 @@ public sealed class StationSaveTests
         var stored = (await _factory.FindAsync<Station>(OwnersStation))!;
         Assert.AreEqual("Changed", stored.FullName);
         Assert.AreEqual(OwnersStation, stored.PrimaryModuleId);
+    }
+
+    [TestMethod]
+    public async Task AnAssistantHelpsTheOwnersEditTheStationAndItsTracks()
+    {
+        Assert.AreEqual(1, (await Stations.SaveAsync(Principal(Assistant), Changed("By assistant"))).Count);
+        var track = new StationTrack { Id = Track, StationId = OwnersStation, Designation = "1b", DisplayOrder = 1, MaxTrainLength = 3, DirectionId = 10 };
+        Assert.AreEqual(1, (await Tracks.SaveOrUpdateAsync(Principal(Assistant), track)).Count);
     }
 
     [TestMethod]
