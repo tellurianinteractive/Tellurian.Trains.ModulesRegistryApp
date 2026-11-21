@@ -13,13 +13,10 @@ else
     @* A static form also asks before leaving it with unsaved changes (leave-guard.js): the texts of its dialog are attributes, and a
        form shown again after a POST (an invalid or failed save; a successful one redirects) is unsaved from the start. *@
     <EditForm Model="Item" OnValidSubmit="OnValidSubmit" FormName="@FormName" Enhance="@IsStatic" @attributes="FormAttributes">
-        @if (IsStatic)
+        @* Validated with the form model's DataAnnotations (FluentValidation removed with the last interactive form, Migration step 3.6). *@
+        <DataAnnotationsValidator />
+        @if (!IsStatic)
         {
-            <DataAnnotationsValidator />
-        }
-        else
-        {
-            <FluentValidationValidator />
             <ValidationSummary />
         }
         @Inputs

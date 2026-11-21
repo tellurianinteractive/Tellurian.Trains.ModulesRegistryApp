@@ -1,5 +1,4 @@
 ﻿using Azure.Identity;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Server.Circuits;
@@ -135,7 +134,6 @@ builder.Services.AddDbContextFactory<ModulesDbContext>((sp, options) =>
 }, ServiceLifetime.Scoped);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<INotificationService, NotificationService>();
-builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IClaimsTransformation, ApplicationClaimsTransformation>();
 builder.Services.AddLanguageService(AppLanguages.All);
