@@ -130,7 +130,9 @@ builder.Services.AddDbContextFactory<ModulesDbContext>((sp, options) =>
             options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
         })
         .AddInterceptors(new SkipUnchangedValuesInterceptor(), sp.GetRequiredService<ChangeLogInterceptor>())
-        .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+        // Parameter values (personal data) in logs and exceptions: only on request while debugging (the setting
+        // "EnableSensitiveDataLogging": true in user secrets), never by default, since development may use the production database.
+        .EnableSensitiveDataLogging(builder.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("EnableSensitiveDataLogging"));
 }, ServiceLifetime.Scoped);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<INotificationService, NotificationService>();

@@ -7,6 +7,8 @@ How the app logs, where the logs go, and how to read them. Background and decisi
 - **Locally, in tests and in CI:** no connection string, so nothing is sent. Logs go to the console and the debug output.
 - **Who can read them:** only the administrator and developers, through Azure roles (*Log Analytics Reader* or *Monitoring Reader* is enough). App users have no access.
 
+**EF Core sensitive data logging** (parameter values, which may be personal data, in logs and exception messages) is off, also in Development, since development may use the production database. Turn it on only while debugging, with `"EnableSensitiveDataLogging": true` in user secrets; it is never on outside Development (`App/Program.cs`).
+
 ## Cost (must stay free)
 The workspace includes 5 GB per month for free; the whole workspace (also `fastclock`) used about 1.25 GB per month in November 2026. A daily cap of 0.15 GB on the workspace keeps it below the free allowance. Application Insights tables keep data 90 days at no charge. If the volume grows, look at *Usage and estimated costs* on the workspace before changing anything else.
 

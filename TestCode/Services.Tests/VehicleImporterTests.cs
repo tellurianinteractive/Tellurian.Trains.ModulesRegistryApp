@@ -61,8 +61,7 @@ public static class AppBuilder
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("TimetablePlanningDatabase"),
                 options =>
-                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
-                .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
 
         });
         builder.Services.AddTransient<VehiclesImporter>();  
