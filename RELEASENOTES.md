@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.2
+Released 2026-11-21
+- The Tools page links to the Module Draw and Timetable Planner apps.
+- The invitation mail tells that the link works for 30 days and that the user account is created when the password is set.
 ## Release 1.16.1
 Released 2026-11-21
 - Maintenance update.
