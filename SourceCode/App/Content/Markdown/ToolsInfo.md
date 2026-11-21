@@ -24,7 +24,7 @@ how to integrate the clock with your own applications.
 
 
 #### Module Draw
-[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) is an app for drawing modules and their end profiles, directly in the browser.
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) is an app for drawing modules and their end profiles, halls, and hall plans (the layout for a specific meeting), directly in the browser.
 
 #### Timetable Planner
 [Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) is an app for planning the timetable of a module meeting's layout, directly in the browser.

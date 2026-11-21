@@ -24,7 +24,7 @@ hvordan du integrerer klokken med dine egne applikasjoner.
 
 
 #### Module Draw
-[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) er en app for å tegne moduler og endeprofilene deres, direkte i nettleseren.
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) er en app for å tegne moduler og endeprofilene deres, haller og hallplaner (anlegget for et bestemt treff), direkte i nettleseren.
 
 #### Timetable Planner
 [Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) er en app for å planlegge ruteplanen for et modultreffs anlegg, direkte i nettleseren.

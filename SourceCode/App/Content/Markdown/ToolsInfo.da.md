@@ -23,7 +23,7 @@ hvordan du integrerer uret med dine egne applikationer.
 
 
 #### Module Draw
-[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) er en app til at tegne moduler og deres endeprofiler, direkte i browseren.
+[Module Draw](https://victorious-ocean-0a8bfd603.4.azurestaticapps.net/) er en app til at tegne moduler og deres endeprofiler, haller og halplaner (anlægget til et bestemt træf), direkte i browseren.
 
 #### Timetable Planner
 [Timetable Planner](https://happy-island-09315cf03.7.azurestaticapps.net/) er en app til at planlægge køreplanen for et modultræfs anlæg, direkte i browseren.
