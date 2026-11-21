@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.3
+Released 2026-11-22
+- Maintenance update.
 ## Release 1.16.2
 Released 2026-11-21
 - The Tools page links to the Module Draw and Timetable Planner apps.
