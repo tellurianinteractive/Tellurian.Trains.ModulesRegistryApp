@@ -65,7 +65,7 @@
         }
     }
 
-    string LabelText => Labels is not null ? Labels.Select(l => Localizer[l].Value).ToArray().ToFirstUpperInvariant() : string.Empty;
+    string LabelText => Labels is not null ? string.Join(' ', Labels.Select((l, i) => i == 0 ? Localizer[l].Value : Localizer[l].Value.ToLowerInvariant())) : string.Empty;
     string TitleText => Title.HasValue ? Localizer[Title] : LabelText;
     string[]? Labels => Label.HasValue ? Label.Split("-") : Type.HasValue ? Type.AsArray() : "Button".AsArray();
     string LabelOrType => Label ?? Type ?? "Button";

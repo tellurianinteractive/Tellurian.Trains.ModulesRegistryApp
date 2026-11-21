@@ -69,7 +69,7 @@ public static class LocalizedStringExtensions
     private static bool IsEmpty(this PageAction pageAction) => pageAction == PageAction.List || pageAction == PageAction.Unknown || pageAction == PageAction.Error;
 
     private static string ObjectName(this IStringLocalizer localizer, string? objectName, bool toLower) =>
-        string.IsNullOrWhiteSpace(objectName) ? string.Empty : toLower ? localizer[objectName].ToString().ToFirstLowerInvariant() : localizer[objectName].ToString();
+        objectName.IsEmpty ? string.Empty : toLower ? localizer[objectName].ToString().WithInitialLowerCase : localizer[objectName].ToString();
 
     /// <summary>The text as a noun inside a sentence: lower case, except in a language that capitalises nouns (German).</summary>
     public static string LocalizedCasing(this IStringLocalizer localizer, string resourceName) =>
@@ -82,7 +82,7 @@ public static class LocalizedStringExtensions
         if (parts.Length == 1) return localizer[parts[0]];
         var localized = parts.Select(p => (localizer[p] ?? p).ToLowerInvariant());
         var separator = resourceName.Contains('&') ? " & " : resourceName.Contains('=') ? "" : resourceName.Contains('/') ? "/" : resourceName.Contains(',') ? ", " : " ";
-        return string.Join(separator, localized).ToFirstUpperInvariant();
+        return string.Join(separator, localized).WithInitialCapital;
     }
 
     private static string Description(this IStringLocalizer me, object? context) =>

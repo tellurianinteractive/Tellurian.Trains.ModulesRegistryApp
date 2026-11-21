@@ -33,7 +33,7 @@ else
             <td width="6%" align="center">@item.OperatingDay(OperatingDayItems)</td>
             <td width="6%" align="center">@item.CargoDirection(DirectionItems)</td>
             <td width="12%">@item.Quantity @item.QuantityUnit(QuantityUnitItems)</td>
-            <td width="10%">@((item.FromYear ?? item.ExternalStationCustomer.OpenedYear, item.UptoYear ?? item.ExternalStationCustomer.ClosedYear).AsPeriod())</td>
+            <td width="10%">@((item.FromYear ?? item.ExternalStationCustomer.OpenedYear, item.UptoYear ?? item.ExternalStationCustomer.ClosedYear).ToPeriodText())</td>
         </RowTemplate>
     </TableTemplate>
 }

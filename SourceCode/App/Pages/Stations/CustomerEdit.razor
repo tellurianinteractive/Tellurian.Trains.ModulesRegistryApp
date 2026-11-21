@@ -100,7 +100,7 @@
             <td>@cargo.Quantity @cargo.QuantityUnit(QuantityUnitItems)</td>
             <td>@cargo.ReadyLoadingOrUnloading(Localizer, ReadyTimeItems)</td>
             <td style="color: @cargo.TrackOrAreaForeColor(); background-color: @cargo.TrackOrAreaBackColour()">@cargo.TrackOrArea()</td>
-            <td>@((cargo.FromYear ?? Existing.OpenedYear, cargo.UptoYear ?? Existing.ClosedYear).AsPeriod())</td>
+            <td>@((cargo.FromYear ?? Existing.OpenedYear, cargo.UptoYear ?? Existing.ClosedYear).ToPeriodText())</td>
             <td>
                 <AppButton Label="Edit" Href="@CargoEditHref(cargo.Id)" />
                 <AppButton Label="Clone" Href="@($"{CargoEditHref(0)}?clone={cargo.Id}")" />

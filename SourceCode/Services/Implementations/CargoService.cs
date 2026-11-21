@@ -211,7 +211,7 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
 
     private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, Description(nhm));
 
-    private static string Description(NHM nhm) => $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName().Value.LineWrapped(200)}";
+    private static string Description(NHM nhm) => $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName().Value.WordWrapped(200, "<br/>")}";
 
     #endregion
 }

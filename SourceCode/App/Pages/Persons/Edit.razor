@@ -3,154 +3,169 @@
 @page "/Persons/{id:int}/EditGroup/{groupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a POST of PersonFormData; the id, the country of a new person and the group come from the
+   address. The form is shown to those who may edit the person (PersonService.MayEditAsync): global administrators, country
+   administrators in the person's country, the person themselves, and those who administer the group's members, for a new person or a
+   member of the group (who is then added to the group). Fields the user may not change are disabled, and the page sets their stored
+   values before the posted form is validated, since a disabled field isn't posted; the service checks the same rules. Unlock is a
+   POST form for administrators. After saving, a redirect to the form's own address. *@
 
-@inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
+@using ModulesRegistry.Forms.Persons
+
 @inject NavigationManager Navigator
-
 @inject PersonService PersonService
 @inject UserService UserService
 @inject CountryService CountryService
 @inject GroupService GroupService
+@inject IStringLocalizer<Strings> Localizer
 
 <PageHeading ObjectName="Person" IconClass="@FontAwesome.User" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Person" BackHref="@BackHref" />
 
-@if (Person is null)
+@if (FailureMessage is not null)
 {
-
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
-else if (Principal.IsAuthorisedInCountry(Person.CountryId))
+
+@if (Existing?.User is not null)
 {
-    <UserStatusView User="Person.User" />
-    <EditTemplate Item="@Person" OnValidSubmit="OnValidSumbit" DeleteHref="@DeleteHref(Person)" MayDelete="MayDelete(Person)">
-        <Inputs>
-            <AppInputText Width="2" Label="FirstName" @bind-Value="Person.FirstName" />
-            <AppInputText Width="2" Label="NickName" @bind-Value="Person.NickName" />
-            <AppInputText Width="2" Label="MiddleName" @bind-Value="Person.MiddleName" />
-            <AppInputText Width="2" Label="LastName" @bind-Value="Person.LastName" />
-            <AppInputText Width="2" Label="CityName" @bind-Value="Person.CityName" />
-            <AppInputSelect Width="2" Label="Country" @bind-Value="Person.CountryId" Items="CountriesItems" ShowPleaseSelect="true" />
-            <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Person.EmailAddresses" />
-            <AppInputFill Width="4" />
-
-            <AppInputNumber Width="1" Label="FremoNumber" @bind-Value="Person.FremoMemberNumber" />
-            @if (Person.IsFremoMember())
-            {
-                <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
-                <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Person.FremoOwnerSignature" />
-                <AppInputText Width="7" Label="FremoReservedAdresses" @bind-Value="Person.FremoReservedAdresses" Placeholder="LocoAddressExample" />
-
-            }
+    <UserStatusView User="Existing.User" />
+}
+<EditTemplate Item="Form" FormName="person" OnValidSubmit="SaveAsync" DeleteHref="@DeleteHref" MayDelete="MayDelete">
+    <Inputs>
+        <AppInputText Width="2" Label="FirstName" @bind-Value="Form!.FirstName" />
+        <AppInputText Width="2" Label="NickName" @bind-Value="Form!.NickName" />
+        <AppInputText Width="2" Label="MiddleName" @bind-Value="Form!.MiddleName" />
+        <AppInputText Width="2" Label="LastName" @bind-Value="Form!.LastName" />
+        <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+        <AppInputSelect Width="2" Label="Country" Items="CountryItems" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" @bind-Value="Form!.CountryId" />
+        <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
+        <AppInputFill Width="6" />
+        <AppInputNumber Width="2" Label="FremoNumber" @bind-Value="Form!.FremoMemberNumber" />
+        @if (Existing is not null && Existing.IsFremoMember())
+        {
+            <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Existing.FremoNumber()" BackColor="#e9ecef" />
+        }
+        <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" />
+        <AppInputText Width="6" Label="FremoReservedAdresses" @bind-Value="Form!.FremoReservedAdresses" Placeholder="LocoAddressExample" />
+        @if (ShowsUserRights)
+        {
             <hr />
-            @if (Principal.IsGlobalOrCountryAdministrator() && Person.User is not null)
+            <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Form!.IsGlobalAdministrator" IsDisabled="@(!Principal.MayChangeGlobalAdministrator(Existing!.User!))" />
+            <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Form!.IsCountryAdministrator" IsDisabled="@(!Principal.MayChangeCountryAdministrator)" />
+            <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Form!.IsApiAccessPermitted" />
+            <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Form!.MayUploadSkpDrawing" />
+            <AppInputCheck Width="2" Label="MayVerifyWiFreds" @bind-Value="Form!.MayManageWiFreds" />
+            <AppInputFill Width="2" />
+            <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" />
+            <AppDisplay Width="3" Label="PasswordResetAttempts" Value="@Existing!.User!.PasswordResetAttempts.ToString()" BackColor="#e9ecef" />
+            <AppDisplay Width="3" Label="FailedLoginAttempts" Value="@Existing.User.FailedLoginAttempts.ToString()" BackColor="#e9ecef" />
+            @if (Existing.User.IsApiAccessPermitted)
             {
-                <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Person.User.IsGlobalAdministrator" IsDisabled="!IsSelfAsGlobalAdministrator" />
-                <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Person.User.IsCountryAdministrator" IsDisabled="IsNotGlobalAdministrator" />
-                <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Person.User.IsApiAccessPermitted" />
-                <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Person.User.MayUploadSkpDrawing" />
-                <AppInputCheck Width="2" Label="MayVerifyWiFreds" @bind-Value="Person.User.MayManageWiFreds" />
-
-                @if (Person.User.IsGlobalAdministrator || Person.User.IsCountryAdministrator)
-                {
-                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Person.User.AdministratorAreaOfResposibility" />
-                    <AppInputFill Width="6" />
-                }
-                <AppInputNumber Width="3" Label="PasswordResetAttempts" @bind-Value="Person.User.PasswordResetAttempts" IsDisabled=true />
-                <AppInputNumber Width="3" Label="FailedLoginAttempts" @bind-Value="Person.User.FailedLoginAttempts" IsDisabled=true />
-                @if (Person.User.IsApiAccessPermitted)
-                {
-                    <AppDisplay Width="6" Label="ApiKey" Value="@Person.User.ApiKey()" BackColor="#e9ecef" />
-                }
-                @if (Person.User.AdministratorAreaOfResposibility.HasValue)
-                {
-                    <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Person.User.AdministratorAreaOfResposibility" IsDisabled="IsNotAdministrator" />
-                }
+                <AppDisplay Width="6" Label="ApiKey" Value="@Existing.User.ApiKey()" BackColor="#e9ecef" />
             }
-        </Inputs>
+        }
+    </Inputs>
+</EditTemplate>
 
-    </EditTemplate>
-
-
-    @if (Person.User is not null && Person.User.IsLockedOut())
-    {
-        <br />
-        <h3>@Localizer["UserIsLockedOut"]</h3>
-        <AppButton Label="Unlock" OnClickCallback="UnlockUser" />
-    }
-}
-else
+@if (ShowsUserRights && Existing!.User!.IsLockedOut())
 {
-    <div class="alert alert-danger">
-        @Localizer["NotAuthorised"]
-    </div>
+    <br />
+    <h3>@Localizer["UserIsLockedOut"]</h3>
+    <form method="post" @formname="unlock" @onsubmit="UnlockAsync" data-enhance>
+        <AntiforgeryToken />
+        <input type="hidden" name="Unlock" value="true" />
+        <AppButton Label="Unlock" IsSubmit="true" />
+    </form>
 }
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int CountryId { get; set; }
     [Parameter] public int GroupId { get; set; }
+    [SupplyParameterFromForm(FormName = "person")] private PersonFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "unlock")] private bool Unlock { get; set; }
 
-    private Person? Person;
-    private Group? Group;
-    private IEnumerable<ListboxItem>? CountriesItems;
-    private ClaimsPrincipal? Principal;
-    private string? ApiKey;
+    ClaimsPrincipal? Principal;
+    Person? Existing;
+    IEnumerable<ListboxItem>? CountryItems;
+    string? FailureMessage;
 
-    protected async override Task OnParametersSetAsync()
+    bool MaySelectCountry => Principal.IsGlobalAdministrator() || GroupId > 0;
+    // The rights of a stored user, for global administrators and the country administrators of the person's country.
+    bool ShowsUserRights => Existing?.User is not null && Principal.MayChangeUserRights(Existing.CountryId);
+    bool MayDelete => Existing is not null && Principal.IsCountryAdministratorInCountry(Existing.CountryId) && !Principal.IsReadOnly();
+    string? DeleteHref => Existing is null ? null : $"Persons/{Existing.Id}/Delete";
+
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        CountriesItems = await CountryService.ListboxItemsAsync(Principal, IsGroupAdministrator);
-        Person = await GetOrCreatePersonAsync();
-        if (Person.User is not null)
+        if (Id > 0)
         {
-            ApiKey = Person.User.ApiKey();
+            Existing = await PersonService.FindByIdAsync(Principal, Id);
         }
-        if (GroupId > 0) Group = await GroupService.FindByIdAsync(Principal, GroupId);
-    }
-
-    private async Task OnValidSumbit()
-    {
-        if (Principal is null || Person is null) return;
-        var result = await PersonService.SaveAsync(Principal, Person, IsGroupAdministrator);
-        if (result.Count < 1)
+        var person = Existing ?? new Person { CountryId = DefaultCountryId };
+        if ((Id > 0 && Existing is null) || !await PersonService.MayEditAsync(Principal, person, GroupId))
         {
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            Existing = null;
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
         }
-        else
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= person.AsFormData();
+        // Disabled fields aren't posted: their values are the stored ones.
+        if (!MaySelectCountry) Form.CountryId = person.CountryId;
+        if (Existing?.User is { } user)
         {
-            Person = result.Entity;
-            if (Person is not null) CountryId = Person.CountryId;
-            if (IsNotGroupMember)
+            if (!Principal.MayChangeGlobalAdministrator(user)) Form.IsGlobalAdministrator = user.IsGlobalAdministrator;
+            if (!Principal.MayChangeCountryAdministrator) Form.IsCountryAdministrator = user.IsCountryAdministrator;
+            if (!ShowsUserRights)
             {
-                var addresult = await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = Person!.Id });
+                Form.IsApiAccessPermitted = user.IsApiAccessPermitted;
+                Form.MayUploadSkpDrawing = user.MayUploadSkpDrawing;
+                Form.MayManageWiFreds = user.MayManageWiFreds;
+                Form.AdministratorAreaOfResposibility = user.AdministratorAreaOfResposibility;
             }
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(3000);
-            Navigator.NavigateTo(AfterSaveHref, forceLoad: true); // The list is a static SSR page: a full page load, since the interactive router would otherwise try to render it.
         }
+        // Group member administrators may add members from any fully supported country.
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, allSupportedCountries: GroupId > 0);
     }
 
-    async Task UnlockUser()
-    {
-        if (Person is null) return;
-        Person.User = await UserService.UnlockUser(Person.User);
-    }
+    // A country administrator adds persons in their own country, a global administrator in the country of the address.
+    int DefaultCountryId => CountryId > 0 && Principal.IsGlobalAdministrator() ? CountryId : Principal.CountryId();
 
-    private bool IsGroupAdministrator => Group is not null && Group.GroupMembers.Any(gm => gm.PersonId == Principal.PersonId() && gm.IsGroupAdministrator);
-
-    private async Task<Person> GetOrCreatePersonAsync() =>
-        Principal is null || Id == 0 ? DefaultPerson : await PersonService.FindByIdAsync(Principal, Id) ?? DefaultPerson;
-
-    private int DefaultCountryId => CountryId > 0 ? CountryId : Principal is not null ? Principal.CountryId() : CountriesItems is null ? 0 : CountriesItems.Count() == 1 ? CountriesItems.First().Id : 0;
-    private Person DefaultPerson => new Person { CountryId = DefaultCountryId };
     // The persons list is static, so this page may have no history (Migration step 3.3).
-    private string BackHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"Persons/Country/{Person?.CountryId ?? DefaultCountryId}";
-    private string AfterSaveHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"/Persons/Country/{CountryId}";
-    private bool IsNotGroupMember => GroupId > 0 && (Person is null || !Person.GroupMembers.Any(gm => gm.GroupId == GroupId));
-    private bool IsNotGlobalAdministrator => !Principal.IsGlobalAdministrator();
-    private bool IsSelfAsGlobalAdministrator => Principal.IsGlobalAdministrator() && Principal.UserId() == Person?.User?.Id;
-    private bool IsNotAdministrator => Person?.User is null || !(Person.User.IsCountryAdministrator || Person.User.IsGlobalAdministrator);
-    string DeleteHref(Person person) => $"persons/{person.Id}/delete";
-    bool MayDelete(Person person) => Principal.IsGlobalAdministrator() || Principal.IsCountryAdministratorInCountry(person.CountryId);
+    string BackHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : $"Persons/Country/{Existing?.CountryId ?? DefaultCountryId}";
+    string FormHref(int personId) => GroupId > 0 ? $"Persons/{personId}/EditGroup/{GroupId}" : $"Persons/{personId}/Edit";
 
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded person and its user (Migration section 3.4, the data-loss rule).
+        var person = Form.AsEntity(Existing);
+        var (count, message, saved) = await PersonService.SaveAsync(Principal, person, GroupId);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        var savedId = (saved ?? person).Id;
+        if (GroupId > 0 && Existing is null)
+        {
+            await GroupService.AddMemberAsync(Principal, new GroupMember { GroupId = GroupId, PersonId = savedId });
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(FormHref(savedId));
+    }
+
+    async Task UnlockAsync()
+    {
+        if (!Unlock || !ShowsUserRights || Principal.IsReadOnly()) return;
+        await UserService.UnlockUser(Existing!.User);
+        HttpContext.SetFlashMessage("Unlock", FlashMessageLevel.Success);
+        Navigator.NavigateTo(FormHref(Existing.Id));
+    }
 }

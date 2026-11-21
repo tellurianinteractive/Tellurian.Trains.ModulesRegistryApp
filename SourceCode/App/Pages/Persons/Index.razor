@@ -57,7 +57,7 @@
             @* Only the date; the status icon tells what it is, and so does the date's tooltip. *@
             @if (person.AccountStatus() is { Date: not null } status)
             {
-                <span title="@Localizer[status.DateTextKey!]">@status.Date.DateOnly()</span>
+                <span title="@Localizer[status.DateTextKey!]">@status.Date.ToDateText()</span>
             }
         </TemplateColumn>
         <TemplateColumn Title="@Localizer["Actions"]" Context="person">
@@ -139,7 +139,7 @@
 
     bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
 
-    string ClearFilterHref => Sort.HasValue ? $"Persons/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction ?? "")}" : $"Persons/Country/{CountryId}";
+    string ClearFilterHref => Sort.HasValue ? $"Persons/Country/{CountryId}?sort={Uri.EscapeDataString(Sort)}&direction={Uri.EscapeDataString(Direction.OrEmpty)}" : $"Persons/Country/{CountryId}";
     string AddHref(int countryId) => countryId > 0 ? $"persons/0/edit/{countryId}" : string.Empty;
     string EditHref(Person person) => $"persons/{person.Id}/edit";
     string ModulesHref(Person person) => $"persons/{person.Id}/modules";

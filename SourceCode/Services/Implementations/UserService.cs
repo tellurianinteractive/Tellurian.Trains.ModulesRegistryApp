@@ -16,18 +16,18 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     public async Task<User?> FindByEmailAsync(string? emailAddress)
     {
-        if (string.IsNullOrWhiteSpace(emailAddress)) return null;
+        if (emailAddress.IsEmpty) return null;
         using var dbContext = Factory.CreateDbContext();
         return await dbContext.Users.SignInAccounts(emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).FirstOrDefaultAsync();
     }
 
     public async Task<User?> SetEmailAsync(int userId, string? emailAddress)
     {
-        if (!emailAddress.IsEmailAddress()) return null;
+        if (!emailAddress.IsEmailAddress) return null;
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user is null) return null;
-        var address = emailAddress.ToItems(';').FirstOrDefault().OrEmpty.Trim().ToLowerInvariant();
+        var address = emailAddress.AsEmailAddresses().FirstItem(separator: ';');
         // A sign-in address belongs to one user and their own person only (Migration step 3.5).
         if (await dbContext.IsSignInAddressTakenAsync(address, user.Id)) return null;
         user.EmailAddress = address;
@@ -37,8 +37,8 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     public async Task<User?> SetPasswordAsync(string? emailAddress, string? objectId, string? password)
     {
-        if (!emailAddress.IsEmailAddress() || password.IsEmpty) return null;
-        var objectGuid = objectId.AsGuid(); if (objectGuid is null) return null;
+        if (!emailAddress.IsEmailAddress || password.IsEmpty) return null;
+        var objectGuid = objectId.ToGuidOrNull; if (objectGuid is null) return null;
         using var dbContext = Factory.CreateDbContext();
         var user = await dbContext.Users.SingleOrDefaultAsync(u => u.EmailAddress == emailAddress && u.ObjectId == objectGuid);
         if (user is null) return null;
@@ -52,7 +52,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     public async Task<User?> ResetPasswordAsync(string? emailAddress)
     {
-        if (string.IsNullOrWhiteSpace(emailAddress)) return null;
+        if (emailAddress.IsEmpty) return null;
         using var dbContext = Factory.CreateDbContext();
         var existing = await dbContext.Users.SignInAccounts(emailAddress).Include(u => u.Person).ThenInclude(p => p.Country).FirstOrDefaultAsync();
         if (existing is null)
@@ -74,7 +74,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     public async Task<User?> FindByApiKeyAsync(string? apiKey)
     {
-        if (string.IsNullOrWhiteSpace(apiKey)) return null;
+        if (apiKey.IsEmpty) return null;
         using var dbContext = Factory.CreateDbContext();
         var user = await FindByObjectIdAsync(dbContext, apiKey);
         return user is not null && user.IsApiAccessPermitted ? user : null;
@@ -82,8 +82,7 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
 
     private static async Task<User?> FindByObjectIdAsync(ModulesDbContext dbContext, string? objectId)
     {
-        if (string.IsNullOrWhiteSpace(objectId)) return null;
-        if (Guid.TryParse(objectId, out var objectGuid))
+        if (objectId.ToGuidOrNull is { } objectGuid)
         {
             return await dbContext.Users.Where(u => u.ObjectId == objectGuid).Include(u => u.Person).ThenInclude(p => p.Country).SingleOrDefaultAsync();
         }
@@ -94,12 +93,12 @@ public sealed class UserService(IDbContextFactory<ModulesDbContext> factory, ILo
     {
         using var dbContext = Factory.CreateDbContext();
         User? existing = null;
-        if (emailAddress.IsEmailAddress()) existing = await FindByEmailAsync(emailAddress);
+        if (emailAddress.IsEmailAddress) existing = await FindByEmailAsync(emailAddress);
         existing ??= await FindByObjectIdAsync(dbContext, objectId);
         if (existing is not null) return existing;
 
-        if (!emailAddress.IsEmailAddress()) return null;
-        var objectGuid = objectId.AsGuidOrNew();
+        if (!emailAddress.IsEmailAddress) return null;
+        var objectGuid = objectId.ToGuidOrNew();
 
         // The whole address of exactly one person, who isn't a user yet: a shared address, as in a family, can't be a sign-in address.
         var persons = await dbContext.People.WithEmailAddress(emailAddress!).Take(2).ToListAsync();

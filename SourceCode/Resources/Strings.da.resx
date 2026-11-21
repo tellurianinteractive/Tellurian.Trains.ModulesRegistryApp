@@ -2274,6 +2274,18 @@
   <data name="UniqueMacAddressAttribute_Error" xml:space="preserve">
     <value>"{0}" bruges allerede af et andet wiFRED kørehåndtag</value>
   </data>
+  <data name="EmailAddressesAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være e-mailadresser adskilt af semikolon</value>
+  </data>
+  <data name="LocoAddressesAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være DCC-adresser fra 1 til 9999, for eksempel 3,10-15</value>
+  </data>
+  <data name="FremoMemberNumberOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være et nummer fra 1 til 9999999 eller tomt</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API-nøgle</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" må højst have {1} tegn</value>
   </data>

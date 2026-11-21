@@ -1,3 +1,5 @@
+using ModulesRegistry.Data.Extensions;
+
 namespace ModulesRegistry.Forms.Validation;
 
 /// <summary>
@@ -12,7 +14,7 @@ public static class TextRules
         /// <summary>Only Latin letters, digits and some punctuation and symbols.</summary>
         public bool IsOrdinaryText()
         {
-            if (string.IsNullOrEmpty(text)) return true;
+            if (text.IsEmpty) return true;
             foreach (var c in text)
             {
                 if (c.IsLatinChar()) continue;
@@ -22,6 +24,19 @@ public static class TextRules
             }
             return true;
         }
+
+        /// <summary>
+        /// Email addresses, as corrected when saving (<c>AsEmailAddresses</c>): separated by <c>; ,</c>, spaces or line breaks,
+        /// in any case, duplicates allowed (Tellurian.Utilities.Text). Empty is valid.
+        /// </summary>
+        public bool IsEmailAddressesWhenCorrected() =>
+            text.AsEmailAddresses() is not { Length: > 0 } corrected || corrected.IsEmailAddresses;
+
+        /// <summary>
+        /// Loco addresses, as corrected when saving (<see cref="LocoAddressExtensions.AsLocoAddresses"/>): numbers and ranges from
+        /// 1 to 9999, separated by <c>, ;</c> or spaces, a range in any order. Empty is valid.
+        /// </summary>
+        public bool IsLocoAddressesWhenCorrected() => text.AsLocoAddresses().TryParseLocoAdresses(out _);
     }
 
     extension(char c)

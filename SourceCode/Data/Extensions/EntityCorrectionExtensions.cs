@@ -183,12 +183,19 @@ public static class EntityCorrectionExtensions
 
     extension(Person person)
     {
-        /// <summary>The names (<see cref="PersonExtensions.CorrectNames"/>), the email addresses and the reserved loco addresses.</summary>
+        /// <summary>
+        /// The names (<see cref="PersonExtensions.CorrectNames"/>), the email addresses, the FREMO prefix and reserved loco addresses,
+        /// a FREMO member number of 0 as empty, and the user's area of responsibility.
+        /// </summary>
         public void CorrectInput()
         {
             person.CorrectNames();
             person.EmailAddresses = person.EmailAddresses.AsEmailAddresses().OrNullIfEmpty;
+            person.FremoOwnerSignature = person.FremoOwnerSignature.Corrected(TextCase.AsTyped, TextCleanup.OrdinaryText | TextCleanup.NullIfEmpty);
             person.FremoReservedAdresses = person.FremoReservedAdresses.AsLocoAddresses().OrNullIfEmpty;
+            person.FremoMemberNumber = person.FremoMemberNumber > 0 ? person.FremoMemberNumber : null;
+            if (person.User is not null)
+                person.User.AdministratorAreaOfResposibility = person.User.AdministratorAreaOfResposibility.Corrected(TextCase.AsTyped, TextCleanup.OrdinaryText | TextCleanup.NullIfEmpty);
         }
     }
 }

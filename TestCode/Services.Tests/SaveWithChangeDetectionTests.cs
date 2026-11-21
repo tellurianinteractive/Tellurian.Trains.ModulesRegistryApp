@@ -172,12 +172,12 @@ public sealed class SaveWithChangeDetectionTests
         var changed = NewPerson(1);
         changed.UserId = 1;
         changed.User = NewUser(1);
-        changed.User.IsReadOnly = true;
+        changed.User.MayUploadSkpDrawing = true;
 
         var (count, _, _) = await target.SaveAsync(GlobalAdministrator, changed);
 
         Assert.AreEqual(1, count);
-        Assert.IsTrue((await _factory.FindAsync<User>(1))?.IsReadOnly);
+        Assert.IsTrue((await _factory.FindAsync<User>(1))?.MayUploadSkpDrawing);
     }
 
     [TestMethod]
@@ -199,22 +199,24 @@ public sealed class SaveWithChangeDetectionTests
     }
 
     [TestMethod]
-    public async Task PersonNewWithNewUserIsAdded()
+    public async Task PersonNewIsAddedWithoutAUser()
     {
+        // Users are created by invitation (UserService), never by saving a person (release 1.15.28).
         var target = new PersonService(_factory, new SystemTimeProvider());
         var person = NewPerson(0);
         person.User = NewUser(0);
 
         var (count, _, entity) = await target.SaveAsync(GlobalAdministrator, person);
 
-        Assert.AreEqual(2, count);
+        Assert.AreEqual(1, count);
         var saved = await _factory.FindAsync<Person>(entity!.Id);
-        Assert.IsNotNull(saved?.UserId);
+        Assert.IsNull(saved?.UserId);
     }
 
     [TestMethod]
-    public async Task PersonExistingGetsNewUser()
+    public async Task PersonExistingGetsNoUserBySaving()
     {
+        // Users are created by invitation (UserService), never by saving a person (release 1.15.28).
         await _factory.SeedAsync(NewPerson(1));
         var target = new PersonService(_factory, new SystemTimeProvider());
         var person = NewPerson(1);
@@ -222,8 +224,8 @@ public sealed class SaveWithChangeDetectionTests
 
         var (count, _, _) = await target.SaveAsync(GlobalAdministrator, person);
 
-        Assert.AreEqual(2, count);
-        Assert.IsNotNull((await _factory.FindAsync<Person>(1))?.UserId);
+        Assert.AreEqual(0, count);
+        Assert.IsNull((await _factory.FindAsync<Person>(1))?.UserId);
     }
 
     [TestMethod]

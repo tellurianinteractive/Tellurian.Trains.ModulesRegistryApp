@@ -12,11 +12,11 @@ else
     }
     else if (User.IsNeverLoggedIn())
     {
-        <span>@Localizer["Invited"]: @User.RegistrationTime.DateOnly()</span>
+        <span>@Localizer["Invited"]: @User.RegistrationTime.ToDateText()</span>
     }
     else if (User.HasCreatedPassword())
     {
-        <span>@Localizer["PasswordCreated"]: @User.LastEmailConfirmationTime.DateOnly()</span>
+        <span>@Localizer["PasswordCreated"]: @User.LastEmailConfirmationTime.ToDateText()</span>
     }
     else if (User.HasNotAcceptedTermsOfUse())
     {
@@ -25,7 +25,7 @@ else
     }
     else if (User.LastSignInTime.HasValue)
     {
-        <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.DateOnly()</span>
+        <span>@Localizer["LastLoginTime"]: @User.LastSignInTime.ToDateText()</span>
     }
 }
 @code {

@@ -1,38 +1,140 @@
 ﻿@page "/Users/Settings"
 
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6). Signed in: the user's own settings, a POST of UserSettingsFormData saved by PersonService (the
+   person themselves may save; names, country and rights are kept). Not signed in: the password reset, where "I have read" is a link
+   to ?read=true and Send a POST form. Each POST is followed by a redirect with a one-time message. *@
+
+@using ModulesRegistry.Forms.Persons
+
 @inject IStringLocalizer<Strings> Localizer
 @inject IMailSender MailSender
-@inject INotificationService NotificationService
 @inject NavigationManager Navigator
 @inject ContentService ContentService
 @inject UserService UserService
+@inject PersonService PersonService
+@inject CountryService CountryService
 
 <PageHeading Label="UserSettings" IconClass="@FontAwesome.Settings" PageAction="PageAction.List" />
 
-
-<AuthorizeView Policy="User">
-    <Authorized>
-        <UserEditView Id="@Principal.UserId()" />
-    </Authorized>
-</AuthorizeView>
-
-<AuthorizeView>
-    <NotAuthorized>
-        <PasswordResetView />
-    </NotAuthorized>
-</AuthorizeView>
+@if (Principal.IsAuthenticated())
+{
+    <h3>@Localizer["UserSettings"]</h3>
+    @if (Person is null)
+    {
+        <p class="alert alert-info"><span class="fa fa-info-circle" /> @Localizer["Nothing to se here yet!"]</p>
+    }
+    else
+    {
+        <ContentView ContentName="UserSettingsEdit" />
+        @if (FailureMessage is not null)
+        {
+            <ActionMessage Label="@FailureMessage" AlertType="stop" />
+        }
+        <EditTemplate Item="Form" FormName="user-settings" OnValidSubmit="SaveAsync">
+            <Inputs>
+                <AppDisplay Width="2" Label="FirstName" Value="@Person.FirstName" BackColor="#e9ecef" />
+                <AppDisplay Width="2" Label="NickName" Value="@Person.NickName" BackColor="#e9ecef" />
+                <AppDisplay Width="2" Label="MiddleName" Value="@Person.MiddleName" BackColor="#e9ecef" />
+                <AppDisplay Width="2" Label="LastName" Value="@Person.LastName" BackColor="#e9ecef" />
+                <AppInputFill Width="4" />
+                <AppInputText Width="4" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
+                <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+                <AppDisplay Width="2" Label="Country" Value="@Person.Country?.EnglishName.AsLocalized()" BackColor="#e9ecef" />
+                <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" IsDisabled="@IsFremoOwnerSignatureLocked" />
+                <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
+                <AppDisplay Width="4" Label="ApiKey" Value="@Person.User?.ApiKey()" BackColor="#e9ecef" />
+            </Inputs>
+        </EditTemplate>
+        <br />
+    }
+}
+else
+{
+    <h3><span class="fa fa-key" /> @Localizer["ResetPassword"]</h3>
+    <ContentView ContentName="PasswordReset" />
+    @if (HaveRead)
+    {
+        <form method="post" @formname="password-reset" @onsubmit="RequestNewPasswordAsync" data-enhance>
+            <AntiforgeryToken />
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-control-label" for="email">@Localizer["Email"]</label>
+                    <input class="form-control" id="email" type="email" name="ResetEmailAddress" autocomplete="email" required />
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-sm"><span class="fa fa-paper-plane" /> @Localizer["Send"]</button>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="col-12">
+            <a class="btn btn-primary btn-sm" href="Users/Settings?read=true"><span class="fa fa-user-check" /> @Localizer["IHaveReadAndUnderstand"]</a>
+        </div>
+    }
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [SupplyParameterFromQuery(Name = "read")] private bool HaveRead { get; set; }
+    [SupplyParameterFromForm(FormName = "user-settings")] private UserSettingsFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "password-reset")] private string? ResetEmailAddress { get; set; }
+
     ClaimsPrincipal? Principal;
-    User? User;
+    Person? Person;
+    string? FailureMessage;
+
+    bool IsFremoOwnerSignatureLocked => Person?.FremoOwnerSignature.HasValue == true;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (Principal.IsAuthenticated())
+        if (!Principal.IsAuthenticated()) return;
+        // Only the signed-in user's own person.
+        Person = await PersonService.FindByIdAsync(Principal, Principal.PersonId());
+        if (Person is null || Person.UserId != Principal.UserId())
         {
-            User = await UserService.FindByIdAsync(Principal.UserId());
+            Person = null;
+            Form = null;
+            return;
         }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= Person.AsUserSettingsFormData();
+        // A disabled field isn't posted: the stored prefix.
+        if (IsFremoOwnerSignatureLocked) Form.FremoOwnerSignature = Person.FremoOwnerSignature;
+    }
+
+    async Task SaveAsync()
+    {
+        if (Form is null || Person is null) return;
+        // The person's own fields stay, and the sign-in address follows the first email address (PersonService).
+        var (count, message, _) = await PersonService.SaveAsync(Principal, Form.AsEntity(Person));
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo("Users/Settings");
+    }
+
+    async Task RequestNewPasswordAsync()
+    {
+        var requestor = await UserService.ResetPasswordAsync(ResetEmailAddress);
+        if (requestor is not null && requestor.IsPasswordResetPermitted())
+        {
+            var markdown = await ContentService.GetTextContent("PasswordResetMail", requestor.PreferredLanguage());
+            var request = new PasswordResetRequest(requestor, Localizer["PasswordResetHasBeenRequested"].ToString(), markdown, Navigator.BaseUri);
+            if (request.IsValid && request.MailMessage is { } mail)
+            {
+                var sent = await MailSender.SendMailMessageAsync(mail);
+                HttpContext.SetFlashMessage("PasswordResetMailSent", sent > 0);
+            }
+        }
+        Navigator.NavigateTo("Users/Settings");
     }
 }

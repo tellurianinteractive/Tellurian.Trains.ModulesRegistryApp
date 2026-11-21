@@ -121,6 +121,39 @@ public sealed class FormValidationScriptTests
         Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{MacAddressAttribute.ClientRuleName}({{ value: {Js(typed)} }}).success").AsBoolean(), "JavaScript");
     }
 
+    // Email addresses as typed, and whether [EmailAddresses] accepts them (after the correction when saving).
+    public static IEnumerable<object?[]> EmailAddressesValues =>
+    [
+        [null, true], ["", true], ["   ", true], ["anna@example.se", true], ["a@b.se; c@d.se", true], ["Anna@Example.se, anna@example.se", true],
+        ["a@b.se\r\nc@d.se", true], ["a@b.se;;", true], ["Anna.Berg+modul@Example.co.uk", true],
+        ["a@b.se;inte en adress", false], ["anna", false], ["anna@", false], ["anna@exam_ple.se", false], ["åsa@example.se", false], ["anna@example..se", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(EmailAddressesValues))]
+    public void EmailAddressesIsTheSame(string? typed, bool valid)
+    {
+        Assert.AreEqual(valid, new EmailAddressesAttribute().IsValid(typed), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{EmailAddressesAttribute.ClientRuleName}({{ value: {Js(typed)} }}).success").AsBoolean(), "JavaScript");
+    }
+
+    // Loco addresses as typed, and whether [LocoAddresses] accepts them (after the correction when saving).
+    public static IEnumerable<object?[]> LocoAddressesValues =>
+    [
+        [null, true], ["", true], ["3", true], ["3,10-15", true], ["15-10; 3 3", true], ["10 - 15", true], ["1-9999", true], [" 3 ", true],
+        ["3, x", false], ["10000", false], ["0", false], ["-5", false], ["1-2-3", false], ["3.5", false], ["12345678901234567890", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(LocoAddressesValues))]
+    public void LocoAddressesIsTheSame(string? typed, bool valid)
+    {
+        var attribute = new LocoAddressesAttribute();
+        var rule = attribute.GetClientValidationRules().Single();
+        Assert.AreEqual(valid, attribute.IsValid(typed), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{rule.Name}({{ value: {Js(typed)}, params: {{ min: '{rule.Parameters["min"]}', max: '{rule.Parameters["max"]}' }} }}).success").AsBoolean(), "JavaScript");
+    }
+
     [TestMethod]
     public void TheAttributeEmitsTheRuleTheScriptRegisters()
     {
@@ -133,5 +166,7 @@ public sealed class FormValidationScriptTests
         CollectionAssert.Contains(registered, new OrdinaryTextAttribute().GetClientValidationRules().Single().Name);
         CollectionAssert.Contains(registered, new YearOrEmptyAttribute().GetClientValidationRules().Single().Name);
         CollectionAssert.Contains(registered, new MacAddressAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new EmailAddressesAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new LocoAddressesAttribute().GetClientValidationRules().Single().Name);
     }
 }

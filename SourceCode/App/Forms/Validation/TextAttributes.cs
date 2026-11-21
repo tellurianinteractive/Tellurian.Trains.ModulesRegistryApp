@@ -78,3 +78,46 @@ public sealed class MacAddressAttribute : ValidationAttribute, IClientValidation
         yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>());
     }
 }
+
+/// <summary>
+/// Email addresses separated by semicolons, after the correction made when saving (<c>AsEmailAddresses</c>): commas, spaces and
+/// line breaks are also accepted as separators, in any case. An empty value is valid: [Required] decides.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class EmailAddressesAttribute : ValidationAttribute, IClientValidationRuleProvider
+{
+    public const string ClientRuleName = "emailaddresses";
+
+    public override bool IsValid(object? value) => value is not string text || text.IsEmailAddressesWhenCorrected();
+
+    public IEnumerable<ClientValidationRule> GetClientValidationRules()
+    {
+        yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>());
+    }
+}
+
+/// <summary>
+/// Loco addresses as numbers and ranges, such as <c>3,10-15</c>, after the correction made when saving
+/// (<see cref="LocoAddressExtensions.AsLocoAddresses"/>): <c>; ,</c> or spaces separate them and a range may be reversed. An empty
+/// value is valid.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class LocoAddressesAttribute : ValidationAttribute, IClientValidationRuleProvider
+{
+    public const string ClientRuleName = "locoaddresses";
+
+    public override bool IsValid(object? value) => value is not string text || text.IsLocoAddressesWhenCorrected();
+
+    public IEnumerable<ClientValidationRule> GetClientValidationRules()
+    {
+        yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>
+        {
+            ["min"] = LocoAddressExtensions.MinDccAddress.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["max"] = LocoAddressExtensions.MaxDccAddress.ToString(System.Globalization.CultureInfo.InvariantCulture),
+        });
+    }
+}
+
+/// <summary>A person's FREMO member number, or empty: from 1 to 9999999 (the number is shown with the country's phone code when it has at most four digits).</summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class FremoMemberNumberOrEmptyAttribute() : WholeNumberOrEmptyAttribute(1, 9999999);

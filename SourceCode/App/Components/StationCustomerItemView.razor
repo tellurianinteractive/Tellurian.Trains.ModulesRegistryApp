@@ -48,7 +48,7 @@ else
             <td width="6%" align="center">@item.CargoDirection(DirectionItems)</td>
             <td width="12%">@item.Quantity @item.QuantityUnit(QuantityUnitItems)</td>
             <td width="20%">@item.ReadyLoadingOrUnloading(Localizer, ReadyTimeItems)</td>
-            <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).AsPeriod())</td>
+            <td width="10%">@((item.FromYear ?? item.StationCustomer.OpenedYear, item.UptoYear ?? item.StationCustomer.ClosedYear).ToPeriodText())</td>
         </RowTemplate>
     </TableTemplate>
 

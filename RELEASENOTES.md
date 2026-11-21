@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.15.28
+Released 2026-11-21
+- The person form and your user settings check the entries as you type and stay open after saving; email and reserved loco addresses are tidied up when saved. Requesting a new password no longer needs a live connection.
+- Security fix: only global administrators, country administrators in the person's country, the person themselves and the administrators of a group the person belongs to can change a person; only administrators change a person's country and user rights.
 ## Release 1.15.27
 Released 2026-11-20
 - Maintenance update.

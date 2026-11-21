@@ -2274,6 +2274,18 @@
   <data name="UniqueMacAddressAttribute_Error" xml:space="preserve">
     <value>"{0}" is already used by another wiFRED throttle</value>
   </data>
+  <data name="EmailAddressesAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be email addresses, separated by semicolons</value>
+  </data>
+  <data name="LocoAddressesAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be DCC addresses from 1 to 9999, such as 3,10-15</value>
+  </data>
+  <data name="FremoMemberNumberOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be a number from 1 to 9999999, or empty</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
   <data name="StringLengthAttribute_Error" xml:space="preserve">
     <value>"{0}" can have at most {1} characters</value>
   </data>

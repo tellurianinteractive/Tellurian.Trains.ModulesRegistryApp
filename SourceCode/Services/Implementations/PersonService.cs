@@ -111,62 +111,68 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         return null;
     }
 
-    public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity, bool isGroupAdministrator = false)
+    /// <summary>
+    /// Whether the user may edit the stored <paramref name="person"/> (or add a new one): a global administrator, a country
+    /// administrator in the person's country, the person themselves, or, with <paramref name="groupId"/>, one who administers that
+    /// group's members (<see cref="GroupPermissionExtensions.MayAdministerGroupMembersAsync"/>) when the person is new or a member of
+    /// the group. Never a read-only user.
+    /// </summary>
+    /// <remarks>
+    /// Before release 1.15.28 saving needed only a country administrator in any country, the person themselves, or a group
+    /// administrator flag the page computed from the group in the address, without checking that the person was in that group.
+    /// </remarks>
+    public async Task<bool> MayEditAsync(ClaimsPrincipal? principal, Person person, int groupId = 0)
     {
-        var ownerRef = ModuleOwnershipRef.Person(entity.Id);
-        if (principal.MaySave(ownerRef, isGroupAdministrator))
-        {
-            // Corrected, not validated: names (capitals, ordinary text, a quoted nickname to its own field), email and loco addresses.
-            entity.CorrectInput();
-            using var dbContext = Factory.CreateDbContext();
-            // Checked in the database (Migration step 3.5): the same person registered twice, the same address for two users.
-            if (await dbContext.IsRegisteredAgainAsync(entity)) return Strings.PersonAlreadyExists.SaveResult(entity);
-            if (await dbContext.AnotherUsersSignInAddressAsync(entity) is { } taken) return string.Format(Strings.EmailAddressIsAnotherUsersSignIn, taken).SaveResult(entity);
-            if (entity.EmailAddresses.HasValue && entity.User is not null)
-            {
-                entity.User.EmailAddress = entity.EmailAddresses.ToItems(';').FirstOrDefault().OrEmpty;
-            }
-            if (entity.Id > 0)
-            {
-                var existing = await dbContext.People.FindAsync(entity.Id);
-                if (existing is null) return principal.NothingToUpdate<Person>();
-                dbContext.Entry(existing).CurrentValues.SetValues(entity);
-                var isUserChanged = false;
-                if (entity.User is not null)
-                {
-                    if (entity.User.Id > 0)
-                    {
-                        var existingUser = await dbContext.Users.FindAsync(entity.User.Id);
-                        if (existingUser is null) return principal.NothingToUpdate<Person>();
-                        dbContext.Entry(existingUser).CurrentValues.SetValues(entity.User);
-                        isUserChanged = dbContext.Entry(existingUser).State != EntityState.Unchanged;
-                    }
-                    else
-                    {
-                        existing.User = entity.User;
-                        isUserChanged = true;
-                    }
-                }
-                if (!isUserChanged && dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
-            }
-            else
-            {
-                if (entity.User is { Id: > 0 } user)
-                {
-                    var existingUser = await dbContext.Users.FindAsync(user.Id);
-                    if (existingUser is null) return principal.NothingToUpdate<Person>();
-                    dbContext.Entry(existingUser).CurrentValues.SetValues(user);
-                    entity.User = existingUser;
-                }
-                dbContext.People.Add(entity);
-            }
-            var count = await dbContext.SaveChangesAsync();
-            return count.SaveResult(entity);
-        }
-        return principal.SaveNotAuthorised<Person>();
+        using var dbContext = await Factory.CreateDbContextAsync();
+        return await dbContext.MayEditPersonAsync(principal, person, groupId);
     }
 
-
+    /// <summary>
+    /// Saves a person, and the user's rights when the person is a user. Who may save: <see cref="MayEditAsync"/>. The country may be
+    /// set by a global administrator, a country administrator to their own country, and a group's member administrator (members may
+    /// come from other countries); the person themselves keeps it. Rights the signed-in user may not change keep their stored values
+    /// (<see cref="PersonPermissionExtensions.KeepRightsNotChangeableBy"/>).
+    /// </summary>
+    public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity, int groupId = 0)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var existing = entity.Id > 0 ? await dbContext.People.Include(p => p.User).SingleOrDefaultAsync(p => p.Id == entity.Id) : null;
+        if (entity.Id > 0 && existing is null) return principal.NothingToUpdate<Person>();
+        if (!await dbContext.MayEditPersonAsync(principal, existing ?? entity, groupId)) return principal.SaveNotAuthorised<Person>();
+        if (!principal.MaySetPersonCountry(entity.CountryId, existing?.CountryId, groupId > 0)) return principal.SaveNotAuthorised<Person>();
+        // Corrected, not validated: names (capitals, ordinary text, a quoted nickname to its own field), email and loco addresses.
+        entity.CorrectInput();
+        // Checked in the database (Migration step 3.5): the same person registered twice, the same address for two users.
+        if (await dbContext.IsRegisteredAgainAsync(entity)) return Strings.PersonAlreadyExists.SaveResult(entity);
+        if (await dbContext.AnotherUsersSignInAddressAsync(entity) is { } taken) return string.Format(Strings.EmailAddressIsAnotherUsersSignIn, taken).SaveResult(entity);
+        if (entity.EmailAddresses.HasValue && entity.User is not null)
+        {
+            entity.User.EmailAddress = entity.EmailAddresses.FirstItem(separator: ';');
+        }
+        if (existing is not null)
+        {
+            var isUserChanged = false;
+            if (entity.User is not null)
+            {
+                // Only the person's own user, and only the rights the signed-in user may change.
+                if (existing.User is null || entity.User.Id != existing.User.Id) return principal.SaveNotAuthorised<Person>();
+                entity.User.KeepRightsNotChangeableBy(principal, existing.User, existing.CountryId);
+                existing.User.SetRightsAndSignInAddressFrom(entity.User);
+                isUserChanged = dbContext.Entry(existing.User).State != EntityState.Unchanged;
+            }
+            entity.UserId = existing.UserId; // The user is linked by invitation, never by the form.
+            dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            if (!isUserChanged && dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(entity);
+        }
+        else
+        {
+            entity.User = null;
+            entity.UserId = null;
+            dbContext.People.Add(entity);
+        }
+        var count = await dbContext.SaveChangesAsync();
+        return count.SaveResult(existing ?? entity);
+    }
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {

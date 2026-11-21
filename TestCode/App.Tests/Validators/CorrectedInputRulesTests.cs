@@ -7,7 +7,7 @@ namespace ModulesRegistry.AppTests.Validators;
 
 /// <summary>
 /// The interactive forms' rules since Migration step 3.5 (decided 2026-11-19): what the service corrects when saving is not
-/// refused. Names aren't checked for capitals, and the address, year, MAC address and DCC address rules check the value
+/// refused. Names aren't checked for capitals, and the year, MAC address and DCC address rules check the value
 /// as it will be after the correction.
 /// </summary>
 [TestClass]
@@ -25,22 +25,6 @@ public sealed class CorrectedInputRulesTests
         CollectionAssert.DoesNotContain(invalid, nameof(Station.FullName));
         CollectionAssert.DoesNotContain(invalid, nameof(Station.Signature));
     }
-
-    [TestMethod]
-    [DataRow(null, true)]
-    [DataRow("", true)]
-    [DataRow("a@b.se; c@d.se", true)]
-    [DataRow("Anna@Example.se, anna@example.se", true)]
-    [DataRow("a@b.se;inte en adress", false)]
-    public void EmailAddresses(string? value, bool expected) => Assert.AreEqual(expected, value.IsEmailAddressesWhenCorrected());
-
-    [TestMethod]
-    [DataRow(null, true)]
-    [DataRow("15-10; 3 3", true)]
-    [DataRow("10 - 15", true)]
-    [DataRow("3, x", false)]
-    [DataRow("10000", false)]
-    public void LocoAddresses(string? value, bool expected) => Assert.AreEqual(expected, value.IsLocoAddressesWhenCorrected());
 
     [TestMethod]
     [DataRow(null, 1900, true)]

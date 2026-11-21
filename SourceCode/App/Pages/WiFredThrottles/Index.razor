@@ -47,10 +47,10 @@
             <FilterColumn Property="@(c => c.OwningPerson.NameWithCityAndCountry())" Title="@Localizer["Owner"]" FilterForm="throttles-filter" FilterName="owner" FilterValue="@OwnerName" />
         }
         <PropertyColumn Property="@(c => c.DccAddresses())" Title="@Localizer["DccAddress"]" />
-        <PropertyColumn Property="@(c => c.ValidationDateTime.DateAndTime() )" Title="@Localizer["Validated"]" Align="Align.Center" />
+        <PropertyColumn Property="@(c => c.ValidationDateTime.ToDateAndTimeText() )" Title="@Localizer["Validated"]" Align="Align.Center" />
         @if (!OnlyMyThrottles)
         {
-            <PropertyColumn Property="@(c => c.DeletedDateTime.DateAndTime() )" Title="@Localizer["Deleted"]" Align="Align.Center" />
+            <PropertyColumn Property="@(c => c.DeletedDateTime.ToDateAndTimeText() )" Title="@Localizer["Deleted"]" Align="Align.Center" />
         }
         <TemplateColumn Title="@Localizer["Actions"]" Context="throttle">
             <HeaderTemplate Context="column">

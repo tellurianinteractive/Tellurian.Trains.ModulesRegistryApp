@@ -67,16 +67,38 @@
         return /^[0-9A-Fa-f]{12}$/.test(text.replace(/[\s:.\-]/g, ''));
     }
 
+    // As TextRules.IsEmailAddressesWhenCorrected (App), after AsEmailAddresses: addresses separated by ; , spaces or line breaks.
+    const emailAddress = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+    function isEmailAddressesWhenCorrected(value) {
+        return (value || '').split(/[;, \t\r\n]/).filter(address => address.length > 0).every(address => emailAddress.test(address.toLowerCase()));
+    }
+
+    // As TextRules.IsLocoAddressesWhenCorrected (App), after AsLocoAddresses: numbers and ranges from min to max, separated by
+    // , ; or spaces; spaces around a hyphen belong to the range, and a range may be reversed.
+    function isLocoAddressesWhenCorrected(value, min, max) {
+        const text = (value || '').trim();
+        if (!text) return true;
+        return text.replace(/\s*-\s*/g, '-').split(/[,; \t\r\n]/).filter(part => part.length > 0).every(part => {
+            const ends = part.split('-');
+            return ends.length <= 2 && ends.every(end => /^\d+$/.test(end) && Number(end) >= min && Number(end) <= max);
+        });
+    }
+
     const validators = {
         // [OrdinaryText]: valid when the text, as corrected when saving, is ordinary text. Empty is valid: [Required] decides.
         ordinarytext: context => ({ success: !context.value || isOrdinaryText(asOrdinaryText(context.value)) }),
         // [YearOrEmpty], [DccAddressOrEmpty]: empty, zero or less (saved as empty), or a whole number from min to max.
         numberorempty: context => ({ success: isWholeNumberOrEmpty(context.value, Number(context.params.min), Number(context.params.max)) }),
         // [MacAddress]: a MAC address in any notation the correction understands. Empty is valid: [Required] decides.
-        macaddress: context => ({ success: isMacAddressWhenCorrected(context.value) })
+        macaddress: context => ({ success: isMacAddressWhenCorrected(context.value) }),
+        // [EmailAddresses]: email addresses in any notation the correction understands. Empty is valid.
+        emailaddresses: context => ({ success: isEmailAddressesWhenCorrected(context.value) }),
+        // [LocoAddresses]: numbers and ranges from min to max, as the correction understands them. Empty is valid.
+        locoaddresses: context => ({ success: isLocoAddressesWhenCorrected(context.value, Number(context.params.min), Number(context.params.max)) })
     };
 
-    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isWholeNumberOrEmpty, isMacAddressWhenCorrected, validators };
+    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isWholeNumberOrEmpty, isMacAddressWhenCorrected, isEmailAddressesWhenCorrected, isLocoAddressesWhenCorrected, validators };
 
     if (global.Blazor && global.Blazor.formValidation) {
         for (const name of Object.keys(validators)) global.Blazor.formValidation.addValidator(name, validators[name]);

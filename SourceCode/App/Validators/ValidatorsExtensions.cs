@@ -3,7 +3,6 @@ using Microsoft.Extensions.Localization;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Forms.Validation;
-using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Validators;
 
@@ -14,21 +13,10 @@ namespace ModulesRegistry.Validators;
 /// and the address, year, MAC address and colour rules check the value as it will be after the correction. Ordinary text is
 /// still checked as typed, until each form's service also corrects it (step 3.6).
 /// </summary>
-public static partial class ValidatorsExtensions
+public static class ValidatorsExtensions
 {
-    public static IRuleBuilderOptions<T, string?> MustBeOrdinaryTextOrNull<T>(this IRuleBuilder<T, string?> builder, IStringLocalizer localizer) =>
-       builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
-
     public static IRuleBuilderOptions<T, string> MustBeOrdinaryText<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
         builder.Must(value => value.IsOrdinaryText()).WithMessage($"\"{{PropertyName}}\" {localizer["MustOnlyContainOrdinaryText"]}");
-
-    /// <summary>Loco addresses, after the correction when saving (<see cref="LocoAddressExtensions.AsLocoAddresses"/>).</summary>
-    public static IRuleBuilderOptions<T, string> MustBeLocoAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsLocoAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidDccAdresses"]}");
-
-    /// <summary>Email addresses, after the correction when saving (<c>AsEmailAddresses</c>).</summary>
-    public static IRuleBuilderOptions<T, string> MustBeValidEmailAdresses<T>(this IRuleBuilder<T, string> builder, IStringLocalizer localizer) =>
-        builder.Must(value => value.IsEmailAddressesWhenCorrected()).WithMessage($"\"{{PropertyName}}\" {localizer["MustBeValidEmailAddresses"]}");
 
     public static IRuleBuilderOptions<T, Station> IsRegionRequired<T>(this IRuleBuilder<T, Station> builder, IStringLocalizer localizer) =>
         builder.Must(x => x.IsShadow || x.RegionId.HasValue).WithMessage(value => $"\"{{PropertyName}}\" {localizer["MustBeSelected"]}");
@@ -56,20 +44,8 @@ public static partial class ValidatorsExtensions
     public static IRuleBuilderOptions<T, short?> MustBeYearOrEmpty<T>(this IRuleBuilder<T, short?> builder, IStringLocalizer localizer, int minimum = YearPeriod.MinYear) =>
         builder.Must(year => year.IsYearOrEmpty(minimum)).WithMessage($"\"{{PropertyName}}\" {string.Format(localizer["MustBeBetweenOrEmpty"].Value, minimum, YearPeriod.MaxYear)}");
 
-    extension(string? value)
-    {
-        internal bool IsEmailAddressesWhenCorrected() =>
-            value.AsEmailAddresses().ToItems().All(EmailRegex().IsMatch);
-
-        internal bool IsLocoAddressesWhenCorrected() => value.AsLocoAddresses().TryParseLocoAdresses(out _);
-    }
-
     extension(short? year)
     {
         internal bool IsYearOrEmpty(int minimum) => year is null || year <= 0 || (year >= minimum && year <= YearPeriod.MaxYear);
     }
-
-    [GeneratedRegex("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
-    private static partial Regex EmailRegex();
-
 }
