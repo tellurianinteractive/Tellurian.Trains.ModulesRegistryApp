@@ -7,113 +7,187 @@
 @page "/Stations/Create/{moduleId:int}/GroupOwned/{GroupId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6), as the freight customer form: a POST of StationFormData, validated in the browser and again
+   on the server; the id comes from the address. A new station is added to a module of the owner in the address (person or group)
+   that has no station; an existing station is edited by a user who may edit it (MayEditStationAsync), whatever owner the address
+   names, and its module can't be changed: the field is disabled, so the stored module is set before validation. The tracks are
+   listed below, each edited on its own form (TrackEdit.razor); Delete is ?deleteTrack={id} with a POST confirmation. The
+   instructions document is uploaded with a static form (DocumentUploadForm). After saving, a redirect to this form, which reads
+   the station back; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Stations
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
+@inject NavigationManager Navigator
 @inject ModuleService ModuleService
 @inject StationService StationService
-@inject PersonService PersonService
-@inject GroupService GroupService
+@inject StationTrackService StationTrackService
 @inject RegionService RegionService
 
-<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Station" BackHref="@BackHref" />
+<PageHeading ObjectName="OperationLocation" Context="@Existing" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Station" BackHref="@BackHref" />
 
-@if (Station is not null)
+@if (FailureMessage is not null)
 {
-    <EditTemplate Item="Station" OnValidSubmit="OnValidSubmit">
-        <Inputs>
-            <AppInputSelect Width="3" Label="Module" @bind-Value="ModuleId" Items="ModulesItems" DisplayName="Module" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
-            <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Station.RegionId" Items="RegionItems" DisplayName="Region" ShowNoneOption="true" />
-            <AppInputText Width="3" Label="FullName" @bind-Value="Station.FullName" />
-            <AppInputText Width="1" Label="Signature" @bind-Value="Station.Signature" />
-            <AppInputFill Width="3" />
-            <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Station.HasCargoCustomers" />
-            <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Station.IsJunction" />
-            <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Station.IsTerminus" />
-            <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Station.IsShadow" />
-            <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Station.IsHarbour" />
-            <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Station.IsKeyRequired" />
-            <AppInputText Width="12"  Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Station.OperationInstructionsMarkdown" NumberOfRows="10"/>
-        </Inputs>
-        <SubInputs>
-            <StationTracksEdit Station="Station" />
-        </SubInputs>
-    </EditTemplate>
-    @if (Station.Id > 0)
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="station" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputSelect Width="3" Label="Module" @bind-Value="Form!.ModuleId" Items="ModulesItems" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
+        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowNoneOption="true" />
+        <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
+        <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
+        <AppInputFill Width="3" />
+        <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Form!.HasCargoCustomers" />
+        <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Form!.IsJunction" />
+        <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Form!.IsTerminus" />
+        <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Form!.IsShadow" />
+        <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Form!.IsHarbour" />
+        <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Form!.IsKeyRequired" />
+        <AppInputText Width="12" Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Form!.OperationInstructionsMarkdown" NumberOfRows="10" />
+    </Inputs>
+</EditTemplate>
+
+@if (Existing is not null && Form is not null)
+{
+    <h3 class="mt-3">@Localizer["Tracks"]</h3>
+    @if (TrackToDelete is not null)
     {
-        <DocumentsUpload DocumentedObject="Station">
-            <Uploads>
-                <DocumentUpload FileExtension="pdf" DocumentedObject="Station" Label="OperatingInstructions" MaxFileSizeKb="250" OnUpdatedAsync="OnDocumentUpdated" />
-            </Uploads>
-        </DocumentsUpload>
+        <div class="alert alert-warning mt-2" role="alert">
+            <form method="post" @formname="delete-track" @onsubmit="DeleteTrackAsync" data-enhance>
+                <AntiforgeryToken />
+                <input type="hidden" name="DeleteTrackId" value="@TrackToDelete.Id" />
+                <strong>@Localizer["Delete"] @Localizer["Track"].Value.ToLowerInvariant() @TrackToDelete.Designation?</strong>
+                <AppButton Label="Delete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+                <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+            </form>
+        </div>
     }
+    <div class="col-12">
+        <AppButton Label="Add" ObjectName="Track" Href="@TrackHref(0)" />
+    </div>
+    <TableTemplate Items="Existing.StationTracks.OrderBy(st => st.DisplayOrder)" RowStyle="RowStyle">
+        <TableHeader>
+            <th>@Localizer["TrackNumber"]</th>
+            <th>@Localizer["Direction"]</th>
+            <th>@Localizer["MaxTrainLength"]</th>
+            <th>@Localizer["PlatformLength"]</th>
+            <th>@Localizer["SpeedLimit"]</th>
+            <th>@Localizer["Usage"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="track">
+            <td>@track.Designation</td>
+            <td>@track.DirectionText(EnumExtensions.StationTrackDirectionListboxItems())</td>
+            <td>@track.MaxTrainLengthText()</td>
+            <td>@track.PlatformLengthText()</td>
+            <td>@track.SpeedLimitText()</td>
+            <td>@track.UsageText()</td>
+            <td style="white-space: nowrap !important;">
+                <AppButton Label="Edit" Href="@TrackHref(track.Id)" />
+                <AppButton Label="Delete" Href="@($"{SelfHref}?deleteTrack={track.Id}")" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
+    <DocumentsUpload DocumentedObject="Existing">
+        <Uploads>
+            <DocumentUploadForm FileExtension="pdf" DocumentedObject="Existing" Label="OperatingInstructions" MaxFileSizeKb="250" ReturnHref="@SelfHref" />
+        </Uploads>
+    </DocumentsUpload>
 }
 
 @code {
     // Reached from the static modules list, this page may have no history (Migration step 3.3).
     const string BackHref = "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int OwnerId { get; set; }
     [Parameter] public int GroupId { get; set; }
     [Parameter] public int PersonId { get; set; }
     [Parameter] public int ModuleId { get; set; }
+    [SupplyParameterFromForm(FormName = "station")] private StationFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-track")] private int DeleteTrackId { get; set; }
+    [SupplyParameterFromQuery(Name = "deleteTrack")] private int? DeleteTrackQueryId { get; set; }
 
     ClaimsPrincipal? Principal;
-    Station? Station;
-    ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
-
+    Station? Existing;
     IEnumerable<ListboxItem>? ModulesItems;
     IEnumerable<ListboxItem>? RegionItems;
+    string? FailureMessage;
 
-    bool IsAdd => Id == 0;
-    bool IsEdit => !IsAdd;
+    bool IsEdit => Id > 0;
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        OwnershipRef = ModuleOwnershipRef.Any(Principal, PersonId, GroupId);
-        ModulesItems = await ModuleService.ModuleItems(Principal, OwnershipRef, Id);
-        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Id == 0)
+        if (IsEdit)
         {
-            Station = new Station();
+            Existing = await StationService.FindByIdAsync(Principal, Id);
+            if (Existing is null || !await StationService.MayEditAsync(Principal, Existing.Id))
+            {
+                Existing = null;
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+            var module = Existing.Modules.FirstOrDefault(m => m.Id == Existing.PrimaryModuleId);
+            ModulesItems = module is null ? [] : [new ListboxItem(module.Id, module.FullName)];
         }
         else
         {
-            Station = await StationService.FindByIdAsync(Principal, Id, OwnershipRef) ?? new Station();
-            if (Station is not null) ModuleId = Station.Modules.Single(m => m.Id == Station.PrimaryModuleId).Id;
+            ModulesItems = await ModuleService.ModuleItems(Principal, ModuleOwnershipRef.Any(Principal, PersonId, GroupId), stationId: 0); // Modules without a station.
         }
-        await TrySetDefaultStationName();
-    }
-
-    private async Task OnDocumentUpdated()
-    {
-        Station = await StationService.FindByIdAsync(Principal, Id, OwnershipRef) ?? Station;
-    }
-
-    async Task OnValidSubmit()
-    {
-        if (Station is not null)
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        if (Form is null)
         {
-            var result = await StationService.SaveAsync(Principal, Station, OwnershipRef, ModuleId);
-            if (result.Entity is not null) Station = result.Entity;
-            if (Station is not null && Station.Modules.Any()) ModuleId = Station.Modules.First().Id;
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
+            Form = (Existing ?? new Station()).AsFormData();
+            if (!IsEdit && ModuleId > 0 && ModulesItems.Any(m => m.Id == ModuleId))
+            {
+                Form.ModuleId = ModuleId;
+                Form.FullName = (await ModuleService.FindByIdAsync(Principal, ModuleId))?.FullName ?? string.Empty; // A new station is named as its module.
+            }
         }
+        if (Existing is not null) Form.ModuleId = Existing.PrimaryModuleId ?? 0; // The disabled field isn't posted.
+        RegionItems = await RegionService.ListboxItemsAsync(Principal, 0);
     }
 
-    async Task TrySetDefaultStationName()
+    StationTrack? TrackToDelete => DeleteTrackQueryId > 0 ? Existing?.StationTracks.FirstOrDefault(t => t.Id == DeleteTrackQueryId) : null;
+
+    string OwnerSuffix =>
+        PersonId > 0 && GroupId > 0 ? $"/PersonOwned/{PersonId}/InGroup/{GroupId}" :
+        PersonId > 0 ? $"/PersonOwned/{PersonId}" :
+        GroupId > 0 ? $"/GroupOwned/{GroupId}" : string.Empty;
+
+    string EditHref(int stationId) => $"Stations/{stationId}/Edit{OwnerSuffix}";
+    string SelfHref => EditHref(Id);
+    string TrackHref(int trackId) => $"Stations/{Id}/Tracks/{trackId}/Edit";
+
+    async Task SaveAsync()
     {
-        if (Station is not null && ModuleId > 0 && Station.FullName.IsEmpty)
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded station (Migration section 3.4, the data-loss rule).
+        var station = Form.AsEntity(Existing);
+        var (count, message, saved) = await StationService.SaveAsync(Principal, station, Form.ModuleId);
+        if (count == 0)
         {
-            var module = await ModuleService.FindByIdAsync(Principal, ModuleId);
-            Station.FullName = module is null ? string.Empty : module.FullName;
+            FailureMessage = message;
+            return;
         }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(EditHref((saved ?? station).Id));
     }
+
+    async Task DeleteTrackAsync()
+    {
+        // Only a track of this station (the service also checks the user's rights for the track's station).
+        if (Existing is null || !Existing.StationTracks.Any(t => t.Id == DeleteTrackId)) return;
+        var deleted = (await StationTrackService.DeleteAsync(Principal, DeleteTrackId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(SelfHref);
+    }
+
+    string RowStyle(StationTrack track) => $"background-color: {track.BackgroundColor()}";
 }

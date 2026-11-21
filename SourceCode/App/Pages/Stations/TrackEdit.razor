@@ -1,0 +1,90 @@
+﻿@page "/Stations/{StationId:int}/Tracks/{Id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a station track, posted as StationTrackFormData, for a user who may edit the station
+   (StationTrackService). A new track (id 0) starts as a copy of the last track, numbered after it (CreateTrack), as Add did on the
+   station page. After saving, a redirect back to the station form, which lists the tracks; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Stations
+
+@inject NavigationManager Navigator
+@inject StationService StationService
+@inject StationTrackService StationTrackService
+
+<PageHeading ObjectName="Track" Context="@Station" IconClass="@FontAwesome.Station" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@StationHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="track" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppInputText Width="2" Label="TrackNumber" @bind-Value="Form!.Designation" />
+        <AppInputNumber TValue="int" Width="2" Label="DisplayOrder" @bind-Value="Form!.DisplayOrder" />
+        <AppInputSelect Width="2" Label="Direction" @bind-Value="Form!.DirectionId" Items="EnumExtensions.StationTrackDirectionListboxItems()" />
+        <AppInputNumber TValue="double" Width="2" Label="MaxTrainLength" @bind-Value="Form!.MaxTrainLength" Unit="m" Step="0.1" />
+        <AppInputNumber TValue="double?" Width="2" Label="PlatformLength" @bind-Value="Form!.PlatformLength" Unit="m" Step="0.1" />
+        <AppInputNumber TValue="int?" Width="2" Label="SpeedLimit" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
+
+        <AppInputText Width="4" Label="Usage" @bind-Value="Form!.UsageNote" />
+        <AppInputFill Width="8" />
+
+        <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="Form!.IsThroughTrack" />
+        <AppInputCheck Width="2" Label="IsSiding" @bind-Value="Form!.IsSiding" />
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int StationId { get; set; }
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "track")] private StationTrackFormData? Form { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Station? Station;
+    StationTrack? Existing;
+    string? FailureMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Station = await StationService.FindByIdAsync(Principal, StationId);
+        if (Station is null || !await StationService.MayEditAsync(Principal, StationId))
+        {
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = await StationTrackService.FindAsync(Principal, StationId, Id);
+            if (Existing is null)
+            {
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? Station.CreateTrack()).AsFormData();
+    }
+
+    string StationHref => $"Stations/{StationId}/Edit";
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded track (Migration section 3.4, the data-loss rule).
+        var track = Form.AsEntity(Existing, stationId: StationId);
+        var result = await StationTrackService.SaveOrUpdateAsync(Principal, track);
+        if (result.Count == 0)
+        {
+            FailureMessage = result.Message ?? "SaveFailed";
+            return;
+        }
+        if (result.Count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(StationHref);
+    }
+}

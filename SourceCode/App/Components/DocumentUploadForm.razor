@@ -1,0 +1,112 @@
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject DocumentService DocumentService
+
+@* A document upload for a static SSR page (Migration step 3.6), instead of the interactive DocumentUpload: a multipart POST form
+   with a file field, and a Delete form when the object has the document. Each form has its own name (by object type, id and file
+   extension), so several uploads can be on one page. The file is read from the posted form and saved by DocumentService, which
+   checks the user's rights and the size. Success is a one-time message and a redirect to ReturnHref; a failure is shown here. *@
+
+@if (MayUpload)
+{
+    <div class="row g-2 align-items-center mb-2">
+        <div class="col-md-3">
+            <img src="@IconImageSrc" class="icon" alt="" /> @Heading
+        </div>
+        <div class="col-md-5">
+            <form method="post" enctype="multipart/form-data" @formname="@UploadFormName" @onsubmit="UploadAsync" class="d-flex gap-1" data-enhance>
+                <AntiforgeryToken />
+                <input type="file" name="@FileFieldName" accept="@Accept" class="form-control form-control-sm" required aria-label="@Heading" />
+                <button type="submit" class="btn btn-secondary btn-sm"><span class="@FontAwesome.Upload" /> <span class="sm-hide">@Localizer["Save"]</span></button>
+            </form>
+        </div>
+        <div class="col-md-2">
+            @if (DocumentId.HasValue)
+            {
+                <form method="post" @formname="@DeleteFormName" @onsubmit="DeleteAsync" data-enhance>
+                    <AntiforgeryToken />
+                    <AppButton Label="Delete" IsSubmit="true" IconName="@FontAwesome.Delete" />
+                </form>
+            }
+        </div>
+        <div class="col-md-2">
+            @MaxSizeText
+        </div>
+        @if (FailureMessage is not null)
+        {
+            <div class="col-12"><ActionMessage Label="@FailureMessage" AlertType="stop" /></div>
+        }
+    </div>
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter, EditorRequired] public object? DocumentedObject { get; set; }
+    [Parameter, EditorRequired] public string? FileExtension { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public int? MaxFileSizeKb { get; set; }
+    /// <summary>Where to go after a successful upload or delete, normally the page itself.</summary>
+    [Parameter, EditorRequired] public string ReturnHref { get; set; } = string.Empty;
+
+    private const string FileFieldName = "document";
+
+    int? DocumentId;
+    string? FailureMessage;
+    (int Id, int? DocumentId, string TypeName) Documented;
+    long MaxFileSize => (MaxFileSizeKb ?? 1024) * 1024L;
+
+    protected override void OnParametersSet()
+    {
+        Documented = DocumentService.DocumentedObject(DocumentedObject, FileExtension);
+        DocumentId = Documented.DocumentId;
+    }
+
+    async Task UploadAsync()
+    {
+        var file = HttpContext?.Request.HasFormContentType == true ? HttpContext.Request.Form.Files.GetFile(FileFieldName) : null;
+        if (file is null || file.Length == 0)
+        {
+            FailureMessage = Localizer["SelectFile"];
+            return;
+        }
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        var result = await DocumentService.SaveAsync(principal, new FormFileAsBrowserFile(file), DocumentedObject, FileExtension, MaxFileSize);
+        if (result.Message == DocumentService.FileTooLargeMessage)
+        {
+            FailureMessage = string.Format(LanguageExtensions.CurrentCulture, Localizer["FileExceedsMaxSizeOf"].Value, MaxFileSize / 1024);
+            return;
+        }
+        if (result.Count <= 0)
+        {
+            FailureMessage = result.Message ?? Localizer["SaveFailed"];
+            return;
+        }
+        HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        Navigator.NavigateTo(ReturnHref);
+    }
+
+    async Task DeleteAsync()
+    {
+        if (!DocumentId.HasValue) return;
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        var result = await DocumentService.DeleteAsync(principal, DocumentId.Value);
+        if (result.Count <= 0)
+        {
+            FailureMessage = result.Message;
+            return;
+        }
+        HttpContext.SetFlashMessage("FileDeleted", FlashMessageLevel.Success);
+        Navigator.NavigateTo(ReturnHref);
+    }
+
+    string FormNameSuffix => $"{Documented.TypeName}-{Documented.Id}-{FileExtension}".ToLowerInvariant();
+    string UploadFormName => $"upload-{FormNameSuffix}";
+    string DeleteFormName => $"delete-document-{FormNameSuffix}";
+    string IconImageSrc => $"/images/{FileExtension}.png";
+    bool MayUpload => FileExtension.IsPermittedFileExtension() && DocumentedObject.IsValidDocumentObject();
+    string Accept => $".{FileExtension}";
+    string Heading => DocumentId.HasValue ? $"{Localizer["Update"]} {LabelWithFileExtension.ToLowerInvariant()}" : $"{Localizer["Add"]} {LabelWithFileExtension.ToLowerInvariant()}";
+    string LabelWithFileExtension => string.IsNullOrWhiteSpace(Label) ? $"{FileExtension}" : $"{Localizer[Label]} ({FileExtension})";
+    string MaxSizeText => string.Format(LanguageExtensions.CurrentCulture, Localizer.Value("MaxUploadFileSizeKb"), MaxFileSizeKb);
+}

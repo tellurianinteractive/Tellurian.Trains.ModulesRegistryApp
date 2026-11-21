@@ -4,7 +4,7 @@ namespace ModulesRegistry.Services.Extensions;
 /// Who may change a station's freight customers and their waybills, the same rule as on the station pages: a global
 /// administrator, a country administrator in the station's country, an owner of the station's primary module, a data
 /// administrator of an owning group, or a data administrator of a group that an owning person is a member of.
-/// A read-only user may not.
+/// A read-only user may not. Also for the station itself, its tracks and its deletion (since Migration step 3.6).
 /// </summary>
 /// <remarks>
 /// Before release 1.15.10 these writes only required a signed-in user, so anyone could change another member's freight
@@ -23,10 +23,30 @@ public static class StationPermissionExtensions
                 .SingleOrDefaultAsync().ConfigureAwait(false);
             if (station is null) return false;
             if (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(station.CountryId)) return true;
-            if (station.PrimaryModuleId is null) return false;
+            return station.PrimaryModuleId is not null && await dbContext.IsOwnerOrDataAdministratorOfModuleAsync(principal, station.PrimaryModuleId.Value).ConfigureAwait(false);
+        }
 
+        /// <summary>
+        /// Who may add a station to a module (Migration step 3.6): a global administrator, a country administrator in the country
+        /// of a person or group that owns the module, an owner, or a data administrator as for <see cref="MayEditStationAsync"/>.
+        /// </summary>
+        public async Task<bool> MayEditModuleAsync(ClaimsPrincipal? principal, int moduleId)
+        {
+            if (!principal.IsAuthenticated() || principal.IsReadOnly()) return false;
+            if (principal.IsGlobalAdministrator()) return true;
+            if (principal.IsCountryAdministrator())
+            {
+                var countryId = principal.CountryId();
+                if (await dbContext.ModuleOwnerships.AsNoTracking().AnyAsync(mo => mo.ModuleId == moduleId && mo.OwnedShare > 0 &&
+                    (mo.PersonId.HasValue && mo.Person.CountryId == countryId || mo.GroupId.HasValue && mo.Group.CountryId == countryId)).ConfigureAwait(false)) return true;
+            }
+            return await dbContext.IsOwnerOrDataAdministratorOfModuleAsync(principal, moduleId).ConfigureAwait(false);
+        }
+
+        private async Task<bool> IsOwnerOrDataAdministratorOfModuleAsync(ClaimsPrincipal principal, int moduleId)
+        {
             var owners = await dbContext.ModuleOwnerships.AsNoTracking()
-                .Where(mo => mo.ModuleId == station.PrimaryModuleId)
+                .Where(mo => mo.ModuleId == moduleId && mo.OwnedShare > 0) // An assistant (no share) is not an owner.
                 .Select(mo => new { mo.PersonId, mo.GroupId })
                 .ToListAsync().ConfigureAwait(false);
             var personId = principal.PersonId();

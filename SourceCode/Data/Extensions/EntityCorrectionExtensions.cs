@@ -184,7 +184,13 @@ public static class EntityCorrectionExtensions
 
     extension(StationTrack track)
     {
-        public void CorrectInput() => track.PlatformLength = track.PlatformLength.OrNullIfZero();
+        public void CorrectInput()
+        {
+            track.PlatformLength = track.PlatformLength.OrNullIfZero();
+            track.Designation = track.Designation.Corrected(TextCase.AsTyped);
+            track.UsageNote = track.UsageNote.Corrected(TextCase.AsTyped, Optional);
+            if (!Enum.IsDefined((StationTrackDirection)track.DirectionId)) track.DirectionId = (int)StationTrackDirection.Bidirectional;
+        }
     }
 
     extension(WiFredThrottle throttle)

@@ -220,34 +220,17 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     }
 
     /// <summary>
-    /// Who may upload or delete the documents of an object, from the database (never from the page's owner reference):
-    /// a global administrator, a country administrator (as for saving a module), or, for a module, a person who owns a
-    /// share of it, a data administrator of a group that owns a share, or a data administrator of a group that a
-    /// person owner is a member of. For a station: the same for any of its modules. Read-only users never.
+    /// Who may upload or delete the documents of an object, from the database (never from the page's owner reference): for a
+    /// module those who may edit it (<c>MayEditModuleAsync</c>), for a station those who may edit it (<c>MayEditStationAsync</c>).
+    /// Read-only users never. Before Migration step 3.6 a country administrator could change documents in any country.
     /// </summary>
-    internal static async Task<bool> MayChangeDocumentsOfAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, object target)
-    {
-        if (!principal.IsAuthenticated() || principal.IsReadOnly()) return false;
-        if (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(principal.CountryId())) return true;
-        var personId = principal.PersonId();
-        if (personId <= 0) return false;
-
-        var modules = target switch
+    internal static async Task<bool> MayChangeDocumentsOfAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, object target) =>
+        target switch
         {
-            Module module => dbContext.Modules.Where(m => m.Id == module.Id),
-            Station station => dbContext.Modules.Where(m => m.StationId == station.Id),
-            _ => null
+            Module module => await dbContext.MayEditModuleAsync(principal, module.Id),
+            Station station => await dbContext.MayEditStationAsync(principal, station.Id),
+            _ => false
         };
-        if (modules is null) return false;
-
-        var dataAdministratorGroupIds = dbContext.GroupMembers
-            .Where(gm => gm.PersonId == personId && gm.IsDataAdministrator)
-            .Select(gm => gm.GroupId);
-        return await modules.AnyAsync(m => m.ModuleOwnerships.Any(mo => mo.OwnedShare > 0 && (
-            mo.PersonId == personId ||
-            mo.GroupId.HasValue && dataAdministratorGroupIds.Contains(mo.GroupId.Value) ||
-            mo.PersonId.HasValue && dbContext.GroupMembers.Any(gm => gm.PersonId == mo.PersonId && dataAdministratorGroupIds.Contains(gm.GroupId)))));
-    }
 
     /// <summary>
     /// End profiles are edited by administrators only: as in <see cref="ModuleEndProfileService"/>, which in practice

@@ -113,97 +113,79 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
         return [];
     }
 
-    public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, ModuleOwnershipRef ownershipRef, int moduleId)
+    /// <summary>
+    /// Saves a station's own fields; its tracks are saved one by one (<see cref="StationTrackService"/>). A new station is added to
+    /// the module <paramref name="moduleId"/>, which must not have a station, by a user who may edit the module
+    /// (<c>MayEditModuleAsync</c>); an existing station by a user who may edit it (<c>MayEditStationAsync</c>). The primary module and
+    /// the instruction document are never changed here.
+    /// </summary>
+    /// <remarks>
+    /// Before Migration step 3.6 the rights came from the page's ownership reference and any station id could be saved with it.
+    /// </remarks>
+    public async Task<(int Count, string Message, Station? Entity)> SaveAsync(ClaimsPrincipal? principal, Station entity, int moduleId = 0)
     {
+        if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Station>();
+        using var dbContext = Factory.CreateDbContext();
         // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5); the signature by the country's language.
-        await using (var casingContext = await Factory.CreateDbContextAsync())
-            entity.CorrectInput(await casingContext.CountryCasingsAsync(entity.RegionId, principal));
-        if (principal.IsAuthenticated())
+        entity.CorrectInput(await dbContext.CountryCasingsAsync(entity.RegionId, principal));
+        if (entity.Id > 0)
         {
-            ownershipRef = principal.UpdateFrom(ownershipRef);
-            if (ownershipRef.IsGroup || ownershipRef.IsPersonInGroup)
-            {
-                using var dbContext = Factory.CreateDbContext();
-                var isDataAdministrator = await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.IsDataAdministrator && gm.GroupId == ownershipRef.GroupId && gm.PersonId == principal.PersonId()).ConfigureAwait(false);
-                if (isDataAdministrator || principal.IsGlobalOrCountryAdministrator())
-                {
-                    return await AddOrUpdate(dbContext, principal, entity, moduleId).ConfigureAwait(false);
-                }
-            }
-            else if (principal.MaySave(ownershipRef))
-            {
-                using var dbContext = Factory.CreateDbContext();
-                return await AddOrUpdate(dbContext, principal, entity, moduleId).ConfigureAwait(false);
-            }
-        }
-        return principal.SaveNotAuthorised<Station>();
-
-        static async Task<(int Count, string Message, Station? Entity)> AddOrUpdate(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station entity, int moduleId)
-        {
-            var existing = await dbContext.Stations.Include(s => s.StationTracks).Include(s => s.Modules).FirstOrDefaultAsync(s => s.Id == entity.Id).ConfigureAwait(false);
-            return (existing is null) ?
-                await AddNew(dbContext, principal, entity, moduleId).ConfigureAwait(false) :
-                await UpdateExisting(dbContext, entity, existing).ConfigureAwait(false);
-        }
-
-        static async Task<(int Count, string Message, Station? Entity)> AddNew(ModulesDbContext dbContext, ClaimsPrincipal? principal, Station entity, int moduleId)
-        {
-            entity.PrimaryModuleId = moduleId;
-            dbContext.Add(entity);
-            var module = await dbContext.Modules.FindAsync(moduleId).ConfigureAwait(false);
-            if (module is null) return principal.SaveNotAuthorised<Station>();
-
-            entity.Modules.Add(module);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(entity);
-        }
-
-        static async Task<(int Count, string Message, Station? Entity)> UpdateExisting(ModulesDbContext dbContext, Station entity, Station existing)
-        {
+            var existing = await dbContext.Stations.FirstOrDefaultAsync(s => s.Id == entity.Id).ConfigureAwait(false);
+            if (existing is null || !await dbContext.MayEditStationAsync(principal, existing.Id)) return principal.SaveNotAuthorised<Station>();
+            entity.PrimaryModuleId = existing.PrimaryModuleId;
+            entity.PdfInstructionId = existing.PdfInstructionId;
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            AddOrRemoveTracks(dbContext, entity, existing);
-
-            if (IsUnchanged(dbContext, existing)) return (-1).SaveResult(existing);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.SaveResult(existing);
-
-            static void AddOrRemoveTracks(ModulesDbContext dbContext, Station entity, Station existing)
-            {
-                foreach (var track in entity.StationTracks)
-                {
-                    var existingTrack = existing.StationTracks.AsQueryable().FirstOrDefault(t => t.Id == track.Id);
-                    if (existingTrack is null) existing.StationTracks.Add(track);
-                    else dbContext.Entry(existingTrack).CurrentValues.SetValues(track);
-                }
-                foreach (var track in existing.StationTracks) if (!entity.StationTracks.Any(st => st.Id == track.Id)) dbContext.Remove(track);
-            }
-
-            static bool IsUnchanged(ModulesDbContext dbContext, Station station) =>
-                dbContext.Entry(station).State == EntityState.Unchanged &&
-                station.StationTracks.All(st => dbContext.Entry(st).State == EntityState.Unchanged);
+            if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
+            return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(existing);
+        }
+        else
+        {
+            var module = await dbContext.Modules.FindAsync(moduleId).ConfigureAwait(false);
+            if (module is null || module.StationId.HasValue || !await dbContext.MayEditModuleAsync(principal, moduleId)) return principal.SaveNotAuthorised<Station>();
+            entity.PrimaryModuleId = moduleId;
+            entity.PdfInstructionId = null;
+            entity.StationTracks.Clear();
+            dbContext.Add(entity);
+            entity.Modules.Add(module);
+            return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(entity);
         }
     }
 
+    public async Task<bool> MayEditAsync(ClaimsPrincipal? principal, int stationId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayEditStationAsync(principal, stationId);
+    }
+
+    public async Task<bool> MayAddToModuleAsync(ClaimsPrincipal? principal, int moduleId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.MayEditModuleAsync(principal, moduleId);
+    }
 
     public async Task<bool> IsSubmittedToUpcomingMeeting(Station? station)
     {
         if (station is null) return false;
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.LayoutStations.AnyAsync(ls => ls.StationId == station.Id && ls.LayoutParticipant.Layout.Meeting.EndDate > TimeProvider.Now);
+        var today = TimeProvider.Today.ToDateTime(TimeOnly.MinValue); // A meeting has not ended until its last day is over, as in PersonDeletionPlan.
+        return await dbContext.LayoutStations.AnyAsync(ls => ls.StationId == station.Id && ls.LayoutParticipant.Layout.Meeting.EndDate >= today);
 
     }
+    /// <summary>
+    /// Deletes a station with its tracks and instruction document, by a user who may edit it, when it is not registered for a
+    /// meeting that has not ended. Before Migration step 3.6 any user who could see the station could delete it.
+    /// </summary>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.MayDelete(principal.OwnerRef()))
-        {
-            var entity = await FindByIdAsync(principal, id).ConfigureAwait(false);
-            using var dbContext = Factory.CreateDbContext();
-            if (entity is null) return principal.NotAuthorized<Station>();
-            if (entity.PdfInstructionId.HasValue) await DocumentService.RemoveDocumentsAsync(dbContext, [entity.PdfInstructionId.Value]);
-            dbContext.Stations.Remove(entity);
-            var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
-            return result.DeleteResult();
-        }
-        return principal.NotAuthorized<Station>();
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationAsync(principal, id)) return principal.NotAuthorized<Station>();
+        var entity = await dbContext.Stations.Include(s => s.StationTracks).Include(s => s.Modules).SingleOrDefaultAsync(s => s.Id == id).ConfigureAwait(false);
+        if (entity is null) return principal.NotAuthorized<Station>();
+        if (await IsSubmittedToUpcomingMeeting(entity)) return 0.DeleteResult();
+        if (entity.PdfInstructionId.HasValue) await DocumentService.RemoveDocumentsAsync(dbContext, [entity.PdfInstructionId.Value]);
+        foreach (var module in entity.Modules) module.StationId = null;
+        dbContext.Stations.Remove(entity);
+        var result = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+        return result.DeleteResult();
     }
 }

@@ -19,14 +19,6 @@ public sealed class CorrectedInputRulesTests
         [.. validator.Validate(item).Errors.Select(e => e.PropertyName)];
 
     [TestMethod]
-    public void NamesAreNotCheckedForCapitals()
-    {
-        var invalid = InvalidMembers(new StationValidator(Localizer), new Station { FullName = "nedre ullerud", Signature = "nu", IsShadow = true });
-        CollectionAssert.DoesNotContain(invalid, nameof(Station.FullName));
-        CollectionAssert.DoesNotContain(invalid, nameof(Station.Signature));
-    }
-
-    [TestMethod]
     [DataRow(null, 1900, true)]
     [DataRow((short)0, 1900, true, DisplayName = "Zero is saved as empty")]
     [DataRow((short)1900, 1900, true)]

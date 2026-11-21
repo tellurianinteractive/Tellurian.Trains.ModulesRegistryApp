@@ -1,63 +1,62 @@
 ﻿@page "/Stations/{id:int}/Delete"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): deleting a station is a POST form, for a user who may edit the station, when it is not
+   registered for a meeting that has not ended (both also checked by StationService). Afterwards, a redirect to the modules list. *@
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-@inject PageHistory PageHistory
-
+@inject NavigationManager Navigator
 @inject StationService StationService
 
-<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="PageAction.Delete" />
+<PageHeading ObjectName="OperationLocation" Context="@Station" IconClass="@FontAwesome.Station" PageAction="PageAction.Delete" BackHref="@BackHref" />
 
-<ul>
-    <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>
-</ul>
 @if (Station is null)
 {
     <ActionMessage AlertType="stop" Label="NothingToDelete" />
 }
-else if (!IsRegisteredInUpcomingMeeting)
-{
-    <button class="btn btn-danger btn-sm" @onclick="OnDelete"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
-}
 else
 {
-    <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+    <ul>
+        <li>@Localizer["IsRegisteredInUpcomingMeeting"]: @IsRegisteredInUpcomingMeeting.AsYesOrNoWithColor(true)</li>
+    </ul>
+    @if (IsRegisteredInUpcomingMeeting)
+    {
+        <ActionMessage AlertType="info" Label="ConditionsForDeleteNotMet" />
+    }
+    else
+    {
+        <form method="post" @formname="delete-station" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <button type="submit" class="btn btn-danger btn-sm"><span class="@FontAwesome.Delete" /> @Localizer["ConfirmDelete"]</button>
+        </form>
+    }
 }
 
-
 @code {
+    // The modules list is static, so this page may have no history (Migration step 3.3).
+    const string BackHref = "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
 
     ClaimsPrincipal? Principal;
     Station? Station;
-
     bool IsRegisteredInUpcomingMeeting;
 
-    override protected async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    override protected async Task OnParametersSetAsync()
-    {
         Station = await StationService.FindByIdAsync(Principal, Id);
-        if (Station is not null)
-        {
-            IsRegisteredInUpcomingMeeting = await StationService.IsSubmittedToUpcomingMeeting(Station);
-        }
+        if (Station is not null && !await StationService.MayEditAsync(Principal, Station.Id)) Station = null;
+        if (Station is not null) IsRegisteredInUpcomingMeeting = await StationService.IsSubmittedToUpcomingMeeting(Station);
     }
 
-    async Task OnDelete()
+    async Task DeleteAsync()
     {
-        if (Station is not null)
-        {
-            var result = await StationService.DeleteAsync(Principal, Station.Id);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-            await Task.Delay(3000);
-            PageHistory.NavigateBack();
-        }
+        if (Station is null || IsRegisteredInUpcomingMeeting) return;
+        var (count, _) = await StationService.DeleteAsync(Principal, Station.Id);
+        HttpContext.SetFlashMessage(count > 0 ? "DeletedSuccessfully" : "DeleteFailed", count > 0);
+        Navigator.NavigateTo(count > 0 ? BackHref : $"Stations/{Id}/Delete");
     }
 }
