@@ -1,16 +1,29 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject IStringLocalizer<Strings> Localizer
 
-<AppButton OnClickCallback="CopyToClipboard" Label="@Label" IconName="@FontAwesome.Mail"  />
+@* Copies the recipients' email addresses. Interactive: through JS interop. Static (Migration step 3.6): a plain button whose text
+   to copy is in data-copy-text, handled by a click listener in App.razor. *@
+@if (RendererInfo.IsInteractive)
+{
+    <AppButton OnClickCallback="CopyToClipboard" Label="@Label" IconName="@FontAwesome.Mail" />
+}
+else
+{
+    <span class="noprint" style="margin-left: 4px">
+        <button type="button" class="btn btn-sm btn-secondary" data-copy-text="@Text" data-copied="@Localizer["Copied"]"><span class="@FontAwesome.Mail" />&nbsp;@LabelText</button>
+    </span>
+}
 
 @code {
     [Parameter] public required IEnumerable<MailHolder> Recipients { get; set; }
     [Parameter] public string? Label { get; set; } = "CopyAllMailAddresses";
 
+    string Text => string.Join(';', Recipients.Select(r => r.EmailAddresses));
+    // As AppButton: the parts between hyphens are resource keys.
+    string LabelText => string.Join(' ', (Label ?? "CopyAllMailAddresses").Split('-').Select((l, i) => i == 0 ? Localizer[l].Value : Localizer[l].Value.ToLowerInvariant()));
+
     private async Task CopyToClipboard()
     {
-        var mailAddresses = Recipients.Select(r => r.EmailAddresses);
-        var text = string.Join(';', mailAddresses);
-        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", text, Localizer["Copied"].ToString());
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", Text, Localizer["Copied"].ToString());
     }
 }

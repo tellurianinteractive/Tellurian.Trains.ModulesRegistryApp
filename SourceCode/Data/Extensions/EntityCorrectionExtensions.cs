@@ -183,7 +183,24 @@ public static class EntityCorrectionExtensions
 
     extension(Layout layout)
     {
-        public void CorrectInput() => (layout.FirstYear, layout.LastYear) = YearPeriod.Corrected(layout.FirstYear, layout.LastYear);
+        public void CorrectInput()
+        {
+            (layout.FirstYear, layout.LastYear) = YearPeriod.Corrected(layout.FirstYear, layout.LastYear);
+            layout.ShortName = layout.ShortName.Corrected(TextCase.AsTyped, Optional);
+            layout.Theme = layout.Theme.Corrected(TextCase.AsTyped, Optional);
+            layout.Details = layout.Details.OrNullIfEmpty;
+            layout.MaxNumberOfParticipants = layout.MaxNumberOfParticipants.OrNullIfZero();
+        }
+    }
+
+    extension(LayoutStation station)
+    {
+        public void CorrectInput()
+        {
+            station.OtherName = station.OtherName.Corrected(TextCase.InitialCapital, Optional);
+            station.OtherSignature = station.OtherSignature.Corrected(TextCase.AsTyped, Optional);
+            if (!Enum.IsDefined((DifficultyLevel)station.Difficulty)) station.Difficulty = (int)DifficultyLevel.Undefined;
+        }
     }
 
     extension(Vehicle vehicle)

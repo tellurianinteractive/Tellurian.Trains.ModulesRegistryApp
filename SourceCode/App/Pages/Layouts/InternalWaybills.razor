@@ -1,11 +1,13 @@
 ﻿@page "/layouts/{LayoutId:int}/waybills/{PersonId:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): a participant's stations in a layout, with links to their internal waybills and freight customers. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject LayoutService LayoutService
 
-<PageHeading Label="InternalWaybills" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" />
+<PageHeading Label="InternalWaybills" IconClass="@FontAwesome.Waybills" PageAction="PageAction.List" BackHref="@($"Layouts/{LayoutId}/Modules")" />
 @if (LayoutStations is null)
 {
     <ActionMessage Label="FetchingData" />
@@ -51,10 +53,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
         LayoutStations = await LayoutService.GetParticipantsLayoutStations(Principal, LayoutId, PersonId);
     }
 }

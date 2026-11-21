@@ -9,12 +9,16 @@
     {
         <label class="form-control-label text-end" for="@Label">@LabelText(Localizer)</label>
     }
-    <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" @bind="@CurrentValue" />
+    <input disabled=@IsDisabled type="date" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
             <ValidationMessage For="@ValidationFor" />
         </div>
+    }
+    else if (ShowFieldValidationMessage)
+    {
+        <ValidationMessage For="@ValueExpression" />
     }
 </div>
 

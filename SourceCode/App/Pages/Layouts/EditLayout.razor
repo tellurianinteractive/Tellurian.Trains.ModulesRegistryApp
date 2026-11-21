@@ -1,116 +1,114 @@
 ﻿@page "/Meetings/{meetingid:int}/Layouts/{id:int}"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR form (Migration step 3.6): a meeting's layout, posted as LayoutFormData. A new layout or another organising group by the
+   meeting's organisers, the rest also by the layout's organisers (LayoutService); others see the form without Save. The contact
+   person is chosen among the members of the stored (or posted) organising group. The maximum number of participants is always
+   shown, since a hidden field isn't posted. After saving, a redirect to this form; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.Layouts
 
 @inject IStringLocalizer<Strings> Localizer
-@inject INotificationService NotificationService
-
+@inject NavigationManager Navigator
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
 @inject GroupService GroupService
 @inject ModuleStandardService ModuleStandardService
-@inject OperatingDayService OperatingDayService
-@inject PersonService PersonService
 
+<PageHeading Context="Existing" ObjectName="Layout" IconClass="@FontAwesome.Layout" PageAction="Id.ToAddOrEditPageAction()" HelpContext="Layout" ShowHelpInitially="false" BackHref="@BackHref" />
 
-
-<PageHeading Context="Layout" IconClass="@FontAwesome.Layout" PageAction="Id.ToAddOrEditPageAction()" HelpContext="Layout" ShowHelpInitially=false/>
-
-@if (Layout is not null)
+@if (FailureMessage is not null)
 {
-    <EditTemplate Item="Layout" OnValidSubmit="OnValidSubmit" ShowSaveButton="MayEdit">
-        <Inputs>
-            <AppInputSelect Width="4" @bind-Value="Layout.OrganisingGroupId" Label="ResponsibleGroup" Items="ResponsibleGroupItems" />
-            <AppInputSelect Width="3" @bind-Value="Layout.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" />
-            <AppInputSelectNullable Width="3" @bind-Value="Layout.ContactPersonId" Label="ContactPerson" Items="ContactPersonItems" ShowNoneOption=true />
-            <AppInputText Width="3" @bind-Value="Layout.ShortName" Label="Name" />
-            <AppInputText Width="5" @bind-Value="Layout.Theme" Label="Theme" />
-            <AppInputDate Width="2" @bind-Value="Layout.RegistrationOpeningDate" Label="RegistrationOpens" />
-            <AppInputDate Width="2" @bind-Value="Layout.RegistrationClosingDate" Label="RegistrationCloses" />
-            <AppInputDateNullable Width="2" @bind-Value="Layout.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
-            <AppInputCheck Width="3" Label="IsRegistrationPermitted" @bind-Value="Layout.IsRegistrationPermitted" AlignWithFields=true />
-            @if(Layout.IsRegistrationPermitted)
-            {
-                <AppInputNumber Width="2" @bind-Value="Layout.MaxNumberOfParticipants" Label="MaxNumberOfParticipants" />
-            }
-            <h4>@Localizer["GameSettings"]</h4>
-            <AppInputNumber Width="2" @bind-Value="Layout.FirstYear" Label="FirstYear" />
-            <AppInputNumber Width="2" @bind-Value="Layout.LastYear" Label="LastYear" />
-            <AppInputMarkdown @bind-Value="Layout.Details" Label="Note" MaxNumberOfCharacters="@LayoutValidator.MaxNoteLength" />
-        </Inputs>
-        <Buttons>
-
-        </Buttons>
-    </EditTemplate>
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
 
+<EditTemplate Item="Form" FormName="layout" OnValidSubmit="SaveAsync" ShowSaveButton="MayEdit">
+    <Inputs>
+        <AppInputSelect Width="4" @bind-Value="Form!.OrganisingGroupId" Label="ResponsibleGroup" Items="ResponsibleGroupItems" ShowPleaseSelect="true" />
+        <AppInputSelect Width="3" @bind-Value="Form!.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+        <AppInputSelectNullable Width="3" @bind-Value="Form!.ContactPersonId" Label="ContactPerson" Items="ContactPersonItems" ShowNoneOption="true" />
+        <AppInputText Width="3" @bind-Value="Form!.ShortName" Label="Name" />
+        <AppInputText Width="5" @bind-Value="Form!.Theme" Label="Theme" />
+        <AppInputDate Width="2" @bind-Value="Form!.RegistrationOpeningDate" Label="RegistrationOpens" />
+        <AppInputDate Width="2" @bind-Value="Form!.RegistrationClosingDate" Label="RegistrationCloses" />
+        <AppInputDateNullable Width="2" @bind-Value="Form!.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
+        <AppInputCheck Width="3" Label="IsRegistrationPermitted" @bind-Value="Form!.IsRegistrationPermitted" AlignWithFields="true" />
+        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.MaxNumberOfParticipants" Label="MaxNumberOfParticipants" />
+        <h4>@Localizer["GameSettings"]</h4>
+        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.FirstYear" Label="FirstYear" />
+        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.LastYear" Label="LastYear" />
+        <AppInputMarkdown @bind-Value="Form!.Details" Label="Note" MaxNumberOfCharacters="LayoutFormData.MaxNoteLength" />
+    </Inputs>
+</EditTemplate>
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int MeetingId { get; set; }
+    [SupplyParameterFromForm(FormName = "layout")] private LayoutFormData? Form { get; set; }
 
     ClaimsPrincipal? Principal;
     Meeting? Meeting;
-    Layout? Layout;
+    Layout? Existing;
     IEnumerable<ListboxItem>? ResponsibleGroupItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
-    IEnumerable<ListboxItem>? OperatingDayItems;
     IEnumerable<ListboxItem>? ContactPersonItems;
-
-
     bool MayEdit;
+    string? FailureMessage;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (MeetingId > 0)
+        Meeting = MeetingId > 0 ? await MeetingService.FindByIdAsync(MeetingId) : null;
+        if (Meeting is null)
         {
-            Meeting = await MeetingService.FindByIdAsync(MeetingId);
-            if (Meeting is not null)
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = Meeting.Layouts.SingleOrDefault(l => l.Id == Id);
+            if (Existing is null)
             {
-                Layout = Id > 0 ? Meeting.Layouts.SingleOrDefault(l => l.Id == Id) ?? DefaultLayout(Meeting) : DefaultLayout(Meeting);
-                ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
-                ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
-                OperatingDayItems = await OperatingDayService.BasicDaysItemsAsync();
-                ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Layout.OrganisingGroupId);
-                MayEdit = Layout.Id > 0 ? await MeetingService.IsLayoutOrganiser(Principal, Layout.Id) : await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting);
+                Form = null;
+                return;
             }
-            else
-            {
-                NotificationService.ShowNotFound<Meeting>(Localizer);
-            }
+            MayEdit = await MeetingService.IsLayoutOrganiser(Principal, Existing.Id);
         }
         else
         {
-            NotificationService.ShowNotFound<Meeting>(Localizer);
+            MayEdit = await MeetingService.IsAdministratorOrMeetingOrganiser(Principal, Meeting.Id);
         }
-    }
-
-
-
-    async Task OnValidSubmit()
-    {
-        if (Meeting is not null && Layout is not null)
-        {
-            Meeting.Layouts.Add(Layout);
-            var result = await LayoutService.SaveAsync(Principal, Layout);
-            Layout = result.Entity;
-            ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Meeting.OrganiserGroupId);
-            NotificationService.ShowSuccessOrFailure(Localizer, result.Count, result.Message);
-        }
-    }
-
-    Layout DefaultLayout(Meeting meeting) => new Layout
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Layout
         {
             MeetingId = MeetingId,
-            OrganisingGroupId = meeting.OrganiserGroupId,
-            RegistrationOpeningDate = DefaultRegistrationOpeningDate,
-            RegistrationClosingDate = DefaultRegistrationClosingDate
-        };
-    string Heading => Meeting is null ? Localizer["Layout"].ToString() : $"{Localizer["Layout"]} {Meeting.Name} {Meeting.CityName} {Meeting.StartDate.ToString("MMMM yyyy")}";
+            OrganisingGroupId = Meeting.OrganiserGroupId,
+            RegistrationOpeningDate = Meeting.StartDate.AddMonths(-6),
+            RegistrationClosingDate = Meeting.StartDate.AddMonths(-2),
+        }).AsFormData();
+        ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
+        ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
+        ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Form.OrganisingGroupId);
+    }
 
-    DateTime DefaultRegistrationOpeningDate => Meeting?.StartDate.AddMonths(-6) ?? DateTime.Today;
-    DateTime DefaultRegistrationClosingDate => Meeting?.StartDate.AddMonths(-2) ?? DateTime.Today.AddMonths(2);
+    string BackHref => $"Meetings/{MeetingId}/Layouts/Edit";
 
+    async Task SaveAsync()
+    {
+        if (Form is null || Meeting is null || !MayEdit) return;
+        // Edit: only the form's fields change on the loaded layout (Migration section 3.4, the data-loss rule).
+        var layout = Form.AsEntity(Existing, meetingId: Meeting.Id);
+        var (count, message, saved) = await LayoutService.SaveAsync(Principal, layout);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Meetings/{Meeting.Id}/Layouts/{(saved ?? layout).Id}");
+    }
 }

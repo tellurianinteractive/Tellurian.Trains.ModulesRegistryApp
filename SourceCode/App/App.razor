@@ -57,6 +57,11 @@
                     });
             }
         };
+        // On static pages (Migration step 3.6) MailCopyButton is a plain button with the text in data-copy-text.
+        document.addEventListener('click', function (event) {
+            const button = event.target instanceof Element ? event.target.closest('[data-copy-text]') : null;
+            if (button) window.clipboardCopy.copyText(button.getAttribute('data-copy-text'), button.getAttribute('data-copied') || '');
+        });
     </script>
 </body>
 </html>

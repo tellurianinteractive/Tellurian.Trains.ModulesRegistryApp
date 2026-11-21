@@ -82,15 +82,27 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             return await dbContext.LayoutStations
                 .Include(ls => ls.Station)
                 .Include(ls => ls.LayoutParticipant).ThenInclude(lp => lp.Layout).ThenInclude(l => l.Meeting)
-                .FirstAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
         return null;
+    }
+
+    /// <summary>May change the station's settings in the layout: its participant while the layout is open, or a layout organiser (as <see cref="UpdateAsync"/>).</summary>
+    public async Task<bool> MayEditLayoutStationAsync(ClaimsPrincipal? principal, int layoutStationId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var participant = await dbContext.LayoutStations.AsNoTracking()
+            .Where(ls => ls.Id == layoutStationId)
+            .Select(ls => new { ls.LayoutParticipant.MeetingParticipantId, ls.LayoutParticipant.LayoutId })
+            .SingleOrDefaultAsync();
+        return participant is not null && await dbContext.MayManageParticipantAsync(principal, participant.MeetingParticipantId, TimeProvider.LocalTime, participant.LayoutId);
     }
 
     public async Task<(int Count, string Message, LayoutStation? Entity)> UpdateAsync(ClaimsPrincipal? principal, LayoutStation entity)
     {
         if (principal.IsAuthenticated())
         {
+            entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
             entity = entity.WithDataRulesApplied();
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.LayoutStations.Include(ls => ls.LayoutParticipant).SingleOrDefaultAsync(l => l.Id == entity.Id);

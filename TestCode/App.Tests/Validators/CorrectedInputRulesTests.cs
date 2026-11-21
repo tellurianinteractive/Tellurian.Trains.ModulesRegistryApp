@@ -28,14 +28,6 @@ public sealed class CorrectedInputRulesTests
     [DataRow((short)1850, 1850, true, DisplayName = "A vehicle's manufacture year")]
     public void YearOrEmpty(short? year, int minimum, bool expected) => Assert.AreEqual(expected, year.IsYearOrEmpty(minimum));
 
-    [TestMethod]
-    public void ReversedYearsAreAcceptedSinceTheyAreSwappedWhenSaving()
-    {
-        var invalid = InvalidMembers(new LayoutValidator(Localizer), new Layout { FirstYear = 1970, LastYear = 1950 });
-        CollectionAssert.DoesNotContain(invalid, nameof(Layout.FirstYear));
-        CollectionAssert.DoesNotContain(invalid, nameof(Layout.LastYear));
-    }
-
     private sealed class KeyLocalizer : IStringLocalizer<Strings>
     {
         public LocalizedString this[string name] => new(name, name);

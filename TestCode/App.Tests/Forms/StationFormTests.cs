@@ -21,7 +21,7 @@ public sealed class StationFormTests
     private static StationTrack ExistingTrack() => new()
     {
         Id = 8, StationId = 5, Designation = "2a", DisplayOrder = 2, DirectionId = (int)StationTrackDirection.EastWest, MaxTrainLength = 3.2,
-        PlatformLength = 2.5, SpeedLimit = 40, UsageNote = "Freight", IsThroughTrack = true, IsSiding = false, IsScheduled = true,
+        PlatformLength = 2.5, SpeedLimit = 40, UsageNote = "Freight", IsThroughTrack = true, IsSiding = false,
     };
 
     [TestMethod]

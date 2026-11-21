@@ -1,16 +1,17 @@
 ﻿@page "/layouts/{id:int}/modules"
 
 @attribute [Authorize(Policy = "User")]
+@attribute [ExcludeFromInteractiveRouting]
+@* Static SSR (Migration step 3.6): a layout's participants and their modules. The organisers' filters are a GET form (?modules=true,
+   ?places=true) submitted when a box is checked (filter-form.js), or with Ok without JavaScript. *@
 
-@inject PageHistory PageHistory
 @inject IStringLocalizer<Strings> Localizer
-@inject IJSRuntime JSRuntime
 
 @inject MeetingService MeetingService
 @inject LayoutParticipantService LayoutParticipantService
 @inject LayoutService LayoutService
 
-<PageHeading Label="@PageHeadingText" IconClass="@FontAwesome.Module" PageAction="PageAction.List" />
+<PageHeading Label="@PageHeadingText" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
 @if (LayoutParticipants is null)
 {
     <ActionMessage Label="FetchingData" />
@@ -28,8 +29,17 @@ else
     </h4>
     @if (IsOrganiser)
     {
-        <AppInputCheck Label="OnlyThoseWithModules" @bind-Value="OnlyThoseWithModules" ShowLabelWhenPrinting="OnlyThoseWithModules" />
-        <AppInputCheck Label="OnlyThoseWithOperationsPlaces" @bind-Value="OnlyThoseWithOperationsPlaces" ShowLabelWhenPrinting="OnlyThoseWithOperationsPlaces" />
+        <form id="layout-modules-filter" method="get" data-auto-submit data-enhance class="@(OnlyThoseWithModules || OnlyThoseWithOperationsPlaces ? "" : "noprint")">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="only-modules" name="modules" value="true" checked="@OnlyThoseWithModules" />
+                <label class="form-check-label" for="only-modules">@Localizer["OnlyThoseWithModules"]</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="only-places" name="places" value="true" checked="@OnlyThoseWithOperationsPlaces" />
+                <label class="form-check-label" for="only-places">@Localizer["OnlyThoseWithOperationsPlaces"]</label>
+            </div>
+            <noscript><AppButton Label="Ok" IsSubmit="true" /></noscript>
+        </form>
 
         <div style="padding: 10px 0px">
             <MailToButton Recipients="FilteredParticipants!.ParticipantsMails()" Sender="Principal!.Sender()" Subject="@Layout.DescriptionWithTheme()" Label="@SendMailLabel" />
@@ -127,11 +137,11 @@ else
     IEnumerable<LayoutStation>? LayoutStations;
     IEnumerable<LayoutModule>? LayoutModules;
     bool IsOrganiser;
-    bool OnlyThoseWithModules;
-    bool OnlyThoseWithOperationsPlaces;
+    [SupplyParameterFromQuery(Name = "modules")] private bool OnlyThoseWithModules { get; set; }
+    [SupplyParameterFromQuery(Name = "places")] private bool OnlyThoseWithOperationsPlaces { get; set; }
     bool HasParticipantsFromDifferentCountries;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         Layout = await LayoutService.GetLayoutAsync(Principal, Id);
@@ -152,6 +162,8 @@ else
             HasParticipantsFromDifferentCountries = LayoutParticipants!.Select(lp => lp.Person.CountryId).Distinct().Count() > 1;
         }
     }
+    // The meeting's layouts for its organisers, otherwise the meeting's page (both static).
+    string BackHref => Layout is null ? "Meetings/Index" : IsOrganiser ? $"Meetings/{Layout.MeetingId}/Layouts/Edit" : $"Meetings/{Layout.MeetingId}";
     string PageHeadingText => $"{Localizer["RegisteredModules"]} {Layout?.DescriptionWithMeetingAndLayoutName()}";
     IEnumerable<object> SubItems(LayoutParticipant participant) => participant.LayoutModules.OrderBy(lm => lm.Module.FullName);
 
@@ -160,11 +172,6 @@ else
     string LayoutStationHref(LayoutModule layoutModule) => $"LayoutStations/{layoutModule.LayoutStationId}";
 
     LayoutStation? LayoutStation(int? id) => id is null || LayoutStations is null ? null : LayoutStations.SingleOrDefault(ls => ls.Id == id);
-
-    async Task NavigateToNewTab(LayoutModule layoutModule)
-    {
-        await JSRuntime.InvokeAsync<object>("open", WaybillsHref(layoutModule), "_blank");
-    }
 
     MarkupString ParticipantNameAndMore(LayoutParticipant participant) => new(
         HasParticipantsFromDifferentCountries ?
