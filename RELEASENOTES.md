@@ -1,6 +1,14 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.17.0
+Released 2026-11-22
+- The forms are laid out in groups of fields, with the checkboxes in their own columns. Fields keep a usable width on tablet-sized screens, and the field labels are smaller.
+- Shorter labels in the module form, such as "Sections" and "Max km/h". Units are shown without parentheses.
+- The vehicle form suggests values already used for keeper signature, class, manufacturer, model manufacturer and decoder type. Signatures and classes are suggested for the chosen country. Other values can still be entered.
+- The keeper signature is shown in upper case while typing.
+- In Swedish, German, Danish and Norwegian, the vehicle's keeper country and signature are called operator country and signature, so they aren't mistaken for the model's owner.
+- Misspelled manufacturer names in vehicles are corrected, and missing keeper countries are set from the signature where it is clear.
 ## Release 1.16.6
 Released 2026-11-22
 - A customer's waybills can be filtered and sorted. Preview prints the waybills shown, and "Mark as printed" sets their print count to zero.

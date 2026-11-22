@@ -82,6 +82,72 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         return items.Select(vf => AsListbox(vf)).OrderBy(lb => lb.Description);
     }
 
+    /// <summary>
+    /// The values already used in the registry's vehicles, suggested while typing in the vehicle form's text fields (2026-11-22);
+    /// other values may still be entered. Keeper signatures are filtered by the keeper country, and classes by the keeper country
+    /// and signature. No personal data: signatures, classes, manufacturers and decoder types.
+    /// The database compares case-insensitively, so the spellings are counted case-sensitively and each value is suggested in its
+    /// most common spelling ("NOHAB", also when a few vehicles have "Nohab").
+    /// </summary>
+    public async Task<VehicleTextSuggestions> GetTextSuggestionsAsync()
+    {
+        const string caseSensitive = "Finnish_Swedish_CS_AS";
+        using var dbContext = Factory.CreateDbContext();
+        var vehicles = dbContext.Vehicles.AsNoTracking();
+        var keepers = await vehicles
+            .Where(v => v.KeeperSignature != null && v.KeeperSignature != "")
+            .GroupBy(v => new { Value = EF.Functions.Collate(v.KeeperSignature, caseSensitive), v.KeeperCountryId })
+            .Select(g => new { g.Key.Value, g.Key.KeeperCountryId, Count = g.Count() })
+            .ToListAsync();
+        var classes = await vehicles
+            .Where(v => v.VehicleClass != null && v.VehicleClass != "")
+            .GroupBy(v => new { Value = EF.Functions.Collate(v.VehicleClass, caseSensitive), v.KeeperCountryId, v.KeeperSignature })
+            .Select(g => new { g.Key.Value, g.Key.KeeperCountryId, g.Key.KeeperSignature, Count = g.Count() })
+            .ToListAsync();
+        var keeperSpellings = MostCommonSpellings(keepers.Select(k => (k.Value, k.Count)));
+        var classSpellings = MostCommonSpellings(classes.Select(c => (c.Value, c.Count)));
+        return new(
+            Sorted(keepers.Select(k => new TextSuggestion(keeperSpellings[k.Value], [CountryFilter(k.KeeperCountryId)]))),
+            Sorted(classes.Select(c => new TextSuggestion(classSpellings[c.Value], [CountryFilter(c.KeeperCountryId), c.KeeperSignature ?? string.Empty]))),
+            await ValuesAsync(v => v.PrototypeManufacturerName),
+            await ValuesAsync(v => v.ModelManufacturerName),
+            await ValuesAsync(v => v.DecoderType));
+
+        static string CountryFilter(int? countryId) => countryId?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
+
+        async Task<IReadOnlyList<TextSuggestion>> ValuesAsync(Expression<Func<Vehicle, string>> property)
+        {
+            var values = await vehicles.Select(property).Where(value => value != null && value != "")
+                .GroupBy(value => EF.Functions.Collate(value, caseSensitive))
+                .Select(g => new { Value = g.Key, Count = g.Count() })
+                .ToListAsync();
+            var spellings = MostCommonSpellings(values.Select(v => (v.Value, v.Count)));
+            return Sorted(values.Select(v => new TextSuggestion(spellings[v.Value])));
+        }
+    }
+
+    /// <summary>
+    /// For each value, ignoring case, its spelling used by most vehicles.
+    /// </summary>
+    internal static Dictionary<string, string> MostCommonSpellings(IEnumerable<(string Value, int Count)> spellings) =>
+        spellings
+            .GroupBy(s => s.Value, StringComparer.OrdinalIgnoreCase)
+            .SelectMany(sameValue =>
+            {
+                var mostCommon = sameValue.GroupBy(s => s.Value).MaxBy(spelling => spelling.Sum(s => s.Count))!.Key;
+                return sameValue.Select(s => KeyValuePair.Create(s.Value, mostCommon));
+            })
+            .DistinctBy(pair => pair.Key)
+            .ToDictionary(StringComparer.Ordinal);
+
+    /// <summary>
+    /// The suggestions without duplicates (the same spelling and filter values), in alphabetical order.
+    /// </summary>
+    private static TextSuggestion[] Sorted(IEnumerable<TextSuggestion> suggestions) =>
+        [.. suggestions
+            .DistinctBy(s => (s.Value, string.Join('|', s.FilterValues)))
+            .OrderBy(s => s.Value, StringComparer.CurrentCultureIgnoreCase)];
+
     public async Task<IEnumerable<ListboxItem>> GetCouplingFeaturesListboxDataAsync(int scaleId)
     {
         using var dbContext = Factory.CreateDbContext();
@@ -202,3 +268,10 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         return await dbContext.SaveChangesAsync();
     }
 }
+
+public sealed record VehicleTextSuggestions(
+    IReadOnlyList<TextSuggestion> KeeperSignatures,
+    IReadOnlyList<TextSuggestion> VehicleClasses,
+    IReadOnlyList<TextSuggestion> PrototypeManufacturers,
+    IReadOnlyList<TextSuggestion> ModelManufacturers,
+    IReadOnlyList<TextSuggestion> DecoderTypes);

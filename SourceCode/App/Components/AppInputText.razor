@@ -19,7 +19,20 @@
     }
     else
     {
-        <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" placeholder="@PlaceholderText" />
+        <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" placeholder="@PlaceholderText"
+               list="@(Suggestions is null ? null : SuggestionsId)" autocomplete="@(Suggestions is null ? null : "off")" data-suggestions="@(Suggestions is null ? null : SuggestionsId)" />
+        @* With Suggestions, the browser suggests the matching values while typing (a combo box); any other value may still be entered.
+           With SuggestionsFilteredBy (names of other fields in the form), suggestion-filter.js shows only the suggestions that match
+           those fields; without JavaScript, all are shown. *@
+        @if (Suggestions is not null)
+        {
+            <datalist id="@SuggestionsId" data-filter-by="@SuggestionsFilteredBy">
+                @foreach (var suggestion in SuggestionsFilteredBy is null ? Suggestions.DistinctBy(s => s.Value, StringComparer.OrdinalIgnoreCase) : Suggestions)
+                {
+                    <option value="@suggestion.Value" data-filter="@(SuggestionsFilteredBy is null ? null : string.Join('|', suggestion.FilterValues))"></option>
+                }
+            </datalist>
+        }
     }
     @if (ValidationFor is not null)
     {
@@ -39,6 +52,8 @@
     [Parameter] public string? TextColor { get; set; }
     [Parameter] public string? BackColor { get; set; }
     [Parameter] public int NumberOfRows { get; set; }
+    [Parameter] public IEnumerable<TextSuggestion>? Suggestions { get; set; }
+    [Parameter] public string? SuggestionsFilteredBy { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
@@ -51,4 +66,5 @@
     string PlaceholderText => string.IsNullOrWhiteSpace(Placeholder) ? string.Empty : Localizer[Placeholder].Value;
     string Disabled => IsDisabled ? "disabled" : string.Empty;
     bool IsTextArea => NumberOfRows > 1;
+    string SuggestionsId => $"{Label}-suggestions";
 }

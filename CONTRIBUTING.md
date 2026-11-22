@@ -115,7 +115,7 @@ Publishing from Visual Studio is not possible: password-based publishing (basic 
 [`Directory.Build.props`](Directory.Build.props) has no matching git tag `v<Version>` yet.
 
 To release:
-1. Step up `<Version>` and `<AssemblyVersion>` in `Directory.Build.props`.
+1. Step up `<Version>` in `Directory.Build.props` (the assembly version follows it).
 2. Add a section `## Release <Version>` with the line `Released <yyyy-MM-dd>` at the top of [`RELEASENOTES.md`](RELEASENOTES.md).
 If the change affects the users or the app's security, add a very short bullet. If it only has internal changes (refactoring, tests, documentation), add the bullet `- Maintenance update.`
 3. Push to `master`. The workflow builds, tests, publishes and deploys, checks that the deployed files match the build,
