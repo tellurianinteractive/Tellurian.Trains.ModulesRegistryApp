@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.5
+Released 2026-11-22
+- The front page shows a random photo from a module meeting, with the meeting's place, country and date. Faces in the photos are blurred, so people can't be recognised.
+- The station form has Is manned, Is industrial area and Has turntable.
+- "Is key required?" is back in the station form: a key is needed to lock and unlock the lockable tracks. The lock key name is shown only when it is checked.
 ## Release 1.16.4
 Released 2026-11-22
 - Tracks can be marked as lockable: locked and unlocked with a key, or released and revoked by the controlling station.
