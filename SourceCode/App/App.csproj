@@ -39,7 +39,6 @@
 		<None Update="StatusPages\site-unavailable.html" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
 		<None Update="Shared/NavMenu.razor.css" CssScope="NavMenu" />
 		<Folder Include="wwwroot\css\fontawesome\" />
-		<None Include="wwwroot\images\Image1.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -122,21 +121,6 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\ReasonsForNotAuthorised.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Content\Markdown\FrontImage.sv.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Content\Markdown\FrontImage.nb.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Content\Markdown\FrontImage.de.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Content\Markdown\FrontImage.da.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Content\Markdown\FrontImage.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Content\Markdown\Help\wiFredConfigurationPage.png">

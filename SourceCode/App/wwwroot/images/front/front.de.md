@@ -1,0 +1,1 @@
+﻿*Modultreffen sind gesellschaftliche Veranstaltungen.*

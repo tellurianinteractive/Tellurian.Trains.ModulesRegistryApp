@@ -1,0 +1,32 @@
+@inject FrontImageService FrontImages
+@inject IStringLocalizer<Strings> Localizer
+@* A random front page photo with its caption and the meeting's facts; recent meetings are shown more often (FrontImageService). *@
+
+@if (Image is not null)
+{
+    var meeting = Image.Meeting;
+    <img style="width: 100%; height: auto; padding-bottom:10px" src="images/front/@Image.FileName" alt=""
+         width="@(Image.Width > 0 ? Image.Width : null)" height="@(Image.Height > 0 ? Image.Height : null)" />
+    @((MarkupString)Image.CaptionHtml(LanguageExtensions.CurrentLanguage))
+    <p class="small text-muted">
+        @if (meeting.WebLink is not null)
+        {
+            <a href="@meeting.WebLink" target="_blank" rel="noopener">@meeting.MeetingName</a>
+        }
+        else
+        {
+            @meeting.MeetingName
+        }
+        <span>, @meeting.Place, @meeting.Country.AsLocalized(), @meeting.MeetingDate.ToString("d")</span>
+        @if (meeting.Credit.HasValue)
+        {
+            <span> · @string.Format(Localizer["PhotoCredit"].Value, meeting.Credit)</span>
+        }
+    </p>
+}
+
+@code {
+    private FrontImage? Image;
+
+    protected override void OnInitialized() => Image = FrontImages.Random();
+}

@@ -447,6 +447,9 @@
   <data name="AcceptedNorm" xml:space="preserve">
     <value>Norm document (link)</value>
   </data>
+  <data name="PhotoCredit" xml:space="preserve">
+    <value>Photo: {0}</value>
+  </data>
   <data name="Wheelset" xml:space="preserve">
     <value>Wheelset</value>
   </data>

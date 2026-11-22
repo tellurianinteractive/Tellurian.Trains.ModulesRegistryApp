@@ -1,0 +1,1 @@
+﻿*Nordic meetings usually mean timber, timber and timber. Stormofoss is one of the loading terminals.*

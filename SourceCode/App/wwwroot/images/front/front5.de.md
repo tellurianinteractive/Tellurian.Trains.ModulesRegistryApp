@@ -1,0 +1,1 @@
+﻿*Nordische Treffen bedeuten meistens Holz, Holz und Holz. Stormofoss ist eines der Verladeterminals.*

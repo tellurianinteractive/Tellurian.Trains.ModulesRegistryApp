@@ -134,6 +134,10 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<CargoService>();
 builder.Services.AddScoped<ContentService>();
+// Singleton: reads the front page photos and their captions once at startup.
+builder.Services.AddSingleton(sp => new FrontImageService(
+    Path.Combine(builder.Environment.WebRootPath ?? Path.Combine(builder.Environment.ContentRootPath, "wwwroot"), "images", "front"),
+    sp.GetRequiredService<TimeProvider>()));
 builder.Services.AddScoped<CountryService>();
 builder.Services.AddScoped<DocumentService>();
 builder.Services.AddScoped<EmptyWagonOrderService>();

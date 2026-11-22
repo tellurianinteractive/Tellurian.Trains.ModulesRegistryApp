@@ -1,0 +1,1 @@
+﻿*Nordiske træf betyder som regel tømmer, tømmer og tømmer. Stormofoss er en af læsseterminalerne.*

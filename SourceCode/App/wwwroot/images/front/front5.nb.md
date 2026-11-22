@@ -1,0 +1,1 @@
+﻿*Nordiske treff betyr som regel tømmer, tømmer og tømmer. Stormofoss er en av lasteterminalene.*

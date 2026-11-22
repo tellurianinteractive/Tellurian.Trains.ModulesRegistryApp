@@ -252,6 +252,9 @@
   <data name="Pallets" xml:space="preserve">
     <value>Palety</value>
   </data>
+  <data name="PhotoCredit" xml:space="preserve">
+    <value>Zdjęcie: {0}</value>
+  </data>
   <data name="Pieces" xml:space="preserve">
     <value>Sztuki</value>
   </data>

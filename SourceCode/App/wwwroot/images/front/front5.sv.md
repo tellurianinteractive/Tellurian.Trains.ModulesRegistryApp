@@ -1,0 +1,1 @@
+﻿*Nordiska träffar betyder oftast timmer, timmer och timmer. Stormofoss är en av lastterminalerna.*

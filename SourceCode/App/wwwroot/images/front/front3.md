@@ -1,0 +1,1 @@
+﻿*A rare and memorable event, an early FREMO H0 meeting arranged in Sweden.*

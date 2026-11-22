@@ -1,0 +1,1 @@
+﻿*Modultreffer er sosiale arrangementer.*
