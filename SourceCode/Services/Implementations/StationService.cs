@@ -134,9 +134,7 @@ public class StationService(IDbContextFactory<ModulesDbContext> factory, ITimePr
             if (existing is null || !await dbContext.MayEditStationAsync(principal, existing.Id)) return principal.SaveNotAuthorised<Station>();
             entity.PrimaryModuleId = existing.PrimaryModuleId;
             entity.PdfInstructionId = existing.PdfInstructionId;
-            entity.KeepKeyRequiredOf(existing);
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
-            existing.RemoveRedundantKeyRequired(await dbContext.StationTracks.AnyAsync(t => t.StationId == existing.Id && t.IsLockable));
             if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
             return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(existing);
         }

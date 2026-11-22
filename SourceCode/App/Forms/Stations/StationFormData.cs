@@ -57,7 +57,10 @@ public class StationFormData : IValidatableObject
     [Display(Name = "HasTurntable")]
     public bool HasTurntable { get; set; }
 
-    // The old IsKeyRequired flag is not in the form (2026-11-22): a lock key name and lockable tracks say that a key is required.
+    [Display(Name = "IsKeyRequired")]
+    public bool IsKeyRequired { get; set; }
+
+    // Shown only when a key is required (CSS, site.css), and cleared when saved without one.
     [Display(Name = "LockKeyName")]
     [StringLength(5)]
     [OrdinaryText]

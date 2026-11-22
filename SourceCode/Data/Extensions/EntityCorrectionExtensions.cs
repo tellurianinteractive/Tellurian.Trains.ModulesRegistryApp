@@ -19,7 +19,8 @@ public static class EntityCorrectionExtensions
         {
             station.FullName = station.FullName.Corrected(TextCase.InitialCapital);
             station.Signature = station.Signature.Corrected(countryCasings.Of(TextKinds.StationSignature, TextCase.InitialCapital));
-            station.LockKeyName = station.LockKeyName.Corrected(TextCase.AsTyped, Optional);
+            // The key's name only when a key is required; the hidden field is still posted.
+            station.LockKeyName = station.IsKeyRequired ? station.LockKeyName.Corrected(TextCase.AsTyped, Optional) : null;
             foreach (var track in station.StationTracks ?? []) track.CorrectInput();
         }
     }

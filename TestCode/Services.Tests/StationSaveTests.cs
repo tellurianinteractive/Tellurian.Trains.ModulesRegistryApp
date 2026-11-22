@@ -136,25 +136,39 @@ public sealed class StationSaveTests
     }
 
     [TestMethod]
-    public async Task TheOldKeyFlagIsClearedWhenALockKeyNameAndALockableTrackSayIt()
+    public async Task TheKeyNameIsKeptOnlyWhenAKeyIsRequired()
     {
-        // 2026-11-22: IsKeyRequired is kept for compatibility, but a lock key name and a lockable track say it instead.
+        // 2026-11-22: the key's name is entered only when a key is required; the hidden field is still posted.
+        var withKey = Changed("Station");
+        withKey.IsKeyRequired = true;
+        withKey.LockKeyName = "A";
+        await Stations.SaveAsync(Principal(Owner), withKey);
+        var stored = (await _factory.FindAsync<Station>(OwnersStation))!;
+        Assert.IsTrue(stored.IsKeyRequired);
+        Assert.AreEqual("A", stored.LockKeyName);
+
+        var withoutKey = Changed("Station");
+        withoutKey.IsKeyRequired = false;
+        withoutKey.LockKeyName = "A";
+        await Stations.SaveAsync(Principal(Owner), withoutKey);
+        stored = (await _factory.FindAsync<Station>(OwnersStation))!;
+        Assert.IsFalse(stored.IsKeyRequired);
+        Assert.IsNull(stored.LockKeyName);
+    }
+
+    [TestMethod]
+    public async Task ALockableTrackDoesNotChangeTheKeyFlag()
+    {
         await using (var dbContext = _factory.CreateDbContext())
         {
-            (await dbContext.Stations.FindAsync(OwnersStation))!.IsKeyRequired = true;
+            var station = (await dbContext.Stations.FindAsync(OwnersStation))!;
+            station.IsKeyRequired = true;
+            station.LockKeyName = "A";
             await dbContext.SaveChangesAsync();
         }
-        var named = Changed("Station");
-        named.LockKeyName = "A";
-        await Stations.SaveAsync(Principal(Owner), named);
-        Assert.IsTrue((await _factory.FindAsync<Station>(OwnersStation))!.IsKeyRequired, "A name alone, without a lockable track.");
-
         var lockable = new StationTrack { Id = Track, StationId = OwnersStation, Designation = "1", DisplayOrder = 1, MaxTrainLength = 3, DirectionId = 10, IsLockable = true };
-        Assert.IsGreaterThan(0, (await Tracks.SaveOrUpdateAsync(Principal(Owner), lockable)).Count, "The track, and the station's flag.");
-
-        var stored = (await _factory.FindAsync<Station>(OwnersStation))!;
-        Assert.AreEqual("A", stored.LockKeyName);
-        Assert.IsFalse(stored.IsKeyRequired);
+        Assert.AreEqual(1, (await Tracks.SaveOrUpdateAsync(Principal(Owner), lockable)).Count);
+        Assert.IsTrue((await _factory.FindAsync<Station>(OwnersStation))!.IsKeyRequired);
     }
 
     [TestMethod]

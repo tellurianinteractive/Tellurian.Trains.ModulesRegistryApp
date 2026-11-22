@@ -427,3 +427,9 @@ blockquote {
     justify-content: flex-end;
     gap: 0.5rem;
 }
+
+/* The station form's lock key name is shown only while "Is key required?" is checked (2026-11-22). The wrapper takes no box of its
+   own, so the field stays a column in the form's row. */
+.lock-key-name { display: contents; }
+.lock-key-name > div { display: none; }
+form:has(input[name="Form.IsKeyRequired"]:checked) .lock-key-name > div { display: block; }

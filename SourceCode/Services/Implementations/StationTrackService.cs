@@ -24,7 +24,6 @@ public class StationTrackService(IDbContextFactory<ModulesDbContext> factory)
         if (entity.Id > 0 && existing is null) return entity.NonExisting();
         if (existing is not null) entity.StationId = existing.StationId; // A track never moves to another station.
         if (!await dbContext.MayEditStationAsync(principal, entity.StationId)) return entity.NotAuthorised();
-        if (entity.IsLockable && await dbContext.Stations.FindAsync(entity.StationId) is { } station) station.RemoveRedundantKeyRequired(hasLockableTrack: true);
         if (existing is not null)
         {
             dbContext.Entry(existing).CurrentValues.SetValues(entity);

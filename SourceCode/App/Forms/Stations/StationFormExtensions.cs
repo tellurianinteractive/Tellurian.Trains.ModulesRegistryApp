@@ -21,6 +21,7 @@ public static class StationFormExtensions
             IsManned = entity.IsManned,
             IsIndustrialArea = entity.IsIndustrialArea,
             HasTurntable = entity.HasTurntable,
+            IsKeyRequired = entity.IsKeyRequired,
             LockKeyName = entity.LockKeyName,
             OperationInstructionsMarkdown = entity.OperationInstructionsMarkdown,
         };
@@ -47,6 +48,7 @@ public static class StationFormExtensions
             entity.IsManned = form.IsManned;
             entity.IsIndustrialArea = form.IsIndustrialArea;
             entity.HasTurntable = form.HasTurntable;
+            entity.IsKeyRequired = form.IsKeyRequired;
             entity.LockKeyName = form.LockKeyName;
             entity.OperationInstructionsMarkdown = form.OperationInstructionsMarkdown;
             return entity;

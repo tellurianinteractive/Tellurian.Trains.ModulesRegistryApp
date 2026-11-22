@@ -46,7 +46,9 @@
         <AppInputCheck Width="2" Label="IsIndustrialArea" @bind-Value="Form!.IsIndustrialArea" />
         <AppInputCheck Width="2" Label="HasTurntable" @bind-Value="Form!.HasTurntable" />
         <AppInputCheck Width="2" Label="IsManned" @bind-Value="Form!.IsManned" />
-        <AppInputText Width="2" Label="LockKeyName" @bind-Value="Form!.LockKeyName" />
+        <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Form!.IsKeyRequired" />
+        @* Shown only while "Is key required?" is checked (site.css, .lock-key-name), also without JavaScript. *@
+        <div class="lock-key-name"><AppInputText Width="2" Label="LockKeyName" @bind-Value="Form!.LockKeyName" /></div>
         <AppInputText Width="12" Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Form!.OperationInstructionsMarkdown" NumberOfRows="10" />
     </Inputs>
 </EditTemplate>

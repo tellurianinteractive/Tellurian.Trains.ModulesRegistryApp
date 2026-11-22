@@ -25,12 +25,12 @@ public partial class Station
     public bool IsJunction { get; set; }
     public bool IsIndustrialArea { get; set; }
     /// <summary>
-    /// The old flag that a key is required; kept for compatibility with other apps, not shown in the app (2026-11-22). Use
-    /// <c>IsLockKeyRequired</c>, which also counts <see cref="LockKeyName"/> and lockable tracks; when those
-    /// say it, the flag is cleared when saved (<c>RemoveRedundantKeyRequired</c>).
+    /// A key is required to lock and unlock the station's lockable tracks (the meaning since 2026-11-22). Lockable tracks can also be
+    /// controlled without a key, for example through the switch gear. The key's name (<see cref="LockKeyName"/>) is entered only when a key
+    /// is required.
     /// </summary>
-    public bool IsKeyRequired { get; internal set; }
-    /// <summary>The name of the key that locks the station's lockable tracks; the key is held at the controlling station (set in other apps).</summary>
+    public bool IsKeyRequired { get; set; }
+    /// <summary>The name of the key, held at the controlling station (set in other apps); only when <see cref="IsKeyRequired"/>.</summary>
     public string LockKeyName { get; set; }
     public bool HasTurntable { get; set; }
     public bool HasCargoCustomers { get; set; } = true;
@@ -61,24 +61,9 @@ public static class StationExtensions
     extension(Station station)
     {
         /// <summary>
-        /// A key is required (2026-11-22): the old <see cref="Station.IsKeyRequired"/> flag, or a <see cref="Station.LockKeyName"/> with at least
-        /// one lockable track. Needs the station's tracks loaded.
+        /// A key is required (decided 2026-11-22): exactly <see cref="Station.IsKeyRequired"/>. Lockable tracks alone don't require a key,
+        /// since they can also be controlled through the switch gear.
         /// </summary>
-        public bool IsLockKeyRequired => station.IsKeyRequired || station.HasLockKeyAndLockableTrack(station.StationTracks.Any(t => t.IsLockable));
-
-        /// <summary>A lock key name and, as <paramref name="hasLockableTrack"/> tells, at least one lockable track.</summary>
-        public bool HasLockKeyAndLockableTrack(bool hasLockableTrack) => hasLockableTrack && !string.IsNullOrWhiteSpace(station.LockKeyName);
-
-        /// <summary>The stored value of the old <see cref="Station.IsKeyRequired"/> flag, which a save never takes from a page.</summary>
-        public void KeepKeyRequiredOf(Station stored) => station.IsKeyRequired = stored.IsKeyRequired;
-
-        /// <summary>
-        /// Clears the old <see cref="Station.IsKeyRequired"/> flag when the lock key name and a lockable track already say that a key is
-        /// required, so the flag only remains where the new data doesn't tell it. Called by the services when a station or a track is saved.
-        /// </summary>
-        public void RemoveRedundantKeyRequired(bool hasLockableTrack)
-        {
-            if (station.HasLockKeyAndLockableTrack(hasLockableTrack)) station.IsKeyRequired = false;
-        }
+        public bool IsLockKeyRequired => station.IsKeyRequired;
     }
 }
