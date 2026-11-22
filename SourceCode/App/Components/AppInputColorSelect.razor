@@ -1,4 +1,4 @@
-@using System.Diagnostics.CodeAnalysis
+﻿@using System.Diagnostics.CodeAnalysis
 
 @inherits AppInputBase<string>
 @inject IStringLocalizer<Strings> Localizer
@@ -9,12 +9,17 @@
    message) and in interactive ones. The value is the hex code. *@
 
 <div class="@WidthCss">
-    <fieldset class="color-swatches" disabled="@IsDisabled">
-        @if (Label.HasValue)
+    <fieldset class="color-swatches" disabled="@IsDisabled" aria-label="@(HideLabel ? LabelText(Localizer) : null)">
+        @if (HideLabel)
+        {
+            @* Takes the place of the label, so the swatches line up with the fields beside them. *@
+            <div class="form-control-label" aria-hidden="true">&nbsp;</div>
+        }
+        else if (Label.HasValue)
         {
             <legend class="form-control-label">@LabelText(Localizer)</legend>
         }
-        <div class="color-swatch-list">
+        <div class="@(HideLabel ? "color-swatch-list color-swatch-list-aligned" : "color-swatch-list")">
             @foreach (var color in Colors ?? [])
             {
                 var id = $"{Label}-{color.Name}";
@@ -37,6 +42,11 @@
 
 @code {
     [Parameter] public IEnumerable<NamedColor>? Colors { get; set; }
+    /// <summary>
+    /// No visible label where the swatches speak for themselves (beside the field they colour); the label is still read by screen
+    /// readers.
+    /// </summary>
+    [Parameter] public bool HideLabel { get; set; }
 
     bool IsSelected(NamedColor color) => color.HexColor.EqualsCaseInsensitive(CurrentValue);
 

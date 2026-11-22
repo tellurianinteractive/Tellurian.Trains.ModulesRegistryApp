@@ -56,10 +56,9 @@
         <AppInputText Width="4" Label="Name" @bind-Value="Form!.CustomerName" />
         <AppInputText Width="8" Label="Comment" @bind-Value="Form!.Comment" />
         <AppInputText Width="3" Label="TrackOrArea" @bind-Value="Form!.TrackOrArea" BackColor="@Form!.TrackOrAreaColor" TextColor="@Form!.TrackOrAreaColor.TextColor" />
-        <AppInputColorSelect Width="5" Label="Color" Colors="RegionColors.All" @bind-Value="Form!.TrackOrAreaColor" />
-        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" @bind-Value="Form!.OpenedYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" @bind-Value="Form!.ClosedYear" />
-        <AppYearPeriodHint />
+        <AppInputColorSelect Width="5" Label="Color" HideLabel="true" Colors="RegionColors.All" @bind-Value="Form!.TrackOrAreaColor" />
+        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.OpenedYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ClosedYear" />
     </Inputs>
 </EditTemplate>
 

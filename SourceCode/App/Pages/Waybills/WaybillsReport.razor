@@ -6,9 +6,13 @@
 
 @layout PrintLayout
 @attribute [StreamRendering]
-@* Static SSR (Migration step 3.3a): pure print output. Streaming shows "Creating report" until the waybills are ready. *@
+@* Static SSR (Migration step 3.3a): pure print output. Streaming shows "Creating report" until the waybills are ready.
+   A customer's waybills can be filtered as on the customer's waybills page (StationCustomerWaybillsFilter in the query string),
+   so a print has exactly the waybills shown there. *@
+@using ModulesRegistry.Pages.Stations
 @inject IStringLocalizer<Strings> Localizer
 @inject WaybillService WaybillService
+@inject StationCustomerWaybillsService StationCustomerWaybillsService
 @inject LayoutService LayoutService
 @if (Waybills is null)
 {
@@ -39,6 +43,10 @@ else
     [Parameter] public int LayoutId { get; set; }
     [Parameter] public int? LayoutStationId { get; set; }
     [Parameter] public int? GroupId { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.FlowName)] public string? Flow { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.StationName)] public string? OtherStation { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.CustomerName)] public string? OtherCustomer { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.CargoName)] public string? Cargo { get; set; }
 
     ClaimsPrincipal? Principal;
     IEnumerable<Waybill>? Waybills { get; set; }
@@ -62,6 +70,13 @@ else
             else if (StationId > 0)
             {
                 var items = await WaybillService.GetStationCustomerWaybillsAsync(Principal, StationId.Value, CustomerId, true, true);
+                var filter = new StationCustomerWaybillsFilter { Flow = Flow, Station = OtherStation, Customer = OtherCustomer, Cargo = Cargo };
+                if (CustomerId > 0 && filter.HasFilter)
+                {
+                    // The filter matches the texts of the waybills page, so it's applied to the same waybills, by their ids.
+                    var shown = filter.Apply(await StationCustomerWaybillsService.GetStationCustomerWaybillsAsync(Principal, CustomerId.Value)).Select(w => w.Id).ToHashSet();
+                    items = items.Where(w => shown.Contains(w.Id)).ToList();
+                }
                 Waybills = items.AsPrintableWaybills();
             }
             else if (GroupId > 0)

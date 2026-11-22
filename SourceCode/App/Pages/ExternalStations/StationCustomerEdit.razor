@@ -40,9 +40,8 @@
 <EditTemplate Item="Form" FormName="customer" OnValidSubmit="SaveAsync">
     <Inputs>
         <AppInputText Width="4" Label="Name" @bind-Value="Form!.CustomerName" />
-        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" @bind-Value="Form!.OpenedYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" @bind-Value="Form!.ClosedYear" />
-        <AppYearPeriodHint />
+        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.OpenedYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ClosedYear" />
     </Inputs>
 </EditTemplate>
 

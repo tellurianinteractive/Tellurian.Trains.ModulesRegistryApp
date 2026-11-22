@@ -28,18 +28,7 @@ public class FilterColumn<TGridItem, TProp> : PropertyColumn<TGridItem, TProp>
         HeaderContent = builder =>
         {
             title(builder);
-            builder.OpenElement(0, "input");
-            builder.AddAttribute(1, "type", "search");
-            builder.AddAttribute(2, "name", FilterName);
-            builder.AddAttribute(3, "form", FilterForm);
-            builder.AddAttribute(4, "value", FilterValue);
-            builder.AddAttribute(5, "class", "form-control form-control-sm col-filter");
-            builder.AddAttribute(6, "autocomplete", "off");
-            builder.AddAttribute(7, "aria-label", Title);
-            // It isn't obvious that the fields are for filtering, so they say so (as placeholder and as tooltip).
-            builder.AddAttribute(8, "placeholder", Localizer["EnterSearchValue"].Value);
-            builder.AddAttribute(9, "title", Localizer["EnterSearchValue"].Value);
-            builder.CloseElement();
+            FilterField.Render(builder, FilterName, FilterForm, FilterValue, Title, Localizer);
         };
     }
 }

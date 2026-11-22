@@ -43,6 +43,22 @@ public sealed class FrontImageViewTests
     }
 
     [TestMethod]
+    [DataRow("en", "Sweden, 2022-03-15.")]
+    [DataRow("en-US", "Sweden, 2022-03-15.")]
+    [DataRow("en-GB", "Sweden, 2022-03-15.")]
+    [DataRow("de-DE", "Schweden, 2022-03-15.")]
+    [DataRow("da-DK", "Sverige, 2022-03-15.")]
+    [DataRow("nb-NO", "Sverige, 2022-03-15.")]
+    public async Task MeetingDateIsIsoInAllLanguages(string culture, string expected)
+    {
+        WriteMeeting("""{ "meetingDate": "2022-03-15", "meetingName": "Grimslöv 2022", "place": "Grimslöv", "country": "Sweden" }""");
+
+        var html = await RenderAsync(culture);
+
+        StringAssert.Contains(html, $"Grimslöv, {expected}</em>");
+    }
+
+    [TestMethod]
     public async Task LinkAndCreditAreOnTheSameLine()
     {
         WriteMeeting("""{ "meetingDate": "2022-03-15", "meetingName": "Grimslöv 2022", "place": "Grimslöv", "country": "Sweden", "link": "https://example.com/", "credit": "A photographer" }""");

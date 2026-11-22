@@ -1,4 +1,4 @@
-html, body {
+﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -213,6 +213,15 @@ blockquote {
         margin: 2px 0 0 0.4rem;
     }
 
+    /* A coloured label as wide as the filter field above it (FilterTemplateColumn): a cell has 0.4rem more padding on its right
+       than the field leaves (td: 0.4rem + --col-gap; field: --col-gap), so the label reaches into it. */
+    .quickgrid .col-filter-label {
+        display: block;
+        padding: 0.2rem 0.5rem;
+        margin-right: -0.4rem;
+        border-radius: var(--bs-border-radius-sm);
+    }
+
     /* Sortable columns (the title is a link in static pages, a button in interactive ones) show a faint up-down arrow
        until sorted, when QuickGrid shows the direction; the title is highlighted under the pointer. */
     .quickgrid th:not(.col-sort-asc, .col-sort-desc) :is(a, button).col-title .sort-indicator {
@@ -251,12 +260,13 @@ blockquote {
         visibility: visible;
     }
 
-/* Person search suggestions (AppSearchPerson.razor + js/person-search.js; list items are created by the script, so not scoped CSS). */
-.person-search {
+/* Person search suggestions (AppSearchPerson.razor + js/person-search.js) and select typeahead (AppInputSelect with Typeahead +
+   js/select-typeahead.js); list items are created by the scripts, so not scoped CSS. */
+.person-search, .typeahead {
     position: relative;
 }
 
-.person-search-list {
+.person-search-list, .typeahead-list {
     position: absolute;
     z-index: 1000;
     width: 100%;
@@ -267,7 +277,7 @@ blockquote {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-    .person-search-list .list-group-item {
+    .person-search-list .list-group-item, .typeahead-list .list-group-item {
         cursor: pointer;
     }
 
@@ -355,6 +365,12 @@ blockquote {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+}
+
+/* Without a visible label: as high as a field and centred, so the swatches line up with the fields beside them. */
+.color-swatch-list-aligned {
+    align-items: center;
+    min-height: calc(1.5em + 0.75rem + 2px);
 }
 
 .color-swatch-input {

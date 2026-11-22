@@ -1,9 +1,13 @@
 ﻿@page "/Stations/{stationId:int}/Customers/{id:int}/Waybills"
 
 @attribute [Authorize(Policy = "User")]
-@* Static SSR (Migration step 3.6): a freight customer's waybills. Update generates the missing waybills from the cargo flows (the
-   AddGenerated*Waybills procedures) as a POST form; each waybill's print settings are edited on CustomerWaybillEdit. Only those
-   who may edit the station get Update and Edit. While Update runs, busy-form.js shows "Updating waybills". The customer must be at the station in the address. *@
+@* Static SSR (Migration step 3.6): a freight customer's waybills, as a QuickGrid with filters on direction, other station, other
+   customer and cargo in the column headers (FilterColumn), joined to the GET form waybills-filter, so filter and sort are in the
+   query string. Update generates the missing waybills from the cargo flows (the AddGenerated*Waybills procedures) as a POST form;
+   each waybill's print settings are edited on CustomerWaybillEdit. Mark as printed sets the print count of the waybills shown
+   (all, or the filtered ones) to zero, and Preview prints the waybills shown; both use StationCustomerWaybillsFilter, so they
+   act on the same waybills as the list. Only those who may edit the station get Update, Mark as printed and Edit. While Update
+   runs, busy-form.js shows "Updating waybills". The customer must be at the station in the address. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
@@ -28,46 +32,65 @@ else
             </form>
         }
         <AppButton Label="Preview" Href="@PreviewHref" AlwaysShowLabel="true" />
+        @if (MayEdit && ShownWaybills.Any(w => w.PrintCount > 0))
+        {
+            @* After printing: the print count of the waybills shown becomes zero, so the next print leaves them out. The form
+               posts to the page's address, filter included, and the server applies the filter again. *@
+            <form method="post" @formname="mark-printed" @onsubmit="MarkAsPrintedAsync" data-enhance>
+                <AntiforgeryToken />
+                <AppButton Label="@(Filter.HasFilter ? "MarkShownAsPrinted" : "MarkAllAsPrinted")" IsSubmit="true" IconName="@FontAwesome.Ok" AlwaysShowLabel="true" />
+            </form>
+        }
     </div>
     @* Shown by busy-form.js while the waybills are generated; the page that comes back has it hidden again. *@
     <div id="updating-waybills" hidden>
         <ActionMessage Label="UpdatingWaybills" AlertType="Info" />
     </div>
 
-    <TableTemplate Items="Waybills">
-        <TableHeader>
-            <th>@Localizer["Id"]</th>
-            <th>@Localizer["Direction"]</th>
-            <th>@Localizer["Station"]</th>
-            <th>@Localizer["FreightCustomer"]</th>
-            <th>@Localizer["Cargo"]</th>
-            <th>@Localizer["Quantity"]</th>
-            <th>@Localizer["Days"]</th>
-            <th>@Localizer["PrintPerOperatingDay"]</th>
-            <th>@Localizer["HasEmptyReturn"]</th>
-            <th style="text-align: center">@Localizer["PrintCount"]</th>
-            @if (MayEdit)
-            {
-                <th>@Localizer["Actions"]</th>
-            }
-        </TableHeader>
-        <RowTemplate Context="item">
-            <td>@item.Id</td>
-            <td>@item.StationCustomerCargo.Direction.LongNameLocalized()</td>
-            <td style="@item.OtherRegion.Style()">@item.OtherStationName()</td>
-            <td>@item.OtherCustomerName()</td>
-            <td>@item.CargoName()</td>
-            <td>@item.QuantityAndUnit()</td>
-            <td>@item.OperatingDay.ShortNameLocalized()</td>
-            <td align="center">@item.PrintPerOperatingDay.AsYesOrNo()</td>
-            <td align="center">@item.HasEmptyReturn()</td>
-            <td align="center">@item.PrintCount</td>
-            @if (MayEdit)
-            {
-                <td><AppButton Label="Edit" Href="@($"Stations/{StationId}/Customers/{Id}/Waybills/{item.Id}/Edit")" /></td>
-            }
-        </RowTemplate>
-    </TableTemplate>
+    <form id="waybills-filter" method="get" data-auto-submit data-enhance class="noprint">
+        @if (Sort.HasValue)
+        {
+            <input type="hidden" name="sort" value="@Sort" />
+            <input type="hidden" name="direction" value="@SortDirection" />
+        }
+        <button type="submit" class="visually-hidden">@Localizer["Filter"]</button>
+    </form>
+
+    <div class="grid" tabindex="-1">
+        <QuickGrid Items="@ShownWaybills.AsQueryable()">
+            <PropertyColumn Property="@(w => w.Id)" Sortable="true" Title="@Localizer["Id"]" />
+            <FilterColumn Property="@(w => w.StationCustomerCargo.Direction.LongNameLocalized())" Sortable="true" Title="@Localizer["Direction"]"
+                          FilterForm="waybills-filter" FilterName="@StationCustomerWaybillsFilter.FlowName" FilterValue="@Flow" />
+            <FilterTemplateColumn Title="@Localizer["Station"]" SortBy="@StationSort" Context="item"
+                                  FilterForm="waybills-filter" FilterName="@StationCustomerWaybillsFilter.StationName" FilterValue="@OtherStation">
+                <span class="col-filter-label" style="@item.OtherRegion.Style()"><span class="@OtherStationIcon(item)" title="@OtherStationKind(item)" aria-hidden="true"></span> @item.OtherStationName()</span>
+            </FilterTemplateColumn>
+            <FilterColumn Property="@(w => w.OtherCustomerName())" Sortable="true" Title="@Localizer["FreightCustomer"]"
+                          FilterForm="waybills-filter" FilterName="@StationCustomerWaybillsFilter.CustomerName" FilterValue="@OtherCustomer" />
+            <FilterColumn Property="@(w => w.CargoName())" Sortable="true" Title="@Localizer["Cargo"]"
+                          FilterForm="waybills-filter" FilterName="@StationCustomerWaybillsFilter.CargoName" FilterValue="@Cargo" />
+            <PropertyColumn Property="@(w => w.QuantityAndUnit())" Title="@Localizer["Quantity"]" />
+            <PropertyColumn Property="@(w => w.OperatingDay.ShortNameLocalized())" Title="@Localizer["Days"]" />
+            <PropertyColumn Property="@(w => w.PrintPerOperatingDay.AsYesOrNo())" Title="@Localizer["PrintPerOperatingDay"]" Align="Align.Center" />
+            <PropertyColumn Property="@(w => w.HasEmptyReturn())" Title="@Localizer["HasEmptyReturn"]" Align="Align.Center" />
+            <PropertyColumn Property="@(w => w.PrintCount)" Sortable="true" Title="@Localizer["PrintCount"]" Align="Align.Center" />
+            <TemplateColumn Title="@Localizer["Actions"]" Context="item">
+                <HeaderTemplate Context="column">
+                    <div class="col-title"><div class="col-title-text">@column.Title</div></div>
+                    @if (Filter.HasFilter)
+                    {
+                        <div class="col-filter-clear"><AppButton Label="ClearFilter" Href="@ClearFilterHref" IconName="@FontAwesome.Erase" /></div>
+                    }
+                </HeaderTemplate>
+                <ChildContent>
+                    @if (MayEdit)
+                    {
+                        <AppButton Label="Edit" Href="@($"Stations/{StationId}/Customers/{Id}/Waybills/{item.Id}/Edit")" />
+                    }
+                </ChildContent>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
 }
 
 @code {
@@ -75,11 +98,21 @@ else
     [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public int StationId { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.FlowName)] public string? Flow { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.StationName)] public string? OtherStation { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.CustomerName)] public string? OtherCustomer { get; set; }
+    [SupplyParameterFromQuery(Name = StationCustomerWaybillsFilter.CargoName)] public string? Cargo { get; set; }
+    [SupplyParameterFromQuery(Name = "sort")] public string? Sort { get; set; }
+    [SupplyParameterFromQuery(Name = "direction")] public string? SortDirection { get; set; }
 
     ClaimsPrincipal? Principal;
     StationCustomer? Customer;
-    IEnumerable<StationCustomerWaybill>? Waybills;
+    IEnumerable<StationCustomerWaybill> Waybills = [];
     bool MayEdit;
+
+    StationCustomerWaybillsFilter Filter => new() { Flow = Flow, Station = OtherStation, Customer = OtherCustomer, Cargo = Cargo };
+    IEnumerable<StationCustomerWaybill> ShownWaybills => Filter.Apply(Waybills);
+    static readonly GridSort<StationCustomerWaybill> StationSort = GridSort<StationCustomerWaybill>.ByAscending(w => w.OtherStationName());
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,9 +128,30 @@ else
         Waybills = await WaybillService.GetStationCustomerWaybillsAsync(Principal, Id);
     }
 
-    string SelfHref => $"Stations/{StationId}/Customers/{Id}/Waybills";
+    // A school for a module station, a globe for an external station (as on the freight customers page).
+    static string OtherStationIcon(StationCustomerWaybill waybill) => waybill.IsOtherModuleStation ? FontAwesome.Station : FontAwesome.ExternalStation;
+    string OtherStationKind(StationCustomerWaybill waybill) => Localizer[waybill.IsOtherModuleStation ? "Station" : "ExternalStation"];
+
+    // After a POST, back to the list as it was: filter and sort stay.
+    string SelfHref => Navigator.Uri;
     string CustomersHref => $"Stations/{StationId}/Customers";
-    string PreviewHref => $"reports/waybills/station/{StationId}/customer/{Id}";
+    string PreviewHref => $"reports/waybills/station/{StationId}/customer/{Id}{Filter.QueryString}";
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?>
+    {
+        [StationCustomerWaybillsFilter.FlowName] = null,
+        [StationCustomerWaybillsFilter.StationName] = null,
+        [StationCustomerWaybillsFilter.CustomerName] = null,
+        [StationCustomerWaybillsFilter.CargoName] = null,
+    });
+
+    async Task MarkAsPrintedAsync()
+    {
+        if (Customer is null || !MayEdit) return;
+        var count = await WaybillService.MarkAsPrintedAsync(Principal, Id, ShownWaybills.Select(w => w.Id));
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(SelfHref);
+    }
 
     async Task GenerateAsync()
     {

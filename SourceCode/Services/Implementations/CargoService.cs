@@ -26,17 +26,14 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
         if (principal.IsAuthenticated())
         {
             var items = await Cache.GetReferenceDataAsync(ReferenceDataCache.Cargos, Factory, db => db.Cargos);
-            if (includeDefaultClasses)
-            {
-                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})"))
-                    .OrderBy(l => l.Description).ToList();
-            }
-            else
-            {
-                return items.Select(c => new ListboxItem(c.Id, $"{c.MajorNhmCode()} {c.LocalizedName().Value}"))
-                    .OrderBy(l => l.Description).ToList();
-
-            }
+            // The typeahead matches the full eight-digit NHM code from its start, and the name anywhere.
+            return items
+                .Select(c => new ListboxItem(c.Id, includeDefaultClasses ? $"{c.MajorNhmCode()} {c.LocalizedName().Value} ({c.DefaultClasses})" : $"{c.MajorNhmCode()} {c.LocalizedName().Value}")
+                {
+                    SearchCode = c.NhmCode == 0 ? null : $"{c.NhmCode:00000000}",
+                    SearchName = c.LocalizedName().Value,
+                })
+                .OrderBy(l => l.Description).ToList();
         }
         return [];
     }
@@ -209,7 +206,12 @@ public sealed class CargoService(IDbContextFactory<ModulesDbContext> factory, IM
 
     }
 
-    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, Description(nhm));
+    // The search code and name are for the typeahead (select-typeahead.js): the code shown, and the name without the code.
+    private static ListboxItem ListboxItem(NHM nhm) => new(nhm.Id, Description(nhm))
+    {
+        SearchCode = nhm.Code![..nhm.LevelDigits],
+        SearchName = nhm.LocalizedName().Value,
+    };
 
     private static string Description(NHM nhm) => $"{nhm.Code![..nhm.LevelDigits]} {nhm.LocalizedName().Value.WordWrapped(200, "<br/>")}";
 

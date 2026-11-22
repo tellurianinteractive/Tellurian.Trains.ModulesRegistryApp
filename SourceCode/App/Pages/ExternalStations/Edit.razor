@@ -28,9 +28,8 @@
         <AppInputText Width="3" Label="InternationalName" @bind-Value="Form!.InternationalName" />
         <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
         <AppInputFill Width="2" />
-        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" @bind-Value="Form!.OpenedYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" @bind-Value="Form!.ClosedYear" />
-        <AppYearPeriodHint />
+        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.OpenedYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ClosedYear" />
     </Inputs>
     <Buttons>
         @if (Existing is not null)

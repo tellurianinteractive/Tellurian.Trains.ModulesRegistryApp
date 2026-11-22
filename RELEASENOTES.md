@@ -1,6 +1,13 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.16.6
+Released 2026-11-22
+- A customer's waybills can be filtered and sorted. Preview prints the waybills shown, and "Mark as printed" sets their print count to zero.
+- Updating waybills no longer changes the print count of existing waybills.
+- The cargo type and NHM code lists can be searched by NHM code or name.
+- Empty year fields show "No limit", with a tooltip telling how an empty year is read.
+- Dates under the front page photo are shown as year-month-day.
 ## Release 1.16.5
 Released 2026-11-22
 - The front page shows a random photo from a module meeting, with the meeting's place, country and date. Faces in the photos are blurred, so people can't be recognised.

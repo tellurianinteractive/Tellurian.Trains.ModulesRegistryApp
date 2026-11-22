@@ -6,6 +6,15 @@ namespace ModulesRegistry.Services.Extensions;
 
 public static class StationCustomerWaybillExtensions
 {
+    extension(StationCustomerWaybill? waybill)
+    {
+        /// <summary>
+        /// The other end is a module station; otherwise an external station (a customer's, or the region's representative one),
+        /// as <see cref="OtherStationName"/> takes it.
+        /// </summary>
+        public bool IsOtherModuleStation => waybill?.OtherStationCustomerCargo?.StationCustomer?.Station is not null;
+    }
+
     public static string CargoName(this StationCustomerWaybill? waybill) =>
         waybill is null ? string.Empty :
         waybill.StationCustomerCargo.Cargo.Localized() ??

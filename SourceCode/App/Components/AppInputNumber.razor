@@ -10,7 +10,7 @@
     {
         <label class="form-control-label text-end" for="@Label">@((MarkupString)LabelMarkup)</label>
     }
-    <input type="number" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" step="@NumberStep" disabled="@IsDisabled" @onfocusout="OnChangedValue" />
+    <input type="number" class="form-control text-end @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" step="@NumberStep" placeholder="@Placeholder" title="@Tooltip" disabled="@IsDisabled" @onfocusout="OnChangedValue" />
     @if (ValidationFor is not null)
     {
         <div class="form-control-validation">
@@ -28,6 +28,11 @@
     [Parameter] public string? Step { get; set; }
     [Parameter] public string? Unit { get; set; }
     [Parameter] public EventCallback OnChangedValue { get; set; }
+    /// <summary>
+    /// A year field of a period (YearPeriod in Data, decided 2026-11-19): when empty, the field says "no limit", and its tooltip says
+    /// that an empty year means no start or end year and that the year itself is included.
+    /// </summary>
+    [Parameter] public YearPeriodEnd? PeriodEnd { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TValue result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
@@ -85,6 +90,14 @@
         if (Unit is null) return string.Format($"{{0:{Format}}}", value);
         return string.Format($"{{0:{Format}}} {{1}}", value, Unit);
     }
+
+    string? Placeholder => PeriodEnd.HasValue ? Localizer["YearEmptyPlaceholder"].Value : null;
+    string? Tooltip => PeriodEnd switch
+    {
+        YearPeriodEnd.From => Localizer["YearFromEmptyTooltip"].Value,
+        YearPeriodEnd.Upto => Localizer["YearUptoEmptyTooltip"].Value,
+        _ => null
+    };
 
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
     string NumberStep => Step is null ? "1" : CurrentValue is double ? ".1" : Step;

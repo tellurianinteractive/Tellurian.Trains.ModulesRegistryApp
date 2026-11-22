@@ -44,6 +44,52 @@ public sealed class FilterColumnTests
         Assert.DoesNotContain("value=", html.Split("col-filter")[1].Split('>')[0], "No value attribute without a filter.");
     }
 
+    [TestMethod]
+    public async Task TemplateColumnHasTheSortLinkTheFilterFieldAndItsOwnCells()
+    {
+        CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en-GB");
+        var services = new ServiceCollection();
+        services.AddLogging().AddLocalization();
+        services.AddSingleton<NavigationManager>(new TestNavigationManager("http://localhost/list?station=ab"));
+        services.AddSingleton<IJSRuntime, NoJSRuntime>();
+        await using var provider = services.BuildServiceProvider();
+        await using var renderer = new HtmlRenderer(provider, NullLoggerFactory.Instance);
+        Item[] list = [new("abc"), new("xyz")];
+        RenderFragment columns = builder =>
+        {
+            builder.OpenComponent<FilterTemplateColumn<Item>>(0);
+            builder.AddComponentParameter(1, nameof(FilterTemplateColumn<Item>.Title), "Station");
+            builder.AddComponentParameter(2, nameof(FilterTemplateColumn<Item>.SortBy), GridSort<Item>.ByAscending(i => i.Name));
+            builder.AddComponentParameter(3, nameof(FilterTemplateColumn<Item>.FilterName), "station");
+            builder.AddComponentParameter(4, nameof(FilterTemplateColumn<Item>.FilterForm), "the-filter");
+            builder.AddComponentParameter(5, nameof(FilterTemplateColumn<Item>.FilterValue), "ab");
+            builder.AddComponentParameter(6, nameof(FilterTemplateColumn<Item>.ChildContent), (RenderFragment<Item>)(item => b =>
+            {
+                b.OpenElement(0, "b");
+                b.AddContent(1, $"* {item.Name}");
+                b.CloseElement();
+            }));
+            builder.CloseComponent();
+        };
+
+        var html = await renderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var output = await renderer.RenderComponentAsync<QuickGrid<Item>>(ParameterView.FromDictionary(new Dictionary<string, object?>
+            {
+                [nameof(QuickGrid<Item>.Items)] = list.AsQueryable(),
+                [nameof(QuickGrid<Item>.ChildContent)] = columns,
+            }));
+            return output.ToHtmlString();
+        });
+
+        StringAssert.Contains(html, "<a ", "With SortBy, the title is a sort link.");
+        StringAssert.Contains(html, "name=\"station\"");
+        StringAssert.Contains(html, "form=\"the-filter\"");
+        StringAssert.Contains(html, "value=\"ab\"");
+        StringAssert.Contains(html, "aria-label=\"Station\"");
+        StringAssert.Contains(html, "<b>* abc</b>", "The cells are the column's template.");
+    }
+
     private static async Task<string> RenderAsync(string uri, string? filterValue)
     {
         CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en-GB");

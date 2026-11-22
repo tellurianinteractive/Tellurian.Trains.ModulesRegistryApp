@@ -20,14 +20,13 @@
 
 <EditTemplate Item="Form" FormName="cargo" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="12" Label="NHMCode" Items="NhmCodeItems" @bind-Value="Form!.NhmCode" ShowPleaseSelect="true" />
+        <AppInputSelect Width="12" Label="NHMCode" Items="NhmCodeItems" @bind-Value="Form!.NhmCode" ShowPleaseSelect="true" Typeahead="true" TypeaheadPlaceholder="TypeNhmCodeOrName" />
 
         <AppInputText Width="3" Label="DefaultClasses" @bind-Value="Form!.DefaultClasses" />
-        <AppInputNumber TValue="int?" Width="2" Label="FromYear" @bind-Value="Form!.FromYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" @bind-Value="Form!.UptoYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.FromYear" />
+        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.UptoYear" />
         <AppInputCheck Width="2" Label="IsExpress" @bind-Value="Form!.IsExpress" AlignWithFields="true" />
         <AppInputCheck Width="3" Label="IsCoolingRequired" @bind-Value="Form!.IsCoolingRequired" AlignWithFields="true" />
-        <AppYearPeriodHint />
 
         <AppInputText Width="4" Label="English" @bind-Value="Form!.EN" />
         <AppInputText Width="4" Label="German" @bind-Value="Form!.DE" />

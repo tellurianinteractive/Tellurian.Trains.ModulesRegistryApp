@@ -10,7 +10,11 @@
         {
             <label class="form-control-label" for="@Label">@LabelText(Localizer)</label>
         }
-        <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString">
+        @* With Typeahead, wwwroot/js/select-typeahead.js shows a search field instead of the list (the list is still posted);
+           without JavaScript, the list works as usual. *@
+        <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString"
+                data-typeahead="@(Typeahead ? "" : null)" data-typeahead-placeholder="@(Typeahead && TypeaheadPlaceholder.HasValue ? Localizer[TypeaheadPlaceholder!].Value : null)"
+                data-typeahead-not-found="@(Typeahead ? Localizer["NotFound"].Value : null)">
             @if (ShowPleaseSelect)
             {
                 <option value="0" selected="@(CurrentValue == 0)">@PleaseSelectText</option>
@@ -19,7 +23,7 @@
             {
                 foreach (var item in Items)
                 {
-                    <option selected="@Selected(item)" value="@item.Id">@item.Description</option>
+                    <option selected="@Selected(item)" value="@item.Id" data-code="@(Typeahead ? item.SearchCode : null)" data-name="@(Typeahead ? item.SearchName : null)">@item.Description</option>
                 }
             }
         </select>
@@ -42,6 +46,10 @@
     [Parameter] public Action<int, object?>? OnSelected { get; set; }
     [Parameter] public int ItemHeight { get; set; }
     [Parameter] public object? Context { get; set; }
+    /// <summary>Shows a search field that filters the options as you type: the start of an option's SearchCode, or anywhere in its name.</summary>
+    [Parameter] public bool Typeahead { get; set; }
+    /// <summary>The text key of the search field's placeholder.</summary>
+    [Parameter] public string? TypeaheadPlaceholder { get; set; }
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
     string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";

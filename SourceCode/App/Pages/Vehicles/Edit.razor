@@ -47,9 +47,8 @@
         <AppInputText Width="12" Label="Prototype-ImageLink" @bind-Value="Form!.PrototypeImageHref" />
 
         <h4>@Localizer["PeriodInThisVersion"]</h4>
-        <AppInputNumber TValue="int?" Width="1" Label="FromYear" @bind-Value="Form!.ThisEmbodiementFromYear" />
-        <AppInputNumber TValue="int?" Width="1" Label="UptoYear" @bind-Value="Form!.ThisEmbodiementUptoYear" />
-        <AppYearPeriodHint />
+        <AppInputNumber TValue="int?" Width="1" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.ThisEmbodiementFromYear" />
+        <AppInputNumber TValue="int?" Width="1" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ThisEmbodiementUptoYear" />
 
         <h3>@Localizer["ModelData"]</h3>
         <AppInputNumber TValue="int" Width="1" Label="InventoryNumber" @bind-Value="Form!.InventoryNumber" />

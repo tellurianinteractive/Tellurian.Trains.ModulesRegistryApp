@@ -2256,8 +2256,14 @@
   <data name="RangeAttribute_Error" xml:space="preserve">
     <value>"{0}" må være mellom {1} og {2}</value>
   </data>
-  <data name="YearPeriodHint" xml:space="preserve">
-    <value>La et år stå tomt for ingen grense; begge årene er inkludert.</value>
+  <data name="YearEmptyPlaceholder" xml:space="preserve">
+    <value>Ingen grense</value>
+  </data>
+  <data name="YearFromEmptyTooltip" xml:space="preserve">
+    <value>Tomt betyr ikke noe startår. Året er inkludert.</value>
+  </data>
+  <data name="YearUptoEmptyTooltip" xml:space="preserve">
+    <value>Tomt betyr ikke noe sluttår. Året er inkludert.</value>
   </data>
   <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" må være et år fra 1900 til 2100, eller tomt</value>
@@ -2816,5 +2822,14 @@
   </data>
   <data name="IsIndustrialArea" xml:space="preserve">
     <value>Er industriområde?</value>
+  </data>
+  <data name="TypeNhmCodeOrName" xml:space="preserve">
+    <value>Skriv NHM-kode eller navn</value>
+  </data>
+  <data name="MarkAllAsPrinted" xml:space="preserve">
+    <value>Merk alle som skrevet ut</value>
+  </data>
+  <data name="MarkShownAsPrinted" xml:space="preserve">
+    <value>Merk viste som skrevet ut</value>
   </data>
 </root>

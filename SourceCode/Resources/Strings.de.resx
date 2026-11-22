@@ -2256,8 +2256,14 @@
   <data name="RangeAttribute_Error" xml:space="preserve">
     <value>"{0}" muss zwischen {1} und {2} liegen</value>
   </data>
-  <data name="YearPeriodHint" xml:space="preserve">
-    <value>Ein leeres Jahr bedeutet keine Grenze; beide Jahre sind eingeschlossen.</value>
+  <data name="YearEmptyPlaceholder" xml:space="preserve">
+    <value>Keine Grenze</value>
+  </data>
+  <data name="YearFromEmptyTooltip" xml:space="preserve">
+    <value>Leer bedeutet kein Anfangsjahr. Das Jahr ist eingeschlossen.</value>
+  </data>
+  <data name="YearUptoEmptyTooltip" xml:space="preserve">
+    <value>Leer bedeutet kein Endjahr. Das Jahr ist eingeschlossen.</value>
   </data>
   <data name="YearOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" muss ein Jahr von 1900 bis 2100 sein oder leer</value>
@@ -2816,5 +2822,14 @@
   </data>
   <data name="IsIndustrialArea" xml:space="preserve">
     <value>Ist Industriegebiet?</value>
+  </data>
+  <data name="TypeNhmCodeOrName" xml:space="preserve">
+    <value>NHM-Code oder Namen eingeben</value>
+  </data>
+  <data name="MarkAllAsPrinted" xml:space="preserve">
+    <value>Alle als gedruckt markieren</value>
+  </data>
+  <data name="MarkShownAsPrinted" xml:space="preserve">
+    <value>Angezeigte als gedruckt markieren</value>
   </data>
 </root>

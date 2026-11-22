@@ -56,6 +56,23 @@ public class StationCustomerWaybillsService(IDbContextFactory<ModulesDbContext> 
     }
 
     /// <summary>
+    /// Marks the customer's waybills with the given ids as printed (the ones shown on the page), if the user may edit the customer's
+    /// station: their print count becomes zero, so a print leaves them out until a count is set again. Ids of other customers'
+    /// waybills are ignored. Saved through the change tracker, so the change is logged.
+    /// </summary>
+    /// <returns>The number of waybills changed; zero when none had a count or the user may not edit.</returns>
+    public async Task<int> MarkAsPrintedAsync(ClaimsPrincipal? principal, int stationCustomerId, IEnumerable<int> waybillIds)
+    {
+        var ids = waybillIds.ToArray();
+        if (ids.Length == 0) return 0;
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.MayEditStationOfCustomerAsync(principal, stationCustomerId)) return 0;
+        var waybills = await dbContext.StationCustomerWaybills.Where(w => w.StationCustomerId == stationCustomerId && ids.Contains(w.Id) && w.PrintCount != 0).ToListAsync();
+        foreach (var waybill in waybills) waybill.PrintCount = 0;
+        return await dbContext.SaveChangesAsync();
+    }
+
+    /// <summary>
     /// Saves a waybill's print settings, if the user may edit the customer's station. The waybill must belong to the customer the
     /// page is for (<paramref name="customerId"/>, Migration step 3.6); it stays with its customer and cargo flow.
     /// </summary>

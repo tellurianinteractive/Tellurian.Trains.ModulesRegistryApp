@@ -5,10 +5,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId, PrintCount, QuantityUnitId, Quantity) AS
+	-- Existing waybills keep their print count (zero after "Mark all as printed", or a count set by hand); only new ones get one.
+	WITH UpdatedableWaybill( Id, OperatingDayId, RegionId) AS
 	(
-		SELECT 
-			SCW.Id, ME.OperatingDayId, OTHER.RegionId, SCW.PrintCount, ME.QuantityUnitId, ME.Quantity
+		SELECT
+			SCW.Id, ME.OperatingDayId, OTHER.RegionId
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
 			ModuleCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
@@ -20,13 +21,8 @@ BEGIN
 	UPDATE StationCustomerWaybill 
 		SET 
 			OperatingDayId = UW.OperatingDayId,
-			OtherRegionId = UW.RegionId,
-			PrintCount = CASE 
-				WHEN (UW.PrintCount > 1) THEN UW.PrintCount
-				WHEN (UW.QuantityUnitId = 3) THEN 1
-				ELSE 1
-			END
-		FROM 
+			OtherRegionId = UW.RegionId
+		FROM
 			UpdatedableWaybill UW
 		WHERE
 			StationCustomerWaybill.Id = UW.Id

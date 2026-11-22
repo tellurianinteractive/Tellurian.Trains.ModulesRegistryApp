@@ -38,6 +38,30 @@ public sealed partial class UsedResourceKeysTests
         Assert.IsEmpty(missing, $"Add these keys to Resources/Strings.resx (and its translations): {string.Join(", ", missing)}");
     }
 
+    [GeneratedRegex(@"<!--(?<comment>.*?)-->", RegexOptions.Singleline)]
+    private static partial Regex CommentRegex();
+
+    [GeneratedRegex(@"<data name=""(?<name>[^""]+)""")]
+    private static partial Regex DataNameRegex();
+
+    /// <summary>
+    /// A text added inside the file's header comment looks like an entry but isn't one, so users see its key. The comment holds
+    /// only Microsoft's four example entries.
+    /// </summary>
+    [TestMethod]
+    public void NoTextIsHiddenInAResourceFilesHeaderComment()
+    {
+        var resourceDirectory = Path.Combine(RepositoryRoot().FullName, "SourceCode", "Resources");
+        foreach (var file in Directory.EnumerateFiles(resourceDirectory, "Strings*.resx"))
+        {
+            var commented = CommentRegex().Matches(File.ReadAllText(file))
+                .SelectMany(comment => DataNameRegex().Matches(comment.Groups["comment"].Value).Select(data => data.Groups["name"].Value))
+                .ToArray();
+            CollectionAssert.AreEquivalent(new[] { "Name1", "Color1", "Bitmap1", "Icon1" }, commented,
+                $"{Path.GetFileName(file)}: move these texts out of the header comment: {string.Join(", ", commented.Except(["Name1", "Color1", "Bitmap1", "Icon1"]))}");
+        }
+    }
+
     private static bool IsBuildOutput(string file)
     {
         var separator = Path.DirectorySeparatorChar;

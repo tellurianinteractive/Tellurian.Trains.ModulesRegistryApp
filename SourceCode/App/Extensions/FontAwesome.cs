@@ -14,6 +14,7 @@ public static class FontAwesome
     public const string Delete = "fa fa-trash-alt";
     public const string ConfirmDelete = "fa fa-trash-alt";
     public const string Erase = "fa fa-eraser";
+    public const string ExternalStation = "fa fa-globe-europe";
     public const string Edit = "fa fa-edit";
     public const string Global = "fa fa-globe-europe";
     public const string Group = "fa fa-users";
@@ -78,6 +79,7 @@ public static class FontAwesome
             {nameof(ConfirmDelete), ConfirmDelete },
             {nameof(Edit), Edit },
             {nameof(Erase), Erase },
+            {nameof(ExternalStation), ExternalStation },
             {nameof(Global), Global },
             {nameof(Group), Group },
             {nameof(Image), Image },
