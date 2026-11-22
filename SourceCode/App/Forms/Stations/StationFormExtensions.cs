@@ -18,6 +18,9 @@ public static class StationFormExtensions
             IsTerminus = entity.IsTerminus,
             IsShadow = entity.IsShadow,
             IsHarbour = entity.IsHarbour,
+            IsManned = entity.IsManned,
+            IsIndustrialArea = entity.IsIndustrialArea,
+            HasTurntable = entity.HasTurntable,
             LockKeyName = entity.LockKeyName,
             OperationInstructionsMarkdown = entity.OperationInstructionsMarkdown,
         };
@@ -41,6 +44,9 @@ public static class StationFormExtensions
             entity.IsTerminus = form.IsTerminus;
             entity.IsShadow = form.IsShadow;
             entity.IsHarbour = form.IsHarbour;
+            entity.IsManned = form.IsManned;
+            entity.IsIndustrialArea = form.IsIndustrialArea;
+            entity.HasTurntable = form.HasTurntable;
             entity.LockKeyName = form.LockKeyName;
             entity.OperationInstructionsMarkdown = form.OperationInstructionsMarkdown;
             return entity;

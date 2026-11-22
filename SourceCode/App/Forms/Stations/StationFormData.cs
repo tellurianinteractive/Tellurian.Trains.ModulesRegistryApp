@@ -48,6 +48,15 @@ public class StationFormData : IValidatableObject
     [Display(Name = "IsHarbour")]
     public bool IsHarbour { get; set; }
 
+    [Display(Name = "IsManned")]
+    public bool IsManned { get; set; }
+
+    [Display(Name = "IsIndustrialArea")]
+    public bool IsIndustrialArea { get; set; }
+
+    [Display(Name = "HasTurntable")]
+    public bool HasTurntable { get; set; }
+
     // The old IsKeyRequired flag is not in the form (2026-11-22): a lock key name and lockable tracks say that a key is required.
     [Display(Name = "LockKeyName")]
     [StringLength(5)]

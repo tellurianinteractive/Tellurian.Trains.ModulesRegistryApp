@@ -2811,4 +2811,7 @@
   <data name="LockKeyName" xml:space="preserve">
     <value>Schlüsselname</value>
   </data>
+  <data name="IsIndustrialArea" xml:space="preserve">
+    <value>Ist Industriegebiet?</value>
+  </data>
 </root>

@@ -17,10 +17,13 @@ public partial class Station
     public int Id { get; set; }
     public string FullName { get; set; }
     public string Signature { get; set; }
+    /// <summary>The station is usually manned; a new station is (the column's default).</summary>
+    public bool IsManned { get; set; } = true;
     public bool IsShadow { get; set; }
     public bool IsTerminus { get; set; }
     public bool IsHarbour { get; set; }
     public bool IsJunction { get; set; }
+    public bool IsIndustrialArea { get; set; }
     /// <summary>
     /// The old flag that a key is required; kept for compatibility with other apps, not shown in the app (2026-11-22). Use
     /// <c>IsLockKeyRequired</c>, which also counts <see cref="LockKeyName"/> and lockable tracks; when those
