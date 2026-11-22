@@ -138,6 +138,16 @@ public sealed class FrontImageServiceTests
     }
 
     [TestMethod]
+    public void OneParagraphCaptionIsInline()
+    {
+        CreateImage("front2.jpg", 10, 10);
+        CreateFile("front2.json", Meeting("2023-06-10"));
+        CreateFile("front2.md", "*Module meetings are social events.*\r\n");
+
+        Assert.AreEqual("<em>Module meetings are social events.</em>", CreateTarget().Images.Single().CaptionHtml(string.Empty));
+    }
+
+    [TestMethod]
     public void ImageWithoutAnyCaptionHasEmptyCaption()
     {
         CreateImage("front2.jpg", 10, 10);

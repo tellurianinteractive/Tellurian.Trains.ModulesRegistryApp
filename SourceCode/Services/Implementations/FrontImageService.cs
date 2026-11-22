@@ -93,9 +93,20 @@ public sealed class FrontImageService
         {
             var language = CaptionLanguage(name, Path.GetFileNameWithoutExtension(captionFile));
             if (language is null) continue;
-            captions[language] = File.ReadAllText(captionFile).Trim().HtmlFromMarkdown();
+            captions[language] = InlineHtml(File.ReadAllText(captionFile));
         }
         return captions;
+    }
+
+    // The caption is shown on one line with the meeting's facts, so a single paragraph loses its <p> wrapper.
+    private static string InlineHtml(string markdown)
+    {
+        const string Start = "<p>";
+        const string End = "</p>";
+        var html = markdown.Trim().HtmlFromMarkdown().Trim();
+        return html.StartsWith(Start, StringComparison.Ordinal) && html.EndsWith(End, StringComparison.Ordinal) && html.IndexOf(Start, 1, StringComparison.Ordinal) < 0
+            ? html[Start.Length..^End.Length]
+            : html;
     }
 
     // A missing or invalid file (a required property missing, a date not yyyy-MM-dd) gives null; the content test reports it.
