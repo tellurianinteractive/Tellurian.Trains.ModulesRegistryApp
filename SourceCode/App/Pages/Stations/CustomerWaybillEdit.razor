@@ -32,11 +32,15 @@
 
 <EditTemplate Item="Form" FormName="waybill" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
-        <AppInputNumber TValue="int" Width="2" Label="PrintCount" @bind-Value="Form!.PrintCount" />
-        <AppInputCheck Width="3" Label="PrintPerOperatingDay" @bind-Value="Form!.PrintPerOperatingDay" />
-        <AppInputCheck Width="2" Label="HasEmptyReturn" @bind-Value="Form!.HasEmptyReturn" />
-        <AppInputCheck Width="2" Label="HasSameCargoReturn" @bind-Value="Form!.HasSameCargoReturn" />
+        <AppFormRow>
+            <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
+            <AppInputNumber TValue="int" Width="2" Label="PrintCount" @bind-Value="Form!.PrintCount" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="PrintPerOperatingDay" @bind-Value="Form!.PrintPerOperatingDay" />
+            <AppInputCheck Label="HasEmptyReturn" @bind-Value="Form!.HasEmptyReturn" />
+            <AppInputCheck Label="HasSameCargoReturn" @bind-Value="Form!.HasSameCargoReturn" />
+        </AppCheckGroup>
     </Inputs>
 </EditTemplate>
 

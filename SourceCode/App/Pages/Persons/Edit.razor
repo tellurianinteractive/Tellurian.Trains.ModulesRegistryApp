@@ -32,37 +32,45 @@
 }
 <EditTemplate Item="Form" FormName="person" OnValidSubmit="SaveAsync" DeleteHref="@DeleteHref" MayDelete="MayDelete">
     <Inputs>
-        <AppInputText Width="2" Label="FirstName" @bind-Value="Form!.FirstName" />
-        <AppInputText Width="2" Label="NickName" @bind-Value="Form!.NickName" />
-        <AppInputText Width="2" Label="MiddleName" @bind-Value="Form!.MiddleName" />
-        <AppInputText Width="2" Label="LastName" @bind-Value="Form!.LastName" />
-        <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
-        <AppInputSelect Width="2" Label="Country" Items="CountryItems" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" @bind-Value="Form!.CountryId" />
-        <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
-        <AppInputFill Width="6" />
-        <AppInputNumber Width="2" Label="FremoNumber" @bind-Value="Form!.FremoMemberNumber" />
-        @if (Existing is not null && Existing.IsFremoMember())
-        {
-            <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Existing.FremoNumber()" BackColor="#e9ecef" />
-        }
-        <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" />
-        <AppInputText Width="6" Label="FremoReservedAdresses" @bind-Value="Form!.FremoReservedAdresses" Placeholder="LocoAddressExample" />
+        <AppFormRow>
+            <AppInputText Width="2" Label="FirstName" @bind-Value="Form!.FirstName" />
+            <AppInputText Width="2" Label="NickName" @bind-Value="Form!.NickName" />
+            <AppInputText Width="2" Label="MiddleName" @bind-Value="Form!.MiddleName" />
+            <AppInputText Width="2" Label="LastName" @bind-Value="Form!.LastName" />
+            <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+            <AppInputSelect Width="2" Label="Country" Items="CountryItems" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" @bind-Value="Form!.CountryId" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputText Width="6" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputNumber Width="2" Label="FremoNumber" @bind-Value="Form!.FremoMemberNumber" />
+            @if (Existing is not null && Existing.IsFremoMember())
+            {
+                <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Existing.FremoNumber()" BackColor="#e9ecef" />
+            }
+            <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" />
+            <AppInputText Width="6" Label="FremoReservedAdresses" @bind-Value="Form!.FremoReservedAdresses" Placeholder="LocoAddressExample" />
+        </AppFormRow>
         @if (ShowsUserRights)
         {
             <hr />
-            <AppInputCheck Width="2" Label="IsGlobalAdministrator" @bind-Value="Form!.IsGlobalAdministrator" IsDisabled="@(!Principal.MayChangeGlobalAdministrator(Existing!.User!))" />
-            <AppInputCheck Width="2" Label="IsCountryAdministrator" @bind-Value="Form!.IsCountryAdministrator" IsDisabled="@(!Principal.MayChangeCountryAdministrator)" />
-            <AppInputCheck Width="2" Label="IsApiAccessPermitted" @bind-Value="Form!.IsApiAccessPermitted" />
-            <AppInputCheck Width="2" Label="MayUploadSkpDrawing" @bind-Value="Form!.MayUploadSkpDrawing" />
-            <AppInputCheck Width="2" Label="MayVerifyWiFreds" @bind-Value="Form!.MayManageWiFreds" />
-            <AppInputFill Width="2" />
-            <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" />
-            <AppDisplay Width="3" Label="PasswordResetAttempts" Value="@Existing!.User!.PasswordResetAttempts.ToString()" BackColor="#e9ecef" />
-            <AppDisplay Width="3" Label="FailedLoginAttempts" Value="@Existing.User.FailedLoginAttempts.ToString()" BackColor="#e9ecef" />
-            @if (Existing.User.IsApiAccessPermitted)
-            {
-                <AppDisplay Width="6" Label="ApiKey" Value="@Existing.User.ApiKey()" BackColor="#e9ecef" />
-            }
+            <AppCheckGroup>
+                <AppInputCheck Label="IsGlobalAdministrator" @bind-Value="Form!.IsGlobalAdministrator" IsDisabled="@(!Principal.MayChangeGlobalAdministrator(Existing!.User!))" />
+                <AppInputCheck Label="IsCountryAdministrator" @bind-Value="Form!.IsCountryAdministrator" IsDisabled="@(!Principal.MayChangeCountryAdministrator)" />
+                <AppInputCheck Label="IsApiAccessPermitted" @bind-Value="Form!.IsApiAccessPermitted" />
+                <AppInputCheck Label="MayUploadSkpDrawing" @bind-Value="Form!.MayUploadSkpDrawing" />
+                <AppInputCheck Label="MayVerifyWiFreds" @bind-Value="Form!.MayManageWiFreds" />
+            </AppCheckGroup>
+            <AppFormRow>
+                <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" />
+                <AppDisplay Width="3" Label="PasswordResetAttempts" Value="@Existing!.User!.PasswordResetAttempts.ToString()" BackColor="#e9ecef" />
+                <AppDisplay Width="3" Label="FailedLoginAttempts" Value="@Existing.User.FailedLoginAttempts.ToString()" BackColor="#e9ecef" />
+                @if (Existing.User.IsApiAccessPermitted)
+                {
+                    <AppDisplay Width="6" Label="ApiKey" Value="@Existing.User.ApiKey()" BackColor="#e9ecef" />
+                }
+            </AppFormRow>
         }
     </Inputs>
 </EditTemplate>

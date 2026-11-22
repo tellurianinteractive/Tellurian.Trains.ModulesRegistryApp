@@ -20,19 +20,24 @@
 
 <EditTemplate Item="Form" FormName="track" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputText Width="2" Label="TrackNumber" @bind-Value="Form!.Designation" />
-        <AppInputNumber TValue="int" Width="2" Label="DisplayOrder" @bind-Value="Form!.DisplayOrder" />
-        <AppInputSelect Width="2" Label="Direction" @bind-Value="Form!.DirectionId" Items="EnumExtensions.StationTrackDirectionListboxItems()" />
-        <AppInputNumber TValue="double" Width="2" Label="MaxTrainLength" @bind-Value="Form!.MaxTrainLength" Unit="m" Step="0.1" />
-        <AppInputNumber TValue="double?" Width="2" Label="PlatformLength" @bind-Value="Form!.PlatformLength" Unit="m" Step="0.1" />
-        <AppInputNumber TValue="int?" Width="2" Label="SpeedLimit" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
+        <AppFormRow>
+            <AppInputText Width="2" Label="TrackNumber" @bind-Value="Form!.Designation" />
+            <AppInputNumber TValue="int" Width="2" Label="DisplayOrder" @bind-Value="Form!.DisplayOrder" />
+            <AppInputSelect Width="2" Label="Direction" @bind-Value="Form!.DirectionId" Items="EnumExtensions.StationTrackDirectionListboxItems()" />
+            <AppInputNumber TValue="double" Width="2" Label="MaxTrainLength" @bind-Value="Form!.MaxTrainLength" Unit="m" Step="0.1" />
+            <AppInputNumber TValue="double?" Width="2" Label="PlatformLength" @bind-Value="Form!.PlatformLength" Unit="m" Step="0.1" />
+            <AppInputNumber TValue="int?" Width="2" Label="SpeedLimit" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
+        </AppFormRow>
 
-        <AppInputText Width="4" Label="Usage" @bind-Value="Form!.UsageNote" />
-        <AppInputFill Width="8" />
+        <AppFormRow>
+            <AppInputText Width="4" Label="Usage" @bind-Value="Form!.UsageNote" />
+        </AppFormRow>
 
-        <AppInputCheck Width="2" Label="IsThroughTrack" @bind-Value="Form!.IsThroughTrack" />
-        <AppInputCheck Width="2" Label="IsSiding" @bind-Value="Form!.IsSiding" />
-        <AppInputCheck Width="2" Label="IsLockable" @bind-Value="Form!.IsLockable" />
+        <AppCheckGroup>
+            <AppInputCheck Label="IsThroughTrack" @bind-Value="Form!.IsThroughTrack" />
+            <AppInputCheck Label="IsSiding" @bind-Value="Form!.IsSiding" />
+            <AppInputCheck Label="IsLockable" @bind-Value="Form!.IsLockable" />
+        </AppCheckGroup>
     </Inputs>
 </EditTemplate>
 

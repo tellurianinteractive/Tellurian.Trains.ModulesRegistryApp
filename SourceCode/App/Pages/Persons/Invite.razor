@@ -40,7 +40,9 @@ else if (Invitation is not null)
 <EditTemplate Item="MayInvite ? Form : null" FormName="invitation" OnValidSubmit="SendAsync" ShowSaveButton="false">
     <Inputs>
         <AppInputText Width="12" Label="Message" @bind-Value="Form!.PersonalMessage" />
-        <AppInputCheck Width="4" Label="UserIsReadOnly" @bind-Value="Form!.IsReadOnly" />
+        <AppCheckGroup>
+            <AppInputCheck Label="UserIsReadOnly" @bind-Value="Form!.IsReadOnly" />
+        </AppCheckGroup>
     </Inputs>
     <Buttons>
         <AppButton Label="Send" IsSubmit="true" IconName="@FontAwesome.Invite" AlwaysShowLabel="true" />

@@ -33,23 +33,28 @@
 
 <EditTemplate Item="Form" FormName="station" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="3" Label="Module" @bind-Value="Form!.ModuleId" Items="ModulesItems" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
-        <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowNoneOption="true" />
-        <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
-        <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
-        <AppInputFill Width="3" />
-        <AppInputCheck Width="2" Label="HasCargoCustomers" @bind-Value="Form!.HasCargoCustomers" />
-        <AppInputCheck Width="2" Label="IsJunction" @bind-Value="Form!.IsJunction" />
-        <AppInputCheck Width="2" Label="IsTerminus" @bind-Value="Form!.IsTerminus" />
-        <AppInputCheck Width="2" Label="IsShadowStation" @bind-Value="Form!.IsShadow" />
-        <AppInputCheck Width="2" Label="IsHarbour" @bind-Value="Form!.IsHarbour" />
-        <AppInputCheck Width="2" Label="IsIndustrialArea" @bind-Value="Form!.IsIndustrialArea" />
-        <AppInputCheck Width="2" Label="HasTurntable" @bind-Value="Form!.HasTurntable" />
-        <AppInputCheck Width="2" Label="IsManned" @bind-Value="Form!.IsManned" />
-        <AppInputCheck Width="2" Label="IsKeyRequired" @bind-Value="Form!.IsKeyRequired" />
+        <AppFormRow>
+            <AppInputSelect Width="3" Label="Module" @bind-Value="Form!.ModuleId" Items="ModulesItems" ShowPleaseSelect="true" IsDisabled="@IsEdit" />
+            <AppInputSelectNullable Width="2" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowNoneOption="true" />
+            <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
+            <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="HasCargoCustomers" @bind-Value="Form!.HasCargoCustomers" />
+            <AppInputCheck Label="IsJunction" @bind-Value="Form!.IsJunction" />
+            <AppInputCheck Label="IsTerminus" @bind-Value="Form!.IsTerminus" />
+            <AppInputCheck Label="IsShadowStation" @bind-Value="Form!.IsShadow" />
+            <AppInputCheck Label="IsHarbour" @bind-Value="Form!.IsHarbour" />
+            <AppInputCheck Label="IsIndustrialArea" @bind-Value="Form!.IsIndustrialArea" />
+            <AppInputCheck Label="HasTurntable" @bind-Value="Form!.HasTurntable" />
+            <AppInputCheck Label="IsManned" @bind-Value="Form!.IsManned" />
+            <AppInputCheck Label="IsKeyRequired" @bind-Value="Form!.IsKeyRequired" />
+        </AppCheckGroup>
         @* Shown only while "Is key required?" is checked (site.css, .lock-key-name), also without JavaScript. *@
-        <div class="lock-key-name"><AppInputText Width="2" Label="LockKeyName" @bind-Value="Form!.LockKeyName" /></div>
-        <AppInputText Width="12" Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Form!.OperationInstructionsMarkdown" NumberOfRows="10" />
+        <AppFormRow>
+            <div class="lock-key-name"><AppInputText Width="2" Label="LockKeyName" @bind-Value="Form!.LockKeyName" /></div>
+            <AppInputText Width="12" Label="OperatingInstructions,YouCanUseMarkdown" @bind-Value="Form!.OperationInstructionsMarkdown" NumberOfRows="10" />
+        </AppFormRow>
     </Inputs>
 </EditTemplate>
 

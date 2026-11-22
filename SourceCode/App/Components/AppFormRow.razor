@@ -1,0 +1,12 @@
+@* A line of fields in a form (2026-11-22): its own row inside the form's row, so the next group always starts on a new line (this
+   replaced the AppInputFill fillers). The fields keep their Width columns, and stack below the md breakpoint. The fields
+   are aligned at the bottom, so a long label may wrap to two lines in a narrow field and the input boxes still line up. *@
+<div class="col-12">
+    <div class="row g-3 align-items-end">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

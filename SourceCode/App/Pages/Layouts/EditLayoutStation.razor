@@ -21,16 +21,22 @@
 
 <EditTemplate Item="Form" FormName="layout-station" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputCheck Width="3" Label="IsManned" @bind-Value="Form!.IsManned" AlignWithFields="true" />
-        <AppInputCheck Width="3" Label="HidePassingTrains" @bind-Value="Form!.HidePassingTrains" AlignWithFields="true" />
-        <AppInputCheck Width="3" Label="HideMeetingTrains" @bind-Value="Form!.HideMeetingTrains" AlignWithFields="true" />
-        <AppInputCheck Width="3" Label="PrintTrainStartLabels" @bind-Value="Form!.PrintTrainStartLabels" AlignWithFields="true" />
-        <AppInputCheck Width="3" Label="PrintOnlyFirstTrainStartLabel" @bind-Value="Form!.PrintOnlyFirstTrainStartLabel" AlignWithFields="true" />
-        <AppInputSelect Width="3" @bind-Value="Form!.Difficulty" Label="DifficultyLevel" Items="DifficultyLevelItems" />
+        <AppCheckGroup>
+            <AppInputCheck Label="IsManned" @bind-Value="Form!.IsManned" />
+            <AppInputCheck Label="HidePassingTrains" @bind-Value="Form!.HidePassingTrains" />
+            <AppInputCheck Label="HideMeetingTrains" @bind-Value="Form!.HideMeetingTrains" />
+            <AppInputCheck Label="PrintTrainStartLabels" @bind-Value="Form!.PrintTrainStartLabels" />
+            <AppInputCheck Label="PrintOnlyFirstTrainStartLabel" @bind-Value="Form!.PrintOnlyFirstTrainStartLabel" />
+        </AppCheckGroup>
+        <AppFormRow>
+            <AppInputSelect Width="3" @bind-Value="Form!.Difficulty" Label="DifficultyLevel" Items="DifficultyLevelItems" />
+        </AppFormRow>
         <h4>@Localizer["OtherNameOrCountry"]</h4>
-        <AppInputText Width="4" @bind-Value="Form!.OtherName" Label="OtherName" />
-        <AppInputText Width="3" @bind-Value="Form!.OtherSignature" Label="OtherSignature" />
-        <AppInputSelectNullable Width="3" @bind-Value="Form!.OtherCountryId" Label="OtherCountry" Items="CountryItems" ShowNoneOption="true" />
+        <AppFormRow>
+            <AppInputText Width="4" @bind-Value="Form!.OtherName" Label="OtherName" />
+            <AppInputText Width="3" @bind-Value="Form!.OtherSignature" Label="OtherSignature" />
+            <AppInputSelectNullable Width="3" @bind-Value="Form!.OtherCountryId" Label="OtherCountry" Items="CountryItems" ShowNoneOption="true" />
+        </AppFormRow>
     </Inputs>
 </EditTemplate>
 

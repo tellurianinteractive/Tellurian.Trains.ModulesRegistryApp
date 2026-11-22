@@ -23,7 +23,7 @@
 </div>
 
 @code {
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string BootstrapWrapperCss => FormColumn.Css(Width);
 
 
     protected override void OnInitialized()

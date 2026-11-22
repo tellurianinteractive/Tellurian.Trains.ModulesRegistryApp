@@ -41,7 +41,7 @@
     [Parameter] public int ItemHeight { get; set; }
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {Localizer[Label].Value.ToLowerInvariant()}";
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string BootstrapWrapperCss => FormColumn.Css(Width);
 
     // An empty value is "not selected" ("Select ..."), refused by [Required] on the form model.
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)

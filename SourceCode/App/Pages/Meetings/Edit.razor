@@ -26,20 +26,27 @@
 
 <EditTemplate Item="Form" FormName="meeting" ShowSaveButton="MayEdit" OnValidSubmit="SaveAsync" DeleteHref="@($"Meetings/{Id}/Delete")" MayDelete="MayDelete">
     <Inputs>
-        <AppInputSelect Width="2" @bind-Value="Form!.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
-        <AppInputSelect Width="2" @bind-Value="Form!.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
-        <AppInputText Width="3" Label="Name" @bind-Value="Form!.Name" />
-        <AppInputSelect Width="3" @bind-Value="Form!.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
-        <AppInputCheck Width="2" Label="IsOrganisingGroupInternal" @bind-Value="Form!.IsOrganiserInternal" AlignWithFields="true" />
+        <AppFormRow>
+            <AppInputSelect Width="2" @bind-Value="Form!.MeetingType" Label="MeetingType" Items="EnumExtensions.MeetingTypeListboxItems()" />
+            <AppInputSelect Width="2" @bind-Value="Form!.Status" Label="Status" Items="EnumExtensions.MeetingStatusListboxItems()" />
+            <AppInputText Width="3" Label="Name" @bind-Value="Form!.Name" />
+            <AppInputSelect Width="3" @bind-Value="Form!.OrganiserGroupId" Label="Organiser" Items="OrganiserItems" ShowPleaseSelect="MaySelectOrganiserGroup" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="IsOrganisingGroupInternal" @bind-Value="Form!.IsOrganiserInternal" />
+        </AppCheckGroup>
 
-        <AppInputText Width="3" Label="City" @bind-Value="Form!.CityName" />
-        <AppInputText Width="3" Label="Venue" @bind-Value="Form!.VenueName" />
-        <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="Form!.GroupDomainId" ShowNoneOption="true" />
-        <AppInputFill Width="2" />
-        <AppInputDate Width="2" @bind-Value="Form!.StartDate" Label="StartDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
-        <AppInputDate Width="2" @bind-Value="Form!.EndDate" Label="EndDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
-        <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Form!.LatestArrivalTimeWithModules" />
-        <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Form!.EarliestDepartureTimeWithModules" />
+        <AppFormRow>
+            <AppInputText Width="3" Label="City" @bind-Value="Form!.CityName" />
+            <AppInputText Width="3" Label="Venue" @bind-Value="Form!.VenueName" />
+            <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="Form!.GroupDomainId" ShowNoneOption="true" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputDate Width="2" @bind-Value="Form!.StartDate" Label="StartDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
+            <AppInputDate Width="2" @bind-Value="Form!.EndDate" Label="EndDate" IsDisabled="@DatesAreLocked" ShowTime="@ShowTime" />
+            <AppInputTimeOnly Width="2" Label="LatestArrivalTimeWithModules" @bind-Value="Form!.LatestArrivalTimeWithModules" />
+            <AppInputTimeOnly Width="2" Label="EarliestDepartureTimeWithModules" @bind-Value="Form!.EarliestDepartureTimeWithModules" />
+        </AppFormRow>
 
         <AppInputText Width="12" Label="ExternalLink" @bind-Value="Form!.ExternalLink" />
     </Inputs>

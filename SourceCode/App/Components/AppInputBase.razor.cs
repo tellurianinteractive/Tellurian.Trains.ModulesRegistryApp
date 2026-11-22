@@ -26,7 +26,7 @@ public abstract partial class AppInputBase<TValue>
     /// </summary>
     protected bool ShowFieldValidationMessage => ValueExpression is not null;
 
-    public string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    public string WidthCss => FormColumn.Css(Width);
 
     public string LabelText(IStringLocalizer<Strings> localizer)
     {

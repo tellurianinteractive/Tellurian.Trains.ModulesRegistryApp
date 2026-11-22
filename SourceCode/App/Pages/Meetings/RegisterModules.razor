@@ -50,9 +50,13 @@ else
         <Inputs>
             @if (MeetingParticipant.MayRegisterModules())
             {
-                <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="Form!.BringsModulesAfterAgreement" AlignWithFields="true" />
+                <AppCheckGroup>
+                    <AppInputCheck Label="BringsModulesAfterAgreement" @bind-Value="Form!.BringsModulesAfterAgreement" />
+                </AppCheckGroup>
             }
-            <AppInputText Label="Comment" @bind-Value="Form!.NoteToOrganiserMarkdown" />
+            <AppFormRow>
+                <AppInputText Label="Comment" @bind-Value="Form!.NoteToOrganiserMarkdown" />
+            </AppFormRow>
         </Inputs>
     </EditTemplate>
     @if (MeetingParticipant.MayRegisterModules())

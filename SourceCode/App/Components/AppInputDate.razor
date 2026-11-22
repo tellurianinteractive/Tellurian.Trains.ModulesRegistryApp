@@ -32,7 +32,7 @@
 @code {
     [Parameter] public bool ShowTime { get; set; }
 
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string BootstrapWrapperCss => FormColumn.Css(Width);
 
     protected override void OnInitialized()
     {

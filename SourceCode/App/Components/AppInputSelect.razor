@@ -52,7 +52,7 @@
     [Parameter] public string? TypeaheadPlaceholder { get; set; }
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string BootstrapWrapperCss => FormColumn.Css(Width);
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int result, [NotNullWhen(false)] out string? validationErrorMessage)
     {

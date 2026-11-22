@@ -32,17 +32,20 @@
         }
         <EditTemplate Item="Form" FormName="user-settings" OnValidSubmit="SaveAsync">
             <Inputs>
-                <AppDisplay Width="2" Label="FirstName" Value="@Person.FirstName" BackColor="#e9ecef" />
-                <AppDisplay Width="2" Label="NickName" Value="@Person.NickName" BackColor="#e9ecef" />
-                <AppDisplay Width="2" Label="MiddleName" Value="@Person.MiddleName" BackColor="#e9ecef" />
-                <AppDisplay Width="2" Label="LastName" Value="@Person.LastName" BackColor="#e9ecef" />
-                <AppInputFill Width="4" />
-                <AppInputText Width="4" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
-                <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
-                <AppDisplay Width="2" Label="Country" Value="@Person.Country?.EnglishName.AsLocalized()" BackColor="#e9ecef" />
-                <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" IsDisabled="@IsFremoOwnerSignatureLocked" />
-                <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
-                <AppDisplay Width="4" Label="ApiKey" Value="@Person.User?.ApiKey()" BackColor="#e9ecef" />
+                <AppFormRow>
+                    <AppDisplay Width="2" Label="FirstName" Value="@Person.FirstName" BackColor="#e9ecef" />
+                    <AppDisplay Width="2" Label="NickName" Value="@Person.NickName" BackColor="#e9ecef" />
+                    <AppDisplay Width="2" Label="MiddleName" Value="@Person.MiddleName" BackColor="#e9ecef" />
+                    <AppDisplay Width="2" Label="LastName" Value="@Person.LastName" BackColor="#e9ecef" />
+                </AppFormRow>
+                <AppFormRow>
+                    <AppInputText Width="4" Label="EmailAddresses" @bind-Value="Form!.EmailAddresses" />
+                    <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+                    <AppDisplay Width="2" Label="Country" Value="@Person.Country?.EnglishName.AsLocalized()" BackColor="#e9ecef" />
+                    <AppInputText Width="2" Label="FremoPrefix" @bind-Value="Form!.FremoOwnerSignature" IsDisabled="@IsFremoOwnerSignatureLocked" />
+                    <AppDisplay Width="2" Label="FremoMemberNumber" Value="@Person.FremoNumber()" BackColor="#e9ecef" />
+                    <AppDisplay Width="4" Label="ApiKey" Value="@Person.User?.ApiKey()" BackColor="#e9ecef" />
+                </AppFormRow>
             </Inputs>
         </EditTemplate>
         <br />

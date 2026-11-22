@@ -449,3 +449,18 @@ blockquote {
 .lock-key-name { display: contents; }
 .lock-key-name > div { display: none; }
 form:has(input[name="Form.IsKeyRequired"]:checked) .lock-key-name > div { display: block; }
+
+/* AppCheckGroup (2026-11-22): checkboxes in as many equal columns as fit, at least 14rem wide; their col-md-* width is overridden. */
+.app-check-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 0.5rem 1rem;
+}
+.app-check-group > * { width: auto; max-width: none; }
+
+/* Field labels a size smaller than the fields (2026-11-22), so a long label doesn't make its field wider than its value needs.
+   Checkbox labels (form-check-label) keep the normal size. */
+.form-control-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.15rem;
+}

@@ -33,71 +33,79 @@
     <Inputs>
         <h3>@Localizer["PrototypeData"]</h3>
 
-        <AppInputSelectNullable Width="2" Label="Keeper-Country" @bind-Value="Form!.KeeperCountryId" Items="CountryItems" ShowNoneOption="true" />
-        <AppInputText Width="1" Label="KeeperSignature" @bind-Value="Form!.KeeperSignature" />
-        <AppInputText Width="1" Label="Class" @bind-Value="Form!.VehicleClass" />
-        <AppInputText Width="2" Label="VehicleNumber" @bind-Value="Form!.VehicleNumber" />
-        <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="Form!.Theme" ShowPleaseSelect="true" />
-        <AppInputText Width="2" Label="Manufacturer" @bind-Value="Form!.PrototypeManufacturerName" />
-        <AppInputNumber TValue="int?" Width="1" Label="ManufacturedYear" @bind-Value="Form!.PrototypeManufactureYear" />
-        <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="Form!.TractionFeatureId" ShowNoneOption="true" />
-        <AppInputNumber TValue="decimal?" Width="1" Label="Length" Unit="m" @bind-Value="Form!.PrototypeLength" Step="0.01" />
-        <AppInputNumber TValue="decimal?" Width="1" Label="Weight" Unit="t" @bind-Value="Form!.PrototypeWeight" Step="0.01" />
-        <AppInputNumber TValue="int?" Width="1" Label="EnginePower" Unit="kW" @bind-Value="Form!.EnginePower" />
+        <AppFormRow>
+            <AppInputSelectNullable Width="2" Label="KeeperCountry" @bind-Value="Form!.KeeperCountryId" Items="CountryItems" ShowNoneOption="true" />
+            <AppInputText Width="2" Label="KeeperSignature" @bind-Value="Form!.KeeperSignature" />
+            <AppInputText Width="1" Label="Class" @bind-Value="Form!.VehicleClass" />
+            <AppInputText Width="2" Label="VehicleNumber" @bind-Value="Form!.VehicleNumber" />
+            <AppInputSelectText Width="2" Label="Theme" Items="@ThemeExtensions.ThemesTextboxes" @bind-Value="Form!.Theme" ShowPleaseSelect="true" />
+            <AppInputText Width="2" Label="Manufacturer" @bind-Value="Form!.PrototypeManufacturerName" />
+            <AppInputNumber TValue="int?" Width="1" Label="ManufacturedYear" @bind-Value="Form!.PrototypeManufactureYear" />
+            <AppInputSelectNullable Width="2" Label="Traction" Items="TractionFeatureItems" @bind-Value="Form!.TractionFeatureId" ShowNoneOption="true" />
+            <AppInputNumber TValue="decimal?" Width="1" Label="Length" Unit="m" @bind-Value="Form!.PrototypeLength" Step="0.01" />
+            <AppInputNumber TValue="decimal?" Width="1" Label="Weight" Unit="t" @bind-Value="Form!.PrototypeWeight" Step="0.01" />
+            <AppInputNumber TValue="int?" Width="1" Label="EnginePower" Unit="kW" @bind-Value="Form!.EnginePower" />
+        </AppFormRow>
         <AppInputText Width="12" Label="Prototype-ImageLink" @bind-Value="Form!.PrototypeImageHref" />
 
         <h4>@Localizer["PeriodInThisVersion"]</h4>
-        <AppInputNumber TValue="int?" Width="1" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.ThisEmbodiementFromYear" />
-        <AppInputNumber TValue="int?" Width="1" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ThisEmbodiementUptoYear" />
+        <AppFormRow>
+            <AppInputNumber TValue="int?" Width="1" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.ThisEmbodiementFromYear" />
+            <AppInputNumber TValue="int?" Width="1" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ThisEmbodiementUptoYear" />
+        </AppFormRow>
 
         <h3>@Localizer["ModelData"]</h3>
-        <AppInputNumber TValue="int" Width="1" Label="InventoryNumber" @bind-Value="Form!.InventoryNumber" />
-        <AppInputSelect Width="1" Label="Scale" @bind-Value="Form!.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
-        <AppInputText Width="2" Label="Model=Manufacturer" @bind-Value="Form!.ModelManufacturerName" />
-        <AppInputText Width="1" Label="ArticleNumber" @bind-Value="Form!.ModelNumber" />
-        <AppInputSelectNullable Width="1" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="Form!.CouplingFeatureId" ShowNoneOption="true" />
-        <AppInputSelectNullable Width="1" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="Form!.WheelsFeatureId" ShowNoneOption="true" />
-        <AppInputText Width="2" Label="DecoderType" @bind-Value="Form!.DecoderType" />
-        <AppInputNumber TValue="int?" Width="1" Label="DccAddress" @bind-Value="Form!.DccAddress" />
-        <div />
-        <AppInputCheck Width="2" Label="HasSound" @bind-Value="Form!.HasSound" />
-        <AppInputCheck Width="2" Label="HasRemoteCouplings" @bind-Value="Form!.HasRemoteCouplings" />
-        <AppInputCheck Width="2" Label="IsWeathered" @bind-Value="Form!.IsWeathered" />
-        <div />
+        <AppFormRow>
+            <AppInputNumber TValue="int" Width="1" Label="InventoryNumber" @bind-Value="Form!.InventoryNumber" />
+            <AppInputSelect Width="1" Label="Scale" @bind-Value="Form!.ScaleId" Items="ScaleItems" ShowPleaseSelect="true" />
+            <AppInputText Width="2" Label="Model=Manufacturer" @bind-Value="Form!.ModelManufacturerName" />
+            <AppInputText Width="1" Label="ArticleNumber" @bind-Value="Form!.ModelNumber" />
+            <AppInputSelectNullable Width="1" Label="Couplings" Items="CouplingFeatureItems" @bind-Value="Form!.CouplingFeatureId" ShowNoneOption="true" />
+            <AppInputSelectNullable Width="1" Label="Wheels" Items="WheelsFeatureItems" @bind-Value="Form!.WheelsFeatureId" ShowNoneOption="true" />
+            <AppInputText Width="2" Label="DecoderType" @bind-Value="Form!.DecoderType" />
+            <AppInputNumber TValue="int?" Width="1" Label="DccAddress" @bind-Value="Form!.DccAddress" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="HasSound" @bind-Value="Form!.HasSound" />
+            <AppInputCheck Label="HasRemoteCouplings" @bind-Value="Form!.HasRemoteCouplings" />
+            <AppInputCheck Label="IsWeathered" @bind-Value="Form!.IsWeathered" />
+        </AppCheckGroup>
         <AppInputText Width="10" Label="Note" @bind-Value="Form!.Note" Placeholder="@Localizer.MaxChars(200)" />
 
         @* The inputs are placed directly in the form, so the browser gets their validation rules (Migration step 3.6). *@
         <h3>@Localizer["Functions"]</h3>
-        <AppInputText Width="1" Label="F0" @bind-Value="Form!.F0" />
-        <AppInputText Width="1" Label="F1" @bind-Value="Form!.F1" />
-        <AppInputText Width="1" Label="F2" @bind-Value="Form!.F2" />
-        <AppInputText Width="1" Label="F3" @bind-Value="Form!.F3" />
-        <AppInputText Width="1" Label="F4" @bind-Value="Form!.F4" />
-        <AppInputText Width="1" Label="F5" @bind-Value="Form!.F5" />
-        <AppInputText Width="1" Label="F6" @bind-Value="Form!.F6" />
-        <AppInputText Width="1" Label="F7" @bind-Value="Form!.F7" />
-        <AppInputText Width="1" Label="F8" @bind-Value="Form!.F8" />
-        <AppInputText Width="1" Label="F9" @bind-Value="Form!.F9" />
-        <AppInputText Width="1" Label="F10" @bind-Value="Form!.F10" />
-        <AppInputText Width="1" Label="F11" @bind-Value="Form!.F11" />
-        <AppInputText Width="1" Label="F12" @bind-Value="Form!.F12" />
-        <AppInputText Width="1" Label="F13" @bind-Value="Form!.F13" />
-        <AppInputText Width="1" Label="F14" @bind-Value="Form!.F14" />
-        <AppInputText Width="1" Label="F15" @bind-Value="Form!.F15" />
-        <AppInputText Width="1" Label="F16" @bind-Value="Form!.F16" />
-        <AppInputText Width="1" Label="F17" @bind-Value="Form!.F17" />
-        <AppInputText Width="1" Label="F18" @bind-Value="Form!.F18" />
-        <AppInputText Width="1" Label="F19" @bind-Value="Form!.F19" />
-        <AppInputText Width="1" Label="F20" @bind-Value="Form!.F20" />
-        <AppInputText Width="1" Label="F21" @bind-Value="Form!.F21" />
-        <AppInputText Width="1" Label="F22" @bind-Value="Form!.F22" />
-        <AppInputText Width="1" Label="F23" @bind-Value="Form!.F23" />
-        <AppInputText Width="1" Label="F24" @bind-Value="Form!.F24" />
-        <AppInputText Width="1" Label="F25" @bind-Value="Form!.F25" />
-        <AppInputText Width="1" Label="F26" @bind-Value="Form!.F26" />
-        <AppInputText Width="1" Label="F27" @bind-Value="Form!.F27" />
-        <AppInputText Width="1" Label="F28" @bind-Value="Form!.F28" />
-        <AppInputText Width="1" Label="F29" @bind-Value="Form!.F29" />
+        <AppFormRow>
+            <AppInputText Width="1" Label="F0" @bind-Value="Form!.F0" />
+            <AppInputText Width="1" Label="F1" @bind-Value="Form!.F1" />
+            <AppInputText Width="1" Label="F2" @bind-Value="Form!.F2" />
+            <AppInputText Width="1" Label="F3" @bind-Value="Form!.F3" />
+            <AppInputText Width="1" Label="F4" @bind-Value="Form!.F4" />
+            <AppInputText Width="1" Label="F5" @bind-Value="Form!.F5" />
+            <AppInputText Width="1" Label="F6" @bind-Value="Form!.F6" />
+            <AppInputText Width="1" Label="F7" @bind-Value="Form!.F7" />
+            <AppInputText Width="1" Label="F8" @bind-Value="Form!.F8" />
+            <AppInputText Width="1" Label="F9" @bind-Value="Form!.F9" />
+            <AppInputText Width="1" Label="F10" @bind-Value="Form!.F10" />
+            <AppInputText Width="1" Label="F11" @bind-Value="Form!.F11" />
+            <AppInputText Width="1" Label="F12" @bind-Value="Form!.F12" />
+            <AppInputText Width="1" Label="F13" @bind-Value="Form!.F13" />
+            <AppInputText Width="1" Label="F14" @bind-Value="Form!.F14" />
+            <AppInputText Width="1" Label="F15" @bind-Value="Form!.F15" />
+            <AppInputText Width="1" Label="F16" @bind-Value="Form!.F16" />
+            <AppInputText Width="1" Label="F17" @bind-Value="Form!.F17" />
+            <AppInputText Width="1" Label="F18" @bind-Value="Form!.F18" />
+            <AppInputText Width="1" Label="F19" @bind-Value="Form!.F19" />
+            <AppInputText Width="1" Label="F20" @bind-Value="Form!.F20" />
+            <AppInputText Width="1" Label="F21" @bind-Value="Form!.F21" />
+            <AppInputText Width="1" Label="F22" @bind-Value="Form!.F22" />
+            <AppInputText Width="1" Label="F23" @bind-Value="Form!.F23" />
+            <AppInputText Width="1" Label="F24" @bind-Value="Form!.F24" />
+            <AppInputText Width="1" Label="F25" @bind-Value="Form!.F25" />
+            <AppInputText Width="1" Label="F26" @bind-Value="Form!.F26" />
+            <AppInputText Width="1" Label="F27" @bind-Value="Form!.F27" />
+            <AppInputText Width="1" Label="F28" @bind-Value="Form!.F28" />
+            <AppInputText Width="1" Label="F29" @bind-Value="Form!.F29" />
+        </AppFormRow>
     </Inputs>
 </EditTemplate>
 

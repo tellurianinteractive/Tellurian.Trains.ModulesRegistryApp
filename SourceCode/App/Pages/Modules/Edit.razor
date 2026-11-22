@@ -27,50 +27,55 @@
 
 <EditTemplate Item="Form" FormName="module" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="3" Label="Standard&Scale" @bind-Value="Form!.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-        <AppInputText Width="4" Label="Name" @bind-Value="Form!.FullName" />
-        <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Form!.ConfigurationLabel" />
-        <AppInputText Width="1" Label="PackageLabel" @bind-Value="Form!.PackageLabel" />
-        <AppInputNumber TValue="int?" Width="1" Label="FremoNumber" @bind-Value="Form!.FremoNumber" />
-        <AppInputNumber TValue="int?" Width="2" Label="NumberOfSections" @bind-Value="Form!.NumberOfSections" />
-
-        <AppInputSelect Width="2" Label="Visibility" @bind-Value="Form!.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Form!.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Form!.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="LandscapeSeason" @bind-Value="Form!.LandscapeSeason" Items="EnumExtensions.LandscapeSeasonListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Form!.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
-        <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Form!.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
-
-        <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
-        <AppInputNumber TValue="int?" Width="2" Label="RepresentsFromYear" @bind-Value="Form!.RepresentsFromYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="RepresentsToYear" @bind-Value="Form!.RepresentsUptoYear" />
-        <AppInputText Width="4" Label="ThemeNote" @bind-Value="Form!.Theme" />
-
-        <AppInputNumber TValue="double?" Width="1" Label="Radius" @bind-Value="Form!.Radius" Unit="mm" />
-        <AppInputNumber TValue="double?" Width="1" Label="Angle" @bind-Value="Form!.Angle" Unit="°" Step=".1" />
-        <AppInputNumber TValue="double?" Width="1" Label="Straight" @bind-Value="Form!.Straight" Unit="mm" Step="1" />
-        <div class="col-md-1">
-            <label class="form-control-label text-end">@Localizer["Length"]&nbsp;(mm)</label>
-            <div class="form-control text-end" aria-readonly="true">@(Existing?.Length.ToString("0") ?? "")</div>
-        </div>
-        <AppInputNumber TValue="double?" Width="1" Label="Width" @bind-Value="Form!.Width" Unit="mm" Step="1" />
-        <AppInputNumber TValue="int?" Width="2" Label="MaxSpeed" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
-        <AppInputNumber TValue="int" Width="2" Label="NumberOfThroughTracks" @bind-Value="Form!.NumberOfThroughTracks" />
-        <AppInputFill Width="3" />
-
-        <AppInputCheck Width="2" Label="IsUnavailable" @bind-Value="Form!.IsUnavailable" />
-        <AppInputCheck Width="2" Label="IsStandAlone" @bind-Value="Form!.IsStandAlone" />
-        <AppInputCheck Width="2" Label="IsTurntable" @bind-Value="Form!.IsTurntable" />
-        <AppInputCheck Width="2" Label="IsDuckunder" @bind-Value="Form!.IsDuckunder" />
-        <AppInputCheck Width="2" Label="IsSignalModule" @bind-Value="Form!.IsSignalModule" />
-        <AppInputCheck Width="2" Label="IsEndProfileSwitcher" @bind-Value="Form!.IsEndProfileSwitcher" />
-        <AppInputCheck Width="2" Label="IsEndOfLine" @bind-Value="Form!.IsEndOfLine" />
-        <AppInputCheck Width="2" Label="HasNormalGauge" @bind-Value="Form!.HasNormalGauge" />
-        <AppInputCheck Width="2" Label="HasNarrowGauge" @bind-Value="Form!.HasNarrowGauge" />
-        <AppInputCheck Width="2" Label="HasIntegratedLocoNet" @bind-Value="Form!.HasIntegratedLocoNet" />
-        @* Always shown: a hidden checkbox isn't posted, and would be saved as unchecked. *@
-        <AppInputCheck Width="2" Label="Is2R" @bind-Value="Form!.Is2R" />
-        <AppInputCheck Width="2" Label="Is3R" @bind-Value="Form!.Is3R" />
+        <AppFormRow>
+            <AppInputSelect Width="3" Label="Standard&Scale" @bind-Value="Form!.StandardId" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+            <AppInputText Width="5" Label="Name" @bind-Value="Form!.FullName" />
+            <AppInputText Width="1" Label="ConfigurationLabel" @bind-Value="Form!.ConfigurationLabel" />
+            <AppInputText Width="1" Label="PackageLabel" @bind-Value="Form!.PackageLabel" />
+            <AppInputNumber TValue="int?" Width="1" Label="FremoNumber" @bind-Value="Form!.FremoNumber" />
+            <AppInputNumber TValue="int?" Width="1" Label="NumberOfSections" @bind-Value="Form!.NumberOfSections" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputSelect Width="2" Label="Visibility" @bind-Value="Form!.ObjectVisibilityId" Items="EnumExtensions.ObjectVisibilityListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="FunctionalState" @bind-Value="Form!.FunctionalState" Items="EnumExtensions.ModuleFunctionalStateListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="LandscapeState" @bind-Value="Form!.LandscapeState" Items="EnumExtensions.ModuleLandscapeStateListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="LandscapeSeason" @bind-Value="Form!.LandscapeSeason" Items="EnumExtensions.LandscapeSeasonListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="SignalFeature" @bind-Value="Form!.SignalFeature" Items="EnumExtensions.SignalFeatureListboxItems()" ShowPleaseSelect="false" />
+            <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Form!.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
+            <AppInputNumber TValue="int?" Width="1" Label="RepresentsFromYear" @bind-Value="Form!.RepresentsFromYear" />
+            <AppInputNumber TValue="int?" Width="1" Label="RepresentsToYear" @bind-Value="Form!.RepresentsUptoYear" />
+            <AppInputText Width="6" Label="ThemeNote" @bind-Value="Form!.Theme" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputNumber TValue="double?" Width="1" Label="Radius" @bind-Value="Form!.Radius" Unit="mm" />
+            <AppInputNumber TValue="double?" Width="1" Label="Angle" @bind-Value="Form!.Angle" Unit="°" Step=".1" />
+            <AppInputNumber TValue="double?" Width="1" Label="Straight" @bind-Value="Form!.Straight" Unit="mm" Step="1" />
+            <div class="@FormColumn.Css(1)">
+                <label class="form-control-label text-end">@Localizer["Length"]&nbsp;mm</label>
+                <div class="form-control text-end" aria-readonly="true">@(Existing?.Length.ToString("0") ?? "")</div>
+            </div>
+            <AppInputNumber TValue="double?" Width="1" Label="Width" @bind-Value="Form!.Width" Unit="mm" Step="1" />
+            <AppInputNumber TValue="int?" Width="1" Label="MaxSpeed" @bind-Value="Form!.SpeedLimit" Unit="km/h" Step="5" />
+            <AppInputNumber TValue="int" Width="1" Label="NumberOfThroughTracks" @bind-Value="Form!.NumberOfThroughTracks" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="IsUnavailable" @bind-Value="Form!.IsUnavailable" />
+            <AppInputCheck Label="IsStandAlone" @bind-Value="Form!.IsStandAlone" />
+            <AppInputCheck Label="IsTurntable" @bind-Value="Form!.IsTurntable" />
+            <AppInputCheck Label="IsDuckunder" @bind-Value="Form!.IsDuckunder" />
+            <AppInputCheck Label="IsSignalModule" @bind-Value="Form!.IsSignalModule" />
+            <AppInputCheck Label="IsEndProfileSwitcher" @bind-Value="Form!.IsEndProfileSwitcher" />
+            <AppInputCheck Label="IsEndOfLine" @bind-Value="Form!.IsEndOfLine" />
+            <AppInputCheck Label="HasNormalGauge" @bind-Value="Form!.HasNormalGauge" />
+            <AppInputCheck Label="HasNarrowGauge" @bind-Value="Form!.HasNarrowGauge" />
+            <AppInputCheck Label="HasIntegratedLocoNet" @bind-Value="Form!.HasIntegratedLocoNet" />
+            @* Always shown: a hidden checkbox isn't posted, and would be saved as unchecked. *@
+            <AppInputCheck Label="Is2R" @bind-Value="Form!.Is2R" />
+            <AppInputCheck Label="Is3R" @bind-Value="Form!.Is3R" />
+        </AppCheckGroup>
 
         <AppInputText Width="12" Label="Note" @bind-Value="Form!.Note" />
     </Inputs>

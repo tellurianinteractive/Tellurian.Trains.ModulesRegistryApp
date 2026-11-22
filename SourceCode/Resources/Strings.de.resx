@@ -1176,11 +1176,11 @@
   <data name="Junction" xml:space="preserve">
     <value>Verzweigung</value>
   </data>
-  <data name="Keeper" xml:space="preserve">
-    <value>Egentürmer</value>
+  <data name="KeeperCountry" xml:space="preserve">
+    <value>Betreiberland</value>
   </data>
   <data name="KeeperSignature" xml:space="preserve">
-    <value>Eigentümercode</value>
+    <value>Betreiberkürzel</value>
   </data>
   <data name="Kilowatt" xml:space="preserve">
     <value>Kilowatt</value>
@@ -1300,7 +1300,7 @@
     <value>Maximale Teilnehmerzahl</value>
   </data>
   <data name="MaxSpeed" xml:space="preserve">
-    <value>Höchstgeschwindigkeit</value>
+    <value>Max.</value>
   </data>
   <data name="MaxTrainLength" xml:space="preserve">
     <value>Maximale Zuglänge</value>
@@ -1648,10 +1648,10 @@
     <value>{0} Module registriert</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
-    <value>Anzahl der Abschnitte</value>
+    <value>Abschnitte</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Durchgangsspuren</value>
+    <value>Durchg. Gleise</value>
   </data>
   <data name="NumberParticipantsRegistered" xml:space="preserve">
     <value>{0} Teilnehmer registriert</value>
@@ -2050,10 +2050,10 @@
     <value>Repräsentative Station</value>
   </data>
   <data name="RepresentsFromYear" xml:space="preserve">
-    <value>Repräsentiert ab Jahr</value>
+    <value>Modell ab Jahr</value>
   </data>
   <data name="RepresentsToYear" xml:space="preserve">
-    <value>Repräsentiert zu Jahr</value>
+    <value>Modell bis Jahr</value>
   </data>
   <data name="RequiredAttribute_Error" xml:space="preserve">
     <value>"{0}" muss einen Wert haben</value>

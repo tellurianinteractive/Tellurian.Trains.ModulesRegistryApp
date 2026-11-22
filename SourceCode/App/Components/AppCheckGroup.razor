@@ -1,0 +1,11 @@
+@* Checkboxes of a form in their own block (2026-11-22), never mixed with other fields: a grid with as many equal columns as the width
+   allows, so the boxes line up whatever the length of the labels in each language. A Width on the checkboxes is ignored here. *@
+<div class="col-12">
+    <div class="app-check-group">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

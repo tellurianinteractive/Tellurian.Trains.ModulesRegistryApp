@@ -7,10 +7,6 @@
 {
     <span class="@WidthCss">
         <span class="noprint">
-            @if (AlignWithFields)
-            {
-                <br />
-            }
             <span class="form-check">
                 <input disabled="@IsDisabled" type="checkbox" class="form-check-input @CssClass" id="@Label" name="@NameAttributeValue" value="true" @bind="@CurrentValue"/>
                 @if (!string.IsNullOrWhiteSpace(Label))
@@ -28,7 +24,6 @@
     </span>
 }
 @code {
-    [Parameter] public bool AlignWithFields { get; set; }
     [Parameter] public bool ShowLabelWhenPrinting { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage)

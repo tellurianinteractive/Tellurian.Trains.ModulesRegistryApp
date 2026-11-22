@@ -1176,8 +1176,8 @@
   <data name="Junction" xml:space="preserve">
     <value>Junction</value>
   </data>
-  <data name="Keeper" xml:space="preserve">
-    <value>Keeper</value>
+  <data name="KeeperCountry" xml:space="preserve">
+    <value>Keeper country</value>
   </data>
   <data name="KeeperSignature" xml:space="preserve">
     <value>Keeper signature</value>
@@ -1300,7 +1300,7 @@
     <value>Max number of participants</value>
   </data>
   <data name="MaxSpeed" xml:space="preserve">
-    <value>Max speed</value>
+    <value>Max</value>
   </data>
   <data name="MaxTrainLength" xml:space="preserve">
     <value>Max train length</value>
@@ -1648,10 +1648,10 @@
     <value>{0} modules registered</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
-    <value>Number of sections</value>
+    <value>Sections</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Through tracks</value>
+    <value>Tracks through</value>
   </data>
   <data name="NumberParticipantsRegistered" xml:space="preserve">
     <value>{0} participants registered</value>
@@ -2050,10 +2050,10 @@
     <value>Representative station</value>
   </data>
   <data name="RepresentsFromYear" xml:space="preserve">
-    <value>Represents from year</value>
+    <value>Model from year</value>
   </data>
   <data name="RepresentsToYear" xml:space="preserve">
-    <value>Represents to year</value>
+    <value>Model to year</value>
   </data>
   <data name="RequiredAttribute_Error" xml:space="preserve">
     <value>"{0}" must have a value</value>

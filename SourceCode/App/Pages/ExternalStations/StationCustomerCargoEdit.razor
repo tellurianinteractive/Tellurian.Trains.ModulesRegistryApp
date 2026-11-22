@@ -22,18 +22,22 @@
 
 <EditTemplate Item="Form" FormName="cargo-flow" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="3" Label="CargoType" Items="CargoTypeItems" ShowPleaseSelect="true" Typeahead="true" TypeaheadPlaceholder="TypeNhmCodeOrName" @bind-Value="Form!.CargoId" />
-        <AppInputSelect Width="3" Label="PackagingUnit" Items="PackagingUnitItems" ShowPleaseSelect="false" @bind-Value="Form!.PackageUnitId" />
-        <AppInputFill Width="6" />
-        <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
-        <AppInputSelect Width="2" Label="Direction" Items="DirectionItems" ShowPleaseSelect="true" @bind-Value="Form!.DirectionId" />
-        <AppInputNumber TValue="int" Width="2" Label="Quantity" @bind-Value="Form!.Quantity" />
-        <AppInputSelect Width="2" Label="QuantityUnit" Items="QuantityUnitItems" ShowPleaseSelect="true" @bind-Value="Form!.QuantityUnitId" />
-        <AppInputFill Width="4" />
-        <AppInputText Width="2" Label="OtherWagonClass" @bind-Value="Form!.SpecificWagonClass" />
-        <AppInputText Width="3" Label="OtherName" @bind-Value="Form!.SpecialCargoName" />
-        <AppInputNumber TValue="int?" Width="2" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.FromYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.UptoYear" />
+        <AppFormRow>
+            <AppInputSelect Width="3" Label="CargoType" Items="CargoTypeItems" ShowPleaseSelect="true" Typeahead="true" TypeaheadPlaceholder="TypeNhmCodeOrName" @bind-Value="Form!.CargoId" />
+            <AppInputSelect Width="3" Label="PackagingUnit" Items="PackagingUnitItems" ShowPleaseSelect="false" @bind-Value="Form!.PackageUnitId" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputSelect Width="2" Label="Days" Items="OperatingDayItems" ShowPleaseSelect="true" @bind-Value="Form!.OperatingDayId" />
+            <AppInputSelect Width="2" Label="Direction" Items="DirectionItems" ShowPleaseSelect="true" @bind-Value="Form!.DirectionId" />
+            <AppInputNumber TValue="int" Width="2" Label="Quantity" @bind-Value="Form!.Quantity" />
+            <AppInputSelect Width="2" Label="QuantityUnit" Items="QuantityUnitItems" ShowPleaseSelect="true" @bind-Value="Form!.QuantityUnitId" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputText Width="2" Label="OtherWagonClass" @bind-Value="Form!.SpecificWagonClass" />
+            <AppInputText Width="3" Label="OtherName" @bind-Value="Form!.SpecialCargoName" />
+            <AppInputNumber TValue="int?" Width="2" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.FromYear" />
+            <AppInputNumber TValue="int?" Width="2" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.UptoYear" />
+        </AppFormRow>
     </Inputs>
 </EditTemplate>
 

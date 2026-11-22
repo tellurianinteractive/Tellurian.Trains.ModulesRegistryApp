@@ -135,16 +135,19 @@ else
             <EditTemplate Item="Form" FormName="participant" OnValidSubmit="SaveAsync" ShowSaveButton="MayEdit">
                 <Inputs>
                     <h3>@Localizer["Days"]</h3>
-                    @if (Meeting.DaysCount() > 0) { <AppInputCheck Width="1" @bind-Value="Form!.Day1" Label="@Meeting.Day(1).AsLocalized()" /> }
-                    @if (Meeting.DaysCount() > 1) { <AppInputCheck Width="1" @bind-Value="Form!.Day2" Label="@Meeting.Day(2).AsLocalized()" /> }
-                    @if (Meeting.DaysCount() > 2) { <AppInputCheck Width="1" @bind-Value="Form!.Day3" Label="@Meeting.Day(3).AsLocalized()" /> }
-                    @if (Meeting.DaysCount() > 3) { <AppInputCheck Width="1" @bind-Value="Form!.Day4" Label="@Meeting.Day(4).AsLocalized()" /> }
-                    @if (Meeting.DaysCount() > 4) { <AppInputCheck Width="1" @bind-Value="Form!.Day5" Label="@Meeting.Day(5).AsLocalized()" /> }
-                    @if (Meeting.DaysCount() > 5) { <AppInputCheck Width="1" @bind-Value="Form!.Day6" Label="@Meeting.Day(6).AsLocalized()" /> }
-                    <AppInputFill Width="@(Math.Max(0, 12 - Meeting.DaysCount()))" />
+                    <AppCheckGroup>
+                        @if (Meeting.DaysCount() > 0) { <AppInputCheck @bind-Value="Form!.Day1" Label="@Meeting.Day(1).AsLocalized()" /> }
+                        @if (Meeting.DaysCount() > 1) { <AppInputCheck @bind-Value="Form!.Day2" Label="@Meeting.Day(2).AsLocalized()" /> }
+                        @if (Meeting.DaysCount() > 2) { <AppInputCheck @bind-Value="Form!.Day3" Label="@Meeting.Day(3).AsLocalized()" /> }
+                        @if (Meeting.DaysCount() > 3) { <AppInputCheck @bind-Value="Form!.Day4" Label="@Meeting.Day(4).AsLocalized()" /> }
+                        @if (Meeting.DaysCount() > 4) { <AppInputCheck @bind-Value="Form!.Day5" Label="@Meeting.Day(5).AsLocalized()" /> }
+                        @if (Meeting.DaysCount() > 5) { <AppInputCheck @bind-Value="Form!.Day6" Label="@Meeting.Day(6).AsLocalized()" /> }
+                    </AppCheckGroup>
                     <ValidationMessage For="() => Form!.Day1" />
-                    <AppInputTimeOnly Width="2" @bind-Value="Form!.LatestArrivalTime" Label="@LatestArrivalTimeLabel" />
-                    <AppInputTimeOnly Width="2" @bind-Value="Form!.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel" />
+                    <AppFormRow>
+                        <AppInputTimeOnly Width="2" @bind-Value="Form!.LatestArrivalTime" Label="@LatestArrivalTimeLabel" />
+                        <AppInputTimeOnly Width="2" @bind-Value="Form!.EarliestDepartureTime" Label="@EarliestDepartureTimeLabel" />
+                    </AppFormRow>
                 </Inputs>
             </EditTemplate>
         }

@@ -22,7 +22,7 @@
     [Parameter] public bool HideLabelIfValueIsEmpty { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    string WidthCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string WidthCss => FormColumn.Css(Width);
 
     bool ShowLabel => Label.HasValue && (!HideLabelIfValueIsEmpty || Value.HasValue);
 }

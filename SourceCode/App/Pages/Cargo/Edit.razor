@@ -22,23 +22,29 @@
     <Inputs>
         <AppInputSelect Width="12" Label="NHMCode" Items="NhmCodeItems" @bind-Value="Form!.NhmCode" ShowPleaseSelect="true" Typeahead="true" TypeaheadPlaceholder="TypeNhmCodeOrName" />
 
-        <AppInputText Width="3" Label="DefaultClasses" @bind-Value="Form!.DefaultClasses" />
-        <AppInputNumber TValue="int?" Width="2" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.FromYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.UptoYear" />
-        <AppInputCheck Width="2" Label="IsExpress" @bind-Value="Form!.IsExpress" AlignWithFields="true" />
-        <AppInputCheck Width="3" Label="IsCoolingRequired" @bind-Value="Form!.IsCoolingRequired" AlignWithFields="true" />
+        <AppFormRow>
+            <AppInputText Width="3" Label="DefaultClasses" @bind-Value="Form!.DefaultClasses" />
+            <AppInputNumber TValue="int?" Width="2" Label="FromYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.FromYear" />
+            <AppInputNumber TValue="int?" Width="2" Label="UptoYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.UptoYear" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="IsExpress" @bind-Value="Form!.IsExpress" />
+            <AppInputCheck Label="IsCoolingRequired" @bind-Value="Form!.IsCoolingRequired" />
+        </AppCheckGroup>
 
-        <AppInputText Width="4" Label="English" @bind-Value="Form!.EN" />
-        <AppInputText Width="4" Label="German" @bind-Value="Form!.DE" />
-        <AppInputText Width="4" Label="Dutch" @bind-Value="Form!.NL" />
+        <AppFormRow>
+            <AppInputText Width="4" Label="English" @bind-Value="Form!.EN" />
+            <AppInputText Width="4" Label="German" @bind-Value="Form!.DE" />
+            <AppInputText Width="4" Label="Dutch" @bind-Value="Form!.NL" />
 
-        <AppInputText Width="4" Label="French" @bind-Value="Form!.FR" />
-        <AppInputText Width="4" Label="Italian" @bind-Value="Form!.IT" />
-        <AppInputText Width="4" Label="Polish" @bind-Value="Form!.PL" />
+            <AppInputText Width="4" Label="French" @bind-Value="Form!.FR" />
+            <AppInputText Width="4" Label="Italian" @bind-Value="Form!.IT" />
+            <AppInputText Width="4" Label="Polish" @bind-Value="Form!.PL" />
 
-        <AppInputText Width="4" Label="Danish" @bind-Value="Form!.DA" />
-        <AppInputText Width="4" Label="Swedish" @bind-Value="Form!.SV" />
-        <AppInputText Width="4" Label="Norwegian" @bind-Value="Form!.NB" />
+            <AppInputText Width="4" Label="Danish" @bind-Value="Form!.DA" />
+            <AppInputText Width="4" Label="Swedish" @bind-Value="Form!.SV" />
+            <AppInputText Width="4" Label="Norwegian" @bind-Value="Form!.NB" />
+        </AppFormRow>
     </Inputs>
 </EditTemplate>
 

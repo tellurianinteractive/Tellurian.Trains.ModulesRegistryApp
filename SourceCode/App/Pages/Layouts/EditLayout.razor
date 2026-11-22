@@ -24,19 +24,29 @@
 
 <EditTemplate Item="Form" FormName="layout" OnValidSubmit="SaveAsync" ShowSaveButton="MayEdit">
     <Inputs>
-        <AppInputSelect Width="4" @bind-Value="Form!.OrganisingGroupId" Label="ResponsibleGroup" Items="ResponsibleGroupItems" ShowPleaseSelect="true" />
-        <AppInputSelect Width="3" @bind-Value="Form!.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" ShowPleaseSelect="true" />
-        <AppInputSelectNullable Width="3" @bind-Value="Form!.ContactPersonId" Label="ContactPerson" Items="ContactPersonItems" ShowNoneOption="true" />
-        <AppInputText Width="3" @bind-Value="Form!.ShortName" Label="Name" />
-        <AppInputText Width="5" @bind-Value="Form!.Theme" Label="Theme" />
-        <AppInputDate Width="2" @bind-Value="Form!.RegistrationOpeningDate" Label="RegistrationOpens" />
-        <AppInputDate Width="2" @bind-Value="Form!.RegistrationClosingDate" Label="RegistrationCloses" />
-        <AppInputDateNullable Width="2" @bind-Value="Form!.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
-        <AppInputCheck Width="3" Label="IsRegistrationPermitted" @bind-Value="Form!.IsRegistrationPermitted" AlignWithFields="true" />
-        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.MaxNumberOfParticipants" Label="MaxNumberOfParticipants" />
+        <AppFormRow>
+            <AppInputSelect Width="4" @bind-Value="Form!.OrganisingGroupId" Label="ResponsibleGroup" Items="ResponsibleGroupItems" ShowPleaseSelect="true" />
+            <AppInputSelect Width="3" @bind-Value="Form!.PrimaryModuleStandardId" Label="PrimaryModuleStandard" Items="ModuleStandardItems" ShowPleaseSelect="true" />
+            <AppInputSelectNullable Width="3" @bind-Value="Form!.ContactPersonId" Label="ContactPerson" Items="ContactPersonItems" ShowNoneOption="true" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputText Width="3" @bind-Value="Form!.ShortName" Label="Name" />
+            <AppInputText Width="5" @bind-Value="Form!.Theme" Label="Theme" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputDate Width="2" @bind-Value="Form!.RegistrationOpeningDate" Label="RegistrationOpens" />
+            <AppInputDate Width="2" @bind-Value="Form!.RegistrationClosingDate" Label="RegistrationCloses" />
+            <AppInputDateNullable Width="2" @bind-Value="Form!.ModuleRegistrationClosingDate" Label="ModuleRegistrationCloses" />
+            <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.MaxNumberOfParticipants" Label="MaxNumberOfParticipants" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="IsRegistrationPermitted" @bind-Value="Form!.IsRegistrationPermitted" />
+        </AppCheckGroup>
         <h4>@Localizer["GameSettings"]</h4>
-        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.FirstYear" Label="FirstYear" />
-        <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.LastYear" Label="LastYear" />
+        <AppFormRow>
+            <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.FirstYear" Label="FirstYear" />
+            <AppInputNumber TValue="int?" Width="2" @bind-Value="Form!.LastYear" Label="LastYear" />
+        </AppFormRow>
         <AppInputMarkdown @bind-Value="Form!.Details" Label="Note" MaxNumberOfCharacters="LayoutFormData.MaxNoteLength" />
     </Inputs>
 </EditTemplate>

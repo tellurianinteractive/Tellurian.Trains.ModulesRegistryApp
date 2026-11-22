@@ -23,13 +23,16 @@
 
 <EditTemplate Item="Form" FormName="external-station" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="3" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowPleaseSelect="true" IsDisabled="IsRegionLocked" />
-        <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
-        <AppInputText Width="3" Label="InternationalName" @bind-Value="Form!.InternationalName" />
-        <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
-        <AppInputFill Width="2" />
-        <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.OpenedYear" />
-        <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ClosedYear" />
+        <AppFormRow>
+            <AppInputSelect Width="3" Label="Region" @bind-Value="Form!.RegionId" Items="RegionItems" ShowPleaseSelect="true" IsDisabled="IsRegionLocked" />
+            <AppInputText Width="3" Label="FullName" @bind-Value="Form!.FullName" />
+            <AppInputText Width="3" Label="InternationalName" @bind-Value="Form!.InternationalName" />
+            <AppInputText Width="1" Label="Signature" @bind-Value="Form!.Signature" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputNumber TValue="int?" Width="2" Label="OpenedYear" PeriodEnd="YearPeriodEnd.From" @bind-Value="Form!.OpenedYear" />
+            <AppInputNumber TValue="int?" Width="2" Label="ClosedYear" PeriodEnd="YearPeriodEnd.Upto" @bind-Value="Form!.ClosedYear" />
+        </AppFormRow>
     </Inputs>
     <Buttons>
         @if (Existing is not null)

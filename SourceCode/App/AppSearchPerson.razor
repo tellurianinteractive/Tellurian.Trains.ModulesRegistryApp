@@ -10,7 +10,7 @@
     shows the chosen person again when the form is shown after a POST.
 *@
 
-<div class="col-md-4">
+<div class="@FormColumn.Css(4)">
     <label class="form-control-label" for="@InputId">@SearchLabel</label>
     <div @key="ResetKey" class="person-search">
         <input id="@InputId" class="form-control" type="text" autocomplete="off" spellcheck="false" value="@SelectedName" data-selected-name="@SelectedName"

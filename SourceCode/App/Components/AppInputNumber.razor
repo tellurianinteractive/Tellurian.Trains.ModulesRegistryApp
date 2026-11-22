@@ -99,9 +99,9 @@
         _ => null
     };
 
-    string BootstrapWrapperCss => Width.HasValue ? $"col-md-{Width}" : "col-md-4";
+    string BootstrapWrapperCss => FormColumn.Css(Width);
     string NumberStep => Step is null ? "1" : CurrentValue is double ? ".1" : Step;
-    string LabelMarkup => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? LabelText(Localizer) : $"{LabelText(Localizer)}&nbsp;({Unit})";
+    string LabelMarkup => string.IsNullOrWhiteSpace(Label) ? string.Empty : string.IsNullOrWhiteSpace(Unit) ? LabelText(Localizer) : $"{LabelText(Localizer)}&nbsp;{Unit}";
 
     private bool IsInt => typeof(TValue) == typeof(int) || typeof(TValue) == typeof(int?);
     private bool IsDouble => typeof(TValue) == typeof(double) || typeof(TValue) == typeof(double?);

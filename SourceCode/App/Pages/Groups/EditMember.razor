@@ -23,11 +23,13 @@
 <EditTemplate Item="Form" FormName="member" OnValidSubmit="SaveAsync">
     <Inputs>
         <input type="hidden" name="Form.PersonId" value="@Member?.PersonId" />
-        <AppInputCheck Width="3" Label="IsGroupAdministrator" @bind-Value="Form!.IsGroupAdministrator" />
-        <AppInputCheck Width="3" Label="IsDataAdministrator" @bind-Value="Form!.IsDataAdministrator" />
-        <AppInputCheck Width="3" Label="IsMeetingAdministrator" @bind-Value="Form!.IsMeetingAdministrator" />
-        <AppInputCheck Width="3" Label="MayBorrowGroupsModules" @bind-Value="Form!.MayBorrowGroupsModules" />
-        <AppInputCheck Width="3" Label="MemberMayBorrowMyModules" @bind-Value="Form!.MemberMayBorrowMyModules" />
+        <AppCheckGroup>
+            <AppInputCheck Label="IsGroupAdministrator" @bind-Value="Form!.IsGroupAdministrator" />
+            <AppInputCheck Label="IsDataAdministrator" @bind-Value="Form!.IsDataAdministrator" />
+            <AppInputCheck Label="IsMeetingAdministrator" @bind-Value="Form!.IsMeetingAdministrator" />
+            <AppInputCheck Label="MayBorrowGroupsModules" @bind-Value="Form!.MayBorrowGroupsModules" />
+            <AppInputCheck Label="MemberMayBorrowMyModules" @bind-Value="Form!.MemberMayBorrowMyModules" />
+        </AppCheckGroup>
     </Inputs>
 </EditTemplate>
 

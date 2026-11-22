@@ -1176,11 +1176,11 @@
   <data name="Junction" xml:space="preserve">
     <value>Forgrening</value>
   </data>
-  <data name="Keeper" xml:space="preserve">
-    <value>Eier</value>
+  <data name="KeeperCountry" xml:space="preserve">
+    <value>Operatørland</value>
   </data>
   <data name="KeeperSignature" xml:space="preserve">
-    <value>Eierbetegnelse</value>
+    <value>Operatørsignatur</value>
   </data>
   <data name="Kilowatt" xml:space="preserve">
     <value>Kilowatt</value>
@@ -1300,7 +1300,7 @@
     <value>Maks antall deltakere</value>
   </data>
   <data name="MaxSpeed" xml:space="preserve">
-    <value>Maks. hastighet</value>
+    <value>Maks.</value>
   </data>
   <data name="MaxTrainLength" xml:space="preserve">
     <value>Maks toglengde</value>
@@ -1648,10 +1648,10 @@
     <value>{0} moduler registrert</value>
   </data>
   <data name="NumberOfSections" xml:space="preserve">
-    <value>Antall seksjoner</value>
+    <value>Seksjoner</value>
   </data>
   <data name="NumberOfThroughTracks" xml:space="preserve">
-    <value>Gjennomgående spor</value>
+    <value>Spor gjennom</value>
   </data>
   <data name="NumberParticipantsRegistered" xml:space="preserve">
     <value>{0} deltakere registrert</value>
@@ -2050,10 +2050,10 @@
     <value>Representativ stasjon</value>
   </data>
   <data name="RepresentsFromYear" xml:space="preserve">
-    <value>Representerer fra år</value>
+    <value>Modell fra år</value>
   </data>
   <data name="RepresentsToYear" xml:space="preserve">
-    <value>Representerer til år</value>
+    <value>Modell til år</value>
   </data>
   <data name="RequiredAttribute_Error" xml:space="preserve">
     <value>"{0}" må ha en verdi</value>
