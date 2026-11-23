@@ -1,6 +1,6 @@
-# Waybills: how they work today
+# Waybills: implementation and plans
 
-This document describes what the current implementation (stored procedures and views in `SourceCode/Database`) actually does, as surveyed 2026-11-23 (Migration step 5.1). The intended rules are in [Creations of waybills.md](Creations%20of%20waybills.md); the differences are listed at the end. The golden-master tests in `TestCode/Database.Tests` pin this behaviour before it moves to code.
+The technical companion to [Creations of waybills.md](Creations%20of%20waybills.md), which describes for users how waybills work. This document describes what the implementation (stored procedures and views in `SourceCode/Database`, and since Migration step 5.2 `Services/Waybills`) actually does, as surveyed 2026-11-23 (step 5.1) and updated since, its defects, and at the end the planned changes and ideas. The golden-master tests in `TestCode/Database.Tests` pin this behaviour while it moves to code.
 
 ## Cargo flows
 A cargo flow is a row in **StationCustomerCargo** (module station) or **ExternalStationCustomerCargo** (external station).
@@ -108,20 +108,18 @@ These are pinned by the golden-master tests as they are, and are fixed only when
 - **Dead code:** *same-cargo return* can never be set for module and external rows, since those require an NHM code.
 - **Column mix-up:** `ExternalCustomerCargo` puts the direction's *IsSupply* into the column that the other views use for the flow's *EmptyReturn*. The columns `EmptyReturn` and `MatchReturn` aren't used when generating.
 
-## Differences from the intended rules
-Decided 2026-11-23; the rules are in [Creations of waybills.md](Creations%20of%20waybills.md).
+## Planned changes and ideas
+How waybills work today, for users, is in [Creations of waybills.md](Creations%20of%20waybills.md). This section collects what is decided or proposed but not yet implemented. Done: the sending flow's days (1.17.4), the year window and one waybill per day when printing per operating day (1.17.5).
 
-| Rule | Today | Change needed |
-|---|---|---|
-| In the same country, Send or Export matches Receive or Import; between countries, only Export matches Import | The same | No |
-| A module-to-module waybill is stored at the receiving customer, who prints it | The same | No |
-| Module stations need the same main theme, and the same scale unless one has none | The same | No |
-| A new waybill gets print count 1; an existing one keeps its count | New module and external rows get the quantity for some units | Yes |
-| Generate for one cargo flow, or all of a customer's flows | Always all of the customer's flows | Yes |
-| Waybills that no longer match are deleted on both sides when a flow changes, or when the waybill is disabled | Deleted only when a flow or customer is deleted; stale rows are hidden when printing; disabling = print count 0 | Yes |
-| The stations' years overlap, and the cargo exists within that window | Done in 1.17.5, when generating and when printing (17 existing waybills fell outside and are no longer printed) | No |
-| A waybill gets the sending flow's days | Done in 1.17.4 | No |
-| Generated waybills: cargo without an NHM code matches only the representative station of the station's own region, to or from it, with an empty return waybill the other way | The other end is the own region (its representative station, or the region's name if it has none); a row is created only if an opposite flow of the same cargo exists in the same country, in a region with a representative station; *same-cargo return* is set, not *empty return*; id comparisons across tables | Yes |
-| Harbours receive any export and send any import, within the country | Not implemented | New feature |
-| Layout waybills, for all cargo (also without an NHM code, since a layout has few stations), ignore the country and the difference between Send/Export and Receive/Import | Cargo with an NHM code: Send → Receive only; without: Export → Import between stations in different countries | Yes |
-| — (not described) | Group waybills, empty wagon orders | — |
+### Decided
+- **Remove waybills that no longer match** (step 5.5). A waybill that no longer matches the own or the other station's cargo flows is deleted from **StationCustomerWaybill** on both sides, as part of the update request: when a station no longer provides a cargo, or a flow changes from export to send; when the user disables the waybill; when the cargo itself is deleted (unlikely). Today waybills are only deleted when a cargo flow or customer is deleted; the printout hides most of the others.
+- **Print count 1 for new waybills** (step 5.5). An existing waybill keeps its print count. Today a new waybill gets the quantity for some units: pieces for module stations, bearer units for external stations.
+- **Cargo without an NHM code** (step 5.5): the waybill goes to or from the representative station of the station's own region, **with an empty return** the other way, and no waybill when the region has no representative station. Today the return is a *same-cargo return*; a waybill is only created if a flow of the same cargo in the opposite direction exists somewhere in the same country, in a region with a representative station; and a region without a representative station still gets a stored waybill (not printed). The procedure also compares ids from different tables.
+- **Layout waybills** (step 5.4): for all cargo, also without an NHM code (a layout has few stations), the difference between Send/Export and Receive/Import is ignored, so a station that sends matches a station that imports the same cargo. Today cargo with an NHM code matches only sends to receives, and cargo without an NHM code only exports to imports between stations in different countries.
+
+### Proposed
+- **Generate for one cargo flow at a time**, besides all of a customer's flows.
+- **Empty return and match return.** Use the flow's *EmptyReturn* to create empty return waybills for added waybills. Use *MatchReturn* to find a return waybill for a cargo that uses the same type of wagon class: if A sends bread to B in a G or H wagon, find something B can send to A in a G or H wagon. If both are set, a match return has precedence over an empty return; with no match return but an empty return, add an empty return; otherwise no return.
+- **Add a cargo flow from another station's cargo flow.** A user wants to trade with a station and adds a cargo flow by selecting that station's cargo flow. In both the station customers list and the external station customers list, after selecting a customer, the list of its cargo flows comes up with a button *Add to my station*. A separate form lets the user select their own station and customer and add: this adds a cargo flow to the user's customer and matches it, which adds a waybill in the customer's **StationCustomerWaybill**. The two stations must overlap in time, and the cargo must exist within that time.
+- **Harbours.** A module station that is a harbour can also be the destination of any export and the source of any import, limited to cargo flows in the same country, as a real harbour. Harbours are not used in waybills today (`Station.IsHarbour`).
+- **Days of receiving flows.** For flows that receive or import, the days have no meaning, so the selection can be hidden and set to daily behind the scenes. The days are kept, since a flow can change direction, and then the days apply again.

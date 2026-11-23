@@ -1,38 +1,42 @@
 ﻿## Godskunder och frakter
-En viktig del av ett trafikspel är frakter.
-Frakterna kan styras på två sätt:
-- Vagnar i fasta omlopp, där de går på tidtabell.
-- Vagnlaster som styrs med fraktsedlar.
+En viktig del av ett trafikspel är frakter. De kan styras på två sätt:
+- Vagnar i fasta omlopp, som går enligt tidtabell.
+- Vagnslaster som styrs med fraktsedlar.
 
 ### Fraktsedlar
-I **Modulregistret** kan man producera fraktsedlar på två sätt:
-- Per trafikplats där man skapar fraktsedlar som kan återanvändas från träff till träff.
-- Fraktsedlar för frakter mellan de trafikplatser som finns med på en viss träff.
+I **Modulregistret** görs fraktsedlar på två sätt:
+- **Per station:** fraktsedlar för en stations godskunder, som sparas och kan återanvändas från träff till träff.
+- **Per träffanläggning:** fraktsedlar för frakter mellan stationerna i en anläggning på en träff.
 
-Modulregistret har i princip samma funktioner som *Gula Sidorna*, men med vissa skillnader.
+Du skriver inte fraktsedlarna själv. **Modulregistret** skapar dem genom att matcha avsändande och mottagande godskunders godsflöden.
 
-### Godskunder
-I **Modulregistret** lägger man in godskunder och godsflöden för vilka varor som skickas och mottas.
-Man kan lägga in godskunder och godsflöden för sin egen modulstation, 
-men även för *externa stationer*.
+### Godskunder och godsflöden
+Du lägger in godskunder och deras godsflöden, det gods de skickar och tar emot, för dina egna modulstationer och även för *externa stationer*. En *extern station* är en verklig station som läggs in med historiskt korrekta data om stationen, dess kunder och godsflöden.
 
-En *extern station* är en verklig station som måste läggas in med historiskt korrekta data
-om stationen, dess kunder och godsflöden.
+Ett godsflöde har en riktning:
+- **Skicka** och **Motta**: inom samma land.
+- **Export** och **Import**: även till och från andra länder.
 
-### Så här skapas fraktsedlar
-Till skillnad från *Gula Sidorna* kan man inte själv skapa valfria fraktsedlar i **Modulregistret**.
-Istället skapar applikationen fraktsedlar genom att matcha avsändande och mottagande godskunders godsflöde.
-Matchningen görs på följande data:
-- **Tema** för avsändande och mottagande station skall överensstämma. Detta förhindrar att t.ex. amerikanskt och europeiskt tema blandas.
-- **Skala** för att undvika att skapa fratsedlar mellan moduler av olika skala. Externa stationer har ingen skala, så de matchas oavsett skala.
-- **Typ av last** skall överensstämma. Detta matchas på lastens interna id, och inte på namnet. Ett eget namn på lasttypen påverkar *inte* matchningen.
-- **Årtal** skall överlappa: tidsperioderna för *typ av gods*, *avsändande och mottagande station och godsföde*. 
-Detta innebär att fraktsedlar blir historikst korrekta.
+Ett godsflöde kan också ha årtal och veckodagar. Utan egna årtal har godsflödet kundens årtal.
 
-### Anpassa och skriva ut fraktsedlar
-De fraktsedlar som skapas kan anpassas på flera sätt:
-- Antal att skriva ut.
-- Om man vill skriva ut givet antal eller angivet antal per trafikdag.
-- Om man vill ha en returfraktsedel för tomvagn.
+### Vad som matchas
+**Gods med NHM-kod** matchas mot godsflöden på alla andra modulstationer och externa stationer:
+- Samma typ av gods, där den ena skickar (skicka eller export) och den andra tar emot (motta eller import). Matchningen görs på godstypen, så ett eget namn på godset påverkar den inte.
+- Inom samma land matchas alla dessa riktningar. Mellan länder matchas bara export mot import.
+- Mellan modulstationer måste **huvudtemat** (Europa eller USA) vara detsamma, och även **skalan**. Externa stationer har inget av dem, så de matchas ändå.
+- **Årtalen** för de två godsflödena måste överlappa, och godset måste finnas under den perioden. Det gör fraktsedlarna historiskt korrekta.
 
-För avgående vagnslatser kan kan även skriva ut tomvagnsbeställningar, fraktsedlar som man placerar vid tågmagasin.
+**Gods utan NHM-kod**, som styckegods, post och expressgods, matchas inte mot enskilda stationer, eftersom det skulle ge tusentals fraktsedlar. Det går till eller från den *representativa stationen* i din stations region. En station utan region, eller i en region utan representativ station, får inga sådana fraktsedlar.
+
+**På en träffanläggning** handlar anläggningens stationer med varandra, även över landsgränser. Externa stationer är inte med, och godsflödena måste vara i drift under anläggningens årtal.
+
+### Skapa, anpassa och skriva ut fraktsedlar
+På en godskunds sida för fraktsedlar skapar **Uppdatera** fraktsedlarna för alla kundens godsflöden. En fraktsedel mellan två modulstationer hör till den mottagande kunden och skrivs ut av den mottagande stationen. Du kan uppdatera igen när du vill: bara nya matchningar läggs till, och de fraktsedlar du har behåller sitt antal att skriva ut.
+
+Fraktsedlarna kan anpassas på flera sätt:
+- Antal att skriva ut. Noll betyder att fraktsedeln inte skrivs ut, och **Markera alla som utskrivna** sätter noll för de fraktsedlar som visas.
+- Dagarna. En fraktsedel skickas den avsändande kundens dagar.
+- En fraktsedel per trafikdag, i stället för en för alla dagarna.
+- En returfraktsedel för den tomma vagnen, som skickas dagligen.
+
+För avgående vagnslaster kan du även skriva ut *tomvagnsbeställningar*, som du placerar vid tågmagasinet.

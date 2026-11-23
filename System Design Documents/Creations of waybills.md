@@ -1,152 +1,71 @@
-# System Design
-## Creation of Waybills
-Creation of waybills is a bit complex because it involves several steps.
-1. The first step is users adding freight customers and **cargo flow**.
-2. The second step is to **generate** or **manually create waybills**. 
-3. The third step is to **print waybills**.
+# Creation of Waybills
+Creating waybills involves three steps:
+1. Users add freight customers and their **cargo flows**.
+2. Waybills are **generated** from the cargo flows, and can then be adjusted.
+3. Waybills are **printed**.
 
-Below these steps are descriped in more detail.
+This document describes how it works today. Planned changes and the technical details are in [Waybills.md](Waybills.md).
 
-### Cargo Flow
-A *cargo flow* is the definition of a single type of good being sent or received
-for a freight customer. Cargo flows can be defined for *module stations* and 
-*external station*. 
-It is the cargo flow that forms the basis for creating waybills.
+## Main principles
 
-Cargo flows for module stations are created by the mainainer of the module. 
-Cargo flows for external stations are created by a user that want to
-have a real station sending or receiving cargo, maybe to match their module
-stations cargo flow.
+### Cargo flows
+A *cargo flow* is a single type of goods that a freight customer sends or receives. Cargo flows are defined for customers at *module stations* by the module's owners, and for customers at *external stations* (real stations outside the layout) by any user who wants a real station to trade with.
 
-### Create Waybills
-Waybills can be created by *generating waybills* for a cargoflows for a 
-freight customer (often all cargo flows for a freight customer).
-This method finds all matching cargo customers at other module stations and
-external stations, and is stored for each station customer in the 
-table *StationCustomerWaybill*. 
-The gererantion can be repeated, and only adds waybills that are not 
-in the station customer's list.
-The cargo matching depends on the direction and scope:
-- Sends matches same cargo id that other stations receives, and vice versa, 
-  limitted to within the same country.
-- Exports matches same cargo id that other stations receives, and vice versa, 
-  limitted to outside the country.
+Each cargo flow has a direction:
+- **Send** and **Receive**: within the same country.
+- **Export** and **Import**: also to and from other countries.
 
-Clarifications (2026-11-23, see [Waybills.md](Waybills.md) for how it works today):
-- Within the same country, the scope doesn't matter: a send or an export matches
-  a receive or an import of the same cargo. Between countries, only an export
-  matches an import.
-- A waybill between two module stations is stored only at the receiving customer,
-  and it is the receiving station that prints it.
-- Module stations must have the same main theme (Europe or USA), and the same
-  scale unless one of them has none.
-- A new waybill gets print count 1. An existing waybill keeps its print count
-  when waybills are generated again.
+A cargo flow can also have years (from and up to) and days of the week. Without its own years, a cargo flow has the customer's years.
 
-#### Cargo without NHM code
-Cargo without an NHM code (general cargo, mail, express goods etc.) does not match
-individual stations, otherwise we get thousands of waybills.
-It matches only the representative station 
-of the same region as the station,
-and the waybill goes to or from that station.
-with an empty return waybill the other way.
+### Generating waybills
+On a customer's waybills page, **Update** finds the matching cargo flows at other stations for all the customer's cargo flows, and adds a waybill for each match the customer doesn't already have. Existing waybills keep their print count; their days are set again from the sending cargo flow.
 
-#### Removing Unmatched Waybills
-A waybill that not any longer matches the current and/or other stations cargo, 
-should be deleted from **StationCustomerWaybill** on both sides:
-- If my station no longer provides a cargo or it changes from exports to sends,
-  corresponding waybills at both mine and other stations should be deleted
-  as part of my update request.
-- If I disable my waybill
-- If the Cargo itself eventually are deleted (unlikley to happen).
+- A waybill between two module stations belongs to the **receiving** customer, and it is the receiving station that prints it.
+- A waybill with an external station belongs to the module station's customer, whether it sends or receives.
 
-This must be supported. Today waybills are only deleted when a cargo flow or
-a customer is deleted, so changed cargo flows leave waybills that no longer match.
+### Years
+Year matching makes the use of cargo more realistic and historically correct:
+- The two customers' cargo flows must have overlapping years. This makes a time window.
+- The cargo itself must exist within that window.
 
-#### Years Matching
-The purpose of year matching is to improve realism and historical correctness of cargo use.
-- Both stations must have overlapping years of operation. This creates a time window.
-- Only cargo that exists under that time window should be considered.
+A waybill to or from a region's representative station (see *Cargo without an NHM code* below) has the cargo flow's own years as its window.
 
-This is the norm since 1.17.5, both when generating and when printing.
-A shadow yard has no years of its own, so its window is the own cargo flow's years.
+### Days
+Sending cargo can take several days (timetable sessions), so what matters is the day the cargo is sent:
+- A waybill is sent on the **sending** cargo flow's days.
+- An empty return is sent daily.
+- A return with the same cargo is sent on the days of its own sender, which is the receiver of the outgoing waybill.
 
-#### Days Matching
-Cargo flows can be defined to be limited on specific days of the week. 
-Now, sending/exporting cargo can take several days (i.e. timetable sessions),
-so the thing that only matters is which day to send cargo. 
-The arrival days has no meaning, and can be omitted in the printed waybills.
+### Adjusting waybills
+After waybills are generated, they can be filtered and edited: the number to print (zero means not printed), the days, whether a return waybill is printed, and more. *Mark as printed* sets the print count of the waybills shown to zero.
 
-Also, in cargo flows that are receive/import, the selection of days has no meaning and can be disabled/hidden and set to daily behind the scenes.
-The reason to keep it like that, is that a single cargo flow can change direction, and then days applies again.
+### Printing waybills
+Waybills are printed 12 per page, 6 in each row. Waybills with a return are printed first, so they can be cut in pairs and folded. A waybill printed *per operating day* gives one waybill for each sending day.
 
-So a waybill gets the sending cargo flow's days. An empty return is always daily,
-and a return with the same cargo gets the days of the return's sender
-(the receiver of the outgoing waybill). Done in 1.17.4.
+## What matches
 
-### Improved Matching
-We can add the follwing features:
-- Option to updating waybills for only one cargo flow at a time.
-- Use EmptyReturn to create empty return waybills for added waybills.
-- Use MatchCargoFlow to find a return waybill for a cargo that uses same type of wagon class.
-  If A sends Bread to B in a G or H wagon, find something B can send to A in a G or H wago.
+### Cargo with an NHM code
+A customer's cargo flow at a module station matches cargo flows at **all other module stations and external stations**:
+- The same cargo type, where one sends (Send or Export) and the other receives (Receive or Import).
+- In the same country, any of these combinations matches. Between countries, only an export matches an import.
+- Between two module stations: the same main theme (Europe or USA), and the same scale unless one of them has none.
+- The years, as described above.
 
-A new featue that people asked for. A user want to add a cargoflow by selecting a cargoflow of another station,
-because the user want to trade with that station. 
+### Cargo without an NHM code
+Cargo without an NHM code (general cargo, mail, express goods and so on) doesn't match individual stations, otherwise there would be thousands of waybills. It matches only the **representative station of the station's own region**: the waybill goes to or from that station, with a return waybill with the same cargo the other way.
 
-In both Station customers list and External station customers list, after selecting a customer,
-the list of cargo flows for that customer comes up. Add a button Add to my station. A separate form comes up,
-where you can select a station, a customer and Add button. This adds a cargo flow to my customer, 
-and creates a waybill directly in my StationCustomerWaybill table.
+A station without a region, or in a region without a representative station, gets no such waybills.
 
-
-#### Harbours
-A module that is a harbour adds that it also can be a destination for any
-exports, and a source for any imports, limitted to cargo flows in the same country.
-This corresponds to the real world, where a harbour is a destination for any export, and a source for any imports.
-This is a new feature; harbours are not used in waybills today.
-
-#### Layout internal waybills
-There are also an option to create waybills per meeting layout,
-with internal freights only.
-In this case, the waybills are created between all module stations 
-ignoring the country, to also create waybills for internal freights between module stations in different countries.
-The difference between sends/exports and receives/imports is also ignored:
-a station that sends matches a station that imports the same cargo, and so on.
-Layout waybills are a special case: this applies to all cargo, also cargo
-without an NHM code (for example general cargo), since the number of stations
-on a layout is limited. The rule in *Cargo without NHM code* applies to
-generated waybills, not to layout waybills.
-Today cargo with an NHM code matches only sends to receives, and cargo without
-an NHM code only exports to imports between different countries.
-
-### Modifying Waybills
-After waybills are gererated, they can be filtered and edited, for example 
-number to print (where zero disable printing), and
-if an empty return waybill should be created, etc.
-
-### Printing Waybills
-Nornally, waybills are printed 12 per page, first 6 in top row and
-then 5 in last row.
-The printing function always print waybills with return waybills first,
-so they can be cut in pairs and folded.
+### Meeting layouts
+For a layout at a meeting, waybills are made when they are printed, without being stored:
+- They are made only between the layout's module stations (internal freights), never with external stations.
+- The country of the stations is ignored, so stations from different countries in the same layout trade with each other.
+- Receiving customers are at the layout's stations; sending customers are at stations in the layouts at the same meeting with the same main theme and scale. Stations of participants who have cancelled are left out.
+- Cargo with an NHM code: a sending customer matches a receiving customer. Cargo without an NHM code: an export matches an import between stations in different countries.
+- Both cargo flows must be in operation within the layout's years.
+- Wagons and other bearer units get an empty return waybill.
 
 ## Technical Solution
-### Cargo Flow
-The *cargo flow* is edited in the user interface and stored in tables:
-a) **StationCustomerCargo** for module stations, and
-b) **ExternalStationCustomerCargo** for external stations.
+The cargo flows are stored in **StationCustomerCargo** (module stations) and **ExternalStationCustomerCargo** (external stations).
 
-### Generated Waybills
-The generation of waybills adds rows in  the table **StationCustomerWaybill**.
-This table holds a reference to the station customer and its specific cargo flow,
-and to the *other* end of the waybill as a relation to ether another 
-*StationCustomerCargo*, 
-an *ExternalStationCustomerCargo*
-while the other one is NULL.
-
-
-
-
-
-
+Generating adds rows to **StationCustomerWaybill**. A row refers to the customer and its cargo flow, and to the *other* end of the waybill: another **StationCustomerCargo** or an **ExternalStationCustomerCargo**, with the other one NULL; with neither, the other end is the region's representative station. More details, and how the current implementation works, are in [Waybills.md](Waybills.md).

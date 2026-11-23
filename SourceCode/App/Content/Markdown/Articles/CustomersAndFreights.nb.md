@@ -1,38 +1,42 @@
 ﻿## Fraktkunder og frakter
-En viktig del av ett trafikspil er frakt.
-Fraktene kan styres på to måter:
-- Vogne i fast turnus, hvor de kjører på ruteplan.
-- Vognlast styret av fraktbrev.
+En viktig del av et trafikkspill er frakter. De kan styres på to måter:
+- Vogner i faste omløp, som går etter ruteplan.
+- Vognlaster som styres med fraktbrev.
 
 ### Fraktbrev
-I **Modulregisteret** kan fraktbrev produseres på to måter:
-- Fraktbrev som kan gjenbrukes fra treff til treff.
-- Fraktbrev for frakt mellom godsstasjonene som er i et bestemt treffanlegg.
+I **Modulregisteret** lages fraktbrev på to måter:
+- **Per stasjon:** fraktbrev for en stasjons fraktkunder, som lagres og kan gjenbrukes fra treff til treff.
+- **Per treffanlegg:** fraktbrev for frakter mellom stasjonene i et anlegg på et treff.
 
-**Modulregisteret** har i utgangspunktet de samme funksjonene som *Gule sider*, men med noen forskjeller.
+Du skriver ikke fraktbrevene selv. **Modulregisteret** lager dem ved å matche avsendende og mottakende fraktkunders laststrømmer.
 
-### Fraktkunder
-I **Modulregisteret** legger du inn fraktkunder og fraktstrømmer som varer sendes og mottas for.
-Du kan legge inn fraktkunder og varestrømmer for din egen modulstasjon,
-men også for *eksterne stasjoner*.
+### Fraktkunder og laststrømmer
+Du legger inn fraktkunder og deres laststrømmer, varene de sender og mottar, for dine egne modulstasjoner og også for *eksterne stasjoner*. En *ekstern stasjon* er en virkelig stasjon som legges inn med historisk korrekte data om stasjonen, dens kunder og laststrømmer.
 
-En *ekstern stasjon* er en reell stasjon som skal legges inn med historisk korrekte data
-om stasjonen, dens kunder og godsstrømmer.
+En laststrøm har en retning:
+- **Send** og **Motta**: innenfor samme land.
+- **Eksport** og **Import**: også til og fra andre land.
 
-### Slik lages fraktsedler
-I motsetning til *Gule sider*, kan du ikke manuelt lage fraktsedler selv i **Modulregisteret**.
-I stedet oppretter applikasjonen fraktsedler ved å matche fraktflyten til avsendende og mottakende fraktkunder.
-Matchningen gjøres på følgende data:
-- **Tema** for sende- og mottaksstasjonen må samsvare. Dette forhindrer f.eks. amerikanske og europeiske temaer er blandet.
-- **Skala** for å unngå å lage frakt mellom moduler av ulik skala. Eksterne stasjoner har ingen skala, så de matches uansett skala.
-- **Type last** må samsvare. Dette matches på lastens interne id, og ikke på navnet. Et tilpasset lastetypenavn *påvirker* ikke samsvaret.
-- **År** må overlappe: tidsperiodene for *type gods*, *sendings- og mottaksstasjon og fraktfôr*.
-Dette betyr at fraktsedler lages historisk nøyaktige.
+En laststrøm kan også ha årstall og ukedager. Uten egne årstall har laststrømmen kundens årstall.
 
-### Tilpass og skriv ut fraktsedler
-Fraktbrevene som opprettes kan tilpasses på flere måter:
-- Antall som skal skrives ut.
-- Hvis du ønsker å skrive ut et gitt antall eller spesifisert antall per operasjonsdag.
-– Hvis du vil ha returfraktbrev for en tomvogn.
+### Hva som matches
+**Varer med NHM-kode** matches mot laststrømmer på alle andre modulstasjoner og eksterne stasjoner:
+- Samme varetype, der den ene sender (send eller eksport) og den andre mottar (motta eller import). Det matches på varetypen, så et eget navn på varen påvirker ikke matchingen.
+- Innenfor samme land matcher alle disse retningene. Mellom land matcher bare eksport mot import.
+- Mellom modulstasjoner må **hovedtemaet** (Europa eller USA) være det samme, og også **skalaen**. Eksterne stasjoner har ingen av dem, så de matches likevel.
+- **Årstallene** for de to laststrømmene må overlappe, og varen må finnes i den perioden. Det gjør fraktbrevene historisk korrekte.
 
-For avgående vognlass kan du også skrive ut tomme vognbestillinger, som du legger inn på skyggebanegården.
+**Varer uten NHM-kode**, som stykkgods, post og ekspressgods, matches ikke mot enkeltstasjoner, siden det ville gitt tusenvis av fraktbrev. De går til eller fra den *representative stasjonen* i din stasjons region. En stasjon uten region, eller i en region uten representativ stasjon, får ingen slike fraktbrev.
+
+**På et treffanlegg** handler anleggets stasjoner med hverandre, også over landegrenser. Eksterne stasjoner er ikke med, og laststrømmene må være i drift innenfor anleggets årstall.
+
+### Lage, tilpasse og skrive ut fraktbrev
+På en fraktkundes side for fraktbrev lager **Oppdater** fraktbrevene for alle kundens laststrømmer. Et fraktbrev mellom to modulstasjoner hører til den mottakende kunden og skrives ut av den mottakende stasjonen. Du kan oppdatere igjen når du vil: bare nye treff legges til, og fraktbrevene du har beholder antallet som skal skrives ut.
+
+Fraktbrevene kan tilpasses på flere måter:
+- Antall som skal skrives ut. Null betyr at fraktbrevet ikke skrives ut, og **Merk alle som skrevet ut** setter null for fraktbrevene som vises.
+- Dagene. Et fraktbrev sendes på den avsendende kundens dager.
+- Ett fraktbrev per driftsdag i stedet for ett for alle dagene.
+- Et returfraktbrev for den tomme vognen, som sendes daglig.
+
+For avgående vognlaster kan du også skrive ut *tomvognordrer*, som du plasserer på skyggebanegården.
