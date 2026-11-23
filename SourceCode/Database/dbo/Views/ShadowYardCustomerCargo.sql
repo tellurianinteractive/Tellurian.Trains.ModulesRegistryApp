@@ -41,7 +41,6 @@ SELECT
 	COALESCE(R.CountryId, ESR.CountryId) AS CountryId,
 	COALESCE(R.BackColor,ESR.BackColor) AS BackColor,
 	COALESCE(R.ForeColor,ESR.ForeColor) AS ForeColor,
-	COALESCE(R.IsCargoHub, ESR.IsCargoHub) AS IsCargoHub,
 	C.Languages,
 	C.DomainSuffix,
 	OD.Flag AS OperatingDayFlag,

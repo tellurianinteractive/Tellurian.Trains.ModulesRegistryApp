@@ -83,6 +83,13 @@ public static class WiFredThrottleMapper
             entity.ToTable("WiFredThrottle");
             entity.HasOne(p => p.OwningPerson)
                 .WithMany()
-                .HasForeignKey(w => w.OwningPersonId);
+                .HasForeignKey(w => w.OwningPersonId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.Property(e => e.MacAddress).HasMaxLength(17).IsUnicode(false).IsFixedLength().IsRequired();
+            entity.Property(e => e.Name).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Configuration).IsUnicode(false);
+            // UNIQUE constraints in the database. HasFilter(null): EF would otherwise leave out rows with NULL, as SQL Server does not.
+            entity.HasIndex(e => new { e.OwningPersonId, e.InventoryNumber }, "UX_WIFredThrottle_InventoryNumber").IsUnique().HasFilter(null);
+            entity.HasIndex(e => e.MacAddress, "UX_WIFredThrottle_MacAddress").IsUnique().HasFilter(null);
         });
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 using Microsoft.Extensions.Localization;
 using Rationals;
 using System.Diagnostics;
@@ -141,5 +142,9 @@ public static class ModuleOwnershipMapping
             entity.HasOne(d => d.Person)
                 .WithMany(p => p.ModuleOwnerships)
                 .HasForeignKey(d => d.PersonId);
+            entity.Property(e => e.OwnedShare).HasDatabaseDefault("0");
+            entity.HasIndex(e => e.PersonId, "IX_ModuleOwnership_PersonId");
+            entity.HasIndex(e => e.ModuleId, "IX_ModuleOwnership_ModuleId");
+            entity.HasIndex(e => e.GroupId, "IX_ModuleOwnership_GroupId");
         });
 }

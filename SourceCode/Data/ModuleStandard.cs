@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -37,11 +38,9 @@ public static class ModuleStandardMapping
             entity.Property(e => e.Electricity)
                 .HasMaxLength(20);
 
-            entity.Property(e => e.PreferredTheme)
-                .HasMaxLength(20);
+            entity.Property(e => e.PreferredTheme).HasMaxLength(50);
 
-            entity.Property(e => e.ShortName)
-                .HasMaxLength(10);
+            entity.Property(e => e.ShortName).HasMaxLength(12);
 
             entity.Property(e => e.TrackSystem)
                 .HasMaxLength(20);
@@ -53,5 +52,6 @@ public static class ModuleStandardMapping
                 .WithMany(p => p.ModuleStandards)
                 .HasForeignKey(d => d.ScaleId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.Property(e => e.MainThemeId).HasDatabaseDefault("0");
         });
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -81,11 +82,15 @@ internal static class ExternalStationCustomerCargoMapper
 
             entity.HasOne(d => d.OperatingDay)
                 .WithMany()
-                .HasForeignKey(d => d.OperatingDayId);
+                .HasForeignKey(d => d.OperatingDayId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.QuantityUnit)
                 .WithMany()
                 .HasForeignKey(d => d.QuantityUnitId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.Property(e => e.PackageUnitId).HasDatabaseDefault("0");
+            entity.Property(e => e.OperatingDayId).HasDatabaseDefault("0");
+            entity.HasIndex(e => e.ExternalStationCustomerId, "IX_ExternalStationCustomerCargo_StationCustomerId").IncludeProperties(e => new { e.CargoId, e.PackageUnitId, e.DirectionId, e.OperatingDayId, e.QuantityUnitId });
         });
 }

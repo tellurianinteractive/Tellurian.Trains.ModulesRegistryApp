@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -18,5 +19,9 @@ internal static class CargoDirectionMapper
         builder.Entity<CargoDirection>(entity =>
         {
             entity.ToTable("CargoDirection");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.FullName).HasMaxLength(10);
+            entity.Property(e => e.ShortName).HasMaxLength(4);
+            entity.Property<bool>("IsInternational").HasDatabaseDefault("0");
         });
 }

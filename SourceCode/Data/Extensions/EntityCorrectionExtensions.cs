@@ -201,7 +201,6 @@ public static class EntityCorrectionExtensions
         {
             station.OtherName = station.OtherName.Corrected(TextCase.InitialCapital, Optional);
             station.OtherSignature = station.OtherSignature.Corrected(TextCase.AsTyped, Optional);
-            if (!Enum.IsDefined((DifficultyLevel)station.Difficulty)) station.Difficulty = (int)DifficultyLevel.Undefined;
         }
     }
 

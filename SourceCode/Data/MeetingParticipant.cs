@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 using System.Security;
 
 namespace ModulesRegistry.Data;
@@ -42,15 +43,26 @@ public static class MeetingParticipantMapping
 
             entity.HasOne(d => d.Meeting)
                 .WithMany(d => d.Participants)
-                .HasForeignKey(d => d.MeetingId);
+                .HasForeignKey(d => d.MeetingId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(d => d.Person)
                 .WithMany()
-                .HasForeignKey(d => d.PersonId);
+                .HasForeignKey(d => d.PersonId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasMany(d => d.LayoutParticipations)
                 .WithOne(d => d.MeetingParticipant)
                 .HasForeignKey(d => d.MeetingParticipantId);
+            entity.Property(e => e.ParticipateDay1).HasDatabaseDefault("0");
+            entity.Property(e => e.ParticipateDay2).HasDatabaseDefault("0");
+            entity.Property(e => e.ParticipateDay3).HasDatabaseDefault("0");
+            entity.Property(e => e.ParticipateDay4).HasDatabaseDefault("0");
+            entity.Property(e => e.ParticipateDay5).HasDatabaseDefault("0");
+            entity.Property(e => e.ParticipateDay6).HasDatabaseDefault("0");
+            entity.Property(e => e.EarliestDepartureTime).HasPrecision(0);
+            entity.Property(e => e.LatestArrivalTime).HasPrecision(0);
+            entity.HasIndex(e => e.MeetingId, "IX_MeetingParticipant_MeetingId");
         });
 }
 

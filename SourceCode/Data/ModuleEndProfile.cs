@@ -23,7 +23,8 @@ public static class ModuleEndProfileMapping
             entity.ToTable("ModuleEndProfile");
 
             entity.Property(e => e.Designation)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(20);
 
             entity.HasOne(d => d.Scale)
                 .WithMany()
@@ -33,6 +34,6 @@ public static class ModuleEndProfileMapping
             entity.HasOne(d => d.PdfDocument)
                 .WithMany()
                 .HasForeignKey(d => d.PdfDocumentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientCascade);
         });
 }

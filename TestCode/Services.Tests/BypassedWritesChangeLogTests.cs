@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
@@ -151,6 +151,7 @@ public sealed class BypassedWritesChangeLogTests
         KeeperSignature = "SJ",
         VehicleClass = vehicleClass,
         VehicleNumber = id.ToString(),
+        InventoryNumber = id, // Unique per owner, as in the database.
         PrototypeLength = length,
         Theme = "SE",
     };

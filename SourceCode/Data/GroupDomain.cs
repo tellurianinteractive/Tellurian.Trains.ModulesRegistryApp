@@ -19,6 +19,10 @@ public class GroupDomain
 internal static class GroupDomainMapper
 {
     public static void MapGroupDomain(this ModelBuilder builder) =>
-        builder.Entity<GroupDomain>(entity => 
-            entity.ToTable("GroupDomain"));
+        builder.Entity<GroupDomain>(entity =>
+        {
+            entity.ToTable("GroupDomain");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name).HasMaxLength(50).IsRequired();
+        });
 }

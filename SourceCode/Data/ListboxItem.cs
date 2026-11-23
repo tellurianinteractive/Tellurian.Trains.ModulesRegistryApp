@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModulesRegistry.Data;
 
@@ -18,4 +19,13 @@ public record ListboxItem(int Id, string Description)
 public record TextboxItem(string Description, string? Value = null)
 {
     public string OptionValue => Value ?? Description;
+}
+
+public static class ListboxItemExtensions
+{
+    extension(ModelBuilder builder)
+    {
+        /// <summary>Read only with <c>FromSqlRaw</c> from list views and procedures, so it has no table.</summary>
+        internal void MapListboxItem() => builder.Entity<ListboxItem>(entity => entity.ToView(null));
+    }
 }

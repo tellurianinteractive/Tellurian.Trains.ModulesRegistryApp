@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.17.1
+Released 2026-11-23
+- Maintenance update.
 ## Release 1.17.0
 Released 2026-11-22
 - The forms are laid out in groups of fields, with the checkboxes in their own columns. Fields keep a usable width on tablet-sized screens, and the field labels are smaller.

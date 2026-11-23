@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Resources;
 using System.Diagnostics.CodeAnalysis;
@@ -40,6 +41,46 @@ public partial class Person
 # nullable enable
 public static partial class PersonExtensions
 {
+    extension(ModelBuilder builder)
+    {
+        internal void MapPerson() =>
+            builder.Entity<Person>(entity =>
+            {
+                entity.ToTable("Person");
+
+                entity.Property(e => e.CityName).HasMaxLength(50);
+
+                entity.Property(e => e.EmailAddresses).HasMaxLength(50);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FremoOwnerSignature).HasMaxLength(10);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MiddleName).HasMaxLength(50);
+
+                entity.Property(e => e.NickName).HasMaxLength(50);
+
+                entity.HasOne(d => d.Country)
+                    .WithMany(p => p.People)
+                    .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.Person)
+                    .HasForeignKey<Person>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+                entity.Property(e => e.FremoReservedAdresses).HasMaxLength(200);
+                entity.HasIndex(e => e.UserId, "IX_Person_UserId").IsUnique().HasFilter("[UserId] IS NOT NULL");
+                entity.HasIndex(e => e.CountryId, "IX_Person_CountryId");
+            });
+    }
+
     /// <summary>First name, nickname in quotation marks, middle and last name: Karl "Kalle" Svensson.</summary>
     public static string Name(this Person? person) =>
         person is null ? string.Empty :

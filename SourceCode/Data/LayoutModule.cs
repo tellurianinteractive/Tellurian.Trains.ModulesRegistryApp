@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 using System.Text;
 
 namespace ModulesRegistry.Data;
@@ -75,11 +76,13 @@ internal static class LayoutModuleMapping
 
             entity.HasOne(e => e.LayoutParticipant)
                  .WithMany(e => e.LayoutModules)
-                 .HasForeignKey(e => e.LayoutParticipantId);
+                 .HasForeignKey(e => e.LayoutParticipantId)
+                 .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.Module)
                   .WithMany()
-                  .HasForeignKey(e => e.ModuleId);
+                  .HasForeignKey(e => e.ModuleId)
+                  .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.LayoutStation)
                 .WithMany(e => e.LayoutModules)
@@ -88,6 +91,10 @@ internal static class LayoutModuleMapping
             entity.HasOne(e => e.LayoutParticipant)
                 .WithMany(e => e.LayoutModules)
                 .HasForeignKey(e => e.LayoutParticipantId);
-
+            entity.Property(e => e.RegisteredTime).HasDatabaseDefault("sysdatetimeoffset()");
+            entity.Property(e => e.BringAnyway).HasDatabaseDefault("0");
+            entity.HasIndex(e => e.LayoutParticipantId, "IX_LayoutModule_LayoutParticipantId");
+            entity.HasIndex(e => e.LayoutStationId, "IX_LayoutModule_LayoutStationId");
+            entity.HasIndex(e => e.ModuleId, "IX_LayoutModule_ModuleId");
         });
 }

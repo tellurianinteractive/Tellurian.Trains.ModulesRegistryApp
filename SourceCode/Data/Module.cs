@@ -302,7 +302,7 @@ public static class ModuleMapping
             entity.HasOne(d => d.PdfDocumentation)
                 .WithMany()
                 .HasForeignKey(d => d.PdfDocumentationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(d => d.Scale)
                 .WithMany(p => p.Modules)
@@ -312,12 +312,34 @@ public static class ModuleMapping
             entity.HasOne(d => d.Station)
                   .WithMany(p => p.Modules)
                   .HasForeignKey(d => d.StationId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasMany(d => d.GroupLayoutModules)
                 .WithOne(d => d.Module)
                 .HasForeignKey(d => d.ModuleId);
-
+            entity.Property(e => e.HasNormalGauge).HasDatabaseDefault("1");
+            entity.Property(e => e.HasNarrowGauge).HasDatabaseDefault("0");
+            entity.Property(e => e.Is2R).HasDatabaseDefault("1");
+            entity.Property(e => e.Is3R).HasDatabaseDefault("0");
+            entity.Property(e => e.IsTurntable).HasDatabaseDefault("0");
+            entity.Property(e => e.IsDuckunder).HasDatabaseDefault("0");
+            entity.Property(e => e.IsStandAlone).HasDatabaseDefault("1");
+            entity.Property(e => e.IsEndOfLine).HasDatabaseDefault("0");
+            entity.Property(e => e.IsSignalModule).HasDatabaseDefault("0");
+            entity.Property(e => e.IsEndProfileSwitcher).HasDatabaseDefault("0");
+            entity.Property(e => e.FunctionalState).HasDatabaseDefault("0");
+            entity.Property(e => e.LandscapeState).HasDatabaseDefault("0");
+            entity.Property(e => e.LandscapeSeason).HasDatabaseDefault("0");
+            entity.Property(e => e.SignalFeature).HasDatabaseDefault("0");
+            entity.Property(e => e.OverheadLineFeature).HasDatabaseDefault("0");
+            entity.Property(e => e.ObjectVisibilityId).HasDatabaseDefault("0");
+            entity.Property(e => e.HasIntegratedLocoNet).HasDatabaseDefault("0");
+            entity.Property(e => e.IsUnavailable).HasDatabaseDefault("0");
+            entity.HasOne(e => e.Standard)
+                .WithMany()
+                .HasForeignKey(e => e.StandardId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.HasIndex(e => e.StationId, "IX_Module_StationId");
         });
 }
 

@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -28,5 +29,7 @@ internal static class CargoReadyTimeMapper
             entity.Property(e => e.ShortName)
                 .IsRequired()
                 .HasMaxLength(10);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.IsSpecifiedInLayout).HasDatabaseDefault("0");
         });
 }

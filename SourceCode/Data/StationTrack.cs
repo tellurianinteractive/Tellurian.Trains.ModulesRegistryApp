@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 using static ModulesRegistry.Resources.Strings;
 
@@ -31,6 +32,29 @@ public partial class StationTrack
 
 public static class StationTrackExtensions
 {
+    extension(ModelBuilder builder)
+    {
+        internal void MapStationTrack() =>
+            builder.Entity<StationTrack>(entity =>
+            {
+                entity.ToTable("StationTrack");
+
+                entity.Property(e => e.Designation)
+                    .IsRequired()
+                    .HasMaxLength(5);
+
+                entity.Property(e => e.UsageNote).HasMaxLength(50);
+
+                entity.HasOne(d => d.Station)
+                    .WithMany(p => p.StationTracks)
+                    .HasForeignKey(d => d.StationId);
+                entity.Property(e => e.IsLockable).HasDatabaseDefault("0");
+                entity.Property(e => e.IsThroughTrack).HasDatabaseDefault("0");
+                entity.Property(e => e.DirectionId).HasDatabaseDefault("10");
+                entity.HasIndex(e => e.StationId, "IX_StationTrack_StationId");
+            });
+    }
+
     public static string DirectionText(this StationTrack track, IEnumerable<ListboxItem> items) => items.Single(i => i.Id == track.DirectionId).Description;
     public static string MaxTrainLengthText(this StationTrack track) => track.MaxTrainLength > 0 ? $"{track.MaxTrainLength:F1}m" : "";
     public static string PlatformLengthText(this StationTrack track) => track.PlatformLength.HasValue && track.PlatformLength.Value > 0 ? $"{track.PlatformLength.Value:F1}m" : None;

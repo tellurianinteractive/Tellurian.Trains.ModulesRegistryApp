@@ -33,7 +33,6 @@
     [FremoNumber]           INT            NULL,
     [ConfigurationLabel]    NVARCHAR (10)  NULL,
     [PackageLabel]          NVARCHAR (10)  NULL,
-    [CatenaryDescription]   NVARCHAR (50)  NULL,
     [NumberOfSections]      SMALLINT       NULL,
     [SignalFeature]         INT            CONSTRAINT [DF_Module_SignalFeature] DEFAULT ((0)) NOT NULL,
     [OverheadLineFeature]   INT            CONSTRAINT [DF_Module_OverheadLineFeature] DEFAULT ((0)) NOT NULL,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -47,11 +48,13 @@ internal static class StationCustomerWaybillMapper
 
             entity.HasOne(e => e.StationCustomer)
                 .WithMany(e => e.Waybills)
-                .HasForeignKey(e => e.StationCustomerId);
+                .HasForeignKey(e => e.StationCustomerId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.StationCustomerCargo)
                .WithMany()
-               .HasForeignKey(e => e.StationCustomerCargoId);
+               .HasForeignKey(e => e.StationCustomerCargoId)
+               .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.OtherStationCustomerCargo)
                 .WithMany()
@@ -67,7 +70,18 @@ internal static class StationCustomerWaybillMapper
 
             entity.HasOne(e => e.OperatingDay)
                 .WithMany()
-                .HasForeignKey(e => e.OperatingDayId);
-
+                .HasForeignKey(e => e.OperatingDayId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.Property(e => e.OperatingDayId).HasDatabaseDefault("8");
+            entity.Property(e => e.IsManuallyCreated).HasDatabaseDefault("0");
+            entity.Property(e => e.HasEmptyReturn).HasDatabaseDefault("0");
+            entity.Property(e => e.HasSameCargoReturn).HasDatabaseDefault("0");
+            entity.Property(e => e.HideLoadingTimes).HasDatabaseDefault("0");
+            entity.Property(e => e.HideUnloadingTimes).HasDatabaseDefault("0");
+            entity.Property(e => e.PrintPerOperatingDay).HasDatabaseDefault("0");
+            entity.Property(e => e.PrintCount).HasDatabaseDefault("1");
+            entity.Property(e => e.SequenceNumber).HasDatabaseDefault("1");
+            entity.HasIndex(e => e.OtherExternalCustomerCargoId, "IX_StationCustomerWaybill_OtherExternalCustomerCargoId");
+            entity.HasIndex(e => new { e.StationCustomerId, e.StationCustomerCargoId }, "IX_StationCustomerWaybill_StationCustomerId").IncludeProperties(e => new { e.OtherStationCustomerCargoId, e.OtherExternalCustomerCargoId, e.OtherRegionId, e.OperatingDayId });
         });
 }

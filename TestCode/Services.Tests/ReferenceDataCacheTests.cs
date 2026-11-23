@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
@@ -27,7 +27,7 @@ public sealed class ReferenceDataCacheTests
     {
         _factory = new SqliteDbContextFactory(_queries);
         _cache = new MemoryCache(new MemoryCacheOptions());
-        await _factory.SeedAsync(new NHM { Id = 1, Code = "1", LevelDigits = 2 });
+        await _factory.SeedAsync(new NHM { Id = 1, Code = "1", LevelDigits = 2, DA = "", DE = "", EN = "", NL = "", PL = "", SV = "" });
         await _factory.SeedAsync(
             new Cargo { Id = 1, NhmCode = 1, EN = "Coal", DE = "Kohle" },
             new CargoDirection { Id = 1, FullName = "Loading", ShortName = "L" });

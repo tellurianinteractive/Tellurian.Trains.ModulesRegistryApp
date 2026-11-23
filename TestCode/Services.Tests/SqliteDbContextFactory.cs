@@ -1,6 +1,7 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging.Testing;
 using Microsoft.Extensions.Time.Testing;
 using ModulesRegistry.Data;
@@ -11,7 +12,8 @@ namespace ModulesRegistry.Services.Tests;
 /// <summary>
 /// An in-memory SQLite database with the app's model, for service tests that save data.
 /// The connection stays open for the lifetime of the factory, otherwise the database disappears.
-/// SQLite differs from SQL Server (collation, triggers, stored procedures), so test only EF behaviour with it.
+/// SQLite differs from SQL Server (collation, triggers, stored procedures), so test only EF behaviour with it. The cascade triggers are
+/// stood in for by <see cref="CascadeTriggersModelCustomizer"/>.
 /// </summary>
 public sealed class SqliteDbContextFactory : IDbContextFactory<ModulesDbContext>, IDisposable
 {
@@ -34,6 +36,7 @@ public sealed class SqliteDbContextFactory : IDbContextFactory<ModulesDbContext>
         var changeLog = new ChangeLogInterceptor(CurrentUser, ChangeLogOptions, new ChangeLogCleanupSchedule(), Time, ChangeLogLogger);
         _options = new DbContextOptionsBuilder<ModulesDbContext>()
             .UseSqlite(_connection)
+            .ReplaceService<IModelCustomizer, CascadeTriggersModelCustomizer>()
             .AddInterceptors([new SkipUnchangedValuesInterceptor(), changeLog, .. interceptors])
             .Options;
         using var dbContext = CreateDbContext();
@@ -72,4 +75,19 @@ public sealed class TestCurrentUser : ICurrentUser
     public int? UserId { get; set; }
     public Exception? Throws { get; set; }
     public Task<int?> GetUserIdAsync() => Throws is null ? Task.FromResult(UserId) : Task.FromException<int?>(Throws);
+}
+
+/// <summary>
+/// SQL Server deletes the children of a deleted row with INSTEAD OF DELETE triggers, which SQLite doesn't have, while its foreign keys
+/// have no cascade. The model marks those relationships <see cref="DeleteBehavior.ClientCascade"/>; in the SQLite test database they
+/// cascade, so a delete gives the same result as the triggers.
+/// </summary>
+public sealed class CascadeTriggersModelCustomizer(ModelCustomizerDependencies dependencies) : ModelCustomizer(dependencies)
+{
+    public override void Customize(ModelBuilder modelBuilder, DbContext context)
+    {
+        base.Customize(modelBuilder, context);
+        foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()).Where(fk => fk.DeleteBehavior == DeleteBehavior.ClientCascade))
+            foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
+    }
 }

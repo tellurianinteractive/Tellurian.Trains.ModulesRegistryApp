@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public partial class StationCustomer
@@ -27,4 +29,36 @@ public partial class StationCustomer
     public virtual ICollection<StationCustomerCargo> Cargos { get; set; }
     public virtual ICollection<StationCustomerWaybill> Waybills { get; set; }
 
+}
+
+#nullable enable
+public static class StationCustomerExtensions
+{
+    extension(ModelBuilder builder)
+    {
+        internal void MapStationCustomer() =>
+            builder.Entity<StationCustomer>(entity =>
+            {
+                entity.ToTable("StationCustomer", tb => tb.HasTrigger("DeleteStationCustomer"));
+
+                entity.Property(e => e.Comment)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TrackOrArea).HasMaxLength(20);
+
+                entity.Property(e => e.TrackOrAreaColor).HasMaxLength(7).IsFixedLength();
+
+                entity.HasOne(d => d.Station)
+                    .WithMany(p => p.StationCustomers)
+                    .HasForeignKey(d => d.StationId)
+                    .OnDelete(DeleteBehavior.ClientCascade);
+                entity.HasIndex(e => e.StationId, "IX_StationCustomer_StationId");
+            });
+    }
 }

@@ -45,5 +45,7 @@ internal static class ExternalStationMapper
                 .WithMany(p => p.ExternalStations)
                 .HasForeignKey(d => d.RegionId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.Property(e => e.InternationalName).HasMaxLength(50);
+            entity.HasIndex(e => e.RegionId, "IX_ExternalStation_RegionId");
         });
 }

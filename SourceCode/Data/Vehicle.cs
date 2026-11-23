@@ -99,10 +99,12 @@ internal static class VehicleMapper
                 .HasForeignKey(e => e.VehicleInteroperabilityCode);
             entity.HasOne(e => e.Scale)
                 .WithMany(s => s.Vehicles)
-                .HasForeignKey(e => e.ScaleId);
+                .HasForeignKey(e => e.ScaleId)
+                .OnDelete(DeleteBehavior.ClientCascade);
             entity.HasOne(e => e.OwningPerson)
                 .WithMany(p => p.Vehicles)
-                .HasForeignKey(e => e.OwningPersonId);
+                .HasForeignKey(e => e.OwningPersonId)
+                .OnDelete(DeleteBehavior.ClientCascade);
             entity.HasOne(e => e.CouplingFeature)
                 .WithMany()
                 .HasForeignKey(e => e.CouplingFeatureId);
@@ -112,6 +114,55 @@ internal static class VehicleMapper
             entity.HasOne(e => e.TractionFeature)
                 .WithMany()
                 .HasForeignKey(e => e.TractionFeatureId);
+            entity.Property(e => e.KeeperSignature).HasMaxLength(10).IsUnicode(false).IsRequired();
+            entity.Property<int?>("VehicleType");
+            entity.Property(e => e.VehicleClass).HasMaxLength(10).IsUnicode(false).IsRequired();
+            entity.Property(e => e.VehicleNumber).HasMaxLength(20).IsUnicode(false).IsRequired();
+            entity.Property(e => e.PrototypeManufacturerName).HasMaxLength(20);
+            entity.Property<int?>("EnginePowerUnit").HasDefaultValueSql("0");
+            entity.Property(e => e.PrototypeImageHref).HasMaxLength(512).IsUnicode(false);
+            entity.Property(e => e.ModelManufacturerName).HasMaxLength(20);
+            entity.Property<byte[]>("ModelImage");
+            entity.Property(e => e.ModelImageHref).HasMaxLength(512).IsUnicode(false);
+            entity.Property(e => e.ModelNumber).HasMaxLength(16);
+            entity.Property(e => e.IsWeathered).HasDatabaseDefault("0");
+            entity.Property(e => e.Theme).HasMaxLength(10).IsUnicode(false).IsRequired();
+            entity.Property(e => e.DecoderType).HasMaxLength(20);
+            entity.Property(e => e.HasSound).HasDatabaseDefault("0");
+            entity.Property(e => e.HasRemoteCouplings).HasDatabaseDefault("0");
+            entity.Property(e => e.F0).HasMaxLength(12);
+            entity.Property(e => e.F1).HasMaxLength(12);
+            entity.Property(e => e.F2).HasMaxLength(12);
+            entity.Property(e => e.F3).HasMaxLength(12);
+            entity.Property(e => e.F4).HasMaxLength(12);
+            entity.Property(e => e.F5).HasMaxLength(12);
+            entity.Property(e => e.F6).HasMaxLength(12);
+            entity.Property(e => e.F7).HasMaxLength(12);
+            entity.Property(e => e.F8).HasMaxLength(12);
+            entity.Property(e => e.F9).HasMaxLength(12);
+            entity.Property(e => e.F10).HasMaxLength(12);
+            entity.Property(e => e.F11).HasMaxLength(12);
+            entity.Property(e => e.F12).HasMaxLength(12);
+            entity.Property(e => e.F13).HasMaxLength(12);
+            entity.Property(e => e.F14).HasMaxLength(12);
+            entity.Property(e => e.F15).HasMaxLength(12);
+            entity.Property(e => e.F16).HasMaxLength(12);
+            entity.Property(e => e.F17).HasMaxLength(12);
+            entity.Property(e => e.F18).HasMaxLength(12);
+            entity.Property(e => e.F19).HasMaxLength(12);
+            entity.Property(e => e.F20).HasMaxLength(12);
+            entity.Property(e => e.F21).HasMaxLength(12);
+            entity.Property(e => e.F22).HasMaxLength(12);
+            entity.Property(e => e.F23).HasMaxLength(12);
+            entity.Property(e => e.F24).HasMaxLength(12);
+            entity.Property(e => e.F25).HasMaxLength(12);
+            entity.Property(e => e.F26).HasMaxLength(12);
+            entity.Property(e => e.F27).HasMaxLength(12);
+            entity.Property(e => e.F28).HasMaxLength(12);
+            entity.Property(e => e.F29).HasMaxLength(12);
+            entity.Property<decimal?>("SellingPrice").HasPrecision(9, 2);
+            // UNIQUE constraints in the database. HasFilter(null): EF would otherwise leave out rows with NULL, as SQL Server does not.
+            entity.HasIndex(e => new { e.OwningPersonId, e.InventoryNumber }, "UX_Vehicle_InventoryNumber").IsUnique().HasFilter(null);
         });
     }
 }

@@ -8,7 +8,6 @@
     [ForeColor]                        NVARCHAR (10)  NOT NULL,
     [BackColor]                        NVARCHAR (10)  NOT NULL,
     [RepresentativeExternalStationId]  INT            NULL,
-    [IsCargoHub]                       BIT            NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_Region] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Region_Country] FOREIGN KEY ([CountryId]) REFERENCES [dbo].[Country] ([Id]),
     CONSTRAINT [FK_Region_RepresentativeExternalStationId] FOREIGN KEY ([RepresentativeExternalStationId]) REFERENCES [dbo].[ExternalStation] ([Id]),

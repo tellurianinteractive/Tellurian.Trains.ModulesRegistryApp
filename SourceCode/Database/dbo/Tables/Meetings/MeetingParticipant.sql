@@ -4,7 +4,6 @@
     [MeetingId]                 INT                NOT NULL,
     [RegistrationTime]          DATETIMEOFFSET (7) NOT NULL,
     [CancellationTime]          DATETIMEOFFSET (7) NULL,
-    [ArrivalTime]               DATETIME           NULL,
     [ParticipateDay1]           BIT                NOT NULL DEFAULT 0,
     [ParticipateDay2]           BIT                NOT NULL DEFAULT 0,
     [ParticipateDay3]           BIT                NOT NULL DEFAULT 0,

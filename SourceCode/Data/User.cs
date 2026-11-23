@@ -1,5 +1,8 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
+
 namespace ModulesRegistry.Data;
 
 public partial class User
@@ -34,5 +37,28 @@ public partial class User
 
 public static class UserExtensions
 {
+    extension(ModelBuilder builder)
+    {
+        internal void MapUser() =>
+            builder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+                entity.HasQueryFilter(u => u.DeletedTimestamp.HasValue == false);
+                entity.Property(e => e.EmailAddress).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.RegistrationTime).HasDatabaseDefault("getdate()");
+                entity.Property(e => e.HashedPassword).HasMaxLength(255);
+                entity.Property(e => e.AdministratorAreaOfResposibility).HasMaxLength(50);
+                entity.Property(e => e.IsGlobalAdministrator).HasDatabaseDefault("0");
+                entity.Property(e => e.IsCountryAdministrator).HasDatabaseDefault("0");
+                entity.Property(e => e.IsReadOnly).HasDatabaseDefault("0");
+                entity.Property(e => e.IsDemo).HasDatabaseDefault("0");
+                entity.Property(e => e.IsApiAccessPermitted).HasDatabaseDefault("0");
+                entity.Property(e => e.PasswordResetAttempts).HasDatabaseDefault("0");
+                entity.Property(e => e.FailedLoginAttempts).HasDatabaseDefault("0");
+                entity.Property(e => e.MayUploadSkpDrawing).HasDatabaseDefault("0");
+                entity.Property(e => e.MayManageWiFreds).HasDatabaseDefault("0");
+            });
+    }
+
     public static bool IsActiveUser(this User user) => user.LastSignInTime.HasValue && user.LastTermsOfUseAcceptTime.HasValue;
 }

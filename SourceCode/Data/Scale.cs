@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore;
+
 namespace ModulesRegistry.Data;
 
 public partial class Scale
@@ -23,5 +25,18 @@ public partial class Scale
 # nullable enable
 public static class ScaleExtensions
 {
+    extension(ModelBuilder builder)
+    {
+        internal void MapScale() =>
+            builder.Entity<Scale>(entity =>
+            {
+                entity.ToTable("Scale");
+
+                entity.Property(e => e.ShortName)
+                    .IsRequired()
+                    .HasMaxLength(10);
+            });
+    }
+
     public static string Display(this Scale? me) => me is null ? string.Empty : $"{me.ShortName} 1:{me.Denominator}";
 }

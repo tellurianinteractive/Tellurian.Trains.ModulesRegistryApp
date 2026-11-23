@@ -34,6 +34,14 @@ internal static class GroupLayoutModuleMapper
             //entity.HasOne<GroupMember>()
             //   .WithMany()
             //   .HasForeignKey(e => e.GroupMemberId);
+            entity.HasOne(e => e.Group)
+                .WithMany()
+                .HasForeignKey(e => e.GroupId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.HasOne(e => e.GroupMember)
+                .WithMany()
+                .HasForeignKey(e => e.GroupMemberId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 }
 

@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
@@ -17,7 +18,6 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<CargoDirection> CargoDirections { get; set; }
     public virtual DbSet<CargoPackagingUnit> CargoPackagingUnits { get; set; }
     public virtual DbSet<CargoReadyTime> CargoReadyTimes { get; set; }
-    public virtual DbSet<CargoRelation> CargoRelations { get; set; }
     public virtual DbSet<CargoQuantityUnit> CargoUnits { get; set; }
     public virtual DbSet<ChangeLog> ChangeLogs { get; set; }
     public virtual DbSet<Country> Countries { get; set; }
@@ -46,7 +46,6 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<NHM> NhmCodes { get; set; }
     public virtual DbSet<OperatingBasicDay> OperatingBasicDays { get; set; }
     public virtual DbSet<OperatingDay> OperatingDays { get; set; }
-    public virtual DbSet<Operator> Operators { get; set; }
     public virtual DbSet<Person> People { get; set; }
     public virtual DbSet<Property> Properties { get; set; }
     public virtual DbSet<Region> Regions { get; set; }
@@ -73,6 +72,8 @@ public partial class ModulesDbContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
+        // Indexes are declared in each entity's mapping as they are in the SQL project, so EF doesn't add one for every foreign key.
+        configurationBuilder.Conventions.Remove<ForeignKeyIndexConvention>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -84,7 +85,6 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapCargoPackagingUnit();
         modelBuilder.MapCargoQuantityUnit();
         modelBuilder.MapCargoReadyTime();
-        modelBuilder.MapCargoRelation();
         modelBuilder.MapChangeLog();
         modelBuilder.MapCountry();
         modelBuilder.MapCountryStatistics();
@@ -100,6 +100,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapLayoutModule();
         modelBuilder.MapLayoutParticipant();
         modelBuilder.MapLayoutStation();
+        modelBuilder.MapListboxItem();
         modelBuilder.MapMeeting();
         modelBuilder.MapMeetingAdministrator();
         modelBuilder.MapMeetingParticipant();
@@ -111,158 +112,21 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapNHM();
         modelBuilder.MapOperatingBasicDay();
         modelBuilder.MapOperationDay();
-        modelBuilder.MapOperator();
+        modelBuilder.MapPerson();
+        modelBuilder.MapProperty();
         modelBuilder.MapRegion();
-
+        modelBuilder.MapScale();
+        modelBuilder.MapStation();
+        modelBuilder.MapStationCustomer();
+        modelBuilder.MapStationCustomerCargo();
+        modelBuilder.MapStationCustomerWaybill();
+        modelBuilder.MapStationTrack();
+        modelBuilder.MapUser();
         modelBuilder.MapVehicle();
         modelBuilder.MapVehicleFeature();
         modelBuilder.MapVehicleInteroperability();
         modelBuilder.MapVehicleOperator();
         modelBuilder.MapWiFredThrottle();
-
-
-
-
-
-
-        
-        
-
-        
-
-        
-
-       
-
-       
-        modelBuilder.Entity<Person>(entity =>
-        {
-            entity.ToTable("Person");
-
-            entity.Property(e => e.CityName).HasMaxLength(50);
-
-            entity.Property(e => e.EmailAddresses).HasMaxLength(50);
-
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.FremoOwnerSignature).HasMaxLength(10);
-
-            entity.Property(e => e.LastName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.MiddleName).HasMaxLength(50);
-
-            entity.Property(e => e.NickName).HasMaxLength(50);
-
-            entity.HasOne(d => d.Country)
-                .WithMany(p => p.People)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.User)
-                .WithOne(p => p.Person)
-                .HasForeignKey<Person>(d => d.UserId);
-        });
-
-        modelBuilder.Entity<Property>(entity =>
-        {
-            entity.ToTable("Property");
-
-            entity.HasIndex(e => new { e.Name, e.Value }, "IX_Property_Unique")
-                .IsUnique();
-
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Value)
-                .IsRequired()
-                .HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<Scale>(entity =>
-        {
-            entity.ToTable("Scale");
-
-            entity.Property(e => e.ShortName)
-                .IsRequired()
-                .HasMaxLength(10);
-        });
-
-        modelBuilder.Entity<Station>(entity =>
-        {
-            entity.ToTable("Station", tb => tb.HasTrigger("DeleteStation"));
-
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Signature)
-                .IsRequired()
-                .HasMaxLength(5);
-
-            entity.Property(e => e.LockKeyName).HasMaxLength(5);
-
-            entity.HasOne(d => d.Region)
-                .WithMany(p => p.Stations)
-                .HasForeignKey(d => d.RegionId);
-
-            entity.HasOne(e => e.PrimaryModule)
-                .WithMany()
-                .HasForeignKey(e => e.PrimaryModuleId);
-        });
-
-        modelBuilder.Entity<StationCustomer>(entity =>
-        {
-            entity.ToTable("StationCustomer", tb => tb.HasTrigger("DeleteStationCustomer"));
-
-            entity.Property(e => e.Comment)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.Property(e => e.CustomerName)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.Property(e => e.TrackOrArea).HasMaxLength(50);
-
-            entity.Property(e => e.TrackOrAreaColor)
-                .HasMaxLength(10)
-                .IsFixedLength(true);
-
-            entity.HasOne(d => d.Station)
-                .WithMany(p => p.StationCustomers)
-                .HasForeignKey(d => d.StationId);
-        });
-
-        modelBuilder.MapStationCustomerWaybill();
-
-        modelBuilder.MapStationCustomerCargo();
-
-        modelBuilder.Entity<StationTrack>(entity =>
-        {
-            entity.ToTable("StationTrack");
-
-            entity.Property(e => e.Designation)
-                .IsRequired()
-                .HasMaxLength(5);
-
-            entity.Property(e => e.UsageNote).HasMaxLength(20);
-
-            entity.HasOne(d => d.Station)
-                .WithMany(p => p.StationTracks)
-                .HasForeignKey(d => d.StationId);
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.ToTable("User");
-            entity.HasQueryFilter(u => u.DeletedTimestamp.HasValue == false);
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -41,6 +42,11 @@ internal static class GroupMemberMapper
             entity.HasOne(d => d.Person)
                 .WithMany(p => p.GroupMembers)
                 .HasForeignKey(d => d.PersonId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.Property(e => e.IsGroupAdministrator).HasDatabaseDefault("0");
+            entity.Property(e => e.IsDataAdministrator).HasDatabaseDefault("0");
+            entity.Property(e => e.IsMeetingAdministrator).HasDatabaseDefault("0");
+            entity.Property(e => e.MayBorrowGroupsModules).HasDatabaseDefault("0");
+            entity.Property(e => e.MemberMayBorrowMyModules).HasDatabaseDefault("0");
         });
 }

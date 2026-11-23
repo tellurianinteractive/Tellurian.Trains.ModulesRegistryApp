@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -57,15 +58,18 @@ internal static class LayoutParticipantMapping
 
             entity.HasOne(e => e.Person)
                 .WithMany()
-                .HasForeignKey(e => e.PersonId);
+                .HasForeignKey(e => e.PersonId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.MeetingParticipant)
                 .WithMany(e => e.LayoutParticipations)
-                .HasForeignKey(e => e.MeetingParticipantId);
+                .HasForeignKey(e => e.MeetingParticipantId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.Layout)
                 .WithMany(e => e.LayoutParticipants)
-                .HasForeignKey(e => e.LayoutId);
+                .HasForeignKey(e => e.LayoutId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasMany(e => e.LayoutModules)
                 .WithOne(e => e.LayoutParticipant)
@@ -74,6 +78,9 @@ internal static class LayoutParticipantMapping
             entity.HasMany(e => e.LayoutStations)
                 .WithOne(e => e.LayoutParticipant)
                 .HasForeignKey(e => e.LayoutParticipantId);
+            entity.Property(e => e.BringsModulesAfterAgreement).HasDatabaseDefault("0");
+            entity.HasIndex(e => e.LayoutId, "IX_LayoutParticipant_LayoutId");
+            entity.HasIndex(e => e.MeetingParticipantId, "IX_LayoutParticipant_MeetingParticipantId");
         });
 }
 

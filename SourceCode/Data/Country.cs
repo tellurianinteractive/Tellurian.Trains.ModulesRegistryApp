@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -56,5 +57,7 @@ internal static class CountryMapper
 
             entity.Property(e => e.Languages)
                 .HasMaxLength(10);
+            entity.Property<string>("TimeZoneName").HasMaxLength(50);
+            entity.Property(e => e.IsFullySupported).HasDatabaseDefault("0");
         });
 }

@@ -27,7 +27,7 @@ internal static class DocumentMapper
 
             entity.Property(e => e.FileExtension)
                 .IsRequired()
-                .HasMaxLength(5)
-                .IsFixedLength(true);
+                .HasMaxLength(6);
+            entity.Property(e => e.ContentType).HasMaxLength(50);
         });
 }

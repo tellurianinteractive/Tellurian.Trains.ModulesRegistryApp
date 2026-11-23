@@ -21,8 +21,6 @@ public sealed class LayoutFormTests
     private static LayoutStation ExistingStation() => new()
     {
         Id = 4, LayoutParticipantId = 6, StationId = 8, OtherName = "Nedre Ullerud", OtherSignature = "Nu", OtherCountryId = 1,
-        Difficulty = (int)DifficultyLevel.Experienced, IsManned = true, HideMeetingTrains = false, HidePassingTrains = false,
-        PrintTrainStartLabels = true, PrintOnlyFirstTrainStartLabel = true,
     };
 
     [TestMethod]

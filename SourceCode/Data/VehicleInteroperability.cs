@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -27,7 +28,18 @@ internal static class VehicleInteroperabilityMapper
         {
             entity.ToTable("VehicleInteroperability");
             entity.HasKey(e => e.Code);
-
+            entity.Property(e => e.Code).ValueGeneratedNever();
+            entity.Property(e => e.Description).HasMaxLength(100).IsUnicode(false);
+            entity.Property(e => e.AppliesToTractionUnits).HasDatabaseDefault("0");
+            entity.Property(e => e.AppliesToFreightWagons).HasDatabaseDefault("0");
+            entity.Property(e => e.AppliesToPassengerCars).HasDatabaseDefault("0");
+            entity.Property(e => e.AppliesToBogieWagons).HasDatabaseDefault("0");
+            entity.Property(e => e.AppliesToCarCarryingWagons).HasDatabaseDefault("0");
+            entity.Property(e => e.IsForInternationalUse).HasDatabaseDefault("0");
+            entity.Property(e => e.IsCompliantWithInternationalStandard).HasDatabaseDefault("0");
+            entity.Property(e => e.InternationalUseRequiresSpecialAgreement).HasDatabaseDefault("0");
+            entity.Property(e => e.IsSpecialVehicle).HasDatabaseDefault("0");
+            entity.Property(e => e.WithAirCondition).HasDatabaseDefault("0");
         });
     }
 }

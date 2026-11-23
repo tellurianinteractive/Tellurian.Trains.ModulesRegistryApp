@@ -101,19 +101,20 @@ public static class LayoutMapping
     public static void MapLayout(this ModelBuilder builder) =>
         builder.Entity<Layout>(entity =>
         {
-            entity.Property(e => e.Details)
-                .HasMaxLength(50);
+            entity.Property(e => e.Details);
 
             entity.ToTable("Layout",
                 tb => tb.HasTrigger("DeleteLayout"));
 
             entity.HasOne(d => d.Meeting)
                 .WithMany(p => p.Layouts)
-                .HasForeignKey(d => d.MeetingId);
+                .HasForeignKey(d => d.MeetingId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(d => d.OrganisingGroup)
                 .WithMany()
-                .HasForeignKey(d => d.OrganisingGroupId);
+                .HasForeignKey(d => d.OrganisingGroupId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(d => d.ContactPerson)
                 .WithMany()
@@ -121,9 +122,17 @@ public static class LayoutMapping
 
             entity.HasOne(d => d.PrimaryModuleStandard)
                 .WithMany()
-                .HasForeignKey(d => d.PrimaryModuleStandardId);
+                .HasForeignKey(d => d.PrimaryModuleStandardId)
+                .OnDelete(DeleteBehavior.ClientCascade);
             entity.HasMany(d => d.LayoutParticipants)
                 .WithOne()
                 .HasForeignKey(d => d.LayoutId);
+            entity.Property(e => e.ShortName).HasMaxLength(10);
+            entity.Property(e => e.Theme).HasMaxLength(100);
+            entity.Property(e => e.RegistrationClosingDate).HasColumnType("smalldatetime");
+            entity.Property(e => e.RegistrationOpeningDate).HasColumnType("smalldatetime");
+            entity.Property(e => e.ModuleRegistrationClosingDate).HasColumnType("smalldatetime");
+            entity.Property(e => e.IsRegistrationPermitted).HasDatabaseDefault("0");
+            entity.HasIndex(e => e.MeetingId, "IX_Layout_MeetingId");
         });
 }

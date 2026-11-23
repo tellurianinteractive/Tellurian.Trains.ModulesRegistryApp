@@ -35,6 +35,8 @@ internal static class ExternalStationCustomerMapper
 
             entity.HasOne(d => d.ExternalStation)
                 .WithMany(p => p.ExternalStationCustomers)
-                .HasForeignKey(d => d.ExternalStationId);
+                .HasForeignKey(d => d.ExternalStationId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.HasIndex(e => e.ExternalStationId, "IX_ExternalStationCustomer_ExternalStationId");
         });
 }

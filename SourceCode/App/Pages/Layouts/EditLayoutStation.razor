@@ -1,9 +1,9 @@
 ﻿@page "/LayoutStations/{id:int}"
 
 @attribute [Authorize(Policy = "User")]
-@* Static SSR form (Migration step 3.6): a station's settings in a layout, posted as LayoutStationFormData, for its participant while
-   the layout is open or a layout organiser (LayoutService). The dependent settings are made consistent when saved, so no field is
-   disabled. After saving, a redirect to the layout's modules; the result is a one-time message. *@
+@* Static SSR form (Migration step 3.6): a station's name, signature and country in a layout, posted as LayoutStationFormData, for its
+   participant while the layout is open or a layout organiser (LayoutService). The operating settings belong to the Timetable Planner
+   (2026-11-23). After saving, a redirect to the layout's modules; the result is a one-time message. *@
 
 @using ModulesRegistry.Forms.Layouts
 
@@ -21,16 +21,6 @@
 
 <EditTemplate Item="Form" FormName="layout-station" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppCheckGroup>
-            <AppInputCheck Label="IsManned" @bind-Value="Form!.IsManned" />
-            <AppInputCheck Label="HidePassingTrains" @bind-Value="Form!.HidePassingTrains" />
-            <AppInputCheck Label="HideMeetingTrains" @bind-Value="Form!.HideMeetingTrains" />
-            <AppInputCheck Label="PrintTrainStartLabels" @bind-Value="Form!.PrintTrainStartLabels" />
-            <AppInputCheck Label="PrintOnlyFirstTrainStartLabel" @bind-Value="Form!.PrintOnlyFirstTrainStartLabel" />
-        </AppCheckGroup>
-        <AppFormRow>
-            <AppInputSelect Width="3" @bind-Value="Form!.Difficulty" Label="DifficultyLevel" Items="DifficultyLevelItems" />
-        </AppFormRow>
         <h4>@Localizer["OtherNameOrCountry"]</h4>
         <AppFormRow>
             <AppInputText Width="4" @bind-Value="Form!.OtherName" Label="OtherName" />
@@ -49,7 +39,6 @@
     ClaimsPrincipal? Principal;
     LayoutStation? Existing;
     IEnumerable<ListboxItem> CountryItems = [];
-    readonly IEnumerable<ListboxItem> DifficultyLevelItems = EnumExtensions.LayoutStationDifficultyLevel();
     string? FailureMessage;
 
     protected override async Task OnInitializedAsync()

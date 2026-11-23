@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -51,5 +52,7 @@ public static class OperationDayMapper
              entity.Property(e => e.ShortName)
                  .IsRequired()
                  .HasMaxLength(10);
+             entity.Property(e => e.DisplayOrder).HasDatabaseDefault("0");
+             entity.Property(e => e.IsSundayFirst).HasDatabaseDefault("0");
          });
 }

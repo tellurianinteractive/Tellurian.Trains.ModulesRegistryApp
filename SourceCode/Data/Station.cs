@@ -1,6 +1,7 @@
 ﻿#nullable disable
 #pragma warning disable IDE0028 // Simplify collection initialization
 
+using Microsoft.EntityFrameworkCore;
 using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
@@ -52,6 +53,42 @@ public partial class Station
 #nullable enable
 public static class StationExtensions
 {
+    extension(ModelBuilder builder)
+    {
+        internal void MapStation() =>
+            builder.Entity<Station>(entity =>
+            {
+                entity.ToTable("Station", tb => tb.HasTrigger("DeleteStation"));
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Signature)
+                    .IsRequired()
+                    .HasMaxLength(5);
+
+                entity.Property(e => e.LockKeyName).HasMaxLength(5);
+
+                entity.HasOne(d => d.Region)
+                    .WithMany(p => p.Stations)
+                    .HasForeignKey(d => d.RegionId);
+
+                entity.HasOne(e => e.PrimaryModule)
+                    .WithMany()
+                    .HasForeignKey(e => e.PrimaryModuleId);
+                entity.Property(e => e.IsManned).HasDatabaseDefault("1");
+                entity.Property(e => e.IsHarbour).HasDatabaseDefault("0");
+                entity.Property(e => e.IsJunction).HasDatabaseDefault("0");
+                entity.Property(e => e.IsIndustrialArea).HasDatabaseDefault("0");
+                entity.Property(e => e.IsKeyRequired).HasDatabaseDefault("0");
+                entity.Property(e => e.HasTurntable).HasDatabaseDefault("0");
+                entity.Property(e => e.HasCargoCustomers).HasDatabaseDefault("1");
+                entity.Property(e => e.BoosterTypes).HasMaxLength(50);
+                entity.HasIndex(e => e.RegionId, "IX_Station_RegionId");
+            });
+    }
+
     public static bool HasConfigurationLabel(this Station? me) => me is not null && me.Modules.Any(m => m.ConfigurationLabel.HasValue);
     public static bool HasPackageLabel(this Station? me) => me is not null && me.Modules.Any(m => m.PackageLabel.HasValue);
     public static bool HasPassengerTraffic(this Station? me) => me is not null && (me.IsShadow || me.StationTracks.Any(t =>  t.PlatformLength.HasValue && t.PlatformLength.Value > 0));

@@ -1,4 +1,4 @@
-using ModulesRegistry.Data;
+﻿using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;
@@ -50,7 +50,7 @@ public sealed class VehicleSaveTests
     private static Vehicle Vehicle(int id, int owner, string number = "1323") => new()
     {
         Id = id, OwningPersonId = owner, KeeperSignature = "SJ", VehicleClass = "Rc6", VehicleNumber = number, Theme = "SJ",
-        ModelManufacturerName = "Roco", InventoryNumber = 1, ScaleId = H0,
+        ModelManufacturerName = "Roco", InventoryNumber = id > 0 ? id : 100, ScaleId = H0, // Unique per owner, as in the database.
     };
 
     [TestMethod]

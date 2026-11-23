@@ -3,7 +3,7 @@
     [DefaultClasses] NVARCHAR (10) NULL,
     [FromYear]       SMALLINT      NULL,
     [UptoYear]       SMALLINT      NULL,
-    [NHMCode]        INT           NULL,
+    [NHMCode]        INT           NOT NULL,
     [DA]             NVARCHAR (50) NULL,
     [DE]             NVARCHAR (50) NULL,
     [EN]             NVARCHAR (50) NULL,

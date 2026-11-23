@@ -180,7 +180,8 @@ public static class MeetingMapping
 
             entity.HasOne(d => d.OrganiserGroup)
                 .WithMany()
-                .HasForeignKey(d => d.OrganiserGroupId);
+                .HasForeignKey(d => d.OrganiserGroupId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(d => d.GroupDomain)
                 .WithMany()
@@ -189,6 +190,17 @@ public static class MeetingMapping
             entity.HasMany(d => d.Participants)
                 .WithOne(d => d.Meeting)
                 .HasForeignKey(d => d.MeetingId);
+            entity.Property(e => e.CityName).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.VenueName).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.StartDate).HasColumnType("datetime");
+            entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.IsOrganiserInternal).HasDatabaseDefault("0");
+            entity.Property(e => e.ExternalLink).IsUnicode(false);
+            entity.Property(e => e.MeetingType).HasDatabaseDefault("0");
+            entity.Property(e => e.AccessKey).IsRequired().HasDatabaseDefault("newid()");
+            entity.Property(e => e.LatestArrivalTimeWithModules).HasPrecision(0);
+            entity.Property(e => e.EarliestDepartureTimeWithModules).HasPrecision(0);
         });
 }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -24,5 +25,9 @@ internal static class CargoPackagingUnitMapper
             entity.ToTable("CargoPackagingUnit");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.SingularResourceCode).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.PluralResourceCode).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.PrepositionResourceCode).HasMaxLength(4);
+            entity.Property(e => e.IsContainer).HasDatabaseDefault("0");
         });
 }

@@ -1,4 +1,4 @@
-using ModulesRegistry.Data;
+﻿using ModulesRegistry.Data;
 using ModulesRegistry.Data.Extensions;
 using ModulesRegistry.Services.Implementations;
 using System.Security.Claims;
@@ -55,7 +55,7 @@ public sealed class ExternalStationSaveTests
 
     private async Task SeedCustomersAsync()
     {
-        await _factory.SeedAsync(new NHM { Id = 1, Code = "1", LevelDigits = 2 });
+        await _factory.SeedAsync(new NHM { Id = 1, Code = "1", LevelDigits = 2, DA = "", DE = "", EN = "", NL = "", PL = "", SV = "" });
         await _factory.SeedAsync(new Cargo { Id = 5, NhmCode = 1, EN = "Paper", DE = "Papier", DA = "Papir", SV = "Papper", NB = "Papir" });
         await _factory.SeedAsync(
             new CargoDirection { Id = 1, FullName = "Receive", ShortName = "R" },

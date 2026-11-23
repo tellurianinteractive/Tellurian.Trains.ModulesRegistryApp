@@ -12,7 +12,7 @@ The solution file is `Modules Registry App.slnx` (XML-based .slnx format — not
 
 Projects:
 - `SourceCode/App` — Blazor Web App host (`AssemblyName=ModulesRegistry`, SDK `Microsoft.NET.Sdk.Web`): `App.razor` is the HTML document (rendered on the server per request, sets the culture cookie and the antiforgery token), `Routes.razor` the router; every page is static SSR (Migration step 3.7): no interactive render mode, circuits or SignalR, so forms are POSTs and filters GET forms, with small scripts in `wwwroot/js` for what needs the browser; `Pages/NotFound.razor` is the catch-all for unknown addresses. No Razor Pages or MVC. Contains `Pages/` (routable razor components, organised in feature subfolders), `Components/` (non-routable UI), `Endpoints/` (the app's own `/app` minimal APIs), `Security/` (cookie auth, `ApplicationClaimsTransformation`, security headers), `Content/Markdown/` (help texts, localised per-language via `.xx.md` suffix), `Resources/` (App.*.resx).
-- `SourceCode/Data` — EF Core domain model + `ModulesDbContext` (partial class; `_ModulesDbContext.cs` holds `DbSet`s and config; fluent mappings are moving into a `Map<Entity>()` extension in each entity's file, see "EF model" below). Its texts, also the validation messages, are in `SourceCode/Resources`.
+- `SourceCode/Data` — EF Core domain model + `ModulesDbContext` (partial class; `_ModulesDbContext.cs` holds `DbSet`s and config; each entity's fluent mapping is a `Map<Entity>()` extension in its own file, see "EF model" below). Its texts, also the validation messages, are in `SourceCode/Resources`.
 - `SourceCode/Api` — The public API (`/api/...`) as minimal APIs: `MapPublicApi()`/`AddPublicApi()`, called by the app. API key filter on the group, `Data.Api` DTOs only, JSON in the `PublicApiJson` format (`ReferenceHandler.Preserve`, kept for external consumers).
 - `SourceCode/Resources` — All translations: `Strings.resx` (English, neutral) and `Strings.<lang>.resx`, used by Data, Services and App.
 - `SourceCode/Data.Api` — Plain DTO contracts shared with API consumers (no dependencies).
@@ -64,17 +64,18 @@ In production, the connection string and the `Brevo:*` mail settings come from t
 
 There are no EF migrations. The domain classes in `SourceCode/Data` and the SQL `CREATE TABLE` files under `SourceCode/Database/dbo/Tables` must be kept consistent **by hand**. When renaming/adding a column or property:
 
-1. Change both the C# property and the SQL table definition to match.
+1. Change both the C# property (with its mapping) and the SQL table definition to match. `DatabaseSchemaTests` (Data.Tests) fails when they differ.
 2. Publish the database project (via Visual Studio SQL tooling) — this will cause runtime errors for the affected table until the app is also redeployed.
 3. Deploy the app so model and schema match again.
 
 Make changes in small steps (one column/table at a time). Triggers exist only to override cascade-delete behaviour. See `System Design Documents/Overview.md` for the full rationale.
 
-### EF model (moving to EF Core migrations, Migration.md stage 4)
+### EF model (Migration.md stage 4: 4.1 now, migrations deferred until the schema tools are compared)
 
 Follow the global `efcore` skill. Project specifics:
 
-- Fluent mappings are moving out of `_ModulesDbContext.cs` into one `Map<Entity>()` extension per entity file (`Data/Region.cs` is the template). When moving one, carry over **every** `HasMaxLength`, `IsRequired`, index, trigger and `OnDelete` from the old block: step 4.1 requires a model identical to the production schema.
+- Every entity has its fluent mapping in one `Map<Entity>()` extension in its own file (`Data/Region.cs` is the template); `OnModelCreating` only calls them, in alphabetical order. When changing one, keep **every** `HasMaxLength`, `IsRequired`, index, trigger and `OnDelete`: the model describes the tables exactly as the SQL project does (step 4.1), and `DatabaseSchemaTests` compares the two.
+- Mapping rules that keep behaviour unchanged: a column default is `HasDatabaseDefault(sql)` (EF still writes the value on insert); a column the app doesn't use is a shadow property; a foreign key whose children a cascade trigger deletes is `ClientCascade` (NO ACTION in the database); indexes are declared explicitly with their names (EF's foreign key index convention is removed).
 - The database default collation is `Finnish_Swedish_CI_AS` (annotation in `OnModelCreating`). SQLite tests won't reproduce its sorting or case-insensitivity.
 - Entities are legacy scaffolded (`#nullable disable`, `partial`, `virtual`). Keep that style per entity until it is modernised on purpose.
 - `SkipUnchangedValuesInterceptor` (`Data/ChangeTracking`) drops modified marks whose value didn't change, so **an entity attached and forced to `Modified` is not saved**. To update: load the entity, then change it or use `CurrentValues.SetValues`.

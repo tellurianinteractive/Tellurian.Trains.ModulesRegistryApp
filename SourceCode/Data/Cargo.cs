@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -52,9 +53,18 @@ internal static class CargoMapper
         {
             entity.ToTable("Cargo");
 
-            entity.HasOne<NHM>()
-                .WithMany()
-                .HasForeignKey(e => e.NhmCode);
+            entity.Property(e => e.DefaultClasses).HasMaxLength(10);
+            entity.Property(e => e.DA).HasMaxLength(50);
+            entity.Property(e => e.DE).HasMaxLength(50);
+            entity.Property(e => e.EN).HasMaxLength(50);
+            entity.Property(e => e.FR).HasMaxLength(50);
+            entity.Property(e => e.IT).HasMaxLength(50);
+            entity.Property(e => e.NL).HasMaxLength(50);
+            entity.Property(e => e.NB).HasMaxLength(50);
+            entity.Property(e => e.PL).HasMaxLength(50);
+            entity.Property(e => e.SV).HasMaxLength(50);
+            entity.Property(e => e.IsExpress).HasDatabaseDefault("0");
+            entity.Property(e => e.IsCoolingRequired).HasDatabaseDefault("0");
         });
 }
 

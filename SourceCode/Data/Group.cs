@@ -63,5 +63,7 @@ internal static class GroupMapper
                 .WithMany(p => p.Groups)
                 .HasForeignKey(d => d.GroupDomainId)
                 .OnDelete(DeleteBehavior.Restrict);
+            entity.Property<Guid?>("ApiKey");
+            entity.HasIndex(e => e.CountryId, "IX_Group_CountryId");
         });
 }

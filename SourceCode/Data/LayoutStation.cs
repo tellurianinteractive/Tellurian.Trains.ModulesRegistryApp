@@ -1,7 +1,6 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ModulesRegistry.Data;
 
@@ -18,12 +17,6 @@ public class LayoutStation
     public string OtherName { get; set; }
     public string OtherSignature { get; set; }
     public int? OtherCountryId { get; set; }
-    public int Difficulty { get; set; }
-    public bool IsManned { get; set; }
-    public bool HideMeetingTrains { get; set; }
-    public bool HidePassingTrains { get; set; }
-    public bool PrintTrainStartLabels { get; set; }
-    public bool PrintOnlyFirstTrainStartLabel { get; set; }
 
     public virtual LayoutParticipant LayoutParticipant { get; set; }
     public virtual Station Station { get; set; }
@@ -34,27 +27,8 @@ public class LayoutStation
 }
 # nullable enable
 
-public enum DifficultyLevel
-{
-    Undefined = 0,
-    Beginner = 1,
-    Experienced = 2,
-    Advanced = 3,
-}
-
 public static class LayoutStationExtensions
 {
-    extension([NotNull] LayoutStation layoutStation)
-    {
-        public LayoutStation WithDataRulesApplied()
-        {
-            if (!layoutStation.IsManned) layoutStation.Difficulty = (int)DifficultyLevel.Undefined;
-            if (layoutStation.HidePassingTrains) layoutStation.HideMeetingTrains = true;
-            if (!layoutStation.PrintTrainStartLabels) layoutStation.PrintOnlyFirstTrainStartLabel = false;
-
-            return layoutStation;
-        }
-    }
     extension(LayoutStation? layoutStation)
     {
         public string LayoutName => layoutStation?.LayoutParticipant?.Layout?.DescriptionWithMeetingAndLayoutName() ?? "";
@@ -84,22 +58,28 @@ internal static class LayoutStationMapping
             entity.Property(e => e.OtherName)
                  .HasMaxLength(50);
 
-            entity.Property(e => e.OtherSignature)
-                  .HasMaxLength(6);
+            entity.Property(e => e.OtherSignature).HasMaxLength(5);
 
             entity.HasOne(e => e.LayoutParticipant)
                  .WithMany(e => e.LayoutStations)
                  .HasForeignKey(e => e.LayoutParticipantId);
 
             entity.HasMany(e => e.Regions)
-                .WithMany(e => e.LayoutStations);
+                .WithMany(e => e.LayoutStations)
+                .UsingEntity<Dictionary<string, object>>("LayoutStationRegion",
+                    region => region.HasOne<Region>().WithMany().HasForeignKey("RegionId").OnDelete(DeleteBehavior.ClientCascade),
+                    station => station.HasOne<LayoutStation>().WithMany().HasForeignKey("TimetableStationId").OnDelete(DeleteBehavior.Cascade),
+                    join => join.HasKey("TimetableStationId", "RegionId"));
 
             entity.HasOne(e => e.Station)
                  .WithOne()
-                 .HasForeignKey<LayoutStation>(e => e.StationId);
+                 .HasForeignKey<LayoutStation>(e => e.StationId)
+                 .OnDelete(DeleteBehavior.ClientCascade);
 
             entity.HasOne(e => e.OtherCountry)
                 .WithOne()
                 .HasForeignKey<LayoutStation>(e => e.OtherCountryId);
+            entity.HasIndex(e => e.LayoutParticipantId, "IX_LayoutStation_LayoutParticipantId");
+            entity.HasIndex(e => e.StationId, "IX_LayoutStation_StationId");
         });
 }

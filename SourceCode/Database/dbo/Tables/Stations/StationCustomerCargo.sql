@@ -25,6 +25,8 @@
     CONSTRAINT [FK_CustomerCargo_CargoDirection] FOREIGN KEY ([DirectionId]) REFERENCES [dbo].[CargoDirection] ([Id]),
     CONSTRAINT [FK_CustomerCargo_CargoReadyTime] FOREIGN KEY ([ReadyTimeId]) REFERENCES [dbo].[CargoReadyTime] ([Id]),
     CONSTRAINT [FK_CustomerCargo_OperatingDay] FOREIGN KEY ([OperatingDayId]) REFERENCES [dbo].[OperatingDay] ([Id]),
+    CONSTRAINT [FK_CustomerCargo_CargoPackagingUnit] FOREIGN KEY ([PackageUnitId]) REFERENCES [dbo].[CargoPackagingUnit] ([Id]),
+    CONSTRAINT [FK_CustomerCargo_CargoUnit] FOREIGN KEY ([QuantityUnitId]) REFERENCES [dbo].[CargoUnit] ([Id]),
 );
 GO
 

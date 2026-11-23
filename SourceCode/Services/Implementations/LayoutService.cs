@@ -103,7 +103,6 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
         if (principal.IsAuthenticated())
         {
             entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
-            entity = entity.WithDataRulesApplied();
             using var dbContext = Factory.CreateDbContext();
             var existing = await dbContext.LayoutStations.Include(ls => ls.LayoutParticipant).SingleOrDefaultAsync(l => l.Id == entity.Id);
             if (existing is null) return (-1).SaveResult(entity);

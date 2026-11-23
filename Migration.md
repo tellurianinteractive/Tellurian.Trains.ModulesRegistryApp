@@ -208,8 +208,22 @@ Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; 
 | # | Step | Verification | Ref |
 |---|---|---|---|
 | 4.1 | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | 4.3 B |
-| 4.2 | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | 4.3 B |
-| 4.3 | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | 4.3 B |
+| 4.2 ⏸ | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | 4.3 B |
+| 4.3 ⏸ | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | 4.3 B |
+
+**Decided 2026-11-23:** 4.1 is done now; **4.2 and 4.3 are deferred** until a thorough comparison of EF Core migrations with the SQL project (DACPAC, also as SDK-style `Microsoft.Build.Sql`) and any other viable alternative (for example script-based migration tools) has been made and a choice documented in section 4.3. **Stage 5 comes next after 4.1.** A complete EF model is useful whatever the choice: it is what the code relies on, and it can be compared with the SQL project.
+
+**Step 4.1, the mappings (2026-11-23):** every entity now has its `Map<Entity>()` in its own file; the last seven (`Person`, `Property`, `Scale`, `Station`, `StationCustomer`, `StationTrack`, `User`) moved out of `_ModulesDbContext.cs`, which only calls the map methods. The model's debug view and the generated create script (`GenerateCreateScript`) were identical before and after the move.
+
+**Step 4.1, the model matches the SQL project (2026-11-23):** `DatabaseSchemaTests` (Data.Tests) reads the `CREATE TABLE` files with Microsoft's T-SQL parser (ScriptDom, no database) and compares them with the EF relational model: columns (type, length, nullability, identity, default), primary keys, foreign keys with their delete action, unique constraints and indexes, indexes (with `INCLUDE` and filter) and check constraints; constraint names are not compared. It runs in CI, so a change to one side only fails the build. To get there, with no change in behaviour (all 44 tables queried in production through the new model):
+- Defaults: `HasDatabaseDefault(sql)` (`Data/Extensions`) is `HasDefaultValueSql(...).ValueGeneratedNever()`, so EF still writes the value on insert (a `false` is not replaced by a `DEFAULT 1`).
+- Columns the app doesn't use are shadow properties (`Property<T>("Name")`), so the classes don't change; four of them are foreign keys (`Layout.PrimaryOperationCountryId`, `Layout.StartWeekdayId`, `LayoutStation.PartOfOtherLayoutStationId`, `StationCustomerCargo.OperatorId`).
+- Delete actions: where the database has NO ACTION (the cascade triggers do the deleting) and EF had `Cascade`, it is `ClientCascade`, which keeps EF's behaviour for tracked entities. The SQLite test database turns these into cascades (`CascadeTriggersModelCustomizer`), standing in for the triggers.
+- EF's foreign key index convention is removed; the indexes are declared as in the SQL project, with their names.
+- Lookup tables without `IDENTITY` (`CargoDirection`, `CargoReadyTime`, `CargoUnit`, `GroupDomain`, `NHM`, `VehicleFeature`, `VehicleInteroperability`) are `ValueGeneratedNever`.
+- Removed: the unused entities `CargoRelation` and `Operator` (no such tables), the Cargo → NHM relationship (NHM code 0 means none, so the database has no foreign key) and an EF-only unique index on `Property`. `ListboxItem` has no table (read with `FromSqlRaw`). `VehicleOperator.LastYearInOperation` is mapped to the column `FinalYearInOperation`; before, a query on the entity would have failed.
+- **Schema changes** (production data checked, none violates them): `Cargo.NHMCode` and `CargoUnit.IsBearer` NOT NULL (as the entities' types already assume), and the foreign keys `Vehicle.TractionFeatureId`, `StationCustomerCargo.PackageUnitId` and `.QuantityUnitId`, which the entities navigate.
+- 18 tables had no entity, since nothing used them (no code, view or procedure). 13 are removed (step 5.8); 5 stay for features to come and are listed in the test: `VehicleProvider` with `TimetabledVehicle` and `Timetable`, `MeetingPurchaseableItem` and `MeetingParticipantPurchasedItem`.
 
 Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` fluent mapping moved from `_ModulesDbContext.cs` to `MapRegion()` in `Data/Region.cs`, the template for the other entities. It now has the index and constraint names, and `RepresentativeExternalStation` is mapped `WithMany()` since the database has no unique index on that column. The Region form model and its mapping extensions moved to `App/Forms/Regions/`; no page uses them yet.
 
@@ -224,14 +238,22 @@ Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` f
 | 5.5 | `AddGenerated*Waybills` and `GetEmptyWagonOrders` → code (then drop them in the next step) | Golden master on the generated rows, empty-wagon orders in the browser | 4.5 |
 | 5.6 | Remaining `SqlCommand`/raw SQL (`ModuleService`, `ModuleOwnershipService`, `LayoutService`, `ExternalStationService`) → EF, a few per release | Tests per method, affected pages in the browser | 4.3 A |
 | 5.7 | Cascade triggers → explicit deletes in the services, **one aggregate per release** (then drop the trigger in the next step) | Tests that delete a parent and check its children | 4.3 A |
-| 5.8 | Remove the unused database objects | Publish, smoke test | 4.5 |
+| 5.8 | Remove the unused database objects. **Tables and columns decided 2026-11-23, already removed from the SQL project and the EF model** (the definitions describe the database after the change): 13 timetabling tables (`DriverDuty`, `DriverDutyScheduleLocoPart`, `LayoutStationTrack`, `ModuleOnTimetableTrackStretch`, `Schedule`, `ScheduleTrainPart`, `TimetableStretch`, `TimetableStretchTrackStretch`, `TrackStretch`, `Train`, `TrainCategory`, `TrainStationCall`, `VehicleSchedule`; all empty), the unused `LayoutStation` columns (handled in Module Draw and Timetable Planner) and also its operating settings `IsManned`, `HideMeetingTrains`, `HidePassingTrains`, `PrintTrainStartLabels`, `PrintOnlyFirstTrainStartLabel` and `Difficulty` (Timetable Planner; removed from the layout station form too), the unused `Layout` columns (`StartHour`, `EndHour`, `StartWeekdayId`, `PrimaryOperationCountryId`, `FontFamily`, `GeneralInstructionsMarkdown`: Timetable Planner), `MeetingParticipant.ArrivalTime` (replaced by `LatestArrivalTime`), `Region.IsCargoHub` (also out of the three customer cargo views, where nothing read it), `Module.CatenaryDescription` (replaced by `OverheadLineFeature`) and `NHM.MaxId`. The released app read none of these columns except the six `LayoutStation` operating settings, which the user dropped in production before the app release that removes them (2026-11-23, at night; the layout station pages failed until that release). The DACPAC refuses to drop tables and columns with data, so those are dropped by hand in SQL Server Management Studio. Left for the step: other unused objects (views, procedures) | Publish, smoke test; `DatabaseSchemaTests` green | 4.5 |
+
+**Unused columns that stay (decided 2026-11-23), for features to come; until then shadow properties:**
+- `Vehicle.ModelImage` (with `PrototypeImageHref`), `VehicleType` and `EnginePowerUnit`: Vehicle gets the properties of the Wagon Card app (Tellurian.Trains), so vehicle data can be posted there to create cards; `VehicleType` for freight and passenger wagons as well (the Wagon Card app guides the extension); `EnginePowerUnit` as electric, diesel-electric, diesel-hydraulic, dual diesel and electric and similar. `SellingPrice` is not mentioned yet.
+- `StationCustomerCargo.OperatorId`, `EmptyReturn` and `MatchReturn`: for waybill generation (stage 5).
+- The tables `VehicleProvider` (with `TimetabledVehicle` and `Timetable`): which participant provides a timetabled vehicle; `MeetingPurchaseableItem` and `MeetingParticipantPurchasedItem`: items a meeting sells to its participants.
+- `Group.ApiKey`: for the API, GET, PUT and POST of group related items, including the meetings and layouts the group administers.
+- `Country.TimeZoneName`: to be implemented, so times are right in each country, for example a `TimeProvider` for the country's time zone giving `DateTimeOffset`s with the correct offset (see the `DATETIMEOFFSET` analysis in 4.4 and step 5.9).
+- `CargoDirection.IsInternational`: true for directions such as Export and Import.
 | 5.9 | DATETIMEOFFSET analysis (read-only, can be done any time) | Conclusion documented in 4.4 | 4.4 |
 
 
 ### Stage 6: PostgreSQL (optional, decided later)
 Only once stages 3 and 5 are done. See 4.3 phase C. This is planned as its own project with a rehearsed data migration.
 
-**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stage 2B should come before stage 3, so the new forms (3.4–3.6) get their texts from one place. Stage 2C should also come before stage 3, so the SSR releases can be observed in Application Insights. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline.
+**Order between stages:** 1 → 2 must come first, and 1B should come before step 1.2. Stage 2B should come before stage 3, so the new forms (3.4–3.6) get their texts from one place. Stage 2C should also come before stage 3, so the SSR releases can be observed in Application Insights. Stages 3 and 4 are independent of each other and can alternate, but only **one step per release**. Stage 5 comes after stage 3, so fewer SQL objects have to go into the baseline. **Current order (decided 2026-11-23):** 4.1 → stage 5 → the comparison of schema tools → 4.2 and 4.3, or their replacement.
 
 ---
 
@@ -615,6 +637,8 @@ The SQL project is the old (non-SDK) format. That's why `dotnet build` can't bui
 **Alternative if we stay on SQL Server for good:** convert the SQL project to the SDK-style format `Microsoft.Build.Sql`. Then it builds with `dotnet build` and in CI, and we keep DACPAC's strengths. This doesn't remove the duplicate maintenance and doesn't help with PostgreSQL.
 
 ### 4.3 Recommendation
+
+> **Under review (2026-11-23):** this recommendation stands until a thorough comparison of EF Core migrations, the SQL project (DACPAC, also as SDK-style `Microsoft.Build.Sql`) and other viable alternatives has been made, after stage 5. Phase A (stage 5) and the model completion in phase B (step 4.1) go ahead either way.
 
 **Move to EF Core migrations, in phases, and treat PostgreSQL as an option, not a goal.** The main reason is to get rid of the duplicate maintenance and the risky deploy order. PostgreSQL becomes *possible* once the SQL Server dependencies in the code are gone (phase A), and that work pays off whether or not we ever switch.
 

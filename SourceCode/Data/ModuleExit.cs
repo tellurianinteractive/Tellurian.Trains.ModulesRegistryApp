@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -36,5 +37,6 @@ public static class ModuleExitMapper
                 .WithMany()
                 .HasForeignKey(d => d.EndProfileId)
                 .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(e => e.Direction).HasDatabaseDefault("0");
         });
 }

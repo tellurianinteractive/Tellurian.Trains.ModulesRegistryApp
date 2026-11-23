@@ -72,6 +72,7 @@
     CONSTRAINT [FK_Vehicle_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
     CONSTRAINT [FK_Vehicle_CouplingFeature] FOREIGN KEY ([CouplingFeatureId]) REFERENCES [dbo].[VehicleFeature] ([Id]),
     CONSTRAINT [FK_Vehicle_WheelsFeature] FOREIGN KEY ([WheelsFeatureId]) REFERENCES [dbo].[VehicleFeature] ([Id]),
+    CONSTRAINT [FK_Vehicle_TractionFeature] FOREIGN KEY ([TractionFeatureId]) REFERENCES [dbo].[VehicleFeature] ([Id]),
     CONSTRAINT [FK_Vehicle_OwningPersonId] FOREIGN KEY ([OwningPersonId]) REFERENCES [dbo].[Person] ([Id]),
     CONSTRAINT [UX_Vehicle_InventoryNumber] UNIQUE (OwningPersonId, InventoryNumber)
 )

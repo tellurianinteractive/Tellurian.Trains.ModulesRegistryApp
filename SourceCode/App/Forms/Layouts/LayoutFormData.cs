@@ -66,31 +66,12 @@ public class LayoutFormData
 }
 
 /// <summary>
-/// The fields of a station's settings in a layout (Migration step 3.6). The dependent settings are made consistent when saved
-/// (<c>WithDataRulesApplied</c>), so no field is disabled in the form.
+/// The fields of a station's settings in a layout (Migration step 3.6): the name, signature and country it has in the layout. The
+/// operating settings (manned, hidden trains, train start labels, difficulty) belong to the Timetable Planner (2026-11-23).
 /// </summary>
 [ValidatableType]
 public class LayoutStationFormData
 {
-    [Display(Name = "IsManned")]
-    public bool IsManned { get; set; }
-
-    [Display(Name = "HidePassingTrains")]
-    public bool HidePassingTrains { get; set; }
-
-    [Display(Name = "HideMeetingTrains")]
-    public bool HideMeetingTrains { get; set; }
-
-    [Display(Name = "PrintTrainStartLabels")]
-    public bool PrintTrainStartLabels { get; set; }
-
-    [Display(Name = "PrintOnlyFirstTrainStartLabel")]
-    public bool PrintOnlyFirstTrainStartLabel { get; set; }
-
-    // Any value of DifficultyLevel; the list offers only those.
-    [Display(Name = "DifficultyLevel")]
-    public int Difficulty { get; set; }
-
     [Display(Name = "OtherName")]
     [StringLength(50)]
     [OrdinaryText]
@@ -159,12 +140,6 @@ public static class LayoutFormExtensions
         /// <summary>Entity → form data (GET: populate the form).</summary>
         public LayoutStationFormData AsFormData() => new()
         {
-            IsManned = entity.IsManned,
-            HidePassingTrains = entity.HidePassingTrains,
-            HideMeetingTrains = entity.HideMeetingTrains,
-            PrintTrainStartLabels = entity.PrintTrainStartLabels,
-            PrintOnlyFirstTrainStartLabel = entity.PrintOnlyFirstTrainStartLabel,
-            Difficulty = entity.Difficulty,
             OtherName = entity.OtherName,
             OtherSignature = entity.OtherSignature,
             OtherCountryId = entity.OtherCountryId,
@@ -176,12 +151,6 @@ public static class LayoutFormExtensions
         /// <summary>Form data → the loaded layout station: only the form's fields change. Call it only with validated form data.</summary>
         public LayoutStation AsEntity(LayoutStation existing)
         {
-            existing.IsManned = form.IsManned;
-            existing.HidePassingTrains = form.HidePassingTrains;
-            existing.HideMeetingTrains = form.HideMeetingTrains;
-            existing.PrintTrainStartLabels = form.PrintTrainStartLabels;
-            existing.PrintOnlyFirstTrainStartLabel = form.PrintOnlyFirstTrainStartLabel;
-            existing.Difficulty = form.Difficulty;
             existing.OtherName = form.OtherName;
             existing.OtherSignature = form.OtherSignature;
             existing.OtherCountryId = form.OtherCountryId is null or 0 ? null : form.OtherCountryId;

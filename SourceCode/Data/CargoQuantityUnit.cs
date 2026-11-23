@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -49,7 +50,10 @@ internal static class QuantityUnitMapper
                 .HasMaxLength(50);
 
             entity.Property(e => e.DisplayOrder)
-                .IsRequired();
+                .IsRequired()
+                .HasDatabaseDefault("0");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.IsBearer).HasDatabaseDefault("0");
         });
 
 }

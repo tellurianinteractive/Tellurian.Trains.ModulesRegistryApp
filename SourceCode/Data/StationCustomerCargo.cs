@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 using Microsoft.Extensions.Localization;
 
 namespace ModulesRegistry.Data;
@@ -105,35 +106,53 @@ public static class StationCustomerCargoMapping
             entity.ToTable("StationCustomerCargo",
                 tb => tb.HasTrigger("DeleteStationCustomerCargo"));
 
-            //entity.HasOne(d => d.StationCustomer)
-            //  .WithMany(p => p.Cargos)
-            //  .HasForeignKey(d => d.StationCustomerId);
+            entity.HasOne(e => e.StationCustomer)
+                .WithMany(p => p.Cargos)
+                .HasForeignKey(e => e.StationCustomerId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            //entity.HasOne(e => e.Cargo)
-            //   .WithMany()
-            //   .HasForeignKey(d => d.CargoId);
+            entity.HasOne(e => e.Cargo)
+                .WithMany()
+                .HasForeignKey(e => e.CargoId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            //entity.HasOne(d => d.Direction)
-            //  .WithMany()
-            //  .HasForeignKey(d => d.DirectionId);
+            entity.HasOne(e => e.Direction)
+                .WithMany()
+                .HasForeignKey(e => e.DirectionId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            //entity.HasOne(d => d.ReadyTime)
-            //  .WithMany()
-            //  .HasForeignKey(d => d.ReadyTimeId);
+            entity.HasOne(e => e.ReadyTime)
+                .WithMany()
+                .HasForeignKey(e => e.ReadyTimeId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            //entity.HasOne(e => e.QuantityUnit)
-            //  .WithMany()
-            //  .HasForeignKey(d => d.QuantityUnitId)
-            //  .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(e => e.QuantityUnit)
+                .WithMany()
+                .HasForeignKey(e => e.QuantityUnitId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            //entity.HasOne(e => e.PackageUnit)
-            //    .WithMany()
-            //    .HasForeignKey(d => d.PackageUnitId);
+            entity.HasOne(e => e.PackageUnit)
+                .WithMany()
+                .HasForeignKey(e => e.PackageUnitId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-
-            //entity.HasOne(d => d.OperatingDay)
-            //  .WithMany()
-            //  .HasForeignKey(d => d.OperatingDayId);
-
+            entity.HasOne(e => e.OperatingDay)
+                .WithMany()
+                .HasForeignKey(e => e.OperatingDayId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            entity.Property(e => e.PackageUnitId).HasDatabaseDefault("0");
+            entity.Property(e => e.TrackOrArea).HasMaxLength(20);
+            entity.Property(e => e.TrackOrAreaColor).HasMaxLength(7).IsFixedLength();
+            entity.Property(e => e.SpecificWagonClass).HasMaxLength(10);
+            entity.Property(e => e.SpecialCargoName).HasMaxLength(20);
+            entity.Property(e => e.OperatingDayId).HasDatabaseDefault("0");
+            entity.Property(e => e.Quantity).HasDatabaseDefault("0");
+            entity.HasOne<VehicleOperator>()
+                .WithMany()
+                .HasForeignKey("OperatorId")
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.Property<bool>("EmptyReturn").HasDatabaseDefault("0");
+            entity.Property<bool>("MatchReturn").HasDatabaseDefault("0");
+            entity.HasIndex(e => e.StationCustomerId, "IX_StationCustomerCargo_StationCustomerId").IncludeProperties(e => new { e.CargoId, e.PackageUnitId, e.DirectionId, e.OperatingDayId, e.QuantityUnitId });
         });
 }

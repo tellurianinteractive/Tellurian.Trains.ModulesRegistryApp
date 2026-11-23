@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore;
+using ModulesRegistry.Data.Extensions;
 
 namespace ModulesRegistry.Data;
 
@@ -34,10 +35,21 @@ internal static class VehicleOperatorMapper
             entity.ToTable("VehicleOperator");
             entity.HasOne(e => e.PrimaryOperatingCountry)
                 .WithMany()
-                .HasForeignKey(e => e.PrimaryOperatingCountryId);
+                .HasForeignKey(e => e.PrimaryOperatingCountryId)
+                .OnDelete(DeleteBehavior.ClientCascade);
             entity.HasOne(e => e.OnlyInLayout)
                 .WithMany()
                 .HasForeignKey(e => e.OnlyInLayoutId);
+            entity.Property(e => e.LastYearInOperation).HasColumnName("FinalYearInOperation");
+            entity.Property(e => e.Signature).HasMaxLength(6).IsRequired();
+            entity.Property(e => e.ShortName).HasMaxLength(30).IsRequired();
+            entity.Property(e => e.FullName).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.IsPassengerOperator).HasDatabaseDefault("0");
+            entity.Property(e => e.IsFreightOperator).HasDatabaseDefault("0");
+            entity.Property(e => e.IsConstructionOperator).HasDatabaseDefault("0");
+            entity.Property(e => e.IsVeteranOperator).HasDatabaseDefault("0");
+            // UNIQUE constraints in the database. HasFilter(null): EF would otherwise leave out rows with NULL, as SQL Server does not.
+            entity.HasIndex(e => new { e.PrimaryOperatingCountryId, e.Signature, e.FirstYearInOperation, e.OnlyInLayoutId }, "UX_VehicleOperator").IsUnique().HasFilter(null);
         });
     }
 }
