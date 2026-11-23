@@ -9,8 +9,7 @@ namespace ModulesRegistry.Data.Tests.Schema;
 public sealed class DatabaseSchemaTests
 {
     /// <summary>
-    /// Tables in the SQL project without an entity, kept for features to come (decided 2026-11-23): vehicle providers for timetabled
-    /// vehicles, and items a meeting sells to its participants.
+    /// Tables in the SQL project without an entity: kept, although the app doesn't use them yet (decided 2026-11-23).
     /// </summary>
     private static readonly string[] TablesWithoutEntity =
     [
