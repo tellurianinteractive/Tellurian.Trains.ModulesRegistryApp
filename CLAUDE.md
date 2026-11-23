@@ -40,7 +40,7 @@ dotnet test --project TestCode/Services.Tests/Services.Tests.csproj --filter "Fu
 dotnet run --project SourceCode/App/App.csproj
 ```
 
-CI/CD is one workflow, `.github/workflows/build-and-deploy.yml` (the other workflow, `log-review.yml`, is the nightly log review, Migration.md 9.5). Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
+CI/CD is one workflow, `.github/workflows/build-and-deploy.yml` (the other workflow, `log-review.yml`, is the nightly log review, Migration.md chapter I.5). Its `build` job runs the same build and test commands on every push and pull request to `master`, on `ubuntu-latest`, so tests must not depend on Windows paths, the local time zone or file timestamps from the checkout.
 
 Its `deploy` job: a push to `master` deploys to Azure only when `<Version>` in `Directory.Build.props` has no matching tag `v<Version>`; the workflow then creates the tag and a GitHub release. To release: step up the version, add its release notes section with the date (bullets for changes that affect users or security, otherwise `- Maintenance update.`), then push. Publishing from Visual Studio is not possible (basic authentication is turned off on the App Service); the release procedure is in `CONTRIBUTING.md`. Markdown content whose date matters must have a `<!-- LastModified: ... -->` first line, since a checkout resets file timestamps.
 
@@ -80,7 +80,7 @@ Follow the global `efcore` skill. Project specifics:
 - Entities are legacy scaffolded (`#nullable disable`, `partial`, `virtual`). Keep that style per entity until it is modernised on purpose.
 - `SkipUnchangedValuesInterceptor` (`Data/ChangeTracking`) drops modified marks whose value didn't change, so **an entity attached and forced to `Modified` is not saved**. To update: load the entity, then change it or use `CurrentValues.SetValues`.
 - `ChangeLogInterceptor` writes a `ChangeLog` row (entity, key, operation, changed property names, user id) for every save through the change tracker. The context factory is **scoped** for this (the user comes from `ICurrentUser`); don't inject it into singletons. Writes that bypass the change tracker (`ExecuteUpdate`/`ExecuteDelete`, raw SQL, stored procedures, triggers) aren't logged, so write through the change tracker; today only the `AddGenerated*Waybills` procedures and the triggers bypass it (until Migration stage 5).
-- Form models go in `App/Forms/<Aggregate>/` (Migration.md section 3.4), not in the Data project.
+- Form models go in `App/Forms/<Aggregate>/` (Migration.md chapter C.4), not in the Data project.
 
 ## Localisation
 

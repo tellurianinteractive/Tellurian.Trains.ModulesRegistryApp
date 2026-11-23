@@ -154,7 +154,7 @@
     async Task SaveAsync()
     {
         if (Form is null) return;
-        // Edit: only the form's fields change on the loaded vehicle (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded vehicle (Migration chapter C.4, the data-loss rule).
         var vehicle = Form.AsEntity(Existing, owningPersonId: Principal.PersonId());
         var (count, message, saved) = await VehicleService.SaveAsync(Principal, vehicle);
         if (count == 0)

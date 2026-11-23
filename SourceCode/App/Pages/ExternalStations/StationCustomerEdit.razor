@@ -145,7 +145,7 @@
     async Task SaveAsync()
     {
         if (Form is null || Station is null) return;
-        // Edit: only the form's fields change on the loaded customer, its cargo flows stay (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded customer, its cargo flows stay (Migration chapter C.4, the data-loss rule).
         var customer = Form.AsEntity(Existing, StationId);
         var (count, message, saved) = await ExternalStationService.SaveAsync(Principal, customer);
         if (count == 0)

@@ -207,7 +207,7 @@
     async Task SaveAsync()
     {
         if (Form is null) return;
-        // Edit: only the form's fields change on the loaded module (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded module (Migration chapter C.4, the data-loss rule).
         var module = Form.AsEntity(Existing);
         var (count, message, saved) = await ModuleService.SaveAsync(Principal, module, OwnershipRef);
         if (count == 0)

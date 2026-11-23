@@ -126,7 +126,7 @@
     async Task SaveAsync()
     {
         if (Form is null || !MayEdit) return;
-        // Edit: only the form's fields change on the loaded meeting (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded meeting (Migration chapter C.4, the data-loss rule).
         var meeting = Form.AsEntity(Existing);
         if (!ShowTime)
         {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 namespace ModulesRegistry.Data.ChangeTracking;
 
 /// <summary>
-/// The change log's own errors, event ids 2000–2999 (Migration section 9.1).
+/// The change log's own errors, event ids 2000–2999 (Migration chapter I.1).
 /// </summary>
 public static partial class ChangeLogLog
 {

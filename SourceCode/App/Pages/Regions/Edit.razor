@@ -77,7 +77,7 @@
             FailureKey = "NotAuthorized";
             return;
         }
-        // Edit: only the form's fields change on the loaded region (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded region (Migration chapter C.4, the data-loss rule).
         var region = Form.AsEntity(Existing);
         var (count, _, _) = await RegionService.SaveAsync(Principal, region);
         if (count == 0)

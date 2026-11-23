@@ -3,7 +3,7 @@ using ModulesRegistry.Data.Extensions;
 namespace ModulesRegistry.Forms.Validation;
 
 /// <summary>
-/// The text rules behind the custom validation attributes (Migration section 3.3), in one place, so the JavaScript validators
+/// The text rules behind the custom validation attributes (Migration chapter C.3), in one place, so the JavaScript validators
 /// of step 3.5 can be written and tested against the same table of values. An empty value is valid: [Required] decides that.
 /// Capitalisation of names isn't here: see NameCapitalizationExtensions in Data, which corrects names when saved.
 /// </summary>

@@ -80,7 +80,7 @@
     async Task SaveAsync()
     {
         if (Form is null) return;
-        // Edit: only the form's fields change on the loaded track (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded track (Migration chapter C.4, the data-loss rule).
         var track = Form.AsEntity(Existing, stationId: StationId);
         var result = await StationTrackService.SaveOrUpdateAsync(Principal, track);
         if (result.Count == 0)

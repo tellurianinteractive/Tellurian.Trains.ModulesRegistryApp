@@ -1,6 +1,6 @@
 name: Daily log review
 
-# Claude Code reads the last 24 hours of production logs and reports through a pull request (a fix) or an issue (Migration.md 9.5).
+# Claude Code reads the last 24 hours of production logs and reports through a pull request (a fix) or an issue (Migration.md chapter I.5).
 # Three jobs, so that no job both runs the agent's output and holds credentials:
 # - review:  signs in to Azure (Log Analytics Reader only), saves the query results to files, signs out, then runs the agent
 #            with file tools only (no shell). The agent can't run code, reach Azure or write to GitHub.
@@ -213,7 +213,7 @@ jobs:
           printf '\n\n---\nOpened by the [daily log review](%s).\n' "$RUN_URL" >> body.md
           gh issue create --title "$(cat "$OUT/issue-title.txt")" --body-file body.md --label log-review
 
-      # Migration.md 2.1: a maintenance release for each runtime patch. Compares the patch's date with the latest GitHub release.
+      # Migration.md chapter B.1: a maintenance release for each runtime patch. Compares the patch's date with the latest GitHub release.
       - name: .NET runtime patch
         run: |
           metadata=$(curl --silent --show-error --fail https://builds.dotnet.microsoft.com/dotnet/release-metadata/11.0/releases.json)

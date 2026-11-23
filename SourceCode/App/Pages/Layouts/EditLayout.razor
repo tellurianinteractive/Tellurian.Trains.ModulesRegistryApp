@@ -108,7 +108,7 @@
     async Task SaveAsync()
     {
         if (Form is null || Meeting is null || !MayEdit) return;
-        // Edit: only the form's fields change on the loaded layout (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded layout (Migration chapter C.4, the data-loss rule).
         var layout = Form.AsEntity(Existing, meetingId: Meeting.Id);
         var (count, message, saved) = await LayoutService.SaveAsync(Principal, layout);
         if (count == 0)

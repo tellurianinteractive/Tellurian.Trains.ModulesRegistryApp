@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 namespace ModulesRegistry.Services.Diagnostics;
 
 /// <summary>
-/// Document events, event ids 3000–3999 (Migration section 9.1).
+/// Document events, event ids 3000–3999 (Migration chapter I.1).
 /// </summary>
 /// <remarks>
 /// Uploads refused for size are logged to learn what file sizes users need (or, as for SKP drawings, where the file

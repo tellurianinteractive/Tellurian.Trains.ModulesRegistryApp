@@ -1,6 +1,6 @@
 # Logging
 
-How the app logs, where the logs go, and how to read them. Background and decisions: `Migration.md`, section 9.
+How the app logs, where the logs go, and how to read them. Background and decisions: `Migration.md`, chapter I.
 
 ## Where the logs go
 - **Production:** Application Insights resource `ModuleRegistry` (resource group `Tellurian.Trains`), stored in the Log Analytics workspace `Tellurian-Trains-LogAnalytics-Workspace`. The app sends through the Microsoft OpenTelemetry Distro (`App/Diagnostics/ApplicationInsights.cs`), turned on by the App Service app setting `APPLICATIONINSIGHTS_CONNECTION_STRING`. The App Service's codeless Application Insights agent, Profiler and Snapshot Debugger are **not used** (their app settings were removed 2026-11-15); turning the agent on again would send everything twice. The app is self-contained, so App Service add-ons that need a framework-dependent app (such as the *ASP.NET Core Logging Integration* site extension) don't work and must not be installed.
@@ -118,4 +118,4 @@ traces
 Saved data is not logged here but stored in the database table `ChangeLog` (step 2C.5c).
 
 ## Daily log review
-The workflow `.github/workflows/log-review.yml` runs every night at 03:17 UTC. It runs the queries in `.github/log-review/queries/` against the workspace (the last 24 hours against the 7 days before), and Claude Code analyses the results following `.github/log-review/prompt.md`. A cause with a clear fix becomes a pull request, the rest an issue, both labelled `log-review`; a quiet day gives nothing. When something new shows up regularly and is expected, describe it in this file, so the review learns to skip it. Design and setup: `Migration.md`, section 9.5.
+The workflow `.github/workflows/log-review.yml` runs every night at 03:17 UTC. It runs the queries in `.github/log-review/queries/` against the workspace (the last 24 hours against the 7 days before), and Claude Code analyses the results following `.github/log-review/prompt.md`. A cause with a clear fix becomes a pull request, the rest an issue, both labelled `log-review`; a quiet day gives nothing. When something new shows up regularly and is expected, describe it in this file, so the review learns to skip it. Design and setup: `Migration.md`, chapter I.5.

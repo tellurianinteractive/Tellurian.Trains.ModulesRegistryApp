@@ -104,7 +104,7 @@
     async Task SaveAsync()
     {
         if (Form is null || Member is null) return;
-        // Only the rights change on the loaded member (Migration section 3.4, the data-loss rule).
+        // Only the rights change on the loaded member (Migration chapter C.4, the data-loss rule).
         var member = Form.AsEntity(Member);
         member.Group = null!; member.Person = null!; // Loaded for display only.
         var (count, message, _) = await GroupService.SaveMemberAsync(Principal, member);

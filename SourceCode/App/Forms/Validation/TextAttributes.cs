@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModulesRegistry.Forms.Validation;
 
-// Custom validation attributes for the form models (Migration sections 3.3 and 3.5). Their messages are the resource keys
+// Custom validation attributes for the form models (Migration chapter C.3 and step 3.5). Their messages are the resource keys
 // "<AttributeName>_Error", found by convention by Microsoft.Extensions.Validation (AddValidation in Program.cs). Each one also
 // emits a client rule (IClientValidationRuleProvider) whose JavaScript validator of the same name is in wwwroot/js/form-validation.js.
 // What the service corrects when saving (<c>Tellurian.Utilities.Text</c>) is accepted, so the user is only told about what

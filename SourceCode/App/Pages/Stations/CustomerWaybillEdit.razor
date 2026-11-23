@@ -84,7 +84,7 @@
     async Task SaveAsync()
     {
         if (Form is null || Existing is null) return;
-        // Only the form's fields change on the loaded waybill (Migration section 3.4, the data-loss rule).
+        // Only the form's fields change on the loaded waybill (Migration chapter C.4, the data-loss rule).
         var (count, message, _) = await WaybillService.SaveAsync(Principal, CustomerId, Form.AsEntity(Existing));
         if (count == 0)
         {

@@ -86,7 +86,7 @@
     async Task SaveAsync()
     {
         if (Form is null) return;
-        // Edit: only the form's fields change on the loaded group, its members stay (Migration section 3.4, the data-loss rule).
+        // Edit: only the form's fields change on the loaded group, its members stay (Migration chapter C.4, the data-loss rule).
         var group = Form.AsEntity(Existing);
         var (count, message, saved) = await GroupService.SaveAsync(Principal, group);
         if (count == 0)

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 namespace ModulesRegistry.Services.Diagnostics;
 
 /// <summary>
-/// Security events, event ids 1000–1999 (Migration step 2C.4, section 9.1): successful sign-in is Information, everything
+/// Security events, event ids 1000–1999 (Migration step 2C.4, chapter I.1): successful sign-in is Information, everything
 /// else Warning.
 /// </summary>
 /// <remarks>
