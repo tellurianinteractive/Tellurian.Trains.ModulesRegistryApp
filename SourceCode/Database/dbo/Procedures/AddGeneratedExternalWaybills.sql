@@ -9,7 +9,7 @@ BEGIN
 	WITH UpdatedableWaybill (Id, OperatingDayId, RegionId) AS
 	(
 		SELECT
-			SCW.Id, ME.OperatingDayId, OTHER.RegionId
+			SCW.Id, CASE WHEN ME.IsSupply <> 0 THEN ME.OperatingDayId ELSE OTHER.OperatingDayId END, OTHER.RegionId
 		FROM 
 			ModuleCustomerCargo AS ME INNER JOIN
 			ExternalCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
@@ -33,7 +33,7 @@ BEGIN
 		NULL AS [OtherStationCustomerCargoId],
 		OTHER.StationCustomerCargoId AS [OtherExternalCustomerCargoId],
 		OTHER.RegionId AS [OtherRegionId],
-		ME.OperatingDayId AS OperatingDayId,
+		CASE WHEN ME.IsSupply <> 0 THEN ME.OperatingDayId ELSE OTHER.OperatingDayId END AS OperatingDayId, -- The sending flow's days.
 		0 AS [IsManuallyCreated],
 		0 AS [HasEmptyReturn],
 		CASE

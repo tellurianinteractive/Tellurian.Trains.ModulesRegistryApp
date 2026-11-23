@@ -70,7 +70,7 @@ Direction: "Receive"
 OtherModuleCustomer: "Berga skog"
 OtherExternalCustomer: NULL
 OtherRegion: "Norrland"
-OperatingDay: "Daily"
+OperatingDay: "Monday"
 IsManuallyCreated: 0
 HasEmptyReturn: 0
 HasSameCargoReturn: 0

@@ -1,232 +1,7 @@
 === Station 1, customer all, sending True, receiving True: 7 waybills
 
 OwnerStationId: 1
-OperatingDayFlag: 0
-OperatorName: ""
-Epoch: ""
-DefaultWagonClass: "G"
-SpecialWagonClass: ""
-Quantity: 5
-QuantityUnitId: 1
-QuantityShortUnit: "t"
-QuantityIsBearer: 0
-HasEmptyReturn: 0
-HasSameCargoReturn: 1
-IsExpress: 0
-IsCoolingRequired: 0
-MatchReturn: 0
-PrintCount: 1
-PrintPerOperatingDay: 0
-IsEmptyReturn: 0
-HideLoadingTimes: 0
-HideUnloadingTimes: 0
-IsLayoutInternal: 0
-OwnerNames: ""
-Origin.Id: 0
-Origin.Name: ""
-Origin.StationId: 31
-Origin.StationName: "Umeå"
-Origin.InternationalStationName: ""
-Origin.IsModuleStation: 0
-Origin.ForeColor: "#FFFFFF"
-Origin.BackColor: "#0000FF"
-Origin.Languages: "sv"
-Origin.DomainSuffix: "se"
-Origin.CargoName: "Styckegods"
-Origin.SpecialCargoName: ""
-Origin.QuantityUnitResourceKey: "Tons"
-Origin.PackagingUnitResourceKey: "Pallets"
-Origin.PackagingPrepositionResourceCode: "In"
-Origin.ReadyTimeResourceKey: "Morning"
-Origin.OperationDaysFlags: 31
-Origin.DisplayReadyTime: 1
-Origin.TrackOrArea: ""
-Origin.TrackOrAreaColor: ""
-Origin.CargoTrackOrArea: ""
-Origin.CargoTrackOrAreaColor: ""
-Origin.FromYear: NULL
-Origin.UptoYear: NULL
-Origin.IsOrigin: 1
-Origin.Waybill is set: 1
-Destination.Id: 0
-Destination.Name: "Alby sågverk"
-Destination.StationId: 1
-Destination.StationName: "Alby"
-Destination.InternationalStationName: ""
-Destination.IsModuleStation: 1
-Destination.ForeColor: "#FFFFFF"
-Destination.BackColor: "#0000FF"
-Destination.Languages: "sv"
-Destination.DomainSuffix: "se"
-Destination.CargoName: "Styckegods"
-Destination.SpecialCargoName: ""
-Destination.QuantityUnitResourceKey: "Tons"
-Destination.PackagingUnitResourceKey: "Pallets"
-Destination.PackagingPrepositionResourceCode: "On"
-Destination.ReadyTimeResourceKey: "Morning"
-Destination.OperationDaysFlags: 31
-Destination.DisplayReadyTime: 1
-Destination.TrackOrArea: ""
-Destination.TrackOrAreaColor: ""
-Destination.CargoTrackOrArea: ""
-Destination.CargoTrackOrAreaColor: ""
-Destination.FromYear: NULL
-Destination.UptoYear: NULL
-Destination.IsOrigin: 0
-Destination.Waybill is set: 1
-
-OwnerStationId: 1
-OperatingDayFlag: 0
-OperatorName: ""
-Epoch: ""
-DefaultWagonClass: "Gbs"
-SpecialWagonClass: ""
-Quantity: 20
-QuantityUnitId: 1
-QuantityShortUnit: "t"
-QuantityIsBearer: 0
-HasEmptyReturn: 0
-HasSameCargoReturn: 0
-IsExpress: 0
-IsCoolingRequired: 0
-MatchReturn: 0
-PrintCount: 1
-PrintPerOperatingDay: 0
-IsEmptyReturn: 0
-HideLoadingTimes: 0
-HideUnloadingTimes: 0
-IsLayoutInternal: 0
-OwnerNames: ""
-Origin.Id: 0
-Origin.Name: "Cederby lantmän"
-Origin.StationId: 3
-Origin.StationName: "Cederby"
-Origin.InternationalStationName: ""
-Origin.IsModuleStation: 1
-Origin.ForeColor: "#000000"
-Origin.BackColor: "#FFFF00"
-Origin.Languages: "sv"
-Origin.DomainSuffix: "se"
-Origin.CargoName: "Spannmål"
-Origin.SpecialCargoName: ""
-Origin.QuantityUnitResourceKey: "Tons"
-Origin.PackagingUnitResourceKey: "None"
-Origin.PackagingPrepositionResourceCode: "In"
-Origin.ReadyTimeResourceKey: "Evening"
-Origin.OperationDaysFlags: 127
-Origin.DisplayReadyTime: 1
-Origin.TrackOrArea: ""
-Origin.TrackOrAreaColor: ""
-Origin.CargoTrackOrArea: ""
-Origin.CargoTrackOrAreaColor: ""
-Origin.FromYear: 1930
-Origin.UptoYear: 1960
-Origin.IsOrigin: 1
-Origin.Waybill is set: 1
-Destination.Id: 0
-Destination.Name: "Alby kvarn"
-Destination.StationId: 1
-Destination.StationName: "Alby"
-Destination.InternationalStationName: ""
-Destination.IsModuleStation: 1
-Destination.ForeColor: "#FFFFFF"
-Destination.BackColor: "#0000FF"
-Destination.Languages: "sv"
-Destination.DomainSuffix: "se"
-Destination.CargoName: "Spannmål"
-Destination.SpecialCargoName: ""
-Destination.QuantityUnitResourceKey: "Tons"
-Destination.PackagingUnitResourceKey: "None"
-Destination.PackagingPrepositionResourceCode: ""
-Destination.ReadyTimeResourceKey: "Morning"
-Destination.OperationDaysFlags: 127
-Destination.DisplayReadyTime: 1
-Destination.TrackOrArea: ""
-Destination.TrackOrAreaColor: ""
-Destination.CargoTrackOrArea: ""
-Destination.CargoTrackOrAreaColor: ""
-Destination.FromYear: 1950
-Destination.UptoYear: 1990
-Destination.IsOrigin: 0
-Destination.Waybill is set: 1
-
-OwnerStationId: 1
-OperatingDayFlag: 0
-OperatorName: ""
-Epoch: ""
-DefaultWagonClass: "Ks"
-SpecialWagonClass: ""
-Quantity: 2
-QuantityUnitId: 3
-QuantityShortUnit: ""
-QuantityIsBearer: 0
-HasEmptyReturn: 0
-HasSameCargoReturn: 0
-IsExpress: 0
-IsCoolingRequired: 0
-MatchReturn: 0
-PrintCount: 1
-PrintPerOperatingDay: 0
-IsEmptyReturn: 0
-HideLoadingTimes: 0
-HideUnloadingTimes: 0
-IsLayoutInternal: 0
-OwnerNames: ""
-Origin.Id: 0
-Origin.Name: "Malmö hamn"
-Origin.StationId: 32
-Origin.StationName: "Malmö"
-Origin.InternationalStationName: "Malmoe"
-Origin.IsModuleStation: 0
-Origin.ForeColor: "#000000"
-Origin.BackColor: "#FFFF00"
-Origin.Languages: "sv"
-Origin.DomainSuffix: "se"
-Origin.CargoName: "Timmer"
-Origin.SpecialCargoName: ""
-Origin.QuantityUnitResourceKey: "Piece"
-Origin.PackagingUnitResourceKey: "None"
-Origin.PackagingPrepositionResourceCode: "In"
-Origin.ReadyTimeResourceKey: ""
-Origin.OperationDaysFlags: 127
-Origin.DisplayReadyTime: 0
-Origin.TrackOrArea: ""
-Origin.TrackOrAreaColor: ""
-Origin.CargoTrackOrArea: ""
-Origin.CargoTrackOrAreaColor: ""
-Origin.FromYear: NULL
-Origin.UptoYear: NULL
-Origin.IsOrigin: 1
-Origin.Waybill is set: 1
-Destination.Id: 0
-Destination.Name: "Alby sågverk"
-Destination.StationId: 1
-Destination.StationName: "Alby"
-Destination.InternationalStationName: ""
-Destination.IsModuleStation: 1
-Destination.ForeColor: "#FFFFFF"
-Destination.BackColor: "#0000FF"
-Destination.Languages: "sv"
-Destination.DomainSuffix: "se"
-Destination.CargoName: "Timmer"
-Destination.SpecialCargoName: ""
-Destination.QuantityUnitResourceKey: "Piece"
-Destination.PackagingUnitResourceKey: "None"
-Destination.PackagingPrepositionResourceCode: ""
-Destination.ReadyTimeResourceKey: "Morning"
-Destination.OperationDaysFlags: 127
-Destination.DisplayReadyTime: 1
-Destination.TrackOrArea: ""
-Destination.TrackOrAreaColor: ""
-Destination.CargoTrackOrArea: "Spår 3"
-Destination.CargoTrackOrAreaColor: ""
-Destination.FromYear: NULL
-Destination.UptoYear: NULL
-Destination.IsOrigin: 0
-Destination.Waybill is set: 1
-
-OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 1
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -301,7 +76,157 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
+OperatorName: ""
+Epoch: ""
+DefaultWagonClass: "Gbs"
+SpecialWagonClass: ""
+Quantity: 20
+QuantityUnitId: 1
+QuantityShortUnit: "t"
+QuantityIsBearer: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+IsExpress: 0
+IsCoolingRequired: 0
+MatchReturn: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+IsEmptyReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+IsLayoutInternal: 0
+OwnerNames: ""
+Origin.Id: 0
+Origin.Name: "Cederby lantmän"
+Origin.StationId: 3
+Origin.StationName: "Cederby"
+Origin.InternationalStationName: ""
+Origin.IsModuleStation: 1
+Origin.ForeColor: "#000000"
+Origin.BackColor: "#FFFF00"
+Origin.Languages: "sv"
+Origin.DomainSuffix: "se"
+Origin.CargoName: "Spannmål"
+Origin.SpecialCargoName: ""
+Origin.QuantityUnitResourceKey: "Tons"
+Origin.PackagingUnitResourceKey: "None"
+Origin.PackagingPrepositionResourceCode: "In"
+Origin.ReadyTimeResourceKey: "Evening"
+Origin.OperationDaysFlags: 127
+Origin.DisplayReadyTime: 1
+Origin.TrackOrArea: ""
+Origin.TrackOrAreaColor: ""
+Origin.CargoTrackOrArea: ""
+Origin.CargoTrackOrAreaColor: ""
+Origin.FromYear: 1930
+Origin.UptoYear: 1960
+Origin.IsOrigin: 1
+Origin.Waybill is set: 1
+Destination.Id: 0
+Destination.Name: "Alby kvarn"
+Destination.StationId: 1
+Destination.StationName: "Alby"
+Destination.InternationalStationName: ""
+Destination.IsModuleStation: 1
+Destination.ForeColor: "#FFFFFF"
+Destination.BackColor: "#0000FF"
+Destination.Languages: "sv"
+Destination.DomainSuffix: "se"
+Destination.CargoName: "Spannmål"
+Destination.SpecialCargoName: ""
+Destination.QuantityUnitResourceKey: "Tons"
+Destination.PackagingUnitResourceKey: "None"
+Destination.PackagingPrepositionResourceCode: ""
+Destination.ReadyTimeResourceKey: "Morning"
+Destination.OperationDaysFlags: 127
+Destination.DisplayReadyTime: 1
+Destination.TrackOrArea: ""
+Destination.TrackOrAreaColor: ""
+Destination.CargoTrackOrArea: ""
+Destination.CargoTrackOrAreaColor: ""
+Destination.FromYear: 1950
+Destination.UptoYear: 1990
+Destination.IsOrigin: 0
+Destination.Waybill is set: 1
+
+OwnerStationId: 1
+OperatingDayFlag: 127
+OperatorName: ""
+Epoch: ""
+DefaultWagonClass: "Ks"
+SpecialWagonClass: ""
+Quantity: 2
+QuantityUnitId: 3
+QuantityShortUnit: ""
+QuantityIsBearer: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+IsExpress: 0
+IsCoolingRequired: 0
+MatchReturn: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+IsEmptyReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+IsLayoutInternal: 0
+OwnerNames: ""
+Origin.Id: 0
+Origin.Name: "Malmö hamn"
+Origin.StationId: 32
+Origin.StationName: "Malmö"
+Origin.InternationalStationName: "Malmoe"
+Origin.IsModuleStation: 0
+Origin.ForeColor: "#000000"
+Origin.BackColor: "#FFFF00"
+Origin.Languages: "sv"
+Origin.DomainSuffix: "se"
+Origin.CargoName: "Timmer"
+Origin.SpecialCargoName: ""
+Origin.QuantityUnitResourceKey: "Piece"
+Origin.PackagingUnitResourceKey: "None"
+Origin.PackagingPrepositionResourceCode: "In"
+Origin.ReadyTimeResourceKey: ""
+Origin.OperationDaysFlags: 127
+Origin.DisplayReadyTime: 0
+Origin.TrackOrArea: ""
+Origin.TrackOrAreaColor: ""
+Origin.CargoTrackOrArea: ""
+Origin.CargoTrackOrAreaColor: ""
+Origin.FromYear: NULL
+Origin.UptoYear: NULL
+Origin.IsOrigin: 1
+Origin.Waybill is set: 1
+Destination.Id: 0
+Destination.Name: "Alby sågverk"
+Destination.StationId: 1
+Destination.StationName: "Alby"
+Destination.InternationalStationName: ""
+Destination.IsModuleStation: 1
+Destination.ForeColor: "#FFFFFF"
+Destination.BackColor: "#0000FF"
+Destination.Languages: "sv"
+Destination.DomainSuffix: "se"
+Destination.CargoName: "Timmer"
+Destination.SpecialCargoName: ""
+Destination.QuantityUnitResourceKey: "Piece"
+Destination.PackagingUnitResourceKey: "None"
+Destination.PackagingPrepositionResourceCode: ""
+Destination.ReadyTimeResourceKey: "Morning"
+Destination.OperationDaysFlags: 127
+Destination.DisplayReadyTime: 1
+Destination.TrackOrArea: ""
+Destination.TrackOrAreaColor: ""
+Destination.CargoTrackOrArea: "Spår 3"
+Destination.CargoTrackOrAreaColor: ""
+Destination.FromYear: NULL
+Destination.UptoYear: NULL
+Destination.IsOrigin: 0
+Destination.Waybill is set: 1
+
+OwnerStationId: 1
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -376,7 +301,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"
@@ -451,7 +376,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"
@@ -525,10 +450,85 @@ Destination.UptoYear: NULL
 Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
+OwnerStationId: 1
+OperatingDayFlag: 31
+OperatorName: ""
+Epoch: ""
+DefaultWagonClass: "G"
+SpecialWagonClass: ""
+Quantity: 5
+QuantityUnitId: 1
+QuantityShortUnit: "t"
+QuantityIsBearer: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 1
+IsExpress: 0
+IsCoolingRequired: 0
+MatchReturn: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+IsEmptyReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+IsLayoutInternal: 0
+OwnerNames: ""
+Origin.Id: 0
+Origin.Name: ""
+Origin.StationId: 31
+Origin.StationName: "Umeå"
+Origin.InternationalStationName: ""
+Origin.IsModuleStation: 0
+Origin.ForeColor: "#FFFFFF"
+Origin.BackColor: "#0000FF"
+Origin.Languages: "sv"
+Origin.DomainSuffix: "se"
+Origin.CargoName: "Styckegods"
+Origin.SpecialCargoName: ""
+Origin.QuantityUnitResourceKey: "Tons"
+Origin.PackagingUnitResourceKey: "Pallets"
+Origin.PackagingPrepositionResourceCode: "In"
+Origin.ReadyTimeResourceKey: "Morning"
+Origin.OperationDaysFlags: 31
+Origin.DisplayReadyTime: 1
+Origin.TrackOrArea: ""
+Origin.TrackOrAreaColor: ""
+Origin.CargoTrackOrArea: ""
+Origin.CargoTrackOrAreaColor: ""
+Origin.FromYear: NULL
+Origin.UptoYear: NULL
+Origin.IsOrigin: 1
+Origin.Waybill is set: 1
+Destination.Id: 0
+Destination.Name: "Alby sågverk"
+Destination.StationId: 1
+Destination.StationName: "Alby"
+Destination.InternationalStationName: ""
+Destination.IsModuleStation: 1
+Destination.ForeColor: "#FFFFFF"
+Destination.BackColor: "#0000FF"
+Destination.Languages: "sv"
+Destination.DomainSuffix: "se"
+Destination.CargoName: "Styckegods"
+Destination.SpecialCargoName: ""
+Destination.QuantityUnitResourceKey: "Tons"
+Destination.PackagingUnitResourceKey: "Pallets"
+Destination.PackagingPrepositionResourceCode: "On"
+Destination.ReadyTimeResourceKey: "Morning"
+Destination.OperationDaysFlags: 31
+Destination.DisplayReadyTime: 1
+Destination.TrackOrArea: ""
+Destination.TrackOrAreaColor: ""
+Destination.CargoTrackOrArea: ""
+Destination.CargoTrackOrAreaColor: ""
+Destination.FromYear: NULL
+Destination.UptoYear: NULL
+Destination.IsOrigin: 0
+Destination.Waybill is set: 1
+
 === Station 2, customer all, sending True, receiving True: 2 waybills
 
 OwnerStationId: 2
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "G"
@@ -603,7 +603,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 2
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"
@@ -680,7 +680,7 @@ Destination.Waybill is set: 1
 === Station 3, customer all, sending True, receiving True: 1 waybills
 
 OwnerStationId: 3
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -757,7 +757,7 @@ Destination.Waybill is set: 1
 === Station 4, customer all, sending True, receiving True: 1 waybills
 
 OwnerStationId: 4
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -840,157 +840,7 @@ Destination.Waybill is set: 1
 === Station 1, customer 11, sending False, receiving True: 6 waybills
 
 OwnerStationId: 1
-OperatingDayFlag: 0
-OperatorName: ""
-Epoch: ""
-DefaultWagonClass: "G"
-SpecialWagonClass: ""
-Quantity: 5
-QuantityUnitId: 1
-QuantityShortUnit: "t"
-QuantityIsBearer: 0
-HasEmptyReturn: 0
-HasSameCargoReturn: 1
-IsExpress: 0
-IsCoolingRequired: 0
-MatchReturn: 0
-PrintCount: 1
-PrintPerOperatingDay: 0
-IsEmptyReturn: 0
-HideLoadingTimes: 0
-HideUnloadingTimes: 0
-IsLayoutInternal: 0
-OwnerNames: ""
-Origin.Id: 0
-Origin.Name: ""
-Origin.StationId: 31
-Origin.StationName: "Umeå"
-Origin.InternationalStationName: ""
-Origin.IsModuleStation: 0
-Origin.ForeColor: "#FFFFFF"
-Origin.BackColor: "#0000FF"
-Origin.Languages: "sv"
-Origin.DomainSuffix: "se"
-Origin.CargoName: "Styckegods"
-Origin.SpecialCargoName: ""
-Origin.QuantityUnitResourceKey: "Tons"
-Origin.PackagingUnitResourceKey: "Pallets"
-Origin.PackagingPrepositionResourceCode: "In"
-Origin.ReadyTimeResourceKey: "Morning"
-Origin.OperationDaysFlags: 31
-Origin.DisplayReadyTime: 1
-Origin.TrackOrArea: ""
-Origin.TrackOrAreaColor: ""
-Origin.CargoTrackOrArea: ""
-Origin.CargoTrackOrAreaColor: ""
-Origin.FromYear: NULL
-Origin.UptoYear: NULL
-Origin.IsOrigin: 1
-Origin.Waybill is set: 1
-Destination.Id: 0
-Destination.Name: "Alby sågverk"
-Destination.StationId: 1
-Destination.StationName: "Alby"
-Destination.InternationalStationName: ""
-Destination.IsModuleStation: 1
-Destination.ForeColor: "#FFFFFF"
-Destination.BackColor: "#0000FF"
-Destination.Languages: "sv"
-Destination.DomainSuffix: "se"
-Destination.CargoName: "Styckegods"
-Destination.SpecialCargoName: ""
-Destination.QuantityUnitResourceKey: "Tons"
-Destination.PackagingUnitResourceKey: "Pallets"
-Destination.PackagingPrepositionResourceCode: "On"
-Destination.ReadyTimeResourceKey: "Morning"
-Destination.OperationDaysFlags: 31
-Destination.DisplayReadyTime: 1
-Destination.TrackOrArea: ""
-Destination.TrackOrAreaColor: ""
-Destination.CargoTrackOrArea: ""
-Destination.CargoTrackOrAreaColor: ""
-Destination.FromYear: NULL
-Destination.UptoYear: NULL
-Destination.IsOrigin: 0
-Destination.Waybill is set: 1
-
-OwnerStationId: 1
-OperatingDayFlag: 0
-OperatorName: ""
-Epoch: ""
-DefaultWagonClass: "Ks"
-SpecialWagonClass: ""
-Quantity: 2
-QuantityUnitId: 3
-QuantityShortUnit: ""
-QuantityIsBearer: 0
-HasEmptyReturn: 0
-HasSameCargoReturn: 0
-IsExpress: 0
-IsCoolingRequired: 0
-MatchReturn: 0
-PrintCount: 1
-PrintPerOperatingDay: 0
-IsEmptyReturn: 0
-HideLoadingTimes: 0
-HideUnloadingTimes: 0
-IsLayoutInternal: 0
-OwnerNames: ""
-Origin.Id: 0
-Origin.Name: "Malmö hamn"
-Origin.StationId: 32
-Origin.StationName: "Malmö"
-Origin.InternationalStationName: "Malmoe"
-Origin.IsModuleStation: 0
-Origin.ForeColor: "#000000"
-Origin.BackColor: "#FFFF00"
-Origin.Languages: "sv"
-Origin.DomainSuffix: "se"
-Origin.CargoName: "Timmer"
-Origin.SpecialCargoName: ""
-Origin.QuantityUnitResourceKey: "Piece"
-Origin.PackagingUnitResourceKey: "None"
-Origin.PackagingPrepositionResourceCode: "In"
-Origin.ReadyTimeResourceKey: ""
-Origin.OperationDaysFlags: 127
-Origin.DisplayReadyTime: 0
-Origin.TrackOrArea: ""
-Origin.TrackOrAreaColor: ""
-Origin.CargoTrackOrArea: ""
-Origin.CargoTrackOrAreaColor: ""
-Origin.FromYear: NULL
-Origin.UptoYear: NULL
-Origin.IsOrigin: 1
-Origin.Waybill is set: 1
-Destination.Id: 0
-Destination.Name: "Alby sågverk"
-Destination.StationId: 1
-Destination.StationName: "Alby"
-Destination.InternationalStationName: ""
-Destination.IsModuleStation: 1
-Destination.ForeColor: "#FFFFFF"
-Destination.BackColor: "#0000FF"
-Destination.Languages: "sv"
-Destination.DomainSuffix: "se"
-Destination.CargoName: "Timmer"
-Destination.SpecialCargoName: ""
-Destination.QuantityUnitResourceKey: "Piece"
-Destination.PackagingUnitResourceKey: "None"
-Destination.PackagingPrepositionResourceCode: ""
-Destination.ReadyTimeResourceKey: "Morning"
-Destination.OperationDaysFlags: 127
-Destination.DisplayReadyTime: 1
-Destination.TrackOrArea: ""
-Destination.TrackOrAreaColor: ""
-Destination.CargoTrackOrArea: "Spår 3"
-Destination.CargoTrackOrAreaColor: ""
-Destination.FromYear: NULL
-Destination.UptoYear: NULL
-Destination.IsOrigin: 0
-Destination.Waybill is set: 1
-
-OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 1
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -1065,7 +915,82 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
+OperatorName: ""
+Epoch: ""
+DefaultWagonClass: "Ks"
+SpecialWagonClass: ""
+Quantity: 2
+QuantityUnitId: 3
+QuantityShortUnit: ""
+QuantityIsBearer: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+IsExpress: 0
+IsCoolingRequired: 0
+MatchReturn: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+IsEmptyReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+IsLayoutInternal: 0
+OwnerNames: ""
+Origin.Id: 0
+Origin.Name: "Malmö hamn"
+Origin.StationId: 32
+Origin.StationName: "Malmö"
+Origin.InternationalStationName: "Malmoe"
+Origin.IsModuleStation: 0
+Origin.ForeColor: "#000000"
+Origin.BackColor: "#FFFF00"
+Origin.Languages: "sv"
+Origin.DomainSuffix: "se"
+Origin.CargoName: "Timmer"
+Origin.SpecialCargoName: ""
+Origin.QuantityUnitResourceKey: "Piece"
+Origin.PackagingUnitResourceKey: "None"
+Origin.PackagingPrepositionResourceCode: "In"
+Origin.ReadyTimeResourceKey: ""
+Origin.OperationDaysFlags: 127
+Origin.DisplayReadyTime: 0
+Origin.TrackOrArea: ""
+Origin.TrackOrAreaColor: ""
+Origin.CargoTrackOrArea: ""
+Origin.CargoTrackOrAreaColor: ""
+Origin.FromYear: NULL
+Origin.UptoYear: NULL
+Origin.IsOrigin: 1
+Origin.Waybill is set: 1
+Destination.Id: 0
+Destination.Name: "Alby sågverk"
+Destination.StationId: 1
+Destination.StationName: "Alby"
+Destination.InternationalStationName: ""
+Destination.IsModuleStation: 1
+Destination.ForeColor: "#FFFFFF"
+Destination.BackColor: "#0000FF"
+Destination.Languages: "sv"
+Destination.DomainSuffix: "se"
+Destination.CargoName: "Timmer"
+Destination.SpecialCargoName: ""
+Destination.QuantityUnitResourceKey: "Piece"
+Destination.PackagingUnitResourceKey: "None"
+Destination.PackagingPrepositionResourceCode: ""
+Destination.ReadyTimeResourceKey: "Morning"
+Destination.OperationDaysFlags: 127
+Destination.DisplayReadyTime: 1
+Destination.TrackOrArea: ""
+Destination.TrackOrAreaColor: ""
+Destination.CargoTrackOrArea: "Spår 3"
+Destination.CargoTrackOrAreaColor: ""
+Destination.FromYear: NULL
+Destination.UptoYear: NULL
+Destination.IsOrigin: 0
+Destination.Waybill is set: 1
+
+OwnerStationId: 1
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Ks"
@@ -1140,7 +1065,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"
@@ -1215,7 +1140,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 1
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"
@@ -1289,10 +1214,85 @@ Destination.UptoYear: NULL
 Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
+OwnerStationId: 1
+OperatingDayFlag: 31
+OperatorName: ""
+Epoch: ""
+DefaultWagonClass: "G"
+SpecialWagonClass: ""
+Quantity: 5
+QuantityUnitId: 1
+QuantityShortUnit: "t"
+QuantityIsBearer: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 1
+IsExpress: 0
+IsCoolingRequired: 0
+MatchReturn: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+IsEmptyReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+IsLayoutInternal: 0
+OwnerNames: ""
+Origin.Id: 0
+Origin.Name: ""
+Origin.StationId: 31
+Origin.StationName: "Umeå"
+Origin.InternationalStationName: ""
+Origin.IsModuleStation: 0
+Origin.ForeColor: "#FFFFFF"
+Origin.BackColor: "#0000FF"
+Origin.Languages: "sv"
+Origin.DomainSuffix: "se"
+Origin.CargoName: "Styckegods"
+Origin.SpecialCargoName: ""
+Origin.QuantityUnitResourceKey: "Tons"
+Origin.PackagingUnitResourceKey: "Pallets"
+Origin.PackagingPrepositionResourceCode: "In"
+Origin.ReadyTimeResourceKey: "Morning"
+Origin.OperationDaysFlags: 31
+Origin.DisplayReadyTime: 1
+Origin.TrackOrArea: ""
+Origin.TrackOrAreaColor: ""
+Origin.CargoTrackOrArea: ""
+Origin.CargoTrackOrAreaColor: ""
+Origin.FromYear: NULL
+Origin.UptoYear: NULL
+Origin.IsOrigin: 1
+Origin.Waybill is set: 1
+Destination.Id: 0
+Destination.Name: "Alby sågverk"
+Destination.StationId: 1
+Destination.StationName: "Alby"
+Destination.InternationalStationName: ""
+Destination.IsModuleStation: 1
+Destination.ForeColor: "#FFFFFF"
+Destination.BackColor: "#0000FF"
+Destination.Languages: "sv"
+Destination.DomainSuffix: "se"
+Destination.CargoName: "Styckegods"
+Destination.SpecialCargoName: ""
+Destination.QuantityUnitResourceKey: "Tons"
+Destination.PackagingUnitResourceKey: "Pallets"
+Destination.PackagingPrepositionResourceCode: "On"
+Destination.ReadyTimeResourceKey: "Morning"
+Destination.OperationDaysFlags: 31
+Destination.DisplayReadyTime: 1
+Destination.TrackOrArea: ""
+Destination.TrackOrAreaColor: ""
+Destination.CargoTrackOrArea: ""
+Destination.CargoTrackOrAreaColor: ""
+Destination.FromYear: NULL
+Destination.UptoYear: NULL
+Destination.IsOrigin: 0
+Destination.Waybill is set: 1
+
 === Station 2, customer all, sending True, receiving False: 2 waybills
 
 OwnerStationId: 2
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "G"
@@ -1367,7 +1367,7 @@ Destination.IsOrigin: 0
 Destination.Waybill is set: 1
 
 OwnerStationId: 2
-OperatingDayFlag: 0
+OperatingDayFlag: 127
 OperatorName: ""
 Epoch: ""
 DefaultWagonClass: "Zaes"

@@ -25,6 +25,9 @@ public static class OperatingDayExtensions
 
 public static class OperationDaysExtensions
 {
+    /// <summary>The flags of every day of the week.</summary>
+    public const byte DailyFlag = 0x7F;
+
     private static readonly Day[] Days = [
             new Day(0, 0x7F, "Daily"),
             new Day(1, 0x01, "Monday"),

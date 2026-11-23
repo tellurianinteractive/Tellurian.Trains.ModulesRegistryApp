@@ -159,6 +159,7 @@ public static class CargoFlowQueries
                 FlowId = w.StationCustomerCargoId,
                 OtherFlowId = w.OtherStationCustomerCargoId,
                 OtherExternalFlowId = w.OtherExternalCustomerCargoId,
+                OperatingDayFlag = w.OperatingDay.Flag,
                 PrintCount = w.PrintCount,
                 PrintPerOperatingDay = w.PrintPerOperatingDay,
                 HasEmptyReturn = w.HasEmptyReturn,

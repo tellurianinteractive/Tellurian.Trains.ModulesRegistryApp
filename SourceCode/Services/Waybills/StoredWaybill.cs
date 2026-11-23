@@ -10,6 +10,10 @@ public sealed record StoredWaybill
     public int FlowId { get; init; }
     public int? OtherFlowId { get; init; }
     public int? OtherExternalFlowId { get; init; }
+    /// <summary>
+    /// The days the waybill is sent: the sending flow's days when generated, and may be changed on the waybill.
+    /// </summary>
+    public byte OperatingDayFlag { get; init; }
     public int PrintCount { get; init; }
     public bool PrintPerOperatingDay { get; init; }
     public bool HasEmptyReturn { get; init; }

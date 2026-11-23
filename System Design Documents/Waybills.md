@@ -28,7 +28,7 @@ For each of the customer's flows that **receives** (Receive or Import) a cargo w
 - has years that overlap the receiving flow's years.
 
 The row is stored **only at the receiving customer**. Generating for a sending customer adds no module-to-module rows. Values:
-- the receiver's operating day,
+- the receiver's operating day (since 1.17.4 the sender's, see *Days* below),
 - the sender's region,
 - print count = the quantity when the unit is *piece*, otherwise 1,
 - no empty return and no same-cargo return.
@@ -57,6 +57,12 @@ When printed, the other end is the customer's own region's shadow yard, named af
 - **Stored rows:** 3,153 module-to-module, 1,890 module-to-external and 272 shadow-yard rows; none manually created.
 - **Flows by direction:** 1,636 Receive, 1,007 Send, 292 Import, 187 Export.
 - **Stale rows:** 189 module-to-module rows no longer match, because the cargo or direction has changed. 26 module-to-module rows are stored at the sender, from before only receivers were generated for.
+
+## Days (since 1.17.4)
+- **Generation** stores the sending flow's days on the waybill (`OperatingDayId`): the other flow's when the own flow receives, the own flow's when it sends. A shadow-yard waybill has the own flow's days. Regenerating sets the days again, as before; the print count is kept.
+- **A station's printout** uses the stored days, which can be changed on the waybill. Layout and group waybills have no stored rows and use the sending flow's days.
+- **Returns:** a return with the same cargo is sent on its own sender's days (the outgoing waybill's receiver), an empty return daily.
+- Existing waybills got the sending flow's days with the one-off script `dbo/Scripts/SetWaybillSendingDays.sql`.
 
 ## Removing waybills
 Only the cascade triggers delete rows: when a station customer, a cargo flow or an external cargo flow is deleted. A row stays when a flow changes cargo, direction, years or country. Printing hides most such rows, because the print views check cargo, direction and country again. The customer's waybills page still lists them.
@@ -112,7 +118,7 @@ Decided 2026-11-23; the rules are in [Creations of waybills.md](Creations%20of%2
 | Generate for one cargo flow, or all of a customer's flows | Always all of the customer's flows | Yes |
 | Waybills that no longer match are deleted on both sides when a flow changes, or when the waybill is disabled | Deleted only when a flow or customer is deleted; stale rows are hidden when printing; disabling = print count 0 | Yes |
 | The stations' years overlap, and the cargo exists within that window | The flows' years overlap when generating; the cargo's years are checked against the sender's years only, when printing | Yes |
-| A waybill gets the sending flow's days | A module row gets the **receiver's** days | Yes |
+| A waybill gets the sending flow's days | Done in 1.17.4 | No |
 | Generated waybills: cargo without an NHM code matches only the representative station of the station's own region, to or from it, with an empty return waybill the other way | The other end is the own region (its representative station, or the region's name if it has none); a row is created only if an opposite flow of the same cargo exists in the same country, in a region with a representative station; *same-cargo return* is set, not *empty return*; id comparisons across tables | Yes |
 | Harbours receive any export and send any import, within the country | Not implemented | New feature |
 | Layout waybills, for all cargo (also without an NHM code, since a layout has few stations), ignore the country and the difference between Send/Export and Receive/Import | Cargo with an NHM code: Send → Receive only; without: Export → Import between stations in different countries | Yes |

@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.17.4
+Released 2026-11-23
+- Waybills show the sender's days. Empty returns are daily, and returns with the same cargo have the days of their sender.
+- The days set on a station's waybill are printed.
 ## Release 1.17.3
 Released 2026-11-23
 - The freight customer form for external stations no longer fails to open.

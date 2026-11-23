@@ -18,8 +18,7 @@ public static class WaybillExtensions
             {
                 if (waybill.PrintPerOperatingDay)
                 {
-                    var operationDays = (byte)(waybill.Destination!.OperationDaysFlags & waybill.Origin!.OperationDaysFlags);
-                    if (operationDays > 0)
+                    if (waybill.OperatingDayFlag > 0)
                     {
                         foreach (var day in waybill.OperatingDayFlag.GetDays(false, true))
                         {
@@ -57,7 +56,8 @@ public static class WaybillExtensions
     {
         foreach (var item in items)
         {
-            item.OperatingDayFlag = item.WaybillSendingDaysFlags();
+            // A stored waybill has its own days (station waybills); the others are sent on the sender's days.
+            if (item.OperatingDayFlag == 0) item.OperatingDayFlag = item.Origin.OperationDaysFlags;
             if (item.QuantityIsBearer)
             {
                 item.PrintCount = item.Quantity * item.PrintCount;
@@ -71,15 +71,14 @@ public static class WaybillExtensions
         return items;
     }
 
-    private static byte WaybillSendingDaysFlags(this Waybill it)
-    {
-        byte intersectionDays = (byte)(it.Destination!.OperationDaysFlags & it.Origin!.OperationDaysFlags);
-        return intersectionDays == 0 ? it.Origin.OperationDaysFlags : intersectionDays;
-    }
-
+    /// <summary>
+    /// The days a waybill is sent: the sender's days. A return with the same cargo is sent on its own sender's days
+    /// (the receiver of the outgoing waybill), an empty return daily.
+    /// </summary>
     private static Waybill Return(this Waybill waybill)
     {
         var returnWaybill = waybill.Clone;
+        returnWaybill.OperatingDayFlag = waybill.HasSameCargoReturn ? waybill.Destination.OperationDaysFlags : OperationDaysExtensions.DailyFlag;
         var newOrigin = returnWaybill.Destination;
         var newDestination = returnWaybill.Origin;
         returnWaybill.Origin = newOrigin;
@@ -157,9 +156,7 @@ public static class WaybillExtensions
     {
         if (me is null || me.Origin is null) return string.Empty;
         var culture = new CultureInfo(me.Origin.Language());
-        return
-            me.IsEmptyReturn ? string.Empty :
-            me.OperatingDayFlag.OperationDays(culture).ShortName;
+        return me.OperatingDayFlag.OperationDays(culture).ShortName;
     }
 
     public static string LoadingReady(this Waybill? me) =>

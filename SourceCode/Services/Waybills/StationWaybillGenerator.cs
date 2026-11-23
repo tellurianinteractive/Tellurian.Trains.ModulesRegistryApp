@@ -10,6 +10,7 @@ namespace ModulesRegistry.Services.Waybills;
 /// <item>No other end: the region's shadow yard, named after its representative external station; no shadow yard without one.</item>
 /// <item>Always: the cargo's years overlap the sending flow's years.</item>
 /// </list>
+/// The waybill is sent on the stored waybill's days (the sending flow's days when generated).
 /// The views joined the other end on its id alone, also against flows of the other kind with the same id; such false matches are not
 /// reproduced.
 /// </summary>
@@ -74,6 +75,7 @@ public static class StationWaybillGenerator
         {
             Id = stored.Id,
             OwnerStationId = stationId,
+            OperatingDayFlag = stored.OperatingDayFlag,
             Quantity = receiver.QuantityIsBearer ? 1 : receiver.Quantity,
             QuantityUnitId = receiver.QuantityUnitId,
             QuantityShortUnit = Text(receiver.QuantityShortUnit),

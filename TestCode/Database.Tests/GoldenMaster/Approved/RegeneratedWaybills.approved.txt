@@ -70,7 +70,7 @@ Direction: "Receive"
 OtherModuleCustomer: "Berga skog"
 OtherExternalCustomer: NULL
 OtherRegion: "Norrland"
-OperatingDay: "Monday"
+OperatingDay: "Måndag-fredag"
 IsManuallyCreated: 0
 HasEmptyReturn: 0
 HasSameCargoReturn: 0
@@ -86,7 +86,7 @@ Direction: "Receive"
 OtherModuleCustomer: "Cederby export"
 OtherExternalCustomer: NULL
 OtherRegion: "Skåne"
-OperatingDay: "Monday"
+OperatingDay: "Daily"
 IsManuallyCreated: 0
 HasEmptyReturn: 0
 HasSameCargoReturn: 0
@@ -102,7 +102,7 @@ Direction: "Receive"
 OtherModuleCustomer: NULL
 OtherExternalCustomer: "Malmö hamn"
 OtherRegion: "Skåne"
-OperatingDay: "Monday"
+OperatingDay: "Daily"
 IsManuallyCreated: 0
 HasEmptyReturn: 0
 HasSameCargoReturn: 0

@@ -80,8 +80,9 @@ The arrival days has no meaning, and can be omitted in the printed waybills.
 Also, in cargo flows that are receive/import, the selection of days has no meaning and can be disabled/hidden and set to daily behind the scenes.
 The reason to keep it like that, is that a single cargo flow can change direction, and then days applies again.
 
-So a waybill gets the sending cargo flow's days. Today a waybill between two
-module stations gets the receiving cargo flow's days, which must change.
+So a waybill gets the sending cargo flow's days. An empty return is always daily,
+and a return with the same cargo gets the days of the return's sender
+(the receiver of the outgoing waybill). Done in 1.17.4.
 
 ### Improved Matching
 We can add the follwing features:

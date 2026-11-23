@@ -37,7 +37,7 @@ BEGIN
 		NULL AS [OtherStationCustomerCargoId],
 		NULL AS [OtherExternalCustomerCargoId],
 		ME.RegionId AS [OtherRegionId],
-		ME.OperatingDayId AS OperatingDayId,
+		ME.OperatingDayId AS OperatingDayId, -- The own flow's days, which are also the shadow yard's.
 		0 AS [IsManuallyCreated],
 		0 AS [HasEmptyReturn],
 		CASE

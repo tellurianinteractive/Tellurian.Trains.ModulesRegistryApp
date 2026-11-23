@@ -13,20 +13,29 @@ namespace ModulesRegistry.Database.Tests.GoldenMaster;
 public class StationWaybillGeneratorTests : DatabaseTest
 {
     [TestMethod]
-    public async Task ProcedureWaybillsAreApproved()
+    public async Task GeneratedWaybillsAreApproved()
     {
         await SeedAndGenerateAsync();
-        Approvals.Verify("StationWaybillObjects", await RenderAsync(ProcedureWaybillsAsync));
+        Approvals.Verify("StationWaybillObjects", await RenderAsync(GeneratedWaybillsAsync));
     }
 
+    /// <summary>
+    /// The same waybills as from the procedure, except their days: since 1.17.4 a station waybill is sent on the stored waybill's days,
+    /// which the procedure didn't give (the printout used the flows' days).
+    /// </summary>
     [TestMethod]
     public async Task GeneratedWaybillsAreTheProcedureWaybills()
     {
         await SeedAndGenerateAsync();
         var expected = await RenderAsync(ProcedureWaybillsAsync);
-        var actual = await RenderAsync(GeneratedWaybillsAsync);
+        var actual = await RenderAsync(async query => [.. (await GeneratedWaybillsAsync(query)).Select(WithoutDays)]);
         Assert.AreEqual(expected, actual);
-        Approvals.Verify("StationWaybillObjects", actual);
+    }
+
+    private static Waybill WithoutDays(Waybill waybill)
+    {
+        waybill.OperatingDayFlag = 0;
+        return waybill;
     }
 
     private async Task SeedAndGenerateAsync()
