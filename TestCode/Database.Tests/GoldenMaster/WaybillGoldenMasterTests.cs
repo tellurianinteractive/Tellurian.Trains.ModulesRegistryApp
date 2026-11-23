@@ -10,9 +10,6 @@ namespace ModulesRegistry.Database.Tests.GoldenMaster;
 [TestClass]
 public class WaybillGoldenMasterTests : DatabaseTest
 {
-    private static readonly int[] ModuleCustomerIds = [11, 12, 13, 14, 15, 16, 17, 18];
-    private static readonly int[] StationIds = [1, 2, 3, 4, 5, 6];
-
     private const string StoredWaybillsQuery = """
         SELECT
             SC.CustomerName AS Customer,
@@ -41,42 +38,40 @@ public class WaybillGoldenMasterTests : DatabaseTest
     [TestMethod]
     public async Task GeneratedWaybills()
     {
-        await SeedScenarioAsync();
-        await GenerateWaybillsAsync();
+        await WaybillScenario.SeedAsync(Transaction);
+        await WaybillScenario.GenerateWaybillsAsync(Transaction);
         Approvals.Verify(nameof(GeneratedWaybills), await StoredWaybillsAsync());
     }
 
     [TestMethod]
     public async Task RegeneratedWaybills()
     {
-        await SeedScenarioAsync();
-        await GenerateWaybillsAsync();
+        await WaybillScenario.SeedAsync(Transaction);
+        await WaybillScenario.GenerateWaybillsAsync(Transaction);
         // Mark all as printed, and change the operating days of a receiving and a sending flow.
         await Transaction.ExecuteScriptAsync("""
             UPDATE StationCustomerWaybill SET PrintCount = 0;
             UPDATE StationCustomerCargo SET OperatingDayId = 1 WHERE Id = 101;
             UPDATE StationCustomerCargo SET OperatingDayId = 10 WHERE Id = 105;
             """);
-        await GenerateWaybillsAsync();
+        await WaybillScenario.GenerateWaybillsAsync(Transaction);
         Approvals.Verify(nameof(RegeneratedWaybills), await StoredWaybillsAsync());
     }
 
     [TestMethod]
     public async Task StationWaybills()
     {
-        await SeedScenarioAsync();
-        await GenerateWaybillsAsync();
+        await WaybillScenario.SeedAsync(Transaction);
+        await WaybillScenario.GenerateWaybillsAsync(Transaction);
         var result = new StringBuilder();
-        foreach (var stationId in StationIds) await AppendStationWaybillsAsync(result, stationId, null, sending: true, receiving: true);
-        await AppendStationWaybillsAsync(result, 1, 11, sending: false, receiving: true);
-        await AppendStationWaybillsAsync(result, 2, null, sending: true, receiving: false);
+        foreach (var query in WaybillScenario.StationQueries) await AppendStationWaybillsAsync(result, query);
         Approvals.Verify(nameof(StationWaybills), result.ToString());
     }
 
     [TestMethod]
     public async Task LayoutWaybills()
     {
-        await SeedScenarioAsync();
+        await WaybillScenario.SeedAsync(Transaction);
         var result = new StringBuilder();
         foreach (var (layoutId, stationId) in new (int, int?)[] { (1, null), (1, 1), (2, null), (3, null) })
         {
@@ -92,7 +87,7 @@ public class WaybillGoldenMasterTests : DatabaseTest
     [TestMethod]
     public async Task GroupWaybills()
     {
-        await SeedScenarioAsync();
+        await WaybillScenario.SeedAsync(Transaction);
         await using var command = Transaction.CreateProcedureCommand("GetGroupWaybills");
         command.Parameters.AddWithValue("@GroupId", 1);
         await using var reader = await command.ExecuteReaderAsync();
@@ -102,9 +97,9 @@ public class WaybillGoldenMasterTests : DatabaseTest
     [TestMethod]
     public async Task EmptyWagonOrders()
     {
-        await SeedScenarioAsync();
+        await WaybillScenario.SeedAsync(Transaction);
         var result = new StringBuilder();
-        foreach (var stationId in StationIds)
+        foreach (var stationId in WaybillScenario.StationIds)
         {
             await using var command = Transaction.CreateProcedureCommand("GetEmptyWagonOrders");
             command.Parameters.AddWithValue("@StationId", stationId);
@@ -112,25 +107,6 @@ public class WaybillGoldenMasterTests : DatabaseTest
             result.Append($"=== Station {stationId}: ").Append(await ResultText.RenderAsync(reader)).Append('\n');
         }
         Approvals.Verify(nameof(EmptyWagonOrders), result.ToString());
-    }
-
-    private async Task SeedScenarioAsync() =>
-        await Transaction.ExecuteScriptAsync(await File.ReadAllTextAsync(RepositoryFiles.PathOf("TestCode", "Database.Tests", "GoldenMaster", "WaybillScenario.sql")));
-
-    /// <summary>
-    /// What <c>StationCustomerWaybillsService.AddGeneratedCustomerWaybills</c> does, for every module customer in turn.
-    /// </summary>
-    private async Task GenerateWaybillsAsync()
-    {
-        foreach (var customerId in ModuleCustomerIds)
-        {
-            foreach (var procedure in new[] { "AddGeneratedModuleWaybills", "AddGeneratedExternalWaybills", "AddGeneratedShadowYardWaybills" })
-            {
-                await using var command = Transaction.CreateProcedureCommand(procedure);
-                command.Parameters.AddWithValue("@StationCustomerId", customerId);
-                await command.ExecuteNonQueryAsync();
-            }
-        }
     }
 
     private async Task<string> StoredWaybillsAsync()
@@ -143,15 +119,9 @@ public class WaybillGoldenMasterTests : DatabaseTest
     /// <summary>
     /// The waybills as printed for a station; <c>Id</c> is the stored waybill's identity value, which isn't stable between tests.
     /// </summary>
-    private async Task AppendStationWaybillsAsync(StringBuilder result, int stationId, int? customerId, bool sending, bool receiving)
+    private async Task AppendStationWaybillsAsync(StringBuilder result, (int StationId, int? CustomerId, bool Sending, bool Receiving) query)
     {
-        await using var command = Transaction.CreateProcedureCommand("GetStationCustomerWaybills");
-        command.Parameters.AddWithValue("@StationId", stationId);
-        command.Parameters.AddWithValue("@StationCustomerId", customerId.HasValue ? customerId.Value : DBNull.Value);
-        command.Parameters.AddWithValue("@Sending", sending);
-        command.Parameters.AddWithValue("@Receiving", receiving);
-        await using var reader = await command.ExecuteReaderAsync();
-        result.Append($"=== Station {stationId}, customer {customerId?.ToString() ?? "all"}, sending {sending}, receiving {receiving}: ")
-            .Append(await ResultText.RenderAsync(reader, "Id")).Append('\n');
+        await using var reader = await StationWaybillProcedure.ExecuteAsync(Transaction, query);
+        result.Append(WaybillScenario.QueryTitle(query)).Append(await ResultText.RenderAsync(reader, "Id")).Append('\n');
     }
 }

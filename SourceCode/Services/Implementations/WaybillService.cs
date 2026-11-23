@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using ModulesRegistry.Data;
 using ModulesRegistry.Services.Models;
+using ModulesRegistry.Services.Waybills;
 using System.Data;
 
 namespace ModulesRegistry.Services.Implementations;
@@ -64,99 +65,20 @@ public class WaybillService(IDbContextFactory<ModulesDbContext> factory, ILogger
         return waybills;
     }
 
+    /// <summary>
+    /// A station's waybills, or one of its customers', as printed: its stored waybills with the other ends, by the rules of
+    /// <see cref="StationWaybillGenerator"/> (Migration step 5.2; before, the procedure <c>GetStationCustomerWaybills</c>).
+    /// </summary>
     public async Task<IEnumerable<Waybill>> GetStationCustomerWaybillsAsync(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
     {
-        List<Waybill> waybills = new List<Waybill>(200);
-        if (principal.IsAuthenticated())
-        {
-            var ownerNames = await GetStationOwnerNames(principal, stationId);
-            var dbContext = Factory.CreateDbContext();
-            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
-            if (connection is not null)
-            {
-                var command = new SqlCommand("GetStationCustomerWaybills", connection)
-                {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = 120
-                };
-                command.Parameters.AddWithValue("@StationId", stationId);
-                command.Parameters.AddWithValue("StationCustomerId", stationCustomerId);
-                command.Parameters.AddWithValue("@Sending", sending);
-                command.Parameters.AddWithValue("@Receiving", receiving);
-                connection.Open();
-                var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    waybills.Add(reader.MapWaybill(stationId));
-                    waybills.Last().OwnerNames = ownerNames;
-                }
-            }
-        }
+        if (!principal.IsAuthenticated()) return [];
+        var ownerNames = await GetStationOwnerNames(principal, stationId);
+        await using var dbContext = await Factory.CreateDbContextAsync();
+        var waybills = await dbContext.StationWaybillsAsync(stationId, stationCustomerId, sending, receiving);
+        foreach (var waybill in waybills) waybill.OwnerNames = ownerNames;
         return waybills;
-
     }
 
-
-    public async Task<IEnumerable<Waybill>> GetStationCustomerWaybills2(ClaimsPrincipal? principal, int stationId, int? stationCustomerId, bool receiving, bool sending)
-    {
-        List<Waybill> waybills = new List<Waybill>(200);
-        if (principal.IsAuthenticated())
-        {
-            var dbContext = Factory.CreateDbContext();
-            using var connection = dbContext.Database.GetDbConnection() as SqlConnection;
-            if (connection is not null)
-            {
-                var sql = getSql(receiving, sending);
-                if (sql.IsEmpty) return waybills;
-                var command = new SqlCommand(sql, connection)
-                {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = 120
-                };
-                command.Parameters.AddWithValue("@StationId", stationId);
-                command.Parameters.AddWithNullableValue("@StationCustomerId", stationCustomerId);
-
-                connection.Open();
-                var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    waybills.Add(reader.MapWaybill(stationId));
-                }
-
-            }
-        }
-        return waybills;
-
-        static string getSql(bool receiving, bool sending) =>
-            receiving && sending ? sqlSupplier() + " UNION " + sqlConsumer() :
-            receiving ? sqlSupplier() :
-            sending ? sqlConsumer() :
-            string.Empty;
-
-        static string sqlSupplier() =>
-            $"""
-            SELECT * FROM ModuleSupplierWaybill AS MSW
-                WHERE MSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR MSW.DestinationStationCustomerId = @StationCustomerId )
-            UNION
-            SELECT * FROM ExternalSupplierWaybill AS ESW
-            	WHERE ESW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR ESW.DestinationStationCustomerId = @StationCustomerId )
-            UNION
-            SELECT * FROM ShadowYardSupplierWaybill AS SYSW 
-                WHERE SYSW.DestinationStationId = @StationId AND ( @StationCustomerId IS NULL OR SYSW.DestinationStationCustomerId = @StationCustomerId )
-            """;
-
-        static string sqlConsumer() =>
-            $"""
-            SELECT * FROM ModuleConsumerWaybill AS MCW
-                WHERE MCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR MCW.OriginStationCustomerId = @StationCustomerId )
-            UNION
-            SELECT * FROM ExternalConsumerWaybill AS ECW
-            	WHERE ECW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR ECW.OriginStationCustomerId = @StationCustomerId )
-            UNION
-            SELECT * FROM ShadowYardConsumerWaybill AS SYCW 
-                WHERE SYCW.OriginStationId = @StationId AND ( @StationCustomerId IS NULL OR SYCW.OriginStationCustomerId = @StationCustomerId )
-            """;
-    }
     public async Task<IEnumerable<Waybill>> GetLayoutWaybillsAsync(ClaimsPrincipal? principal, int layoutId, int? stationId)
     {
         List<Waybill> waybills = new List<Waybill>(200);

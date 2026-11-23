@@ -70,6 +70,8 @@ The procedure returns the union of six views, for one station and optionally one
 
 Each view joins a stored row with the sender's and receiver's flows. It also checks the cargo's own years against the **sender's** years. Since module-to-module rows are stored at the receiver, the receiving station prints them; the sending station only sees the 26 old rows.
 
+**Since Migration step 5.2** this is done in code, with the same rules: `StationWaybillGenerator` (Services/Waybills) combines the station's stored waybills with the flows loaded by `CargoFlowQueries`. The views joined the other end on its id alone, so a flow of the other kind (module or external) with the same id could give a false waybill; the code doesn't reproduce that. The procedure and the views stay in the database until step 5.3.
+
 ## Layout waybills (`GetLayoutWaybills2`), computed, not stored
 For a meeting layout, optionally for one station in it:
 - **Receivers:** receiving flows at the layout's stations, from participants who haven't cancelled.

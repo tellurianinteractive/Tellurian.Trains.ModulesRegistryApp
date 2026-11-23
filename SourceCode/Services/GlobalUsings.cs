@@ -15,3 +15,4 @@ global using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
 [assembly:InternalsVisibleTo("ModulesRegistry.Services.Tests")]
+[assembly:InternalsVisibleTo("ModulesRegistry.Database.Tests")]
