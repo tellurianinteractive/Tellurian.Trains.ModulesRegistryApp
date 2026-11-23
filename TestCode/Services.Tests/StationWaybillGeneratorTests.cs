@@ -107,6 +107,32 @@ public class StationWaybillGeneratorTests
     }
 
     [TestMethod]
+    public void CargoMustExistWithinTheWindowOfBothFlows()
+    {
+        var grain = Timber with { FromYear = 1900, UptoYear = 1960 };
+        StoredWaybill stored = new() { FlowId = 101, OtherFlowId = 102 };
+        var sender = Flow(102, 2, isSupply: true, cargo: grain) with { FromYear = 1940, UptoYear = 1970 };
+        Assert.IsEmpty(Generate(1, stored, [Flow(101, 1, isSupply: false) with { FromYear = 1965, UptoYear = 1990 }, sender]), "The window 1965-1970 is after the cargo.");
+        Assert.HasCount(1, Generate(1, stored, [Flow(101, 1, isSupply: false) with { FromYear = 1950, UptoYear = 1990 }, sender]), "The window 1950-1970 has the cargo.");
+    }
+
+    [TestMethod]
+    public void FlowsWithoutOverlappingYearsGiveNoWaybill()
+    {
+        StoredWaybill stored = new() { FlowId = 101, OtherFlowId = 102 };
+        Assert.IsEmpty(Generate(1, stored, [Flow(101, 1, isSupply: false) with { FromYear = 1980 }, Flow(102, 2, isSupply: true) with { UptoYear = 1979 }]));
+        Assert.HasCount(1, Generate(1, stored, [Flow(101, 1, isSupply: false) with { FromYear = 1980 }, Flow(102, 2, isSupply: true) with { UptoYear = 1980 }]), "The up-to year is included.");
+    }
+
+    [TestMethod]
+    public void ShadowYardWindowIsTheOwnFlowsYears()
+    {
+        var grain = Timber with { UptoYear = 1960 };
+        Assert.IsEmpty(Generate(1, new StoredWaybill { FlowId = 101 }, [Flow(101, 1, isSupply: false, cargo: grain) with { FromYear = 1970 }]));
+        Assert.HasCount(1, Generate(1, new StoredWaybill { FlowId = 101 }, [Flow(101, 1, isSupply: false, cargo: grain) with { FromYear = 1950 }]));
+    }
+
+    [TestMethod]
     public void ExternalWaybillNeedsTheSameCargo()
     {
         StoredWaybill stored = new() { FlowId = 101, OtherExternalFlowId = 201 };

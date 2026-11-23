@@ -5,7 +5,7 @@ namespace ModulesRegistry.Database.Tests.GoldenMaster;
 /// </summary>
 public static class WaybillScenario
 {
-    public static readonly int[] ModuleCustomerIds = [11, 12, 13, 14, 15, 16, 17, 18];
+    public static readonly int[] ModuleCustomerIds = [11, 12, 13, 14, 15, 16, 17, 18, 19];
     public static readonly int[] StationIds = [1, 2, 3, 4, 5, 6];
 
     /// <summary>

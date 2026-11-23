@@ -16,21 +16,19 @@ public static class WaybillExtensions
         {
             for (var i = 0; i < waybill.PrintCount; i++)
             {
-                if (waybill.PrintPerOperatingDay)
+                // One waybill for each sending day, instead of one for all the days.
+                if (waybill.PrintPerOperatingDay && waybill.OperatingDayFlag > 0)
                 {
-                    if (waybill.OperatingDayFlag > 0)
+                    foreach (var day in waybill.OperatingDayFlag.GetDays(false, true))
                     {
-                        foreach (var day in waybill.OperatingDayFlag.GetDays(false, true))
-                        {
-                            var clone = waybill.Clone;
-                            clone.OperatingDayFlag = day.Flag;
+                        var clone = waybill.Clone;
+                        clone.OperatingDayFlag = day.Flag;
 
-                            result.Add(clone);
-                            if (clone.HasReturn()) result.Add(clone.Return());
-                        }
+                        result.Add(clone);
+                        if (clone.HasReturn()) result.Add(clone.Return());
                     }
                 }
-                if (waybill.QuantityUnitId==3)
+                else if (waybill.QuantityUnitId==3)
                 {
                     var printCount = waybill.Quantity;
                     waybill.Quantity = 1;

@@ -51,7 +51,8 @@ BEGIN
 		0 AS [SequenceNumber]
 	FROM
 		ModuleCustomerCargo AS ME INNER JOIN
-		ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId LEFT JOIN
+		ShadowYardCustomerCargo AS OTHER ON ME.CargoId = OTHER.CargoId INNER JOIN
+		Cargo AS C ON C.Id = ME.CargoId LEFT JOIN
 		StationCustomerWaybill AS SCW ON ME.StationCustomerCargoId = SCW.StationCustomerCargoId 
 	WHERE
 		ME.NHMCode = 0 AND
@@ -65,5 +66,8 @@ BEGIN
 		AND (ME.CountryId = OTHER.CountryId) 
 		AND (ME.FromYear IS NULL OR OTHER.UptoYear IS NULL OR ME.FromYear <= OTHER.UptoYear )
 		AND (ME.UptoYear IS NULL OR OTHER.FromYear IS NULL OR ME.UptoYear >= OTHER.FromYear )
+		-- The cargo exists within the own flow's years (the shadow yard has no years of its own).
+		AND (C.FromYear IS NULL OR ME.UptoYear IS NULL OR C.FromYear <= ME.UptoYear)
+		AND (C.UptoYear IS NULL OR ME.FromYear IS NULL OR C.UptoYear >= ME.FromYear)
 		AND SCW.Id IS NULL
 END

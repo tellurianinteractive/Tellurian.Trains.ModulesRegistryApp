@@ -8,7 +8,8 @@ namespace ModulesRegistry.Services.Waybills;
 /// <item>An external station: opposite directions and the same cargo; the same country, or the receiving flow international (receiving),
 /// or both international (sending).</item>
 /// <item>No other end: the region's shadow yard, named after its representative external station; no shadow yard without one.</item>
-/// <item>Always: the cargo's years overlap the sending flow's years.</item>
+/// <item>Always: the two flows' years overlap, and the cargo exists within that window (since 1.17.5; before, the cargo's years
+/// were only checked against the sending flow's). A shadow yard has the own flow's years.</item>
 /// </list>
 /// The waybill is sent on the stored waybill's days (the sending flow's days when generated).
 /// The views joined the other end on its id alone, also against flows of the other kind with the same id; such false matches are not
@@ -30,7 +31,7 @@ public static class StationWaybillGenerator
             var match = Match(stored, own, sending, receiving, moduleFlows, externalFlows);
             if (match is null) continue;
             var (sender, receiver, cargo) = match.Value;
-            if (!CargoExistsInSenderYears(cargo, sender)) continue;
+            if (!IsWithinYearWindow(sender, receiver, cargo)) continue;
             result.Add(CreateWaybill(stationId, stored, sender, receiver, cargo));
         }
         return result;
@@ -65,9 +66,18 @@ public static class StationWaybillGenerator
         return null;
     }
 
-    private static bool CargoExistsInSenderYears(CargoRow cargo, CargoFlowRow sender) =>
-        (!cargo.FromYear.HasValue || !sender.UptoYear.HasValue || cargo.FromYear.Value <= sender.UptoYear.Value) &&
-        (!cargo.UptoYear.HasValue || !sender.FromYear.HasValue || cargo.UptoYear.Value >= sender.FromYear.Value);
+    /// <summary>
+    /// The flows' years overlap, which makes a window, and the cargo exists within it. A missing year has no limit;
+    /// the up-to year is included.
+    /// </summary>
+    internal static bool IsWithinYearWindow(CargoFlowRow sender, CargoFlowRow receiver, CargoRow cargo) =>
+        Overlaps(sender.FromYear, sender.UptoYear, receiver.FromYear, receiver.UptoYear) &&
+        Overlaps(cargo.FromYear, cargo.UptoYear, sender.FromYear, sender.UptoYear) &&
+        Overlaps(cargo.FromYear, cargo.UptoYear, receiver.FromYear, receiver.UptoYear);
+
+    private static bool Overlaps(int? from, int? upto, int? otherFrom, int? otherUpto) =>
+        (!from.HasValue || !otherUpto.HasValue || from.Value <= otherUpto.Value) &&
+        (!upto.HasValue || !otherFrom.HasValue || upto.Value >= otherFrom.Value);
 
     private static Waybill CreateWaybill(int stationId, StoredWaybill stored, CargoFlowRow sender, CargoFlowRow receiver, CargoRow cargo)
     {

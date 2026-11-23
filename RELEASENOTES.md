@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.17.5
+Released 2026-11-23
+- Waybills printed per operating day give one waybill for each sending day, without an extra waybill for all the days.
+- Waybills are only created and printed when the cargo exists within the years both customers are in operation.
 ## Release 1.17.4
 Released 2026-11-23
 - Waybills show the sender's days. Empty returns are daily, and returns with the same cargo have the days of their sender.

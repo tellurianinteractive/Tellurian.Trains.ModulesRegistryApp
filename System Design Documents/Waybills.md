@@ -14,6 +14,8 @@ A cargo flow is a row in **StationCustomerCargo** (module station) or **External
 
 A flow's years are its own *from* and *up to* years, or else the customer's opened and closed years.
 
+**Years since 1.17.5:** the two flows' years must overlap, which makes a window, and the cargo must exist within it; a shadow-yard waybill's window is the own flow's years. This applies when generating and when printing a station's waybills. The descriptions below are of the procedures before that change.
+
 A module station's flows take part only if the station has cargo customers, belongs to a region, and its primary module belongs to the station. Scale, standard and main theme (USA or Europe) come from the station's modules. An external station's flows take part if the station belongs to a region.
 
 ## Generated waybills (stored)
@@ -117,7 +119,7 @@ Decided 2026-11-23; the rules are in [Creations of waybills.md](Creations%20of%2
 | A new waybill gets print count 1; an existing one keeps its count | New module and external rows get the quantity for some units | Yes |
 | Generate for one cargo flow, or all of a customer's flows | Always all of the customer's flows | Yes |
 | Waybills that no longer match are deleted on both sides when a flow changes, or when the waybill is disabled | Deleted only when a flow or customer is deleted; stale rows are hidden when printing; disabling = print count 0 | Yes |
-| The stations' years overlap, and the cargo exists within that window | The flows' years overlap when generating; the cargo's years are checked against the sender's years only, when printing | Yes |
+| The stations' years overlap, and the cargo exists within that window | Done in 1.17.5, when generating and when printing (17 existing waybills fell outside and are no longer printed) | No |
 | A waybill gets the sending flow's days | Done in 1.17.4 | No |
 | Generated waybills: cargo without an NHM code matches only the representative station of the station's own region, to or from it, with an empty return waybill the other way | The other end is the own region (its representative station, or the region's name if it has none); a row is created only if an opposite flow of the same cargo exists in the same country, in a region with a representative station; *same-cargo return* is set, not *empty return*; id comparisons across tables | Yes |
 | Harbours receive any export and send any import, within the country | Not implemented | New feature |

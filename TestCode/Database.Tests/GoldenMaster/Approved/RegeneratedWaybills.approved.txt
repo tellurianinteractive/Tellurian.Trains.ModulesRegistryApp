@@ -1,4 +1,20 @@
-12 rows
+13 rows
+
+Customer: "Alby kvarn"
+Cargo: "Grain"
+Direction: "Receive"
+OtherModuleCustomer: "Cederby lantmän"
+OtherExternalCustomer: NULL
+OtherRegion: "Skåne"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 0
+SequenceNumber: 0
 
 Customer: "Alby kvarn"
 Cargo: "Grain"

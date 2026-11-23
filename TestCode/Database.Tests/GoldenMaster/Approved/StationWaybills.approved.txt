@@ -1,4 +1,4 @@
-=== Station 1, customer all, sending True, receiving True: 7 rows
+=== Station 1, customer all, sending True, receiving True: 8 rows
 
 Source: "ExternalSupplier"
 PrintCount: 1
@@ -155,6 +155,72 @@ SendingDayFlag: 127
 OriginIsModuleStation: 1
 SenderFromYear: 1930
 SenderUptoYear: 1960
+OriginIsExternal: 1
+DestinationStationId: 1
+DestinationStationCustomerId: 12
+DestinationStationName: "Alby"
+DestinationInternationalStationName: ""
+ReceiverName: "Alby kvarn"
+ReceiverTrackOrArea: NULL
+ReceiverTrackOrAreaColor: NULL
+ReceiverCargoTrackOrArea: NULL
+ReceiverCargoTrackOrAreaColor: NULL
+DestinationLanguages: "sv"
+DestinationDomainSuffix: "se"
+DestinationBackColor: "#0000FF"
+DestinationForeColor: "#FFFFFF"
+ReceiverReadyTime: "Morning"
+ReceivingDayFlag: 127
+DestinationIsModuleStation: 1
+SpecialCargoName: NULL
+SpecificWagonClass: NULL
+QuantityIsBearer: 0
+QuantityUnitId: 1
+Quantity: 20
+QuanityUnitResourceName: "Tons"
+QuantityShortUnit: "t"
+PackagingUnitResourceName: "None"
+PackagingPrepositionResourceCode: NULL
+ReceiverFromYear: 1950
+ReceiverUptoYear: 1990
+DestinationIsExternal: 1
+DefaultClasses: "Gbs"
+NHMCode: 10000000
+DA: NULL
+DE: NULL
+EN: "Grain"
+FR: NULL
+IT: NULL
+NB: NULL
+NL: NULL
+PL: NULL
+SV: "Spannmål"
+IsExpress: 0
+IsCoolingRequired: 0
+
+Source: "ModuleSupplier"
+PrintCount: 1
+PrintPerOperatingDay: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+OriginStationId: 3
+OriginStationCustomerId: 15
+OriginStationName: "Cederby"
+OriginInternationalStationName: ""
+SenderName: "Cederby lantmän"
+SenderTrackOrArea: NULL
+SenderTrackOrAreaColor: NULL
+SenderCargoTrackOrArea: NULL
+SenderCargoTrackOrAreaColor: NULL
+OriginLanguages: "sv"
+OriginDomainSuffix: "se"
+OriginBackColor: "#FFFF00"
+OriginForeColor: "#000000"
+SenderReadyTime: "Evening"
+SendingDayFlag: 127
+OriginIsModuleStation: 1
+SenderFromYear: 1940
+SenderUptoYear: 1970
 OriginIsExternal: 1
 DestinationStationId: 1
 DestinationStationCustomerId: 12

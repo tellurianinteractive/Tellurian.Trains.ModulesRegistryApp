@@ -68,8 +68,8 @@ The purpose of year matching is to improve realism and historical correctness of
 - Both stations must have overlapping years of operation. This creates a time window.
 - Only cargo that exists under that time window should be considered.
 
-This is the new norm. Today the cargo's own years are only checked against
-the sending station's years, and only when printing.
+This is the norm since 1.17.5, both when generating and when printing.
+A shadow yard has no years of its own, so its window is the own cargo flow's years.
 
 #### Days Matching
 Cargo flows can be defined to be limited on specific days of the week. 
@@ -87,8 +87,9 @@ and a return with the same cargo gets the days of the return's sender
 ### Improved Matching
 We can add the follwing features:
 - Option to updating waybills for only one cargo flow at a time.
-- Use EmptyReturn to cerate empty return waybills for added waybills.
-- Use MatchCargoFlow to find a return waybill for a cargo that uses same type of wagon.
+- Use EmptyReturn to create empty return waybills for added waybills.
+- Use MatchCargoFlow to find a return waybill for a cargo that uses same type of wagon class.
+  If A sends Bread to B in a G or H wagon, find something B can send to A in a G or H wago.
 
 A new featue that people asked for. A user want to add a cargoflow by selecting a cargoflow of another station,
 because the user want to trade with that station. 

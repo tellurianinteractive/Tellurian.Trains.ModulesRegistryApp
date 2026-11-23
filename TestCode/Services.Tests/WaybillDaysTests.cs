@@ -50,6 +50,35 @@ public class WaybillDaysTests
     }
 
     [TestMethod]
+    public void PrintPerOperatingDayGivesOneWaybillForEachSendingDay()
+    {
+        const byte MondayWednesdayFriday = 0x15;
+        var waybill = Waybill(senderDays: MondayWednesdayFriday, receiverDays: MondayToFriday);
+        waybill.PrintPerOperatingDay = true;
+        var printed = new[] { waybill }.AsPrintableWaybills().ToList();
+        CollectionAssert.AreEqual(new byte[] { 0x01, 0x04, 0x10 }, printed.Select(w => w.OperatingDayFlag).ToArray());
+    }
+
+    [TestMethod]
+    public void PrintPerOperatingDayWithEmptyReturnGivesPairs()
+    {
+        const byte MondayWednesdayFriday = 0x15;
+        var waybill = Waybill(senderDays: MondayWednesdayFriday, receiverDays: MondayToFriday, emptyReturn: true);
+        waybill.PrintPerOperatingDay = true;
+        var printed = new[] { waybill }.AsPrintableWaybills().ToList();
+        Assert.HasCount(6, printed);
+        CollectionAssert.AreEqual(new[] { false, true, false, true, false, true }, printed.Select(w => w.IsEmptyReturn).ToArray());
+    }
+
+    [TestMethod]
+    public void PrintPerOperatingDayForDailyGivesSevenWaybills()
+    {
+        var waybill = Waybill(senderDays: OperationDaysExtensions.DailyFlag, receiverDays: OperationDaysExtensions.DailyFlag);
+        waybill.PrintPerOperatingDay = true;
+        Assert.HasCount(7, new[] { waybill }.AsPrintableWaybills().ToList());
+    }
+
+    [TestMethod]
     public void SameCargoReturnHasItsSendersDays()
     {
         var printed = new[] { Waybill(senderDays: Monday, receiverDays: Weekend, sameCargoReturn: true) }.AsPrintableWaybills().ToList();

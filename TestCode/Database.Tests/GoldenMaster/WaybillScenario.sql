@@ -111,7 +111,8 @@ INSERT INTO StationCustomer (Id, StationId, CustomerName, OpenedYear, ClosedYear
     (15, 3, 'Cederby lantmän', NULL, NULL),
     (16, 4, 'Dalen bruk', NULL, NULL),
     (17, 5, 'Eastville lumber', NULL, NULL),
-    (18, 6, 'Fjärdingen trä', NULL, NULL);
+    (18, 6, 'Fjärdingen trä', NULL, NULL),
+    (19, 2, 'Berga kvarn', 1965, 1990);
 SET IDENTITY_INSERT StationCustomer OFF;
 
 -- DirectionId: 1 Receive, 2 Send, 3 Import, 4 Export. QuantityUnitId: 1 ton, 3 piece, 4 wagon (bearer).
@@ -132,7 +133,9 @@ INSERT INTO StationCustomerCargo (Id, StationCustomerId, CargoId, DirectionId, Q
     (112, 16, 1, 2, 4, 1, 0, 8, 1, NULL, NULL, NULL),         -- Dalen (Norway) sends timber: other country, not international.
     (113, 17, 1, 2, 4, 1, 0, 8, 1, NULL, NULL, NULL),         -- Eastville sends timber: other main theme.
     (114, 18, 1, 2, 4, 1, 0, 8, 1, NULL, NULL, NULL),         -- Fjärdingen sends timber: other scale.
-    (115, 13, 4, 2, 4, 4, 0, 8, 1, NULL, NULL, NULL);         -- Berga sends oil (empty wagon order: no, oil's NHM has none).
+    (115, 13, 4, 2, 4, 4, 0, 8, 1, NULL, NULL, NULL),         -- Berga sends oil (empty wagon order: no, oil's NHM has none).
+    (116, 19, 2, 1, 1, 20, 0, 8, 4, NULL, NULL, NULL),        -- Berga kvarn receives grain; customer years 1965-1990.
+    (117, 15, 2, 2, 1, 10, 0, 8, 1, 1940, 1970, NULL);        -- Cederby sends grain 1940-1970: the window with Berga kvarn is 1965-1970, after grain (up to 1960).
 SET IDENTITY_INSERT StationCustomerCargo OFF;
 
 SET IDENTITY_INSERT ExternalStationCustomer ON;
