@@ -22,7 +22,7 @@
     <ActionMessage Label="@FailureMessage" AlertType="stop" />
 }
 
-@if (Existing is not null && Principal.IsSuperUser())
+@if (Existing is not null && MayMove)
 {
     <form id="customer-move" method="post" @formname="move" @onsubmit="MoveAsync" data-enhance class="noprint" style="display: flex; align-items: center; gap: 10px; padding-bottom: 5px;">
         <AntiforgeryToken />
@@ -130,7 +130,7 @@
             DirectionItems = await CargoService.CargoDirectionsListboxItemsAsync(Principal);
             OperatingDayItems = await OperatingDayService.AllDaysItemsAsync();
             QuantityUnitItems = await CargoService.CargoQuantityListboxItemsAsync(Principal);
-            if (Principal.IsSuperUser()) ExternalStationItems = await ExternalStationService.ListboxItemsAsync(Principal, Station.Region.CountryId, null);
+            if (MayMove) ExternalStationItems = await ExternalStationService.ListboxItemsAsync(Principal, Station.Region.CountryId, null);
         }
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
         Form ??= (Existing ?? new ExternalStationCustomer()).AsFormData();
@@ -165,6 +165,11 @@
         HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
         Navigator.NavigateTo(SelfHref);
     }
+
+    /// <summary>
+    /// Only the super user and global administrators may move the customer to another station.
+    /// </summary>
+    bool MayMove => Station is not null && Principal.MayMoveExternalStationCustomers();
 
     async Task MoveAsync()
     {

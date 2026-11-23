@@ -10,12 +10,16 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
     {
         if (principal is null) return [];
         var actualCountryId = principal.CountryOrDefaultId(countryId);
-        var sql = string.Empty;
-        if (regionId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [RegionId] = {regionId.Value}";
-        else if (actualCountryId > 0) sql = $"SELECT * FROM ListExternalStation WHERE [CountryId] = {actualCountryId}";
-        else sql = $"SELECT * FROM ListExternalStation";
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.ListboxItems.FromSqlRaw(sql).OrderBy(l => l.Description).ToListAsync();
+        var stations = dbContext.ExternalStations.AsNoTracking();
+        if (regionId > 0) stations = stations.Where(s => s.RegionId == regionId.Value);
+        else if (actualCountryId > 0) stations = stations.Where(s => s.Region.CountryId == actualCountryId);
+        // The same items as the former view ListExternalStation: the station's name, region and country domain, in the region's colours.
+        return await stations
+            .Select(s => new { s.Id, Description = s.FullName + ", " + s.Region.LocalName + " (" + s.Region.Country.DomainSuffix + ")", s.Region.BackColor, s.Region.ForeColor })
+            .OrderBy(s => s.Description)
+            .Select(s => new ListboxItem(s.Id, s.Description) { BackColor = s.BackColor, ForeColor = s.ForeColor })
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<ExternalStation>> GetAsync(ClaimsPrincipal? principal, int countryId = 0, int regionId = 0)
@@ -75,20 +79,19 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         return principal.SaveNotAuthorised<ExternalStation>();
     }
 
+    /// <summary>
+    /// Deletes an external station, if the user is a country administrator in the station's country or a global administrator.
+    /// </summary>
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsGlobalOrCountryAdministrator())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var existing = await dbContext.ExternalStations
-                .SingleOrDefaultAsync(es => es.Id == id);
-            if (existing is null) { return (0, Resources.Strings.NothingToDelete); }
-            dbContext.Remove(existing);
-            var result = await dbContext.SaveChangesAsync();
-            return result.DeleteResult();
-        }
-        return principal.NotAuthorized<ExternalStation>();
-
+        if (!principal.IsAuthenticated()) return principal.NotAuthorized<ExternalStation>();
+        using var dbContext = Factory.CreateDbContext();
+        var existing = await dbContext.ExternalStations.Include(es => es.Region).SingleOrDefaultAsync(es => es.Id == id);
+        if (existing is null) return (0, Resources.Strings.NothingToDelete);
+        if (!principal.IsCountryAdministratorInCountry(existing.Region.CountryId)) return principal.NotAuthorized<ExternalStation>();
+        dbContext.Remove(existing);
+        var result = await dbContext.SaveChangesAsync();
+        return result.DeleteResult();
     }
 
     #region External station customers
@@ -215,20 +218,19 @@ public sealed class ExternalStationService(IDbContextFactory<ModulesDbContext> f
         return (await dbContext.SaveChangesAsync()).DeleteResult();
     }
 
+    /// <summary>
+    /// Moves a customer to another external station; only the super user and global administrators may.
+    /// </summary>
     public async Task<(int Count, string Message)> MoveCustomerAsync(ClaimsPrincipal? principal, ExternalStationCustomer? customer, int toStationId)
     {
-        if (principal.IsSuperUser())
-        {
-            using var dbContext = Factory.CreateDbContext();
-            var toStation = await dbContext.ExternalStations.FindAsync(toStationId);
-            if (toStation is null) return principal.NotFoundResult<ExternalStationCustomer>();
-            customer = await dbContext.ExternalStationCustomers.FindAsync(customer?.Id);
-            if (customer is null) return principal.NotFoundResult<ExternalStationCustomer>();
-            customer.ExternalStationId = toStationId;
-            var result = await dbContext.SaveChangesAsync();
-            return result.UpdateResult();
-        }
-        return principal.NotAuthorized<ExternalStationCustomer>();
+        if (!principal.MayMoveExternalStationCustomers()) return principal.NotAuthorized<ExternalStationCustomer>();
+        using var dbContext = Factory.CreateDbContext();
+        if (!await dbContext.ExternalStations.AnyAsync(es => es.Id == toStationId)) return principal.NotFoundResult<ExternalStationCustomer>();
+        var existing = await dbContext.ExternalStationCustomers.SingleOrDefaultAsync(c => c.Id == customer!.Id);
+        if (existing is null) return principal.NotFoundResult<ExternalStationCustomer>();
+        existing.ExternalStationId = toStationId;
+        var result = await dbContext.SaveChangesAsync();
+        return result.UpdateResult();
     }
     #endregion
 }

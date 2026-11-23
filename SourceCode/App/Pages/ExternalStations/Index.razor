@@ -145,7 +145,7 @@
 
     object? Owner => Country is not null ? Country : Region;
     bool MayEdit => ExternalStations is not null;
-    bool MayDelete => Principal.IsGlobalOrCountryAdministrator();
+    bool MayDelete => Principal.IsCountryAdministratorInCountry(CountryId);
     bool HasData => ExternalStations is not null && ExternalStations.Any();
     bool CanSelectCountry => CountryItems is not null && CountryItems.Count() > 1;
 

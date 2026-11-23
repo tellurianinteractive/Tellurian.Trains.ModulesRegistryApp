@@ -71,6 +71,7 @@ public static class ClaimsPrincipalExtensions
     #region Administrator scope
 
     public static bool IsSuperUser(this ClaimsPrincipal? principal) => principal.UserId() == 1; // TODO: Implement property in database.
+    public static bool MayMoveExternalStationCustomers([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.IsSuperUser() || principal.IsGlobalAdministrator();
     public static bool IsGlobalOrCountryAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal, int countryId = 0) =>
         principal is not null && (principal.IsGlobalAdministrator() || principal.IsCountryAdministratorInCountry(countryId));
 

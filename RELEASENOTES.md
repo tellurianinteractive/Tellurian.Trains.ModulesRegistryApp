@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.17.3
+Released 2026-11-23
+- The freight customer form for external stations no longer fails to open.
+- Country administrators can delete external stations in their own country.
 ## Release 1.17.2
 Released 2026-11-23
 - Station waybills no longer include a few wrong or duplicated waybills.
