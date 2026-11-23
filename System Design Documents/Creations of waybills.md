@@ -32,8 +32,24 @@ The cargo matching depends on the direction and scope:
 - Exports matches same cargo id that other stations receives, and vice versa, 
   limitted to outside the country.
 
-  > There is no need to manually create waybills to other stations, 
-because the generated one cover all possible cases.
+Clarifications (2026-11-23, see [Waybills.md](Waybills.md) for how it works today):
+- Within the same country, the scope doesn't matter: a send or an export matches
+  a receive or an import of the same cargo. Between countries, only an export
+  matches an import.
+- A waybill between two module stations is stored only at the receiving customer,
+  and it is the receiving station that prints it.
+- Module stations must have the same main theme (Europe or USA), and the same
+  scale unless one of them has none.
+- A new waybill gets print count 1. An existing waybill keeps its print count
+  when waybills are generated again.
+
+#### Cargo without NHM code
+Cargo without an NHM code (general cargo, mail, express goods etc.) does not match
+individual stations, otherwise we get thousands of waybills.
+It matches only the representative station 
+of the same region as the station,
+and the waybill goes to or from that station.
+with an empty return waybill the other way.
 
 #### Removing Unmatched Waybills
 A waybill that not any longer matches the current and/or other stations cargo, 
@@ -44,10 +60,16 @@ should be deleted from **StationCustomerWaybill** on both sides:
 - If I disable my waybill
 - If the Cargo itself eventually are deleted (unlikley to happen).
 
+This must be supported. Today waybills are only deleted when a cargo flow or
+a customer is deleted, so changed cargo flows leave waybills that no longer match.
+
 #### Years Matching
 The purpose of year matching is to improve realism and historical correctness of cargo use.
 - Both stations must have overlapping years of operation. This creates a time window.
 - Only cargo that exists under that time window should be considered.
+
+This is the new norm. Today the cargo's own years are only checked against
+the sending station's years, and only when printing.
 
 #### Days Matching
 Cargo flows can be defined to be limited on specific days of the week. 
@@ -57,6 +79,9 @@ The arrival days has no meaning, and can be omitted in the printed waybills.
 
 Also, in cargo flows that are receive/import, the selection of days has no meaning and can be disabled/hidden and set to daily behind the scenes.
 The reason to keep it like that, is that a single cargo flow can change direction, and then days applies again.
+
+So a waybill gets the sending cargo flow's days. Today a waybill between two
+module stations gets the receiving cargo flow's days, which must change.
 
 ### Improved Matching
 We can add the follwing features:
@@ -77,12 +102,21 @@ and creates a waybill directly in my StationCustomerWaybill table.
 A module that is a harbour adds that it also can be a destination for any
 exports, and a source for any imports, limitted to cargo flows in the same country.
 This corresponds to the real world, where a harbour is a destination for any export, and a source for any imports.
+This is a new feature; harbours are not used in waybills today.
 
 #### Layout internal waybills
 There are also an option to create waybills per meeting layout,
 with internal freights only.
 In this case, the waybills are created between all module stations 
 ignoring the country, to also create waybills for internal freights between module stations in different countries.
+The difference between sends/exports and receives/imports is also ignored:
+a station that sends matches a station that imports the same cargo, and so on.
+Layout waybills are a special case: this applies to all cargo, also cargo
+without an NHM code (for example general cargo), since the number of stations
+on a layout is limited. The rule in *Cargo without NHM code* applies to
+generated waybills, not to layout waybills.
+Today cargo with an NHM code matches only sends to receives, and cargo without
+an NHM code only exports to imports between different countries.
 
 ### Modifying Waybills
 After waybills are gererated, they can be filtered and edited, for example 

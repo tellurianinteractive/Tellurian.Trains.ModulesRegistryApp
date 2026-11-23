@@ -18,6 +18,7 @@
     <File Path="Security.md" />
     <File Path="System Design Documents/Creations of waybills.md" />
     <File Path="System Design Documents/Overview.md" />
+    <File Path="System Design Documents/Waybills.md" />
     <File Path="System Design Documents/WiFredThrottles.md" />
   </Folder>
   <Project Path="SourceCode/Api/Api.csproj" />
