@@ -44,6 +44,18 @@ public sealed class TestTransaction : IAsyncDisposable
 
     public SqlCommand CreateProcedureCommand(string procedureName) => CreateCommand(procedureName, CommandType.StoredProcedure);
 
+    /// <summary>
+    /// Runs a script in the test's transaction, batch by batch (separated by lines with only <c>GO</c>).
+    /// </summary>
+    public async Task ExecuteScriptAsync(string script)
+    {
+        foreach (var batch in SqlScript.Batches(script))
+        {
+            await using var command = CreateCommand(batch);
+            await command.ExecuteNonQueryAsync();
+        }
+    }
+
     public async ValueTask DisposeAsync()
     {
         await _transaction.RollbackAsync();

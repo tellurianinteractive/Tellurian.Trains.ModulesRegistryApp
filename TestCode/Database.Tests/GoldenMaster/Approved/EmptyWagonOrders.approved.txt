@@ -1,0 +1,182 @@
+=== Station 1: 0 rows
+
+
+=== Station 2: 1 rows
+
+StationId: 2
+StationName: "Berga"
+StationSignature: "Bg"
+CustomerId: 13
+CustomerName: "Berga skog"
+NumberOfWagons: 3
+SpecificWagonClass: NULL
+FromYear: NULL
+UptoYear: NULL
+CargoTrackOrArea: NULL
+CustomerTrackOrArea: NULL
+CargoTrackOrAreaColor: NULL
+CustomerTrackOrAreaColor: NULL
+SpecificWagonClass: NULL
+Languages: "sv"
+DomainSuffix: "se"
+SpecialCargoName: NULL
+Id: 1
+DefaultClasses: "Ks"
+FromYear: NULL
+UptoYear: NULL
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+
+=== Station 3: 1 rows
+
+StationId: 3
+StationName: "Cederby"
+StationSignature: "Cb"
+CustomerId: 14
+CustomerName: "Cederby export"
+NumberOfWagons: 1
+SpecificWagonClass: NULL
+FromYear: NULL
+UptoYear: NULL
+CargoTrackOrArea: NULL
+CustomerTrackOrArea: NULL
+CargoTrackOrAreaColor: NULL
+CustomerTrackOrAreaColor: NULL
+SpecificWagonClass: NULL
+Languages: "sv"
+DomainSuffix: "se"
+SpecialCargoName: NULL
+Id: 1
+DefaultClasses: "Ks"
+FromYear: NULL
+UptoYear: NULL
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+
+=== Station 4: 1 rows
+
+StationId: 4
+StationName: "Dalen"
+StationSignature: "Dl"
+CustomerId: 16
+CustomerName: "Dalen bruk"
+NumberOfWagons: 1
+SpecificWagonClass: NULL
+FromYear: NULL
+UptoYear: NULL
+CargoTrackOrArea: NULL
+CustomerTrackOrArea: NULL
+CargoTrackOrAreaColor: NULL
+CustomerTrackOrAreaColor: NULL
+SpecificWagonClass: NULL
+Languages: "nb"
+DomainSuffix: "no"
+SpecialCargoName: NULL
+Id: 1
+DefaultClasses: "Ks"
+FromYear: NULL
+UptoYear: NULL
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+
+=== Station 5: 1 rows
+
+StationId: 5
+StationName: "Eastville"
+StationSignature: "Ev"
+CustomerId: 17
+CustomerName: "Eastville lumber"
+NumberOfWagons: 1
+SpecificWagonClass: NULL
+FromYear: NULL
+UptoYear: NULL
+CargoTrackOrArea: NULL
+CustomerTrackOrArea: NULL
+CargoTrackOrAreaColor: NULL
+CustomerTrackOrAreaColor: NULL
+SpecificWagonClass: NULL
+Languages: "sv"
+DomainSuffix: "se"
+SpecialCargoName: NULL
+Id: 1
+DefaultClasses: "Ks"
+FromYear: NULL
+UptoYear: NULL
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+
+=== Station 6: 1 rows
+
+StationId: 6
+StationName: "Fjärdingen"
+StationSignature: "Fj"
+CustomerId: 18
+CustomerName: "Fjärdingen trä"
+NumberOfWagons: 1
+SpecificWagonClass: NULL
+FromYear: NULL
+UptoYear: NULL
+CargoTrackOrArea: NULL
+CustomerTrackOrArea: NULL
+CargoTrackOrAreaColor: NULL
+CustomerTrackOrAreaColor: NULL
+SpecificWagonClass: NULL
+Languages: "sv"
+DomainSuffix: "se"
+SpecialCargoName: NULL
+Id: 1
+DefaultClasses: "Ks"
+FromYear: NULL
+UptoYear: NULL
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0

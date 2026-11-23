@@ -54,7 +54,28 @@ public sealed class TestDatabase : IAsyncDisposable
         };
         using var package = SqlProjectPackage.Create();
         new DacServices(server).Deploy(package, database.Name, upgradeExisting: false, options);
+        await database.AddReferenceDataAsync();
         return database;
+    }
+
+    /// <summary>
+    /// The SQL project's initial data for the lookup tables that the tests don't vary, committed for the whole test run.
+    /// </summary>
+    private static readonly string[] ReferenceDataScripts = ["dbo.CargoDirection.Table.sql", "dbo.CargoReadyTime.Table.sql", "dbo.OperatingDay.Table.sql"];
+
+    private async Task AddReferenceDataAsync()
+    {
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        foreach (var script in ReferenceDataScripts)
+        {
+            var path = RepositoryFiles.PathOf("SourceCode", "Database", "dbo", "Scripts", "Initial data", script);
+            foreach (var batch in SqlScript.Batches(await File.ReadAllTextAsync(path)))
+            {
+                await using var command = new SqlCommand(batch, connection);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
     }
 
     public async ValueTask DisposeAsync()

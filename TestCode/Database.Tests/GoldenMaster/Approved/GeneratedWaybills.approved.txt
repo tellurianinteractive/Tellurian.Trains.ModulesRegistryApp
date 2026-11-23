@@ -1,0 +1,193 @@
+12 rows
+
+Customer: "Alby kvarn"
+Cargo: "Grain"
+Direction: "Receive"
+OtherModuleCustomer: "Cederby lantmän"
+OtherExternalCustomer: NULL
+OtherRegion: "Skåne"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "General cargo"
+Direction: "Receive"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: NULL
+OtherRegion: "Norrland"
+OperatingDay: "Måndag-fredag"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 1
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "Oil"
+Direction: "Import"
+OtherModuleCustomer: "Berga skog"
+OtherExternalCustomer: NULL
+OtherRegion: "Norrland"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "Oil"
+Direction: "Import"
+OtherModuleCustomer: "Dalen bruk"
+OtherExternalCustomer: NULL
+OtherRegion: "Østlandet"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "Timber"
+Direction: "Receive"
+OtherModuleCustomer: "Berga skog"
+OtherExternalCustomer: NULL
+OtherRegion: "Norrland"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 2
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "Timber"
+Direction: "Receive"
+OtherModuleCustomer: "Cederby export"
+OtherExternalCustomer: NULL
+OtherRegion: "Skåne"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 2
+SequenceNumber: 0
+
+Customer: "Alby sågverk"
+Cargo: "Timber"
+Direction: "Receive"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: "Malmö hamn"
+OtherRegion: "Skåne"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Berga skog"
+Cargo: "General cargo"
+Direction: "Send"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: NULL
+OtherRegion: "Norrland"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 1
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Berga skog"
+Cargo: "Oil"
+Direction: "Send"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: "Umeå energi"
+OtherRegion: "Norrland"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 4
+SequenceNumber: 0
+
+Customer: "Cederby export"
+Cargo: "General cargo"
+Direction: "Receive"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: NULL
+OtherRegion: "Skåne"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 1
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Cederby export"
+Cargo: "Timber"
+Direction: "Export"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: "Oslo havn"
+OtherRegion: "Østlandet"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0
+
+Customer: "Dalen bruk"
+Cargo: "Timber"
+Direction: "Send"
+OtherModuleCustomer: NULL
+OtherExternalCustomer: "Oslo havn"
+OtherRegion: "Østlandet"
+OperatingDay: "Daily"
+IsManuallyCreated: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+HideLoadingTimes: 0
+HideUnloadingTimes: 0
+PrintPerOperatingDay: 0
+PrintCount: 1
+SequenceNumber: 0

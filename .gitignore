@@ -394,3 +394,6 @@ healthchecksdb
 
 # Private notes about coming features
 TODO.txt
+
+# Golden-master results that differ from the approved ones (TestCode/Database.Tests/GoldenMaster)
+*.received.txt

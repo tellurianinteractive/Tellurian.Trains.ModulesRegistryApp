@@ -1,0 +1,292 @@
+=== Layout 1, station all: 2 rows
+
+Id: 101
+OriginStationId: 2
+OriginStationCustomerId: 13
+OriginStationName: "Berga"
+OriginInternationalStationName: NULL
+SenderName: "Berga skog"
+SenderTrackOrArea: NULL
+SenderTrackOrAreaColor: NULL
+SenderCargoTrackOrArea: NULL
+SenderCargoTrackOrAreaColor: NULL
+OriginLanguages: "sv"
+OriginDomainSuffix: "se"
+OriginBackColor: "#FFFFFF"
+OriginForeColor: "#000000"
+OriginIsInternal: 1
+SenderReadyTime: "Evening"
+SendingDayFlag: 1
+OriginIsModuleStation: 1
+SenderFromYear: NULL
+SenderUptoYear: NULL
+OriginInExternal: 0
+DestinationStationId: 1
+DestinationStationCustomerId: 11
+DestinationStationName: "Alby"
+DestinationInternationalStationName: NULL
+ReceiverName: "Alby sågverk"
+ReceiverTrackOrArea: "Spår 3"
+ReceiverTrackOrAreaColor: NULL
+ReceiverCargoTrackOrArea: "Spår 3"
+ReceiverCargoTrackOrAreaColor: NULL
+DestinationLanguages: "sv"
+DestinationDomainSuffix: "se"
+DestinationBackColor: "#FFFFFF"
+DestinationForeColor: "#000000"
+DestinationIsInternal: 1
+ReceiverReadyTime: "Morning"
+ReceivingDayFlag: 127
+DestinationIsModuleStation: 1
+SpecialCargoName: NULL
+DefaultClasses: "Ks"
+SpecificWagonClass: NULL
+QuantityIsBearer: 0
+QuantityUnitId: 3
+Quantity: 2
+QuanityUnitResourceName: "Pieces"
+QuantityShortUnit: ""
+PackagingUnitResourceName: "None"
+PackagingPrepositionResourceCode: NULL
+DestinationPackageUnitId: 0
+ReceiverFromYear: NULL
+ReceiverUptoYear: NULL
+DestinationIsExternal: 0
+DefaultClasses: "Ks"
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+OwnerNames: "Anna Andersson"
+
+Id: 101
+OriginStationId: 4
+OriginStationCustomerId: 16
+OriginStationName: "Dalen"
+OriginInternationalStationName: NULL
+SenderName: "Dalen bruk"
+SenderTrackOrArea: NULL
+SenderTrackOrAreaColor: NULL
+SenderCargoTrackOrArea: NULL
+SenderCargoTrackOrAreaColor: NULL
+OriginLanguages: "nb"
+OriginDomainSuffix: "no"
+OriginBackColor: "#FFFFFF"
+OriginForeColor: "#000000"
+OriginIsInternal: 1
+SenderReadyTime: "Evening"
+SendingDayFlag: 127
+OriginIsModuleStation: 1
+SenderFromYear: NULL
+SenderUptoYear: NULL
+OriginInExternal: 0
+DestinationStationId: 1
+DestinationStationCustomerId: 11
+DestinationStationName: "Alby"
+DestinationInternationalStationName: NULL
+ReceiverName: "Alby sågverk"
+ReceiverTrackOrArea: "Spår 3"
+ReceiverTrackOrAreaColor: NULL
+ReceiverCargoTrackOrArea: "Spår 3"
+ReceiverCargoTrackOrAreaColor: NULL
+DestinationLanguages: "sv"
+DestinationDomainSuffix: "se"
+DestinationBackColor: "#FFFFFF"
+DestinationForeColor: "#000000"
+DestinationIsInternal: 1
+ReceiverReadyTime: "Morning"
+ReceivingDayFlag: 127
+DestinationIsModuleStation: 1
+SpecialCargoName: NULL
+DefaultClasses: "Ks"
+SpecificWagonClass: NULL
+QuantityIsBearer: 0
+QuantityUnitId: 3
+Quantity: 2
+QuanityUnitResourceName: "Pieces"
+QuantityShortUnit: ""
+PackagingUnitResourceName: "None"
+PackagingPrepositionResourceCode: NULL
+DestinationPackageUnitId: 0
+ReceiverFromYear: NULL
+ReceiverUptoYear: NULL
+DestinationIsExternal: 0
+DefaultClasses: "Ks"
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+OwnerNames: "Anna Andersson"
+
+=== Layout 1, station 1: 2 rows
+
+Id: 101
+OriginStationId: 2
+OriginStationCustomerId: 13
+OriginStationName: "Berga"
+OriginInternationalStationName: NULL
+SenderName: "Berga skog"
+SenderTrackOrArea: NULL
+SenderTrackOrAreaColor: NULL
+SenderCargoTrackOrArea: NULL
+SenderCargoTrackOrAreaColor: NULL
+OriginLanguages: "sv"
+OriginDomainSuffix: "se"
+OriginBackColor: "#FFFFFF"
+OriginForeColor: "#000000"
+OriginIsInternal: 1
+SenderReadyTime: "Evening"
+SendingDayFlag: 1
+OriginIsModuleStation: 1
+SenderFromYear: NULL
+SenderUptoYear: NULL
+OriginInExternal: 0
+DestinationStationId: 1
+DestinationStationCustomerId: 11
+DestinationStationName: "Alby"
+DestinationInternationalStationName: NULL
+ReceiverName: "Alby sågverk"
+ReceiverTrackOrArea: "Spår 3"
+ReceiverTrackOrAreaColor: NULL
+ReceiverCargoTrackOrArea: "Spår 3"
+ReceiverCargoTrackOrAreaColor: NULL
+DestinationLanguages: "sv"
+DestinationDomainSuffix: "se"
+DestinationBackColor: "#FFFFFF"
+DestinationForeColor: "#000000"
+DestinationIsInternal: 1
+ReceiverReadyTime: "Morning"
+ReceivingDayFlag: 127
+DestinationIsModuleStation: 1
+SpecialCargoName: NULL
+DefaultClasses: "Ks"
+SpecificWagonClass: NULL
+QuantityIsBearer: 0
+QuantityUnitId: 3
+Quantity: 2
+QuanityUnitResourceName: "Pieces"
+QuantityShortUnit: ""
+PackagingUnitResourceName: "None"
+PackagingPrepositionResourceCode: NULL
+DestinationPackageUnitId: 0
+ReceiverFromYear: NULL
+ReceiverUptoYear: NULL
+DestinationIsExternal: 0
+DefaultClasses: "Ks"
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+OwnerNames: "Anna Andersson"
+
+Id: 101
+OriginStationId: 4
+OriginStationCustomerId: 16
+OriginStationName: "Dalen"
+OriginInternationalStationName: NULL
+SenderName: "Dalen bruk"
+SenderTrackOrArea: NULL
+SenderTrackOrAreaColor: NULL
+SenderCargoTrackOrArea: NULL
+SenderCargoTrackOrAreaColor: NULL
+OriginLanguages: "nb"
+OriginDomainSuffix: "no"
+OriginBackColor: "#FFFFFF"
+OriginForeColor: "#000000"
+OriginIsInternal: 1
+SenderReadyTime: "Evening"
+SendingDayFlag: 127
+OriginIsModuleStation: 1
+SenderFromYear: NULL
+SenderUptoYear: NULL
+OriginInExternal: 0
+DestinationStationId: 1
+DestinationStationCustomerId: 11
+DestinationStationName: "Alby"
+DestinationInternationalStationName: NULL
+ReceiverName: "Alby sågverk"
+ReceiverTrackOrArea: "Spår 3"
+ReceiverTrackOrAreaColor: NULL
+ReceiverCargoTrackOrArea: "Spår 3"
+ReceiverCargoTrackOrAreaColor: NULL
+DestinationLanguages: "sv"
+DestinationDomainSuffix: "se"
+DestinationBackColor: "#FFFFFF"
+DestinationForeColor: "#000000"
+DestinationIsInternal: 1
+ReceiverReadyTime: "Morning"
+ReceivingDayFlag: 127
+DestinationIsModuleStation: 1
+SpecialCargoName: NULL
+DefaultClasses: "Ks"
+SpecificWagonClass: NULL
+QuantityIsBearer: 0
+QuantityUnitId: 3
+Quantity: 2
+QuanityUnitResourceName: "Pieces"
+QuantityShortUnit: ""
+PackagingUnitResourceName: "None"
+PackagingPrepositionResourceCode: NULL
+DestinationPackageUnitId: 0
+ReceiverFromYear: NULL
+ReceiverUptoYear: NULL
+DestinationIsExternal: 0
+DefaultClasses: "Ks"
+NHMCode: 44000000
+DA: NULL
+DE: NULL
+EN: "Timber"
+FR: NULL
+IT: NULL
+NL: NULL
+NB: NULL
+PL: NULL
+SV: "Timmer"
+IsExpress: 0
+IsCoolingRequired: 0
+PrintCount: 1
+PrintPerOperatingDay: 0
+HasEmptyReturn: 0
+HasSameCargoReturn: 0
+OwnerNames: "Anna Andersson"
+
+=== Layout 2, station all: 0 rows
+
+
+=== Layout 3, station all: 0 rows
