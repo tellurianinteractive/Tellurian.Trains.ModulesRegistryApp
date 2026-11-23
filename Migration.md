@@ -230,7 +230,7 @@ Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` f
 ### Stage 5: database logic to code (still SQL Server + DACPAC)
 | # | Step | Verification | Chapter |
 |---|---|---|---|
-| 5.0 | Evaluate a disposable test database for integration tests: SQL Server in a container built from `Database.sqlproj`, started by Aspire (AppHost + ServiceDefaults) or by Testcontainers alone. Decide which, and whether it also runs in CI. Prerequisite for the golden-master tests in 5.1. | A test creates the database, inserts known data and runs a stored procedure; decision documented in chapter H | H |
+| 5.0 ✅ | Evaluate a disposable test database for integration tests: SQL Server in a container built from `Database.sqlproj`, started by Aspire (AppHost + ServiceDefaults) or by Testcontainers alone. Decide which, and whether it also runs in CI. Prerequisite for the golden-master tests in 5.1. **Done 2026-11-23:** neither; a database with a unique name on LocalDB locally and on a service container in CI, the schema deployed with DacFx (chapter H.4). | A test creates the database, inserts known data and runs a stored procedure; decision documented in chapter H | H |
 | 5.1 | Document the waybill rules (`System Design Documents/Waybills.md`) and add golden-master tests against the current procedures. No production change. | The tests run green against the current implementation | D.5 |
 | 5.2 | `GetStationCustomerWaybills` → `WaybillGenerator` + LINQ (the old procedure is kept) | Golden master identical, unit tests, station waybills printed and compared in the browser | D.5 |
 | 5.3 | Drop the six waybill views and `GetStationCustomerWaybills` in the database | Publish the DACPAC, smoke test | D.5 |
@@ -872,11 +872,12 @@ The job runs in a GitHub environment called `production`. Then Azure only trusts
 - Cost: two more projects (AppHost, ServiceDefaults) for Aspire, Docker/Podman for developers, and one more tool to keep updated.
 - Likely choice: start with **Testcontainers** for the integration tests in stage 5. Add **Aspire** when there is more than one runnable project, or if the local dashboard and OpenTelemetry (to Application Insights) are wanted. OpenTelemetry to Application Insights comes already in stage 2C (chapter I); Aspire's ServiceDefaults could take over that setup later.
 
-### H.4 To decide in step 5.0
-- [ ] Testcontainers alone, or Aspire.
-- [ ] How the schema gets into the container now (DACPAC) and after stage 4 (EF migrations bundle).
-- [ ] Test data: a small hand-written set per golden-master scenario, not a copy of production (personal data).
-- [ ] Whether the integration tests run in CI on every push, or separately.
+### H.4 Decided in step 5.0 (2026-11-23)
+- [x] **Neither Testcontainers nor Aspire.** The development machine has no Docker, and a container per run adds nothing that a database with a unique name on an existing server doesn't give. `TestCode/Database.Tests` reads a server connection string, `ConnectionStrings:IntegrationTestServer`: locally from user secrets (a LocalDB instance, `SqlLocalDB create ModulesRegistryTests -s`, no administrator rights needed), in CI from an environment variable that points to a SQL Server service container in the workflow (`mcr.microsoft.com/mssql/server:2025-latest`). Without the connection string the tests are inconclusive (skipped).
+- [x] **The schema:** `SqlProjectPackage` builds the DACPAC in memory with DacFx (`Microsoft.SqlServer.DacFx`) from the `Build` items in `Database.sqlproj`, with the project's collation, and deploys it to a new database (`TestDatabase`, dropped when disposed; databases left by stopped runs are dropped after an hour). It works on Windows and Linux, so the old-style project doesn't have to be converted. After a move to EF migrations, `TestDatabase` would run the migrations instead.
+- [x] **Test data:** hand-written per scenario, inserted through the EF model, which also checks the model against a real SQL Server. No copy of production (personal data).
+- [x] **One database per test run, one transaction per test:** the schema is deployed once (`SharedTestDatabase`, assembly initialize; about 15 s locally). Each test derives from `DatabaseTest`, which opens a `TestTransaction`: the test seeds its data, runs procedures and queries through `Transaction.CreateDbContext()` and `Transaction.CreateCommand(...)`, all in that transaction, and it is rolled back after the test. No procedure, view or trigger manages transactions itself, so this holds. Identity values are not rolled back, so results are compared by content, not by generated ids. Tests don't run in parallel.
+- [x] **CI:** on every push, as the step "Test Database".
 
 ---
 

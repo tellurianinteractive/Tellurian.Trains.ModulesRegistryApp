@@ -34,6 +34,20 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       deploy: ${{ steps.version.outputs.deploy }}
+    # SQL Server for Database.Tests (Migration.md chapter H). The password only protects this throwaway container on the runner.
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2025-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: Integration-Tests-1433
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Integration-Tests-1433 -C -Q 'SELECT 1' -b"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 12
     steps:
       - uses: actions/checkout@v7
 
@@ -48,6 +62,7 @@ jobs:
           dotnet build "TestCode/App.Tests/App.Tests.csproj" --configuration Release
           dotnet build "TestCode/Data.Tests/Data.Tests.csproj" --configuration Release
           dotnet build "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release
+          dotnet build "TestCode/Database.Tests/Database.Tests.csproj" --configuration Release
 
       - name: Test App
         run: dotnet test --project "TestCode/App.Tests/App.Tests.csproj" --configuration Release --no-build
@@ -57,6 +72,11 @@ jobs:
 
       - name: Test Services
         run: dotnet test --project "TestCode/Services.Tests/Services.Tests.csproj" --configuration Release --no-build
+
+      - name: Test Database
+        env:
+          ConnectionStrings__IntegrationTestServer: Server=localhost,1433;User ID=sa;Password=Integration-Tests-1433;TrustServerCertificate=True
+        run: dotnet test --project "TestCode/Database.Tests/Database.Tests.csproj" --configuration Release --no-build
 
       - name: Decide whether to deploy
         id: version

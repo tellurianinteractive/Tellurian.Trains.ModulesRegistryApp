@@ -18,7 +18,7 @@ Projects:
 - `SourceCode/Data.Api` — Plain DTO contracts shared with API consumers (no dependencies).
 - `SourceCode/Services` — Business logic in `Implementations/` (one `XxxService` class per aggregate, all registered as scoped in `App/Program.cs`). Uses `IDbContextFactory<ModulesDbContext>` — services create their own short-lived context per operation rather than taking an injected `DbContext`.
 - `SourceCode/Database` — SQL Server database project (`Database.sqlproj`). Schema-as-code under `dbo/Tables`, `dbo/Views`, `dbo/Procedures`. **Entity Framework migrations are NOT used** — see "Database workflow" below.
-- `TestCode/App.Tests`, `TestCode/Data.Tests`, `TestCode/Services.Tests` — MSTest v4 (`App.Tests` uses `MSTest.Sdk`).
+- `TestCode/App.Tests`, `TestCode/Data.Tests`, `TestCode/Services.Tests`, `TestCode/Database.Tests` — MSTest v4 (`App.Tests` and `Database.Tests` use `MSTest.Sdk`). `Database.Tests` runs views, procedures and triggers against a real SQL Server: `TestDatabase` deploys the SQL project (DACPAC built in memory with DacFx from the `Build` items of `Database.sqlproj`) to a new database with a unique name, once per test run, and drops it afterwards. Tests derive from `DatabaseTest`: each seeds its data through `Transaction.CreateDbContext()` and runs commands through `Transaction.CreateCommand(...)` in one transaction that is rolled back after the test (identity values aren't, so don't compare generated ids). Without the connection string `IntegrationTestServer` the tests are inconclusive (Migration.md chapter H.4).
 
 ## Commands
 
@@ -32,6 +32,7 @@ dotnet build "Modules Registry App.slnx"
 dotnet test --project TestCode/App.Tests/App.Tests.csproj
 dotnet test --project TestCode/Services.Tests/Services.Tests.csproj
 dotnet test --project TestCode/Data.Tests/Data.Tests.csproj
+dotnet test --project TestCode/Database.Tests/Database.Tests.csproj
 
 # Run a single test by name (MSTest filter syntax)
 dotnet test --project TestCode/Services.Tests/Services.Tests.csproj --filter "FullyQualifiedName~MyTestClass.MyTestMethod"
@@ -54,9 +55,12 @@ The `Database.sqlproj` project builds with MSBuild only (not `dotnet build`). Us
 {
   "ConnectionStrings:TimetablePlanningDatabase": "Server=localhost\\mssqlserver01;Database=Tellurian.Trains.Database;Trusted_Connection=True;TrustServerCertificate=True",
   "TestUsername": "your account email",
-  "TestPassword": "your account password"
+  "TestPassword": "your account password",
+  "ConnectionStrings:IntegrationTestServer": "Server=(localdb)\\ModulesRegistryTests;Integrated Security=true;TrustServerCertificate=True"
 }
 ```
+
+`IntegrationTestServer` is the server `Database.Tests` creates its databases on (no database name); create the LocalDB instance once with `SqlLocalDB create ModulesRegistryTests -s`. CI uses a SQL Server service container instead.
 
 In production, the connection string and the `Brevo:*` mail settings come from the App Service's connection strings and app settings; Azure Key Vault is used only when the App Service setting `VaultUri` is set (`App/Program.cs`), and is being removed (2026-11-21). Logs and telemetry go to Application Insights only when the app setting `APPLICATIONINSIGHTS_CONNECTION_STRING` is set (`App/Diagnostics/ApplicationInsights.cs`); log levels and saved queries are in `System Design Documents/Logging.md`. The app must stay on Azure free tiers, so check the cost of any change in Azure first. `DefaultUser` is registered as a singleton — populated from `TestUsername`/`TestPassword` in development, empty in production.
 

@@ -39,6 +39,7 @@
   </Project>
   <Project Path="TestCode/App.Tests/App.Tests.csproj" />
   <Project Path="TestCode/Data.Tests/Data.Tests.csproj" />
+  <Project Path="TestCode/Database.Tests/Database.Tests.csproj" />
   <Project Path="TestCode/Services.Tests/Services.Tests.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
