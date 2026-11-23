@@ -58,11 +58,20 @@ The arrival days has no meaning, and can be omitted in the printed waybills.
 Also, in cargo flows that are receive/import, the selection of days has no meaning and can be disabled/hidden and set to daily behind the scenes.
 The reason to keep it like that, is that a single cargo flow can change direction, and then days applies again.
 
-#### Improved Matching
+### Improved Matching
 We can add the follwing features:
 - Option to updating waybills for only one cargo flow at a time.
 - Use EmptyReturn to cerate empty return waybills for added waybills.
 - Use MatchCargoFlow to find a return waybill for a cargo that uses same type of wagon.
+
+A new featue that people asked for. A user want to add a cargoflow by selecting a cargoflow of another station,
+because the user want to trade with that station. 
+
+In both Station customers list and External station customers list, after selecting a customer,
+the list of cargo flows for that customer comes up. Add a button Add to my station. A separate form comes up,
+where you can select a station, a customer and Add button. This adds a cargo flow to my customer, 
+and creates a waybill directly in my StationCustomerWaybill table.
+
 
 #### Harbours
 A module that is a harbour adds that it also can be a destination for any
