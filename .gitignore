@@ -391,3 +391,6 @@ healthchecksdb
 *.fodp
 *.fodg
 .~lock.*#
+
+# Private notes about coming features
+TODO.txt

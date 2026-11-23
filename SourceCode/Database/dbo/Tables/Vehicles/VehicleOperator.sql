@@ -12,6 +12,8 @@
     [IsFreightOperator]         BIT            DEFAULT ((0)) NOT NULL,
     [IsConstructionOperator]    BIT            DEFAULT ((0)) NOT NULL,
     [IsVeteranOperator]         BIT            DEFAULT ((0)) NOT NULL,
+    [ApprovedByPersonId]        INT            NULL,
+    [ApprovedDateTime]          DATETIMEOFFSET(7)  NULL,    
     [OnlyInLayoutId]            INT            NULL,
 
     CONSTRAINT [PK_Operator] PRIMARY KEY CLUSTERED ([Id] ASC),

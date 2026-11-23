@@ -41,6 +41,9 @@ internal static class VehicleOperatorMapper
                 .WithMany()
                 .HasForeignKey(e => e.OnlyInLayoutId);
             entity.Property(e => e.LastYearInOperation).HasColumnName("FinalYearInOperation");
+            // Not used by the app yet: shadow properties.
+            entity.Property<int?>("ApprovedByPersonId");
+            entity.Property<DateTimeOffset?>("ApprovedDateTime");
             entity.Property(e => e.Signature).HasMaxLength(6).IsRequired();
             entity.Property(e => e.ShortName).HasMaxLength(30).IsRequired();
             entity.Property(e => e.FullName).HasMaxLength(100).IsRequired();
