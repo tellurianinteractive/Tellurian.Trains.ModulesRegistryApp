@@ -135,9 +135,9 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
     }
 
     /// <summary>
-    /// Saves a person, and the user's rights when the person is a user. Who may save: <see cref="MayEditAsync"/>. The country may be
-    /// set by a global administrator, a country administrator to their own country, and a group's member administrator (members may
-    /// come from other countries); the person themselves keeps it. Rights the signed-in user may not change keep their stored values
+    /// Saves a person, and the user's rights when the person is a user. Who may save: <see cref="MayEditAsync"/>. Only a global
+    /// administrator changes a stored person's country; a new person's country is set by a global administrator, a country
+    /// administrator to their own country, and a group's member administrator (members may come from other countries). Rights the signed-in user may not change keep their stored values
     /// (<see cref="PersonPermissionExtensions.KeepRightsNotChangeableBy"/>).
     /// </summary>
     public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity, int groupId = 0)

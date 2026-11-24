@@ -56,14 +56,14 @@
         {
             <hr />
             <AppCheckGroup>
-                <AppInputCheck Label="IsGlobalAdministrator" @bind-Value="Form!.IsGlobalAdministrator" IsDisabled="@(!Principal.MayChangeGlobalAdministrator(Existing!.User!))" />
+                <AppInputCheck Label="IsGlobalAdministrator" @bind-Value="Form!.IsGlobalAdministrator" IsDisabled="@(!Principal.MayChangeGlobalAdministrator)" />
                 <AppInputCheck Label="IsCountryAdministrator" @bind-Value="Form!.IsCountryAdministrator" IsDisabled="@(!Principal.MayChangeCountryAdministrator)" />
                 <AppInputCheck Label="IsApiAccessPermitted" @bind-Value="Form!.IsApiAccessPermitted" />
                 <AppInputCheck Label="MayUploadSkpDrawing" @bind-Value="Form!.MayUploadSkpDrawing" />
                 <AppInputCheck Label="MayVerifyWiFreds" @bind-Value="Form!.MayManageWiFreds" />
             </AppCheckGroup>
             <AppFormRow>
-                <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" />
+                <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" IsDisabled="@(!Form.IsAdministrator)" EnabledBy="Form.IsGlobalAdministrator Form.IsCountryAdministrator" />
                 <AppDisplay Width="3" Label="PasswordResetAttempts" Value="@Existing!.User!.PasswordResetAttempts.ToString()" BackColor="#e9ecef" />
                 <AppDisplay Width="3" Label="FailedLoginAttempts" Value="@Existing.User.FailedLoginAttempts.ToString()" BackColor="#e9ecef" />
                 @if (Existing.User.IsApiAccessPermitted)
@@ -100,7 +100,8 @@
     IEnumerable<ListboxItem>? CountryItems;
     string? FailureMessage;
 
-    bool MaySelectCountry => Principal.IsGlobalAdministrator() || GroupId > 0;
+    // Only a global administrator changes a stored person's country; a group's member administrator sets it for a new member.
+    bool MaySelectCountry => Principal.IsGlobalAdministrator() || (GroupId > 0 && Existing is null);
     // The rights of a stored user, for global administrators and the country administrators of the person's country.
     bool ShowsUserRights => Existing?.User is not null && Principal.MayChangeUserRights(Existing.CountryId);
     bool MayDelete => Existing is not null && Principal.MayDeletePerson(Existing.CountryId);
@@ -126,7 +127,7 @@
         if (!MaySelectCountry) Form.CountryId = person.CountryId;
         if (Existing?.User is { } user)
         {
-            if (!Principal.MayChangeGlobalAdministrator(user)) Form.IsGlobalAdministrator = user.IsGlobalAdministrator;
+            if (!Principal.MayChangeGlobalAdministrator) Form.IsGlobalAdministrator = user.IsGlobalAdministrator;
             if (!Principal.MayChangeCountryAdministrator) Form.IsCountryAdministrator = user.IsCountryAdministrator;
             if (!ShowsUserRights)
             {
@@ -135,6 +136,8 @@
                 Form.MayManageWiFreds = user.MayManageWiFreds;
                 Form.AdministratorAreaOfResposibility = user.AdministratorAreaOfResposibility;
             }
+            // Only an administrator's area of responsibility is edited; the field is disabled otherwise.
+            if (!Form.IsAdministrator) Form.AdministratorAreaOfResposibility = user.AdministratorAreaOfResposibility;
         }
         // Group member administrators may add members from any fully supported country.
         CountryItems = await CountryService.ListboxItemsAsync(Principal, allSupportedCountries: GroupId > 0);

@@ -81,6 +81,9 @@ public class PersonFormData
     [Display(Name = "MayVerifyWiFreds")]
     public bool MayManageWiFreds { get; set; }
 
+    /// <summary>The area of responsibility is edited only for a global or country administrator.</summary>
+    public bool IsAdministrator => IsGlobalAdministrator || IsCountryAdministrator;
+
     [Display(Name = "AdministratorAreaOfResposibility")]
     [StringLength(50)]
     [OrdinaryText]

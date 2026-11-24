@@ -20,10 +20,12 @@
     else
     {
         <input style="color: @TextColor; background-color: @BackColor" disabled="@IsDisabled" type="@Type" class="form-control @CssClass" id="@Label" name="@NameAttributeValue" @bind="@CurrentValue" placeholder="@PlaceholderText"
-               list="@(Suggestions is null ? null : SuggestionsId)" autocomplete="@(Suggestions is null ? null : "off")" data-suggestions="@(Suggestions is null ? null : SuggestionsId)" />
+               list="@(Suggestions is null ? null : SuggestionsId)" autocomplete="@(Suggestions is null ? null : "off")" data-suggestions="@(Suggestions is null ? null : SuggestionsId)"
+               data-enabled-by="@EnabledBy" />
         @* With Suggestions, the browser suggests the matching values while typing (a combo box); any other value may still be entered.
            With SuggestionsFilteredBy (names of other fields in the form), suggestion-filter.js shows only the suggestions that match
-           those fields; without JavaScript, all are shown. *@
+           those fields; without JavaScript, all are shown. With EnabledBy (names of checkboxes in the form), enabled-by.js enables
+           the field only while one of them is checked; IsDisabled sets the state the page is rendered with. *@
         @if (Suggestions is not null)
         {
             <datalist id="@SuggestionsId" data-filter-by="@SuggestionsFilteredBy">
@@ -54,6 +56,7 @@
     [Parameter] public int NumberOfRows { get; set; }
     [Parameter] public IEnumerable<TextSuggestion>? Suggestions { get; set; }
     [Parameter] public string? SuggestionsFilteredBy { get; set; }
+    [Parameter] public string? EnabledBy { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string result, [NotNullWhen(false)] out string? validationErrorMessage)
     {

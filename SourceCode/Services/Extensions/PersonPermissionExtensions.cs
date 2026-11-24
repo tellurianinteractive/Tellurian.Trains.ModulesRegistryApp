@@ -41,17 +41,17 @@ public static class PersonPermissionExtensions
     extension(ClaimsPrincipal? principal)
     {
         /// <summary>
-        /// A global administrator sets any country, a country administrator their own, and a group's member administrator
-        /// (<paramref name="viaGroup"/>) any, since members may come from other countries; otherwise the stored country stays.
+        /// Only a global administrator changes the country of a stored person (<paramref name="storedCountryId"/>); otherwise it stays.
+        /// A new person gets any country from a global administrator, the own country from a country administrator, and any from a
+        /// group's member administrator (<paramref name="viaGroup"/>), since members may come from other countries.
         /// </summary>
         public bool MaySetPersonCountry(int countryId, int? storedCountryId, bool viaGroup = false) =>
-            principal.IsCountryAdministratorInCountry(countryId) || viaGroup || countryId == storedCountryId;
+            storedCountryId.HasValue ?
+                countryId == storedCountryId || principal.IsGlobalAdministrator() :
+                principal.IsCountryAdministratorInCountry(countryId) || viaGroup;
 
-        /// <summary>
-        /// Only a global administrator removes their own global administrator right; nobody grants it here.
-        /// </summary>
-        public bool MayChangeGlobalAdministrator(User user) =>
-            principal.IsGlobalAdministrator() && principal.UserId() == user.Id;
+        /// <summary>Only the super user grants or removes the global administrator right.</summary>
+        public bool MayChangeGlobalAdministrator => principal.IsSuperUser();
 
         /// <summary>Only a global administrator makes a user a country administrator or removes the right.</summary>
         public bool MayChangeCountryAdministrator => principal.IsGlobalAdministrator();
@@ -87,10 +87,13 @@ public static class PersonPermissionExtensions
             if (source.EmailAddress.HasValue) user.EmailAddress = source.EmailAddress;
         }
 
-        /// <summary>Sets back the stored value of each right <paramref name="principal"/> may not change.</summary>
+        /// <summary>
+        /// Sets back the stored value of each right <paramref name="principal"/> may not change, and the stored area of responsibility
+        /// when the user is neither a global nor a country administrator.
+        /// </summary>
         public void KeepRightsNotChangeableBy(ClaimsPrincipal? principal, User stored, int personCountryId)
         {
-            if (!principal.MayChangeGlobalAdministrator(stored)) user.IsGlobalAdministrator = stored.IsGlobalAdministrator;
+            if (!principal.MayChangeGlobalAdministrator) user.IsGlobalAdministrator = stored.IsGlobalAdministrator;
             if (!principal.MayChangeCountryAdministrator) user.IsCountryAdministrator = stored.IsCountryAdministrator;
             if (!principal.MayChangeUserRights(personCountryId))
             {
@@ -99,6 +102,7 @@ public static class PersonPermissionExtensions
                 user.MayManageWiFreds = stored.MayManageWiFreds;
                 user.AdministratorAreaOfResposibility = stored.AdministratorAreaOfResposibility;
             }
+            if (!user.IsGlobalAdministrator && !user.IsCountryAdministrator) user.AdministratorAreaOfResposibility = stored.AdministratorAreaOfResposibility;
         }
     }
 }

@@ -109,6 +109,7 @@ public sealed class PersonPermissionTests
     {
         Assert.AreEqual(0, await RenameAsync(Principal(Self), Self, change: p => p.CountryId = Norway), "The person themselves.");
         Assert.AreEqual(0, await RenameAsync(CountryAdministrator(), Member, change: p => p.CountryId = Norway), "To another country.");
+        Assert.AreEqual(0, await RenameAsync(Principal(GroupAdministrator), Member, Group, p => p.CountryId = Norway), "A group's member administrator, for a stored member.");
         Assert.AreEqual(1, await RenameAsync(GlobalAdministrator(), Member, change: p => p.CountryId = Norway));
     }
 
@@ -153,7 +154,37 @@ public sealed class PersonPermissionTests
         await RenameAsync(GlobalAdministrator(), Member, change: p => { p.User.IsCountryAdministrator = true; p.User.IsGlobalAdministrator = true; });
         var user = (await StoredAsync(Member)).User;
         Assert.IsTrue(user.IsCountryAdministrator);
-        Assert.IsFalse(user.IsGlobalAdministrator, "Only their own global right can be removed, as before.");
+        Assert.IsFalse(user.IsGlobalAdministrator, "Only the super user.");
+    }
+
+    [TestMethod]
+    public async Task OnlyTheSuperUserChangesTheGlobalAdministratorRight()
+    {
+        // User 1 is the super user (ClaimsPrincipalExtensions.IsSuperUser).
+        var superUser = new ClaimsPrincipal(new ClaimsIdentity(
+        [
+            new Claim(AppClaimTypes.ObjectId, Guid.NewGuid().ToString()),
+            new Claim(AppClaimTypes.UserId, "1"),
+            new Claim(AppClaimTypes.CountryId, Sweden.ToString()),
+            new Claim(AppClaimTypes.GlobalAdministrator, "true"),
+        ], "Test"));
+        await RenameAsync(superUser, Member, change: p => p.User.IsGlobalAdministrator = true);
+        Assert.IsTrue((await StoredAsync(Member)).User.IsGlobalAdministrator, "Granted by the super user.");
+        await RenameAsync(GlobalAdministrator(), Member, change: p => p.User.IsGlobalAdministrator = false);
+        Assert.IsTrue((await StoredAsync(Member)).User.IsGlobalAdministrator, "Not removed by another global administrator.");
+        await RenameAsync(superUser, Member, change: p => p.User.IsGlobalAdministrator = false);
+        Assert.IsFalse((await StoredAsync(Member)).User.IsGlobalAdministrator, "Removed by the super user.");
+    }
+
+    [TestMethod]
+    public async Task OnlyAnAdministratorsAreaOfResponsibilityIsSaved()
+    {
+        await RenameAsync(CountryAdministrator(), Member, change: p => p.User.AdministratorAreaOfResposibility = "Signals");
+        Assert.IsNull((await StoredAsync(Member)).User.AdministratorAreaOfResposibility, "Not an administrator.");
+        await RenameAsync(GlobalAdministrator(), Member, change: p => { p.User.IsCountryAdministrator = true; p.User.AdministratorAreaOfResposibility = "Signals"; });
+        Assert.AreEqual("Signals", (await StoredAsync(Member)).User.AdministratorAreaOfResposibility, "Made a country administrator in the same save.");
+        await RenameAsync(GlobalAdministrator(), Member, change: p => { p.User.IsCountryAdministrator = false; p.User.AdministratorAreaOfResposibility = null; });
+        Assert.AreEqual("Signals", (await StoredAsync(Member)).User.AdministratorAreaOfResposibility, "Kept when no longer an administrator.");
     }
 
     [TestMethod]
