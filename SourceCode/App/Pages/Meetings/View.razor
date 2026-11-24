@@ -29,6 +29,20 @@ else
     {
     }
     @Item("Venue", $"{Meeting.VenueName}: {Meeting.CityName}, {Meeting.OrganiserGroup.Country.EnglishName.AsLocalized()}")
+    @if (Meeting.VenueLocality is Locality venue)
+    {
+        <div class="noprint">
+            @venue.FullAddress
+            @if (GeoCoordinates.From(venue.Latitude, venue.Longitude) is GeoCoordinates coordinates)
+            {
+                <AppButton Label="ShowOnMap" Href="@coordinates.MapHref" IconName="@FontAwesome.Locality" />
+            }
+            @if (venue.HallDrawingId.HasValue)
+            {
+                <AppButton Label="HallDrawing" Href="@($"Localities/{venue.Id}/Hall")" IconName="@FontAwesome.MeetingVenue" />
+            }
+        </div>
+    }
     @Item("Duration", Meeting.DurationText())
     @Item("Organiser", Meeting.Organiser())
     @Item("Status", Meeting.Status.MeetingStatus())

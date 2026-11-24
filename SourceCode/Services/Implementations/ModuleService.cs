@@ -226,6 +226,12 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         if (entity.Id > 0 && (existing is null || !await dbContext.MayEditModuleAsync(principal, existing.Id))) return principal.SaveNotAuthorised<Module>();
         if (existing is null && !await dbContext.MayAddModuleForAsync(principal, ownerRef)) return principal.SaveNotAuthorised<Module>();
         if (entity.StationId.HasValue && entity.StationId != existing?.StationId && !await dbContext.MayEditStationAsync(principal, entity.StationId.Value)) return principal.SaveNotAuthorised<Module>();
+        if (entity.StoredAtLocalityId.HasValue && entity.StoredAtLocalityId != existing?.StoredAtLocalityId)
+        {
+            // A changed storage place must be one the module may be stored at (marked as storage, in an owner's country, seen by the user).
+            var ownerCountryIds = await dbContext.ModuleOwnerCountryIdsAsync(existing?.Id ?? 0, ownerRef);
+            if (!await dbContext.StorageLocalitiesFor(principal, ownerCountryIds).AnyAsync(l => l.Id == entity.StoredAtLocalityId)) return principal.SaveNotAuthorised<Module>();
+        }
         if (await IsSameNameAlreadyExisting(dbContext, entity, ownerRef)) return Strings.ModuleNameIsAlreadyTaken.SaveResult(entity);
 
         if (existing is null)

@@ -63,6 +63,9 @@ public class ModuleFormData : IValidatableObject
     [Display(Name = "IsStationOrPartOf")]
     public int? StationId { get; set; }
 
+    [Display(Name = "StoredAt")]
+    public int? StoredAtLocalityId { get; set; }
+
     [Display(Name = "FromYear")]
     [YearOrEmpty]
     public int? RepresentsFromYear { get; set; }

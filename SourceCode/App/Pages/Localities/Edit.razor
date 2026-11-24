@@ -1,0 +1,127 @@
+@page "/Localities/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@* Static SSR form: a POST of LocalityFormData; the id comes from the address, the country of a new locality from ?country=.
+   Global administrators, country administrators in the locality's country and the data administrators of the group using it
+   edit it (LocalityService). Only a global administrator selects the country, and only administrators the group; a group's data
+   administrator adds localities for one of their groups. Disabled fields aren't posted, so the page sets their stored values
+   before the posted form is validated. After saving, a redirect to the form's own address. *@
+
+@using ModulesRegistry.Forms.Localities
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject LocalityService LocalityService
+@inject CountryService CountryService
+
+<PageHeading ObjectName="Locality" IconClass="@FontAwesome.Locality" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@BackHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="locality" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppFormRow>
+            <AppInputText Width="4" Label="Name" @bind-Value="Form!.Name" />
+            <AppInputSelect Width="2" Label="Country" Items="CountryItems" ShowPleaseSelect="true" IsDisabled="@(!MaySelectCountry)" @bind-Value="Form!.CountryId" />
+            <AppInputSelectNullable Width="3" Label="UsedByGroup" Items="GroupItems" ShowNoneOption="@MaySelectGroup" NoneLabel="None" IsDisabled="@(!MayChangeGroup)" @bind-Value="Form!.UsedByGroupId" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputText Width="4" Label="StreetAddress" @bind-Value="Form!.StreetAddress" />
+            <AppInputText Width="1" Label="PostalCode" @bind-Value="Form!.PostalCode" />
+            <AppInputText Width="2" Label="CityName" @bind-Value="Form!.CityName" />
+            <AppInputText Width="2" Label="Coordinates" Placeholder="57.182900, 14.047400" @bind-Value="Form!.Coordinates" />
+        </AppFormRow>
+        <AppFormRow>
+            <AppInputText Width="9" Label="Description" @bind-Value="Form!.Description" />
+        </AppFormRow>
+        <AppCheckGroup>
+            <AppInputCheck Label="IsModuleStorage" @bind-Value="Form!.IsModuleStorage" />
+            <AppInputCheck Label="IsMeetingVenue" @bind-Value="Form!.IsMeetingVenue" />
+        </AppCheckGroup>
+        <p class="form-text">@Localizer["LocalityVisibility"]</p>
+    </Inputs>
+</EditTemplate>
+
+@if (Existing is { IsMeetingVenue: true })
+{
+    @* The hall drawing: a hall file from Module Draw, checked when uploaded (DocumentService, HallDrawings). *@
+    <DocumentsUpload DocumentedObject="Existing">
+        <Uploads>
+            <DocumentUploadForm FileExtension="@HallDrawings.FileExtension" DocumentedObject="Existing" Label="HallDrawing" MaxFileSizeKb="1024" ReturnHref="@SelfHref" />
+        </Uploads>
+    </DocumentsUpload>
+    @if (Existing.HallDrawingId.HasValue)
+    {
+        <AppButton Label="HallDrawing" Href="@($"Localities/{Existing.Id}/Hall")" IconName="@FontAwesome.MeetingVenue" AlwaysShowLabel="true" />
+    }
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? NewCountryId { get; set; }
+    [SupplyParameterFromForm(FormName = "locality")] private LocalityFormData? Form { get; set; }
+
+    ClaimsPrincipal? Principal;
+    Locality? Existing;
+    IEnumerable<ListboxItem>? CountryItems;
+    IEnumerable<ListboxItem>? GroupItems;
+    string? FailureMessage;
+
+    int CountryId => Existing?.CountryId ?? (NewCountryId > 0 ? NewCountryId.Value : Principal.CountryId());
+    bool MaySelectCountry => Principal.IsGlobalAdministrator();
+    // Administrators set, change and clear the group; a group's data administrator chooses one of their groups for a new locality.
+    bool MaySelectGroup => Principal.IsCountryAdministratorInCountry(CountryId);
+    bool MayChangeGroup => MaySelectGroup || Existing is null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (Id > 0)
+        {
+            Existing = await LocalityService.FindByIdAsync(Principal, Id);
+            if (Existing is null || !await LocalityService.MayEditAsync(Principal, Existing))
+            {
+                Existing = null;
+                Form = null; // Shows "no records"; also when a form was posted.
+                return;
+            }
+        }
+        else if (!await LocalityService.MayAddAsync(Principal, CountryId))
+        {
+            Form = null;
+            return;
+        }
+        GroupItems = await LocalityService.UsedByGroupItemsAsync(Principal, CountryId);
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= (Existing ?? new Locality { CountryId = CountryId, IsModuleStorage = true, UsedByGroupId = MaySelectGroup ? null : GroupItems.FirstOrDefault()?.Id }).AsFormData();
+        // Disabled fields aren't posted: their values are the stored ones (or those of a new locality).
+        if (!MaySelectCountry) Form.CountryId = CountryId;
+        if (!MayChangeGroup) Form.UsedByGroupId = Existing?.UsedByGroupId;
+        CountryItems = await CountryService.ListboxItemsAsync(Principal, true);
+    }
+
+    string BackHref => $"Localities/Country/{CountryId}";
+    string SelfHref => $"Localities/{Id}/Edit";
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        // Edit: only the form's fields change on the loaded locality (Migration chapter C.4, the data-loss rule).
+        var locality = Form.AsEntity(Existing);
+        locality.UsedByGroup = null;
+        var (count, message, _) = await LocalityService.SaveAsync(Principal, locality);
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo($"Localities/{locality.Id}/Edit");
+    }
+}

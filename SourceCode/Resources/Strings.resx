@@ -2886,4 +2886,61 @@
   <data name="WebPage" xml:space="preserve">
     <value>Web page</value>
   </data>
+  <data name="Locality" xml:space="preserve">
+    <value>Locality</value>
+  </data>
+  <data name="Localities" xml:space="preserve">
+    <value>Localities</value>
+  </data>
+  <data name="IsModuleStorage" xml:space="preserve">
+    <value>Module storage</value>
+  </data>
+  <data name="IsMeetingVenue" xml:space="preserve">
+    <value>Meeting venue</value>
+  </data>
+  <data name="StreetAddress" xml:space="preserve">
+    <value>Street address</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal code</value>
+  </data>
+  <data name="Coordinates" xml:space="preserve">
+    <value>GPS coordinates</value>
+  </data>
+  <data name="Coordinates_Error" xml:space="preserve">
+    <value>Give latitude and longitude, for example 57.182900, 14.047400.</value>
+  </data>
+  <data name="UsedByGroup" xml:space="preserve">
+    <value>Used by group</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="LocalityVisibility" xml:space="preserve">
+    <value>A meeting venue is shown to everyone. A storage place used by a group is shown only to the group's members.</value>
+  </data>
+  <data name="StoredAt" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="HiddenLocality" xml:space="preserve">
+    <value>(not visible to you)</value>
+  </data>
+  <data name="VenueLocality" xml:space="preserve">
+    <value>Registered venue</value>
+  </data>
+  <data name="HallDrawing" xml:space="preserve">
+    <value>Hall drawing</value>
+  </data>
+  <data name="FitInView" xml:space="preserve">
+    <value>Fit in view</value>
+  </data>
+  <data name="HallDrawingCannotBeShown" xml:space="preserve">
+    <value>The hall drawing can't be shown.</value>
+  </data>
+  <data name="NotAHallDrawing" xml:space="preserve">
+    <value>The file is not a hall drawing from Module Draw.</value>
+  </data>
+  <data name="HallDrawingNewerVersion" xml:space="preserve">
+    <value>The hall drawing is from a newer version of Module Draw than the Module Registry can read.</value>
+  </data>
 </root>

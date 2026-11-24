@@ -2886,4 +2886,61 @@
   <data name="WebPage" xml:space="preserve">
     <value>Nettside</value>
   </data>
+  <data name="Locality" xml:space="preserve">
+    <value>Lokale</value>
+  </data>
+  <data name="Localities" xml:space="preserve">
+    <value>Lokaler</value>
+  </data>
+  <data name="IsModuleStorage" xml:space="preserve">
+    <value>Lagring av moduler</value>
+  </data>
+  <data name="IsMeetingVenue" xml:space="preserve">
+    <value>Treffsted</value>
+  </data>
+  <data name="StreetAddress" xml:space="preserve">
+    <value>Gateadresse</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postnummer</value>
+  </data>
+  <data name="Coordinates" xml:space="preserve">
+    <value>GPS-koordinater</value>
+  </data>
+  <data name="Coordinates_Error" xml:space="preserve">
+    <value>Oppgi breddegrad og lengdegrad, for eksempel 57.182900, 14.047400.</value>
+  </data>
+  <data name="UsedByGroup" xml:space="preserve">
+    <value>Brukes av gruppe</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Kart</value>
+  </data>
+  <data name="LocalityVisibility" xml:space="preserve">
+    <value>Et treffsted vises for alle. Et lagringssted som brukes av en gruppe, vises bare for gruppens medlemmer.</value>
+  </data>
+  <data name="StoredAt" xml:space="preserve">
+    <value>Lagringssted</value>
+  </data>
+  <data name="HiddenLocality" xml:space="preserve">
+    <value>(ikke synlig for deg)</value>
+  </data>
+  <data name="VenueLocality" xml:space="preserve">
+    <value>Registrert treffsted</value>
+  </data>
+  <data name="HallDrawing" xml:space="preserve">
+    <value>Lokaletegning</value>
+  </data>
+  <data name="FitInView" xml:space="preserve">
+    <value>Tilpass til visningen</value>
+  </data>
+  <data name="HallDrawingCannotBeShown" xml:space="preserve">
+    <value>Lokaletegningen kan ikke vises.</value>
+  </data>
+  <data name="NotAHallDrawing" xml:space="preserve">
+    <value>Filen er ikke en lokaletegning fra Module Draw.</value>
+  </data>
+  <data name="HallDrawingNewerVersion" xml:space="preserve">
+    <value>Lokaletegningen er fra en nyere versjon av Module Draw enn modulregisteret kan lese.</value>
+  </data>
 </root>

@@ -35,8 +35,10 @@ public class Meeting
     public string Food { get; set; }
     public string ExternalLink { get; set; }
     public Guid? AccessKey { get; set; } = Guid.NewGuid();
+    public int? VenueLocalityId { get; set; }
     public virtual Group OrganiserGroup { get; set; }
     public virtual GroupDomain GroupDomain { get; set; }
+    public virtual Locality VenueLocality { get; set; }
     public virtual ICollection<Layout> Layouts { get; set; }
     public virtual ICollection<MeetingParticipant> Participants { get; set; }
 }
@@ -201,6 +203,12 @@ public static class MeetingMapping
             entity.Property(e => e.AccessKey).IsRequired().HasDatabaseDefault("newid()");
             entity.Property(e => e.LatestArrivalTimeWithModules).HasPrecision(0);
             entity.Property(e => e.EarliestDepartureTimeWithModules).HasPrecision(0);
+            entity.HasOne(e => e.VenueLocality)
+                .WithMany()
+                .HasForeignKey(e => e.VenueLocalityId)
+                .HasConstraintName("FK_Meeting_VenueLocality")
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasIndex(e => e.VenueLocalityId, "IX_Meeting_VenueLocalityId");
         });
 }
 

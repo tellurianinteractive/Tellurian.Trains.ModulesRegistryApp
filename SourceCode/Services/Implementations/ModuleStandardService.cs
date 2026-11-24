@@ -12,21 +12,8 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
     {
         if (!principal.IsAuthenticated()) return [];
         using var dbContext = Factory.CreateDbContext();
-        int[] countryIds;
-        int? selectedId = null;
-        if (moduleId > 0)
-        {
-            countryIds = await dbContext.ModuleOwnerships
-                .Where(mo => mo.ModuleId == moduleId && mo.OwnedShare > 0)
-                .Select(mo => mo.PersonId != null ? mo.Person.CountryId : mo.Group.CountryId)
-                .Distinct()
-                .ToArrayAsync();
-            selectedId = await dbContext.Modules.Where(m => m.Id == moduleId).Select(m => (int?)m.StandardId).SingleOrDefaultAsync();
-        }
-        else if (ownerRef.IsGroup)
-            countryIds = await dbContext.Groups.Where(g => g.Id == ownerRef.GroupId).Select(g => g.CountryId).ToArrayAsync();
-        else
-            countryIds = await dbContext.People.Where(p => p.Id == ownerRef.PersonId).Select(p => p.CountryId).ToArrayAsync();
+        var countryIds = await dbContext.ModuleOwnerCountryIdsAsync(moduleId, ownerRef);
+        var selectedId = moduleId > 0 ? await dbContext.Modules.Where(m => m.Id == moduleId).Select(m => (int?)m.StandardId).SingleOrDefaultAsync() : null;
         return await ListboxItemsAsync(dbContext, countryIds, selectedId);
     }
 

@@ -17,6 +17,7 @@
 @inject ModuleService ModuleService
 @inject StationService StationService
 @inject ModuleStandardService ModuleStandardService
+@inject LocalityService LocalityService
 
 <PageHeading ObjectName="Module" Context="@Existing" IconClass="@FontAwesome.Module" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Module" BackHref="@BackHref" />
 
@@ -44,10 +45,11 @@
             <AppInputSelect Width="2" Label="OverheadLineFeature" @bind-Value="Form!.OverheadLineFeature" Items="EnumExtensions.OverheadLineFeatureListboxItems()" ShowPleaseSelect="false" />
         </AppFormRow>
         <AppFormRow>
-            <AppInputSelectNullable Width="4" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
+            <AppInputSelectNullable Width="3" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
             <AppInputNumber TValue="int?" Width="1" Label="RepresentsFromYear" @bind-Value="Form!.RepresentsFromYear" />
             <AppInputNumber TValue="int?" Width="1" Label="RepresentsToYear" @bind-Value="Form!.RepresentsUptoYear" />
-            <AppInputText Width="6" Label="ThemeNote" @bind-Value="Form!.Theme" />
+            <AppInputText Width="3" Label="ThemeNote" @bind-Value="Form!.Theme" />
+            <AppInputSelectNullable Width="4" Label="StoredAt" @bind-Value="Form!.StoredAtLocalityId" Items="StorageItems" ShowNoneOption="true" NoneLabel="None" IsDisabled="@IsStorageHidden" />
         </AppFormRow>
         <AppFormRow>
             <AppInputNumber TValue="double?" Width="1" Label="Radius" @bind-Value="Form!.Radius" Unit="mm" />
@@ -156,7 +158,11 @@
     Module? Existing;
     IEnumerable<ListboxItem>? ModuleStandardItems;
     IEnumerable<ListboxItem>? StationItems;
+    IEnumerable<ListboxItem>? StorageItems;
     string? FailureMessage;
+
+    // The module is stored at a group's storage place the user doesn't see: shown disabled and kept as it is.
+    bool IsStorageHidden => Existing?.StoredAtLocalityId is int id && StorageItems?.Any(i => i.Id == id) == false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -179,6 +185,13 @@
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
         Form ??= (Existing ?? new Module { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers }).AsFormData();
         ModuleStandardItems = await ModuleStandardService.ModuleListboxItemsAsync(Principal, Id, OwnershipRef); // National standards only of the owners' countries.
+        StorageItems = await LocalityService.StorageListboxItemsAsync(Principal, Id, OwnershipRef);
+        if (IsStorageHidden)
+        {
+            // A disabled field isn't posted: the stored value is kept, under a placeholder instead of the locality's name.
+            Form.StoredAtLocalityId = Existing!.StoredAtLocalityId;
+            StorageItems = [new ListboxItem(Existing.StoredAtLocalityId!.Value, Localizer["HiddenLocality"]), .. StorageItems];
+        }
         StationItems = await StationService.StationItemsAsync(Principal, OwnershipRef);
         if (Existing?.StationId is int stationId && !StationItems.Any(s => s.Id == stationId))
         {

@@ -16,6 +16,7 @@
 @inject MeetingService MeetingService
 @inject LayoutService LayoutService
 @inject GroupService GroupService
+@inject LocalityService LocalityService
 
 <PageHeading Context="Existing" ObjectName="Meeting" IconClass="@FontAwesome.Meeting" PageAction="@Id.ToAddOrEditPageAction()" HelpContext="Meeting" BackHref="@BackHref" />
 
@@ -37,7 +38,8 @@
         </AppCheckGroup>
 
         <AppFormRow>
-            <AppInputText Width="3" Label="City" @bind-Value="Form!.CityName" />
+            <AppInputSelectNullable Width="3" Label="VenueLocality" Items="@VenueItems" @bind-Value="Form!.VenueLocalityId" ShowNoneOption="true" NoneLabel="None" />
+            <AppInputText Width="2" Label="City" @bind-Value="Form!.CityName" />
             <AppInputText Width="3" Label="Venue" @bind-Value="Form!.VenueName" />
             <AppInputSelectNullable Width="4" Label="InPartnershipWith" Items="@GroupDomainItems" @bind-Value="Form!.GroupDomainId" ShowNoneOption="true" />
         </AppFormRow>
@@ -79,6 +81,7 @@
     Meeting? Existing;
     IEnumerable<ListboxItem>? OrganiserItems;
     IEnumerable<ListboxItem>? GroupDomainItems;
+    IEnumerable<ListboxItem>? VenueItems;
     bool MayEdit;
     bool MayDelete;
     bool DatesAreLocked;
@@ -118,6 +121,8 @@
         if (OrganiserGroupId > 0 && Existing is null) Form.OrganiserGroupId = OrganiserGroupId;
         OrganiserItems = await GroupService.ListboxItemsAsync(Principal, Existing?.OrganiserGroup?.CountryId, OrganiserGroupId);
         GroupDomainItems = await GroupService.GroupDomainListboxItemsAsync(Principal);
+        // Venues in the meeting's country, the organiser's; when a venue is chosen, City and Venue are taken from it when saved.
+        VenueItems = await LocalityService.VenueListboxItemsAsync(Principal, Existing?.OrganiserGroupId ?? OrganiserGroupId, Existing?.VenueLocalityId);
     }
 
     bool ShowTime => (Existing ?? new Meeting { MeetingType = Form?.MeetingType ?? 0 }).ShowTime();

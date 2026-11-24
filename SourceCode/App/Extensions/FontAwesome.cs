@@ -22,12 +22,15 @@ public static class FontAwesome
     public const string Info = "fa fa-info";
     public const string Invite = "fa fa-envelope";
     public const string Layout = "fa fa-project-diagram";
+    public const string Locality = "fa fa-map-marker-alt";
     public const string Mail = "fa fa-mail-bulk";
     public const string Manage = "fa fa-tasks";
     public const string Market = "fa fa-shopping-cart";
     public const string Meeting = "fa fa-calendar-alt";
+    public const string MeetingVenue = "fa fa-building";
     public const string Module = "fa fa-box";
     public const string Modules = "fa fa-box";
+    public const string ModuleStorage = "fa fa-warehouse";
     public const string Note = "fa fa-exclamation";
     public const string Ok = "fa fa-check-circle";
     public const string OperationLocation = "fa fa-school";
@@ -86,12 +89,15 @@ public static class FontAwesome
             {nameof(Info), Info },
             {nameof(Invite), Invite },
             {nameof(Layout), Layout },
+            {nameof(Locality), Locality },
             {nameof(Mail), Mail },
             {nameof(Manage), Manage },
             {nameof(Market), Market },
             {nameof(Meeting), Meeting },
+            {nameof(MeetingVenue), MeetingVenue },
             {nameof(Module), Module },
             {nameof(Modules), Modules },
+            {nameof(ModuleStorage), ModuleStorage },
             {nameof(Note), Note },
             {nameof(Ok), Ok },
             {nameof(OperationLocation), OperationLocation },

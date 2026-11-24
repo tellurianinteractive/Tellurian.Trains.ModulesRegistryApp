@@ -46,8 +46,8 @@ public class MeetingFormData : IValidatableObject
     [Display(Name = "IsOrganisingGroupInternal")]
     public bool IsOrganiserInternal { get; set; }
 
+    /// <summary>Required when no registered venue is chosen; otherwise set from the venue when saved (MeetingService).</summary>
     [Display(Name = "City")]
-    [Required]
     [StringLength(50)]
     [OrdinaryText]
     public string CityName { get; set; } = string.Empty;
@@ -56,6 +56,9 @@ public class MeetingFormData : IValidatableObject
     [StringLength(50)]
     [OrdinaryText]
     public string? VenueName { get; set; }
+
+    [Display(Name = "VenueLocality")]
+    public int? VenueLocalityId { get; set; }
 
     [Display(Name = "InPartnershipWith")]
     public int? GroupDomainId { get; set; }
@@ -90,6 +93,8 @@ public class MeetingFormData : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        if (VenueLocalityId is null or 0 && string.IsNullOrWhiteSpace(CityName))
+            yield return new ValidationResult(string.Format(Strings.RequiredAttribute_Error, Strings.City), [nameof(CityName)]);
         if (StartDate.Date != StoredStartDate?.Date && StartDate.Date < Today.AddDays(-DaysBackForStartDate))
             yield return new ValidationResult(Strings.StartDateTooEarly_Error, [nameof(StartDate)]);
         if (MeetingType == (int)Data.MeetingType.ModuleMeeting)
@@ -116,6 +121,7 @@ public static class MeetingFormExtensions
             IsOrganiserInternal = entity.IsOrganiserInternal,
             CityName = entity.CityName ?? string.Empty,
             VenueName = entity.VenueName,
+            VenueLocalityId = entity.VenueLocalityId,
             GroupDomainId = entity.GroupDomainId,
             StartDate = entity.StartDate,
             EndDate = entity.EndDate,
@@ -144,6 +150,7 @@ public static class MeetingFormExtensions
             entity.IsOrganiserInternal = form.IsOrganiserInternal;
             entity.CityName = form.CityName;
             entity.VenueName = form.VenueName;
+            entity.VenueLocalityId = form.VenueLocalityId is null or 0 ? null : form.VenueLocalityId;
             entity.GroupDomainId = form.GroupDomainId is null or 0 ? null : form.GroupDomainId;
             entity.StartDate = form.StartDate;
             entity.EndDate = form.EndDate;

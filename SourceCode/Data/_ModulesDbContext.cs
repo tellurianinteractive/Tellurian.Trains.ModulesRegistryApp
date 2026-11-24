@@ -35,6 +35,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<LayoutModule> LayoutModules { get; set; }
     public virtual DbSet<LayoutParticipant> LayoutParticipants { get; set; }
     public virtual DbSet<LayoutStation> LayoutStations { get; set; }
+    public virtual DbSet<Locality> Localities { get; set; }
     public virtual DbSet<Meeting> Meetings { get; set; }
     public virtual DbSet<MeetingAdministrator> MeetingAdministrators { get; set; }
     public virtual DbSet<MeetingParticipant> MeetingParticipants { get; set; }
@@ -101,6 +102,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapLayoutModule();
         modelBuilder.MapLayoutParticipant();
         modelBuilder.MapLayoutStation();
+        modelBuilder.MapLocality();
         modelBuilder.MapMeeting();
         modelBuilder.MapMeetingAdministrator();
         modelBuilder.MapMeetingParticipant();

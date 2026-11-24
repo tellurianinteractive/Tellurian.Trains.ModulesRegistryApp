@@ -145,6 +145,7 @@ builder.Services.AddScoped<ExternalStationService>();
 builder.Services.AddScoped<GroupCategoryService>();
 builder.Services.AddScoped<GroupLayoutModuleService>();
 builder.Services.AddScoped<GroupService>();
+builder.Services.AddScoped<LocalityService>();
 builder.Services.AddScoped<LayoutService>();
 builder.Services.AddScoped<LayoutParticipantService>();
 builder.Services.AddScoped<MeetingService>();

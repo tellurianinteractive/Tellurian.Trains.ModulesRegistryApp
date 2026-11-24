@@ -114,6 +114,14 @@ public sealed class GroupDeleteTests
         CollectionAssert.AreEquivalent(new[] { 1, 2, 3 }, deletable.ToArray());
     }
 
+    [TestMethod]
+    public async Task GroupUsingLocalityIsNotDeletable()
+    {
+        await _factory.SeedAsync(new Locality { Id = 1, CountryId = CountryId, Name = "Club room", CityName = "City", IsModuleStorage = true, UsedByGroupId = 1 });
+
+        await AssertNotDeletableAsync(1);
+    }
+
     private async Task AssertNotDeletableAsync(int groupId)
     {
         var target = new GroupService(_factory);

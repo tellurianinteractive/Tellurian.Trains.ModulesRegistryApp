@@ -58,6 +58,7 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
              .Include(m => m.Layouts).ThenInclude(l => l.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
              .Include(m => m.OrganiserGroup).ThenInclude(ag => ag.Country)
              .Include(m => m.GroupDomain)
+             .Include(m => m.VenueLocality) // A venue is seen by everyone (LocalityQueryExtensions).
              .Include(m => m.Participants).ThenInclude(p => p.Person).ThenInclude(p => p.Country)
              .Include(m => m.Participants).ThenInclude(p => p.LayoutParticipations).ThenInclude(lp => lp.Layout).ThenInclude(ms => ms.PrimaryModuleStandard).ThenInclude(pms => pms.Scale)
             .ReadOnlySingleOrDefaultAsync(m => m.Id == id);
@@ -145,10 +146,28 @@ public class MeetingService(IDbContextFactory<ModulesDbContext> factory, ITimePr
                 (storedGroupId == entity.OrganiserGroupId || await dbContext.MayOrganiseForGroupAsync(principal, entity.OrganiserGroupId).ConfigureAwait(false));
             if (mayOrganise)
             {
+                if (!await ApplyVenueAsync(dbContext, entity).ConfigureAwait(false)) return Resources.Strings.SaveFailed.SaveResult(entity);
                 return await AddOrUpdate(dbContext, entity).ConfigureAwait(false);
             }
         }
         return principal.SaveNotAuthorised<Meeting>();
+
+        // A registered venue must be a locality marked as venue in the organiser's country (a venue already stored is kept as it is).
+        // Its name and city become the meeting's venue and city, so the texts follow the venue.
+        static async Task<bool> ApplyVenueAsync(ModulesDbContext dbContext, Meeting entity)
+        {
+            if (entity.VenueLocalityId is not int venueId) return true;
+            var storedVenueId = entity.Id > 0 ?
+                await dbContext.Meetings.AsNoTracking().Where(m => m.Id == entity.Id).Select(m => m.VenueLocalityId).SingleOrDefaultAsync().ConfigureAwait(false) :
+                null;
+            var countryId = await dbContext.Groups.AsNoTracking().Where(g => g.Id == entity.OrganiserGroupId).Select(g => g.CountryId).SingleOrDefaultAsync().ConfigureAwait(false);
+            var venue = await dbContext.Localities.AsNoTracking()
+                .SingleOrDefaultAsync(l => l.Id == venueId && (venueId == storedVenueId || (l.IsMeetingVenue && l.CountryId == countryId))).ConfigureAwait(false);
+            if (venue is null) return false;
+            entity.CityName = venue.CityName.Truncated(50);
+            entity.VenueName = venue.Name.Truncated(50);
+            return true;
+        }
 
         // Only the meeting's own fields; layouts are saved by LayoutService (since Migration step 3.6), and the access key stays.
         static async Task<(int Count, string Message, Meeting? Entity)> AddOrUpdate(ModulesDbContext dbContext, Meeting entity)

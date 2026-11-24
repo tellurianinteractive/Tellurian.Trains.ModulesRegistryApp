@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
@@ -42,7 +43,7 @@ public static class DocumentEndpoint
             if (context.User.Identity?.IsAuthenticated != true) return TypedResults.Challenge();
             if (!(await authorization.AuthorizeAsync(context.User, AppPolicyNames.User)).Succeeded) return TypedResults.Forbid();
         }
-        var document = await source.FindAsync(id);
+        var document = await source.FindAsync(id, context.User);
         if (document is null) return TypedResults.NotFound();
         context.Response.Headers.CacheControl = "no-store";
         return TypedResults.File(document.Content, document.ContentType, document.FileName);
@@ -84,16 +85,28 @@ public sealed class PublicDocumentKeys(IDataProtectionProvider provider)
 /// </summary>
 public interface IDocumentSource
 {
-    Task<DocumentFile?> FindAsync(int id);
+    /// <summary>The document, or null when there is none or <paramref name="user"/> may not have it.</summary>
+    Task<DocumentFile?> FindAsync(int id, ClaimsPrincipal user);
 }
 
-public sealed class DocumentSource(DocumentService documentService) : IDocumentSource
+/// <remarks>
+/// A locality's hall drawing is given only to a user who sees the locality, with what the Registry knows about the venue written
+/// into it (<see cref="LocalityService.FindHallDrawingByDocumentIdAsync"/>).
+/// </remarks>
+public sealed class DocumentSource(DocumentService documentService, LocalityService localityService) : IDocumentSource
 {
-    public async Task<DocumentFile?> FindAsync(int id)
+    public async Task<DocumentFile?> FindAsync(int id, ClaimsPrincipal user)
     {
         var document = await documentService.FindByIdAsync(id);
         if (document is null) return null;
+        var content = document.Content;
+        var hallDrawing = await localityService.FindHallDrawingByDocumentIdAsync(user, id);
+        if (hallDrawing.IsHallDrawing)
+        {
+            if (hallDrawing.Content is null) return null;
+            content = hallDrawing.Content;
+        }
         var name = await documentService.GetDocumentName(id);
-        return new(document.Content, document.ContentType, $"{name}.{document.FileExtension}");
+        return new(content, document.ContentType, $"{name}.{document.FileExtension}");
     }
 }

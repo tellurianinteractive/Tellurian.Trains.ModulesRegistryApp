@@ -7,8 +7,8 @@ namespace ModulesRegistry.Services.Implementations;
 
 public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<DocumentService> logger)
 {
-    public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp" };
-    public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station) };
+    public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp", HallDrawings.FileExtension };
+    public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station), typeof(Locality) };
 
     /// <summary>
     /// The message of an upload refused because the file is over the size limit; the page shows its own text with the limit.
@@ -51,6 +51,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             .Select(mgt => mgt.Designation)
             .SingleOrDefaultAsync();
         if (name is not null) return name;
+        name = await dbContext.Localities.AsNoTracking()
+            .Where(l => l.HallDrawingId == id)
+            .Select(l => l.Name)
+            .SingleOrDefaultAsync();
+        if (name is not null) return $"{name}.hall"; // As Module Draw names hall files: .hall.json.
         return id.ToString();
     }
 
@@ -74,7 +79,8 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         var modules = await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId).ToListAsync();
         var stations = await dbContext.Stations.Where(s => s.PdfInstructionId == documentId).ToListAsync();
         var endProfiles = await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId).ToListAsync();
-        var references = modules.Count + stations.Count + endProfiles.Count;
+        var localities = await dbContext.Localities.Where(l => l.HallDrawingId == documentId).ToListAsync();
+        var references = modules.Count + stations.Count + endProfiles.Count + localities.Count;
         if (references == 0) return 0.DeleteResult();
 
         foreach (var module in modules)
@@ -86,6 +92,10 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             if (!await MayChangeDocumentsOfAsync(dbContext, principal, station)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
         }
         if (endProfiles.Count > 0 && !MayChangeEndProfileDocuments(principal)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+        foreach (var locality in localities)
+        {
+            if (!await MayChangeDocumentsOfAsync(dbContext, principal, locality)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+        }
 
         foreach (var module in modules)
         {
@@ -95,6 +105,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         }
         foreach (var station in stations) station.PdfInstructionId = null;
         foreach (var endProfile in endProfiles) endProfile.PdfDocumentId = null;
+        foreach (var locality in localities) locality.HallDrawingId = null;
         dbContext.Documents.Remove(document);
         return (await dbContext.SaveChangesAsync()).DeleteResult();
     }
@@ -118,9 +129,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         {
             nameof(Module) => await dbContext.Modules.FindAsync(id),
             nameof(Station) => await dbContext.Stations.FindAsync(id),
+            nameof(Locality) => await dbContext.Localities.FindAsync(id),
             _ => null
         };
         if (target is null) return (0, "UploadFailed", null);
+        if (target is Locality { IsMeetingVenue: false }) return (0, "UploadFailed", null); // Only a venue has a hall drawing.
         if (!await MayChangeDocumentsOfAsync(dbContext, principal, target))
         {
             Denied(principal, "upload", typeName, id);
@@ -133,6 +146,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             return (0, FileTooLargeMessage, null);
         }
 
+        byte[] content;
+        using (var stream = file.OpenReadStream(file.Size)) content = await GetContent(stream, (int)file.Size);
+        // A hall drawing must be a hall file Module Draw can read; the user is told why not.
+        if (target is Locality && HallDrawings.ErrorKey(content) is string errorKey) return (0, errorKey, null);
+
         var (_, currentDocumentId, _) = DocumentedObject(target, fileExtension);
         var document = currentDocumentId.HasValue ? await dbContext.Documents.FindAsync(currentDocumentId.Value) : null;
         if (document is null)
@@ -141,8 +159,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             dbContext.Documents.Add(document);
             SetDocumentReference(target, fileExtension, document);
         }
-        using var stream = file.OpenReadStream(file.Size);
-        document.Content = await GetContent(stream, (int)file.Size);
+        document.Content = content;
         document.LastModifiedTime = TimeProvider.Now;
         var result = await dbContext.SaveChangesAsync();
         return result > 0 ? result.SaveResult(document) : (0, "UploadFailed", null);
@@ -167,6 +184,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
               {
                   "dwg" => "image/vnd.dwg",
                   "pdf" => "application/pdf",
+                  HallDrawings.FileExtension => HallDrawings.ContentType,
                   _ => "application/octet-stream"
               };
     }
@@ -197,6 +215,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             (Module, "pdf") => nameof(Module.PdfDocumentation),
             (Module, "skp") => nameof(Module.SkpDrawing),
             (Station, "pdf") => nameof(Station.PdfInstruction),
+            (Locality, HallDrawings.FileExtension) => nameof(Locality.HallDrawing),
             _ => fileExtension ?? string.Empty
         };
 
@@ -216,6 +235,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             case (Module module, "pdf"): module.PdfDocumentation = document; break;
             case (Module module, "skp"): module.SkpDrawing = document; break;
             case (Station station, "pdf"): station.PdfInstruction = document; break;
+            case (Locality locality, HallDrawings.FileExtension): locality.HallDrawing = document; break;
         }
     }
 
@@ -229,6 +249,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         {
             Module module => await dbContext.MayEditModuleAsync(principal, module.Id),
             Station station => await dbContext.MayEditStationAsync(principal, station.Id),
+            Locality locality => await dbContext.MayEditLocalityAsync(principal, locality),
             _ => false
         };
 
@@ -261,6 +282,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             case (Module module, "pdf"): module.PdfDocumentationId = null; return true;
             case (Module module, "skp"): module.SkpDrawingId = null; return true;
             case (Station station, "pdf"): station.PdfInstructionId = null; return true;
+            case (Locality locality, HallDrawings.FileExtension): locality.HallDrawingId = null; return true;
             default: return false;
         }
     }
@@ -286,6 +308,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 "pdf" => (station.Id, station.PdfInstructionId, nameof(Station)), // Was PrimaryModuleId, which linked the wrong station.
                 _ => (0, null, string.Empty)
             },
+            Locality locality => fileExtension switch
+            {
+                HallDrawings.FileExtension => (locality.Id, locality.HallDrawingId, nameof(Locality)),
+                _ => (0, null, string.Empty)
+            },
             _ => (0, null, string.Empty)
         };
 
@@ -303,6 +330,7 @@ public static class DocumentExtenstions
     {
         Module m => m.Id,
         Station s => s.Id,
+        Locality l => l.Id,
         _ => null
     };
 

@@ -21,6 +21,7 @@ public static class ModuleFormExtensions
             SignalFeature = entity.SignalFeature,
             OverheadLineFeature = entity.OverheadLineFeature,
             StationId = entity.StationId,
+            StoredAtLocalityId = entity.StoredAtLocalityId,
             Theme = entity.Theme,
             Radius = entity.Radius,
             Angle = entity.Angle,
@@ -87,6 +88,7 @@ public static class ModuleFormExtensions
             entity.Is3R = form.Is3R;
             entity.Note = form.Note;
             entity.StationId = form.StationId is null or 0 ? null : form.StationId;
+            entity.StoredAtLocalityId = form.StoredAtLocalityId is null or 0 ? null : form.StoredAtLocalityId;
             entity.NumberOfSections = (short?)form.NumberOfSections;
             entity.RepresentsFromYear = (short?)form.RepresentsFromYear;
             entity.RepresentsUptoYear = (short?)form.RepresentsUptoYear;

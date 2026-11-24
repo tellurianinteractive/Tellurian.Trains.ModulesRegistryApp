@@ -242,7 +242,7 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
     /// <summary>
     /// The groups among <paramref name="groupIds"/> that <paramref name="principal"/> may delete: a global administrator,
     /// or a country administrator in the group's country, and only a group that has no members, no modules and no meetings
-    /// (nor layouts at meetings, which also refer to the group).
+    /// (nor layouts at meetings, which also refer to the group), and that no locality is used by.
     /// </summary>
     public async Task<IReadOnlySet<int>> DeletableIdsAsync(ClaimsPrincipal? principal, IEnumerable<int> groupIds)
     {
@@ -280,7 +280,8 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
             !g.ModuleOwnerships.Any() &&
             !dbContext.Meetings.Any(m => m.OrganiserGroupId == g.Id) &&
             !dbContext.Layouts.Any(l => l.OrganisingGroupId == g.Id) &&
-            !dbContext.GroupLayoutModules.Any(glm => glm.GroupId == g.Id));
+            !dbContext.GroupLayoutModules.Any(glm => glm.GroupId == g.Id) &&
+            !dbContext.Localities.Any(l => l.UsedByGroupId == g.Id));
 
     public async Task<(int Count, string Message, GroupMember? Member)> AddMemberAsync(ClaimsPrincipal? principal, GroupMember groupMember)
     {

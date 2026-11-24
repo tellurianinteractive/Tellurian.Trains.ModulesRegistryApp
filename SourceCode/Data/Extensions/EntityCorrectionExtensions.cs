@@ -169,6 +169,20 @@ public static class EntityCorrectionExtensions
         }
     }
 
+    extension(Locality locality)
+    {
+        public void CorrectInput()
+        {
+            locality.Name = locality.Name.Corrected(TextCase.InitialCapital) ?? string.Empty;
+            locality.StreetAddress = locality.StreetAddress.Corrected(TextCase.InitialCapital, Optional);
+            locality.PostalCode = locality.PostalCode.Corrected(TextCase.UpperCase, Optional);
+            locality.CityName = locality.CityName.Corrected(TextCase.Place) ?? string.Empty;
+            locality.Description = locality.Description.Corrected(TextCase.AsTyped, Optional);
+            if (!locality.IsModuleStorage && !locality.IsMeetingVenue) locality.IsModuleStorage = true; // At least one kind.
+            if (locality.Latitude is null || locality.Longitude is null) (locality.Latitude, locality.Longitude) = (null, null); // Both or none.
+        }
+    }
+
     extension(Meeting meeting)
     {
         public void CorrectInput()

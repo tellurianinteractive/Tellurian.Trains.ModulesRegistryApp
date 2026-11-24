@@ -14,7 +14,7 @@ public sealed class MeetingFormTests
 
     private static Meeting Existing() => new()
     {
-        Id = 4, OrganiserGroupId = 2, IsOrganiserInternal = true, GroupDomainId = 3, CityName = "Karlstad", VenueName = "Hall", Name = "Autumn meeting",
+        Id = 4, OrganiserGroupId = 2, IsOrganiserInternal = true, GroupDomainId = 3, CityName = "Karlstad", VenueName = "Hall", VenueLocalityId = 6, Name = "Autumn meeting",
         StartDate = new DateTime(2027, 3, 1), EndDate = new DateTime(2027, 3, 4), LatestArrivalTimeWithModules = new TimeOnly(10, 0),
         EarliestDepartureTimeWithModules = new TimeOnly(14, 0), Status = (int)MeetingStatus.Planned, MeetingType = (int)MeetingType.ModuleMeeting,
         Details = "# Details", Accomodation = "Hotel", Food = "Lunch", ExternalLink = "https://example.com", AccessKey = Guid.NewGuid(),
@@ -45,6 +45,16 @@ public sealed class MeetingFormTests
         var key = existing.AccessKey;
         Assert.AreSame(existing, ValidForm().AsEntity(existing));
         Assert.AreEqual(key, existing.AccessKey);
+    }
+
+    [TestMethod]
+    public void TheCityIsRequiredOnlyWithoutAVenue()
+    {
+        var form = ValidForm();
+        form.CityName = " ";
+        Assert.IsEmpty(InvalidMembers(form));
+        form.VenueLocalityId = null;
+        CollectionAssert.AreEqual(new[] { nameof(MeetingFormData.CityName) }, InvalidMembers(form));
     }
 
     [TestMethod]

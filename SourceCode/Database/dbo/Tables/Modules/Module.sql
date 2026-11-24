@@ -34,22 +34,27 @@
     [ConfigurationLabel]    NVARCHAR (10)  NULL,
     [PackageLabel]          NVARCHAR (10)  NULL,
     [NumberOfSections]      SMALLINT       NULL,
+    [LastMeetingRegistrationDate] DATETIMEOFFSET NULL,
     [SignalFeature]         INT            CONSTRAINT [DF_Module_SignalFeature] DEFAULT ((0)) NOT NULL,
     [OverheadLineFeature]   INT            CONSTRAINT [DF_Module_OverheadLineFeature] DEFAULT ((0)) NOT NULL,
     [SpeedLimit]            SMALLINT       NULL,
     [ObjectVisibilityId]    INT            CONSTRAINT [DF_Module_ObjectVisibilityId] DEFAULT ((0)) NOT NULL,
     [HasIntegratedLocoNet]  BIT            CONSTRAINT [DF_Module_HasIntegratedLoconet] DEFAULT ((0)) NOT NULL,
     [IsUnavailable]         BIT            CONSTRAINT [DF_Module_IsUnavailable] DEFAULT ((0)) NOT NULL,
+    [StoredAtLocalityId]    INT            NULL,
     CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Module_Document] FOREIGN KEY ([SkpDrawingId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_DxfDocument] FOREIGN KEY ([DwgDrawingId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_ModuleStandard] FOREIGN KEY ([StandardId]) REFERENCES [dbo].[ModuleStandard] ([Id]),
     CONSTRAINT [FK_Module_PdfDocument] FOREIGN KEY ([PdfDocumentationId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
-    CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id])
+    CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]),
+    CONSTRAINT [FK_Module_StoredAtLocality] FOREIGN KEY ([StoredAtLocalityId]) REFERENCES [dbo].[Locality] ([Id])
 );
 GO
 CREATE INDEX [IX_Module_StationId] ON [Module] ([StationId]);
+GO
+CREATE INDEX [IX_Module_StoredAtLocalityId] ON [Module] ([StoredAtLocalityId]);
 GO
 CREATE TRIGGER [DeleteModule] ON [Module] INSTEAD OF DELETE 
 AS

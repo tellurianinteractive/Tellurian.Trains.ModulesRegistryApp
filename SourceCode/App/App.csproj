@@ -21,6 +21,7 @@
 		<PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.3.1" />
 		<PackageReference Include="QRCoder" Version="1.8.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="11.0.0" />
+		<PackageReference Include="Tellurian.Trains.Drawing.Components" Version="0.10.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<InternalsVisibleTo Include="ModulesRegistry.App.Tests" />

@@ -17,11 +17,15 @@
     [AccessKey]            UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     [LatestArrivalTimeWithModules] TIME(0) NULL, 
     [EarliestDepartureTimeWithModules] TIME(0) NULL, 
+    [VenueLocalityId]      INT NULL,
     CONSTRAINT [PK_Meeting] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Meeting_Group] FOREIGN KEY ([OrganiserGroupId]) REFERENCES [dbo].[Group] ([Id]),
-    CONSTRAINT [FK_Meeting_GroupDomain] FOREIGN KEY ([GroupDomainId]) REFERENCES [dbo].[GroupDomain] ([Id])
+    CONSTRAINT [FK_Meeting_GroupDomain] FOREIGN KEY ([GroupDomainId]) REFERENCES [dbo].[GroupDomain] ([Id]),
+    CONSTRAINT [FK_Meeting_VenueLocality] FOREIGN KEY ([VenueLocalityId]) REFERENCES [dbo].[Locality] ([Id])
 
 );
+GO
+CREATE INDEX [IX_Meeting_VenueLocalityId] ON [Meeting] ([VenueLocalityId]);
 GO
 CREATE TRIGGER [DeleteMeeting] ON [Meeting] INSTEAD OF DELETE
 AS

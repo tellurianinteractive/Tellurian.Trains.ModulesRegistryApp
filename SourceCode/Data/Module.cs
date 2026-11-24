@@ -60,6 +60,7 @@ public partial class Module
     public int OverheadLineFeature { get; set; }
     public short? SpeedLimit { get; set; }
     public int LandscapeSeason { get; set; }
+    public int? StoredAtLocalityId { get; set; }
 
     public virtual Document DwgDrawing { get; set; }
     public virtual Document SkpDrawing { get; set; }
@@ -67,6 +68,7 @@ public partial class Module
     public virtual Scale Scale { get; set; }
     public virtual ModuleStandard Standard { get; set; }
     public virtual Station Station { get; set; }
+    public virtual Locality StoredAtLocality { get; set; }
     public virtual ICollection<ModuleExit> ModuleExits { get; set; }
     public virtual ICollection<ModuleOwnership> ModuleOwnerships { get; set; }
     public virtual ICollection<GroupLayoutModule> GroupLayoutModules { get; set; }
@@ -176,6 +178,7 @@ public static class ModuleExtensions
             IsEndOfLine = me.IsEndOfLine,
             IsTurntable = me.IsTurntable,
             IsUnavailable = me.IsUnavailable,
+            StoredAtLocalityId = me.StoredAtLocalityId,
             LandscapeSeason = me.LandscapeSeason,
             LandscapeState = me.LandscapeState,
             Length = me.Length,
@@ -340,6 +343,13 @@ public static class ModuleMapping
                 .HasForeignKey(e => e.StandardId)
                 .OnDelete(DeleteBehavior.ClientCascade);
             entity.HasIndex(e => e.StationId, "IX_Module_StationId");
+            entity.HasOne(e => e.StoredAtLocality)
+                .WithMany()
+                .HasForeignKey(e => e.StoredAtLocalityId)
+                .HasConstraintName("FK_Module_StoredAtLocality")
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasIndex(e => e.StoredAtLocalityId, "IX_Module_StoredAtLocalityId");
+            entity.Property<DateTimeOffset?>("LastMeetingRegistrationDate"); // Not used yet.
         });
 }
 

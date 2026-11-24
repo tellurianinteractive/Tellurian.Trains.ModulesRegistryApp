@@ -1,0 +1,53 @@
+@page "/Localities/{id:int}/Hall"
+
+@attribute [Authorize(Policy = "User")]
+@* The hall drawing of a venue, view only, for everyone who sees the locality (LocalityService.FindHallDrawingAsync). Drawn with
+   Module Draw's HallView as SVG; the page is static, so the drawing is fitted to its frame without pan and zoom. The download
+   is the hall file with the Registry's name, address and reference written into it. *@
+
+@using Tellurian.Trains.Drawing.Components.Views
+
+@inject IStringLocalizer<Strings> Localizer
+@inject LocalityService LocalityService
+
+<PageHeading Label="HallDrawing" IconClass="@FontAwesome.MeetingVenue" BackHref="@BackHref" />
+
+@if (Locality is null || Json is null)
+{
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else
+{
+    <h2>@Locality.Name</h2>
+    <p>
+        @Locality.FullAddress
+        @if (GeoCoordinates.From(Locality.Latitude, Locality.Longitude) is GeoCoordinates coordinates)
+        {
+            <AppButton Label="ShowOnMap" Href="@coordinates.MapHref" IconName="@FontAwesome.Locality" />
+        }
+        <DocumentLink DocumentId="Locality.HallDrawingId" FileExtension="@HallDrawings.FileExtension" />
+    </p>
+    <div class="hall-drawing">
+        <HallView Json="@Json" Label="@Locality.Name" FitText="@Localizer["FitInView"]" Error="@Localizer["HallDrawingCannotBeShown"]" />
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    Locality? Locality;
+    string? Json;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (await LocalityService.FindHallDrawingAsync(principal, Id) is var (locality, content))
+        {
+            Locality = locality;
+            Json = HallDrawings.Text(content);
+        }
+    }
+
+    string BackHref => Locality is null ? "Localities/Index" : $"Localities/Country/{Locality.CountryId}";
+}

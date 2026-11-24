@@ -2886,4 +2886,61 @@
   <data name="WebPage" xml:space="preserve">
     <value>Webseite</value>
   </data>
+  <data name="Locality" xml:space="preserve">
+    <value>Veranstaltungsort</value>
+  </data>
+  <data name="Localities" xml:space="preserve">
+    <value>Veranstaltungsorte</value>
+  </data>
+  <data name="IsModuleStorage" xml:space="preserve">
+    <value>Modullager</value>
+  </data>
+  <data name="IsMeetingVenue" xml:space="preserve">
+    <value>Veranstaltungsort für Treffen</value>
+  </data>
+  <data name="StreetAddress" xml:space="preserve">
+    <value>Straße</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postleitzahl</value>
+  </data>
+  <data name="Coordinates" xml:space="preserve">
+    <value>GPS-Koordinaten</value>
+  </data>
+  <data name="Coordinates_Error" xml:space="preserve">
+    <value>Geben Sie Breiten- und Längengrad an, zum Beispiel 57.182900, 14.047400.</value>
+  </data>
+  <data name="UsedByGroup" xml:space="preserve">
+    <value>Genutzt von Gruppe</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Karte</value>
+  </data>
+  <data name="LocalityVisibility" xml:space="preserve">
+    <value>Ein Veranstaltungsort für Treffen wird allen angezeigt. Ein Lager, das von einer Gruppe genutzt wird, wird nur den Mitgliedern der Gruppe angezeigt.</value>
+  </data>
+  <data name="StoredAt" xml:space="preserve">
+    <value>Lagerort</value>
+  </data>
+  <data name="HiddenLocality" xml:space="preserve">
+    <value>(für Sie nicht sichtbar)</value>
+  </data>
+  <data name="VenueLocality" xml:space="preserve">
+    <value>Registrierter Veranstaltungsort</value>
+  </data>
+  <data name="HallDrawing" xml:space="preserve">
+    <value>Hallenzeichnung</value>
+  </data>
+  <data name="FitInView" xml:space="preserve">
+    <value>In Ansicht einpassen</value>
+  </data>
+  <data name="HallDrawingCannotBeShown" xml:space="preserve">
+    <value>Die Hallenzeichnung kann nicht angezeigt werden.</value>
+  </data>
+  <data name="NotAHallDrawing" xml:space="preserve">
+    <value>Die Datei ist keine Hallenzeichnung aus Module Draw.</value>
+  </data>
+  <data name="HallDrawingNewerVersion" xml:space="preserve">
+    <value>Die Hallenzeichnung stammt aus einer neueren Version von Module Draw, als das Modulregister lesen kann.</value>
+  </data>
 </root>

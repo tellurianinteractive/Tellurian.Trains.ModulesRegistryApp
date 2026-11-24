@@ -1,6 +1,12 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.3
+Released 2026-11-24
+- Localities: places where modules are stored and venues of meetings, with address and GPS coordinates. A storage place used by a group is only shown to the group's members; venues are shown to everyone.
+- A module can be marked as stored at a storage place in its owner's country.
+- A meeting can have a registered venue in its country; the meeting page shows its address and map.
+- A venue can have a hall drawing from Module Draw, which is checked when uploaded and can be viewed by everyone.
 ## Release 1.18.2
 Released 2026-11-24
 - The modules list can be filtered on a group: the modules the group owns and those its members own.

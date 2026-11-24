@@ -1,0 +1,130 @@
+@page "/Localities/Index"
+@page "/Localities/Country/{countryId:int}"
+
+@attribute [Authorize(Policy = "User")]
+@* Static SSR: the localities of a country that the user may see (LocalityService: venues and localities without a group for
+   everyone, a group's storage places only for its members and the administrators). The country is chosen with a GET form to
+   /Localities/Index?country=..., which redirects to the country's address. Delete, only for a locality no module or meeting refers
+   to, is a link that adds ?delete={id}, which shows a confirmation with a POST form; the result is a one-time message. *@
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject AppService AppService
+@inject LocalityService LocalityService
+@inject CountryService CountryService
+
+<PageHeading ObjectName="Localities" IconClass="@FontAwesome.Locality" PageAction="PageAction.List" />
+
+<ListboxForm Id="localities-country" Action="Localities/Index" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
+
+@if (MayAdd)
+{
+    <AppButton Label="Add" Href="@($"Localities/0/Edit?country={CountryId}")" />
+}
+
+@if (LocalityToDelete is not null)
+{
+    <div class="alert alert-warning mt-2" role="alert">
+        <form method="post" @formname="delete" @onsubmit="DeleteAsync" data-enhance>
+            <AntiforgeryToken />
+            <input type="hidden" name="DeleteLocalityId" value="@LocalityToDelete.Id" />
+            <strong>@Localizer["Delete"] @LocalityToDelete.Name?</strong>
+            <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+            <AppButton Label="Cancel" Href="@WithoutDelete" AlwaysShowLabel="true" />
+        </form>
+    </div>
+}
+
+<TableTemplate Items="Localities">
+    <TableHeader>
+        <th>@Localizer["Name"]</th>
+        <th></th>
+        <th>@Localizer["StreetAddress"]</th>
+        <th>@Localizer["CityName"]</th>
+        <th>@Localizer["UsedByGroup"]</th>
+        <th>@Localizer["Actions"]</th>
+    </TableHeader>
+    <RowTemplate Context="item">
+        <td>@item.Locality.Name</td>
+        <td style="white-space: nowrap">
+            @if (item.Locality.IsModuleStorage)
+            {
+                <span class="@FontAwesome.ModuleStorage" title="@Localizer["IsModuleStorage"]" aria-label="@Localizer["IsModuleStorage"]"></span>
+            }
+            @if (item.Locality.IsMeetingVenue)
+            {
+                <span class="@FontAwesome.MeetingVenue ms-1" title="@Localizer["IsMeetingVenue"]" aria-label="@Localizer["IsMeetingVenue"]"></span>
+            }
+        </td>
+        <td>@item.Locality.StreetAddress @item.Locality.PostalCode</td>
+        <td>@item.Locality.CityName</td>
+        <td>@item.Locality.UsedByGroup?.FullName</td>
+        <td style="white-space: nowrap">
+            @if (GeoCoordinates.From(item.Locality.Latitude, item.Locality.Longitude) is GeoCoordinates coordinates)
+            {
+                <AppButton Label="ShowOnMap" Href="@coordinates.MapHref" IconName="@FontAwesome.Locality" />
+            }
+            @if (item.Locality.HallDrawingId.HasValue)
+            {
+                <AppButton Label="HallDrawing" Href="@($"Localities/{item.Locality.Id}/Hall")" IconName="@FontAwesome.MeetingVenue" />
+            }
+            @if (item.MayEdit)
+            {
+                <AppButton Label="Edit" Href="@($"Localities/{item.Locality.Id}/Edit")" />
+            }
+            @if (DeletableIds.Contains(item.Locality.Id))
+            {
+                <AppButton Label="Delete" Href="@DeleteHref(item.Locality.Id)" />
+            }
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int CountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "delete")] public int? DeleteId { get; set; }
+    [SupplyParameterFromForm(FormName = "delete")] public int DeleteLocalityId { get; set; }
+
+    ClaimsPrincipal? Principal;
+    IEnumerable<(Locality Locality, bool MayEdit)>? Localities;
+    IEnumerable<ListboxItem>? Countries;
+    IReadOnlySet<int> DeletableIds = new HashSet<int>();
+    bool MayAdd;
+
+    bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Countries = await CountryService.ListboxItemsAsync(Principal, true);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CountryId < 1)
+        {
+            var id = SelectedCountryId > 0 ? SelectedCountryId.Value : Principal.CountryId();
+            Navigator.NavigateTo($"Localities/Country/{id}");
+            return;
+        }
+        AppService.LastCountryId = CountryId;
+        Localities = await LocalityService.GetAllInCountryAsync(Principal, CountryId);
+        DeletableIds = await LocalityService.DeletableIdsAsync(Principal, Localities.Select(l => l.Locality.Id));
+        MayAdd = await LocalityService.MayAddAsync(Principal, CountryId);
+    }
+
+    async Task DeleteAsync()
+    {
+        // Only a locality shown as deletable in this list is deleted; the service checks the conditions again.
+        var deleted = DeletableIds.Contains(DeleteLocalityId) && (await LocalityService.DeleteAsync(Principal, DeleteLocalityId)).Count > 0;
+        HttpContext.SetFlashMessage(deleted ? "DeletedSuccessfully" : "DeleteFailed", deleted);
+        Navigator.NavigateTo(WithoutDelete);
+    }
+
+    Locality? LocalityToDelete => DeleteId > 0 && DeletableIds.Contains(DeleteId.Value) ? Localities?.FirstOrDefault(l => l.Locality.Id == DeleteId).Locality : null;
+    string DeleteHref(int id) => Navigator.GetUriWithQueryParameter("delete", id);
+    string WithoutDelete => Navigator.GetUriWithQueryParameter("delete", (string?)null);
+}

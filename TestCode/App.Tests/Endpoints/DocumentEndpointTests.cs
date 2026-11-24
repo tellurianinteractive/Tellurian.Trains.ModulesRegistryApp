@@ -157,7 +157,7 @@ public sealed class DocumentEndpointTests
         public bool WasCalled { get; private set; }
         public int Id { get; private set; }
 
-        public Task<DocumentFile?> FindAsync(int id)
+        public Task<DocumentFile?> FindAsync(int id, System.Security.Claims.ClaimsPrincipal user)
         {
             (WasCalled, Id) = (true, id);
             return Task.FromResult(id == 404 ? null : new DocumentFile(Content, "application/pdf", "Station A.pdf"));

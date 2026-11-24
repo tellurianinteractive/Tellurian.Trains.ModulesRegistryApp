@@ -126,6 +126,11 @@
                     <span class="@FontAwesome.Station" aria-hidden="true" />@Localizer["ExternalStations"]
                 </NavLink>
             </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@LocalitiesHref>
+                    <span class="@FontAwesome.Locality" aria-hidden="true" />@Localizer["Localities"]
+                </NavLink>
+            </li>
             <li class="nav-item px-3" style="border-bottom: solid 1px white">
                 <NavLink class="nav-link" href=@RegionsHref>
                     <span class="fa fa-shield-alt" aria-hidden="true" />@Localizer["Regions"]
@@ -208,6 +213,7 @@
 
     string PersonsHref => $"Persons/Country/{AppService.LastCountryId}";
     string RegionsHref => $"Regions/Country/{AppService.LastCountryId}";
+    string LocalitiesHref => $"Localities/Country/{AppService.LastCountryId}";
     string GroupsHref => $"Groups/Country/{AppService.LastCountryId}";
 
 }

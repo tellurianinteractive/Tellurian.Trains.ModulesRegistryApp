@@ -12,6 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="11.0.0" />
     <PackageReference Include="Tellurian.Localization" Version="1.8.0" />
+    <PackageReference Include="Tellurian.Trains.Schedules.Exporters.Drawing" Version="4.0.27" />
+    <PackageReference Include="Tellurian.Trains.Schedules.Importers.Drawing" Version="4.0.27" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data.Api\Data.Api.csproj" />
