@@ -87,6 +87,7 @@
     <Build Include="dbo\Tables\Country.sql" />
     <Build Include="dbo\Tables\Document.sql" />
     <Build Include="dbo\Tables\ChangeLog.sql" />
+    <Build Include="dbo\Tables\ExternalLink.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.Country.Table.sql" />

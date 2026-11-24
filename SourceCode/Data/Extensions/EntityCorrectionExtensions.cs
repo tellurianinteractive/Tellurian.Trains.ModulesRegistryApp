@@ -96,6 +96,9 @@ public static class EntityCorrectionExtensions
             standard.AcceptedNorm = standard.AcceptedNorm.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty); // Often a link, kept as typed.
             standard.NormalGauge = standard.NormalGauge is > 0 ? standard.NormalGauge : null;
             standard.NarrowGauge = standard.NarrowGauge is > 0 ? standard.NarrowGauge : null;
+            standard.ExtendsStandardId = standard.ExtendsStandardId.OrNullIfZero();
+            standard.OnlyValidInCountryId = standard.OnlyValidInCountryId.OrNullIfZero();
+            if (standard.Id > 0 && standard.ExtendsStandardId == standard.Id) standard.ExtendsStandardId = null; // Not an extension of itself.
         }
     }
 

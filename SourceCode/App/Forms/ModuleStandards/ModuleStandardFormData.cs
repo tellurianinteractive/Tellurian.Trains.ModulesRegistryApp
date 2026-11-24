@@ -26,6 +26,14 @@ public class ModuleStandardFormData
     [Range(1, int.MaxValue, ErrorMessage = "MustBeSelected_Error")]
     public int MainThemeId { get; set; }
 
+    // Empty is "not an extension".
+    [Display(Name = "ExtendsStandard")]
+    public int? ExtendsStandardId { get; set; }
+
+    // Empty is an international standard. An extension of a national standard gets its country when saved.
+    [Display(Name = "OnlyValidInCountry")]
+    public int? OnlyValidInCountryId { get; set; }
+
     [Display(Name = "PreferredTheme")]
     [StringLength(50)]
     [OrdinaryText]
@@ -91,6 +99,8 @@ public static class ModuleStandardFormExtensions
             ShortName = entity.ShortName ?? string.Empty,
             ScaleId = entity.ScaleId,
             MainThemeId = entity.MainThemeId,
+            ExtendsStandardId = entity.ExtendsStandardId,
+            OnlyValidInCountryId = entity.OnlyValidInCountryId,
             PreferredTheme = entity.PreferredTheme,
             TrackSystem = entity.TrackSystem,
             NormalGauge = entity.NormalGauge,
@@ -115,6 +125,8 @@ public static class ModuleStandardFormExtensions
             entity.ShortName = form.ShortName;
             entity.ScaleId = form.ScaleId;
             entity.MainThemeId = form.MainThemeId;
+            entity.ExtendsStandardId = form.ExtendsStandardId;
+            entity.OnlyValidInCountryId = form.OnlyValidInCountryId;
             entity.PreferredTheme = form.PreferredTheme;
             entity.TrackSystem = form.TrackSystem;
             entity.NormalGauge = form.NormalGauge;

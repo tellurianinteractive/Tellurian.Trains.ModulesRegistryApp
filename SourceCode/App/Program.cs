@@ -150,6 +150,7 @@ builder.Services.AddScoped<LayoutParticipantService>();
 builder.Services.AddScoped<MeetingService>();
 builder.Services.AddScoped<ModuleService>();
 builder.Services.AddScoped<ModuleOwnershipService>();
+builder.Services.AddScoped<ExternalLinkService>();
 builder.Services.AddScoped<ModuleEndProfileService>();
 builder.Services.AddScoped<ModuleStandardService>();
 builder.Services.AddScoped<OperatingDayService>();

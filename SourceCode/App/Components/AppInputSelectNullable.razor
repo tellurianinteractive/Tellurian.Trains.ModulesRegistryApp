@@ -44,9 +44,11 @@
 @code {
     [Parameter] public IEnumerable<ListboxItem>? Items { get; set; }
     [Parameter] public bool ShowNoneOption { get; set; }
+    /// <summary>The resource key of the text of the none option.</summary>
+    [Parameter] public string NoneLabel { get; set; } = "NotApplicableOption";
     [Parameter] public Action<int?>? OnSelected { get; set; }
 
-    string NoneOption => Localizer["NotApplicableOption"].Value;
+    string NoneOption => Localizer[NoneLabel].Value;
     string BootstrapWrapperCss => FormColumn.Css(Width);
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out int? result, [NotNullWhen(false)] out string? validationErrorMessage)

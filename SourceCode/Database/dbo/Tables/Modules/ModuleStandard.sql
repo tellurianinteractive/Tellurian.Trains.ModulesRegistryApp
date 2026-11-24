@@ -11,7 +11,11 @@
     [PreferredTheme] NVARCHAR (50)  NULL,
     [AcceptedNorm]   NVARCHAR (255) NULL,
     [MainThemeId] INT NOT NULL DEFAULT 0, 
+    [ExtendsStandardId] INT NULL,
+    [OnlyValidInCountryId] INT NULL,
     CONSTRAINT [PK_ModuleStandard] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_ModuleStandard_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id])
+    CONSTRAINT [FK_ModuleStandard_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
+    CONSTRAINT [FK_ModuleStandard_ExtendsStandard] FOREIGN KEY ([ExtendsStandardId]) REFERENCES [dbo].[ModuleStandard] ([Id]),
+    CONSTRAINT [FK_ModuleStandard_OnlyValidInCountry] FOREIGN KEY ([OnlyValidInCountryId]) REFERENCES [dbo].[Country] ([Id])
 );
 

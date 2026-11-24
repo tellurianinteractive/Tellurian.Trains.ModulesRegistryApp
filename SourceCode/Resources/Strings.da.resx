@@ -2832,4 +2832,49 @@
   <data name="MarkShownAsPrinted" xml:space="preserve">
     <value>Markér viste som udskrevet</value>
   </data>
+  <data name="ExtendsStandard" xml:space="preserve">
+    <value>Udvider standard</value>
+  </data>
+  <data name="ExtendsStandardLoop_Error" xml:space="preserve">
+    <value>En standard kan ikke udvide sig selv eller en standard, der udvider den.</value>
+  </data>
+  <data name="OnlyValidInCountry" xml:space="preserve">
+    <value>Gælder kun i land</value>
+  </data>
+  <data name="International" xml:space="preserve">
+    <value>International</value>
+  </data>
+  <data name="Europe" xml:space="preserve">
+    <value>Europa</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="ExternalLinkLanguageExists_Error" xml:space="preserve">
+    <value>Der findes allerede et link med dette formål på dette sprog.</value>
+  </data>
+  <data name="StandardDocument" xml:space="preserve">
+    <value>Standarddokument</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Billede</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Websted</value>
+  </data>
+  <data name="PdfDocument" xml:space="preserve">
+    <value>PDF-dokument</value>
+  </data>
+  <data name="PngImage" xml:space="preserve">
+    <value>PNG-billede</value>
+  </data>
+  <data name="JpegImage" xml:space="preserve">
+    <value>JPEG-billede</value>
+  </data>
+  <data name="WebPImage" xml:space="preserve">
+    <value>WebP-billede</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Webside</value>
+  </data>
 </root>

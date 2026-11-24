@@ -19,7 +19,13 @@ public partial class ModuleStandard
     public string PreferredTheme { get; set; }
     public string AcceptedNorm { get; set; }
     public int MainThemeId { get; set; }
+    /// <summary>The standard this standard is an extension of, if any.</summary>
+    public int? ExtendsStandardId { get; set; }
+    /// <summary>The country of a national standard; empty for an international standard.</summary>
+    public int? OnlyValidInCountryId { get; set; }
     public virtual Scale Scale { get; set; }
+    public virtual ModuleStandard ExtendsStandard { get; set; }
+    public virtual Country OnlyValidInCountry { get; set; }
 }
 
 public static class ModuleStandardMapping
@@ -51,6 +57,16 @@ public static class ModuleStandardMapping
             entity.HasOne(d => d.Scale)
                 .WithMany(p => p.ModuleStandards)
                 .HasForeignKey(d => d.ScaleId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.ExtendsStandard)
+                .WithMany()
+                .HasForeignKey(d => d.ExtendsStandardId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.OnlyValidInCountry)
+                .WithMany()
+                .HasForeignKey(d => d.OnlyValidInCountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
             entity.Property(e => e.MainThemeId).HasDatabaseDefault("0");
         });

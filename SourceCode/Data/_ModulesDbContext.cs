@@ -23,6 +23,7 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<Country> Countries { get; set; }
     public virtual DbSet<CountryStatistics> CountriesStatistics { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
+    public virtual DbSet<ExternalLink> ExternalLinks { get; set; }
     public virtual DbSet<ExternalStation> ExternalStations { get; set; }
     public virtual DbSet<ExternalStationCustomer> ExternalStationCustomers { get; set; }
     public virtual DbSet<ExternalStationCustomerCargo> ExternalStationCustomerCargos { get; set; }
@@ -88,6 +89,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapCountry();
         modelBuilder.MapCountryStatistics();
         modelBuilder.MapDocument();
+        modelBuilder.MapExternalLink();
         modelBuilder.MapExternalStation();
         modelBuilder.MapExternalStationCustomer();
         modelBuilder.MapExternalStationCustomerCargo();

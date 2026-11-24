@@ -2832,4 +2832,49 @@
   <data name="MarkShownAsPrinted" xml:space="preserve">
     <value>Angezeigte als gedruckt markieren</value>
   </data>
+  <data name="ExtendsStandard" xml:space="preserve">
+    <value>Erweitert Standard</value>
+  </data>
+  <data name="ExtendsStandardLoop_Error" xml:space="preserve">
+    <value>Ein Standard kann nicht sich selbst oder einen Standard erweitern, der ihn erweitert.</value>
+  </data>
+  <data name="OnlyValidInCountry" xml:space="preserve">
+    <value>Nur gültig in Land</value>
+  </data>
+  <data name="International" xml:space="preserve">
+    <value>International</value>
+  </data>
+  <data name="Europe" xml:space="preserve">
+    <value>Europa</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="ExternalLinkLanguageExists_Error" xml:space="preserve">
+    <value>Es gibt bereits einen Link mit diesem Zweck in dieser Sprache.</value>
+  </data>
+  <data name="StandardDocument" xml:space="preserve">
+    <value>Normdokument</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="PdfDocument" xml:space="preserve">
+    <value>PDF-Dokument</value>
+  </data>
+  <data name="PngImage" xml:space="preserve">
+    <value>PNG-Bild</value>
+  </data>
+  <data name="JpegImage" xml:space="preserve">
+    <value>JPEG-Bild</value>
+  </data>
+  <data name="WebPImage" xml:space="preserve">
+    <value>WebP-Bild</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Webseite</value>
+  </data>
 </root>

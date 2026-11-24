@@ -178,7 +178,7 @@
         }
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
         Form ??= (Existing ?? new Module { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers }).AsFormData();
-        ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
+        ModuleStandardItems = await ModuleStandardService.ModuleListboxItemsAsync(Principal, Id, OwnershipRef); // National standards only of the owners' countries.
         StationItems = await StationService.StationItemsAsync(Principal, OwnershipRef);
         if (Existing?.StationId is int stationId && !StationItems.Any(s => s.Id == stationId))
         {

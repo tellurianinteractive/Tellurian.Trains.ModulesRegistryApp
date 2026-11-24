@@ -17,6 +17,8 @@
     <TableHeader>
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["Name"]</th>
+        <th>@Localizer["ExtendsStandard"]</th>
+        <th>@Localizer["OnlyValidInCountry"]</th>
         <th>@Localizer["Theme"]</th>
         <th>@Localizer["TrackSystem"]</th>
         <th>@Localizer["ElectricSystem"]</th>
@@ -29,7 +31,9 @@
     <RowTemplate Context="standard">
         <td>@standard.Scale.ShortName 1:@standard.Scale.Denominator</td>
         <td>@standard.ShortName</td>
-        <td>@((Theme)standard.MainThemeId) @standard.PreferredTheme</td>
+        <td>@standard.ExtendsStandard?.ShortName</td>
+        <td>@(standard.OnlyValidInCountry is null ? Localizer["International"] : standard.OnlyValidInCountry.EnglishName.AsLocalized())</td>
+        <td>@(standard.MainThemeId.ToEnumLocalized<Theme>()) @standard.PreferredTheme</td>
         <td>@standard.TrackSystem</td>
         <td>@standard.Electricity</td>
         <td>@standard.Couplings</td>

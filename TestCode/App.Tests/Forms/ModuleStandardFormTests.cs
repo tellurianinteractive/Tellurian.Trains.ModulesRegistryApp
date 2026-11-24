@@ -13,7 +13,7 @@ public sealed class ModuleStandardFormTests
 {
     private static ModuleStandard Existing() => new()
     {
-        Id = 7, ShortName = "MMM/H0n3", ScaleId = 3, MainThemeId = 1, PreferredTheme = "Sweden", TrackSystem = "Code 70",
+        Id = 7, ShortName = "MMM/H0n3", ScaleId = 3, MainThemeId = 1, ExtendsStandardId = 2, OnlyValidInCountryId = 1, PreferredTheme = "Sweden", TrackSystem = "Code 70",
         NormalGauge = null, NarrowGauge = 10.5, Wheelset = "RP25", Couplings = "Kadee", Electricity = "DC", AcceptedNorm = "http://example.org/norm.pdf",
     };
 

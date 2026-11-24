@@ -99,7 +99,7 @@
             RegistrationClosingDate = Meeting.StartDate.AddMonths(-2),
         }).AsFormData();
         ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
-        ModuleStandardItems = await ModuleStandardService.GetStandardsListboxItemsAsync(Principal);
+        ModuleStandardItems = await ModuleStandardService.LayoutListboxItemsAsync(Principal, Meeting.CountryId(), Existing?.PrimaryModuleStandardId); // National standards only of the meeting's country.
         ContactPersonItems = await GroupService.MemberListboxItemsAsync(Principal, Form.OrganisingGroupId);
     }
 
