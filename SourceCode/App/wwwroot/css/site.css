@@ -464,3 +464,24 @@ form:has(input[name="Form.IsKeyRequired"]:checked) .lock-key-name > div { displa
     font-size: 0.875rem;
     margin-bottom: 0.15rem;
 }
+
+/* Column titles tilted 30 degrees (the yes/no columns of the group members list): each title starts at the bottom of its
+   column and reads upwards to the right, over the columns after it, so the columns need only the width of their values.
+   The page sets the header's height from the longest title, since a rotated element takes no space in the layout. */
+th.tilted {
+    position: relative;
+    width: 2.75rem;
+    min-width: 2.75rem;
+    max-width: 2.75rem;
+    padding: 0;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+    th.tilted > span {
+        position: absolute;
+        left: 0.75rem;
+        bottom: 0.3rem;
+        transform-origin: 0 100%;
+        transform: rotate(-30deg);
+    }

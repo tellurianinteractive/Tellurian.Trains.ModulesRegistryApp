@@ -45,6 +45,15 @@ public sealed class GroupMemberFormTests
     }
 
     [TestMethod]
+    public void ExcludedModulesMayNotBeBorrowed()
+    {
+        var saved = Existing().AsFormData().With(f => f.IsModulesExcluded = true).AsEntity(Existing());
+
+        Assert.IsTrue(saved.IsModulesExcluded);
+        Assert.IsFalse(saved.MemberMayBorrowMyModules);
+    }
+
+    [TestMethod]
     public void APersonMustBeChosen()
     {
         CollectionAssert.AreEqual(new[] { "PersonId" }, InvalidMembers(new GroupMemberFormData()));

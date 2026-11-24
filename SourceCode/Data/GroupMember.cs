@@ -14,6 +14,8 @@ public partial class GroupMember
     public bool IsMeetingAdministrator { get; set; }
     public bool MayBorrowGroupsModules { get; set; }
     public bool MemberMayBorrowMyModules { get; set; }
+    /// <summary>The person's modules are not among the group members' modules, and no member may borrow them.</summary>
+    public bool IsModulesExcluded { get; set; }
 
     public virtual Group Group { get; set; }
     public virtual Person Person { get; set; }
@@ -48,5 +50,6 @@ internal static class GroupMemberMapper
             entity.Property(e => e.IsMeetingAdministrator).HasDatabaseDefault("0");
             entity.Property(e => e.MayBorrowGroupsModules).HasDatabaseDefault("0");
             entity.Property(e => e.MemberMayBorrowMyModules).HasDatabaseDefault("0");
+            entity.Property(e => e.IsModulesExcluded).HasDatabaseDefault("0");
         });
 }

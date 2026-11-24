@@ -31,6 +31,9 @@ public class GroupMemberFormData
 
     [Display(Name = "MemberMayBorrowMyModules")]
     public bool MemberMayBorrowMyModules { get; set; }
+
+    [Display(Name = "IsModulesExcluded")]
+    public bool IsModulesExcluded { get; set; }
 }
 
 public static class GroupMemberFormExtensions
@@ -46,6 +49,7 @@ public static class GroupMemberFormExtensions
             IsMeetingAdministrator = entity.IsMeetingAdministrator,
             MayBorrowGroupsModules = entity.MayBorrowGroupsModules,
             MemberMayBorrowMyModules = entity.MemberMayBorrowMyModules,
+            IsModulesExcluded = entity.IsModulesExcluded,
         };
     }
 
@@ -54,6 +58,7 @@ public static class GroupMemberFormExtensions
         /// <summary>
         /// Form data → entity. Edit: <c>form.AsEntity(existing)</c> changes only the rights; the group and person stay. Add:
         /// <c>form.AsEntity(groupId: ...)</c> makes the chosen person a member of the group. Call it only with validated form data.
+        /// A member whose modules are excluded doesn't let members borrow them either, so that right is cleared.
         /// </summary>
         public GroupMember AsEntity(GroupMember? existing = null, int groupId = 0)
         {
@@ -62,7 +67,8 @@ public static class GroupMemberFormExtensions
             entity.IsDataAdministrator = form.IsDataAdministrator;
             entity.IsMeetingAdministrator = form.IsMeetingAdministrator;
             entity.MayBorrowGroupsModules = form.MayBorrowGroupsModules;
-            entity.MemberMayBorrowMyModules = form.MemberMayBorrowMyModules;
+            entity.MemberMayBorrowMyModules = form.MemberMayBorrowMyModules && !form.IsModulesExcluded;
+            entity.IsModulesExcluded = form.IsModulesExcluded;
             return entity;
         }
     }

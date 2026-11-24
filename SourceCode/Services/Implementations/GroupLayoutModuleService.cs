@@ -23,7 +23,8 @@ public class GroupLayoutModuleService(IDbContextFactory<ModulesDbContext> factor
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
-            var person = await dbContext.GroupMembers.Where(gm => gm.Id == groupMemberId).Select(gm => gm.Person).SingleOrDefaultAsync();
+            // A member whose modules are excluded has none to offer the group.
+            var person = await dbContext.GroupMembers.Where(gm => gm.Id == groupMemberId && !gm.IsModulesExcluded).Select(gm => gm.Person).SingleOrDefaultAsync();
             if (person is not null)
             {
                 return await dbContext.Modules
@@ -45,7 +46,7 @@ public class GroupLayoutModuleService(IDbContextFactory<ModulesDbContext> factor
         if (!await dbContext.MayAdministerGroupMembersAsync(principal, groupId)) return 0;
         if (groupMemberId.HasValue)
         {
-            var personId = await dbContext.GroupMembers.Where(gm => gm.Id == groupMemberId && gm.GroupId == groupId).Select(gm => (int?)gm.PersonId).SingleOrDefaultAsync();
+            var personId = await dbContext.GroupMembers.Where(gm => gm.Id == groupMemberId && gm.GroupId == groupId && !gm.IsModulesExcluded).Select(gm => (int?)gm.PersonId).SingleOrDefaultAsync();
             if (personId is null || !await dbContext.ModuleOwnerships.AnyAsync(mo => mo.ModuleId == moduleId && mo.PersonId == personId)) return 0;
         }
         if (await dbContext.GroupLayoutModules.AnyAsync(x => x.GroupId == groupId && x.ModuleId == moduleId)) return 0;

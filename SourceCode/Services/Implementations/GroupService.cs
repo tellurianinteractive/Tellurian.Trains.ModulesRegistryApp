@@ -17,6 +17,21 @@ public sealed class GroupService(IDbContextFactory<ModulesDbContext> factory)
             .ToReadOnlyListAsync();
     }
 
+    /// <summary>The groups in the country, for everyone signed in, also administrators of other countries.</summary>
+    public async Task<IEnumerable<ListboxItem>> CountryListboxItemsAsync(ClaimsPrincipal? principal, int countryId)
+    {
+        if (principal.IsAuthenticated())
+        {
+            using var dbContext = Factory.CreateDbContext();
+            return await dbContext.Groups
+                .Where(g => g.CountryId == countryId)
+                .OrderBy(g => g.FullName)
+                .Select(g => new ListboxItem(g.Id, g.FullName))
+                .ToReadOnlyListAsync();
+        }
+        return [];
+    }
+
     public async Task<IEnumerable<ListboxItem>> MemberListboxItemsAsync(ClaimsPrincipal? principal, int? groupId)
     {
         if (principal.IsAuthenticated() && groupId > 0 == true)

@@ -1,6 +1,13 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.2
+Released 2026-11-24
+- The modules list can be filtered on a group: the modules the group owns and those its members own.
+- In the owners filter, a group's short name also matches, and a group name followed by + also shows the members' modules, for example "mmm+".
+- A group member can have their modules excluded from the group; members then can't borrow them either.
+- The group members page shows the number of members, with tilted column titles to make the table narrower.
+- Only global and country administrators add new persons; group member administrators add existing persons to the group.
 ## Release 1.18.1
 Released 2026-11-24
 - Country administrators edit all fields of the persons in their own country, including the users' rights to API access, uploading drawings and managing wiFREDs, delete persons, and unlock locked user accounts.

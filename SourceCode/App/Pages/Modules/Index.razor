@@ -11,9 +11,21 @@
 
 @inject ModuleService ModuleService
 @inject CountryService CountryService
+@inject GroupService GroupService
 
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Modules" PageAction="@PageAction.List" />
 <ListboxForm Id="modules-country" Action="Modules/Index" Name="country" Items="Countries" ItemType="Country" IsVisible="IsSelectCountryVisible" SelectedId="CountryId" />
+@if (Groups.Any())
+{
+    @* Part of the filter form: the modules the group owns or its members own a share of (ModuleService). *@
+    <select name="group" form="modules-filter" class="form-control-sm noprint" aria-label="@Localizer["Group"]" style="margin-bottom: 4px">
+        <option value="">@Localizer["AllGroups"]</option>
+        @foreach (var item in Groups)
+        {
+            <option value="@item.Id" selected="@(item.Id == GroupId)">@item.Description</option>
+        }
+    </select>
+}
 <hr />
 
 <form id="modules-filter" method="get" data-auto-submit data-enhance class="noprint">
@@ -74,6 +86,7 @@
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [Parameter] public int CountryId { get; set; }
     [SupplyParameterFromQuery(Name = "country")] public int? SelectedCountryId { get; set; }
+    [SupplyParameterFromQuery(Name = "group")] public int? GroupId { get; set; }
     [SupplyParameterFromQuery(Name = "scale")] public string? Scale { get; set; }
     [SupplyParameterFromQuery(Name = "name")] public string? ModuleName { get; set; }
     [SupplyParameterFromQuery(Name = "owner")] public string? OwnerName { get; set; }
@@ -84,8 +97,9 @@
     private IEnumerable<Module> Modules = [];
     PaginationState PaginationState = new() { ItemsPerPage = 20 };
     private IEnumerable<ListboxItem>? Countries;
+    private IEnumerable<ListboxItem> Groups = [];
 
-    ModulesFilter Filter => new() { Scale = Scale, ModuleName = ModuleName, OwnerName = OwnerName };
+    ModulesFilter Filter => new() { Scale = Scale, ModuleName = ModuleName, OwnerName = OwnerName, GroupId = GroupId };
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
     // The Actions column is shown to all, since it also holds Clear filter; its buttons only to administrators, as before.
@@ -106,12 +120,13 @@
             Navigator.NavigateTo($"Modules/Country/{id}");
             return;
         }
-        Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId);
+        Groups = await GroupService.CountryListboxItemsAsync(Principal, CountryId);
+        Modules = await ModuleService.GetAllInCountryAsync(Principal, CountryId, groupId: GroupId ?? 0, groupName: Filter.GroupName);
     }
 
     IQueryable<Module> FilteredModules => Filter.Apply(Modules).AsQueryable();
 
-    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["scale"] = null, ["name"] = null, ["owner"] = null, ["page"] = null });
+    string ClearFilterHref => Navigator.GetUriWithQueryParameters(new Dictionary<string, object?> { ["scale"] = null, ["name"] = null, ["owner"] = null, ["group"] = null, ["page"] = null });
 
     string EditModuleHref(Module? module) =>
         module is null ? string.Empty :

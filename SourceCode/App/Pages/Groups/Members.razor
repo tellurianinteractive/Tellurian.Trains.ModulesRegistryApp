@@ -16,6 +16,7 @@
 }
 else
 {
+    <p>@Localizer["GroupMembersCount", Group.GroupMembers.Count]</p>
     @if (IsGroupAdministrator)
     {
         <AppButton Label="Add" Href="@($"Groups/{Group.Id}/Members/Add")" AlwaysShowLabel="true" />
@@ -41,11 +42,12 @@ else
     <TableTemplate Items="Group.GroupMembers.OrderBy(gm => gm.Person.Name())">
         <TableHeader>
             <th>@Localizer["Name"]</th>
-            <th align="center">@Localizer["IsGroupAdministrator"]</th>
-            <th align="center">@Localizer["IsDataAdministrator"]</th>
-            <th align="center">@Localizer["IsMeetingAdministrator"]</th>
-            <th align="center">@Localizer["MayBorrowGroupsModules"]</th>
-            <th align="center">@Localizer["MemberMayBorrowMyModules"]</th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["IsGroupAdministrator"]</span></th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["IsDataAdministrator"]</span></th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["IsMeetingAdministrator"]</span></th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["MayBorrowGroupsModules"]</span></th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["MemberMayBorrowMyModules"]</span></th>
+            <th class="tilted" style="@TiltedStyle"><span>@Localizer["IsModulesExcluded"]</span></th>
             <th align="center">@Localizer["Status"]</th>
             <th>@Localizer["Actions"]</th>
         </TableHeader>
@@ -56,6 +58,7 @@ else
             <td align="center">@member.IsMeetingAdministrator.AsYesOrNo()</td>
             <td align="center">@member.MayBorrowGroupsModules.AsYesOrNo()</td>
             <td align="center">@member.MemberMayBorrowMyModules.AsYesOrNo()</td>
+            <td align="center">@member.IsModulesExcluded.AsYesOrNo()</td>
             <td align="center"><PersonStatusIcon Person="member.Person" /></td>
             <td style="white-space: nowrap !important;">
                 <AppButton Label="Modules" Href="@($"Persons/{member.PersonId}/Modules/InGroup/{member.GroupId}")" />
@@ -84,6 +87,10 @@ else
     ClaimsPrincipal? Principal;
     Group? Group;
     bool IsGroupAdministrator;
+
+    static readonly string[] TiltedLabels = ["IsGroupAdministrator", "IsDataAdministrator", "IsMeetingAdministrator", "MayBorrowGroupsModules", "MemberMayBorrowMyModules", "IsModulesExcluded"];
+    // The tilted titles don't take space in the layout, so the header gets the height of the longest one in the current language.
+    string TiltedStyle => FormattableString.Invariant($"height: {TiltedLabels.Max(l => Localizer[l].Value.Length) * 0.27 + 1.5:0.0}em");
 
     protected override async Task OnInitializedAsync()
     {

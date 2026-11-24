@@ -891,6 +891,9 @@
   <data name="GlobalAdministrator" xml:space="preserve">
     <value>Globaler Administrator</value>
   </data>
+  <data name="AllGroups" xml:space="preserve">
+    <value>Alle Gruppen</value>
+  </data>
   <data name="Group" xml:space="preserve">
     <value>Gruppe</value>
   </data>
@@ -899,6 +902,9 @@
   </data>
   <data name="GroupMembers" xml:space="preserve">
     <value>Gruppenmitglieder</value>
+  </data>
+  <data name="GroupMembersCount" xml:space="preserve">
+    <value>Anzahl der Gruppenmitglieder zurzeit: {0}</value>
   </data>
   <data name="Groups" xml:space="preserve">
     <value>Gruppen</value>
@@ -1349,6 +1355,9 @@
   </data>
   <data name="Member" xml:space="preserve">
     <value>Mitglieder</value>
+  </data>
+  <data name="IsModulesExcluded" xml:space="preserve">
+    <value>Module von der Gruppe ausgenommen?</value>
   </data>
   <data name="MemberMayBorrowMyModules" xml:space="preserve">
     <value>Mitglied darf meine Module ausleihen?</value>

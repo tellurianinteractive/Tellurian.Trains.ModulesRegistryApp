@@ -57,16 +57,29 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         return false;
     }
 
-    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId, int scaleId = 0, int themeId = 0)
+    /// <summary>
+    /// The modules with an owner in the country. With <paramref name="groupId"/> or <paramref name="groupName"/>, instead the
+    /// modules that the group owns or that any of its members owns a share of, also members in other countries;
+    /// <paramref name="groupName"/> is part of the short or full name of one or more groups. Members whose modules are excluded
+    /// (<see cref="GroupMember.IsModulesExcluded"/>) don't count.
+    /// </summary>
+    public async Task<IEnumerable<Module>> GetAllInCountryAsync(ClaimsPrincipal? principal, int countryId, int scaleId = 0, int themeId = 0, int groupId = 0, string? groupName = null)
     {
         if (principal.IsAuthenticated())
         {
             using var dbContext = Factory.CreateDbContext();
+            var name = groupName?.Trim() ?? string.Empty;
+            var byGroup = groupId > 0 || name.Length > 0;
             return await dbContext.Modules.AsNoTracking()
                 .Where(m =>
                     (scaleId == 0 || m.ScaleId == scaleId) &&
                     (themeId == 0 || m.Standard.MainThemeId == themeId) &&
-                    m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId)
+                    (byGroup || m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId)) &&
+                    (groupId == 0 || m.ModuleOwnerships.Any(mo => mo.OwnedShare > 0 &&
+                        (mo.GroupId == groupId || mo.Person.GroupMembers.Any(gm => gm.GroupId == groupId && !gm.IsModulesExcluded)))) &&
+                    (name.Length == 0 || m.ModuleOwnerships.Any(mo => mo.OwnedShare > 0 &&
+                        (mo.Group.ShortName.Contains(name) || mo.Group.FullName.Contains(name) ||
+                         mo.Person.GroupMembers.Any(gm => !gm.IsModulesExcluded && (gm.Group.ShortName.Contains(name) || gm.Group.FullName.Contains(name))))))
                  )
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
                 .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
