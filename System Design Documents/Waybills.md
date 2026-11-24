@@ -71,14 +71,16 @@ Only the cascade triggers delete rows: when a station customer, a cargo flow or 
 
 *Disabling* a waybill means setting its print count to zero. *Mark all as printed* does the same.
 
-## Printing a station's waybills (`GetStationCustomerWaybills`)
-The procedure returns the union of six views, for one station and optionally one customer, receiving and/or sending:
-- as receiver: `ModuleSupplierWaybill`, `ExternalSupplierWaybill`, `ShadowYardSupplierWaybill`;
-- as sender: `ModuleConsumerWaybill`, `ExternalConsumerWaybill`, `ShadowYardConsumerWaybill`.
+## Printing a station's waybills (`StationWaybillGenerator`)
+`StationWaybillGenerator` (Services/Waybills) combines the station's stored waybills, for one station and optionally one customer, receiving and/or sending, with the cargo flows loaded by `CargoFlowQueries`:
+- **Another module station:** the own and the other flow have opposite directions; the same country, or both international.
+- **An external station:** opposite directions and the same cargo; the same country, or the receiving flow international (receiving), or both international (sending).
+- **No other end:** the region's representative station; no waybill without one.
+- **Always:** the year window (since 1.17.5).
 
-Each view joins a stored row with the sender's and receiver's flows. It also checks the cargo's own years against the **sender's** years. Since module-to-module rows are stored at the receiver, the receiving station prints them; the sending station only sees the 26 old rows.
+Since module-to-module rows are stored at the receiver, the receiving station prints them; the sending station only sees the 26 old rows stored at the sender. The waybill is sent on the stored days (since 1.17.4).
 
-**Since Migration step 5.2** this is done in code, with the same rules: `StationWaybillGenerator` (Services/Waybills) combines the station's stored waybills with the flows loaded by `CargoFlowQueries`. The views joined the other end on its id alone, so a flow of the other kind (module or external) with the same id could give a false waybill; the code doesn't reproduce that. The procedure and the views stay in the database until step 5.3.
+Until release 1.17.2 the procedure `GetStationCustomerWaybills` did this, with the union of six views (`ModuleSupplierWaybill`, `ExternalSupplierWaybill`, `ShadowYardSupplierWaybill`, `ModuleConsumerWaybill`, `ExternalConsumerWaybill`, `ShadowYardConsumerWaybill`) over the unions `SupplierCustomerCargo` and `ConsumerCustomerCargo`. The views joined the other end on its id alone, so a flow of the other kind (module or external) with the same id could give a false waybill; compared for all stations in production, 12 of 5,095 waybills were such false matches, which the code doesn't reproduce. The procedure and the eight views were removed in step 5.3 (`dbo/Scripts/DropStationWaybillViews.sql`).
 
 ## Layout waybills (`GetLayoutWaybills2`), computed, not stored
 For a meeting layout, optionally for one station in it:
@@ -103,7 +105,7 @@ These are pinned by the golden-master tests as they are, and are fixed only when
 - **Comparisons across id spaces:**
   - `AddGeneratedExternalWaybills` compares a module customer id with an external customer id (`ME.StationCustomerId <> OTHER.StationCustomerId`).
   - `AddGeneratedShadowYardWaybills` compares a module station id with an external station id. With no representative external station the comparison is NULL, so no shadow-yard row is created.
-- **Mixed id spaces in the views:** `SupplierCustomerCargo` and `ConsumerCustomerCargo` union external and module flows, whose ids come from different tables. The shadow-yard views join on the stored flow id alone, so an external flow with the same numeric id can produce a false row.
+- **Mixed id spaces in the views** (fixed in 1.17.2, the views removed in step 5.3): `SupplierCustomerCargo` and `ConsumerCustomerCargo` unioned external and module flows, whose ids come from different tables, and the waybill views joined on the stored flow id alone, so a flow of the other kind with the same numeric id could produce a false row.
 - **Print count rules differ:** *piece* for module rows, *bearer* for external rows, the smaller of the quantities for layouts.
 - **Dead code:** *same-cargo return* can never be set for module and external rows, since those require an NHM code.
 - **Column mix-up:** `ExternalCustomerCargo` puts the direction's *IsSupply* into the column that the other views use for the flow's *EmptyReturn*. The columns `EmptyReturn` and `MatchReturn` aren't used when generating.

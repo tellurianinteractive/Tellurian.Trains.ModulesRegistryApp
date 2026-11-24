@@ -3,9 +3,10 @@ using System.Text;
 namespace ModulesRegistry.Database.Tests.GoldenMaster;
 
 /// <summary>
-/// Golden master of the current waybill procedures and views (Migration step 5.1), on the test world in <c>WaybillScenario.sql</c>.
+/// Golden master of the remaining waybill procedures (Migration step 5.1), on the test world in <c>WaybillScenario.sql</c>.
 /// The approved results pin today's behaviour, including its defects (System Design Documents/Waybills.md), so the code that replaces
 /// the procedures can be compared with them, and every intended change of behaviour shows up as a reviewed change of an approved file.
+/// A station's printed waybills are made in code since 1.17.2 (<see cref="StationWaybillGeneratorTests"/>).
 /// </summary>
 [TestClass]
 public class WaybillGoldenMasterTests : DatabaseTest
@@ -59,16 +60,6 @@ public class WaybillGoldenMasterTests : DatabaseTest
     }
 
     [TestMethod]
-    public async Task StationWaybills()
-    {
-        await WaybillScenario.SeedAsync(Transaction);
-        await WaybillScenario.GenerateWaybillsAsync(Transaction);
-        var result = new StringBuilder();
-        foreach (var query in WaybillScenario.StationQueries) await AppendStationWaybillsAsync(result, query);
-        Approvals.Verify(nameof(StationWaybills), result.ToString());
-    }
-
-    [TestMethod]
     public async Task LayoutWaybills()
     {
         await WaybillScenario.SeedAsync(Transaction);
@@ -114,14 +105,5 @@ public class WaybillGoldenMasterTests : DatabaseTest
         await using var command = Transaction.CreateCommand(StoredWaybillsQuery);
         await using var reader = await command.ExecuteReaderAsync();
         return await ResultText.RenderAsync(reader);
-    }
-
-    /// <summary>
-    /// The waybills as printed for a station; <c>Id</c> is the stored waybill's identity value, which isn't stable between tests.
-    /// </summary>
-    private async Task AppendStationWaybillsAsync(StringBuilder result, (int StationId, int? CustomerId, bool Sending, bool Receiving) query)
-    {
-        await using var reader = await StationWaybillProcedure.ExecuteAsync(Transaction, query);
-        result.Append(WaybillScenario.QueryTitle(query)).Append(await ResultText.RenderAsync(reader, "Id")).Append('\n');
     }
 }
