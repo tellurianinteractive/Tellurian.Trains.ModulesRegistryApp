@@ -35,7 +35,7 @@ public static class AvaliableModuleExtensions
             }
         }
         return packages.Select((p, i) =>
-    new ModulePackage(i, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value), OwnersPersonId(p.Value), p.Value.Select(v => v.Module)) { ScaleId = p.Value.First().ScaleId });
+    new ModulePackage(i + 1, PackageType(p.Value), PackageName(p.Value), OwnerName(p.Value), OwnersPersonId(p.Value), p.Value.Select(v => v.Module)) { ScaleId = p.Value.First().ScaleId });
 
         static ModulePackageType PackageType(IEnumerable<(AvailableModule Module, int Scale, ModulePackageType Type)> items) => items.First().Type;
         static string PackageName(IEnumerable<(AvailableModule Module, int Scale, ModulePackageType Type)> items) =>

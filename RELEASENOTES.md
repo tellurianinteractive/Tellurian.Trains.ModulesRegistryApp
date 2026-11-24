@@ -1,6 +1,12 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.0
+Released 2026-11-24
+- Adding the first package in the list of available modules to a meeting layout no longer fails with "Save failed".
+- A module standard can extend another standard, and can be national, valid only in one country. The standard lists of modules and layouts show international standards and the national standards of the owners' or the meeting's country.
+- Module standard themes are translated.
+- The article on freight customers and freights describes how waybills are made today.
 ## Release 1.17.5
 Released 2026-11-23
 - Waybills printed per operating day give one waybill for each sending day, without an extra waybill for all the days.
