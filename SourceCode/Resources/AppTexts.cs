@@ -1,4 +1,7 @@
+using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using System.Globalization;
+using System.Reflection;
 using Tellurian.Localization.Implementatioms;
 
 namespace ModulesRegistry.Resources;
@@ -29,4 +32,29 @@ public static class AppTexts
     /// The text, or the key itself if there is no text with that key.
     /// </summary>
     public static string Translated(string key, CultureInfo? culture = null) => Provider.GetTranslation(key, culture).Text;
+
+    /// <summary>
+    /// The key of a text, or <c>null</c> if it isn't one of the texts in the culture, such as a text with values filled in.
+    /// A key is returned as it is. Used to log which message a user saw without logging the text, which may hold personal data.
+    /// </summary>
+    public static string? KeyOf(string? text, CultureInfo? culture = null)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return null;
+        culture ??= CultureInfo.CurrentUICulture;
+        if (Find(text, culture) is not null) return text;
+        return KeysByText.GetOrAdd(culture.Name, _ => TextKeys(culture)).GetValueOrDefault(text);
+    }
+
+    private static readonly ConcurrentDictionary<string, FrozenDictionary<string, string>> KeysByText = new();
+
+    // The generated class has one string property per key.
+    private static FrozenDictionary<string, string> TextKeys(CultureInfo culture)
+    {
+        var keys = new Dictionary<string, string>();
+        foreach (var property in typeof(Strings).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Where(p => p.PropertyType == typeof(string)))
+        {
+            if (Find(property.Name, culture) is { Length: > 0 } text) keys.TryAdd(text, property.Name);
+        }
+        return keys.ToFrozenDictionary();
+    }
 }

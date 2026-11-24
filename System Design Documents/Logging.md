@@ -17,7 +17,7 @@ The workspace includes 5 GB per month for free; the whole workspace (also `fastc
 |---|---|
 | Critical | Unhandled exceptions ("Fatal") |
 | Error | Handled exceptions |
-| Warning | Failed sign-in, sign-out, lockout, password reset, document change refused, upload over the size limit |
+| Warning | Failed sign-in, sign-out, lockout, password reset, document change refused, upload over the size limit, a failure shown to a user |
 | Information | Successful sign-in |
 
 Steps 2C.2–2C.5 add these entries; until then the levels are as the code had them.
@@ -51,6 +51,15 @@ Only the path is logged, never the query string (it can hold an API key).
 | Event id | Level | Event |
 |---|---|---|
 | 3001 | Warning | Upload refused because the file is over the size limit: document kind (`DwgDrawing`, `PdfDocumentation`, `SkpDrawing`, `PdfInstruction`), file size and limit in kB, user id, module or station id. Logged only for users who may upload, to learn what sizes are needed (SKP drawings can often be shrunk by purging unused objects). |
+
+**Failures shown to users** (event ids 4000–4999, `App/Diagnostics/FailureLog.cs`): every time a page tells a user that something failed, so that unexpected failures are seen even when no exception is thrown.
+
+| Event id | Level | Event |
+|---|---|---|
+| 4001 | Warning | A failure message on the page: `ActionMessage` with `AlertType` `stop` or `error` (path, message key, user id) |
+| 4002 | Warning | A failure message set for the page after a redirect: `SetFlashMessage` with level `Error` (method, path, message key, user id) |
+
+Only the message's resource key is logged (`AppTexts.KeyOf` finds the key of a translated text), never the text: a text with values filled in, such as an address, is logged as `UnknownText`. Some failures are the user's own (`NotAuthorized`, a name already in use); keys such as `SaveFailed`, `DeleteFailed` and `UnknownText`, or many failures on one page, point to a fault.
 
 `appsettings.json`: our own categories (`ModulesRegistry.*`) from *Information*; `Microsoft.*`, `System.*` and `Azure.*` from *Warning* (`Microsoft.Hosting.Lifetime` from *Information*, for start and stop). Log entries hold ids only: no names, user names, e-mail addresses, passwords or form values.
 
@@ -113,6 +122,17 @@ traces
 | where customDimensions.EventId == "3001"
 | extend Kind = tostring(customDimensions.DocumentKind), SizeKb = toint(customDimensions.FileSizeKb), LimitKb = toint(customDimensions.MaxSizeKb)
 | summarize count(), max(SizeKb), percentile(SizeKb, 50), any(LimitKb) by Kind
+```
+
+Failures shown to users per page and message key:
+
+```kusto
+traces
+| where timestamp > ago(7d)
+| extend EventId = toint(customDimensions.EventId)
+| where EventId between (4000 .. 4999)
+| summarize count() by EventId, Path = tostring(customDimensions.Path), MessageKey = tostring(customDimensions.MessageKey)
+| order by count_ desc
 ```
 
 Saved data is not logged here but stored in the database table `ChangeLog` (step 2C.5c).

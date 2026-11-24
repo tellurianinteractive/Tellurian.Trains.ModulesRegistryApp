@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using ModulesRegistry.Diagnostics;
 
 namespace ModulesRegistry.Components
 {
@@ -8,6 +9,16 @@ namespace ModulesRegistry.Components
         public string Label { get; set; } = "ActionInProgress";
         [Parameter]
         public string AlertType { get; set; } = "info";
+        [CascadingParameter] private HttpContext? HttpContext { get; set; }
+        [Inject] private ILogger<ActionMessage> Logger { get; set; } = default!;
+
+        // A failure shown to the user is logged (event 4001), once per request: static SSR renders the page once.
+        protected override void OnParametersSet()
+        {
+            if (IsFailure) Logger.FailureShown(HttpContext, Label);
+        }
+
+        bool IsFailure => AlertType.ToLowerInvariant() is "stop" or "error";
         string AlertCss => $"alert alert-{AlertBootstrapName} mt-3";
         string IconCss => AlertType.ToLowerInvariant() switch
         {

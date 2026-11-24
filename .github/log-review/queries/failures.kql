@@ -1,0 +1,17 @@
+// Failures shown to users (event ids 4000-4999, see Logging.md) in the last 24 hours, per event id, path and message key,
+// with the count in the 7 days before. Numbers in paths are replaced by {id}, so the same page counts as one.
+let app = AppTraces | where _ResourceId endswith "/components/moduleregistry"
+    | extend EventId = toint(Properties.EventId)
+    | where EventId between (4000 .. 4999)
+    | extend Path = replace_regex(tostring(Properties.Path), @"/\d+", "/{id}"), MessageKey = tostring(Properties.MessageKey);
+let baseline = app
+    | where TimeGenerated between (ago(8d) .. ago(24h))
+    | summarize Previous7Days = count() by EventId, Path, MessageKey;
+app
+| where TimeGenerated > ago(24h)
+| summarize Last24Hours = count(), Users = dcount(tostring(Properties.UserId)), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by EventId, Path, MessageKey
+| join kind=leftouter baseline on EventId, Path, MessageKey
+| project-away EventId1, Path1, MessageKey1
+| extend Previous7Days = coalesce(Previous7Days, 0)
+| order by Last24Hours desc
+| take 50

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using ModulesRegistry.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ModulesRegistry.Extensions;
 
@@ -40,6 +41,8 @@ public static partial class FlashMessageExtensions
         public void SetFlashMessage(string textKey, FlashMessageLevel level)
         {
             if (context is null || context.Response.HasStarted) return;
+            // A failure shown after the redirect is logged (event 4002).
+            if (level == FlashMessageLevel.Error) context.RequestServices?.GetService<ILoggerFactory>()?.CreateLogger(typeof(FlashMessageExtensions)).FailureAfterRedirect(context, textKey);
             var value = Format(new FlashMessageText(textKey, level));
             if (value is null) return;
             context.Response.Cookies.Append(CookieName, value, new CookieOptions
