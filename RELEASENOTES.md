@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.1
+Released 2026-11-24
+- Country administrators edit all fields of the persons in their own country, including the users' rights to API access, uploading drawings and managing wiFREDs, delete persons, and unlock locked user accounts.
+- Only a global administrator makes a user a country administrator or changes a person's country.
+- The area of responsibility can only be filled in for global and country administrators.
 ## Release 1.18.0
 Released 2026-11-24
 - Adding the first package in the list of available modules to a meeting layout no longer fails with "Save failed".
