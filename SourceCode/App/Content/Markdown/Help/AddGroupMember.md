@@ -15,4 +15,4 @@ The search matches any part of the person's name.
 - You can also see the people's names in the drop-down list.
 - I you don't find a person, that could be due to two reasons: 
 The person is already member, or the person does not exist in the database.
-- You can add a person to the database only in your own country.
+- Only country administrators add persons to the database. Ask your country administrator to add a person who is missing.

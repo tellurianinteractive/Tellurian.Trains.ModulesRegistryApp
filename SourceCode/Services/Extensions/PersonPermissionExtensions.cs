@@ -10,16 +10,17 @@ public static class PersonPermissionExtensions
     {
         /// <summary>
         /// A global administrator, a country administrator in the person's country, the person themselves, or, with
-        /// <paramref name="groupId"/>, one who administers the group's members when the person is new or a member of the group.
-        /// Never a read-only user. For a stored person, pass the stored values, not the posted ones.
+        /// <paramref name="groupId"/>, one who administers the group's members when the person is a member of the group. Only global
+        /// and country administrators add persons (2026-11-24). Never a read-only user. For a stored person, pass the stored values,
+        /// not the posted ones.
         /// </summary>
         public async Task<bool> MayEditPersonAsync(ClaimsPrincipal? principal, Person person, int groupId = 0)
         {
             if (principal is null || principal.IsReadOnly() || !principal.IsAuthenticated()) return false;
             if (principal.IsCountryAdministratorInCountry(person.CountryId)) return true;
             if (person.Id > 0 && person.Id == principal.PersonId()) return true;
-            if (groupId < 1 || !await dbContext.MayAdministerGroupMembersAsync(principal, groupId).ConfigureAwait(false)) return false;
-            return person.Id == 0 || await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == person.Id).ConfigureAwait(false);
+            if (person.Id < 1 || groupId < 1 || !await dbContext.MayAdministerGroupMembersAsync(principal, groupId).ConfigureAwait(false)) return false;
+            return await dbContext.GroupMembers.AsNoTracking().AnyAsync(gm => gm.GroupId == groupId && gm.PersonId == person.Id).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -42,13 +43,12 @@ public static class PersonPermissionExtensions
     {
         /// <summary>
         /// Only a global administrator changes the country of a stored person (<paramref name="storedCountryId"/>); otherwise it stays.
-        /// A new person gets any country from a global administrator, the own country from a country administrator, and any from a
-        /// group's member administrator (<paramref name="viaGroup"/>), since members may come from other countries.
+        /// A new person gets any country from a global administrator and the own country from a country administrator.
         /// </summary>
-        public bool MaySetPersonCountry(int countryId, int? storedCountryId, bool viaGroup = false) =>
+        public bool MaySetPersonCountry(int countryId, int? storedCountryId) =>
             storedCountryId.HasValue ?
                 countryId == storedCountryId || principal.IsGlobalAdministrator() :
-                principal.IsCountryAdministratorInCountry(countryId) || viaGroup;
+                principal.IsCountryAdministratorInCountry(countryId);
 
         /// <summary>Only the super user grants or removes the global administrator right.</summary>
         public bool MayChangeGlobalAdministrator => principal.IsSuperUser();

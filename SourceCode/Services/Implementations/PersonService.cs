@@ -121,8 +121,8 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
     /// <summary>
     /// Whether the user may edit the stored <paramref name="person"/> (or add a new one): a global administrator, a country
     /// administrator in the person's country, the person themselves, or, with <paramref name="groupId"/>, one who administers that
-    /// group's members (<see cref="GroupPermissionExtensions.MayAdministerGroupMembersAsync"/>) when the person is new or a member of
-    /// the group. Never a read-only user.
+    /// group's members (<see cref="GroupPermissionExtensions.MayAdministerGroupMembersAsync"/>) when the person is a member of the
+    /// group. Only global and country administrators add persons (2026-11-24). Never a read-only user.
     /// </summary>
     /// <remarks>
     /// Before release 1.15.28 saving needed only a country administrator in any country, the person themselves, or a group
@@ -136,8 +136,8 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
 
     /// <summary>
     /// Saves a person, and the user's rights when the person is a user. Who may save: <see cref="MayEditAsync"/>. Only a global
-    /// administrator changes a stored person's country; a new person's country is set by a global administrator, a country
-    /// administrator to their own country, and a group's member administrator (members may come from other countries). Rights the signed-in user may not change keep their stored values
+    /// administrator changes a stored person's country; a new person's country is set by a global administrator, and by a
+    /// country administrator to their own country. Rights the signed-in user may not change keep their stored values
     /// (<see cref="PersonPermissionExtensions.KeepRightsNotChangeableBy"/>).
     /// </summary>
     public async Task<(int Count, string Message, Person? Entity)> SaveAsync(ClaimsPrincipal? principal, Person entity, int groupId = 0)
@@ -146,7 +146,7 @@ public sealed class PersonService(IDbContextFactory<ModulesDbContext> factory, I
         var existing = entity.Id > 0 ? await dbContext.People.Include(p => p.User).SingleOrDefaultAsync(p => p.Id == entity.Id) : null;
         if (entity.Id > 0 && existing is null) return principal.NothingToUpdate<Person>();
         if (!await dbContext.MayEditPersonAsync(principal, existing ?? entity, groupId)) return principal.SaveNotAuthorised<Person>();
-        if (!principal.MaySetPersonCountry(entity.CountryId, existing?.CountryId, groupId > 0)) return principal.SaveNotAuthorised<Person>();
+        if (!principal.MaySetPersonCountry(entity.CountryId, existing?.CountryId)) return principal.SaveNotAuthorised<Person>();
         // Corrected, not validated: names (capitals, ordinary text, a quoted nickname to its own field), email and loco addresses.
         entity.CorrectInput();
         // Checked in the database (Migration step 3.5): the same person registered twice, the same address for two users.

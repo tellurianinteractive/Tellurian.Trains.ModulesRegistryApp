@@ -97,11 +97,14 @@ public sealed class PersonPermissionTests
     }
 
     [TestMethod]
-    public async Task AGroupAdministratorAddsAPersonFromAnyCountry()
+    public async Task OnlyGlobalAndCountryAdministratorsAddPersons()
     {
-        var person = new Person { FirstName = "Ny", LastName = "Medlem", CityName = "Oslo", CountryId = Norway };
-        Assert.AreEqual(1, (await Target.SaveAsync(Principal(GroupAdministrator), person, Group)).Count);
-        Assert.AreEqual(0, (await Target.SaveAsync(Principal(GroupAdministrator), new Person { FirstName = "Utan", LastName = "Grupp", CityName = "Oslo", CountryId = Sweden })).Count, "Without the group.");
+        // 2026-11-24: before, a group's member administrator could add persons from any country.
+        static Person New(int countryId) => new() { FirstName = "Ny", LastName = $"Person{countryId}", CityName = "City", CountryId = countryId };
+        Assert.AreEqual(0, (await Target.SaveAsync(Principal(GroupAdministrator), New(Sweden), Group)).Count, "A group's member administrator.");
+        Assert.AreEqual(0, (await Target.SaveAsync(CountryAdministrator(), New(Norway))).Count, "A country administrator, in another country.");
+        Assert.AreEqual(1, (await Target.SaveAsync(CountryAdministrator(), New(Sweden), Group)).Count, "A country administrator, in their own country.");
+        Assert.AreEqual(1, (await Target.SaveAsync(GlobalAdministrator(), New(Norway))).Count, "A global administrator, in any country.");
     }
 
     [TestMethod]

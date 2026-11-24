@@ -15,4 +15,4 @@ Søgningen matcher enhver del af personens navn.
 - Du kan også se folks navne i rullelisten.
 - Hvis du ikke finder en person, det kan være af to grunde:
 personen er allerede medlem, eller personen findes ikke i databasen.
-- Du kan kun tilføje en person til databasen i dit eget land.
+- Kun landeadministratorer tilføjer personer til databasen. Bed din landeadministrator om at tilføje en person, der mangler.

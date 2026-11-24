@@ -5,8 +5,8 @@
 @attribute [Authorize(Policy = "User")]
 @* Static SSR form (Migration step 3.6): a POST of PersonFormData; the id, the country of a new person and the group come from the
    address. The form is shown to those who may edit the person (PersonService.MayEditAsync): global administrators, country
-   administrators in the person's country, the person themselves, and those who administer the group's members, for a new person or a
-   member of the group (who is then added to the group). Fields the user may not change are disabled, and the page sets their stored
+   administrators in the person's country, the person themselves, and those who administer the group's members, for a member of the
+   group. Only global and country administrators add persons (2026-11-24); from a group's page, the new person is added to the group. Fields the user may not change are disabled, and the page sets their stored
    values before the posted form is validated, since a disabled field isn't posted; the service checks the same rules. Unlock is a
    POST form for administrators. After saving, a redirect to the form's own address. *@
 
@@ -100,8 +100,8 @@
     IEnumerable<ListboxItem>? CountryItems;
     string? FailureMessage;
 
-    // Only a global administrator changes a stored person's country; a group's member administrator sets it for a new member.
-    bool MaySelectCountry => Principal.IsGlobalAdministrator() || (GroupId > 0 && Existing is null);
+    // Only a global administrator selects a person's country; a country administrator adds persons in their own country.
+    bool MaySelectCountry => Principal.IsGlobalAdministrator();
     // The rights of a stored user, for global administrators and the country administrators of the person's country.
     bool ShowsUserRights => Existing?.User is not null && Principal.MayChangeUserRights(Existing.CountryId);
     bool MayDelete => Existing is not null && Principal.MayDeletePerson(Existing.CountryId);
@@ -139,8 +139,7 @@
             // Only an administrator's area of responsibility is edited; the field is disabled otherwise.
             if (!Form.IsAdministrator) Form.AdministratorAreaOfResposibility = user.AdministratorAreaOfResposibility;
         }
-        // Group member administrators may add members from any fully supported country.
-        CountryItems = await CountryService.ListboxItemsAsync(Principal, allSupportedCountries: GroupId > 0);
+        CountryItems = await CountryService.ListboxItemsAsync(Principal);
     }
 
     // A country administrator adds persons in their own country, a global administrator in the country of the address.

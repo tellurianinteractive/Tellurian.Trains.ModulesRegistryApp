@@ -15,4 +15,4 @@ Die Suche stimmt mit einem beliebigen Teil des Namens der Person überein.
 - Du kannst auch die Namen der Personen in der Dropdown-Liste sehen.
 - Wenn Du keine Person findest, kann dies zwei Gründe haben:
 Die Person ist bereits Mitglied oder die Person ist nicht in der Datenbank vorhanden.
-- Du kannst der Datenbank nur in Deinem eigenen Land eine Person hinzufügen.
+- Nur Landesadministratoren fügen Personen zur Datenbank hinzu. Bitte Deinen Landesadministrator, eine fehlende Person hinzuzufügen.

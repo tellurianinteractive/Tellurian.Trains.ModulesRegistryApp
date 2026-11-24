@@ -34,7 +34,7 @@
                              MinimumSearchCharacters="MinimumSearchCharacters"
                              CountryId="SearchCountryId"
                              ExcludeGroupId="GroupId"
-                             AddPersonHref="@($"persons/0/editgroup/{GroupId}")" />
+                             AddPersonHref="@AddPersonHref" />
         </AppFormRow>
         <AppCheckGroup>
             <AppInputCheck Label="IsGroupAdministrator" @bind-Value="Form!.IsGroupAdministrator" />
@@ -54,6 +54,8 @@
     [SupplyParameterFromForm(FormName = "add-member")] private GroupMemberFormData? Form { get; set; }
 
     const int MinimumSearchCharacters = 3;
+    // Only global and country administrators add persons (2026-11-24); a country administrator in their own country.
+    string? AddPersonHref => Principal.IsGlobalAdministrator() || Principal.IsCountryAdministrator() ? $"persons/0/editgroup/{GroupId}" : null;
     ClaimsPrincipal? Principal;
     Group? Group;
     IEnumerable<ListboxItem>? CountryItems;

@@ -15,4 +15,4 @@ Sökningen matchar någon del av personens namn.
 - Du kan också se personers namn i listrutan.
 - Hittar du  ingen person, det kan vara av två skäl:
 personen är redan medlem i gruppen, eller personen finns inte i databasen.
-- Du kan bara lägga till en person i databasen i ditt eget land.
+- Bara landsadministratörer lägger till personer i databasen. Be din landsadministratör att lägga till en person som saknas.

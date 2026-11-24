@@ -15,4 +15,4 @@ Søket samsvarer med hvilken som helst del av personens navn.
 - Du kan også se personens navn i rullegardinlisten.
 - Hvis di ikke finner en person, det kan være av to grunner:
 personen er allerede medlem i gruppen, eller personen eksisterer ikke i databasen.
-- Du kan bare legge til en person i databasen i ditt eget land.
+- Bare landsadministratorer legger til personer i databasen. Be din landsadministrator om å legge til en person som mangler.
