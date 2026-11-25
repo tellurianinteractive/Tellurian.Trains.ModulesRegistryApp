@@ -85,6 +85,12 @@
         });
     }
 
+    // As TextRules.IsWebAddress (App), trimmed: https:// or http://, a host and anything after it without spaces.
+    function isWebAddress(value) {
+        const text = (value || '').trim();
+        return !text || /^https?:\/\/[^\s/?#]+\S*$/i.test(text);
+    }
+
     const validators = {
         // [OrdinaryText]: valid when the text, as corrected when saving, is ordinary text. Empty is valid: [Required] decides.
         ordinarytext: context => ({ success: !context.value || isOrdinaryText(asOrdinaryText(context.value)) }),
@@ -95,10 +101,12 @@
         // [EmailAddresses]: email addresses in any notation the correction understands. Empty is valid.
         emailaddresses: context => ({ success: isEmailAddressesWhenCorrected(context.value) }),
         // [LocoAddresses]: numbers and ranges from min to max, as the correction understands them. Empty is valid.
-        locoaddresses: context => ({ success: isLocoAddressesWhenCorrected(context.value, Number(context.params.min), Number(context.params.max)) })
+        locoaddresses: context => ({ success: isLocoAddressesWhenCorrected(context.value, Number(context.params.min), Number(context.params.max)) }),
+        // [WebAddress]: https:// or http:// and no spaces. Empty is valid.
+        webaddress: context => ({ success: isWebAddress(context.value) })
     };
 
-    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isWholeNumberOrEmpty, isMacAddressWhenCorrected, isEmailAddressesWhenCorrected, isLocoAddressesWhenCorrected, validators };
+    global.modulesRegistryValidation = { asOrdinaryText, isOrdinaryText, isWholeNumberOrEmpty, isMacAddressWhenCorrected, isEmailAddressesWhenCorrected, isLocoAddressesWhenCorrected, isWebAddress, validators };
 
     if (global.Blazor && global.Blazor.formValidation) {
         for (const name of Object.keys(validators)) global.Blazor.formValidation.addValidator(name, validators[name]);

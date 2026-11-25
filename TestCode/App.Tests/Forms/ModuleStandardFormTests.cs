@@ -29,12 +29,14 @@ public sealed class ModuleStandardFormTests
     [TestMethod]
     public void EndProfileRoundTripKeepsItsDocument()
     {
-        var existing = new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", Description = "Single track", PdfDocumentId = 9, DrawingId = 8, ModuleStandardId = 2 };
+        var existing = new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", ReferenceDocumentHref = "https://fremo-net.eu/b96.pdf", HeightMillimeter = 96, WidthMillimeter = 500, PdfDocumentId = 9, DrawingId = 8, ModuleStandardId = 2 };
         var saved = existing.AsFormData().AsEntity(existing);
         Assert.AreEqual(9, saved.PdfDocumentId);
         Assert.AreEqual(8, saved.DrawingId);
         Assert.AreEqual("FREMO 1", saved.Designation);
-        Assert.AreEqual("Single track", saved.Description);
+        Assert.AreEqual("https://fremo-net.eu/b96.pdf", saved.ReferenceDocumentHref);
+        Assert.AreEqual(96, saved.HeightMillimeter);
+        Assert.AreEqual(500, saved.WidthMillimeter);
         Assert.AreEqual(2, saved.ModuleStandardId);
     }
 

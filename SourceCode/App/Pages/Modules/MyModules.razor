@@ -9,7 +9,7 @@
 
 <PageHeading ObjectName="Modules" IconClass="@FontAwesome.Module" PageAction="PageAction.List"/>
 
-<ModulesList Modules="Modules" MayEdit="MayEdit" Principal="Principal"/>
+<ModulesList Modules="Modules" MayEdit="MayEdit" Principal="Principal" BackHref="Modules/My" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

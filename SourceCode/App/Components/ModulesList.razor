@@ -69,6 +69,8 @@
 
 @code {
     [Parameter] public IEnumerable<Module>? Modules { get; set; }
+    /// <summary>The page with the list, where the module form's back arrow goes.</summary>
+    [Parameter] public string? BackHref { get; set; }
     [Parameter] public bool MayEdit { get; set; }
     [Parameter] public int OwningPersonId { get; set; }
     [Parameter] public int OwningGroupId { get; set; }
@@ -94,7 +96,7 @@
     bool AnyHasFremoName;
     bool HasFremoNumber(Module module) => module.FremoNumber.HasValue;
 
-    string ModuleEditHref(int id) => OwnershipRef.Href("Modules", id, "Edit");
+    string ModuleEditHref(int id) => OwnershipRef.Href("Modules", id, "Edit").WithBack(BackHref);
     string ModuleDeleteHref(int id) => OwnershipRef.Href("Modules", id, "Delete");
     string StationEditHref(int id) => OwnershipRef.Href("Stations", id, "Edit");
     string StationCustomersHref(int id) => OwnershipRef.Href("Stations", id, "Customers");

@@ -2988,4 +2988,19 @@
   <data name="Any" xml:space="preserve">
     <value>Beliebig</value>
   </data>
+  <data name="ReferenceDocument" xml:space="preserve">
+    <value>Referenzdokument</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Höhe</value>
+  </data>
+  <data name="WebAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" muss eine Webadresse sein, die mit https:// oder http:// beginnt</value>
+  </data>
+  <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" muss von 1 bis 2000 mm sein oder leer</value>
+  </data>
+  <data name="EndProfileHeightExplanation" xml:space="preserve">
+    <value>Die Höhe wird am Gleis gemessen: von der Gleisunterkante (ohne die Höhe des Gleises selbst) bis zur Unterkante des Kopfstücks, auch wenn andere Teile des Endprofils höher oder tiefer reichen.</value>
+  </data>
 </root>

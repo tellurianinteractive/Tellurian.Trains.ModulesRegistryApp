@@ -2988,4 +2988,19 @@
   <data name="Any" xml:space="preserve">
     <value>Valgfritt</value>
   </data>
+  <data name="ReferenceDocument" xml:space="preserve">
+    <value>Referansedokument</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Høyde</value>
+  </data>
+  <data name="WebAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" må være en nettadresse som begynner med https:// eller http://</value>
+  </data>
+  <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" må være fra 1 til 2000 mm, eller tomt</value>
+  </data>
+  <data name="EndProfileHeightExplanation" xml:space="preserve">
+    <value>Høyden måles ved sporet: fra sporets underkant (uten selve sporets høyde) ned til endeplatens underkant, selv om andre deler av endeprofilen når høyere eller lavere.</value>
+  </data>
 </root>

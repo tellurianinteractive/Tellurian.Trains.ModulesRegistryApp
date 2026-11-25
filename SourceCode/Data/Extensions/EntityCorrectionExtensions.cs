@@ -108,7 +108,9 @@ public static class EntityCorrectionExtensions
         public void CorrectInput()
         {
             profile.Designation = profile.Designation.Corrected(TextCase.AsTyped);
-            profile.Description = profile.Description.Corrected(TextCase.AsTyped, Optional);
+            profile.ReferenceDocumentHref = profile.ReferenceDocumentHref.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty); // A link, kept as typed.
+            profile.HeightMillimeter = profile.HeightMillimeter.OrNullIfZero();
+            profile.WidthMillimeter = profile.WidthMillimeter.OrNullIfZero();
             profile.ModuleStandardId = profile.ModuleStandardId.OrNullIfZero();
         }
     }

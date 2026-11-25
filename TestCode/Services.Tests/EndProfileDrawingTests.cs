@@ -179,17 +179,19 @@ public sealed class EndProfileDrawingTests
     }
 
     [TestMethod]
-    public async Task TheDescriptionIsSavedAndTheDrawingKept()
+    public async Task TheReferenceAndMeasuresAreSavedAndTheDrawingKept()
     {
         await Documents.SaveAsync(Administrator, new FakeFile(EndProfileFile()), new ModuleEndProfile { Id = EndProfileId }, EndProfileDrawings.FileExtension, 100_000);
         var documentId = (await _factory.FindAsync<ModuleEndProfile>(EndProfileId))!.DrawingId;
 
         // As the page posts it: the form's fields on an entity without the document ids.
-        var (count, _, _) = await EndProfiles.SaveAsync(Administrator, new ModuleEndProfile { Id = EndProfileId, ScaleId = 1, Designation = "B96", Description = "  For single track modules.  " });
+        var (count, _, _) = await EndProfiles.SaveAsync(Administrator, new ModuleEndProfile { Id = EndProfileId, ScaleId = 1, Designation = "B96", ReferenceDocumentHref = "  https://fremo-net.eu/b96.pdf  ", HeightMillimeter = 96, WidthMillimeter = 0 });
 
         var stored = (await _factory.FindAsync<ModuleEndProfile>(EndProfileId))!;
         Assert.AreEqual(1, count);
-        Assert.AreEqual("For single track modules.", stored.Description);
+        Assert.AreEqual("https://fremo-net.eu/b96.pdf", stored.ReferenceDocumentHref);
+        Assert.AreEqual(96, stored.HeightMillimeter);
+        Assert.IsNull(stored.WidthMillimeter, "Zero is no measure.");
         Assert.AreEqual(documentId, stored.DrawingId);
     }
 

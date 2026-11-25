@@ -12,7 +12,7 @@
 
 <PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
 
-<ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" />
+<ModulesList Modules="OwnedModules?.OrderBy(om => om.FullName)" MayEdit="MayEdit" OwningPersonId="OwningPersonId" OwningGroupId="GroupId" Principal="Principal" BackHref="@ModulesHref" />
 
 
 @code {
@@ -22,6 +22,8 @@
     private ClaimsPrincipal? Principal;
     private Person? Owner;
     // The persons list is static, so this page may have no history (Migration step 3.3).
+    // This page, for the module form's back arrow.
+    private string ModulesHref => GroupId > 0 ? $"Persons/{Id}/Modules/InGroup/{GroupId}" : $"Persons/{Id}/Modules";
     private string? BackHref => GroupId > 0 ? $"Groups/{GroupId}/Members" : Owner is null ? null : $"Persons/Country/{Owner.CountryId}";
     private IEnumerable<Module>? OwnedModules;
     bool IsDataAdministratorInSameGroupAsMember;

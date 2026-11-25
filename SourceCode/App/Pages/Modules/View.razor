@@ -178,7 +178,7 @@ else
     string Text(string key) => Localizer[key].Value.TrimEnd('?', ' ');
 
     string EditHref =>
-        Module.IsGroupOwned() ? $"Modules/{Module!.Id}/Edit/GroupOwned/{Module.OwningGroupId()}" :
-        Module.IsPersonOwned() ? $"Modules/{Module!.Id}/Edit/PersonOwned/{Module.OwningPersonsIds()[0]}" :
+        Module.IsGroupOwned() ? $"Modules/{Module!.Id}/Edit/GroupOwned/{Module.OwningGroupId()}".WithBack($"Modules/{Module.Id}/View") :
+        Module.IsPersonOwned() ? $"Modules/{Module!.Id}/Edit/PersonOwned/{Module.OwningPersonsIds()[0]}".WithBack($"Modules/{Module.Id}/View") :
         string.Empty;
 }

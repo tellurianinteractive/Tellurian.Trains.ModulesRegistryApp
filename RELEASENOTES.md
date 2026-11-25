@@ -1,6 +1,15 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.4
+Released 2026-11-25
+- A module can have a drawing from Module Draw, which is checked when uploaded. A new module page shows the module and its drawing to all users.
+- End profiles have a link to their reference document, a height and a width, the module standard that defines them, and a drawing from Module Draw, shown with its measures.
+- Modules have a primary theme, Europe or US, and can have a secondary theme. Waybills follow the primary theme; the secondary theme only lets the module also be registered to layouts with that theme.
+- Layouts have a main theme, and only modules with it as their primary or secondary theme can be registered.
+- A module standard can be for any theme.
+- Shadow yards whose modules have several standards no longer risk getting duplicate waybills.
+- The back arrow on the module form returns to the list the module was opened from.
 ## Release 1.18.3
 Released 2026-11-24
 - Localities: places where modules are stored and venues of meetings, with address and GPS coordinates. A storage place used by a group is only shown to the group's members; venues are shown to everyone.

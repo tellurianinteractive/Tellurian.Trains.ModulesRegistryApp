@@ -2988,4 +2988,19 @@
   <data name="Any" xml:space="preserve">
     <value>Valgfrit</value>
   </data>
+  <data name="ReferenceDocument" xml:space="preserve">
+    <value>Referencedokument</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Højde</value>
+  </data>
+  <data name="WebAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være en webadresse, der begynder med https:// eller http://</value>
+  </data>
+  <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" skal være fra 1 til 2000 mm eller tomt</value>
+  </data>
+  <data name="EndProfileHeightExplanation" xml:space="preserve">
+    <value>Højden måles ved sporet: fra sporets underkant (uden selve sporets højde) ned til endepladens underkant, selv om andre dele af endeprofilen når højere eller lavere.</value>
+  </data>
 </root>

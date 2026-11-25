@@ -10,7 +10,15 @@ public class ModuleEndProfile
     public int ScaleId { get; set; }
     public string Designation { get; set; }
     public int? PdfDocumentId { get; set; }
-    public string Description { get; set; }
+    /// <summary>A link to the document that defines the end profile, such as the standard's PDF on the web.</summary>
+    public string ReferenceDocumentHref { get; set; }
+    /// <summary>
+    /// The height of the end plate at the track, mm: from the track base, without the track's own height, down to the bottom of the
+    /// end plate, even where other parts of the end profile reach higher or lower.
+    /// </summary>
+    public int? HeightMillimeter { get; set; }
+    /// <summary>The width of the end plate, mm.</summary>
+    public int? WidthMillimeter { get; set; }
     /// <summary>
     /// The end profile's drawing from Module Draw: an end profile file (<c>.endprofile.json</c>).
     /// </summary>
@@ -47,7 +55,7 @@ public static class ModuleEndProfileMapping
                 .HasForeignKey(d => d.PdfDocumentId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
-            entity.Property(e => e.Description)
+            entity.Property(e => e.ReferenceDocumentHref)
                 .HasMaxLength(500);
 
             entity.HasOne(d => d.Drawing)

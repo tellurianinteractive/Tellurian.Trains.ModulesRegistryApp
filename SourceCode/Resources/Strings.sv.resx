@@ -2988,4 +2988,19 @@
   <data name="Any" xml:space="preserve">
     <value>Valfritt</value>
   </data>
+  <data name="ReferenceDocument" xml:space="preserve">
+    <value>Referensdokument</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Höjd</value>
+  </data>
+  <data name="WebAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" måste vara en webbadress som börjar med https:// eller http://</value>
+  </data>
+  <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" måste vara från 1 till 2000 mm, eller tomt</value>
+  </data>
+  <data name="EndProfileHeightExplanation" xml:space="preserve">
+    <value>Höjden mäts vid spåret: från spårets underkant (utan själva spårets höjd) ner till ändplattans underkant, även om andra delar av ändprofilen når högre eller lägre.</value>
+  </data>
 </root>

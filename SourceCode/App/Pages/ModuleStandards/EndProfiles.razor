@@ -4,6 +4,7 @@
 @* Static SSR (Migration step 3.6): the module end profiles, only text and links; Add and Edit for global administrators. The drawing
    from Module Draw, when there is one, is shown to everyone on its own page (EndProfileDrawing). *@
 
+@using ModulesRegistry.Forms.Validation
 @inject IStringLocalizer<Strings> Localizer
 @inject ModuleEndProfileService ModuleEndProfileService
 
@@ -19,7 +20,9 @@
         <th>@Localizer["Scale"]</th>
         <th>@Localizer["ModuleStandard"]</th>
         <th>@Localizer["Designation"]</th>
-        <th>@Localizer["Description"]</th>
+        <th class="text-end">@Localizer["Width"]</th>
+        <th class="text-end" title="@Localizer["EndProfileHeightExplanation"]">@Localizer["Height"]</th>
+        <th>@Localizer["ReferenceDocument"]</th>
         @if (HasActions)
         {
             <th>@Localizer["Actions"]</th>
@@ -29,7 +32,15 @@
         <td>@item.Scale.Display()</td>
         <td>@item.ModuleStandard?.ShortName</td>
         <td>@item.Designation</td>
-        <td>@item.Description</td>
+        <td class="text-end">@(item.WidthMillimeter is int width ? $"{width} mm" : null)</td>
+        <td class="text-end">@(item.HeightMillimeter is int height ? $"{height} mm" : null)</td>
+        <td>
+            @* Only a web address is a link (TextRules.IsWebAddress), so a javascript: address can't run. *@
+            @if (item.ReferenceDocumentHref.IsWebAddress() && item.ReferenceDocumentHref.HasValue)
+            {
+                <a href="@item.ReferenceDocumentHref" target="_blank" rel="noopener noreferrer"><span class="fa fa-external-link-alt"></span> @Localizer["ReferenceDocument"]</a>
+            }
+        </td>
         @if (HasActions)
         {
             <td style="white-space: nowrap">

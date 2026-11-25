@@ -131,8 +131,11 @@
 
     string EditModuleHref(Module? module) =>
         module is null ? string.Empty :
-        module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
-        $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}";
+        (module.IsGroupOwned() ? $"/Modules/{module.Id}/Edit/GroupOwned/{module.OwningGroupId()}" :
+        $"/Modules/{module.Id}/Edit/PersonOwned/{module.OwningPersonsIds()[0]}").WithBack(SelfHref);
+
+    // This list, with its filters, for the module form's back arrow.
+    string SelfHref => Navigator.ToBaseRelativePath(Navigator.Uri);
 
     string EditStationHref(Module? module) =>
         module is null || module.StationId < 1 ? string.Empty :

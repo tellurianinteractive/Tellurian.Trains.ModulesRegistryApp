@@ -154,6 +154,32 @@ public sealed class FormValidationScriptTests
         Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{rule.Name}({{ value: {Js(typed)}, params: {{ min: '{rule.Parameters["min"]}', max: '{rule.Parameters["max"]}' }} }}).success").AsBoolean(), "JavaScript");
     }
 
+    // A web address as typed, and whether [WebAddress] accepts it (trimmed, as when saving). Only http(s), so a link can't run script.
+    public static IEnumerable<object?[]> WebAddressValues =>
+    [
+        [null, true], ["", true], ["   ", true], ["https://fremo-net.eu/norm.pdf", true], ["HTTP://example.se", true], [" https://a.se/x?y=1#z ", true],
+        ["https://smalsparigt.org/modulnorm-för-h0n3.pdf", true],
+        ["javascript:alert(1)", false], ["www.example.se", false], ["ftp://example.se", false], ["https://", false], ["https://a.se/with space", false],
+        ["data:text/html,x", false], ["//example.se", false],
+    ];
+
+    [TestMethod]
+    [DynamicData(nameof(WebAddressValues))]
+    public void WebAddressIsTheSame(string? typed, bool valid)
+    {
+        Assert.AreEqual(valid, new WebAddressAttribute().IsValid(typed), "C#");
+        Assert.AreEqual(valid, Script.Evaluate($"modulesRegistryValidation.validators.{WebAddressAttribute.ClientRuleName}({{ value: {Js(typed)} }}).success").AsBoolean(), "JavaScript");
+    }
+
+    [TestMethod]
+    [DataRow(null, true)]
+    [DataRow(0, true)]
+    [DataRow(96, true)]
+    [DataRow(2000, true)]
+    [DataRow(2001, false)]
+    public void AnEndPlateMeasureIsFrom1To2000Millimetres(int? millimetres, bool valid) =>
+        Assert.AreEqual(valid, new EndPlateMillimetresOrEmptyAttribute().IsValid(millimetres));
+
     [TestMethod]
     public void TheAttributeEmitsTheRuleTheScriptRegisters()
     {
@@ -168,5 +194,7 @@ public sealed class FormValidationScriptTests
         CollectionAssert.Contains(registered, new MacAddressAttribute().GetClientValidationRules().Single().Name);
         CollectionAssert.Contains(registered, new EmailAddressesAttribute().GetClientValidationRules().Single().Name);
         CollectionAssert.Contains(registered, new LocoAddressesAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new WebAddressAttribute().GetClientValidationRules().Single().Name);
+        CollectionAssert.Contains(registered, new EndPlateMillimetresOrEmptyAttribute().GetClientValidationRules().Single().Name);
     }
 }

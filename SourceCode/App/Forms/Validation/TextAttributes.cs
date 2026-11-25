@@ -54,6 +54,27 @@ public abstract class WholeNumberOrEmptyAttribute(int minimum, int maximum) : Va
     }
 }
 
+/// <summary>
+/// A web address that starts with <c>https://</c> or <c>http://</c> (<see cref="TextRules.IsWebAddress"/>), trimmed as when saving.
+/// An empty value is valid.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class WebAddressAttribute : ValidationAttribute, IClientValidationRuleProvider
+{
+    public const string ClientRuleName = "webaddress";
+
+    public override bool IsValid(object? value) => value is not string text || text.IsWebAddress();
+
+    public IEnumerable<ClientValidationRule> GetClientValidationRules()
+    {
+        yield return new ClientValidationRule(ClientRuleName, new Dictionary<string, string>());
+    }
+}
+
+/// <summary>A measure of an end plate in millimetres, or empty: from 1 to 2000.</summary>
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class EndPlateMillimetresOrEmptyAttribute() : WholeNumberOrEmptyAttribute(1, 2000);
+
 /// <summary>A year of a period (<see cref="YearPeriod"/>), or empty: from <paramref name="minimum"/> to <see cref="YearPeriod.MaxYear"/>.</summary>
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class YearOrEmptyAttribute(int minimum = YearPeriod.MinYear) : WholeNumberOrEmptyAttribute(minimum, YearPeriod.MaxYear);

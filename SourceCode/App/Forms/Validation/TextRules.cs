@@ -7,8 +7,11 @@ namespace ModulesRegistry.Forms.Validation;
 /// of step 3.5 can be written and tested against the same table of values. An empty value is valid: [Required] decides that.
 /// Capitalisation of names isn't here: see NameCapitalizationExtensions in Data, which corrects names when saved.
 /// </summary>
-public static class TextRules
+public static partial class TextRules
 {
+    [System.Text.RegularExpressions.GeneratedRegex(@"^https?://[^\s/?#]+\S*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)]
+    private static partial System.Text.RegularExpressions.Regex WebAddress { get; }
+
     extension(string? text)
     {
         /// <summary>Only Latin letters, digits and some punctuation and symbols.</summary>
@@ -37,6 +40,12 @@ public static class TextRules
         /// 1 to 9999, separated by <c>, ;</c> or spaces, a range in any order. Empty is valid.
         /// </summary>
         public bool IsLocoAddressesWhenCorrected() => text.AsLocoAddresses().TryParseLocoAdresses(out _);
+
+        /// <summary>
+        /// A web address, trimmed as when saving: <c>https://</c> or <c>http://</c>, a host and anything after it without spaces. Empty
+        /// is valid. Only such an address is shown as a link, so a <c>javascript:</c> address can't run in the user's browser.
+        /// </summary>
+        public bool IsWebAddress() => text.IsEmpty || WebAddress.IsMatch(text!.Trim());
     }
 
     extension(char c)

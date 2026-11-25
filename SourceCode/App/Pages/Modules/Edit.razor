@@ -133,7 +133,7 @@
             <td>@exit.EndProfile?.Designation</td>
             <td style="white-space: nowrap !important;">
                 <AppButton Label="Edit" Href="@ExitHref(exit.Id)" />
-                <AppButton Label="Delete" Href="@($"{SelfHref}?deleteExit={exit.Id}")" />
+                <AppButton Label="Delete" Href="@SelfHref.WithQuery("deleteExit", $"{exit.Id}")" />
             </td>
         </RowTemplate>
     </TableTemplate>
@@ -154,7 +154,9 @@
 
 @code {
     // Reached from the static modules list, this page may have no history (Migration step 3.3).
-    const string BackHref = "Modules/Index";
+    /// <summary>The list the module was opened from (My modules, a group's or a member's modules, the modules list, the module view); only an address within the app.</summary>
+    [SupplyParameterFromQuery(Name = BackHrefExtensions.QueryName)] private string? Back { get; set; }
+    string BackHref => Back.AsLocalHref ?? "Modules/Index";
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
@@ -218,9 +220,10 @@
         PersonId > 0 && GroupId > 0 ? $"PersonOwned/{PersonId}/InGroup/{GroupId}" :
         GroupId > 0 ? $"GroupOwned/{GroupId}" : $"PersonOwned/{PersonId}";
 
-    string EditHref(int moduleId) => $"Modules/{moduleId}/Edit/{OwnerSuffix}";
+    // The page's own address keeps where back is, also after saving, uploading and editing an exit.
+    string EditHref(int moduleId) => $"Modules/{moduleId}/Edit/{OwnerSuffix}".WithBack(Back.AsLocalHref);
     string SelfHref => EditHref(Id);
-    string ExitHref(int exitId) => $"Modules/{Id}/Exits/{exitId}/Edit?back={Uri.EscapeDataString(SelfHref)}";
+    string ExitHref(int exitId) => $"Modules/{Id}/Exits/{exitId}/Edit".WithBack(SelfHref);
 
     string StationMakeLink =>
         OwnershipRef.IsGroup ? $"Stations/Create/{Id}/GroupOwned/{OwnershipRef.GroupId}" :

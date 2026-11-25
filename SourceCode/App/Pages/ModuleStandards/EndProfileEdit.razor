@@ -29,7 +29,10 @@
         <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId"
                         IsDisabled="@IsScaleLocked" LockedBy="Form.ModuleStandardId" LockedValues="StandardScaleIds" />
         <AppInputText Width="7" Label="Designation" @bind-Value="Form!.Designation" />
-        <AppInputText Width="12" Label="Description" @bind-Value="Form!.Description" NumberOfRows="3" />
+        <AppInputText Width="8" Label="ReferenceDocument" @bind-Value="Form!.ReferenceDocumentHref" />
+        <AppInputNumber TValue="int?" Width="2" Label="Height" @bind-Value="Form!.HeightMillimeter" Unit="mm" />
+        <AppInputNumber TValue="int?" Width="2" Label="Width" @bind-Value="Form!.WidthMillimeter" Unit="mm" />
+        <p class="form-text">@Localizer["EndProfileHeightExplanation"]</p>
     </Inputs>
 </EditTemplate>
 

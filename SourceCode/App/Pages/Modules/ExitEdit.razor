@@ -66,7 +66,7 @@
         EndProfileItems = (await ModuleEndProfileService.ListboxItemsAsync(Module.ScaleId)).OrderBy(i => i.Description);
     }
 
-    string ModuleHref => Back is { Length: > 0 } back && back[0] is not ('/' or '\\') && !back.Contains(':') ? back : "Modules/Index";
+    string ModuleHref => Back.AsLocalHref ?? "Modules/Index";
 
     async Task SaveAsync()
     {

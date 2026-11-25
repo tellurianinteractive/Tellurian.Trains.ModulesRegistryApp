@@ -10,7 +10,7 @@
 
 <PageHeading ObjectName="Modules" Context="Owner" IconClass="@FontAwesome.Module"  PageAction="PageAction.List" BackHref="@BackHref" />
 
-<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id" />
+<ModulesList Modules="OwnedModules" Principal="Principal" MayEdit="MayEdit" OwningGroupId="Id" BackHref="@($"Groups/{Id}/Modules")" />
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }

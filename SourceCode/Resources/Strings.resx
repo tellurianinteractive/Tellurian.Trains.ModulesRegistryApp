@@ -2988,4 +2988,19 @@
   <data name="Any" xml:space="preserve">
     <value>Any</value>
   </data>
+  <data name="ReferenceDocument" xml:space="preserve">
+    <value>Reference document</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="WebAddressAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be a web address that starts with https:// or http://</value>
+  </data>
+  <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
+    <value>"{0}" must be from 1 to 2000 mm, or empty</value>
+  </data>
+  <data name="EndProfileHeightExplanation" xml:space="preserve">
+    <value>The height is measured at the track: from the track base (without the height of the track itself) down to the bottom of the end plate, even if other parts of the end profile reach higher or lower.</value>
+  </data>
 </root>
