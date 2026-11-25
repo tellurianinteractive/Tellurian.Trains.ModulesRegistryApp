@@ -1,8 +1,15 @@
 # Migration
 
-Things to address when modernising dependencies and moving to .NET 11. Tick items off as they are done.
+Things to address when modernising dependencies and moving to .NET 11. Tick items off as they are done. A chapter checklist item that a roadmap step replaced or made unnecessary is marked *(replaced)* or *(not needed)*, so the open boxes are the real remaining work.
 
-Current state (2026-11-14): `net11.0` (published self-contained for win-x86), Blazor Web App hosting model (`App.razor`, `MapRazorComponents`) with global `InteractiveServer` and no prerendering, release 1.14.7. The SQL Server schema is maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
+Current state (2026-11-24): `net11.0` (published self-contained for win-x86), Blazor Web App with every page static SSR (no circuits, no SignalR, since 1.16.0), release 1.18.1. The EF model describes the schema exactly (step 4.1, checked by `DatabaseSchemaTests`); the SQL Server schema is still maintained in `Database.sqlproj` (DACPAC) with no EF migrations.
+
+**Remaining work (2026-11-24):**
+- Stage 5: publish 5.3, then 5.4–5.8 (5.9 any time).
+- C.6: server-side sessions and a stricter CSP.
+- B.1: read the ASP.NET Core 11 migration guide and breaking changes.
+- Optional: the reflection test for forgotten form mappings (C.4).
+- **Set aside for a later evaluation:** EF Core migrations (4.2, 4.3, D.3 phase B) and PostgreSQL (stage 6, D.3 phase C).
 
 Chapters A–D describe **what** needs to be done and why. **The roadmap below describes the order:** small steps, each verified, tested and deployed before the next one starts. Roadmap steps are numbered by stage (1.1, 2B.3, 5.0); the chapters after the roadmap are lettered (A–J), so a step number never names a chapter.
 
@@ -20,7 +27,7 @@ Chapters A–D describe **what** needs to be done and why. **The roadmap below d
 - **Rollback must be possible** by redeploying the previous version. So database objects are never removed in the same release as the code stops using them; they're removed in the following release.
 - **No behaviour changes mixed with refactoring.** A step either changes structure (same behaviour) or changes behaviour, never both.
 - Tick off each step here when it's deployed, and adjust the coming steps based on what was learned.
-- **Version numbers** (decided 2026-11-14): stages 1–2C are released as 1.14.x. The first release of stage 3 (server-side rendering) steps up to **1.15.0**, and its following releases are 1.15.x. When the full SSR implementation is done (end of stage 3), it is announced as **2.0.0**.
+- **Version numbers** (decided 2026-11-14): stages 1–2C are released as 1.14.x. The first release of stage 3 (server-side rendering) steps up to **1.15.0**, and its following releases are 1.15.x. The full SSR implementation (end of stage 3) was released as **1.16.0** (2026-11-21); **2.0.0** comes only when more is in.
 
 ### Stage 1: dependency hygiene (still .NET 10)
 | # | Step | Verification | Chapter |
@@ -99,7 +106,7 @@ All translations in one resource assembly, and the app's own localisation code r
 | 2B.2 ✅ | Create the resource project and move all `.resx` files there, merged into one set per language. Resolve duplicates and conflicts. Point all `IStringLocalizer` users to it. | The translation tests (all texts translated, all used keys exist) run against the new location and pass; all languages checked in the browser | G |
 | 2B.3 ✅ | Replace the app's language selection and culture handling (`ILanguageService`/`LanguageService`, `LanguageExtensions`) with Tellurian.Localization, a few call sites per release | Unit tests for language selection and fallback; language switch in the browser | G |
 | 2B.4 ✅ | Replace the Markdown content loading (`ContentService`, `CultureInfoExtensions.GetMarkdownAsync`, including the `<!-- LastModified -->` line) with the package's Markdown provider, or extend the package where it lacks something | Content pages in all languages; the Terms of Use guard test still gives 2026-01-09 10:25:31 UTC | G, F.2 |
-| 2B.5 | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | G |
+| 2B.5 ✅ | Replace the per-row multilingual column selection (`Data/Extensions`) with the package's object provider, one aggregate per release | Tests per aggregate; names in all languages in the browser | G |
 
 ### Stage 2C: logging and Application Insights
 Logs we can read in Azure, with levels that mean something, before the larger changes in stage 3, so each of those releases can be "observed for a while" (definition of done, item 4) by looking at real data. Application Insights comes first, so the new log entries land somewhere they can be read. See chapter I.
@@ -115,12 +122,12 @@ Logs we can read in Azure, with levels that mean something, before the larger ch
 | 2C.5c ✅ | **Change log in the database:** table `ChangeLog` (SQL project + entity), written by the interceptor in the same transaction: entity type, key, operation, changed property names (no values), user id, time. The user comes from a scoped `ICurrentUser` (`AuthenticationStateProvider` in components, `HttpContext` in endpoints), through a scoped context factory, so the services don't change. Retention by age and per object, configurable, cleaned up on save. No GUI. | Tests against SQLite that a create, update and delete each give one row with user, entity, key and property names; retention tests; a save in development gives a row | I.1 |
 | 2C.5d ✅ | Explicit change log rows for the writes that bypass the change tracker (`ExecuteUpdate`/`ExecuteDelete`, `SqlCommand`, stored procedures), or a documented decision per write to wait for stage 5. **Decided 2026-11-15:** explicit rows for the `ExecuteUpdate`/`ExecuteDelete` calls (`DocumentService`, `VehicleService`, `ModuleOwnershipService`, `ModuleService`), which stage 5 keeps; the `AddGenerated*Waybills` procedures wait for 5.5 and the cascade triggers' child deletes for 5.7, where they go through `SaveChanges` and are logged without extra code. The other stored procedure and `SqlCommand` calls only read (check each in the step). | Tests per write, or the list with decisions in chapter I.1 | I.1 |
 | 2C.7 ✅ | **Documents: permissions, no new orphans, station link** (done before 2C.6, released after 2C.5d). Upload and delete check that the user may edit every object that refers to the document, worked out from the database; a refusal is a Warning security event (1008). Deleting a station deletes its document too (a module delete already did; a document belongs to one object only). The station upload links the right station. (The stale page after a delete was released ahead in 1.14.21.) `RemoveUnreferencedDocuments` also checks `ModuleEndProfile`; the user runs it once after the release. **Security release note.** | Tests per role for upload and delete, for module and station deletes (documents gone, shared ones kept) and the station link; in production: the list of orphans before, the count after the clean-up | J |
-| 2C.6 | **Daily log review by an agent**, instead of alert rules: a scheduled GitHub Actions workflow runs Claude Code, which reads the last 24 hours from Application Insights (read-only), analyses errors and unusual patterns, and opens a pull request with a fix (or an issue when there is no clear fix). The user is notified through the GitHub app. | A dry run on a known problem (the two start-up exceptions) gives one pull request with a fix and nothing private in its text; a day without problems gives no pull request or issue; the agent can't push to `master` | I.5 |
+| 2C.6 ✅ | **Daily log review by an agent**, instead of alert rules: a scheduled GitHub Actions workflow runs Claude Code, which reads the last 24 hours from Application Insights (read-only), analyses errors and unusual patterns, and opens a pull request with a fix (or an issue when there is no clear fix). The user is notified through the GitHub app. | A dry run on a known problem (the two start-up exceptions) gives one pull request with a fix and nothing private in its text; a day without problems gives no pull request or issue; the agent can't push to `master` | I.5 |
 
 All of 2C is released as 1.14.x. The GUI for the change log ("last changed by … at …", a history list) comes later, as an SSR page in stage 3. Each step is invisible to users (except 2C.2, see its release note), so the release notes get `- Maintenance update.`, except a security-related bullet if wanted for 2C.4.
 
 ### Stage 3: SSR, page group by page group
-Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; the release that completes the full SSR implementation is **2.0.0** (see the rules above).
+Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; the release that completed the full SSR implementation was **1.16.0** (see the rules above).
 
 **How pages move (decided 2026-11-16, step 3.1):** each page group that becomes static SSR gets `@attribute [ExcludeFromInteractiveRouting]`; the other pages stay interactive, layout included, so the error boundary (2C.2) and the notifications keep working there unchanged. A static page with an interactive part gets it as an island (`@rendermode` on that component). Moving between a static and an interactive page is a full page load. When the last page is static, `<Routes>` becomes plain static and the attribute is removed. The alternative, a `@rendermode` on each of the 79 pages with an always static layout, was turned down: it would need an error boundary in every page, `NotificationArea` as its own island and a reworked `HeadOutlet` before any page could become static.
 | # | Step | Verification | Chapter |
@@ -130,8 +137,8 @@ Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; 
 | 3.2b ✅ | Home and Terms of use → static SSR: Accept as a POST form (antiforgery) instead of `AppButton`; Home's redirect to Terms of use as an SSR redirect. `PageHeading` hides its help toggle and back arrow on static pages (`RendererInfo.IsInteractive`); 3.3 needs static versions of them (help as `<details>`, back as a link). `MapStaticAssets().ShortCircuit()`: stylesheets and scripts skip authentication, whose claims transformation ran three database queries for each of them for a signed-in user (a full page load, about 2 s against the remote database during development) | Accepting the terms works without JavaScript; a user who hasn't accepted is sent to Terms of use | C.2 |
 | 3.3a ✅ | Print previews → static SSR (suggested 2026-11-16): waybills, empty wagon orders and tickets, and also name badges, wagon error cards and the wiFRED throttle preview: every page on `PrintLayout`, pure output. The waybill and empty wagon order pages keep "Creating report" with `[StreamRendering]` (print previews are used with JavaScript on) | Print layout and page breaks as before in all report variants; tests: every `/reports/` route and every page on `PrintLayout` is excluded from interactive routing | C.2 |
 | 3.3 ✅ | List pages → SSR: filters as GET forms in the query string, QuickGrid URL paging. **Up to three list pages per release** (decided 2026-11-17, after Cargo types, Persons and User administration proved the pattern; it was one). Remove the page's LocalStorage use; the last one removes the package. **Streaming** (decided 2026-11-17): no `[StreamRendering]` by default (a fast query would flash "Loading", and streamed content needs JavaScript); add it only to a page measured as slow (about 0.5 s or more in Application Insights once the page is static, such as the stored-procedure lists). A streamed page must decide not found and redirects before its first `await`, since the status and headers are sent with the placeholder. With the first streamed page, check that an exception after streaming has started is still logged once as Critical (2C.2). | Shareable URLs, back button, filters | A.5, C.2 |
-| 3.4 | Forms pilot `Region`: form model + mapping extensions + DataAnnotations + localisation + SSR form handling | Mapping, round-trip and validation tests; client-side and server-side validation in all languages | C.3, C.4 |
-| 3.5 | Custom validation attributes + JS validators (`OrdinaryText`, `ValidYear`, …). Capitalisation is not validated but corrected when saved (`AsCapitalizedName`, decided 2026-11-18). Rules that need the database become asynchronous attributes or `IAsyncValidatableObject` (server only in static SSR): the same person registered twice, the same email for two users, and similar | C# and JS tested against the same table of test values; the asynchronous rules against SQLite | C.3 |
+| 3.4 ✅ | Forms pilot `Region`: form model + mapping extensions + DataAnnotations + localisation + SSR form handling | Mapping, round-trip and validation tests; client-side and server-side validation in all languages | C.3, C.4 |
+| 3.5 ✅ | Custom validation attributes + JS validators (`OrdinaryText`, `ValidYear`, …). Capitalisation is not validated but corrected when saved (`AsCapitalizedName`, decided 2026-11-18). Rules that need the database become asynchronous attributes or `IAsyncValidatableObject` (server only in static SSR): the same person registered twice, the same email for two users, and similar | C# and JS tested against the same table of test values; the asynchronous rules against SQLite | C.3 |
 | 3.6 ✅ | Remaining forms, **one aggregate per release**. The last one removes FluentValidation, Blazored.FluentValidation and `App/Validators`. **Station customer form** (noted 2026-11-18): an administrator can move a freight customer to another station from the form, as for external station customers (`MoveCustomerAsync`), to correct a customer added to the wrong station; today it is only possible by saving with another station id (`StationCustomerService.SaveAsync` allows it when the user may edit both stations, since 1.15.10). | As in 3.4 | C.3, C.4 |
 | 3.7 ✅ | Remaining interactive islands + `AutoPause`. Evaluate the Azure SignalR Service; **the goal is to remove it** (about $50 per month, the largest cost) and use the app's own SignalR. | Number of circuits and connections in Azure before/after | C.5 |
 
@@ -207,7 +214,7 @@ Releases in this stage are **1.15.x**, starting with 1.15.0 for the first step; 
 ### Stage 4 EF Core migrations
 | # | Step | Verification | Chapter |
 |---|---|---|---|
-| 4.1 | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | D.3 B |
+| 4.1 ✅ | Complete the EF model (types, lengths, indexes, defaults, delete behaviours), with no schema change | A database created from the model is identical to production in schema compare | D.3 B |
 | 4.2 ⏸ | Baseline migration (marked as applied in production) + an idempotent script or bundle in the release pipeline. The DACPAC is no longer published. | The pipeline runs the empty migration step without errors | D.3 B |
 | 4.3 ⏸ | First real schema change via a migration. Retire `Database.sqlproj` and update `CLAUDE.md` and `Overview.md`. | The migration is reviewed by hand, deployed before the app in the same release | D.3 B |
 
@@ -236,7 +243,7 @@ Groundwork for 4.1 and 3.4 (2026-11-14, not released on its own): the `Region` f
 | 5.3 | Drop the six waybill views and `GetStationCustomerWaybills` in the database. **Removed from the SQL project 2026-11-24:** the procedure, the six views and the two unions they used (`SupplierCustomerCargo`, `ConsumerCustomerCargo`); the base views stay for the generation procedures and `GetEmptyWagonOrders`. `dbo/Scripts/DropStationWaybillViews.sql` drops them in production if publishing doesn't. The tests against the procedure are removed; the approved `StationWaybillObjects` (code) is the reference. | Publish the DACPAC, smoke test | D.5 |
 | 5.4 | `GetLayoutWaybills2` and `GetGroupWaybills` → code (then drop them in the next step) | Golden master, layout and group waybills in the browser | D.5 |
 | 5.5 | `AddGenerated*Waybills` and `GetEmptyWagonOrders` → code (then drop them in the next step). **Also, decided 2026-11-23:** generating removes the waybills that no longer match, on both sides (Creations of waybills.md); until then they are only deleted with their cargo flow or customer. | Golden master on the generated rows, empty-wagon orders in the browser | D.5 |
-| 5.6 | Remaining `SqlCommand`/raw SQL (`ModuleService`, `ModuleOwnershipService`, `LayoutService`, `ExternalStationService`) → EF, a few per release | Tests per method, affected pages in the browser | D.3 A |
+| 5.6 | Remaining `SqlCommand`/raw SQL (`ModuleService`, `ModuleOwnershipService`, `LayoutService`, `ExternalStationService`) → EF, a few per release. **2026-11-24:** `ModuleService`, `ModuleOwnershipService` and `ExternalStationService` have none left; `LayoutService` still calls `GetAvailableModules`, `GetBorrowableModules` and `RegisteredModules` (the waybill and empty-wagon calls belong to 5.4 and 5.5) | Tests per method, affected pages in the browser | D.3 A |
 | 5.7 | Cascade triggers → explicit deletes in the services, **one aggregate per release** (then drop the trigger in the next step). Also the `ModuleOwnership` triggers, which add a group-owned module to the group's layout modules: they read `INSERTED`/`DELETED` as single values, so an insert or update of several rows in one statement fails (found in 5.1). | Tests that delete a parent and check its children | D.3 A |
 | 5.8 | Remove the unused database objects. **Tables and columns decided 2026-11-23, already removed from the SQL project and the EF model** (the definitions describe the database after the change): 13 timetabling tables (`DriverDuty`, `DriverDutyScheduleLocoPart`, `LayoutStationTrack`, `ModuleOnTimetableTrackStretch`, `Schedule`, `ScheduleTrainPart`, `TimetableStretch`, `TimetableStretchTrackStretch`, `TrackStretch`, `Train`, `TrainCategory`, `TrainStationCall`, `VehicleSchedule`; all empty), the unused `LayoutStation` columns (handled in Module Draw and Timetable Planner) and also its operating settings `IsManned`, `HideMeetingTrains`, `HidePassingTrains`, `PrintTrainStartLabels`, `PrintOnlyFirstTrainStartLabel` and `Difficulty` (Timetable Planner; removed from the layout station form too), the unused `Layout` columns (`StartHour`, `EndHour`, `StartWeekdayId`, `PrimaryOperationCountryId`, `FontFamily`, `GeneralInstructionsMarkdown`: Timetable Planner), `MeetingParticipant.ArrivalTime` (replaced by `LatestArrivalTime`), `Region.IsCargoHub` (also out of the three customer cargo views, where nothing read it), `Module.CatenaryDescription` (replaced by `OverheadLineFeature`) and `NHM.MaxId`. The released app read none of these columns except the six `LayoutStation` operating settings, which the user dropped in production before the app release that removes them (2026-11-23, at night; the layout station pages failed until that release). The DACPAC refuses to drop tables and columns with data, so those are dropped by hand in SQL Server Management Studio. Left for the step: other unused objects (views, procedures); among them the 13 list views `ListBasicDay`, `ListCargoDirection`, `ListCargoPackagingUnit`, `ListCargoReadyTime`, `ListCargoUnit`, `ListCountry`, `ListExternalStation`, `ListExternalStationCustomer`, `ListOperatingDay`, `ListRegion`, `ListStation`, `ListStationCustomer` and `ListUntimedCargoReadyTime`, which exist only in production (not in the SQL project) and which the code no longer reads (the last one, `ListExternalStation`, replaced by LINQ in 1.17.3) | Publish, smoke test; `DatabaseSchemaTests` green | D.5 |
 
@@ -290,7 +297,7 @@ Tasks:
 - [x] Add a person search endpoint with authorisation, since person data is personal information. Limit the number of results and require a minimum query length. → `GET /app/persons/search` (max 10 results, at least 3 characters). Convention: `/app/...` endpoints are for the app's own browser calls (sign-in cookie, `User` policy, GET only, filtered to what the user may see); `/api/...` stays the public API with API keys.
 - [x] Replace the typeahead in `AppSearchPerson.razor`: `<input list>` + `<datalist>` filled by `wwwroot/js/person-search.js`; the selected id goes to a hidden input (Blazor handles its change event now, an SSR form will post it).
 - [x] Remove the `blazored-typeahead.css` and `blazored-typeahead.js` includes from `_Host.cshtml`. Package removed.
-- [ ] Check in the browser: keyboard selection, clearing, the minimum length and the dropdown style.
+- [x] Check in the browser: keyboard selection, clearing, the minimum length and the dropdown style. *(replaced: in production since 1.13.8, and the group member form moved to static SSR in step 3.6)*
 
 ### A.3 Blazored.FluentValidation (Legacy): 4 usages
 
@@ -309,10 +316,10 @@ Options:
   That is about 100 lines. In .NET 11 it can use the new async validation hooks (`ValidationRequestedEventArgs.AddAsyncValidator`, `EditContext.RegisterAsyncFieldValidator`) and call `ValidateAsync`. The framework then handles cancellation and the pending state for us.
 - **B. Migrate to DataAnnotations.** See chapter C.3 for details.
 
-Tasks (option A):
-- [ ] Find out how validators are registered and resolved today (DI assembly scan or Blazored's convention lookup).
-- [ ] Implement the component in `App/Components`, keeping the same name so pages don't change.
-- [ ] Add unit tests for mapping property paths to fields.
+Tasks (option A, *not needed*: DataAnnotations were chosen, C.3):
+- ~~Find out how validators are registered and resolved today (DI assembly scan or Blazored's convention lookup).~~
+- ~~Implement the component in `App/Components`, keeping the same name so pages don't change.~~
+- ~~Add unit tests for mapping property paths to fields.~~
 - [x] Remove the `Blazored.FluentValidation` package and using (2026-11-21).
 
 ### A.4 Microsoft.Azure.SignalR (Deprecated: "use >= 1.33.1")
@@ -325,7 +332,7 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 
 - **Recommended:** move list state into the URL query string, for example `?country=SE&owner=me`. Filters become GET forms, and QuickGrid's .NET 11 URL-based paging and sorting fits in. Links become shareable and the back button works. Remembered defaults across visits can be kept in a cookie or in user settings in the database.
 - ~~`ProtectedLocalStorage`~~: it also uses JS interop and a circuit, so it doesn't fit SSR.
-- [ ] Map each LocalStorage key to its query string or cookie replacement.
+- [x] Map each LocalStorage key to its query string or cookie replacement. *(replaced: done in step 3.3, the package is removed)*
 
 ### A.6 Security advisories in transitive packages
 
@@ -351,10 +358,10 @@ It isn't deprecated, but local storage is reached through JS interop, which need
 - [ ] Read through the official migration guide and the breaking changes: https://learn.microsoft.com/aspnet/core/migration/100-to-110 (not done yet; build, tests and a local run work).
 - [x] Update the Azure App Service runtime stack to .NET 11. **But** Windows App Service only had a *preview* of .NET 11, so 1.14.0 (built for the released runtime) failed to start: HTTP 500.31 "ANCM Failed to Find Native Dependencies". Since 1.14.1 the workflow publishes **self-contained for win-x86** (the Free plan runs 32-bit), about 170 MB.
 - [x] ~~When the released .NET 11 runtime is installed on Windows App Service, go back to framework-dependent publishing.~~ **Decided 2026-11-15: stay self-contained.** We choose when to move to a new .NET version, production runs exactly what CI tested, and no platform add-ons are injected (the App Service features that need framework-dependent apps, file logging, the codeless Application Insights agent and the extension-based Profiler, aren't used; see 2C). The cost: **runtime security patches reach production only when we deploy**, and deploys are about 170 MB.
-- [ ] **Patch routine:** a release after each monthly .NET patch day (the second Tuesday), a `- Maintenance update.` if nothing else changed. CI installs the latest `11.0.x` SDK, so the release gets the latest runtime. The daily agent (2C.6) reminds with an issue when a runtime patch is out and not yet deployed.
-- [ ] Lesson for the next upgrade: check the runtime actually installed on the App Service (not just the stack name), or publish self-contained from the start.
+- **Patch routine (ongoing):** a release after each monthly .NET patch day (the second Tuesday), a `- Maintenance update.` if nothing else changed. CI installs the latest `11.0.x` SDK, so the release gets the latest runtime. The daily agent (2C.6) reminds with an issue when a runtime patch is out and not yet deployed.
+- Lesson for the next upgrade: check the runtime actually installed on the App Service (not just the stack name), or publish self-contained from the start.
 
-- [ ] New .NET 11 Blazor analyser warnings (16), left for a separate step: BL0012 unnecessary `StateHasChanged` (12), BL0010/BL0016 JS interop should use `InvokeVoidAsync` and be wrapped in try/catch (4).
+- [x] New .NET 11 Blazor analyser warnings (16), left for a separate step: BL0012 unnecessary `StateHasChanged` (12), BL0010/BL0016 JS interop should use `InvokeVoidAsync` and be wrapped in try/catch (4). *(replaced: gone with stage 3; no BL warnings in the build, 2026-11-24)*
 
 ### B.2 Move to the Blazor Web App hosting model (prerequisite for most new features)
 
@@ -424,11 +431,11 @@ The public API (`/api/...`, API key) has four read-only GET endpoints in `App/Ap
 ### C.1 Inventory and classification
 Current size: 78 page components, 61 component files with `@onclick`, `@onchange`, `@oninput` or `@bind`, 5 `EditForm`s (21 pages use the shared `EditTemplate`), 7 `QuickGrid`s, and 3 files using `IJSRuntime`.
 
-- [ ] Classify every page into one of these groups:
+- [x] Classify every page into one of these groups: *(replaced by the stage 3 steps; in the end every page became static SSR)*
   - **Read-only.** Lists, details, Markdown content. Switch to static SSR directly.
   - **Form.** Edit and create pages. Use static SSR with `EditForm` + `FormName` + `[SupplyParameterFromForm]` and POST → redirect → GET.
   - **Truly interactive.** Live updates, drag/drop, complex client state. Keep these as interactive islands (`@rendermode InteractiveServer` on the component, not the whole page).
-- [ ] Record the result in a table in this document so progress can be tracked.
+- [x] Record the result in a table in this document so progress can be tracked. *(replaced: the stage 3 table)*
 
 ### C.2 Patterns to replace in SSR pages
 | Interactive pattern today | SSR replacement |
@@ -443,8 +450,8 @@ Current size: 78 page components, 61 component files with `@onclick`, `@onchange
 | `IJSRuntime` calls (3 files) | A JS module loaded via `<script type="module">` or a JS initializer. `IJSRuntime` isn't available in static SSR. |
 | `NavigationManager.NavigateTo` after save | `NavigateTo` during SSR form handling produces a redirect, so it still works, but check every case |
 
-- [ ] Rework the shared components so they work without interactivity: `EditTemplate`, `AppButton` (`OnClickCallback` → submit or link), `AppInput*`, `ListboxSelector`, `Paginator` and `TableTemplate`. With 142 `AppButton` and 113 `AppInputText` usages, these components give the biggest payoff.
-- [ ] Turn on enhanced navigation and enhanced form handling (`data-enhance`) so pages don't fully reload. This works without SignalR.
+- [x] Rework the shared components so they work without interactivity: `EditTemplate`, `AppButton` (`OnClickCallback` → submit or link), `AppInput*`, `ListboxSelector`, `Paginator` and `TableTemplate`. With 142 `AppButton` and 113 `AppInputText` usages, these components give the biggest payoff. *(done in stage 3)*
+- [x] Turn on enhanced navigation and enhanced form handling (`data-enhance`) so pages don't fully reload. This works without SignalR. *(done in stage 3)*
 
 ### C.3 Forms and shared validation (client + server)
 
@@ -482,7 +489,7 @@ Consequences:
 
 **Tasks:**
 - [x] Do a pilot with a simple form (`Region` or `Operator`): form model, mapping extensions, attributes, localisation, SSR form handling and tests. Check it in all five languages. Then adjust this document with what was learned.
-- [ ] Write the custom attributes (`OrdinaryText`, `Capitalized`, `ValidYear`, `DccAddress`, `Color`, `MacAddress`, …) with `IClientValidationRuleProvider` and the matching JS validators in a JS initializer (`ModulesRegistry.lib.module.js`).
+- [x] Write the custom attributes (`OrdinaryText`, `Capitalized`, `ValidYear`, `DccAddress`, `Color`, `MacAddress`, …) with `IClientValidationRuleProvider` and the matching JS validators in a JS initializer (`ModulesRegistry.lib.module.js`). *(done in steps 3.5 and 3.6, with changes: capitals and colours are corrected rather than validated, and the validators are in `wwwroot/js/form-validation.js`)*
 - [x] Convert the remaining validators one by one into form models. Delete each FluentValidation class once its form is converted.
 - [x] When all are converted, remove the `FluentValidation` package, `App/Validators` and `ValidatorsExtensions.cs` (2026-11-21).
 
@@ -550,7 +557,7 @@ So the page has to work like this when saving an edit:
 
 Alternative (a larger change): let the services take a delegate, `SaveAsync(principal, id, Action<Region> apply)`, and run `apply` on the entity loaded in their own `DbContext`. That avoids loading the entity twice, but it touches every service. Start with the pattern above and consider this later.
 
-- [ ] Go through every `SaveAsync` in `Services/Implementations` and note the entities that have properties the form doesn't own (owner, audit fields, timestamps, computed values). These are the most important cases to test.
+- [x] Go through every `SaveAsync` in `Services/Implementations` and note the entities that have properties the form doesn't own (owner, audit fields, timestamps, computed values). These are the most important cases to test. *(replaced: each form's tests check that an edit keeps what the form doesn't own)*
 
 **Collections and child entities:** most child entities (station tracks, exits, customers, cargo) are already edited on their own pages and become their own form models. Only add a list of sub-form models where a form edits a collection at the same time. Mapping a list back to entities (adding, updating and removing children) is the hardest part, and is done explicitly in `AsEntity`.
 
@@ -563,27 +570,29 @@ Alternative (a larger change): let the services take a delegate, `SaveAsync(prin
 - The downside is that a new property can be forgotten in the mapping. Round-trip tests (below) catch that.
 
 **Testing:**
-- [ ] Create `TestCode/App.Tests` (MSTest v4, like the other test projects). App currently has no test project.
-- [ ] For each form, write tests that:
+- [x] Create `TestCode/App.Tests` (MSTest v4, like the other test projects).
+- [x] For each form, write tests that: *(`App.Tests/Forms`)*
   - check that `entity.AsFormData().AsEntity(copy)` changes no property;
   - check that `AsEntity(existing)` leaves properties outside the form unchanged;
   - run the validation (`Validator.TryValidateObject(form, …, validateAllProperties: true)`) with valid and invalid values;
   - run the C# side of each custom attribute against a shared table of test values, and keep that table in sync with the JS validator.
-- [ ] Optional: a reflection-based test that fails if an entity gets a new public property that is neither mapped nor explicitly excluded. This is a safety net against forgotten mappings.
+- [ ] Optional, not done: a reflection-based test that fails if an entity gets a new public property that is neither mapped nor explicitly excluded. This is a safety net against forgotten mappings.
 
 ### C.5 Remaining interactive islands
-- [ ] Identify components that must stay interactive and give them `@rendermode InteractiveServer` individually.
-- [ ] Turn on `AutoPause` (B.3) for these, so idle tabs don't hold circuits open.
-- [ ] Evaluate whether the remaining load justifies the **Azure SignalR Service** (about $50 per month, by far the largest cost; the database is about $5), or whether the app's own SignalR is enough. **Goal (2026-11-15): remove it** once SSR is done; today the app's own SignalR is too limited (`AddAzureSignalR`, `ServerStickyMode.Required` in `Program.cs`). Removing it would also remove the deprecated `Microsoft.Azure.SignalR` package (A.4).
-- [ ] Consider `CacheView` for expensive static parts.
+*Done in step 3.7 (1.16.0): nothing stayed interactive, and the Azure SignalR Service and SignalR are gone.*
+- [x] Identify components that must stay interactive and give them `@rendermode InteractiveServer` individually. *(none)*
+- [x] Turn on `AutoPause` (B.3) for these, so idle tabs don't hold circuits open. *(not needed)*
+- [x] Evaluate whether the remaining load justifies the **Azure SignalR Service** (about $50 per month, by far the largest cost; the database is about $5), or whether the app's own SignalR is enough. **Goal (2026-11-15): remove it** once SSR is done; today the app's own SignalR is too limited (`AddAzureSignalR`, `ServerStickyMode.Required` in `Program.cs`). Removing it would also remove the deprecated `Microsoft.Azure.SignalR` package (A.4).
+- [x] Consider `CacheView` for expensive static parts. *(used for Release notes, step 3.2)*
 
 ### C.6 Security and authentication in SSR
-- [ ] Antiforgery: in .NET 11 every SSR form post is validated automatically. Check that every `<form method="post">` gets the token (via `EditForm` or `<AntiforgeryToken />`).
-- [ ] Authorisation: `[Authorize]` on pages, `AuthorizeView` and `AuthorizeRouteView` work in SSR. Check that `ApplicationClaimsTransformation` runs on every request, which happens naturally with SSR.
+- [x] Antiforgery: in .NET 11 every SSR form post is validated automatically. Check that every `<form method="post">` gets the token (via `EditForm` or `<AntiforgeryToken />`). *(checked 2026-11-24: every plain POST form has `<AntiforgeryToken />`)*
+- [x] Authorisation: `[Authorize]` on pages, `AuthorizeView` and `AuthorizeRouteView` work in SSR. Check that `ApplicationClaimsTransformation` runs on every request, which happens naturally with SSR. *(static SSR since 1.16.0)*
 - [ ] Security headers: SSR with fewer inline scripts and styles makes a stricter CSP possible. Revisit the policies currently left out of `App/Security`.
 - [ ] **Server-side sessions** (noted 2026-11-18, to do after 3.3): the cookie holds only the user's `ObjectId` and email, and the claims are read from the database on every request, but a cookie can't be revoked: sign-out only deletes it in that browser, and a copied cookie is valid for the default 14 days, renewed on use (`IsPersistent`, no `ExpireTimeSpan`). `ObjectId` is also the token in the confirm/reset-password mail and the user's API key. Plan: a `UserSession` table (id of 32 random bytes, only its hash stored; user id, created, last used, expires); sign-in creates a row and the cookie gets only the session id as a claim; `ApplicationClaimsTransformation` starts from the session joined to the user (still one query); sign-out deletes the row, setting a password deletes all the user's rows, expired rows are deleted at sign-in; an explicit `ExpireTimeSpan`; no email claim (the test mail in user administration reads the address from the database). Two releases: the table, then the switch (every user signs in once more). `ITicketStore` (`CookieAuthenticationOptions.SessionStore`) is the built-in alternative, but stores the whole ticket, which isn't needed when the claims are rebuilt anyway.
 
 ### C.7 Suggested order
+*Followed in stage 3, done.*
 1. Shared components (`AppButton`, `AppInput*`, `EditTemplate`) are made to work in both modes.
 2. Read-only pages and Markdown/content pages.
 3. List pages (filters → query string, QuickGrid URL state, LocalStorage removed).
@@ -637,14 +646,14 @@ The SQL project is the old (non-SDK) format. That's why `dotnet build` can't bui
 
 **Move to EF Core migrations, in phases, and treat PostgreSQL as an option, not a goal.** The main reason is to get rid of the duplicate maintenance and the risky deploy order. PostgreSQL becomes *possible* once the SQL Server dependencies in the code are gone (phase A), and that work pays off whether or not we ever switch.
 
-**Phase A: reduce SQL Server coupling (useful no matter what)**
+**Phase A: reduce SQL Server coupling (useful no matter what)** *(stage 5, in progress)*
 - [ ] Replace all `SqlConnection`/`SqlCommand` usage with EF Core: LINQ where possible, otherwise `Database.SqlQuery<T>()` or `FromSql` with parameters. This also removes `Microsoft.Data.SqlClient` as a direct dependency of `Services`.
 - [ ] Go through the 16 procedures: rewrite as LINQ or C# where reasonable. **The waybill chain is the first and largest case (see D.5).**
 - [ ] Go through the 21 views: map the needed ones as keyless entities (`ToView`) or replace them with LINQ projections.
 - [ ] Replace the 16 cascade triggers with explicit deletes in the services (in a transaction), or with `DeleteBehavior.Cascade` where SQL Server allows it. Write tests that delete a parent and check the children.
 
-**Phase B: complete EF model + baseline migration (still SQL Server)**
-- [ ] Complete the EF model so it fully describes the schema: column types (`HasColumnType` for `smalldatetime`, `datetimeoffset(7)`), `HasMaxLength`, nullability, defaults (`HasDefaultValueSql`), indexes, unique constraints, delete behaviours, sequences and check constraints.
+**Phase B: complete EF model + baseline migration (still SQL Server)** *(the model is done in step 4.1; the rest is set aside with 4.2 and 4.3)*
+- [x] Complete the EF model so it fully describes the schema: column types (`HasColumnType` for `smalldatetime`, `datetimeoffset(7)`), `HasMaxLength`, nullability, defaults (`HasDefaultValueSql`), indexes, unique constraints, delete behaviours, sequences and check constraints.
 - [ ] Create the baseline: `dotnet ef migrations add Baseline` in a separate migrations assembly (for example `SourceCode/Data.Migrations.SqlServer`), so a PostgreSQL set can live alongside later.
 - [ ] **Verify the baseline:** create an empty database from the migration and compare it with production using schema compare. The existing `.scmp` files can be reused. Iterate until the only differences are deliberate.
 - [ ] Add views, remaining procedures and seed data to the baseline with `migrationBuilder.Sql(...)`, or seed data with `HasData` for small static tables.
@@ -653,7 +662,7 @@ The SQL project is the old (non-SDK) format. That's why `dotnet build` can't bui
 - [ ] Write a migration routine for developers: always review the generated migration, handle renames explicitly, keep each migration small, and never edit a migration that has already been deployed.
 - [ ] Retire `Database.sqlproj` and its `.scmp` files. Update `CLAUDE.md`, `System Design Documents/Overview.md` and the solution file.
 
-**Phase C: PostgreSQL (only if we decide to switch)**
+**Phase C: PostgreSQL (only if we decide to switch)** *(set aside, stage 6)*
 - [ ] Create a separate migration set for Npgsql (`Data.Migrations.Postgres`) with a **fresh** baseline generated from the model. Don't translate the SQL Server migrations.
 - [ ] Choose the provider at startup via configuration (`UseSqlServer` / `UseNpgsql`). `_ModulesDbContext.cs` and `Program.cs` currently hard-code `UseSqlServer`.
 - [ ] `DateTimeOffset`: based on the analysis in D.4, if the offset means "local time at a location", store the UTC instant in `timestamptz` and the time zone (IANA id, for example `Europe/Stockholm`) on the owning entity (meeting or layout). Don't depend on the offset stored in the value.
@@ -665,11 +674,11 @@ The SQL project is the old (non-SDK) format. That's why `dotnet build` can't bui
 
 ### D.4 Open questions
 - ✅ **Is the database shared with other applications?** **Answer (2026-11-11): no, not currently.** This app is the only owner of the schema and the migrations. If timetable data is added to the database in the future, it gets new tables through the same migrations (possibly in its own schema, `timetable`).
-- ⚠️ **Is the offset in the `DATETIMEOFFSET` columns used for anything?** **Answer: unknown, possibly time-zone related.** Becomes a task:
+- ⚠️ **Is the offset in the `DATETIMEOFFSET` columns used for anything?** **Answer: unknown, possibly time-zone related.** Becomes a task (step 5.9):
   - [ ] For each of the 20 `DATETIMEOFFSET` columns, analyse the actual values in production: `SELECT DATEPART(TZOFFSET, <col>) AS Offset, COUNT(*) FROM <table> GROUP BY DATEPART(TZOFFSET, <col>)`.
   - [ ] Find where the offset is read or shown in code (`.Offset`, `.LocalDateTime`, `ToLocalTime()`, formatting).
   - [ ] Conclusion per column: "UTC instant only" or "local time at a location". The latter needs a time-zone design before any PostgreSQL move (see phase C).
-- [ ] Order relative to chapter C: phases A and B can run in parallel with the SSR work, but avoid changing forms and the database schema for the same aggregate at the same time.
+- [x] Order relative to chapter C: phases A and B can run in parallel with the SSR work, but avoid changing forms and the database schema for the same aggregate at the same time. *(chapter C is done)*
 
 ### D.5 Example: waybill generation, from layered views to code
 
@@ -724,16 +733,17 @@ Code     WaybillService · StationCustomerWaybillsService · EmptyWagonOrderServ
 
 **Unused database objects** (referenced by neither code nor other SQL objects; first check whether they're run by hand in SSMS):
 `GetLayoutWaybills` (replaced by `GetLayoutWaybills2`), `GetRegisteredModules`, `GetMeetingAdministrators`, `GetLayoutParticipantEmail`, `ChangeAdministratorPrivilege`, `NullifyRedundantStationCustomerTrackOrArea`, `RemoveUnreferencedDocuments`, `StationScale`, `LayoutParticipantsAvailableModule`.
-- [ ] Check them and remove the unused ones (or move admin scripts to `dbo/Scripts`, outside the schema).
+- [ ] Check them and remove the unused ones (or move admin scripts to `dbo/Scripts`, outside the schema). *(step 5.8)*
 
 ---
 
 ## E. Verification
 
-- [ ] `dotnet build`, plus both test projects green.
-- [ ] Manual browser check: notifications, person search, validation messages on all four forms, list filters kept between visits, and QuickGrid paging and sorting.
-- [ ] Check every fully supported language (en, de, da, sv, nb).
-- [ ] Add a `RELEASENOTES.md` section with the date for each release, with bullets for the changes that affect the users or the app's security.
+*Replaced by the definition of done in the roadmap rules, which every step follows.*
+- [x] `dotnet build`, plus both test projects green.
+- [x] Manual browser check: notifications, person search, validation messages on all four forms, list filters kept between visits, and QuickGrid paging and sorting.
+- [x] Check every fully supported language (en, de, da, sv, nb).
+- [x] Add a `RELEASENOTES.md` section with the date for each release, with bullets for the changes that affect the users or the app's security.
 
 
 ---
@@ -1018,7 +1028,7 @@ Tests: `HandledExceptionLoggingTests` (Services) and `SecurityNotificationLoggin
 - [x] GitHub (2026-11-16): secret `CLAUDE_CODE_OAUTH_TOKEN` in the `log-review` environment, from `claude setup-token` (the user's subscription).
 - [x] GitHub: *Settings → Actions → General → Allow GitHub Actions to create and approve pull requests* was already on.
 - [x] Dry run (2026-11-16): all five queries returned data, the agent finished in 21 turns and reported nothing, which was right: every exception in the window (the two start-up exceptions, the `FK_Module_Document` save) happened before the releases that fixed them (1.14.15, 1.14.21–22).
-- [ ] Verification of a pull request: the two start-up exceptions planned for it are fixed, so the first real finding (or a known, still unfixed problem) has to show it: one pull request or issue, nothing private in its text, the verify result in the body.
+- [x] Verification of a pull request *(not waited for, decided 2026-11-24: a real finding may take months or years)*: the two start-up exceptions planned for it are fixed, so the first real finding (or a known, still unfixed problem) has to show it: one pull request or issue, nothing private in its text, the verify result in the body.
 
 ## J. Documents (step 2C.7)
 

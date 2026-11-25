@@ -4,6 +4,7 @@ Du kan registrere dine egne moduler og gruppeejede moduler, som gruppeadministra
 
 **Tilgængelige moduler** er de *modulpakker*, der er tilgængelige, men som endnu ikke er registreret for banelayoutet.
 Listen er udfyldt med *modulpakker*, der har samme *skala* som banelayoutet.
+Kun moduler, hvis *primære* eller *sekundære tema* er banelayoutets *hovedtema*, vises.
 En *modulpakke* indeholder moduler med samme *bokslabel* eller alle *varianter* af et modul,
 så det kan indeholde mere end ét modul.
 

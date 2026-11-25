@@ -92,6 +92,76 @@ public sealed class ModuleSaveTests
     }
 
     [TestMethod]
+    public async Task WithoutAPrimaryThemeTheModuleGetsItsStandards()
+    {
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        var american = Changed(0, "American");
+        american.StandardId = 2;
+        american.PrimaryThemeId = 0;
+        var european = Changed(0, "European");
+        european.PrimaryThemeId = 0;
+
+        var addedAmerican = await Target.SaveAsync(Principal(Owner), american, ModuleOwnershipRef.Person(Owner));
+        var addedEuropean = await Target.SaveAsync(Principal(Owner), european, ModuleOwnershipRef.Person(Owner));
+
+        Assert.AreEqual((int)Theme.US, (await _factory.FindAsync<Module>(addedAmerican.Entity!.Id))!.PrimaryThemeId);
+        Assert.AreEqual((int)Theme.Europe, (await _factory.FindAsync<Module>(addedEuropean.Entity!.Id))!.PrimaryThemeId, "The standard without a theme counts as Europe.");
+    }
+
+    [TestMethod]
+    public async Task TheOwnerChoosesTheThemes()
+    {
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        var changed = Changed(OwnersModule);
+        changed.StandardId = 2;
+        changed.PrimaryThemeId = (int)Theme.Europe; // Another theme than the standard's.
+        changed.SecondaryThemeId = (int)Theme.US;
+        var same = Changed(StrangersModule);
+        same.PrimaryThemeId = (int)Theme.US;
+        same.SecondaryThemeId = (int)Theme.US;
+
+        await Target.SaveAsync(Principal(Owner), changed, ModuleOwnershipRef.Person(Owner));
+        await Target.SaveAsync(Principal(Stranger), same, ModuleOwnershipRef.Person(Stranger));
+
+        var stored = (await _factory.FindAsync<Module>(OwnersModule))!;
+        Assert.AreEqual((int)Theme.Europe, stored.PrimaryThemeId);
+        Assert.AreEqual((int)Theme.US, stored.SecondaryThemeId);
+        Assert.IsNull((await _factory.FindAsync<Module>(StrangersModule))!.SecondaryThemeId, "The secondary theme is another theme than the primary.");
+    }
+
+    [TestMethod]
+    [DataRow(1, null, null, DisplayName = "Same as the primary")]
+    [DataRow(1, 0, null, DisplayName = "Zero")]
+    [DataRow(1, 2, 2, DisplayName = "Another theme")]
+    [DataRow(1, 7, null, DisplayName = "Not a theme")]
+    public void TheSecondaryThemeIsAnotherThemeOrNone(int primary, int? secondary, int? expected)
+    {
+        var module = new Module { FullName = "Module", PrimaryThemeId = primary, SecondaryThemeId = secondary ?? primary };
+        module.CorrectInput();
+        Assert.AreEqual(expected, module.SecondaryThemeId);
+    }
+
+    [TestMethod]
+    public async Task ASaveKeepsTheLastMeetingRegistrationDate()
+    {
+        var lastMeeting = new DateTimeOffset(2025, 9, 12, 0, 0, 0, TimeSpan.Zero);
+        await using (var dbContext = _factory.CreateDbContext())
+        {
+            (await dbContext.Modules.FindAsync(OwnersModule))!.LastMeetingRegistrationDate = lastMeeting;
+            await dbContext.SaveChangesAsync();
+        }
+
+        var changed = await Target.SaveAsync(Principal(Owner), Changed(OwnersModule), ModuleOwnershipRef.Person(Owner));
+        var newModule = Changed(0, "New");
+        newModule.LastMeetingRegistrationDate = lastMeeting;
+        var added = await Target.SaveAsync(Principal(Owner), newModule, ModuleOwnershipRef.Person(Owner));
+
+        Assert.AreEqual(1, changed.Count, changed.Message);
+        Assert.AreEqual(lastMeeting, (await _factory.FindAsync<Module>(OwnersModule))!.LastMeetingRegistrationDate, "The form has no date.");
+        Assert.IsNull((await _factory.FindAsync<Module>(added.Entity!.Id))!.LastMeetingRegistrationDate, "Only meeting registrations set it.");
+    }
+
+    [TestMethod]
     public async Task ACountryAdministratorChangesModulesOnlyInTheirCountry()
     {
         Assert.AreEqual(0, (await Target.SaveAsync(CountryAdministrator(OtherCountryId), Changed(OwnersModule), ModuleOwnershipRef.Person(Owner))).Count);

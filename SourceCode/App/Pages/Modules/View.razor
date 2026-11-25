@@ -1,0 +1,184 @@
+@page "/Modules/{Id:int}/View"
+
+@attribute [Authorize(Policy = "User")]
+@* Static SSR: the module's properties, for every signed-in user, as the modules list (ModuleService.FindForViewAsync). Links to the
+   station view and the freight customers when the module is a station's, to the module drawing from Module Draw, and to the
+   documents. Edit only for those who may edit the module. *@
+
+@using Tellurian.Trains.Drawing.Components.Views
+
+@inject IStringLocalizer<Strings> Localizer
+@inject ModuleService ModuleService
+
+<PageHeading ObjectName="Module" Context="@Module" IconClass="@FontAwesome.Module" PageAction="PageAction.List" BackHref="@BackHref" />
+
+@if (Module is null)
+{
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else
+{
+    <div class="noprint mb-2">
+        @if (Module.StationId is int stationId)
+        {
+            <AppButton Label="OperationLocation" Href="@($"Stations/{stationId}/View")" IconName="@FontAwesome.Station" AlwaysShowLabel="true" />
+            @if (Module.HasCargoCustomers())
+            {
+                <AppButton Label="FreightCustomers" Href="@($"Stations/{stationId}/Customers")" IconName="@FontAwesome.Customer" AlwaysShowLabel="true" />
+            }
+        }
+        @if (Module.ModuleDrawingId.HasValue)
+        {
+            <AppButton Label="ModuleDrawing" Href="@($"Modules/{Module.Id}/Drawing")" IconName="@FontAwesome.Drawing" AlwaysShowLabel="true" />
+        }
+        @if (MayEdit)
+        {
+            <AppButton Label="Edit" Href="@EditHref" IconName="@FontAwesome.Edit" AlwaysShowLabel="true" />
+        }
+        <span class="ms-2">
+            <DocumentLink DocumentId="Module.PdfDocumentationId" FileExtension="pdf" />
+            <DocumentLink DocumentId="Module.DwgDrawingId" FileExtension="dwg" />
+            <DocumentLink DocumentId="Module.SkpDrawingId" FileExtension="skp" />
+        </span>
+    </div>
+
+    <div class="row">
+    <div class="@(DrawingJson is null ? "col-12" : "col-xl-6")">
+    <table class="table table-sm module-properties">
+        <tbody>
+            <tr><th>@Localizer["Owners"]</th><td>@Module.OwnerNames()</td></tr>
+            @* The description has the standard, the shape, the length, the tracks through and the features it names; they aren't
+               repeated below. *@
+            <tr><th>@Localizer["Description"]</th><td>@Module.Description(compact: true)</td></tr>
+            <tr><th>@Localizer["Scale"]</th><td>@Module.Scale?.Display()</td></tr>
+            @if (Module.FremoName() is string fremoName)
+            {
+                <tr><th>@Localizer["FremoNumber"]</th><td>@fremoName</td></tr>
+            }
+            @if (Module.ConfigurationLabel.HasValue)
+            {
+                <tr><th>@Localizer["ConfigurationLabel"]</th><td>@Module.ConfigurationLabel</td></tr>
+            }
+            @if (Module.PackageLabel.HasValue)
+            {
+                <tr><th>@Localizer["PackageLabel"]</th><td>@Module.PackageLabel</td></tr>
+            }
+            @if (Module.NumberOfSections.HasValue)
+            {
+                <tr><th>@Localizer["NumberOfSections"]</th><td>@Module.NumberOfSections</td></tr>
+            }
+            <tr><th>@Localizer["PrimaryTheme"]</th><td>@(Module.PrimaryThemeId.ToEnumLocalized<Theme>())</td></tr>
+            @if (Module.SecondaryThemeId is int secondaryThemeId)
+            {
+                <tr><th>@Localizer["SecondaryTheme"]</th><td>@(secondaryThemeId.ToEnumLocalized<Theme>())</td></tr>
+            }
+            @if (Module.Theme.HasValue)
+            {
+                <tr><th>@Localizer["ThemeNote"]</th><td>@Module.Theme</td></tr>
+            }
+            @if (Module.RepresentsFromYear.HasValue || Module.RepresentsUptoYear.HasValue)
+            {
+                <tr><th>@Localizer["Period"]</th><td>@(((int?)Module.RepresentsFromYear, (int?)Module.RepresentsUptoYear).ToPeriodText())</td></tr>
+            }
+            @if (Module.Angle.HasValue && Module.Straight.HasValue)
+            {
+                @* A curve with a straight part: the description gives only the total length. *@
+                <tr><th>@Localizer["Straight"]</th><td>@Module.Straight mm</td></tr>
+            }
+            @if (Module.Width.HasValue)
+            {
+                <tr><th>@Localizer["Width"]</th><td>@Module.Width mm</td></tr>
+            }
+            @if (Module.SpeedLimit.HasValue)
+            {
+                <tr><th>@Localizer["MaxSpeed"]</th><td>@Module.SpeedLimit km/h</td></tr>
+            }
+            <tr><th>@Localizer["FunctionalState"]</th><td>@(Module.FunctionalState.ToEnumLocalized<ModuleFunctionalState>())</td></tr>
+            <tr><th>@Localizer["LandscapeState"]</th><td>@(Module.LandscapeState.ToEnumLocalized<ModuleLandscapeState>())</td></tr>
+            <tr><th>@Localizer["LandscapeSeason"]</th><td>@(Module.LandscapeSeason.ToEnumLocalized<LandscapeSeason>())</td></tr>
+            <tr><th>@Text("SignalFeature")</th><td>@(Module.SignalFeature.ToEnumLocalized<SignalFeature>())</td></tr>
+            <tr><th>@Text("OverheadLineFeature")</th><td>@(Module.OverheadLineFeature.ToEnumLocalized<OverheadLineFeature>())</td></tr>
+            @if (Module.StoredAtLocality is Locality storage)
+            {
+                <tr><th>@Localizer["StoredAt"]</th><td>@storage.Name, @storage.CityName</td></tr>
+            }
+            @if (Features.Any())
+            {
+                <tr><th>@Localizer["Features"]</th><td>@string.Join(", ", Features)</td></tr>
+            }
+            @if (Module.Note.HasValue)
+            {
+                <tr><th>@Localizer["Note"]</th><td>@Module.Note</td></tr>
+            }
+        </tbody>
+    </table>
+    </div>
+    @if (DrawingJson is not null)
+    {
+        @* The module drawing from Module Draw, view only (as the drawing page, which shows it larger). *@
+        <div class="col-xl-6">
+            <div class="module-drawing">
+                <ModuleView Json="@DrawingJson" Label="@Module.FullName" FitText="@Localizer["FitInView"]" Error="@Localizer["ModuleDrawingCannotBeShown"]" />
+            </div>
+        </div>
+    }
+    </div>
+
+    @if (Module.ModuleExits.Count > 0)
+    {
+        <h3>@Localizer["Exits"]</h3>
+        <TableTemplate Items="Module.ModuleExits.OrderBy(me => me.Label)">
+            <TableHeader>
+                <th>@Localizer["Direction"]</th>
+                <th>@Localizer["Designation"]</th>
+                <th>@Localizer["EndProfile"]</th>
+            </TableHeader>
+            <RowTemplate Context="exit">
+                <td>@(exit.Direction.ToEnumLocalized<ModuleExitDirection>())</td>
+                <td>@exit.Label</td>
+                <td>@exit.EndProfile?.Designation</td>
+            </RowTemplate>
+        </TableTemplate>
+    }
+}
+
+@code {
+    const string BackHref = "Modules/Index";
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    Module? Module;
+    string? DrawingJson;
+    bool MayEdit;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Module = await ModuleService.FindForViewAsync(principal, Id);
+        MayEdit = Module is not null && await ModuleService.MayEditAsync(principal, Id);
+        if (Module?.ModuleDrawingId is not null && await ModuleService.FindDrawingAsync(principal, Id) is var (_, content))
+        {
+            DrawingJson = ModuleDrawings.Text(content);
+        }
+    }
+
+    // The checkboxes of the module form that are set, as the form labels them; not those the description tells (stand-alone,
+    // 2R/3R, duck-under, signal module, end profile switcher, end of line).
+    IEnumerable<string> Features => Module is null ? [] :
+        new (bool IsSet, string Key)[]
+        {
+            (Module.IsUnavailable, "IsUnavailable"),
+            (Module.IsTurntable, "IsTurntable"),
+            (Module.HasNormalGauge, "HasNormalGauge"),
+            (Module.HasNarrowGauge, "HasNarrowGauge"),
+            (Module.HasIntegratedLocoNet, "HasIntegratedLocoNet"),
+        }.Where(f => f.IsSet).Select(f => Text(f.Key));
+
+    // The form's labels, some of them questions ("Has signal?"), as statements.
+    string Text(string key) => Localizer[key].Value.TrimEnd('?', ' ');
+
+    string EditHref =>
+        Module.IsGroupOwned() ? $"Modules/{Module!.Id}/Edit/GroupOwned/{Module.OwningGroupId()}" :
+        Module.IsPersonOwned() ? $"Modules/{Module!.Id}/Edit/PersonOwned/{Module.OwningPersonsIds()[0]}" :
+        string.Empty;
+}

@@ -57,6 +57,27 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
             .OrderBy(l => l.Description);
     }
 
+    /// <summary>All standards, with their scale, for choosing the standard that defines an end profile.</summary>
+    public async Task<IEnumerable<ListboxItem>> ListboxItemsAsync(ClaimsPrincipal? principal)
+    {
+        if (!principal.IsAuthenticated()) return [];
+        using var dbContext = Factory.CreateDbContext();
+        var standards = await dbContext.ModuleStandards.AsNoTracking()
+            .Include(ms => ms.Scale)
+            .ToReadOnlyListAsync();
+        return standards
+            .Select(ms => new ListboxItem(ms.Id, $"{ms.ShortName} (1:{ms.Scale.Denominator})"))
+            .OrderBy(l => l.Description);
+    }
+
+    /// <summary>The scale of each standard, by the standard's id; an end profile defined by a standard has its scale.</summary>
+    public async Task<IReadOnlyDictionary<int, int>> ScaleIdsAsync(ClaimsPrincipal? principal)
+    {
+        if (!principal.IsAuthenticated()) return new Dictionary<int, int>();
+        using var dbContext = Factory.CreateDbContext();
+        return await dbContext.ModuleStandards.AsNoTracking().ToDictionaryAsync(ms => ms.Id, ms => ms.ScaleId);
+    }
+
     /// <summary>True when the standard <paramref name="id"/> is <paramref name="otherId"/> or extends it, directly or through others.</summary>
     private static bool Extends(Dictionary<int, int?> extendsById, int? id, int otherId)
     {
@@ -143,6 +164,9 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
             // The standards that extend it are no longer extensions (through the change tracker, so it is logged).
             var extensions = await dbContext.ModuleStandards.Where(ms => ms.ExtendsStandardId == id).ToListAsync().ConfigureAwait(false);
             foreach (var extension in extensions) extension.ExtendsStandardId = null;
+            // The end profiles it defines no longer refer to a standard (through the change tracker, so it is logged).
+            var endProfiles = await dbContext.ModuleEndProfiles.Where(ep => ep.ModuleStandardId == id).ToListAsync().ConfigureAwait(false);
+            foreach (var endProfile in endProfiles) endProfile.ModuleStandardId = null;
             // Its links have no foreign key, so they are deleted here (through the change tracker, so it is logged).
             dbContext.ExternalLinks.RemoveRange(await dbContext.ExternalLinks.Where(l => l.OwnerType == ExternalLinkOwners.ModuleStandard && l.OwnerId == id).ToListAsync().ConfigureAwait(false));
             dbContext.ModuleStandards.Remove(existing);

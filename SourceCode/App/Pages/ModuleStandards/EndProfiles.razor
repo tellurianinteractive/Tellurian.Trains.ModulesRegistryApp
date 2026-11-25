@@ -1,7 +1,8 @@
 ﻿@page "/ModuleStandards/EndProfiles"
 
 @attribute [Authorize(Policy = "User")]
-@* Static SSR (Migration step 3.6): the module end profiles, only text and links; Add and Edit for global administrators. *@
+@* Static SSR (Migration step 3.6): the module end profiles, only text and links; Add and Edit for global administrators. The drawing
+   from Module Draw, when there is one, is shown to everyone on its own page (EndProfileDrawing). *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject ModuleEndProfileService ModuleEndProfileService
@@ -13,21 +14,35 @@
     <AppButton Label="Add" Href="ModuleStandards/EndProfiles/0/Edit" AlwaysShowLabel="true" />
 }
 
-<TableTemplate Items="ModuleEndProfiles?.OrderBy(p => p.Scale.Denominator).ThenBy(p => p.Designation)">
+<TableTemplate Items="ModuleEndProfiles?.OrderBy(p => p.Scale.Denominator).ThenBy(p => p.ModuleStandard?.ShortName).ThenBy(p => p.Designation)">
     <TableHeader>
         <th>@Localizer["Scale"]</th>
+        <th>@Localizer["ModuleStandard"]</th>
         <th>@Localizer["Designation"]</th>
-        @if (MayEdit)
+        <th>@Localizer["Description"]</th>
+        @if (HasActions)
         {
             <th>@Localizer["Actions"]</th>
         }
     </TableHeader>
     <RowTemplate Context="item">
         <td>@item.Scale.Display()</td>
+        <td>@item.ModuleStandard?.ShortName</td>
         <td>@item.Designation</td>
-        @if (MayEdit)
+        <td>@item.Description</td>
+        @if (HasActions)
         {
-            <td><AppButton Label="Edit" Href="@($"ModuleStandards/EndProfiles/{item.Id}/Edit")" /></td>
+            <td style="white-space: nowrap">
+                @* Edit first, so it is in the same place on every row; the less common buttons after it. *@
+                @if (MayEdit)
+                {
+                    <AppButton Label="Edit" Href="@($"ModuleStandards/EndProfiles/{item.Id}/Edit")" />
+                }
+                @if (item.DrawingId.HasValue)
+                {
+                    <AppButton Label="EndProfileDrawing" Href="@($"ModuleStandards/EndProfiles/{item.Id}/Drawing")" IconName="@FontAwesome.Drawing" />
+                }
+            </td>
         }
     </RowTemplate>
 </TableTemplate>
@@ -38,6 +53,8 @@
     ClaimsPrincipal? Principal;
     IEnumerable<ModuleEndProfile>? ModuleEndProfiles;
     bool MayEdit => Principal.IsGlobalAdministrator();
+    // The column is shown to everyone when an end profile has a drawing to view; otherwise only to those who edit.
+    bool HasActions => MayEdit || ModuleEndProfiles?.Any(p => p.DrawingId.HasValue) == true;
 
     protected override async Task OnInitializedAsync()
     {

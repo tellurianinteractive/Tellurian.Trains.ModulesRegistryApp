@@ -9,7 +9,7 @@ AS
 
 	SELECT TOP 1 
 		@MeetingId = L.MeetingId, 
-		@MainThemeId = MS.MainThemeId, 
+		@MainThemeId = L.ThemeId, 
 		@ScaleId = MS.ScaleId
 	FROM 
 		Layout AS L INNER JOIN 

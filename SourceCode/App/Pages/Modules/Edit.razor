@@ -48,8 +48,10 @@
             <AppInputSelectNullable Width="3" Label="IsStationOrPartOf" @bind-Value="Form!.StationId" Items="StationItems" ShowNoneOption="true" />
             <AppInputNumber TValue="int?" Width="1" Label="RepresentsFromYear" @bind-Value="Form!.RepresentsFromYear" />
             <AppInputNumber TValue="int?" Width="1" Label="RepresentsToYear" @bind-Value="Form!.RepresentsUptoYear" />
-            <AppInputText Width="3" Label="ThemeNote" @bind-Value="Form!.Theme" />
-            <AppInputSelectNullable Width="4" Label="StoredAt" @bind-Value="Form!.StoredAtLocalityId" Items="StorageItems" ShowNoneOption="true" NoneLabel="None" IsDisabled="@IsStorageHidden" />
+            @* The primary theme decides the waybills; the secondary theme only lets the module also be registered to layouts with it. *@
+            <AppInputSelectNullable Width="2" Label="PrimaryTheme" @bind-Value="Form!.PrimaryThemeId" Items="ThemeItems" ShowNoneOption="true" NoneLabel="AsTheStandard" />
+            <AppInputSelectNullable Width="2" Label="SecondaryTheme" @bind-Value="Form!.SecondaryThemeId" Items="ThemeItems" ShowNoneOption="true" NoneLabel="None" />
+            <AppInputSelectNullable Width="3" Label="StoredAt" @bind-Value="Form!.StoredAtLocalityId" Items="StorageItems" ShowNoneOption="true" NoneLabel="None" IsDisabled="@IsStorageHidden" />
         </AppFormRow>
         <AppFormRow>
             <AppInputNumber TValue="double?" Width="1" Label="Radius" @bind-Value="Form!.Radius" Unit="mm" />
@@ -79,9 +81,16 @@
             <AppInputCheck Label="Is3R" @bind-Value="Form!.Is3R" />
         </AppCheckGroup>
 
-        <AppInputText Width="12" Label="Note" @bind-Value="Form!.Note" />
+        <AppFormRow>
+            <AppInputText Width="4" Label="ThemeNote" @bind-Value="Form!.Theme" />
+            <AppInputText Width="8" Label="Note" @bind-Value="Form!.Note" />
+        </AppFormRow>
     </Inputs>
     <Buttons>
+        @if (Existing is not null)
+        {
+            <AppButton Label="View" Href="@($"Modules/{Existing.Id}/View")" IconName="@FontAwesome.View" />
+        }
         @if (Existing?.StationId is int stationId)
         {
             <AppButton Label="@Localizer.EditObject("OperationLocation")" Href="@OwnershipRef.Href("Stations", stationId, "Edit")" IconName="@FontAwesome.Station" />
@@ -133,6 +142,8 @@
         <Uploads>
             <DocumentUploadForm FileExtension="pdf" DocumentedObject="Existing" Label="Documentation" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
             <DocumentUploadForm FileExtension="dwg" DocumentedObject="Existing" Label="Drawing" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
+            @* A module file from Module Draw, checked when uploaded (DocumentService, ModuleDrawings). *@
+            <DocumentUploadForm FileExtension="@ModuleDrawings.FileExtension" DocumentedObject="Existing" Label="ModuleDrawing" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
             @if (Principal.MayUploadSkpDrawing())
             {
                 <DocumentUploadForm FileExtension="skp" DocumentedObject="Existing" Label="Drawing" MaxFileSizeKb="500" ReturnHref="@SelfHref" />
@@ -157,6 +168,7 @@
     ModuleOwnershipRef OwnershipRef = ModuleOwnershipRef.None;
     Module? Existing;
     IEnumerable<ListboxItem>? ModuleStandardItems;
+    static readonly IEnumerable<ListboxItem> ThemeItems = EnumExtensions.ThemesListboxItems().Where(i => i.Id.IsTheme).ToList();
     IEnumerable<ListboxItem>? StationItems;
     IEnumerable<ListboxItem>? StorageItems;
     string? FailureMessage;
@@ -183,7 +195,7 @@
             return;
         }
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
-        Form ??= (Existing ?? new Module { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers }).AsFormData();
+        Form ??= (Existing ?? new Module { Is2R = true, HasNormalGauge = true, NumberOfThroughTracks = 1, ObjectVisibilityId = (int)ObjectVisibility.GroupMembers, PrimaryThemeId = 0 }).AsFormData();
         ModuleStandardItems = await ModuleStandardService.ModuleListboxItemsAsync(Principal, Id, OwnershipRef); // National standards only of the owners' countries.
         StorageItems = await LocalityService.StorageListboxItemsAsync(Principal, Id, OwnershipRef);
         if (IsStorageHidden)

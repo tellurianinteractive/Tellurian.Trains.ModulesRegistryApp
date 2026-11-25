@@ -208,9 +208,13 @@ blockquote {
         padding-left: 0.4rem;
     }
 
+    /* The field fills the column but doesn't make it wider: the column is as wide as its title and its values, so a field is never
+       wider than what it searches in (an input's default size is about 20 characters). */
     .quickgrid .col-filter {
         flex: 1 0 calc(100% - 0.4rem);
         margin: 2px 0 0 0.4rem;
+        min-width: 0;
+        width: 0;
     }
 
     /* A coloured label as wide as the filter field above it (FilterTemplateColumn): a cell has 0.4rem more padding on its right
@@ -485,3 +489,37 @@ th.tilted {
         transform-origin: 0 100%;
         transform: rotate(-30deg);
     }
+
+/* A module drawing from Module Draw (ModuleView), on the module view and drawing pages: the canvas fills its frame. */
+.module-drawing {
+    height: 28rem;
+    margin-bottom: 1rem;
+}
+
+/* On the drawing page the frame has the drawing's shape (aspect-ratio set by the page), so the drawing uses the whole width;
+   only a module taller than the window is high is limited by the window's height instead. */
+.module-drawing-full {
+    width: 100%;
+    max-height: 100vh;
+    margin-bottom: 1rem;
+}
+
+/* An end profile drawing from Module Draw (EndProfileView), on the end profile edit page: the canvas fills its frame. */
+.end-profile-drawing {
+    height: 22rem;
+    margin-bottom: 1rem;
+}
+
+/* On the end profile drawing page: the drawing with its measures (an SVG shaped by its viewBox) uses the width, but no more of the
+   height than the window has. */
+.end-profile-sheet {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    margin-bottom: 1rem;
+}
+
+.end-profile-sheet-title {
+    font-weight: 600;
+}

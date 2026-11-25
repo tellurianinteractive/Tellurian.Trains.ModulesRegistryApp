@@ -23,6 +23,8 @@ public static class ModuleFormExtensions
             StationId = entity.StationId,
             StoredAtLocalityId = entity.StoredAtLocalityId,
             Theme = entity.Theme,
+            PrimaryThemeId = entity.PrimaryThemeId.IsTheme ? entity.PrimaryThemeId : null,
+            SecondaryThemeId = entity.SecondaryThemeId,
             Radius = entity.Radius,
             Angle = entity.Angle,
             Straight = entity.Straight,
@@ -70,6 +72,8 @@ public static class ModuleFormExtensions
             entity.SignalFeature = form.SignalFeature;
             entity.OverheadLineFeature = form.OverheadLineFeature;
             entity.Theme = form.Theme;
+            entity.PrimaryThemeId = form.PrimaryThemeId ?? 0; // The service gives the standard's theme.
+            entity.SecondaryThemeId = form.SecondaryThemeId;
             entity.Radius = form.Radius;
             entity.Angle = form.Angle;
             entity.Straight = form.Straight;

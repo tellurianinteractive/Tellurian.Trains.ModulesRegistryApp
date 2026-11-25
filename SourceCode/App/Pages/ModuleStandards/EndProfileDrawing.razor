@@ -1,0 +1,69 @@
+@page "/ModuleStandards/EndProfiles/{Id:int}/Drawing"
+
+@attribute [Authorize(Policy = "User")]
+@* The end profile drawing from Module Draw, view only, for every signed-in user (ModuleEndProfileService.FindDrawingAsync). With its
+   measures, as Module Draw prints it (EndProfileDrawingSheet): a plain SVG with Module Draw's EndProfileContent and DimensionLine, so
+   it works on the static page and prints. The edit page shows the drawing without measures. The download is the end profile file with
+   the Registry's id written into it. *@
+
+@using Tellurian.Trains.Drawing.Components.Rendering
+@using Tellurian.Trains.Drawing.Components.Views
+
+@inject IStringLocalizer<Strings> Localizer
+@inject ModuleEndProfileService ModuleEndProfileService
+
+<PageHeading Label="EndProfileDrawing" Context="@EndProfile" IconClass="@FontAwesome.Drawing" BackHref="ModuleStandards/EndProfiles" />
+
+@if (EndProfile is null)
+{
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else
+{
+    <p>
+        @EndProfile.Scale?.Display() @EndProfile.ModuleStandard?.ShortName
+        <DocumentLink DocumentId="EndProfile.DrawingId" FileExtension="@EndProfileDrawings.FileExtension" />
+    </p>
+    @if (EndProfile.Description.HasValue)
+    {
+        <p>@EndProfile.Description</p>
+    }
+    @if (Drawing is var (profile, sheet))
+    {
+        <svg class="end-profile-sheet" viewBox="@sheet.ViewBox" preserveAspectRatio="xMidYMid meet" role="img" aria-label="@EndProfile.Designation">
+            <g transform="scale(1,-1)">
+                <EndProfileContent Profile="profile" RailTopText="@Localizer["TopOfRail"]" TextSize="sheet.TextSize" />
+                @foreach (var dimension in sheet.Dimensions)
+                {
+                    <DimensionLine Dimension="dimension" TextSize="sheet.TextSize" />
+                }
+                @if (sheet.Title is { } title)
+                {
+                    <WorldText At="title.Center" Text="@title.Text" Size="title.Size" Class="end-profile-sheet-title" />
+                }
+            </g>
+        </svg>
+    }
+    else
+    {
+        <ActionMessage Label="EndProfileDrawingCannotBeShown" AlertType="warning" />
+    }
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    ModuleEndProfile? EndProfile;
+    (Tellurian.Trains.Schedules.Model.Layouts.EndProfiles.EndProfile Profile, Tellurian.Trains.Drawing.Editing.EndProfiles.SheetLayout Sheet)? Drawing;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (await ModuleEndProfileService.FindDrawingAsync(principal, Id) is var (profile, content))
+        {
+            EndProfile = profile;
+            Drawing = EndProfileDrawingSheet.Create(EndProfileDrawings.Text(content));
+        }
+    }
+}

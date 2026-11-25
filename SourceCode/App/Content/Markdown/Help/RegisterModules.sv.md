@@ -4,6 +4,7 @@ Du kan registrera dina egna moduler och gruppägda moduler som gruppadministrat�
 
 **Tillgängliga moduler** är *modulpaketen* som är tillgängliga men inte registrerade för banan.
 Listan är fylld med *modulpaket* som har samma *skala* som banan.
+Bara moduler vars *primära* eller *sekundära tema* är banans *huvudtema* visas.
 Ett *modulpaket* innehåller moduler med samma *lådetikett* eller alla *varianter* av en modul,
 så den kan innehålla mer än en modul.
 

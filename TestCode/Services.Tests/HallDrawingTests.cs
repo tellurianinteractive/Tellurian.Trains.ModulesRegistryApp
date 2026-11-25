@@ -133,13 +133,6 @@ public sealed class HallDrawingTests
     }
 
     [TestMethod]
-    public async Task AModuleGetsNoHallDrawing()
-    {
-        Assert.AreEqual((0, (int?)null, string.Empty), DocumentService.DocumentedObject(new Module { Id = 1 }, HallDrawings.FileExtension));
-        await Task.CompletedTask;
-    }
-
-    [TestMethod]
     public async Task EveryoneSeesTheDrawingOfAVenueWithTheRegistrysData()
     {
         await Documents.SaveAsync(CountryAdministrator, new FakeFile(HallFile()), new Locality { Id = Venue }, HallDrawings.FileExtension, 100_000);

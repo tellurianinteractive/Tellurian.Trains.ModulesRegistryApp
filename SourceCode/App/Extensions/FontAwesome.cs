@@ -12,6 +12,7 @@ public static class FontAwesome
     public const string Country = "fa fa-flag";
     public const string Customer = "fa fa-industry";
     public const string Delete = "fa fa-trash-alt";
+    public const string Drawing = "fa fa-drafting-compass";
     public const string ConfirmDelete = "fa fa-trash-alt";
     public const string Erase = "fa fa-eraser";
     public const string ExternalStation = "fa fa-globe-europe";
@@ -79,6 +80,7 @@ public static class FontAwesome
             {nameof(ClubEvent), ClubEvent },
             {nameof(Customer), Customer },
             {nameof(Delete), Delete },
+            {nameof(Drawing), Drawing },
             {nameof(ConfirmDelete), ConfirmDelete },
             {nameof(Edit), Edit },
             {nameof(Erase), Erase },

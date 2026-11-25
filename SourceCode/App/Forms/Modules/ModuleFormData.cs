@@ -74,10 +74,18 @@ public class ModuleFormData : IValidatableObject
     [YearOrEmpty]
     public int? RepresentsUptoYear { get; set; }
 
-    [Display(Name = "Theme")]
+    [Display(Name = "ThemeNote")]
     [StringLength(50)]
     [OrdinaryText]
     public string? Theme { get; set; }
+
+    // Empty is the standard's theme, set when saved.
+    [Display(Name = "PrimaryTheme")]
+    public int? PrimaryThemeId { get; set; }
+
+    // Only lets the module also be registered to layouts with this theme.
+    [Display(Name = "SecondaryTheme")]
+    public int? SecondaryThemeId { get; set; }
 
     [Display(Name = "Radius")]
     [Range(300.0, 10000.0)]

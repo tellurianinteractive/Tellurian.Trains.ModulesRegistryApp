@@ -4,6 +4,7 @@ You can register your own modules and group owned modules that the group adminis
 
 **Avaliable modules** are the *module packages* that are available but not yet registered for the track layout.
 The list is populated with *module packages* that have the same *scale* as the track layout.
+Only modules whose *primary* or *secondary theme* is the layout's *main theme* are listed.
 A *module package* contains modules with same *box label* or all *variants* of a module, 
 so it can contain more than one module.
 

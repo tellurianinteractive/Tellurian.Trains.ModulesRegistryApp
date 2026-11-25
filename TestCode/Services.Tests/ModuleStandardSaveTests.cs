@@ -75,6 +75,20 @@ public sealed class ModuleStandardSaveTests
     }
 
     [TestMethod]
+    [DataRow(0, 0, DisplayName = "Any")]
+    [DataRow(2, 2, DisplayName = "US")]
+    [DataRow(7, 0, DisplayName = "Not a theme")]
+    public async Task AStandardIsForAnyThemeOrOne(int themeId, int expected)
+    {
+        var standard = Changed();
+        standard.MainThemeId = themeId;
+
+        await new ModuleStandardService(_factory).SaveAsync(GlobalAdministrator, standard);
+
+        Assert.AreEqual(expected, (await _factory.FindAsync<ModuleStandard>(1))!.MainThemeId);
+    }
+
+    [TestMethod]
     public async Task AGlobalAdministratorAddsAStandard()
     {
         var (count, _, saved) = await new ModuleStandardService(_factory).SaveAsync(GlobalAdministrator, new ModuleStandard { ShortName = "USMS", ScaleId = 3, MainThemeId = 2 });
@@ -169,6 +183,59 @@ public sealed class ModuleStandardSaveTests
         Assert.IsGreaterThan(0, count);
         Assert.IsNull(await _factory.FindAsync<ModuleStandard>(1));
         Assert.IsNull((await _factory.FindAsync<ModuleStandard>(2))!.ExtendsStandardId);
+    }
+
+    [TestMethod]
+    public async Task AnEndProfileDefinedByAStandardHasItsScale()
+    {
+        await _factory.SeedAsync(new Scale { Id = 4, ShortName = "N", Denominator = 160 });
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "FREMO/N", ScaleId = 4, MainThemeId = 1 });
+        var target = new ModuleEndProfileService(_factory);
+
+        Assert.AreEqual(1, (await target.SaveAsync(GlobalAdministrator, new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", ModuleStandardId = 2 })).Count);
+        var saved = (await _factory.FindAsync<ModuleEndProfile>(1))!;
+        Assert.AreEqual(2, saved.ModuleStandardId);
+        Assert.AreEqual(4, saved.ScaleId, "The scale follows the standard.");
+
+        await target.SaveAsync(GlobalAdministrator, new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", ModuleStandardId = 0 });
+        Assert.IsNull((await _factory.FindAsync<ModuleEndProfile>(1))!.ModuleStandardId, "Zero is no standard.");
+
+        var (_, _, added) = await target.SaveAsync(GlobalAdministrator, new ModuleEndProfile { ScaleId = 3, Designation = "Gone", ModuleStandardId = 99 });
+        Assert.IsNull((await _factory.FindAsync<ModuleEndProfile>(added!.Id))!.ModuleStandardId, "A standard that doesn't exist is dropped.");
+    }
+
+    [TestMethod]
+    public async Task DeletingAStandardKeepsItsEndProfiles()
+    {
+        await new ModuleEndProfileService(_factory).SaveAsync(GlobalAdministrator, new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", ModuleStandardId = 1 });
+
+        var (count, _) = await new ModuleStandardService(_factory).DeleteAsync(GlobalAdministrator, 1);
+
+        Assert.IsGreaterThan(0, count);
+        Assert.IsNull((await _factory.FindAsync<ModuleEndProfile>(1))!.ModuleStandardId);
+    }
+
+    [TestMethod]
+    public async Task TheScaleOfEachStandardLocksAnEndProfilesScale()
+    {
+        await _factory.SeedAsync(new Scale { Id = 4, ShortName = "N", Denominator = 160 });
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "FREMO/N", ScaleId = 4, MainThemeId = 1 });
+
+        var scaleIds = await new ModuleStandardService(_factory).ScaleIdsAsync(GlobalAdministrator);
+
+        Assert.AreEqual(3, scaleIds[1]);
+        Assert.AreEqual(4, scaleIds[2]);
+        Assert.IsEmpty(await new ModuleStandardService(_factory).ScaleIdsAsync(null));
+    }
+
+    [TestMethod]
+    public async Task AllStandardsCanDefineAnEndProfile()
+    {
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "Extension", ScaleId = 3, MainThemeId = 1, ExtendsStandardId = 1 });
+
+        var items = await new ModuleStandardService(_factory).ListboxItemsAsync(GlobalAdministrator);
+
+        CollectionAssert.AreEqual(new[] { "Extension (1:87)", "FREMO/H0-RE (1:87)" }, items.Select(i => i.Description).ToArray());
     }
 
 }

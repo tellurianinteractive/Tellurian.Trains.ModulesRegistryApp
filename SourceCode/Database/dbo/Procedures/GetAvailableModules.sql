@@ -42,6 +42,8 @@ AS
 	WHERE
 		(LP.LayoutId IS NULL OR (SELECT COUNT(*) FROM LayoutModule AS LM INNER JOIN LayoutParticipant AS LP ON LM.LayoutParticipantId = LP.Id WHERE LP.LayoutId = @LayoutId AND LM.ModuleId = M.Id) = 0)  AND
 		ISNULL(M.FunctionalState,0) > 3 AND -- See public enum ModuleFunctionalState
+		-- Only modules with the layout's theme as their primary or secondary theme.
+		EXISTS (SELECT 1 FROM Layout AS TL WHERE TL.Id = @LayoutId AND (M.PrimaryThemeId = TL.ThemeId OR M.SecondaryThemeId = TL.ThemeId)) AND
 		(
 			ISNULL(MO.PersonId,0) = @PersonId OR 
 			ISNULL(MO.GroupId,0) IN (SELECT DISTINCT G.Id FROM [Group] AS G INNER JOIN GroupMember AS GM ON GM.GroupId = G.Id WHERE G.Id = ISNULL(MO.GroupId,0) AND GM.PersonId = @PersonId AND GM.MayBorrowGroupsModules <> 0) OR

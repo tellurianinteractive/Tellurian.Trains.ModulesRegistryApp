@@ -26,6 +26,11 @@ public class Layout
     public short? FirstYear { get; set; }
     public short? LastYear { get; set; }
     public int? MaxNumberOfParticipants { get; set; }
+    /// <summary>
+    /// The layout's theme (<see cref="Data.Theme"/>), which its waybills and modules must have; from the primary standard when the
+    /// layout is added.
+    /// </summary>
+    public int ThemeId { get; set; } = (int)Data.Theme.Europe;
 
     public virtual Meeting Meeting { get; set; }
     public virtual Group OrganisingGroup { get; set; }
@@ -133,6 +138,7 @@ public static class LayoutMapping
             entity.Property(e => e.RegistrationOpeningDate).HasColumnType("smalldatetime");
             entity.Property(e => e.ModuleRegistrationClosingDate).HasColumnType("smalldatetime");
             entity.Property(e => e.IsRegistrationPermitted).HasDatabaseDefault("0");
+            entity.Property(e => e.ThemeId).HasDatabaseDefault("1");
             entity.HasIndex(e => e.MeetingId, "IX_Layout_MeetingId");
         });
 }

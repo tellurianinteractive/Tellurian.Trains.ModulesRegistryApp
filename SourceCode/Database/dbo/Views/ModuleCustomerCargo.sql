@@ -51,7 +51,7 @@ SELECT
 	CAST (0 AS BIT) AS IsShadowYard,
 	SS.ScaleId,
 	SS.StandardId,
-	CASE WHEN SS.MainThemeId = 2 THEN 2 ELSE 1 END AS MainThemeId, -- US = 2, otherwise Europe
+	M.PrimaryThemeId AS MainThemeId, -- The primary module's theme: 1 Europe, 2 US.
 	CO.NHMCode
 FROM 
 	[Station] AS S INNER JOIN Region AS R ON R.Id = S.RegionId AND S.HasCargoCustomers <> 0

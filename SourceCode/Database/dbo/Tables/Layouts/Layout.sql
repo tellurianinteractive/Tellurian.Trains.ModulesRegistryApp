@@ -14,6 +14,7 @@
     [FirstYear]                      SMALLINT       NULL,
     [LastYear]                       SMALLINT       NULL,
     [MaxNumberOfParticipants]        INT            NULL, 
+    [ThemeId]                        INT            CONSTRAINT [DF_Layout_ThemeId] DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_Layout] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Layout_OrganisingGroup] FOREIGN KEY ([OrganisingGroupId]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Layout_ResponsiblePerson] FOREIGN KEY ([ContactPersonId]) REFERENCES [dbo].[Person] ([Id]),

@@ -142,6 +142,42 @@ public sealed class MeetingParticipantPermissionTests
     }
 
     [TestMethod]
+    public async Task ALayoutWithoutThemeGetsItsStandardsAndTheOrganiserMayChooseAnother()
+    {
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
+        var newLayout = NewLayout(0, TheMeeting, OrganiserGroup);
+        newLayout.PrimaryModuleStandardId = 2;
+        newLayout.ThemeId = 0;
+
+        var (_, _, added) = await target.SaveAsync(GlobalAdministrator, newLayout);
+        Assert.AreEqual((int)Theme.US, (await _factory.FindAsync<Layout>(added!.Id))!.ThemeId);
+
+        Layout changed;
+        await using (var dbContext = _factory.CreateDbContext()) changed = (await dbContext.Layouts.FindAsync(added.Id))!;
+        changed.ThemeId = (int)Theme.Europe;
+        await target.SaveAsync(GlobalAdministrator, changed);
+        Assert.AreEqual((int)Theme.Europe, (await _factory.FindAsync<Layout>(added.Id))!.ThemeId);
+    }
+
+    [TestMethod]
+    public async Task OnlyModulesWithTheLayoutsThemeAreRegistered()
+    {
+        await _factory.SeedAsync(
+            new Module { Id = 2, FullName = "American", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.US },
+            new Module { Id = 3, FullName = "Both", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.US, SecondaryThemeId = (int)Theme.Europe });
+        var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
+        var package = new ModulePackage(1, ModulePackageType.Package, "Package", "Owner", [Participant],
+            [Available(2, "American"), Available(3, "Both")]);
+
+        await target.AddPackageModulesAsync(Principal(Participant), TheLayoutParticipant, package); // The layout is European.
+
+        await using var dbContext = _factory.CreateDbContext();
+        var registered = dbContext.LayoutModules.Where(lm => lm.LayoutParticipantId == TheLayoutParticipant).Select(lm => lm.ModuleId).OrderBy(id => id).ToArray();
+        CollectionAssert.AreEqual(new[] { TheModule, 3 }, registered, "The secondary theme lets the module be registered.");
+    }
+
+    [TestMethod]
     public async Task SavingALayout()
     {
         var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
@@ -306,6 +342,37 @@ public sealed class MeetingParticipantPermissionTests
     }
 
     [TestMethod]
+    [DataRow(null, "2026-12-10", DisplayName = "No date stored")]
+    [DataRow("2025-06-01", "2026-12-10", DisplayName = "An earlier meeting stored")]
+    [DataRow("2027-03-05", "2027-03-05", DisplayName = "A later meeting stored")]
+    public async Task RegisteringAModuleRemembersTheMeetingsStartDateWhenLater(string? stored, string expected)
+    {
+        await using (var dbContext = _factory.CreateDbContext())
+        {
+            dbContext.LayoutModules.Remove((await dbContext.LayoutModules.FindAsync(TheLayoutModule))!);
+            (await dbContext.Modules.FindAsync(TheModule))!.LastMeetingRegistrationDate = stored is null ? null : Date(stored);
+            await dbContext.SaveChangesAsync();
+        }
+        var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
+
+        var result = await target.AddPackageModulesAsync(Principal(Participant), TheLayoutParticipant, Package());
+
+        Assert.AreEqual(1, result.Count, result.Message);
+        Assert.AreEqual(Date(expected), (await _factory.FindAsync<Module>(TheModule))!.LastMeetingRegistrationDate);
+    }
+
+    [TestMethod]
+    public void TheDateIsTheMeetingsStartDateAtMidnightWithOffsetZero()
+    {
+        var module = new Module();
+
+        Assert.IsTrue(module.UpdateLastMeetingRegistrationDate(new DateTime(2026, 12, 10, 18, 30, 0, DateTimeKind.Local)));
+        Assert.AreEqual(new DateTimeOffset(2026, 12, 10, 0, 0, 0, TimeSpan.Zero), module.LastMeetingRegistrationDate);
+        Assert.IsFalse(module.UpdateLastMeetingRegistrationDate(new DateTime(2026, 12, 10)), "The same date.");
+        Assert.IsFalse(module.UpdateLastMeetingRegistrationDate(new DateTime(2026, 5, 1)), "An earlier date.");
+    }
+
+    [TestMethod]
     public async Task CancellingARegistration()
     {
         var target = new MeetingService(_factory, _time);
@@ -346,6 +413,8 @@ public sealed class MeetingParticipantPermissionTests
         Assert.AreEqual(1, savedByOrganiser.Count, savedByOrganiser.Message);
     }
 
+    private static DateTimeOffset Date(string isoDate) => DateTime.Parse(isoDate, System.Globalization.CultureInfo.InvariantCulture).AsMeetingRegistrationDate;
+
     private static ModulePackage Package() =>
         new(1, ModulePackageType.SingleModule, "Module", "Owner", [Participant], [new AvailableModule { ModuleId = TheModule, FullName = "Module", FirstName = "First", LastName = "Last1", CityName = "City" }]);
 
@@ -361,6 +430,8 @@ public sealed class MeetingParticipantPermissionTests
         StartDate = new DateTime(2026, 12, 10),
         EndDate = new DateTime(2026, 12, 12),
     };
+
+    private static AvailableModule Available(int moduleId, string name) => new() { ModuleId = moduleId, FullName = name, FirstName = "First", LastName = "Last", CityName = "City" };
 
     private static Layout NewLayout(int id, int meetingId, int groupId) => new()
     {

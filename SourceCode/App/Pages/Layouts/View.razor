@@ -26,6 +26,7 @@ else
             @Display("RegistrationOpens", item.RegistrationOpeningDate.ToString("ddd d MMM yyyy"))
             @Display("ModuleRegistrationCloses", item.ModuleRegistrationClosingDate().ToString("ddd d MMM yyyy"))
             @Display("RegistrationCloses", item.RegistrationClosingDate.ToString("ddd d MMM yyyy"))
+            @Display("MainTheme", item.ThemeId.ToEnumLocalized<Theme>())
             @Display("OperationTheme", item.Theme)
             @Display("Period", OperatingPeriod(item))
             @Display("PrimaryModuleStandard", item.PrimaryModuleStandard.ShortName)

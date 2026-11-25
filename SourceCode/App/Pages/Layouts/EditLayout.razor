@@ -32,6 +32,8 @@
         <AppFormRow>
             <AppInputText Width="3" @bind-Value="Form!.ShortName" Label="Name" />
             <AppInputText Width="5" @bind-Value="Form!.Theme" Label="Theme" />
+            @* Only modules with this theme as their primary or secondary theme can be registered; the layout's waybills have it. *@
+            <AppInputSelectNullable Width="2" @bind-Value="Form!.ThemeId" Label="MainTheme" Items="ThemeItems" ShowNoneOption="true" NoneLabel="AsTheStandard" />
         </AppFormRow>
         <AppFormRow>
             <AppInputDate Width="2" @bind-Value="Form!.RegistrationOpeningDate" Label="RegistrationOpens" />
@@ -63,6 +65,7 @@
     Layout? Existing;
     IEnumerable<ListboxItem>? ResponsibleGroupItems;
     IEnumerable<ListboxItem>? ModuleStandardItems;
+    static readonly IEnumerable<ListboxItem> ThemeItems = EnumExtensions.ThemesListboxItems().Where(i => i.Id.IsTheme).ToList();
     IEnumerable<ListboxItem>? ContactPersonItems;
     bool MayEdit;
     string? FailureMessage;
@@ -97,6 +100,7 @@
             OrganisingGroupId = Meeting.OrganiserGroupId,
             RegistrationOpeningDate = Meeting.StartDate.AddMonths(-6),
             RegistrationClosingDate = Meeting.StartDate.AddMonths(-2),
+            ThemeId = 0, // The primary standard's, unless chosen.
         }).AsFormData();
         ResponsibleGroupItems = await GroupService.ListboxItemsAsync(Principal, Meeting.OrganiserGroup?.CountryId);
         ModuleStandardItems = await ModuleStandardService.LayoutListboxItemsAsync(Principal, Meeting.CountryId(), Existing?.PrimaryModuleStandardId); // National standards only of the meeting's country.

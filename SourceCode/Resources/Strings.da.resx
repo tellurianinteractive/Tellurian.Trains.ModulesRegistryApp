@@ -2943,4 +2943,49 @@
   <data name="HallDrawingNewerVersion" xml:space="preserve">
     <value>Lokaletegningen er fra en nyere version af Module Draw, end modulregistret kan læse.</value>
   </data>
+  <data name="ModuleDrawing" xml:space="preserve">
+    <value>Modultegning</value>
+  </data>
+  <data name="ModuleDrawingCannotBeShown" xml:space="preserve">
+    <value>Modultegningen kan ikke vises.</value>
+  </data>
+  <data name="NotAModuleDrawing" xml:space="preserve">
+    <value>Filen er ikke en modultegning fra Module Draw.</value>
+  </data>
+  <data name="ModuleDrawingNewerVersion" xml:space="preserve">
+    <value>Modultegningen er fra en nyere version af Module Draw, end modulregistret kan læse.</value>
+  </data>
+  <data name="ModuleDrawingOfAnotherModule" xml:space="preserve">
+    <value>Modultegningen hører til et andet modul i modulregistret.</value>
+  </data>
+  <data name="EndProfileDrawing" xml:space="preserve">
+    <value>Endeprofiltegning</value>
+  </data>
+  <data name="EndProfileDrawingCannotBeShown" xml:space="preserve">
+    <value>Endeprofiltegningen kan ikke vises.</value>
+  </data>
+  <data name="NotAnEndProfileDrawing" xml:space="preserve">
+    <value>Filen er ikke en endeprofiltegning fra Module Draw.</value>
+  </data>
+  <data name="EndProfileDrawingNewerVersion" xml:space="preserve">
+    <value>Endeprofiltegningen er fra en nyere version af Module Draw, end modulregistret kan læse.</value>
+  </data>
+  <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
+    <value>Endeprofiltegningen hører til en anden endeprofil i modulregistret.</value>
+  </data>
+  <data name="TopOfRail" xml:space="preserve">
+    <value>Skinneoverkant</value>
+  </data>
+  <data name="PrimaryTheme" xml:space="preserve">
+    <value>Primært tema</value>
+  </data>
+  <data name="SecondaryTheme" xml:space="preserve">
+    <value>Sekundært tema</value>
+  </data>
+  <data name="AsTheStandard" xml:space="preserve">
+    <value>Som standarden</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Valgfrit</value>
+  </data>
 </root>

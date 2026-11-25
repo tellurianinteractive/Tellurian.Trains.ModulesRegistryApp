@@ -5,6 +5,7 @@ die der Gruppenadministrator Dir zum Ausleihen gestattet.
 
 **Verfügbare Module** sind die *Modulpakete*, die verfügbar, aber noch nicht für die Gleisanlage angemeldet sind.
 Die Liste wird mit *Modulpaketen* gefüllt, die denselben *Maßstab* wie das Gleislayout haben.
+Es werden nur Module angezeigt, deren *primäres* oder *sekundäres Thema* das *Hauptthema* der Gleisanlage ist.
 Ein *Modulpaket* enthält Module mit gleichem *Boxlabel* oder alle *Varianten* eines Moduls,
 es kann also mehr als ein Modul enthalten.
 

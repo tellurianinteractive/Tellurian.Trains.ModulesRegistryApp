@@ -4,6 +4,7 @@ Du kan registrere dine egne moduler og gruppeeide moduler som gruppeadministrato
 
 **Tilgjengelige moduler** er *modulpakkene* som er tilgjengelige, men som ennå ikke er registrert for sporoppsettet.
 Listen er fylt med *modulpakker* som har samme *skala* som sporoppsettet.
+Bare moduler der *primært* eller *sekundært tema* er sporoppsettets *hovedtema*, vises.
 En *modulpakke* inneholder moduler med samme *boksetikett* eller alle *varianter* av en modul,
 slik at den kan inneholde mer enn én modul.
 

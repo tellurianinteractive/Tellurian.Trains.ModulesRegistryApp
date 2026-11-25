@@ -28,6 +28,7 @@
     [DwgDrawingId]          INT            NULL,
     [SkpDrawingId]          INT            NULL,
     [PdfDocumentationId]    INT            NULL,
+    [ModuleDrawingId]       INT            NULL,
     [Note]                  NVARCHAR (255) NULL,
     [StationId]             INT            NULL,
     [FremoNumber]           INT            NULL,
@@ -42,6 +43,8 @@
     [HasIntegratedLocoNet]  BIT            CONSTRAINT [DF_Module_HasIntegratedLoconet] DEFAULT ((0)) NOT NULL,
     [IsUnavailable]         BIT            CONSTRAINT [DF_Module_IsUnavailable] DEFAULT ((0)) NOT NULL,
     [StoredAtLocalityId]    INT            NULL,
+    [PrimaryThemeId]        INT            CONSTRAINT [DF_Module_PrimaryThemeId] DEFAULT ((1)) NOT NULL,
+    [SecondaryThemeId]      INT            NULL,
     CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Module_Document] FOREIGN KEY ([SkpDrawingId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_DxfDocument] FOREIGN KEY ([DwgDrawingId]) REFERENCES [dbo].[Document] ([Id]),
@@ -49,6 +52,7 @@
     CONSTRAINT [FK_Module_PdfDocument] FOREIGN KEY ([PdfDocumentationId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_Scale] FOREIGN KEY ([ScaleId]) REFERENCES [dbo].[Scale] ([Id]),
     CONSTRAINT [FK_Module_Station] FOREIGN KEY ([StationId]) REFERENCES [dbo].[Station] ([Id]),
+    CONSTRAINT [FK_Module_ModuleDrawing] FOREIGN KEY ([ModuleDrawingId]) REFERENCES [dbo].[Document] ([Id]),
     CONSTRAINT [FK_Module_StoredAtLocality] FOREIGN KEY ([StoredAtLocalityId]) REFERENCES [dbo].[Locality] ([Id])
 );
 GO

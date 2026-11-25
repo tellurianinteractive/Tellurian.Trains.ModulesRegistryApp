@@ -2,13 +2,18 @@
 
 @attribute [Authorize(Policy = "User")]
 @* Static SSR form (Migration step 3.6): a POST of ModuleEndProfileFormData; the id comes from the address. Only global
-   administrators get the form. After saving, a redirect to the form's own address; the result is a one-time message. *@
+   administrators get the form. After saving, a redirect to the form's own address; the result is a one-time message.
+   A saved end profile also gets the upload of its drawing from Module Draw (an end profile file, checked when uploaded by
+   DocumentService and EndProfileDrawings) and a preview of it with Module Draw's EndProfileView. *@
 
 @using ModulesRegistry.Forms.ModuleStandards
+@using Tellurian.Trains.Drawing.Components.Views
 
+@inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
 @inject ModuleEndProfileService ModuleEndProfileService
 @inject ScaleService ScaleService
+@inject ModuleStandardService ModuleStandardService
 
 <PageHeading ObjectName="EndProfile" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" BackHref="ModuleStandards/EndProfiles" />
 
@@ -19,10 +24,34 @@
 
 <EditTemplate Item="Form" FormName="end-profile" OnValidSubmit="SaveAsync">
     <Inputs>
-        <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId" />
-        <AppInputText Width="8" Label="Designation" @bind-Value="Form!.Designation" />
+        @* With a standard, the scale is the standard's and locked (locked-by.js); the service sets it when saved too. *@
+        <AppInputSelectNullable Width="3" Label="ModuleStandard" Items="StandardItems" ShowNoneOption="true" @bind-Value="Form!.ModuleStandardId" />
+        <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId"
+                        IsDisabled="@IsScaleLocked" LockedBy="Form.ModuleStandardId" LockedValues="StandardScaleIds" />
+        <AppInputText Width="7" Label="Designation" @bind-Value="Form!.Designation" />
+        <AppInputText Width="12" Label="Description" @bind-Value="Form!.Description" NumberOfRows="3" />
     </Inputs>
 </EditTemplate>
+
+@if (Form is not null && Existing is not null)
+{
+    @if (DrawingJson is not null)
+    {
+        <h3>
+            @Localizer["EndProfileDrawing"]
+            <DocumentLink DocumentId="Existing.DrawingId" FileExtension="@EndProfileDrawings.FileExtension" />
+        </h3>
+        @* View only; the static page fits the drawing to its frame. *@
+        <div class="end-profile-drawing">
+            <EndProfileView Json="@DrawingJson" Label="@Existing.Designation" RailTopText="@Localizer["TopOfRail"]" FitText="@Localizer["FitInView"]" Error="@Localizer["EndProfileDrawingCannotBeShown"]" />
+        </div>
+    }
+    <DocumentsUpload DocumentedObject="Existing">
+        <Uploads>
+            <DocumentUploadForm FileExtension="@EndProfileDrawings.FileExtension" DocumentedObject="Existing" Label="EndProfileDrawing" MaxFileSizeKb="200" ReturnHref="@SelfHref" />
+        </Uploads>
+    </DocumentsUpload>
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
@@ -33,7 +62,13 @@
     ClaimsPrincipal? Principal;
     ModuleEndProfile? Existing;
     IEnumerable<ListboxItem>? ScaleItems;
+    IEnumerable<ListboxItem>? StandardItems;
+    IReadOnlyDictionary<int, int> StandardScaleIds = new Dictionary<int, int>();
+    bool IsScaleLocked => Form?.ModuleStandardId is int standardId && StandardScaleIds.ContainsKey(standardId);
     string? FailureMessage;
+    string? DrawingJson;
+
+    string SelfHref => $"ModuleStandards/EndProfiles/{Id}/Edit";
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,6 +90,14 @@
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
         Form ??= (Existing ?? new ModuleEndProfile { ScaleId = 3 }).AsFormData();
         ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
+        StandardItems = await ModuleStandardService.ListboxItemsAsync(Principal);
+        StandardScaleIds = await ModuleStandardService.ScaleIdsAsync(Principal);
+        // Before a posted form is validated: the scale of the chosen standard, also when the locked list wasn't posted.
+        if (Form.ModuleStandardId is int standardId && StandardScaleIds.TryGetValue(standardId, out var scaleId)) Form.ScaleId = scaleId;
+        if (Existing?.DrawingId is not null && await ModuleEndProfileService.FindDrawingAsync(Principal, Id) is var (_, content))
+        {
+            DrawingJson = EndProfileDrawings.Text(content);
+        }
     }
 
     async Task SaveAsync()

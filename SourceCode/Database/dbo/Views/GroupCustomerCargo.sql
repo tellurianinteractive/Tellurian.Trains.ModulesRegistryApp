@@ -2,7 +2,7 @@
 SELECT 
 	G.Id AS GroupId,
 	MON.Names AS OwnerNames,
-	MS.MainThemeId,
+	M.PrimaryThemeId AS MainThemeId, -- The station's primary module's theme.
 	SCC.Id,
 	SCC.StationCustomerId,
 	S.Id AS StationId,
@@ -39,7 +39,6 @@ FROM
 	[Group] AS G INNER JOIN
 	[GroupLayoutModule] AS GLM ON GLM.GroupId = G.Id INNER JOIN
 	[Module] AS M ON M.Id = GLM.ModuleId INNER JOIN
-	[ModuleStandard] AS MS ON MS.Id = M.StandardId INNER JOIN
 	[Station] AS S ON S.PrimaryModuleId = M.Id INNER JOIN
 	[ModuleOwnerNames] AS MON ON MON.ModuleId = M.Id INNER JOIN
 	[StationCustomer] AS SC ON SC.StationId = S.Id INNER JOIN

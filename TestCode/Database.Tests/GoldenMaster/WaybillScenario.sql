@@ -82,13 +82,14 @@ INSERT INTO Station (Id, FullName, Signature, IsShadow, IsTerminus, RegionId) VA
 SET IDENTITY_INSERT Station OFF;
 
 SET IDENTITY_INSERT Module ON;
-INSERT INTO Module (Id, FullName, ScaleId, StandardId, Length, StationId, FunctionalState) VALUES
-    (1, 'Alby', 1, 1, 1.5, 1, 4),
-    (2, 'Berga', 1, 1, 1.5, 2, 4),
-    (3, 'Cederby', 1, 1, 1.5, 3, 2),  -- Not functional: left out of group waybills.
-    (4, 'Dalen', 1, 1, 1.5, 4, 4),
-    (5, 'Eastville', 1, 2, 1.5, 5, 4),
-    (6, 'Fjärdingen', 2, 3, 1.0, 6, 4);
+-- The themes are the standards' themes, as SetModuleAndLayoutThemes.sql gives them.
+INSERT INTO Module (Id, FullName, ScaleId, StandardId, Length, StationId, FunctionalState, PrimaryThemeId) VALUES
+    (1, 'Alby', 1, 1, 1.5, 1, 4, 1),
+    (2, 'Berga', 1, 1, 1.5, 2, 4, 1),
+    (3, 'Cederby', 1, 1, 1.5, 3, 2, 1),  -- Not functional: left out of group waybills.
+    (4, 'Dalen', 1, 1, 1.5, 4, 4, 1),
+    (5, 'Eastville', 1, 2, 1.5, 5, 4, 2),
+    (6, 'Fjärdingen', 2, 3, 1.0, 6, 4, 1);
 SET IDENTITY_INSERT Module OFF;
 
 UPDATE Station SET PrimaryModuleId = Id;
@@ -160,10 +161,10 @@ INSERT INTO Meeting (Id, OrganiserGroupId, CityName, Name, StartDate, EndDate, S
 SET IDENTITY_INSERT Meeting OFF;
 
 SET IDENTITY_INSERT Layout ON;
-INSERT INTO Layout (Id, MeetingId, OrganisingGroupId, PrimaryModuleStandardId, RegistrationOpeningDate, RegistrationClosingDate, FirstYear, LastYear) VALUES
-    (1, 1, 1, 1, '2026-01-01', '2026-04-01', 1940, 1970),
-    (2, 1, 1, 1, '2026-01-01', '2026-04-01', NULL, NULL),
-    (3, 1, 1, 2, '2026-01-01', '2026-04-01', NULL, NULL);
+INSERT INTO Layout (Id, MeetingId, OrganisingGroupId, PrimaryModuleStandardId, RegistrationOpeningDate, RegistrationClosingDate, FirstYear, LastYear, ThemeId) VALUES
+    (1, 1, 1, 1, '2026-01-01', '2026-04-01', 1940, 1970, 1),
+    (2, 1, 1, 1, '2026-01-01', '2026-04-01', NULL, NULL, 1),
+    (3, 1, 1, 2, '2026-01-01', '2026-04-01', NULL, NULL, 2);
 SET IDENTITY_INSERT Layout OFF;
 
 SET IDENTITY_INSERT MeetingParticipant ON;

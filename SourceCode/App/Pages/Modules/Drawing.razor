@@ -1,0 +1,57 @@
+@page "/Modules/{Id:int}/Drawing"
+
+@attribute [Authorize(Policy = "User")]
+@* The module drawing from Module Draw, view only, for every signed-in user (ModuleService.FindDrawingAsync). Drawn with Module Draw's
+   ModuleView as SVG; the page is static, so the drawing is fitted to its frame without pan and zoom. The download is the module file
+   with the Registry's id and the owners written into it. *@
+
+@using System.Globalization
+@using Tellurian.Trains.Drawing.Components.Views
+
+@inject IStringLocalizer<Strings> Localizer
+@inject ModuleService ModuleService
+
+<PageHeading Label="ModuleDrawing" Context="@Module" IconClass="@FontAwesome.Drawing" BackHref="@BackHref" />
+
+@if (Module is null || Json is null)
+{
+    <ActionMessage Label="NoRecordsToDisplay" AlertType="warning" />
+}
+else
+{
+    <p>
+        @Module.OwnerNames()
+        <DocumentLink DocumentId="Module.ModuleDrawingId" FileExtension="@ModuleDrawings.FileExtension" />
+    </p>
+    @* Shaped as the drawing, so it fills the width; only a module taller than the window is limited by its height (site.css). *@
+    <div class="@(AspectRatio is null ? "module-drawing" : "module-drawing-full")" style="@FrameStyle">
+        <ModuleView Json="@Json" Label="@Module.FullName" FitText="@Localizer["FitInView"]" Error="@Localizer["ModuleDrawingCannotBeShown"]" Width="ViewWidth" Height="ViewHeight" />
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    const double ViewWidth = 2000;
+
+    Module? Module;
+    string? Json;
+    double? AspectRatio;
+
+    double ViewHeight => AspectRatio is double ratio ? ViewWidth / ratio : ViewWidth / 2;
+    string? FrameStyle => AspectRatio is null ? null : string.Create(CultureInfo.InvariantCulture, $"aspect-ratio: {ViewWidth:0} / {ViewHeight:0}");
+
+    protected override async Task OnInitializedAsync()
+    {
+        var principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        if (await ModuleService.FindDrawingAsync(principal, Id) is var (module, content))
+        {
+            Module = module;
+            Json = ModuleDrawings.Text(content);
+            AspectRatio = ModuleDrawingExtent.AspectRatio(Json);
+        }
+    }
+
+    string BackHref => $"Modules/{Id}/View";
+}

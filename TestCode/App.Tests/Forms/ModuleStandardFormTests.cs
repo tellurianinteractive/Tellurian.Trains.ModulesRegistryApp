@@ -29,10 +29,13 @@ public sealed class ModuleStandardFormTests
     [TestMethod]
     public void EndProfileRoundTripKeepsItsDocument()
     {
-        var existing = new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", PdfDocumentId = 9 };
+        var existing = new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1", Description = "Single track", PdfDocumentId = 9, DrawingId = 8, ModuleStandardId = 2 };
         var saved = existing.AsFormData().AsEntity(existing);
         Assert.AreEqual(9, saved.PdfDocumentId);
+        Assert.AreEqual(8, saved.DrawingId);
         Assert.AreEqual("FREMO 1", saved.Designation);
+        Assert.AreEqual("Single track", saved.Description);
+        Assert.AreEqual(2, saved.ModuleStandardId);
     }
 
     [TestMethod]
@@ -45,7 +48,7 @@ public sealed class ModuleStandardFormTests
     [TestMethod]
     public void RequiredFields()
     {
-        CollectionAssert.AreEquivalent(new[] { "ShortName", "ScaleId", "MainThemeId" }, InvalidMembers(new ModuleStandardFormData()));
+        CollectionAssert.AreEquivalent(new[] { "ShortName", "ScaleId" }, InvalidMembers(new ModuleStandardFormData()), "The main theme may be Any (0).");
         CollectionAssert.AreEquivalent(new[] { "ScaleId", "Designation" }, InvalidMembers(new ModuleEndProfileFormData()));
     }
 

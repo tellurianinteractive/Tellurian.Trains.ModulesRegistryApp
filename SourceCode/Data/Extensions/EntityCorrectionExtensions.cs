@@ -93,6 +93,7 @@ public static class EntityCorrectionExtensions
             standard.Couplings = standard.Couplings.Corrected(TextCase.AsTyped, Optional);
             standard.Electricity = standard.Electricity.Corrected(TextCase.AsTyped, Optional);
             standard.PreferredTheme = standard.PreferredTheme.Corrected(TextCase.AsTyped, Optional);
+            if (!standard.MainThemeId.IsTheme) standard.MainThemeId = (int)Theme.Any; // The list offers Any, Europe and US.
             standard.AcceptedNorm = standard.AcceptedNorm.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty); // Often a link, kept as typed.
             standard.NormalGauge = standard.NormalGauge is > 0 ? standard.NormalGauge : null;
             standard.NarrowGauge = standard.NarrowGauge is > 0 ? standard.NarrowGauge : null;
@@ -104,7 +105,12 @@ public static class EntityCorrectionExtensions
 
     extension(ModuleEndProfile profile)
     {
-        public void CorrectInput() => profile.Designation = profile.Designation.Corrected(TextCase.AsTyped);
+        public void CorrectInput()
+        {
+            profile.Designation = profile.Designation.Corrected(TextCase.AsTyped);
+            profile.Description = profile.Description.Corrected(TextCase.AsTyped, Optional);
+            profile.ModuleStandardId = profile.ModuleStandardId.OrNullIfZero();
+        }
     }
 
     extension(Cargo cargo)
@@ -140,6 +146,8 @@ public static class EntityCorrectionExtensions
             module.FremoNumber = module.FremoNumber.OrNullIfZero();
             module.NumberOfSections = module.NumberOfSections.OrNullIfZero();
             module.SpeedLimit = module.SpeedLimit.OrNullIfZero();
+            // A secondary theme is another theme than the primary one, or none.
+            module.SecondaryThemeId = module.SecondaryThemeId is int secondary && secondary.IsTheme && secondary != module.PrimaryThemeId ? secondary : null;
             // The lists offer only valid values; anything else is the default.
             if (!Enum.IsDefined((ObjectVisibility)module.ObjectVisibilityId)) module.ObjectVisibilityId = (int)ObjectVisibility.GroupMembers;
             if (!Enum.IsDefined((ModuleFunctionalState)module.FunctionalState)) module.FunctionalState = default;

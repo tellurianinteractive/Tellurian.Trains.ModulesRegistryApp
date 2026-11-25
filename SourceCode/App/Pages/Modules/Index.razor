@@ -64,6 +64,7 @@
                 }
             </HeaderTemplate>
             <ChildContent>
+                <AppButton Label="View" IconName="@FontAwesome.View" Href="@($"Modules/{module.Id}/View")" />
                 @if (IsAdministrator)
                 {
                     <AppButton Label="Edit" IconName="@FontAwesome.Module" Href="@EditModuleHref(module)" IsDisabled="(!MayEdit(module))" />
@@ -102,7 +103,7 @@
     ModulesFilter Filter => new() { Scale = Scale, ModuleName = ModuleName, OwnerName = OwnerName, GroupId = GroupId };
 
     private bool IsSelectCountryVisible => Countries is not null && Countries.Count() > 1;
-    // The Actions column is shown to all, since it also holds Clear filter; its buttons only to administrators, as before.
+    // The Actions column is shown to all, since it also holds Clear filter and View; its edit buttons only to administrators, as before.
     private bool IsAdministrator => Principal.IsGlobalOrCountryAdministrator(CountryId);
     private bool MayEdit(Module module) => IsAdministrator || module.OwningPersonsIds().Contains(Principal.PersonId());
 

@@ -18,6 +18,7 @@
     <None Include="..\..\SourceCode\App\wwwroot\js\busy-form.js" Link="Forms\busy-form.js" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\SourceCode\App\wwwroot\js\leave-guard.js" Link="Forms\leave-guard.js" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\SourceCode\App\wwwroot\js\select-typeahead.js" Link="Forms\select-typeahead.js" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\SourceCode\App\wwwroot\js\locked-by.js" Link="Forms\locked-by.js" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\SourceCode\App\wwwroot\images\front\*" LinkBase="FrontImages" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>

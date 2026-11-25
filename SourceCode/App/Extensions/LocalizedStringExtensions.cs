@@ -100,6 +100,7 @@ public static class LocalizedStringExtensions
             ExternalStationCustomer esc => $"{esc.CustomerName}",
             Vehicle v => $"{v.DisplayInfo()}",
             LayoutStation ls => $"{ls.Station?.FullName} @ {ls.LayoutName}",
+            ModuleEndProfile ep => ep.Designation,
             _ => string.Empty
         };
 

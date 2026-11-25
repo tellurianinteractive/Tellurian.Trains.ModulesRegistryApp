@@ -131,6 +131,12 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                 await dbContext.IsMeetingOrganiserAsync(principal, entity.MeetingId) :
                 existing.MeetingId == entity.MeetingId && await dbContext.IsLayoutOrganiserAsync(principal, existing.Id);
             if (!mayEdit || (existing is not null && existing.MeetingId != entity.MeetingId)) return (0, Resources.Strings.NotAuthorized, entity);
+            if (!entity.ThemeId.IsTheme)
+            {
+                // Without a theme, the primary standard's (Europe when the standard has none).
+                var standardThemeId = await dbContext.ModuleStandards.Where(ms => ms.Id == entity.PrimaryModuleStandardId).Select(ms => ms.MainThemeId).SingleOrDefaultAsync();
+                entity.ThemeId = standardThemeId.IsTheme ? standardThemeId : (int)Theme.Europe;
+            }
             if (existing is null)
             {
                 dbContext.Layouts.Add(entity);
@@ -232,7 +238,10 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
 
 
     /// <summary>
-    /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>
+    /// Adds <see cref="LayoutModule">modules</see> and <see cref="LayoutService">stations</see> in a <see cref="ModulePackage"/> to a <see cref="Layout"/>.
+    /// Each added module gets the meeting's start date as <see cref="Module.LastMeetingRegistrationDate"/> when it is later than the stored one.
+    /// Only modules with the layout's theme as their primary or secondary theme are added (<see cref="ModuleThemeExtensions.HasTheme"/>),
+    /// as the lists of available modules offer them.
     /// </summary>
     /// <param name="principal"></param>
     /// <param name="participantId"></param>
@@ -254,8 +263,15 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
             if (!participant.MeetingParticipant.MayRegisterModules() ||
                 !await dbContext.MayManageParticipantAsync(principal, participant.MeetingParticipantId, TimeProvider.LocalTime, participant.LayoutId))
                 return (0, Resources.Strings.NotAuthorized);
+            var layoutThemeId = await dbContext.Layouts.Where(l => l.Id == participant.LayoutId).Select(l => l.ThemeId).SingleAsync();
             foreach (var module in package.Modules)
             {
+                var storedModule = await dbContext.Modules.FindAsync(module.ModuleId);
+                if (storedModule is null || !storedModule.HasTheme(layoutThemeId))
+                {
+                    result--;
+                    continue;
+                }
                 var existing = await dbContext.LayoutModules
                     .AsNoTracking()
                     .SingleOrDefaultAsync(lm => lm.ModuleId == module.ModuleId && lm.LayoutParticipantId == layoutParticipantId);
@@ -276,6 +292,7 @@ public sealed class LayoutService(IDbContextFactory<ModulesDbContext> factory, I
                             }
                         }
                     }
+                    storedModule.UpdateLastMeetingRegistrationDate(participant.MeetingParticipant.Meeting.StartDate);
                     participant.LastModifiedDateTime = TimeProvider.Now;
                     dbContext.LayoutModules.Add(layoutModule);
                     await dbContext.SaveChangesAsync();

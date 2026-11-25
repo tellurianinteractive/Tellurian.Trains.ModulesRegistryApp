@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Validation;
+﻿using Microsoft.Extensions.Validation;
 using ModulesRegistry.Data;
 using ModulesRegistry.Forms.Validation;
 using System.ComponentModel.DataAnnotations;
@@ -22,8 +22,8 @@ public class ModuleStandardFormData
     [Range(1, int.MaxValue, ErrorMessage = "MustBeSelected_Error")]
     public int ScaleId { get; set; }
 
+    // Any (0), Europe or US. The modules and layouts have their own theme; this one is what they get when none is chosen.
     [Display(Name = "MainTheme")]
-    [Range(1, int.MaxValue, ErrorMessage = "MustBeSelected_Error")]
     public int MainThemeId { get; set; }
 
     // Empty is "not an extension".
@@ -87,6 +87,14 @@ public class ModuleEndProfileFormData
     [StringLength(20)]
     [OrdinaryText]
     public string Designation { get; set; } = string.Empty;
+
+    [Display(Name = "Description")]
+    [StringLength(500)]
+    public string? Description { get; set; }
+
+    // Empty is "no standard"; with a standard, the scale is the standard's when saved.
+    [Display(Name = "ModuleStandard")]
+    public int? ModuleStandardId { get; set; }
 }
 
 public static class ModuleStandardFormExtensions
@@ -142,17 +150,19 @@ public static class ModuleStandardFormExtensions
     extension(ModuleEndProfile entity)
     {
         /// <summary>Entity → form data (GET: populate the form).</summary>
-        public ModuleEndProfileFormData AsFormData() => new() { ScaleId = entity.ScaleId, Designation = entity.Designation ?? string.Empty };
+        public ModuleEndProfileFormData AsFormData() => new() { ScaleId = entity.ScaleId, Designation = entity.Designation ?? string.Empty, Description = entity.Description, ModuleStandardId = entity.ModuleStandardId };
     }
 
     extension(ModuleEndProfileFormData form)
     {
-        /// <summary>Form data → entity; the PDF document stays. Call it only with validated form data.</summary>
+        /// <summary>Form data → entity; the PDF document and the drawing stay. Call it only with validated form data.</summary>
         public ModuleEndProfile AsEntity(ModuleEndProfile? existing = null)
         {
             var entity = existing ?? new ModuleEndProfile();
             entity.ScaleId = form.ScaleId;
             entity.Designation = form.Designation;
+            entity.Description = form.Description;
+            entity.ModuleStandardId = form.ModuleStandardId;
             return entity;
         }
     }

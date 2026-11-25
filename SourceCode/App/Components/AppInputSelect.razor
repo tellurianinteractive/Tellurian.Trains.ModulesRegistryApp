@@ -1,5 +1,6 @@
 ﻿@using System.Diagnostics.CodeAnalysis;
 @using System.Globalization;
+@using System.Text.Json;
 
 @inherits AppInputBase<int>
 @inject IStringLocalizer<Strings> Localizer
@@ -14,7 +15,8 @@
            without JavaScript, the list works as usual. *@
         <select disabled=@IsDisabled style="@Style" class="form-select @CssClass" id="@Label" name="@NameAttributeValue" @bind="CurrentValueAsString"
                 data-typeahead="@(Typeahead ? "" : null)" data-typeahead-placeholder="@(Typeahead && TypeaheadPlaceholder.HasValue ? Localizer[TypeaheadPlaceholder!].Value : null)"
-                data-typeahead-not-found="@(Typeahead ? Localizer["NotFound"].Value : null)">
+                data-typeahead-not-found="@(Typeahead ? Localizer["NotFound"].Value : null)"
+                data-locked-by="@LockedBy" data-locked-values="@LockedValuesJson">
             @if (ShowPleaseSelect)
             {
                 <option value="0" selected="@(CurrentValue == 0)">@PleaseSelectText</option>
@@ -27,6 +29,12 @@
                 }
             }
         </select>
+        @* With LockedBy, wwwroot/js/locked-by.js sets and locks the value while the other list has a value. A disabled list isn't
+           posted, so its value is, in a hidden copy. *@
+        @if (LockedBy is not null && IsDisabled)
+        {
+            <input type="hidden" name="@NameAttributeValue" value="@CurrentValueAsString" data-locked-copy />
+        }
         @if (ValidationFor is not null)
         {
             <div class="form-control-validation">
@@ -50,6 +58,15 @@
     [Parameter] public bool Typeahead { get; set; }
     /// <summary>The text key of the search field's placeholder.</summary>
     [Parameter] public string? TypeaheadPlaceholder { get; set; }
+    /// <summary>
+    /// The name of another list in the form whose value decides this one, through <see cref="LockedValues"/>: while that list has a
+    /// value, this one is set and locked. Render it with <c>IsDisabled</c> when it is locked.
+    /// </summary>
+    [Parameter] public string? LockedBy { get; set; }
+    /// <summary>This list's value for each value of the list named by <see cref="LockedBy"/>.</summary>
+    [Parameter] public IReadOnlyDictionary<int, int>? LockedValues { get; set; }
+
+    string? LockedValuesJson => LockedBy is null ? null : JsonSerializer.Serialize(LockedValues ?? new Dictionary<int, int>());
 
     string PleaseSelectText => string.IsNullOrWhiteSpace(Label) ? Localizer["Select"].Value : $"{Localizer["Select"]} {LabelText(Localizer).ToLowerInvariant()}";
     string BootstrapWrapperCss => FormColumn.Css(Width);

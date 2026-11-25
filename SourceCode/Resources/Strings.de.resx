@@ -2943,4 +2943,49 @@
   <data name="HallDrawingNewerVersion" xml:space="preserve">
     <value>Die Hallenzeichnung stammt aus einer neueren Version von Module Draw, als das Modulregister lesen kann.</value>
   </data>
+  <data name="ModuleDrawing" xml:space="preserve">
+    <value>Modulzeichnung</value>
+  </data>
+  <data name="ModuleDrawingCannotBeShown" xml:space="preserve">
+    <value>Die Modulzeichnung kann nicht angezeigt werden.</value>
+  </data>
+  <data name="NotAModuleDrawing" xml:space="preserve">
+    <value>Die Datei ist keine Modulzeichnung aus Module Draw.</value>
+  </data>
+  <data name="ModuleDrawingNewerVersion" xml:space="preserve">
+    <value>Die Modulzeichnung stammt aus einer neueren Version von Module Draw, als das Modulregister lesen kann.</value>
+  </data>
+  <data name="ModuleDrawingOfAnotherModule" xml:space="preserve">
+    <value>Die Modulzeichnung gehört zu einem anderen Modul im Modulregister.</value>
+  </data>
+  <data name="EndProfileDrawing" xml:space="preserve">
+    <value>Endprofilzeichnung</value>
+  </data>
+  <data name="EndProfileDrawingCannotBeShown" xml:space="preserve">
+    <value>Die Endprofilzeichnung kann nicht angezeigt werden.</value>
+  </data>
+  <data name="NotAnEndProfileDrawing" xml:space="preserve">
+    <value>Die Datei ist keine Endprofilzeichnung aus Module Draw.</value>
+  </data>
+  <data name="EndProfileDrawingNewerVersion" xml:space="preserve">
+    <value>Die Endprofilzeichnung stammt aus einer neueren Version von Module Draw, als das Modulregister lesen kann.</value>
+  </data>
+  <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
+    <value>Die Endprofilzeichnung gehört zu einem anderen Endprofil im Modulregister.</value>
+  </data>
+  <data name="TopOfRail" xml:space="preserve">
+    <value>Schienenoberkante</value>
+  </data>
+  <data name="PrimaryTheme" xml:space="preserve">
+    <value>Primäres Thema</value>
+  </data>
+  <data name="SecondaryTheme" xml:space="preserve">
+    <value>Sekundäres Thema</value>
+  </data>
+  <data name="AsTheStandard" xml:space="preserve">
+    <value>Wie der Standard</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Beliebig</value>
+  </data>
 </root>

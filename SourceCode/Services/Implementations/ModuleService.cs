@@ -73,7 +73,7 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             return await dbContext.Modules.AsNoTracking()
                 .Where(m =>
                     (scaleId == 0 || m.ScaleId == scaleId) &&
-                    (themeId == 0 || m.Standard.MainThemeId == themeId) &&
+                    (themeId == 0 || m.PrimaryThemeId == themeId) &&
                     (byGroup || m.ModuleOwnerships.Any(mo => mo.Person.CountryId == countryId || mo.Group.CountryId == countryId)) &&
                     (groupId == 0 || m.ModuleOwnerships.Any(mo => mo.OwnedShare > 0 &&
                         (mo.GroupId == groupId || mo.Person.GroupMembers.Any(gm => gm.GroupId == groupId && !gm.IsModulesExcluded)))) &&
@@ -204,7 +204,8 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
     /// Saves a module's own fields; its exits are saved one by one (<see cref="SaveExitAsync"/>). An existing module by a user who may
     /// edit it (<c>MayEditModuleAsync</c>, assistants included); a new module for the owner in <paramref name="ownerRef"/> by a user
     /// who may add modules for that owner (<c>MayAddModuleForAsync</c>). The scale follows the standard and the length is calculated;
-    /// documents, exits and owners are never changed here. A changed station must be one the user may edit, and a station keeps at
+    /// documents, exits, owners and the last meeting registration date are never changed here. Without a primary theme the module
+    /// gets the standard's theme (Europe when the standard has none). A changed station must be one the user may edit, and a station keeps at
     /// least one module.
     /// </summary>
     /// <remarks>
@@ -217,10 +218,13 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         ownerRef = principal.UpdateFrom(ownerRef);
         entity.Length = entity.TotalLength();
         using var dbContext = Factory.CreateDbContext();
-        entity.ScaleId = await dbContext.ModuleStandards // This statement replaces the need to enter this in the user interface.
+        var standard = await dbContext.ModuleStandards // This statement replaces the need to enter this in the user interface.
             .Where(ms => ms.Id == entity.StandardId)
-            .Select(ms => ms.ScaleId).SingleOrDefaultAsync();
-        if (entity.ScaleId == 0) return principal.SaveNotAuthorised<Module>();
+            .Select(ms => new { ms.ScaleId, ms.MainThemeId }).SingleOrDefaultAsync();
+        if (standard is null || standard.ScaleId == 0) return principal.SaveNotAuthorised<Module>();
+        entity.ScaleId = standard.ScaleId;
+        if (!entity.PrimaryThemeId.IsTheme) entity.PrimaryThemeId = standard.MainThemeId.IsTheme ? standard.MainThemeId : (int)Theme.Europe;
+        if (entity.SecondaryThemeId == entity.PrimaryThemeId) entity.SecondaryThemeId = null; // Another theme, or none.
 
         var existing = entity.Id > 0 ? await dbContext.Modules.FirstOrDefaultAsync(m => m.Id == entity.Id) : null;
         if (entity.Id > 0 && (existing is null || !await dbContext.MayEditModuleAsync(principal, existing.Id))) return principal.SaveNotAuthorised<Module>();
@@ -242,6 +246,8 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             entity.DwgDrawingId = null;
             entity.PdfDocumentationId = null;
             entity.SkpDrawingId = null;
+            entity.ModuleDrawingId = null;
+            entity.LastMeetingRegistrationDate = null; // Set only by meeting registrations.
             dbContext.Add(entity);
             return (await dbContext.SaveChangesAsync()).SaveResult(entity);
         }
@@ -249,6 +255,8 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
         entity.DwgDrawingId = existing.DwgDrawingId;
         entity.PdfDocumentationId = existing.PdfDocumentationId;
         entity.SkpDrawingId = existing.SkpDrawingId;
+        entity.ModuleDrawingId = existing.ModuleDrawingId;
+        entity.LastMeetingRegistrationDate = existing.LastMeetingRegistrationDate;
         dbContext.Entry(existing).CurrentValues.SetValues(entity);
         if (dbContext.Entry(existing).State == EntityState.Unchanged) return (-1).SaveResult(existing);
         return (await dbContext.SaveChangesAsync()).SaveResult(existing);
@@ -293,6 +301,61 @@ public sealed class ModuleService(IDbContextFactory<ModulesDbContext> factory, I
             .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
             .Include(m => m.ModuleExits).ThenInclude(me => me.EndProfile)
             .SingleOrDefaultAsync(m => m.Id == id);
+    }
+
+    /// <summary>
+    /// A module with what its view page shows, for every signed-in user, as the modules list: owners, scale, standard, station, exits
+    /// and documents. The storage place only when the user sees it (a group's storage place is seen only by its members and the
+    /// administrators); otherwise <see cref="Module.StoredAtLocality"/> is null.
+    /// </summary>
+    public async Task<Module?> FindForViewAsync(ClaimsPrincipal? principal, int id)
+    {
+        if (!principal.IsAuthenticated()) return null;
+        using var dbContext = Factory.CreateDbContext();
+        var module = await dbContext.Modules.AsNoTracking()
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+            .Include(m => m.ModuleExits).ThenInclude(me => me.EndProfile)
+            .Include(m => m.Scale)
+            .Include(m => m.Standard)
+            .Include(m => m.Station)
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(m => m.Id == id);
+        if (module?.StoredAtLocalityId is int localityId)
+        {
+            module.StoredAtLocality = await dbContext.VisibleLocalities(principal).AsNoTracking().SingleOrDefaultAsync(l => l.Id == localityId);
+        }
+        return module;
+    }
+
+    /// <summary>
+    /// The drawing of a module (<see cref="ModuleDrawings"/>), for every signed-in user, with the Registry's id and the owners written
+    /// into it (<see cref="ModuleDrawings.WithRegistryData"/>); null when the module has none.
+    /// </summary>
+    public async Task<(Module Module, byte[] Content)?> FindDrawingAsync(ClaimsPrincipal? principal, int moduleId)
+    {
+        if (!principal.IsAuthenticated()) return null;
+        using var dbContext = Factory.CreateDbContext();
+        var module = await dbContext.Modules.AsNoTracking()
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Person)
+            .Include(m => m.ModuleOwnerships).ThenInclude(mo => mo.Group)
+            .SingleOrDefaultAsync(m => m.Id == moduleId);
+        if (module?.ModuleDrawingId is not int documentId) return null;
+        var content = await dbContext.Documents.Where(d => d.Id == documentId).Select(d => d.Content).SingleOrDefaultAsync();
+        if (content is null) return null;
+        var ownerNames = module.ModuleOwnerships.Any(mo => mo.OwnedShare > 0) ? module.ModuleOwnerships.OwnerNames() : null;
+        return (module, ModuleDrawings.WithRegistryData(content, module.Id, ownerNames));
+    }
+
+    /// <summary>
+    /// For downloading a document: whether it is a module's drawing, and if so its content as <see cref="FindDrawingAsync"/> gives it.
+    /// </summary>
+    public async Task<(bool IsModuleDrawing, byte[]? Content)> FindDrawingByDocumentIdAsync(ClaimsPrincipal? principal, int documentId)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var moduleId = await dbContext.Modules.Where(m => m.ModuleDrawingId == documentId).Select(m => (int?)m.Id).SingleOrDefaultAsync();
+        if (moduleId is null) return (false, null);
+        return (true, (await FindDrawingAsync(principal, moduleId.Value))?.Content);
     }
 
     /// <summary>An exit of a module the user may edit, or null.</summary>

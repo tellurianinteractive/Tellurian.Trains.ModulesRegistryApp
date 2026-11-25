@@ -36,6 +36,10 @@ public class LayoutFormData
     [OrdinaryText]
     public string? Theme { get; set; }
 
+    // Empty is the primary standard's theme, set when saved.
+    [Display(Name = "MainTheme")]
+    public int? ThemeId { get; set; }
+
     [Display(Name = "RegistrationOpens")]
     public DateTime RegistrationOpeningDate { get; set; }
 
@@ -98,6 +102,7 @@ public static class LayoutFormExtensions
             ContactPersonId = entity.ContactPersonId,
             ShortName = entity.ShortName,
             Theme = entity.Theme,
+            ThemeId = entity.ThemeId.IsTheme ? entity.ThemeId : null,
             RegistrationOpeningDate = entity.RegistrationOpeningDate,
             RegistrationClosingDate = entity.RegistrationClosingDate,
             ModuleRegistrationClosingDate = entity.ModuleRegistrationClosingDate,
@@ -123,6 +128,7 @@ public static class LayoutFormExtensions
             entity.ContactPersonId = form.ContactPersonId is null or 0 ? null : form.ContactPersonId;
             entity.ShortName = form.ShortName;
             entity.Theme = form.Theme;
+            entity.ThemeId = form.ThemeId ?? 0; // The service gives the primary standard's theme.
             entity.RegistrationOpeningDate = form.RegistrationOpeningDate;
             entity.RegistrationClosingDate = form.RegistrationClosingDate;
             entity.ModuleRegistrationClosingDate = form.ModuleRegistrationClosingDate;

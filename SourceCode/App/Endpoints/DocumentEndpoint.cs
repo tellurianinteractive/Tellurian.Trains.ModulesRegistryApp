@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
@@ -91,9 +91,11 @@ public interface IDocumentSource
 
 /// <remarks>
 /// A locality's hall drawing is given only to a user who sees the locality, with what the Registry knows about the venue written
-/// into it (<see cref="LocalityService.FindHallDrawingByDocumentIdAsync"/>).
+/// into it (<see cref="LocalityService.FindHallDrawingByDocumentIdAsync"/>); a module's drawing with the Registry's id and the
+/// owners written into it (<see cref="ModuleService.FindDrawingByDocumentIdAsync"/>); an end profile's drawing with the Registry's id
+/// written into it (<see cref="ModuleEndProfileService.FindDrawingByDocumentIdAsync"/>).
 /// </remarks>
-public sealed class DocumentSource(DocumentService documentService, LocalityService localityService) : IDocumentSource
+public sealed class DocumentSource(DocumentService documentService, LocalityService localityService, ModuleService moduleService, ModuleEndProfileService endProfileService) : IDocumentSource
 {
     public async Task<DocumentFile?> FindAsync(int id, ClaimsPrincipal user)
     {
@@ -105,6 +107,18 @@ public sealed class DocumentSource(DocumentService documentService, LocalityServ
         {
             if (hallDrawing.Content is null) return null;
             content = hallDrawing.Content;
+        }
+        var moduleDrawing = await moduleService.FindDrawingByDocumentIdAsync(user, id);
+        if (moduleDrawing.IsModuleDrawing)
+        {
+            if (moduleDrawing.Content is null) return null;
+            content = moduleDrawing.Content;
+        }
+        var endProfileDrawing = await endProfileService.FindDrawingByDocumentIdAsync(user, id);
+        if (endProfileDrawing.IsEndProfileDrawing)
+        {
+            if (endProfileDrawing.Content is null) return null;
+            content = endProfileDrawing.Content;
         }
         var name = await documentService.GetDocumentName(id);
         return new(content, document.ContentType, $"{name}.{document.FileExtension}");

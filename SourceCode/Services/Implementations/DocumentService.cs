@@ -8,7 +8,7 @@ namespace ModulesRegistry.Services.Implementations;
 public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory, ITimeProvider timeProvider, ILogger<DocumentService> logger)
 {
     public static readonly IEnumerable<string> PermittedFileExtenstions = new[] { "pdf", "dwg", "skp", HallDrawings.FileExtension };
-    public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station), typeof(Locality) };
+    public static readonly IEnumerable<Type> ValidDocumentObjects = new[] { typeof(Module), typeof(Station), typeof(Locality), typeof(ModuleEndProfile) };
 
     /// <summary>
     /// The message of an upload refused because the file is over the size limit; the page shows its own text with the limit.
@@ -37,6 +37,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         using var dbContext = Factory.CreateDbContext();
         string? name;
         name = await dbContext.Modules.AsNoTracking()
+            .Where(m => m.ModuleDrawingId == id)
+            .Select(m => m.FullName)
+            .SingleOrDefaultAsync();
+        if (name is not null) return $"{name}.module"; // As Module Draw names module files: .module.json.
+        name = await dbContext.Modules.AsNoTracking()
             .Where(m => m.PdfDocumentationId == id || m.DwgDrawingId == id || m.SkpDrawingId == id)
             .Select(m => m.FullName)
             .SingleOrDefaultAsync();
@@ -46,6 +51,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             .Select(s => s.FullName)
             .SingleOrDefaultAsync();
         if (name is not null) return name;
+        name = await dbContext.ModuleEndProfiles.AsNoTracking()
+            .Where(mgt => mgt.DrawingId == id)
+            .Select(mgt => mgt.Designation)
+            .SingleOrDefaultAsync();
+        if (name is not null) return $"{name}.endprofile"; // As Module Draw names end profile files: .endprofile.json.
         name = await dbContext.ModuleEndProfiles.AsNoTracking()
             .Where(mgt => mgt.PdfDocumentId == id)
             .Select(mgt => mgt.Designation)
@@ -76,9 +86,9 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         var document = await dbContext.Documents.FindAsync(documentId);
         if (document is null) return 0.DeleteResult();
 
-        var modules = await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId).ToListAsync();
+        var modules = await dbContext.Modules.Where(m => m.PdfDocumentationId == documentId || m.DwgDrawingId == documentId || m.SkpDrawingId == documentId || m.ModuleDrawingId == documentId).ToListAsync();
         var stations = await dbContext.Stations.Where(s => s.PdfInstructionId == documentId).ToListAsync();
-        var endProfiles = await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId).ToListAsync();
+        var endProfiles = await dbContext.ModuleEndProfiles.Where(e => e.PdfDocumentId == documentId || e.DrawingId == documentId).ToListAsync();
         var localities = await dbContext.Localities.Where(l => l.HallDrawingId == documentId).ToListAsync();
         var references = modules.Count + stations.Count + endProfiles.Count + localities.Count;
         if (references == 0) return 0.DeleteResult();
@@ -102,9 +112,14 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             if (module.PdfDocumentationId == documentId) module.PdfDocumentationId = null;
             if (module.DwgDrawingId == documentId) module.DwgDrawingId = null;
             if (module.SkpDrawingId == documentId) module.SkpDrawingId = null;
+            if (module.ModuleDrawingId == documentId) module.ModuleDrawingId = null;
         }
         foreach (var station in stations) station.PdfInstructionId = null;
-        foreach (var endProfile in endProfiles) endProfile.PdfDocumentId = null;
+        foreach (var endProfile in endProfiles)
+        {
+            if (endProfile.PdfDocumentId == documentId) endProfile.PdfDocumentId = null;
+            if (endProfile.DrawingId == documentId) endProfile.DrawingId = null;
+        }
         foreach (var locality in localities) locality.HallDrawingId = null;
         dbContext.Documents.Remove(document);
         return (await dbContext.SaveChangesAsync()).DeleteResult();
@@ -130,6 +145,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             nameof(Module) => await dbContext.Modules.FindAsync(id),
             nameof(Station) => await dbContext.Stations.FindAsync(id),
             nameof(Locality) => await dbContext.Localities.FindAsync(id),
+            nameof(ModuleEndProfile) => await dbContext.ModuleEndProfiles.FindAsync(id),
             _ => null
         };
         if (target is null) return (0, "UploadFailed", null);
@@ -148,8 +164,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
 
         byte[] content;
         using (var stream = file.OpenReadStream(file.Size)) content = await GetContent(stream, (int)file.Size);
-        // A hall drawing must be a hall file Module Draw can read; the user is told why not.
+        // A hall drawing must be a hall file Module Draw can read, a module drawing a module file of this module and an end profile
+        // drawing an end profile file of this end profile; the user is told why not.
         if (target is Locality && HallDrawings.ErrorKey(content) is string errorKey) return (0, errorKey, null);
+        if (target is Module drawnModule && fileExtension == ModuleDrawings.FileExtension && ModuleDrawings.ErrorKey(content, drawnModule.Id) is string moduleErrorKey) return (0, moduleErrorKey, null);
+        if (target is ModuleEndProfile drawnProfile && EndProfileDrawings.ErrorKey(content, drawnProfile.Id) is string profileErrorKey) return (0, profileErrorKey, null);
 
         var (_, currentDocumentId, _) = DocumentedObject(target, fileExtension);
         var document = currentDocumentId.HasValue ? await dbContext.Documents.FindAsync(currentDocumentId.Value) : null;
@@ -206,7 +225,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
 
     /// <summary>
     /// The kind of document, as the referring property is named: <c>DwgDrawing</c>, <c>PdfDocumentation</c>,
-    /// <c>SkpDrawing</c> or <c>PdfInstruction</c>.
+    /// <c>SkpDrawing</c>, <c>ModuleDrawing</c>, <c>PdfInstruction</c>, <c>HallDrawing</c> or <c>Drawing</c> (of an end profile).
     /// </summary>
     public static string DocumentKind(object? documentObject, string? fileExtension) =>
         (documentObject, fileExtension) switch
@@ -214,8 +233,10 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             (Module, "dwg") => nameof(Module.DwgDrawing),
             (Module, "pdf") => nameof(Module.PdfDocumentation),
             (Module, "skp") => nameof(Module.SkpDrawing),
+            (Module, ModuleDrawings.FileExtension) => nameof(Module.ModuleDrawing),
             (Station, "pdf") => nameof(Station.PdfInstruction),
             (Locality, HallDrawings.FileExtension) => nameof(Locality.HallDrawing),
+            (ModuleEndProfile, EndProfileDrawings.FileExtension) => nameof(ModuleEndProfile.Drawing),
             _ => fileExtension ?? string.Empty
         };
 
@@ -234,15 +255,17 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             case (Module module, "dwg"): module.DwgDrawing = document; break;
             case (Module module, "pdf"): module.PdfDocumentation = document; break;
             case (Module module, "skp"): module.SkpDrawing = document; break;
+            case (Module module, ModuleDrawings.FileExtension): module.ModuleDrawing = document; break;
             case (Station station, "pdf"): station.PdfInstruction = document; break;
             case (Locality locality, HallDrawings.FileExtension): locality.HallDrawing = document; break;
+            case (ModuleEndProfile profile, EndProfileDrawings.FileExtension): profile.Drawing = document; break;
         }
     }
 
     /// <summary>
     /// Who may upload or delete the documents of an object, from the database (never from the page's owner reference): for a
-    /// module those who may edit it (<c>MayEditModuleAsync</c>), for a station those who may edit it (<c>MayEditStationAsync</c>).
-    /// Read-only users never. Before Migration step 3.6 a country administrator could change documents in any country.
+    /// module those who may edit it (<c>MayEditModuleAsync</c>), for a station those who may edit it (<c>MayEditStationAsync</c>),
+    /// for an end profile global administrators (<see cref="MayChangeEndProfileDocuments"/>). Read-only users never. Before Migration step 3.6 a country administrator could change documents in any country.
     /// </summary>
     internal static async Task<bool> MayChangeDocumentsOfAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, object target) =>
         target switch
@@ -250,6 +273,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             Module module => await dbContext.MayEditModuleAsync(principal, module.Id),
             Station station => await dbContext.MayEditStationAsync(principal, station.Id),
             Locality locality => await dbContext.MayEditLocalityAsync(principal, locality),
+            ModuleEndProfile => MayChangeEndProfileDocuments(principal),
             _ => false
         };
 
@@ -281,8 +305,10 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             case (Module module, "dwg"): module.DwgDrawingId = null; return true;
             case (Module module, "pdf"): module.PdfDocumentationId = null; return true;
             case (Module module, "skp"): module.SkpDrawingId = null; return true;
+            case (Module module, ModuleDrawings.FileExtension): module.ModuleDrawingId = null; return true;
             case (Station station, "pdf"): station.PdfInstructionId = null; return true;
             case (Locality locality, HallDrawings.FileExtension): locality.HallDrawingId = null; return true;
+            case (ModuleEndProfile profile, EndProfileDrawings.FileExtension): profile.DrawingId = null; return true;
             default: return false;
         }
     }
@@ -301,6 +327,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 "dwg" => (module.Id, module.DwgDrawingId, nameof(Module)),
                 "pdf" => (module.Id, module.PdfDocumentationId, nameof(Module)),
                 "skp" => (module.Id, module.SkpDrawingId, nameof(Module)),
+                ModuleDrawings.FileExtension => (module.Id, module.ModuleDrawingId, nameof(Module)),
                 _ => (0, null, string.Empty)
             },
             Station station => fileExtension switch
@@ -311,6 +338,11 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             Locality locality => fileExtension switch
             {
                 HallDrawings.FileExtension => (locality.Id, locality.HallDrawingId, nameof(Locality)),
+                _ => (0, null, string.Empty)
+            },
+            ModuleEndProfile profile => fileExtension switch
+            {
+                EndProfileDrawings.FileExtension => (profile.Id, profile.DrawingId, nameof(ModuleEndProfile)),
                 _ => (0, null, string.Empty)
             },
             _ => (0, null, string.Empty)
@@ -331,6 +363,7 @@ public static class DocumentExtenstions
         Module m => m.Id,
         Station s => s.Id,
         Locality l => l.Id,
+        ModuleEndProfile p => p.Id,
         _ => null
     };
 

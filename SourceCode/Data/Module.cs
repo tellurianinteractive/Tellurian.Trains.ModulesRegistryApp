@@ -50,6 +50,10 @@ public partial class Module
     public int? DwgDrawingId { get; set; }
     public int? SkpDrawingId { get; set; }
     public int? PdfDocumentationId { get; set; }
+    /// <summary>
+    /// The module's drawing from Module Draw: a module file (<c>.module.json</c>).
+    /// </summary>
+    public int? ModuleDrawingId { get; set; }
     public string Note { get; set; }
     public int? StationId { get; set; }
     public int? FremoNumber { get; set; }
@@ -61,10 +65,24 @@ public partial class Module
     public short? SpeedLimit { get; set; }
     public int LandscapeSeason { get; set; }
     public int? StoredAtLocalityId { get; set; }
+    /// <summary>
+    /// The module's theme (<see cref="Data.Theme"/>): what it is built for, used where themes must not be mixed, such as waybills.
+    /// From the standard when the module is added.
+    /// </summary>
+    public int PrimaryThemeId { get; set; } = (int)Data.Theme.Europe;
+    /// <summary>
+    /// Another theme the module may also be registered at meetings with; nothing else follows from it. Null when there is none.
+    /// </summary>
+    public int? SecondaryThemeId { get; set; }
+    /// <summary>
+    /// Start date of the latest meeting the module was registered to; kept when meetings are purged.
+    /// </summary>
+    public DateTimeOffset? LastMeetingRegistrationDate { get; set; }
 
     public virtual Document DwgDrawing { get; set; }
     public virtual Document SkpDrawing { get; set; }
     public virtual Document PdfDocumentation { get; set; }
+    public virtual Document ModuleDrawing { get; set; }
     public virtual Scale Scale { get; set; }
     public virtual ModuleStandard Standard { get; set; }
     public virtual Station Station { get; set; }
@@ -238,6 +256,7 @@ public static class ModuleExtensions
         if (me.PdfDocumentationId.HasValue) yield return me.PdfDocumentationId.Value;
         if (me.DwgDrawingId.HasValue) yield return me.DwgDrawingId.Value;
         if (me.SkpDrawingId.HasValue) yield return me.SkpDrawingId.Value;
+        if (me.ModuleDrawingId.HasValue) yield return me.ModuleDrawingId.Value;
     }
 
     public static double TotalLength(this Module me)
@@ -249,6 +268,44 @@ public static class ModuleExtensions
         return 0.0;
     }
 
+}
+
+public static class ModuleThemeExtensions
+{
+    extension(Module module)
+    {
+        /// <summary>
+        /// Whether the module may be registered to a layout with the theme <paramref name="themeId"/>: its primary or secondary theme.
+        /// </summary>
+        public bool HasTheme(int themeId) => module.PrimaryThemeId == themeId || module.SecondaryThemeId == themeId;
+    }
+}
+
+public static class ModuleMeetingRegistrationExtensions
+{
+    extension(Module module)
+    {
+        /// <summary>
+        /// Remembers the start date of a meeting the module is registered to, when it is later than the one stored, so it is known
+        /// when the module was last used also after the meeting data is purged. Returns true when the date changed.
+        /// </summary>
+        public bool UpdateLastMeetingRegistrationDate(DateTime meetingStartDate)
+        {
+            var date = meetingStartDate.AsMeetingRegistrationDate;
+            if (module.LastMeetingRegistrationDate >= date) return false;
+            module.LastMeetingRegistrationDate = date;
+            return true;
+        }
+    }
+
+    extension(DateTime meetingStartDate)
+    {
+        /// <summary>
+        /// The meeting's start date as stored in <see cref="Module.LastMeetingRegistrationDate"/>: midnight with offset zero,
+        /// the same value as the one-off script SetLastMeetingRegistrationDate.sql writes.
+        /// </summary>
+        public DateTimeOffset AsMeetingRegistrationDate => new(DateTime.SpecifyKind(meetingStartDate.Date, DateTimeKind.Unspecified), TimeSpan.Zero);
+    }
 }
 
 public static class ModuleExtensionsForFremoName
@@ -349,7 +406,14 @@ public static class ModuleMapping
                 .HasConstraintName("FK_Module_StoredAtLocality")
                 .OnDelete(DeleteBehavior.NoAction);
             entity.HasIndex(e => e.StoredAtLocalityId, "IX_Module_StoredAtLocalityId");
-            entity.Property<DateTimeOffset?>("LastMeetingRegistrationDate"); // Not used yet.
+            entity.HasOne(e => e.ModuleDrawing)
+                .WithMany()
+                .HasForeignKey(e => e.ModuleDrawingId)
+                .HasConstraintName("FK_Module_ModuleDrawing")
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(e => e.LastMeetingRegistrationDate);
+            entity.Property(e => e.PrimaryThemeId).HasDatabaseDefault("1");
+            entity.Property(e => e.SecondaryThemeId);
         });
 }
 
