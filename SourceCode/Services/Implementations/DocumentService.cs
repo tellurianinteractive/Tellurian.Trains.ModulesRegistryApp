@@ -101,7 +101,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         {
             if (!await MayChangeDocumentsOfAsync(dbContext, principal, station)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
         }
-        if (endProfiles.Count > 0 && !MayChangeEndProfileDocuments(principal)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
+        if (endProfiles.Count > 0 && !principal.MayManageEndProfiles()) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
         foreach (var locality in localities)
         {
             if (!await MayChangeDocumentsOfAsync(dbContext, principal, locality)) return Denied(principal, "delete", nameof(Document), documentId).DeleteResult();
@@ -133,7 +133,18 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     /// The object is loaded from the database by its id; the current reference is taken from there, not from the page,
     /// so a page with an old document id doesn't leave the replaced document behind.
     /// </remarks>
-    public async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize)
+    public Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, IBrowserFile file, object? documentedObject, string? fileExtension, long maxFileSize) =>
+        SaveAsync(principal, file.Size, async () =>
+        {
+            using var stream = file.OpenReadStream(file.Size);
+            return await GetContent(stream, (int)file.Size);
+        }, documentedObject, fileExtension, maxFileSize);
+
+    /// <summary>As <see cref="SaveAsync(ClaimsPrincipal?, IBrowserFile, object?, string?, long)"/>, with content already read, as from the public API.</summary>
+    public Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, byte[] content, object? documentedObject, string? fileExtension, long maxFileSize) =>
+        SaveAsync(principal, content.LongLength, () => Task.FromResult(content), documentedObject, fileExtension, maxFileSize);
+
+    private async Task<(int Count, string Message, Document? Entity)> SaveAsync(ClaimsPrincipal? principal, long size, Func<Task<byte[]>> readContent, object? documentedObject, string? fileExtension, long maxFileSize)
     {
         if (!principal.IsAuthenticated()) return principal.SaveNotAuthorised<Document>();
         var (id, _, typeName) = DocumentedObject(documentedObject, fileExtension);
@@ -156,14 +167,13 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             return principal.SaveNotAuthorised<Document>();
         }
         // Checked here, after the permission, so the log tells what sizes users who may upload need.
-        if (file.Size > maxFileSize)
+        if (size > maxFileSize)
         {
-            Logger.FileTooLarge(DocumentKind(target, fileExtension), KiloBytes(file.Size), KiloBytes(maxFileSize), principal.UserId(), typeName, id);
+            Logger.FileTooLarge(DocumentKind(target, fileExtension), KiloBytes(size), KiloBytes(maxFileSize), principal.UserId(), typeName, id);
             return (0, FileTooLargeMessage, null);
         }
 
-        byte[] content;
-        using (var stream = file.OpenReadStream(file.Size)) content = await GetContent(stream, (int)file.Size);
+        var content = await readContent();
         // A hall drawing must be a hall file Module Draw can read, a module drawing a module file of this module and an end profile
         // drawing an end profile file of this end profile; the user is told why not.
         if (target is Locality && HallDrawings.ErrorKey(content) is string errorKey) return (0, errorKey, null);
@@ -198,13 +208,6 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                 ContentType = ContentType(fileExtension)
             };
 
-        static async Task<byte[]> GetContent(Stream stream, int size)
-        {
-            byte[] buffer = new byte[size];
-            await stream.ReadExactlyAsync(buffer, 0, size);
-            return buffer;
-        }
-
         static string ContentType(string? fileExtension) =>
               fileExtension switch
               {
@@ -213,6 +216,47 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
                   HallDrawings.FileExtension => HallDrawings.ContentType,
                   _ => "application/octet-stream"
               };
+    }
+
+    private static async Task<byte[]> GetContent(Stream stream, int size)
+    {
+        byte[] buffer = new byte[size];
+        await stream.ReadExactlyAsync(buffer, 0, size);
+        return buffer;
+    }
+
+    /// <summary>The largest end profile drawing accepted, as on the end profile page.</summary>
+    public const long MaxEndProfileDrawingSize = 200 * 1024;
+
+    /// <summary>
+    /// Saves the drawing of an existing end profile from Module Draw, through the public API: only for those who manage end profiles (as
+    /// on the end profile page), only an end profile file that the end profile importer reads and that names no other end profile, and
+    /// only when it isn't older than the stored drawing: its revision must be higher than the stored one's, unless the content is
+    /// the same, so a drawing saved by someone else in between isn't replaced. The end profile gets the drawing's width and height.
+    /// </summary>
+    public async Task<EndProfileDrawingUpload> SaveEndProfileDrawingAsync(ClaimsPrincipal? principal, int endProfileId, byte[] content)
+    {
+        using var dbContext = Factory.CreateDbContext();
+        var endProfile = await dbContext.ModuleEndProfiles.AsNoTracking().SingleOrDefaultAsync(p => p.Id == endProfileId);
+        if (endProfile is null) return new(EndProfileDrawingUploadStatus.NotFound);
+        if (!principal.MayManageEndProfiles())
+        {
+            Denied(principal, "upload", nameof(ModuleEndProfile), endProfileId);
+            return new(EndProfileDrawingUploadStatus.NotAuthorised);
+        }
+        if (content.LongLength > MaxEndProfileDrawingSize) return new(EndProfileDrawingUploadStatus.TooLarge, FileTooLargeMessage);
+        if (EndProfileDrawings.ErrorKey(content, endProfileId) is string errorKey) return new(EndProfileDrawingUploadStatus.Invalid, errorKey);
+        if (endProfile.DrawingId is int drawingId)
+        {
+            var stored = await dbContext.Documents.AsNoTracking().Where(d => d.Id == drawingId).Select(d => d.Content).SingleOrDefaultAsync();
+            if (stored is not null && !stored.AsSpan().SequenceEqual(content) &&
+                EndProfileDrawings.Revision(stored) is int storedRevision && EndProfileDrawings.Revision(content) <= storedRevision)
+                return new(EndProfileDrawingUploadStatus.Conflict, "EndProfileDrawingIsOlder");
+        }
+        var (count, message, _) = await SaveAsync(principal, content, endProfile, EndProfileDrawings.FileExtension, MaxEndProfileDrawingSize);
+        if (count == 0) return new(EndProfileDrawingUploadStatus.Invalid, message);
+        var (width, height) = EndProfileDrawings.Measures(content);
+        return new(EndProfileDrawingUploadStatus.Saved, null, width, height);
     }
 
     /// <summary>
@@ -272,7 +316,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
     /// <summary>
     /// Who may upload or delete the documents of an object, from the database (never from the page's owner reference): for a
     /// module those who may edit it (<c>MayEditModuleAsync</c>), for a station those who may edit it (<c>MayEditStationAsync</c>),
-    /// for an end profile global administrators (<see cref="MayChangeEndProfileDocuments"/>). Read-only users never. Before Migration step 3.6 a country administrator could change documents in any country.
+    /// for an end profile those who manage end profiles (<see cref="ClaimsPrincipalExtensions.MayManageEndProfiles"/>). Read-only users never. Before Migration step 3.6 a country administrator could change documents in any country.
     /// </summary>
     internal static async Task<bool> MayChangeDocumentsOfAsync(ModulesDbContext dbContext, ClaimsPrincipal? principal, object target) =>
         target switch
@@ -280,7 +324,7 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
             Module module => await dbContext.MayEditModuleAsync(principal, module.Id),
             Station station => await dbContext.MayEditStationAsync(principal, station.Id),
             Locality locality => await dbContext.MayEditLocalityAsync(principal, locality),
-            ModuleEndProfile => MayChangeEndProfileDocuments(principal),
+            ModuleEndProfile => principal.MayManageEndProfiles(),
             _ => false
         };
 

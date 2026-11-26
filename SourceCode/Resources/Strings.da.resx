@@ -1314,6 +1314,9 @@
   <data name="MayUploadSkpDrawing" xml:space="preserve">
     <value>Må uploade SketchUp-tegning?</value>
   </data>
+  <data name="MayManageEndProfiles" xml:space="preserve">
+    <value>Må administrere endeprofiler?</value>
+  </data>
   <data name="MayVerifyWiFreds" xml:space="preserve">
     <value>Kan verificere wiFREDs</value>
   </data>
@@ -2954,6 +2957,15 @@
   </data>
   <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
     <value>Endeprofiltegningen hører til en anden endeprofil i modulregistret.</value>
+  </data>
+  <data name="EndProfileDrawingIsOlder" xml:space="preserve">
+    <value>Endeprofiltegningen er ældre end den i modulregistret, som en anden kan have gemt. Importér kataloget igen, og lav ændringen på den nyeste tegning.</value>
+  </data>
+  <data name="UploadFailed" xml:space="preserve">
+    <value>Filen kunne ikke uploades.</value>
+  </data>
+  <data name="UploadFileToLarge" xml:space="preserve">
+    <value>Filen er for stor.</value>
   </data>
   <data name="TopOfRail" xml:space="preserve">
     <value>Skinneoverkant</value>

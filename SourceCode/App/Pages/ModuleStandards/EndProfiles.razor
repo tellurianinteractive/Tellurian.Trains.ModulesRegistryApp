@@ -53,7 +53,7 @@
 
     ClaimsPrincipal? Principal;
     IEnumerable<ModuleEndProfile>? ModuleEndProfiles;
-    bool MayEdit => Principal.IsGlobalAdministrator();
+    bool MayEdit => Principal.MayManageEndProfiles();
     // The column is shown to everyone when an end profile has a drawing to view; otherwise only to those who edit.
     bool HasActions => MayEdit || ModuleEndProfiles?.Any(p => p.DrawingId.HasValue) == true;
 

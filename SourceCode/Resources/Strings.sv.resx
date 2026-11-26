@@ -1314,6 +1314,9 @@
   <data name="MayUploadSkpDrawing" xml:space="preserve">
     <value>Får ladda upp SketchUp-ritning?</value>
   </data>
+  <data name="MayManageEndProfiles" xml:space="preserve">
+    <value>Får hantera ändprofiler?</value>
+  </data>
   <data name="MayVerifyWiFreds" xml:space="preserve">
     <value>Kan verifiera wiFREDs</value>
   </data>
@@ -2954,6 +2957,15 @@
   </data>
   <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
     <value>Ändprofilritningen hör till en annan ändprofil i modulregistret.</value>
+  </data>
+  <data name="EndProfileDrawingIsOlder" xml:space="preserve">
+    <value>Ändprofilritningen är äldre än den i modulregistret, som någon annan kan ha sparat. Importera katalogen igen och gör ändringen på den senaste ritningen.</value>
+  </data>
+  <data name="UploadFailed" xml:space="preserve">
+    <value>Filen kunde inte laddas upp.</value>
+  </data>
+  <data name="UploadFileToLarge" xml:space="preserve">
+    <value>Filen är för stor.</value>
   </data>
   <data name="TopOfRail" xml:space="preserve">
     <value>Rälsöverkant</value>

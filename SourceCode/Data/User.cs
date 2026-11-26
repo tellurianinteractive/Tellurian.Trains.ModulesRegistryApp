@@ -32,6 +32,8 @@ public partial class User
     public int FailedLoginAttempts { get; set; }
     public bool MayUploadSkpDrawing { get; set; }
     public bool MayManageWiFreds { get; set; }
+    /// <summary>May add and edit every end profile and its drawing, also from Module Draw through the API; granted by global administrators.</summary>
+    public bool MayManageEndProfiles { get; set; }
     public DateTimeOffset? DeletedTimestamp { get; set; }
 }
 
@@ -57,6 +59,7 @@ public static class UserExtensions
                 entity.Property(e => e.FailedLoginAttempts).HasDatabaseDefault("0");
                 entity.Property(e => e.MayUploadSkpDrawing).HasDatabaseDefault("0");
                 entity.Property(e => e.MayManageWiFreds).HasDatabaseDefault("0");
+                entity.Property(e => e.MayManageEndProfiles).HasDatabaseDefault("0");
             });
     }
 

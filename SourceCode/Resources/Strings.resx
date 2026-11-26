@@ -1314,6 +1314,9 @@
   <data name="MayUploadSkpDrawing" xml:space="preserve">
     <value>May upload SketchUp drawing?</value>
   </data>
+  <data name="MayManageEndProfiles" xml:space="preserve">
+    <value>May manage end profiles?</value>
+  </data>
   <data name="MayVerifyWiFreds" xml:space="preserve">
     <value>May verify wiFREDs</value>
   </data>
@@ -2954,6 +2957,15 @@
   </data>
   <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
     <value>The end profile drawing belongs to another end profile in the Module Registry.</value>
+  </data>
+  <data name="EndProfileDrawingIsOlder" xml:space="preserve">
+    <value>The end profile drawing is older than the one in the Module Registry, which someone else may have saved. Import the catalogue again and make the change on the latest drawing.</value>
+  </data>
+  <data name="UploadFailed" xml:space="preserve">
+    <value>The file could not be uploaded.</value>
+  </data>
+  <data name="UploadFileToLarge" xml:space="preserve">
+    <value>The file is too large.</value>
   </data>
   <data name="TopOfRail" xml:space="preserve">
     <value>Top of rail</value>

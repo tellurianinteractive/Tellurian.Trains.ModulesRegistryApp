@@ -17,6 +17,7 @@
     [FailedLoginAttempts]              INT                DEFAULT ((0)) NOT NULL,
     [MayUploadSkpDrawing]              BIT                DEFAULT ((0)) NOT NULL, 
     [MayManageWiFreds]                 BIT                DEFAULT ((0)) NOT NULL,     
+    [MayManageEndProfiles]             BIT                DEFAULT ((0)) NOT NULL,
     
     [DeletedTimestamp] DATETIMEOFFSET NULL, 
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Id] ASC)

@@ -64,6 +64,30 @@ public static class EndProfileDrawings
         static int? Millimetres(double value) => value >= 1 ? (int)Math.Round(value) : null;
     }
 
+    /// <summary>The drawing's revision, which Module Draw steps up when it is saved; none for a file that can't be read.</summary>
+    public static int? Revision(byte[] content)
+    {
+        var result = new EndProfileImporter().Import(Text(content));
+        return result.IsFailure ? null : result.Item.Revision;
+    }
+
     /// <summary>The text of an end profile file, without a byte order mark.</summary>
     public static string Text(byte[] content) => HallDrawings.Text(content);
 }
+
+/// <summary>How an end profile drawing sent through the public API went (<see cref="DocumentService.SaveEndProfileDrawingAsync"/>).</summary>
+public enum EndProfileDrawingUploadStatus
+{
+    Saved,
+    NotFound,
+    NotAuthorised,
+    TooLarge,
+    Invalid,
+    Conflict,
+}
+
+/// <summary>
+/// The result of an end profile drawing sent through the public API: the status, the resource key of why it wasn't saved, and when
+/// saved, the end plate's measures from the drawing.
+/// </summary>
+public sealed record EndProfileDrawingUpload(EndProfileDrawingUploadStatus Status, string? MessageKey = null, int? WidthMillimeter = null, int? HeightMillimeter = null);

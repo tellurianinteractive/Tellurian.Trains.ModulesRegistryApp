@@ -1,6 +1,11 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.19.1
+Released 2026-11-26
+- A new user right, may manage end profiles, lets trusted users add and edit end profiles and their drawings; only global administrators grant it.
+- A new public API, POST /api/endprofiles/{id}/drawing, saves an end profile drawing from Module Draw, with an API key.
+- Failed uploads show a message instead of a text key.
 ## Release 1.19.0
 Released 2026-11-26
 - A new public API, /api/catalogue, gives the module standards and end profiles as a Module Draw catalogue, without API key.

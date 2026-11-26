@@ -2,7 +2,7 @@
 
 @attribute [Authorize(Policy = "User")]
 @* Static SSR form (Migration step 3.6): a POST of ModuleEndProfileFormData; the id comes from the address. Only global
-   administrators get the form. After saving, a redirect to the form's own address; the result is a one-time message.
+   administrators and users who may manage end profiles get the form. After saving, a redirect to the form's own address; the result is a one-time message.
    A saved end profile also gets the upload of its drawing from Module Draw (an end profile file, checked when uploaded by
    DocumentService and EndProfileDrawings) and a preview of it with Module Draw's EndProfileView. *@
 
@@ -73,7 +73,7 @@
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
-        if (!Principal.IsGlobalAdministrator())
+        if (!Principal.MayManageEndProfiles())
         {
             Form = null; // Shows "no records"; also when a form was posted.
             return;

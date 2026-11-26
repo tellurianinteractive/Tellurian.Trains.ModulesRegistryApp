@@ -1,4 +1,6 @@
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModulesRegistry.Api;
 using ModulesRegistry.Data.Api;
+using ModulesRegistry.Data.Extensions;
+using ModulesRegistry.Services.Implementations;
 
 namespace ModulesRegistry.AppTests.Api;
 
@@ -21,6 +25,7 @@ public sealed class PublicApiEndpointsTests
 {
     private const string ValidKey = "valid-key";
     private const string ModuleDrawOrigin = "https://draw.example.net";
+    private const int KeyUserId = 42;
 
     /// <summary>
     /// The JSON options the MVC controllers were configured with (in Program.cs, before step 2.1B), on top of the MVC defaults.
@@ -230,6 +235,106 @@ public sealed class PublicApiEndpointsTests
         Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
     }
 
+    private const string DrawingUrl = "/api/endprofiles/7/drawing";
+    private static readonly byte[] DrawingFile = Encoding.UTF8.GetBytes("""{ "format": "tellurian-drawing", "kind": "EndProfile" }""");
+
+    private Task<HttpResponseMessage> PostDrawingAsync(byte[] content, string? apiKey = ValidKey, string url = DrawingUrl)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = new ByteArrayContent(content) };
+        request.Content.Headers.ContentType = new("application/json");
+        if (apiKey is not null) request.Headers.Add(ApiKeyFilter.HeaderName, apiKey);
+        return _client.SendAsync(request);
+    }
+
+    [TestMethod]
+    public async Task SavingADrawingNeedsAnApiKey()
+    {
+        var response = await PostDrawingAsync(DrawingFile, apiKey: null);
+
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.IsFalse(_source.WasCalled);
+    }
+
+    [TestMethod]
+    public async Task ADrawingIsSavedForTheKeysUserWithTheMeasures()
+    {
+        var response = await PostDrawingAsync(DrawingFile);
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var (userId, endProfileId, content) = _source.LastDrawingUpload!.Value;
+        Assert.AreEqual(KeyUserId, userId, "The user of the request is the API key's.");
+        Assert.AreEqual(7, endProfileId);
+        CollectionAssert.AreEqual(DrawingFile, content);
+        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.AreEqual(7, json.RootElement.GetProperty("endProfileId").GetInt32());
+        Assert.AreEqual(500, json.RootElement.GetProperty("widthMillimeter").GetInt32());
+        Assert.AreEqual(200, json.RootElement.GetProperty("heightMillimeter").GetInt32());
+    }
+
+    [TestMethod]
+    [DataRow(EndProfileDrawingUploadStatus.NotFound, null, HttpStatusCode.NotFound, "NotFound")]
+    [DataRow(EndProfileDrawingUploadStatus.NotAuthorised, null, HttpStatusCode.Forbidden, "NotAuthorized")]
+    [DataRow(EndProfileDrawingUploadStatus.Invalid, "NotAnEndProfileDrawing", HttpStatusCode.BadRequest, "NotAnEndProfileDrawing")]
+    [DataRow(EndProfileDrawingUploadStatus.Conflict, "EndProfileDrawingIsOlder", HttpStatusCode.Conflict, "EndProfileDrawingIsOlder")]
+    [DataRow(EndProfileDrawingUploadStatus.TooLarge, "UploadFileToLarge", HttpStatusCode.RequestEntityTooLarge, "UploadFileToLarge")]
+    public async Task ADrawingThatIsNotSavedIsAProblemWithItsReason(EndProfileDrawingUploadStatus status, string? messageKey, HttpStatusCode expected, string expectedKey)
+    {
+        _source.DrawingUploadResult = new(status, messageKey);
+
+        var response = await PostDrawingAsync(DrawingFile);
+
+        Assert.AreEqual(expected, response.StatusCode);
+        Assert.AreEqual("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.AreEqual(expectedKey, json.RootElement.GetProperty("key").GetString());
+        Assert.IsFalse(string.IsNullOrWhiteSpace(json.RootElement.GetProperty("title").GetString()));
+    }
+
+    [TestMethod]
+    public async Task ADrawingLargerThanTheLimitIsNotRead()
+    {
+        var response = await PostDrawingAsync(new byte[DocumentService.MaxEndProfileDrawingSize + 1]);
+
+        Assert.AreEqual(HttpStatusCode.RequestEntityTooLarge, response.StatusCode);
+        Assert.IsNull(_source.LastDrawingUpload);
+    }
+
+    [TestMethod]
+    public async Task ADrawingIsSavedOnlyWithPost()
+    {
+        var response = await GetAsync(DrawingUrl);
+
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.IsNull(_source.LastDrawingUpload);
+    }
+
+    [TestMethod]
+    public async Task ModuleDrawMaySendADrawing()
+    {
+        var response = await PreflightAsync(ModuleDrawOrigin);
+
+        Assert.AreEqual(ModuleDrawOrigin, response.Headers.GetValues("Access-Control-Allow-Origin").Single());
+        StringAssert.Contains(string.Join(",", response.Headers.GetValues("Access-Control-Allow-Headers")), ApiKeyFilter.HeaderName, StringComparison.OrdinalIgnoreCase);
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Credentials"), "No cookies: the user is the API key's.");
+    }
+
+    [TestMethod]
+    public async Task OtherOriginsMayNotSendADrawing()
+    {
+        var response = await PreflightAsync("https://other.example.net");
+
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
+    private Task<HttpResponseMessage> PreflightAsync(string origin)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Options, DrawingUrl);
+        request.Headers.Add("Origin", origin);
+        request.Headers.Add("Access-Control-Request-Method", "POST");
+        request.Headers.Add("Access-Control-Request-Headers", $"{ApiKeyFilter.HeaderName},content-type");
+        return _client.SendAsync(request);
+    }
+
     private static string FormerControllerJson<T>(T value) where T : notnull =>
         JsonSerializer.Serialize(value, value.GetType(), FormerControllerOptions);
 
@@ -250,7 +355,9 @@ public sealed class PublicApiEndpointsTests
 
     private sealed class FakeApiKeyValidator : IApiKeyValidator
     {
-        public Task<bool> IsValidAsync(string? apiKey) => Task.FromResult(apiKey == ValidKey);
+        public Task<ClaimsPrincipal?> FindPrincipalAsync(string? apiKey) => Task.FromResult(apiKey == ValidKey
+            ? new ClaimsPrincipal(new ClaimsIdentity([new Claim(AppClaimTypes.UserId, KeyUserId.ToString())], "ApiKey"))
+            : null);
     }
 
     private sealed class FakePublicApiSource : IPublicApiSource
@@ -259,7 +366,16 @@ public sealed class PublicApiEndpointsTests
         public bool ReturnEmpty { get; set; }
         public (int?, string?)? LastMeetingsQuery { get; private set; }
         public (string?, string?)? LastCatalogueQuery { get; private set; }
+        public (int UserId, int EndProfileId, byte[] Content)? LastDrawingUpload { get; private set; }
+        public EndProfileDrawingUpload DrawingUploadResult { get; set; } = new(EndProfileDrawingUploadStatus.Saved, null, 500, 200);
         public const string CatalogueFile = """{ "format": "tellurian-drawing", "kind": "Catalogue", "schemaVersion": 2, "content": {} }""";
+
+        public Task<EndProfileDrawingUpload> SaveEndProfileDrawingAsync(ClaimsPrincipal principal, int endProfileId, byte[] content)
+        {
+            WasCalled = true;
+            LastDrawingUpload = (principal.UserId(), endProfileId, content);
+            return Task.FromResult(DrawingUploadResult);
+        }
 
         public List<CargoType> CargoTypes { get; } =
         [

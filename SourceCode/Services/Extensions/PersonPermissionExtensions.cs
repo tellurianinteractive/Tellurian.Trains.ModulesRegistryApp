@@ -56,6 +56,9 @@ public static class PersonPermissionExtensions
         /// <summary>Only a global administrator makes a user a country administrator or removes the right.</summary>
         public bool MayChangeCountryAdministrator => principal.IsGlobalAdministrator();
 
+        /// <summary>Only a global administrator lets a user manage end profiles, since that covers the end profiles of every country.</summary>
+        public bool MayChangeEndProfileManager => principal.IsGlobalAdministrator();
+
         /// <summary>
         /// The other rights (API access, uploading drawings, managing wiFREDs) and the area of responsibility: a global administrator,
         /// or a country administrator in the person's country.
@@ -83,6 +86,7 @@ public static class PersonPermissionExtensions
             user.IsApiAccessPermitted = source.IsApiAccessPermitted;
             user.MayUploadSkpDrawing = source.MayUploadSkpDrawing;
             user.MayManageWiFreds = source.MayManageWiFreds;
+            user.MayManageEndProfiles = source.MayManageEndProfiles;
             user.AdministratorAreaOfResposibility = source.AdministratorAreaOfResposibility;
             if (source.EmailAddress.HasValue) user.EmailAddress = source.EmailAddress;
         }
@@ -95,6 +99,7 @@ public static class PersonPermissionExtensions
         {
             if (!principal.MayChangeGlobalAdministrator) user.IsGlobalAdministrator = stored.IsGlobalAdministrator;
             if (!principal.MayChangeCountryAdministrator) user.IsCountryAdministrator = stored.IsCountryAdministrator;
+            if (!principal.MayChangeEndProfileManager) user.MayManageEndProfiles = stored.MayManageEndProfiles;
             if (!principal.MayChangeUserRights(personCountryId))
             {
                 user.IsApiAccessPermitted = stored.IsApiAccessPermitted;

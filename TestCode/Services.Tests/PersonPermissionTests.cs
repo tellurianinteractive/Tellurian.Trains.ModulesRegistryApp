@@ -144,11 +144,20 @@ public sealed class PersonPermissionTests
             p.User.IsCountryAdministrator = true;
             p.User.IsGlobalAdministrator = true;
             p.User.MayUploadSkpDrawing = true;
+            p.User.MayManageEndProfiles = true;
         });
         var user = (await StoredAsync(Member)).User;
         Assert.IsTrue(user.MayUploadSkpDrawing);
         Assert.IsFalse(user.IsCountryAdministrator);
         Assert.IsFalse(user.IsGlobalAdministrator);
+        Assert.IsFalse(user.MayManageEndProfiles, "Managing end profiles covers every country, so only a global administrator grants it.");
+    }
+
+    [TestMethod]
+    public async Task AGlobalAdministratorLetsAUserManageEndProfiles()
+    {
+        await RenameAsync(GlobalAdministrator(), Member, change: p => p.User.MayManageEndProfiles = true);
+        Assert.IsTrue((await StoredAsync(Member)).User.MayManageEndProfiles);
     }
 
     [TestMethod]

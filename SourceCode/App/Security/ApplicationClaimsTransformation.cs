@@ -78,6 +78,7 @@ public class ApplicationClaimsTransformation(IDbContextFactory<ModulesDbContext>
             // Special claims
             if (user.MayUploadSkpDrawing) result.Add(Claim(AppClaimTypes.MayUploadSkpDrawing, true));
             if (user.MayManageWiFreds) result.Add(Claim(AppClaimTypes.MayManageWiFreds, true));
+            if (user.MayManageEndProfiles) result.Add(Claim(AppClaimTypes.MayManageEndProfiles, true));
             if (user.IsLockedOut()) result.Add(Claim(AppClaimTypes.IsLockedOut, true));
         }
 

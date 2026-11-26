@@ -81,6 +81,9 @@ public class PersonFormData
     [Display(Name = "MayVerifyWiFreds")]
     public bool MayManageWiFreds { get; set; }
 
+    [Display(Name = "MayManageEndProfiles")]
+    public bool MayManageEndProfiles { get; set; }
+
     /// <summary>The area of responsibility is edited only for a global or country administrator.</summary>
     public bool IsAdministrator => IsGlobalAdministrator || IsCountryAdministrator;
 
@@ -112,6 +115,7 @@ public static class PersonFormExtensions
             IsApiAccessPermitted = entity.User?.IsApiAccessPermitted == true,
             MayUploadSkpDrawing = entity.User?.MayUploadSkpDrawing == true,
             MayManageWiFreds = entity.User?.MayManageWiFreds == true,
+            MayManageEndProfiles = entity.User?.MayManageEndProfiles == true,
             AdministratorAreaOfResposibility = entity.User?.AdministratorAreaOfResposibility,
         };
     }
@@ -143,6 +147,7 @@ public static class PersonFormExtensions
                 user.IsApiAccessPermitted = form.IsApiAccessPermitted;
                 user.MayUploadSkpDrawing = form.MayUploadSkpDrawing;
                 user.MayManageWiFreds = form.MayManageWiFreds;
+                user.MayManageEndProfiles = form.MayManageEndProfiles;
                 user.AdministratorAreaOfResposibility = form.AdministratorAreaOfResposibility;
             }
             return entity;

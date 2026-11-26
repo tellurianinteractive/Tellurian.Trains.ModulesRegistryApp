@@ -1314,6 +1314,9 @@
   <data name="MayUploadSkpDrawing" xml:space="preserve">
     <value>Darf SketchUp-Zeichnung hochladen?</value>
   </data>
+  <data name="MayManageEndProfiles" xml:space="preserve">
+    <value>Darf Endprofile verwalten?</value>
+  </data>
   <data name="MayVerifyWiFreds" xml:space="preserve">
     <value>Kann wiFREDs überprüfen</value>
   </data>
@@ -2954,6 +2957,15 @@
   </data>
   <data name="EndProfileDrawingOfAnotherEndProfile" xml:space="preserve">
     <value>Die Endprofilzeichnung gehört zu einem anderen Endprofil im Modulregister.</value>
+  </data>
+  <data name="EndProfileDrawingIsOlder" xml:space="preserve">
+    <value>Die Endprofilzeichnung ist älter als die im Modulregister, die jemand anderes gespeichert haben kann. Importieren Sie den Katalog erneut und ändern Sie die neueste Zeichnung.</value>
+  </data>
+  <data name="UploadFailed" xml:space="preserve">
+    <value>Die Datei konnte nicht hochgeladen werden.</value>
+  </data>
+  <data name="UploadFileToLarge" xml:space="preserve">
+    <value>Die Datei ist zu groß.</value>
   </data>
   <data name="TopOfRail" xml:space="preserve">
     <value>Schienenoberkante</value>

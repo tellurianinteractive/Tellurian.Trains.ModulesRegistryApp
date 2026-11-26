@@ -61,6 +61,7 @@
                 <AppInputCheck Label="IsApiAccessPermitted" @bind-Value="Form!.IsApiAccessPermitted" />
                 <AppInputCheck Label="MayUploadSkpDrawing" @bind-Value="Form!.MayUploadSkpDrawing" />
                 <AppInputCheck Label="MayVerifyWiFreds" @bind-Value="Form!.MayManageWiFreds" />
+                <AppInputCheck Label="MayManageEndProfiles" @bind-Value="Form!.MayManageEndProfiles" IsDisabled="@(!Principal.MayChangeEndProfileManager)" />
             </AppCheckGroup>
             <AppFormRow>
                 <AppInputText Width="6" Label="AdministratorAreaOfResposibility" @bind-Value="Form!.AdministratorAreaOfResposibility" IsDisabled="@(!Form.IsAdministrator)" EnabledBy="Form.IsGlobalAdministrator Form.IsCountryAdministrator" />
@@ -129,6 +130,7 @@
         {
             if (!Principal.MayChangeGlobalAdministrator) Form.IsGlobalAdministrator = user.IsGlobalAdministrator;
             if (!Principal.MayChangeCountryAdministrator) Form.IsCountryAdministrator = user.IsCountryAdministrator;
+            if (!Principal.MayChangeEndProfileManager || !ShowsUserRights) Form.MayManageEndProfiles = user.MayManageEndProfiles;
             if (!ShowsUserRights)
             {
                 Form.IsApiAccessPermitted = user.IsApiAccessPermitted;

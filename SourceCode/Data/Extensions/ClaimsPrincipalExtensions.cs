@@ -25,6 +25,7 @@ public static class AppClaimTypes
     public const string DomainId = nameof(DomainId);
     public const string MayUploadSkpDrawing = nameof(MayUploadSkpDrawing);
     public const string MayManageWiFreds = nameof(MayManageWiFreds);
+    public const string MayManageEndProfiles = nameof(MayManageEndProfiles);
     public const string IsLockedOut = nameof(IsLockedOut);
 }
 
@@ -43,6 +44,12 @@ public static class ClaimsPrincipalExtensions
     public static bool IsLockedOut(this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.IsLockedOut);
     public static bool MayUploadSkpDrawing(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayUploadSkpDrawing);
     public static bool MayManageWiFreds(this ClaimsPrincipal? principal) => principal.GetBool(AppClaimTypes.MayManageWiFreds);
+    /// <summary>
+    /// Adds and edits end profiles and their drawings, on the pages and through the API: global administrators, and users given the
+    /// right <see cref="AppClaimTypes.MayManageEndProfiles"/>, trusted persons who aren't administrators (decided 2026-11-26). Never read-only users.
+    /// </summary>
+    public static bool MayManageEndProfiles([NotNullWhen(true)] this ClaimsPrincipal? principal) =>
+        principal is not null && !principal.IsReadOnly() && (principal.IsGlobalAdministrator() || principal.GetBool(AppClaimTypes.MayManageEndProfiles));
     public static bool IsLatestTermsOfUseAccepted(this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.LastTermsOfUseAcceptTime);
     public static bool IsAuthenticated([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.ObjectId);
     public static bool IsGlobalAdministrator([NotNullWhen(true)] this ClaimsPrincipal? principal) => principal.Any(AppClaimTypes.GlobalAdministrator);

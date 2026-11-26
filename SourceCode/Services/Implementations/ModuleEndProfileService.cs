@@ -24,10 +24,10 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
             .ConfigureAwait(false);
     }
 
-    /// <summary>An end profile to edit; only global administrators edit end profiles.</summary>
+    /// <summary>An end profile to edit, for those who manage end profiles (<see cref="ClaimsPrincipalExtensions.MayManageEndProfiles"/>).</summary>
     public async Task<ModuleEndProfile?> FindByIdAsync(ClaimsPrincipal? principal, int id)
     {
-        if (principal.IsGlobalAdministrator())
+        if (principal.MayManageEndProfiles())
         {
             using var dbContext = Factory.CreateDbContext();
             return await dbContext.ModuleEndProfiles.FindAsync(id).ConfigureAwait(false);
@@ -65,10 +65,10 @@ public class ModuleEndProfileService(IDbContextFactory<ModulesDbContext> factory
         return (true, (await FindDrawingAsync(principal, endProfileId.Value).ConfigureAwait(false))?.Content);
     }
 
-    /// <summary>Adds or updates an end profile; only global administrators (as before: <c>IsGlobalOrCountryAdministrator()</c> without a country). The documents are kept as they are. With a module standard, the end profile gets the standard's scale.</summary>
+    /// <summary>Adds or updates an end profile, for those who manage end profiles (<see cref="ClaimsPrincipalExtensions.MayManageEndProfiles"/>). The documents are kept as they are. With a module standard, the end profile gets the standard's scale.</summary>
     public async Task<(int Count, string Message, ModuleEndProfile? Entity)> SaveAsync(ClaimsPrincipal? principal, ModuleEndProfile entity)
     {
-        if (principal.IsGlobalAdministrator() && !principal.IsReadOnly())
+        if (principal.MayManageEndProfiles())
         {
             entity.CorrectInput(); // Corrected, not validated (EntityCorrectionExtensions, Migration step 3.5).
             using var dbContext = Factory.CreateDbContext();

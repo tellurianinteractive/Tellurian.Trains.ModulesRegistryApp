@@ -32,7 +32,7 @@ public sealed class OpenApiDocumentTests
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         var paths = document.RootElement.GetProperty("paths").EnumerateObject().Select(p => p.Name).ToList();
         CollectionAssert.AreEquivalent(
-            new[] { "/api/catalogue", "/api/cargoes", "/api/languages/all/supported", "/api/meetings/{countryId}" },
+            new[] { "/api/catalogue", "/api/cargoes", "/api/endprofiles/{id}/drawing", "/api/languages/all/supported", "/api/meetings/{countryId}" },
             paths);
         Assert.IsFalse(paths.Any(p => p.StartsWith("/app")), "The app's own /app endpoints must not be in the public API description.");
     }
