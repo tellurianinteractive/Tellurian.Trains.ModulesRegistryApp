@@ -59,7 +59,7 @@ public sealed class ModuleDrawingTests
             new Person { Id = OwnerId, CountryId = Sweden, FirstName = "Anna", LastName = "Ägare", CityName = "Växjö" },
             new Person { Id = OtherId, CountryId = Sweden, FirstName = "Bo", LastName = "Annan", CityName = "Växjö" });
         await _factory.SeedAsync(new Scale { Id = 1, ShortName = "H0", Denominator = 87 });
-        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "FREMO H0-RE", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo" });
+        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "FREMO H0-RE", ScaleId = 1, TrackSystem = "Track", PreferredTheme = "Europe" });
         await _factory.SeedAsync(
             new Module { Id = ModuleId, FullName = "Tellby", ScaleId = 1, StandardId = 1, ModuleOwnerships = [new ModuleOwnership { PersonId = OwnerId, OwnedShare = 1 }] },
             new Module { Id = OtherModuleId, FullName = "Other", ScaleId = 1, StandardId = 1, ModuleOwnerships = [new ModuleOwnership { PersonId = OtherId, OwnedShare = 1 }] });

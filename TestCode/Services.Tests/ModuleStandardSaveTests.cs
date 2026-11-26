@@ -15,6 +15,7 @@ public sealed class ModuleStandardSaveTests
     private SqliteDbContextFactory _factory = null!;
     private const int Sweden = 1;
     private const int Norway = 2;
+    private const int NEM310 = 2, RP25 = 3, Steam = 201, FL6511 = 101, Kadee = 109, MicroTrains = 110;
 
     private static ClaimsPrincipal Principal(params Claim[] extra) => new(new ClaimsIdentity(
     [
@@ -36,8 +37,16 @@ public sealed class ModuleStandardSaveTests
         await _factory.SeedAsync(
             new Country { Id = Sweden, EnglishName = "Sweden", DomainSuffix = "se", Languages = "sv" },
             new Country { Id = Norway, EnglishName = "Norway", DomainSuffix = "no", Languages = "nb" });
-        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "FREMO/H0-RE", ScaleId = 3, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo", MainThemeId = 1 });
+        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "FREMO/H0-RE", ScaleId = 3, TrackSystem = "Track", PreferredTheme = "Europe", MainThemeId = 1 });
         await _factory.SeedAsync(new ModuleEndProfile { Id = 1, ScaleId = 3, Designation = "FREMO 1" });
+        await _factory.SeedAsync(new Scale { Id = 1, ShortName = "N", Denominator = 160 });
+        await _factory.SeedAsync(
+            new Feature { Id = NEM310, Category = "WHEELS", Description = "NEM310" },
+            new Feature { Id = RP25, Category = "WHEELS", Description = "RP25" },
+            new Feature { Id = Steam, Category = "TRACTION", Description = "Steam", IsResourceCode = true },
+            new Feature { Id = FL6511, Category = "COUPLINGS", OnlyScaleId = 3, Description = "FL6511" },
+            new Feature { Id = Kadee, Category = "COUPLINGS", Description = "Kadee" },
+            new Feature { Id = MicroTrains, Category = "COUPLINGS", OnlyScaleId = 1, Description = "Micro-Trains" });
     }
 
     [TestCleanup]
@@ -45,8 +54,8 @@ public sealed class ModuleStandardSaveTests
 
     private static ModuleStandard Changed() => new()
     {
-        Id = 1, ShortName = " FREMO/H0-RE ", ScaleId = 3, TrackSystem = "", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC",
-        PreferredTheme = "Europe", AcceptedNorm = " https://fremo-net.eu/norm.pdf ", MainThemeId = 1, NormalGauge = 0, NarrowGauge = 6.5,
+        Id = 1, ShortName = " FREMO/H0-RE ", ScaleId = 3, TrackSystem = "",
+        PreferredTheme = "Europe", MainThemeId = 1,
     };
 
     [TestMethod]
@@ -58,9 +67,61 @@ public sealed class ModuleStandardSaveTests
         var saved = (await _factory.FindAsync<ModuleStandard>(1))!;
         Assert.AreEqual("FREMO/H0-RE", saved.ShortName);
         Assert.IsNull(saved.TrackSystem, "An empty optional text is saved as empty.");
-        Assert.AreEqual("https://fremo-net.eu/norm.pdf", saved.AcceptedNorm);
-        Assert.IsNull(saved.NormalGauge, "Zero is no gauge.");
-        Assert.AreEqual(6.5, saved.NarrowGauge);
+    }
+
+    private static ModuleStandard WithFeatures(ModuleStandard standard, params int[] featureIds)
+    {
+        standard.Features = [.. featureIds.Select(id => new ModuleFeature { ModuleStandardId = standard.Id, FeatureId = id })];
+        return standard;
+    }
+
+    private async Task<int[]> SavedFeatureIdsAsync(int standardId)
+    {
+        await using var dbContext = _factory.CreateDbContext();
+        return [.. dbContext.ModuleFeatures.Where(f => f.ModuleStandardId == standardId).Select(f => f.FeatureId).OrderBy(id => id)];
+    }
+
+    [TestMethod]
+    public async Task AStandardAcceptsWheelsAndCouplingsOfItsScaleOrAnyScale()
+    {
+        await new ModuleStandardService(_factory).SaveAsync(GlobalAdministrator, WithFeatures(Changed(), NEM310, RP25, FL6511, Kadee, MicroTrains, Steam, 999));
+
+        CollectionAssert.AreEqual(new[] { NEM310, RP25, FL6511, Kadee }, await SavedFeatureIdsAsync(1), "Two wheel profiles and two couplings; not another scale's, traction or unknown.");
+    }
+
+    [TestMethod]
+    public async Task ChangedFeaturesAreRemovedAndAdded()
+    {
+        var target = new ModuleStandardService(_factory);
+        await target.SaveAsync(GlobalAdministrator, WithFeatures(Changed(), RP25, FL6511));
+
+        var (count, _, _) = await target.SaveAsync(GlobalAdministrator, WithFeatures(Changed(), NEM310, FL6511));
+        var (unchangedCount, _, _) = await target.SaveAsync(GlobalAdministrator, WithFeatures(Changed(), NEM310, FL6511));
+
+        Assert.AreEqual(2, count, "One removed and one added.");
+        Assert.AreEqual(-1, unchangedCount);
+        CollectionAssert.AreEqual(new[] { NEM310, FL6511 }, await SavedFeatureIdsAsync(1));
+    }
+
+    [TestMethod]
+    public async Task ANewStandardGetsItsFeatures()
+    {
+        var (count, _, saved) = await new ModuleStandardService(_factory).SaveAsync(GlobalAdministrator, WithFeatures(new ModuleStandard { ShortName = "FREMO/QS", ScaleId = 3, MainThemeId = 1 }, RP25));
+
+        Assert.IsGreaterThan(0, count);
+        CollectionAssert.AreEqual(new[] { RP25 }, await SavedFeatureIdsAsync(saved!.Id));
+    }
+
+    [TestMethod]
+    public async Task DeletingAStandardDeletesItsFeatures()
+    {
+        var target = new ModuleStandardService(_factory);
+        await target.SaveAsync(GlobalAdministrator, WithFeatures(Changed(), RP25));
+
+        var (count, _) = await target.DeleteAsync(GlobalAdministrator, 1);
+
+        Assert.IsGreaterThan(0, count);
+        Assert.IsEmpty(await SavedFeatureIdsAsync(1));
     }
 
     [TestMethod]

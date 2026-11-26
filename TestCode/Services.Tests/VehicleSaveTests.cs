@@ -38,9 +38,9 @@ public sealed class VehicleSaveTests
             new Scale { Id = H0, ShortName = "H0", Denominator = 87 },
             new Scale { Id = N, ShortName = "N", Denominator = 160 });
         await _factory.SeedAsync(
-            new VehicleFeature { Id = H0Coupling, Category = "COUPLINGS", Description = "FL6511", OnlyScaleId = H0 },
-            new VehicleFeature { Id = Wheels, Category = "WHEELS", Description = "NEM310" },
-            new VehicleFeature { Id = Traction, Category = "TRACTION", Description = "Electric", IsResourceCode = true });
+            new Feature { Id = H0Coupling, Category = "COUPLINGS", Description = "FL6511", OnlyScaleId = H0 },
+            new Feature { Id = Wheels, Category = "WHEELS", Description = "NEM310" },
+            new Feature { Id = Traction, Category = "TRACTION", Description = "Electric", IsResourceCode = true });
         await _factory.SeedAsync(Vehicle(1, Owner), Vehicle(2, Danish));
     }
 

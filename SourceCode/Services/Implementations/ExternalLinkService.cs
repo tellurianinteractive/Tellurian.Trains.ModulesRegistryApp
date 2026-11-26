@@ -27,6 +27,17 @@ public sealed class ExternalLinkService(IDbContextFactory<ModulesDbContext> fact
     public async Task<IEnumerable<ExternalLink>> ShownLinksAsync(ClaimsPrincipal? principal, string ownerType, int ownerId) =>
         (await LinksAsync(principal, ownerType, ownerId)).Shown(AppLanguages.Current.TwoLetterCode, Time.GetUtcNow());
 
+    /// <summary>The links to show per owner of the type, for the user's language (<see cref="ExternalLinkExtensions.Shown"/>).</summary>
+    public async Task<IReadOnlyDictionary<int, IReadOnlyList<ExternalLink>>> ShownLinksByOwnerAsync(ClaimsPrincipal? principal, string ownerType)
+    {
+        if (!principal.MayRead()) return new Dictionary<int, IReadOnlyList<ExternalLink>>();
+        using var dbContext = Factory.CreateDbContext();
+        var links = await dbContext.ExternalLinks.AsNoTracking().Where(l => l.OwnerType == ownerType).ToListAsync();
+        var language = AppLanguages.Current.TwoLetterCode;
+        var now = Time.GetUtcNow();
+        return links.GroupBy(l => l.OwnerId).ToDictionary(g => g.Key, g => (IReadOnlyList<ExternalLink>)[.. g.Shown(language, now)]);
+    }
+
     public async Task<ExternalLink?> FindAsync(ClaimsPrincipal? principal, int id)
     {
         if (!principal.MayRead()) return null;

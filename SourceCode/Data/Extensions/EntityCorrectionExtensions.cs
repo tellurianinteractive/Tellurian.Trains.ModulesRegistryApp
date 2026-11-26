@@ -89,14 +89,8 @@ public static class EntityCorrectionExtensions
         {
             standard.ShortName = standard.ShortName.Corrected(TextCase.AsTyped); // An abbreviation, "FREMO/H0-RE".
             standard.TrackSystem = standard.TrackSystem.Corrected(TextCase.AsTyped, Optional);
-            standard.Wheelset = standard.Wheelset.Corrected(TextCase.AsTyped, Optional);
-            standard.Couplings = standard.Couplings.Corrected(TextCase.AsTyped, Optional);
-            standard.Electricity = standard.Electricity.Corrected(TextCase.AsTyped, Optional);
             standard.PreferredTheme = standard.PreferredTheme.Corrected(TextCase.AsTyped, Optional);
             if (!standard.MainThemeId.IsTheme) standard.MainThemeId = (int)Theme.Any; // The list offers Any, Europe and US.
-            standard.AcceptedNorm = standard.AcceptedNorm.Corrected(TextCase.AsTyped, TextCleanup.Trimmed | TextCleanup.NullIfEmpty); // Often a link, kept as typed.
-            standard.NormalGauge = standard.NormalGauge is > 0 ? standard.NormalGauge : null;
-            standard.NarrowGauge = standard.NarrowGauge is > 0 ? standard.NarrowGauge : null;
             standard.ExtendsStandardId = standard.ExtendsStandardId.OrNullIfZero();
             standard.OnlyValidInCountryId = standard.OnlyValidInCountryId.OrNullIfZero();
             if (standard.Id > 0 && standard.ExtendsStandardId == standard.Id) standard.ExtendsStandardId = null; // Not an extension of itself.

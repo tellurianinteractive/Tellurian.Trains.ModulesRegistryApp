@@ -14,7 +14,7 @@ public sealed class ModuleStandardFormTests
     private static ModuleStandard Existing() => new()
     {
         Id = 7, ShortName = "MMM/H0n3", ScaleId = 3, MainThemeId = 1, ExtendsStandardId = 2, OnlyValidInCountryId = 1, PreferredTheme = "Sweden", TrackSystem = "Code 70",
-        NormalGauge = null, NarrowGauge = 10.5, Wheelset = "RP25", Couplings = "Kadee", Electricity = "DC", AcceptedNorm = "http://example.org/norm.pdf",
+        Features = [new ModuleFeature { ModuleStandardId = 7, FeatureId = 3 }, new ModuleFeature { ModuleStandardId = 7, FeatureId = 109 }],
     };
 
     [TestMethod]
@@ -24,6 +24,7 @@ public sealed class ModuleStandardFormTests
         var actual = Existing().AsFormData().AsEntity(Existing());
         foreach (var property in typeof(ModuleStandard).GetProperties().Where(p => p.PropertyType.IsValueType || p.PropertyType == typeof(string) || Nullable.GetUnderlyingType(p.PropertyType) is not null))
             Assert.AreEqual(property.GetValue(expected), property.GetValue(actual), property.Name);
+        CollectionAssert.AreEqual(new[] { 3, 109 }, actual.Features.Select(f => f.FeatureId).ToArray());
     }
 
     [TestMethod]
@@ -55,11 +56,9 @@ public sealed class ModuleStandardFormTests
     }
 
     [TestMethod]
-    public void MaximumLengthsAndGauges()
+    public void MaximumLengths()
     {
         CollectionAssert.AreEqual(new[] { "ShortName" }, InvalidMembers(Existing().AsFormData().With(f => f.ShortName = new string('M', 13))));
-        CollectionAssert.AreEqual(new[] { "AcceptedNorm" }, InvalidMembers(Existing().AsFormData().With(f => f.AcceptedNorm = new string('x', 256))));
-        CollectionAssert.AreEqual(new[] { "NarrowGauge" }, InvalidMembers(Existing().AsFormData().With(f => f.NarrowGauge = 401)));
         CollectionAssert.AreEqual(new[] { "Designation" }, InvalidMembers(new ModuleEndProfileFormData { ScaleId = 3, Designation = new string('F', 21) }));
     }
 

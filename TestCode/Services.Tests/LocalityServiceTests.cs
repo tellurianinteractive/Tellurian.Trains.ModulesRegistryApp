@@ -180,7 +180,7 @@ public sealed class LocalityServiceTests
     public async Task LocalityWhereModulesAreStoredIsNotDeletable()
     {
         await _factory.SeedAsync(new Scale { Id = 1, ShortName = "H0", Denominator = 87 });
-        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo" });
+        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", PreferredTheme = "Europe" });
         await _factory.SeedAsync(new Module { Id = 1, FullName = "Module", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, StoredAtLocalityId = PublicStorageId });
 
         var deletable = await Target.DeletableIdsAsync(CountryAdministrator, [PublicStorageId, ClubStorageId]);

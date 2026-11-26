@@ -444,14 +444,8 @@
   <data name="CouplingNotFixed" xml:space="preserve">
     <value>Kobling ikke fikset</value>
   </data>
-  <data name="AcceptedNorm" xml:space="preserve">
-    <value>Normdokument (link)</value>
-  </data>
   <data name="PhotoCredit" xml:space="preserve">
     <value>Foto: {0}</value>
-  </data>
-  <data name="Wheelset" xml:space="preserve">
-    <value>Hjulsæt</value>
   </data>
   <data name="Couplings" xml:space="preserve">
     <value>Koblinger</value>
@@ -647,9 +641,6 @@
   </data>
   <data name="ElectricBattery" xml:space="preserve">
     <value>Elektrisk, batteri</value>
-  </data>
-  <data name="ElectricSystem" xml:space="preserve">
-    <value>Elektrisk system</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Mail</value>
@@ -1233,9 +1224,6 @@
   <data name="Letters" xml:space="preserve">
     <value>Bogstaver</value>
   </data>
-  <data name="LinkToExternalContent" xml:space="preserve">
-    <value>Link til eksternt indhold</value>
-  </data>
   <data name="LiquidContainer" xml:space="preserve">
     <value>Væskebeholder</value>
   </data>
@@ -1515,9 +1503,6 @@
   <data name="NameInLayout" xml:space="preserve">
     <value>Navn på banen</value>
   </data>
-  <data name="NarrowGauge" xml:space="preserve">
-    <value>Smalspor</value>
-  </data>
   <data name="Netherlands" xml:space="preserve">
     <value>Holland</value>
   </data>
@@ -1580,9 +1565,6 @@
   </data>
   <data name="NoRegistrationIdIsProvided" xml:space="preserve">
     <value>Intet registrerings-id angivet</value>
-  </data>
-  <data name="NormalGauge" xml:space="preserve">
-    <value>Normalspor</value>
   </data>
   <data name="Northwards" xml:space="preserve">
     <value>Nordpå</value>
@@ -3002,5 +2984,32 @@
   </data>
   <data name="EndProfileHeightExplanation" xml:space="preserve">
     <value>Højden måles ved sporet: fra sporets underkant (uden selve sporets højde) ned til endepladens underkant, selv om andre dele af endeprofilen når højere eller lavere.</value>
+  </data>
+  <data name="InheritedFrom" xml:space="preserve">
+    <value>Arvet fra {0}</value>
+  </data>
+  <data name="Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Formål</value>
+  </data>
+  <data name="ContentType" xml:space="preserve">
+    <value>Indholdstype</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprog</value>
+  </data>
+  <data name="WebAddress" xml:space="preserve">
+    <value>Webadresse</value>
+  </data>
+  <data name="IsDefaultLink" xml:space="preserve">
+    <value>Forvalg for formålet</value>
+  </data>
+  <data name="NoOrSeveralLanguages" xml:space="preserve">
+    <value>Intet eller flere sprog</value>
+  </data>
+  <data name="UnreachableSince" xml:space="preserve">
+    <value>Utilgængelig siden {0}</value>
   </data>
 </root>

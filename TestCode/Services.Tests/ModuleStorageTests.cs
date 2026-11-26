@@ -36,7 +36,7 @@ public sealed class ModuleStorageTests
             new Country { Id = Sweden, EnglishName = "Sweden", DomainSuffix = "se", Languages = "sv" },
             new Country { Id = Norway, EnglishName = "Norway", DomainSuffix = "no", Languages = "nb" });
         await _factory.SeedAsync(new Scale { Id = 1, ShortName = "H0", Denominator = 87 });
-        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo" });
+        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", PreferredTheme = "Europe" });
         await _factory.SeedAsync(
             new Person { Id = Owner, FirstName = "Anna", LastName = "Berg", CityName = "City", CountryId = Sweden },
             new Person { Id = ClubMember, FirstName = "Erik", LastName = "Ek", CityName = "City", CountryId = Sweden });

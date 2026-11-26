@@ -1,6 +1,13 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.5
+Released 2026-11-26
+- Module standards: wheel profiles and couplings are chosen from lists, and a standard can accept several of each.
+- Module standards can have links to their norm documents and other resources, in several languages; the list of standards shows them.
+- A standard that extends another shows its rails, wheels and couplings when it has none of its own.
+- Gauges and electric system are no longer part of module standards.
+- Kadee and Micro-Trains couplings can be chosen for vehicles.
 ## Release 1.18.4
 Released 2026-11-25
 - A module can have a drawing from Module Draw, which is checked when uploaded. A new module page shows the module and its drawing to all users.

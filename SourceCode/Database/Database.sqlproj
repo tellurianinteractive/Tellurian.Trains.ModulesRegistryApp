@@ -89,6 +89,8 @@
     <Build Include="dbo\Tables\Document.sql" />
     <Build Include="dbo\Tables\ChangeLog.sql" />
     <Build Include="dbo\Tables\ExternalLink.sql" />
+    <Build Include="dbo\Tables\Feature.sql" />
+    <Build Include="dbo\Tables\Vehicles\VehicleFeature.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoDirection.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.CargoReadyTime.Table.sql" />
     <None Include="dbo\Scripts\Initial data\dbo.Country.Table.sql" />
@@ -136,6 +138,7 @@
     <Build Include="dbo\Tables\Stations\StationTrack.sql" />
     <Build Include="dbo\Tables\Modules\ModuleOwnership.sql" />
     <Build Include="dbo\Tables\Modules\ModuleStandard.sql" />
+    <Build Include="dbo\Tables\Modules\ModuleFeature.sql" />
     <Build Include="dbo\Tables\Modules\ModuleExit.sql" />
     <Build Include="dbo\Tables\Modules\ModuleEndProfile.sql" />
     <Build Include="dbo\Tables\Modules\Module.sql" />
@@ -148,7 +151,6 @@
     <Build Include="dbo\Tables\Cargo\NHM.sql" />
     <Build Include="dbo\Tables\Modules\Scale.sql" />
     <Build Include="dbo\Tables\Vehicles\Vehicle.sql" />
-    <Build Include="dbo\Tables\Vehicles\VehicleFeature.sql" />
     <Build Include="dbo\Tables\Vehicles\VehicleInteroperability.sql" />
     <Build Include="dbo\Tables\Vehicles\VehicleOperator.sql" />
     <Build Include="dbo\Tables\Groups\Group.sql" />
@@ -182,6 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticCodeAnalysis.SuppressMessages.xml" />
-    <None Include="dbo\Scripts\Initial data\dbo.VehicleFeature.Table.sql" />
+    <None Include="dbo\Scripts\Initial data\dbo.Feature.Table.sql" />
   </ItemGroup>
 </Project>

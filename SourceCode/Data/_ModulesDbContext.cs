@@ -44,6 +44,8 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<ModuleExit> ModuleExits { get; set; }
     public virtual DbSet<ModuleOwnership> ModuleOwnerships { get; set; }
     public virtual DbSet<ModuleStandard> ModuleStandards { get; set; }
+    public virtual DbSet<ModuleFeature> ModuleFeatures { get; set; }
+    public virtual DbSet<Feature> Features { get; set; }
     public virtual DbSet<NHM> NhmCodes { get; set; }
     public virtual DbSet<OperatingBasicDay> OperatingBasicDays { get; set; }
     public virtual DbSet<OperatingDay> OperatingDays { get; set; }
@@ -58,7 +60,6 @@ public partial class ModulesDbContext : DbContext
     public virtual DbSet<StationTrack> StationTracks { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Vehicle> Vehicles { get; set; }
-    public virtual DbSet<VehicleFeature> VehicleFeatures { get; set; }
     public virtual DbSet<VehicleOperator> VehicleOperators { get; set; }
     public virtual DbSet<WiFredThrottle> WiFredThrottles { get; set; }
 
@@ -94,6 +95,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapExternalStation();
         modelBuilder.MapExternalStationCustomer();
         modelBuilder.MapExternalStationCustomerCargo();
+        modelBuilder.MapFeature();
         modelBuilder.MapGroup();
         modelBuilder.MapGroupDomain();
         modelBuilder.MapGroupLayoutModule();
@@ -111,6 +113,7 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapModuleExit();
         modelBuilder.MapModuleOwnership();
         modelBuilder.MapModuleStandard();
+        modelBuilder.MapModuleFeature();
         modelBuilder.MapNHM();
         modelBuilder.MapOperatingBasicDay();
         modelBuilder.MapOperationDay();
@@ -125,7 +128,6 @@ public partial class ModulesDbContext : DbContext
         modelBuilder.MapStationTrack();
         modelBuilder.MapUser();
         modelBuilder.MapVehicle();
-        modelBuilder.MapVehicleFeature();
         modelBuilder.MapVehicleInteroperability();
         modelBuilder.MapVehicleOperator();
         modelBuilder.MapWiFredThrottle();

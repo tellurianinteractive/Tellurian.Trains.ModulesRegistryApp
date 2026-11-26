@@ -41,8 +41,8 @@ public sealed class DocumentPermissionTests
             new GroupMember { Id = 2, GroupId = 1, PersonId = GroupMemberOwner },
             new ModuleStandard
             {
-                Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25",
-                Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo",
+                Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track",
+                PreferredTheme = "Europe",
             });
         await _factory.SeedAsync(
             NewDocument(PersonModuleDocument, "dwg"), NewDocument(GroupModuleDocument, "dwg"), NewDocument(MemberModuleDocument, "dwg"),

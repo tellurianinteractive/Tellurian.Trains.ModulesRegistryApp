@@ -1,10 +1,12 @@
 ﻿@page "/ModuleStandards"
 
 @attribute [Authorize(Policy = "User")]
-@* Static SSR (Migration step 3.6): the module standards, only text and links; Add and Edit for global administrators. *@
+@* Static SSR (Migration step 3.6): the module standards, only text and links; Add and Edit for global administrators. A value
+   that a standard doesn't have itself is the value of the standard it extends, shown as inherited. *@
 
 @inject IStringLocalizer<Strings> Localizer
 @inject ModuleStandardService ModuleStandardService
+@inject ExternalLinkService ExternalLinkService
 
 <PageHeading ObjectName="ModuleStandards" IconClass="@FontAwesome.Standard" PageAction="PageAction.List" />
 
@@ -21,8 +23,9 @@
         <th>@Localizer["OnlyValidInCountry"]</th>
         <th>@Localizer["Theme"]</th>
         <th>@Localizer["TrackSystem"]</th>
-        <th>@Localizer["ElectricSystem"]</th>
+        <th>@Localizer["Wheels"]</th>
         <th>@Localizer["Couplings"]</th>
+        <th>@Localizer["Links"]</th>
         @if (MayEdit)
         {
             <th>@Localizer["Actions"]</th>
@@ -34,9 +37,15 @@
         <td>@standard.ExtendsStandard?.ShortName</td>
         <td>@(standard.OnlyValidInCountry is null ? Localizer["International"] : standard.OnlyValidInCountry.EnglishName.AsLocalized())</td>
         <td>@(standard.MainThemeId.ToEnumLocalized<Theme>()) @standard.PreferredTheme</td>
-        <td>@standard.TrackSystem</td>
-        <td>@standard.Electricity</td>
-        <td>@standard.Couplings</td>
+        <td>@Inherited(standard, ms => ms.TrackSystem)</td>
+        <td>@Inherited(standard, ms => FeaturesText(ms, FeatureCategories.Wheels))</td>
+        <td>@Inherited(standard, ms => FeaturesText(ms, FeatureCategories.Couplings))</td>
+        <td>
+            @foreach (var link in LinksByStandard.GetValueOrDefault(standard.Id) ?? [])
+            {
+                <a class="me-2" href="@link.Href" target="_blank" rel="noopener noreferrer" hreflang="@link.Language">@Localizer[link.Purpose.ToString()]</a>
+            }
+        </td>
         @if (MayEdit)
         {
             <td><AppButton Label="Edit" Href="@($"ModuleStandards/{standard.Id}/Edit")" /></td>
@@ -49,11 +58,36 @@
 
     ClaimsPrincipal? Principal;
     IEnumerable<ModuleStandard>? ModuleStandards;
+    IReadOnlyDictionary<int, ModuleStandard> StandardsById = new Dictionary<int, ModuleStandard>();
+    IReadOnlyDictionary<int, IReadOnlyList<ExternalLink>> LinksByStandard = new Dictionary<int, IReadOnlyList<ExternalLink>>();
     bool MayEdit => Principal.IsGlobalAdministrator();
 
     protected override async Task OnInitializedAsync()
     {
         Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
         ModuleStandards = await ModuleStandardService.All(Principal);
+        StandardsById = ModuleStandards.ToDictionary(ms => ms.Id);
+        LinksByStandard = await ExternalLinkService.ShownLinksByOwnerAsync(Principal, ExternalLinkOwners.ModuleStandard);
     }
+
+    // The accepted features of the category, or none, so an extension without any has those of the standard it extends.
+    static string? FeaturesText(ModuleStandard standard, string category) =>
+        string.Join(", ", standard.Features
+            .Where(f => f.Feature?.Category == category)
+            .Select(f => f.Feature.IsResourceCode ? LanguageExtensions.GetLocalizedString(f.Feature.Description) : f.Feature.Description)
+            .Order()) is { Length: > 0 } text ? text : null;
+
+    RenderFragment Inherited(ModuleStandard standard, Func<ModuleStandard, string?> value) => __builder =>
+    {
+        var (text, from) = standard.InheritedValue(StandardsById, value);
+        if (from is null) return;
+        if (from == standard)
+        {
+            @text
+        }
+        else
+        {
+            <span class="fst-italic text-muted" title="@Localizer["InheritedFrom", from.ShortName]">@text</span>
+        }
+    };
 }

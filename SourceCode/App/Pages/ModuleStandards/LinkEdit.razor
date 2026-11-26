@@ -1,0 +1,96 @@
+﻿@page "/ModuleStandards/{standardid:int}/Links/{id:int}/Edit"
+
+@attribute [Authorize(Policy = "User")]
+@* Static SSR form: a POST of ExternalLinkFormData for a link of a module standard, such as its norm document; the ids come from
+   the address, and the link must belong to the standard in the address. Only global administrators get the form. After saving,
+   a redirect to the standard's form, which lists its links; the result is a one-time message. *@
+
+@using ModulesRegistry.Forms.ExternalLinks
+@using ModulesRegistry.Services.Localization
+
+@inject IStringLocalizer<Strings> Localizer
+@inject NavigationManager Navigator
+@inject ModuleStandardService ModuleStandardService
+@inject ExternalLinkService ExternalLinkService
+
+<PageHeading ObjectName="ExternalLink" Context="@Standard?.ShortName" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" BackHref="@StandardHref" />
+
+@if (FailureMessage is not null)
+{
+    <ActionMessage Label="@FailureMessage" AlertType="stop" />
+}
+
+<EditTemplate Item="Form" FormName="external-link" OnValidSubmit="SaveAsync">
+    <Inputs>
+        <AppFormRow>
+            <AppInputSelect Width="3" Label="Purpose" Items="PurposeItems" ShowPleaseSelect="true" @bind-Value="Form!.Purpose" />
+            <AppInputSelectText Width="3" Label="ContentType" Items="ContentTypeItems" ShowPleaseSelect="true" @bind-Value="Form!.ContentType" />
+            <AppInputSelectText Width="3" Label="Language" Items="LanguageItems" @bind-Value="Form!.Language" />
+        </AppFormRow>
+        <AppInputText Width="12" Label="WebAddress" @bind-Value="Form!.Href" />
+        <AppCheckGroup>
+            <AppInputCheck Label="IsDefaultLink" @bind-Value="Form!.IsDefault" />
+        </AppCheckGroup>
+    </Inputs>
+</EditTemplate>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    [Parameter] public int StandardId { get; set; }
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromForm(FormName = "external-link")] private ExternalLinkFormData? Form { get; set; }
+
+    ClaimsPrincipal? Principal;
+    ModuleStandard? Standard;
+    ExternalLink? Existing;
+    IEnumerable<ListboxItem> PurposeItems = [];
+    IEnumerable<TextboxItem> ContentTypeItems = [];
+    IEnumerable<TextboxItem> LanguageItems = [];
+    string? FailureMessage;
+
+    string StandardHref => $"ModuleStandards/{StandardId}/Edit";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Principal = await AuthenticationStateTask.GetClaimsPrincipalAsync();
+        Standard = Principal.IsGlobalAdministrator() ? await ModuleStandardService.FindByIdAsync(Principal, StandardId) : null;
+        if (Standard is null)
+        {
+            Form = null; // Shows "no records"; also when a form was posted.
+            return;
+        }
+        if (Id > 0)
+        {
+            Existing = await ExternalLinkService.FindAsync(Principal, Id);
+            if (Existing is null || Existing.OwnerType != ExternalLinkOwners.ModuleStandard || Existing.OwnerId != StandardId)
+            {
+                Existing = null;
+                Form = null;
+                return;
+            }
+        }
+        // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
+        Form ??= Existing?.AsFormData() ?? new ExternalLinkFormData { Purpose = (int)ExternalLinkPurpose.StandardDocument, ContentType = ExternalLinkContentTypes.Pdf };
+        // Per request, since the texts are in the user's language.
+        PurposeItems = [.. Enum.GetValues<ExternalLinkPurpose>().Select(p => new ListboxItem((int)p, Localizer[p.ToString()]))];
+        ContentTypeItems = [.. ExternalLinkContentTypes.All.Select(t => new TextboxItem(Localizer[t.ResourceKey], t.MimeType))];
+        LanguageItems = [new TextboxItem(Localizer["NoOrSeveralLanguages"], string.Empty), .. AppLanguages.All.Select(l => new TextboxItem(LanguageName(l.TwoLetterCode), l.TwoLetterCode))];
+    }
+
+    static string LanguageName(string twoLetterCode) => System.Globalization.CultureInfo.GetCultureInfo(twoLetterCode).NativeName.WithInitialCapital;
+
+    async Task SaveAsync()
+    {
+        if (Form is null) return;
+        var (count, message, _) = await ExternalLinkService.SaveAsync(Principal, Form.AsEntity(ExternalLinkOwners.ModuleStandard, StandardId, Existing?.Id ?? 0));
+        if (count == 0)
+        {
+            FailureMessage = message;
+            return;
+        }
+        if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
+        Navigator.NavigateTo(StandardHref);
+    }
+}

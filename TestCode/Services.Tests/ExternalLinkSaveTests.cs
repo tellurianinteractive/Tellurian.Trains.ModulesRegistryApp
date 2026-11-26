@@ -225,4 +225,29 @@ public sealed class ExternalLinkSaveTests
         CollectionAssert.AreEquivalent(expected, rows.Select(r => (r.EntityId, r.Operation)).ToArray()); // The order within one save varies.
         Assert.IsTrue(rows.All(r => r.UserId == 1));
     }
+
+    [TestMethod]
+    public async Task EachStandardShowsTheLinkInTheUsersLanguage()
+    {
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "MMM", ScaleId = 3, MainThemeId = 1 });
+        await AddAsync(New("en"));
+        var swedish = await AddAsync(New("sv"));
+        var other = New("de");
+        other.OwnerId = 2;
+        var german = await AddAsync(other);
+        var culture = System.Globalization.CultureInfo.CurrentUICulture;
+        System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("sv-SE");
+        try
+        {
+            var shown = await Target.ShownLinksByOwnerAsync(GlobalAdministrator, ExternalLinkOwners.ModuleStandard);
+
+            Assert.AreEqual(swedish.Id, shown[Standard].Single().Id);
+            Assert.AreEqual(german.Id, shown[2].Single().Id, "The only link, in another language.");
+            Assert.IsEmpty(await Target.ShownLinksByOwnerAsync(null, ExternalLinkOwners.ModuleStandard), "Not signed in.");
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = culture;
+        }
+    }
 }

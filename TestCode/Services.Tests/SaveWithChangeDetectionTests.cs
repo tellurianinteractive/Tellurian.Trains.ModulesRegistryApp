@@ -108,14 +108,14 @@ public sealed class SaveWithChangeDetectionTests
         await _factory.SeedAsync(NewModuleStandard(1));
         var target = new ModuleStandardService(_factory);
         var standard = NewModuleStandard(1);
-        standard.Couplings = "Changed";
+        standard.TrackSystem = "Changed";
 
         var (changedCount, _, _) = await target.SaveAsync(GlobalAdministrator, standard);
         var (unchangedCount, _, _) = await target.SaveAsync(GlobalAdministrator, standard);
 
         Assert.AreEqual(1, changedCount);
         Assert.AreEqual(-1, unchangedCount);
-        Assert.AreEqual("Changed", (await _factory.FindAsync<ModuleStandard>(1))?.Couplings);
+        Assert.AreEqual("Changed", (await _factory.FindAsync<ModuleStandard>(1))?.TrackSystem);
     }
 
     [TestMethod]
@@ -308,10 +308,7 @@ public sealed class SaveWithChangeDetectionTests
         ShortName = "Fremo H0",
         ScaleId = 1,
         TrackSystem = "Track",
-        Wheelset = "RP25",
-        Couplings = "Hooks",
-        Electricity = "DC",
         PreferredTheme = "Europe",
-        AcceptedNorm = "Fremo",
+       
     };
 }

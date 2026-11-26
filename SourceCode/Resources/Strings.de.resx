@@ -444,14 +444,8 @@
   <data name="CouplingNotFixed" xml:space="preserve">
     <value>Kupplung nicht fest</value>
   </data>
-  <data name="AcceptedNorm" xml:space="preserve">
-    <value>Normdokument (Link)</value>
-  </data>
   <data name="PhotoCredit" xml:space="preserve">
     <value>Foto: {0}</value>
-  </data>
-  <data name="Wheelset" xml:space="preserve">
-    <value>Radsatz</value>
   </data>
   <data name="Couplings" xml:space="preserve">
     <value>Kupplungen</value>
@@ -647,9 +641,6 @@
   </data>
   <data name="ElectricBattery" xml:space="preserve">
     <value>Elektrisch, Batterie</value>
-  </data>
-  <data name="ElectricSystem" xml:space="preserve">
-    <value>Elektronisches System</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -1233,9 +1224,6 @@
   <data name="Letters" xml:space="preserve">
     <value>Buchstaben</value>
   </data>
-  <data name="LinkToExternalContent" xml:space="preserve">
-    <value>Link zu externen Inhalten</value>
-  </data>
   <data name="LiquidContainer" xml:space="preserve">
     <value>Flüssigkeitsbehälter</value>
   </data>
@@ -1515,9 +1503,6 @@
   <data name="NameInLayout" xml:space="preserve">
     <value>Name auf der Bahn</value>
   </data>
-  <data name="NarrowGauge" xml:space="preserve">
-    <value>Schmalspur</value>
-  </data>
   <data name="Netherlands" xml:space="preserve">
     <value>Niederlande</value>
   </data>
@@ -1580,9 +1565,6 @@
   </data>
   <data name="NoRegistrationIdIsProvided" xml:space="preserve">
     <value>Es wird keine Registrierungs-ID angegeben</value>
-  </data>
-  <data name="NormalGauge" xml:space="preserve">
-    <value>Normalspur</value>
   </data>
   <data name="Northwards" xml:space="preserve">
     <value>Nordwärts</value>
@@ -3002,5 +2984,32 @@
   </data>
   <data name="EndProfileHeightExplanation" xml:space="preserve">
     <value>Die Höhe wird am Gleis gemessen: von der Gleisunterkante (ohne die Höhe des Gleises selbst) bis zur Unterkante des Kopfstücks, auch wenn andere Teile des Endprofils höher oder tiefer reichen.</value>
+  </data>
+  <data name="InheritedFrom" xml:space="preserve">
+    <value>Geerbt von {0}</value>
+  </data>
+  <data name="Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Zweck</value>
+  </data>
+  <data name="ContentType" xml:space="preserve">
+    <value>Inhaltstyp</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="WebAddress" xml:space="preserve">
+    <value>Webadresse</value>
+  </data>
+  <data name="IsDefaultLink" xml:space="preserve">
+    <value>Voreinstellung für den Zweck</value>
+  </data>
+  <data name="NoOrSeveralLanguages" xml:space="preserve">
+    <value>Keine oder mehrere Sprachen</value>
+  </data>
+  <data name="UnreachableSince" xml:space="preserve">
+    <value>Nicht erreichbar seit {0}</value>
   </data>
 </root>

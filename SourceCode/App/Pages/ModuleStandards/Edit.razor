@@ -3,14 +3,17 @@
 @attribute [Authorize(Policy = "User")]
 @* Static SSR form (Migration step 3.6): a POST of ModuleStandardFormData; the id comes from the address. Module standards are
    shared by all countries, so only global administrators get the form. After saving, a redirect to the form's own address (a new
-   standard to its new id), which reads it back; the result is a one-time message. *@
+   standard to its new id), which reads it back; the result is a one-time message. A saved standard lists its links, such as
+   its norm document (LinkEdit); Delete is a link that adds ?deletelink={id}, which shows a confirmation with a POST form. *@
 
 @using ModulesRegistry.Forms.ModuleStandards
 
+@inject IStringLocalizer<Strings> Localizer
 @inject NavigationManager Navigator
 @inject ScaleService ScaleService
 @inject CountryService CountryService
 @inject ModuleStandardService ModuleStandardService
+@inject ExternalLinkService ExternalLinkService
 
 <PageHeading ObjectName="ModuleStandard" IconClass="@FontAwesome.Standard" PageAction="@Id.ToAddOrEditPageAction()" BackHref="ModuleStandards" />
 
@@ -31,30 +34,88 @@
         </AppFormRow>
         <AppFormRow>
             <AppInputText Width="2" Label="TrackSystem" @bind-Value="Form!.TrackSystem" />
-            <AppInputNumber TValue="double?" Width="2" Label="NormalGauge" Format="F1" Step="0.1" Unit="mm" @bind-Value="Form!.NormalGauge" />
-            <AppInputNumber TValue="double?" Width="2" Label="NarrowGauge" Format="F1" Step="0.1" Unit="mm" @bind-Value="Form!.NarrowGauge" />
-            <AppInputText Width="4" Label="Wheelset" @bind-Value="Form!.Wheelset" />
-            <AppInputText Width="3" Label="Couplings" @bind-Value="Form!.Couplings" />
-            <AppInputText Width="2" Label="ElectricSystem" @bind-Value="Form!.Electricity" />
         </AppFormRow>
-        <AppInputText Width="12" Label="AcceptedNorm" Placeholder="LinkToExternalContent" @bind-Value="Form!.AcceptedNorm" />
+        @FeatureChecks("Wheels", WheelsItems)
+        @FeatureChecks("Couplings", CouplingItems)
     </Inputs>
 </EditTemplate>
+
+@if (Form is not null && Existing is not null)
+{
+    <h3 class="mt-3">@Localizer["Links"]</h3>
+    <AppButton Label="Add" ObjectName="ExternalLink" Href="@LinkEditHref(0)" AlwaysShowLabel="true" />
+
+    @if (LinkToDelete is not null)
+    {
+        <div class="alert alert-warning mt-2" role="alert">
+            <form method="post" @formname="delete-link" @onsubmit="DeleteLinkAsync" data-enhance>
+                <AntiforgeryToken />
+                <input type="hidden" name="DeleteLinkId" value="@LinkToDelete.Id" />
+                <strong>@Localizer["Delete"] @Localizer[LinkToDelete.Purpose.ToString()] @LanguageName(LinkToDelete.Language)?</strong>
+                <AppButton Label="ConfirmDelete" IsSubmit="true" IconName="@FontAwesome.Delete" AlwaysShowLabel="true" />
+                <AppButton Label="Cancel" Href="@SelfHref" AlwaysShowLabel="true" />
+            </form>
+        </div>
+    }
+
+    <TableTemplate Items="Links">
+        <TableHeader>
+            <th>@Localizer["Purpose"]</th>
+            <th>@Localizer["Language"]</th>
+            <th>@Localizer["ContentType"]</th>
+            <th>@Localizer["WebAddress"]</th>
+            <th>@Localizer["IsDefaultLink"]</th>
+            <th>@Localizer["Actions"]</th>
+        </TableHeader>
+        <RowTemplate Context="link">
+            <td>@Localizer[link.Purpose.ToString()]</td>
+            <td>@LanguageName(link.Language)</td>
+            <td>@ContentTypeName(link.ContentType)</td>
+            <td>
+                <a href="@link.Href" target="_blank" rel="noopener noreferrer">@link.Href.Truncated(60)</a>
+                @if (link.FoundUnreachableDateTimeOffset is DateTimeOffset since)
+                {
+                    <span class="text-danger">@Localizer["UnreachableSince", since.ToString("d")]</span>
+                }
+            </td>
+            <td>@(link.IsDefault ? Localizer["Yes"] : string.Empty)</td>
+            <td>
+                <AppButton Label="Edit" Href="@LinkEditHref(link.Id)" />
+                <AppButton Label="Delete" Href="@($"{SelfHref}?deletelink={link.Id}")" />
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+}
 
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     [CascadingParameter] private HttpContext? HttpContext { get; set; }
     [Parameter] public int Id { get; set; }
     [SupplyParameterFromForm(FormName = "module-standard")] private ModuleStandardFormData? Form { get; set; }
+    [SupplyParameterFromForm(FormName = "delete-link")] private int DeleteLinkId { get; set; }
+    [SupplyParameterFromQuery(Name = "deletelink")] private int? DeleteLinkQueryId { get; set; }
 
     ClaimsPrincipal? Principal;
     ModuleStandard? Existing;
     IEnumerable<ListboxItem>? ScaleItems;
     IEnumerable<ListboxItem>? ExtendableItems; // Not itself or the standards that extend it.
     IEnumerable<ListboxItem>? CountryItems;
+    IEnumerable<ListboxItem> WheelsItems = []; // For the standard's scale, all for a new standard; the service drops another scale's.
+    IEnumerable<ListboxItem> CouplingItems = [];
     // Any (0), Europe and US. Per request, since the texts are in the user's language.
     readonly IEnumerable<ListboxItem> ThemeItems = EnumExtensions.ThemesListboxItems().ToList();
+    IEnumerable<ExternalLink> Links = [];
     string? FailureMessage;
+
+    string SelfHref => $"ModuleStandards/{Id}/Edit";
+    string LinkEditHref(int linkId) => $"ModuleStandards/{Id}/Links/{linkId}/Edit";
+    ExternalLink? LinkToDelete => DeleteLinkQueryId > 0 ? Links.FirstOrDefault(l => l.Id == DeleteLinkQueryId) : null;
+
+    string LanguageName(string? code) =>
+        code is null ? Localizer["NoOrSeveralLanguages"] : System.Globalization.CultureInfo.GetCultureInfo(code).NativeName.WithInitialCapital;
+
+    string ContentTypeName(string mimeType) =>
+        ExternalLinkContentTypes.All.FirstOrDefault(t => t.MimeType == mimeType) is { ResourceKey: { } key } ? Localizer[key] : mimeType;
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,10 +135,16 @@
             }
         }
         // On a POST, Form holds the posted values, also when they are invalid and the form is shown again.
-        Form ??= (Existing ?? new ModuleStandard { NormalGauge = 16.5, MainThemeId = (int)Theme.Europe }).AsFormData();
+        Form ??= (Existing ?? new ModuleStandard { MainThemeId = (int)Theme.Europe }).AsFormData();
         ScaleItems = await ScaleService.ListboxItemsAsync(Principal);
         ExtendableItems = await ModuleStandardService.ExtendableStandardsListboxItemsAsync(Principal, Id);
         CountryItems = await CountryService.ListboxItemsAsync(Principal, allCountries: true);
+        WheelsItems = await ModuleStandardService.FeatureItemsAsync(Principal, FeatureCategories.Wheels, Existing?.ScaleId ?? 0);
+        CouplingItems = await ModuleStandardService.FeatureItemsAsync(Principal, FeatureCategories.Couplings, Existing?.ScaleId ?? 0);
+        // The checked features are posted as repeated FeatureIds values, read here: the form model has no binding for them.
+        if (HttpContext is { Request.HasFormContentType: true } && HttpContext.Request.Form["_handler"] == "module-standard")
+            Form.FeatureIds = [.. HttpContext.Request.Form["FeatureIds"].Select(value => int.TryParse(value, out var featureId) ? featureId : 0).Where(featureId => featureId > 0)];
+        if (Existing is not null) Links = await ExternalLinkService.LinksAsync(Principal, ExternalLinkOwners.ModuleStandard, Existing.Id);
     }
 
     async Task SaveAsync()
@@ -94,5 +161,29 @@
         if (count > 0) HttpContext.SetFlashMessage("Saved", FlashMessageLevel.Success);
         else HttpContext.SetFlashMessage("NoModification", FlashMessageLevel.Info);
         Navigator.NavigateTo($"ModuleStandards/{(saved ?? standard).Id}/Edit");
+    }
+
+    RenderFragment FeatureChecks(string label, IEnumerable<ListboxItem> items) => __builder =>
+    {
+        <div class="col-12"><span class="form-control-label">@Localizer[label]</span></div>
+        <AppCheckGroup>
+            @foreach (var item in items)
+            {
+                <span class="form-check">
+                    <input type="checkbox" class="form-check-input" id="feature-@item.Id" name="FeatureIds" value="@item.Id" checked="@(Form?.FeatureIds.Contains(item.Id) == true)" />
+                    <label class="form-check-label" for="feature-@item.Id">@item.Description</label>
+                </span>
+            }
+        </AppCheckGroup>
+    };
+
+    async Task DeleteLinkAsync()
+    {
+        // Only a link of this standard; the service checks the rights.
+        if (!Links.Any(l => l.Id == DeleteLinkId)) return;
+        var (count, message) = await ExternalLinkService.DeleteAsync(Principal, DeleteLinkId);
+        if (count > 0) HttpContext.SetFlashMessage("Deleted", FlashMessageLevel.Success);
+        else HttpContext.SetFlashMessage(message, FlashMessageLevel.Warning);
+        Navigator.NavigateTo(SelfHref);
     }
 }

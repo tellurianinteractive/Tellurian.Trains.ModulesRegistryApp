@@ -33,7 +33,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
             if (lines.Length > 1)
             {
                 using var db = await Factory.CreateDbContextAsync(cancellationToken);
-                var vehicleFeatures = await db.VehicleFeatures.ToReadOnlyListAsync();
+                var vehicleFeatures = await db.Features.ToReadOnlyListAsync();
 
                 var vehicles = new List<Vehicle>(lines.Length - 1);
                 var columns = IndexColumns(lines[0]);
@@ -71,7 +71,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
     }
 
 
-    private static Vehicle CreateVehicle(string[] fields, Column[] columns, List<VehicleFeature> features)
+    private static Vehicle CreateVehicle(string[] fields, Column[] columns, List<Feature> features)
     {
         var result = new Vehicle
         {
@@ -97,7 +97,7 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
                     result.PrototypeManufacturerName = fields[column.Index];
                     break;
                 case "Traction":
-                    result.TractionFeatureId = features.SingleOrDefault(f => f.Description.Equals(fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
+                    result.TractionFeatureId = features.SingleOrDefault(f => string.Equals(f.Description, fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
                     break;
                 case "Theme":
                     result.Theme = fields[column.Index];
@@ -118,10 +118,10 @@ public sealed class VehiclesImporter(IDbContextFactory<ModulesDbContext> factory
                     result.ModelNumber = fields[column.Index];
                     break;
                 case "Couplings":
-                    result.CouplingFeatureId = features.SingleOrDefault(f => f.Description.Equals(fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
+                    result.CouplingFeatureId = features.SingleOrDefault(f => string.Equals(f.Description, fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
                     break;
                 case "Wheels":
-                    result.CouplingFeatureId = features.SingleOrDefault(f => f.Description.Equals(fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
+                    result.CouplingFeatureId = features.SingleOrDefault(f => string.Equals(f.Description, fields[column.Index], StringComparison.OrdinalIgnoreCase))?.Id;
                     break;
                 case "Decoder":
                     result.DecoderType = fields[column.Index];

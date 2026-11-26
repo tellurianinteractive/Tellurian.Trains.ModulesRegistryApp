@@ -100,6 +100,7 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
                 .Include(ms => ms.Scale)
                 .Include(ms => ms.ExtendsStandard)
                 .Include(ms => ms.OnlyValidInCountry)
+                .Include(ms => ms.Features).ThenInclude(f => f.Feature)
                 .OrderBy(ms => ms.ShortName)
                 .ToReadOnlyListAsync();
         }
@@ -114,6 +115,7 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
             return await dbContext.ModuleStandards
                 .Where(ms => ms.Id == id)
                 .Include(ms => ms.Scale)
+                .Include(ms => ms.Features)
                 .SingleOrDefaultAsync()
                 .ConfigureAwait(false);
         }
@@ -136,11 +138,17 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
         if (entity.Id > 0 && Extends(extendsById, entity.ExtendsStandardId, entity.Id)) return Resources.Strings.ExtendsStandardLoop_Error.SaveResult<ModuleStandard>();
         var extended = standards.SingleOrDefault(ms => ms.Id == entity.ExtendsStandardId);
         if (extended?.OnlyValidInCountryId is not null) entity.OnlyValidInCountryId = extended.OnlyValidInCountryId;
+        var featureIds = await AcceptableFeatureIdsAsync(dbContext, entity);
         if (entity.Id > 0)
         {
             var existing = standards.SingleOrDefault(ms => ms.Id == entity.Id);
             if (existing is null) return principal.NothingToUpdate<ModuleStandard>();
             dbContext.Entry(existing).CurrentValues.SetValues(entity);
+            var features = await dbContext.ModuleFeatures.Where(f => f.ModuleStandardId == existing.Id).ToListAsync().ConfigureAwait(false);
+            dbContext.ModuleFeatures.RemoveRange(features.Where(f => !featureIds.Contains(f.FeatureId)));
+            dbContext.ModuleFeatures.AddRange(featureIds
+                .Where(featureId => !features.Any(f => f.FeatureId == featureId))
+                .Select(featureId => new ModuleFeature { ModuleStandardId = existing.Id, FeatureId = featureId }));
             if (existing.OnlyValidInCountryId is not null)
                 foreach (var extension in standards.Where(ms => ms.Id != existing.Id && Extends(extendsById, ms.Id, existing.Id)))
                     extension.OnlyValidInCountryId = existing.OnlyValidInCountryId;
@@ -150,8 +158,41 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
         entity.Scale = null!; // Only the ids are saved.
         entity.ExtendsStandard = null!;
         entity.OnlyValidInCountry = null!;
+        entity.Features = [.. featureIds.Select(featureId => new ModuleFeature { FeatureId = featureId })];
         dbContext.ModuleStandards.Add(entity);
         return (await dbContext.SaveChangesAsync().ConfigureAwait(false)).SaveResult(entity);
+    }
+
+    /// <summary>
+    /// The features of the standard that it may accept: wheel profiles and couplings for its scale or any scale. Others, also
+    /// unknown ids, are not saved.
+    /// </summary>
+    private static async Task<List<int>> AcceptableFeatureIdsAsync(ModulesDbContext dbContext, ModuleStandard entity)
+    {
+        var requested = (entity.Features ?? []).Select(f => f.FeatureId).Distinct().ToList();
+        if (requested.Count == 0) return [];
+        return await dbContext.Features
+            .Where(vf => requested.Contains(vf.Id) &&
+                (vf.Category == FeatureCategories.Wheels || vf.Category == FeatureCategories.Couplings) &&
+                (vf.OnlyScaleId == null || vf.OnlyScaleId == entity.ScaleId))
+            .Select(vf => vf.Id)
+            .ToListAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// The wheel profiles or couplings (<paramref name="category"/>) a standard of the scale may accept, all scales' for 0;
+    /// without "Undefined".
+    /// </summary>
+    public async Task<IEnumerable<ListboxItem>> FeatureItemsAsync(ClaimsPrincipal? principal, string category, int scaleId)
+    {
+        if (!principal.IsAuthenticated()) return [];
+        using var dbContext = Factory.CreateDbContext();
+        var features = await dbContext.Features.AsNoTracking()
+            .Where(vf => vf.Category == category && vf.Description != "Undefined" && (scaleId == 0 || vf.OnlyScaleId == null || vf.OnlyScaleId == scaleId))
+            .ToReadOnlyListAsync();
+        return features
+            .Select(vf => new ListboxItem(vf.Id, vf.IsResourceCode ? LanguageExtensions.GetLocalizedString(vf.Description) : vf.Description ?? string.Empty))
+            .OrderBy(i => i.Description);
     }
 
     public async Task<(int Count, string Message)> DeleteAsync(ClaimsPrincipal? principal, int id)
@@ -168,6 +209,8 @@ public sealed class ModuleStandardService(IDbContextFactory<ModulesDbContext> fa
             var endProfiles = await dbContext.ModuleEndProfiles.Where(ep => ep.ModuleStandardId == id).ToListAsync().ConfigureAwait(false);
             foreach (var endProfile in endProfiles) endProfile.ModuleStandardId = null;
             // Its links have no foreign key, so they are deleted here (through the change tracker, so it is logged).
+            // Its accepted features (also deleted by the database, but here through the change tracker, so it is logged).
+            dbContext.ModuleFeatures.RemoveRange(await dbContext.ModuleFeatures.Where(f => f.ModuleStandardId == id).ToListAsync().ConfigureAwait(false));
             dbContext.ExternalLinks.RemoveRange(await dbContext.ExternalLinks.Where(l => l.OwnerType == ExternalLinkOwners.ModuleStandard && l.OwnerId == id).ToListAsync().ConfigureAwait(false));
             dbContext.ModuleStandards.Remove(existing);
             var count = await dbContext.SaveChangesAsync().ConfigureAwait(false);

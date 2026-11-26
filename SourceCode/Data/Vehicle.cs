@@ -26,11 +26,11 @@ public class Vehicle
     public string ModelImageHref { get; set; }
     public int InventoryNumber { get; set; }
     public int? CouplingFeatureId { get; set; }
-    public virtual VehicleFeature CouplingFeature { get; set; }
+    public virtual Feature CouplingFeature { get; set; }
     public int? WheelsFeatureId { get; set; }
-    public virtual VehicleFeature WheelsFeature { get; set; }
+    public virtual Feature WheelsFeature { get; set; }
     public int? TractionFeatureId { get; set; }
-    public virtual VehicleFeature TractionFeature { get; set; }
+    public virtual Feature TractionFeature { get; set; }
     public bool IsWeathered { get; set; }
     public short? DccAddress { get; set; }
     public string DecoderType { get; set; }

@@ -40,7 +40,7 @@ public sealed class StationCustomerPermissionTests
             new Country { Id = OtherCountryId, EnglishName = "Norway", DomainSuffix = "no", Languages = "nb" });
         await _factory.SeedAsync(new Region { Id = 1, CountryId = CountryId, LocalName = "Region", ForeColor = "#000000", BackColor = "#ffffff" });
         await _factory.SeedAsync(new Scale { Id = 1, ShortName = "H0", Denominator = 87 });
-        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", Wheelset = "RP25", Couplings = "Hooks", Electricity = "DC", PreferredTheme = "Europe", AcceptedNorm = "Fremo" });
+        await _factory.SeedAsync(new ModuleStandard { Id = 1, ShortName = "Fremo H0", ScaleId = 1, TrackSystem = "Track", PreferredTheme = "Europe" });
         await _factory.SeedAsync([.. Enumerable.Range(1, 5).Select(id => (object)new Person { Id = id, FirstName = "First", LastName = $"Last{id}", CityName = "City", CountryId = CountryId })]);
         await _factory.SeedAsync(NewGroup(1), NewGroup(2));
         await _factory.SeedAsync(NewModule(PersonStation), NewModule(OtherPersonStation), NewModule(GroupStation));

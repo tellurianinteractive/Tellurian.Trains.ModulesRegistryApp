@@ -9,11 +9,13 @@ namespace ModulesRegistry.Data.Tests.Schema;
 public sealed class DatabaseSchemaTests
 {
     /// <summary>
-    /// Tables in the SQL project without an entity: kept, although the app doesn't use them yet (decided 2026-11-23).
+    /// Tables in the SQL project without an entity: kept, although the app doesn't use them yet (decided 2026-11-23). VehicleFeature
+    /// is replaced by Feature (2026-11-26) and kept until it is dropped, so that publishing doesn't drop it with its data.
     /// </summary>
     private static readonly string[] TablesWithoutEntity =
     [
         "Timetable", "TimetabledVehicle", "VehicleProvider", "MeetingPurchaseableItem", "MeetingParticipantPurchasedItem",
+        "VehicleFeature",
     ];
 
     private static Dictionary<string, TableSchema> SqlTables = null!;

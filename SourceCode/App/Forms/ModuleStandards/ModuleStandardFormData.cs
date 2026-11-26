@@ -44,34 +44,8 @@ public class ModuleStandardFormData
     [OrdinaryText]
     public string? TrackSystem { get; set; }
 
-    // Empty or 0 is "none" (saved as empty).
-    [Display(Name = "NormalGauge")]
-    [Range(0.0, 500.0)]
-    public double? NormalGauge { get; set; }
-
-    [Display(Name = "NarrowGauge")]
-    [Range(0.0, 400.0)]
-    public double? NarrowGauge { get; set; }
-
-    [Display(Name = "Wheelset")]
-    [StringLength(50)]
-    [OrdinaryText]
-    public string? Wheelset { get; set; }
-
-    [Display(Name = "Couplings")]
-    [StringLength(20)]
-    [OrdinaryText]
-    public string? Couplings { get; set; }
-
-    [Display(Name = "ElectricSystem")]
-    [StringLength(20)]
-    [OrdinaryText]
-    public string? Electricity { get; set; }
-
-    // Usually a link to the norm document.
-    [Display(Name = "AcceptedNorm")]
-    [StringLength(255)]
-    public string? AcceptedNorm { get; set; }
+    // The accepted wheel profiles and couplings, checkboxes posted as FeatureIds (read by the page). Another scale's are not saved.
+    public List<int> FeatureIds { get; set; } = [];
 }
 
 /// <summary>The fields of the module end profile form (Migration step 3.6).</summary>
@@ -121,12 +95,7 @@ public static class ModuleStandardFormExtensions
             OnlyValidInCountryId = entity.OnlyValidInCountryId,
             PreferredTheme = entity.PreferredTheme,
             TrackSystem = entity.TrackSystem,
-            NormalGauge = entity.NormalGauge,
-            NarrowGauge = entity.NarrowGauge,
-            Wheelset = entity.Wheelset,
-            Couplings = entity.Couplings,
-            Electricity = entity.Electricity,
-            AcceptedNorm = entity.AcceptedNorm,
+            FeatureIds = [.. (entity.Features ?? []).Select(f => f.FeatureId)],
         };
     }
 
@@ -147,12 +116,7 @@ public static class ModuleStandardFormExtensions
             entity.OnlyValidInCountryId = form.OnlyValidInCountryId;
             entity.PreferredTheme = form.PreferredTheme;
             entity.TrackSystem = form.TrackSystem;
-            entity.NormalGauge = form.NormalGauge;
-            entity.NarrowGauge = form.NarrowGauge;
-            entity.Wheelset = form.Wheelset;
-            entity.Couplings = form.Couplings;
-            entity.Electricity = form.Electricity;
-            entity.AcceptedNorm = form.AcceptedNorm;
+            entity.Features = [.. form.FeatureIds.Distinct().Select(id => new ModuleFeature { ModuleStandardId = entity.Id, FeatureId = id })];
             return entity;
         }
     }

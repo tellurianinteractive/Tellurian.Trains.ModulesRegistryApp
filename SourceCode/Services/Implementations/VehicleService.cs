@@ -161,13 +161,13 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
         return items.Select(vf => AsListbox(vf)).OrderBy(lb => lb.Description);
     }
 
-    private ListboxItem AsListbox(VehicleFeature vf) =>
-        new(vf.Id, vf.IsResourceCode ? LanguageExtensions.GetLocalizedString(vf.Description) : vf.Description);
+    private ListboxItem AsListbox(Feature vf) =>
+        new(vf.Id, vf.IsResourceCode ? LanguageExtensions.GetLocalizedString(vf.Description) : vf.Description ?? string.Empty);
 
-    private async Task<IEnumerable<VehicleFeature>> GetVehicleFeaturesDataAsync(string category, int scaleId)
+    private async Task<IEnumerable<Feature>> GetVehicleFeaturesDataAsync(string category, int scaleId)
     {
         using var dbContext = Factory.CreateDbContext();
-        return await dbContext.VehicleFeatures
+        return await dbContext.Features
             .Where(vf => vf.Category == category && (scaleId == 0 || !vf.OnlyScaleId.HasValue || vf.OnlyScaleId.Value == scaleId))
             .ToReadOnlyListAsync();
     }
@@ -216,7 +216,7 @@ public sealed class VehicleService(IDbContextFactory<ModulesDbContext> factory)
 
     private static async Task<int?> FeatureForScaleOrNullAsync(ModulesDbContext dbContext, string category, int? featureId, int scaleId) =>
         featureId is null ? null :
-        await dbContext.VehicleFeatures.AnyAsync(vf => vf.Id == featureId && vf.Category == category && (vf.OnlyScaleId == null || vf.OnlyScaleId == scaleId)) ? featureId : null;
+        await dbContext.Features.AnyAsync(vf => vf.Id == featureId && vf.Category == category && (vf.OnlyScaleId == null || vf.OnlyScaleId == scaleId)) ? featureId : null;
 
     public async Task<int> AddPrototypeLengthForSameKeeperAndClass(Vehicle vehicle)
     {
