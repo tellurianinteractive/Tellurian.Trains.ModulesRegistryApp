@@ -20,6 +20,7 @@ namespace ModulesRegistry.AppTests.Api;
 public sealed class PublicApiEndpointsTests
 {
     private const string ValidKey = "valid-key";
+    private const string ModuleDrawOrigin = "https://draw.example.net";
 
     /// <summary>
     /// The JSON options the MVC controllers were configured with (in Program.cs, before step 2.1B), on top of the MVC defaults.
@@ -46,10 +47,11 @@ public sealed class PublicApiEndpointsTests
         var builder = WebApplication.CreateBuilder();
         builder.WebHost.UseTestServer();
         builder.Logging.ClearProviders();
-        builder.Services.AddPublicApi();
+        builder.Services.AddPublicApi(ModuleDrawOrigin);
         builder.Services.AddSingleton<IPublicApiSource>(_source);
         builder.Services.AddSingleton<IApiKeyValidator>(new FakeApiKeyValidator());
         _app = builder.Build();
+        _app.UseCors();
         _app.MapPublicApi();
         await _app.StartAsync();
         _client = _app.GetTestClient();
@@ -173,6 +175,61 @@ public sealed class PublicApiEndpointsTests
         Assert.AreEqual(expected.ReplaceLineEndings("\n"), json.ReplaceLineEndings("\n"));
     }
 
+    [TestMethod]
+    public async Task TheCatalogueNeedsNoApiKey()
+    {
+        var response = await _client.GetAsync("/api/catalogue");
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.AreEqual("application/json; charset=utf-8", response.Content.Headers.ContentType?.ToString());
+        Assert.AreEqual(FakePublicApiSource.CatalogueFile, await response.Content.ReadAsStringAsync());
+    }
+
+    [TestMethod]
+    [DataRow("/api/catalogue", null, null)]
+    [DataRow("/api/catalogue?scale=H0", "H0", null)]
+    [DataRow("/api/catalogue?scale=N&country=se", "N", "se")]
+    public async Task TheCataloguePassesItsFilters(string url, string? scale, string? country)
+    {
+        await _client.GetAsync(url);
+
+        Assert.AreEqual((scale, country), _source.LastCatalogueQuery);
+    }
+
+    [TestMethod]
+    public async Task ModuleDrawMayFetchTheCatalogue()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/catalogue");
+        request.Headers.Add("Origin", ModuleDrawOrigin);
+
+        var response = await _client.SendAsync(request);
+
+        Assert.AreEqual(ModuleDrawOrigin, response.Headers.GetValues("Access-Control-Allow-Origin").Single());
+    }
+
+    [TestMethod]
+    public async Task OtherOriginsMayNotFetchTheCatalogue()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/catalogue");
+        request.Headers.Add("Origin", "https://other.example.net");
+
+        var response = await _client.SendAsync(request);
+
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
+    [TestMethod]
+    public async Task OtherEndpointsAreNotOpenToModuleDraw()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/cargoes");
+        request.Headers.Add(ApiKeyFilter.HeaderName, ValidKey);
+        request.Headers.Add("Origin", ModuleDrawOrigin);
+
+        var response = await _client.SendAsync(request);
+
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
     private static string FormerControllerJson<T>(T value) where T : notnull =>
         JsonSerializer.Serialize(value, value.GetType(), FormerControllerOptions);
 
@@ -201,6 +258,8 @@ public sealed class PublicApiEndpointsTests
         public bool WasCalled { get; private set; }
         public bool ReturnEmpty { get; set; }
         public (int?, string?)? LastMeetingsQuery { get; private set; }
+        public (string?, string?)? LastCatalogueQuery { get; private set; }
+        public const string CatalogueFile = """{ "format": "tellurian-drawing", "kind": "Catalogue", "schemaVersion": 2, "content": {} }""";
 
         public List<CargoType> CargoTypes { get; } =
         [
@@ -237,6 +296,13 @@ public sealed class PublicApiEndpointsTests
             LastMeetingsQuery = (countryId, countries);
             List<Meeting> result = ReturnEmpty ? [] : Meetings;
             return Task.FromResult<IEnumerable<Meeting>>(result);
+        }
+
+        public Task<string> CatalogueAsync(string? scale, string? country)
+        {
+            WasCalled = true;
+            LastCatalogueQuery = (scale, country);
+            return Task.FromResult(CatalogueFile);
         }
     }
 }

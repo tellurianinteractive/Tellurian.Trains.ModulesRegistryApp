@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.19.0
+Released 2026-11-26
+- A new public API, /api/catalogue, gives the module standards and end profiles as a Module Draw catalogue, without API key.
 ## Release 1.18.6
 Released 2026-11-26
 - The theme US is renamed North America.

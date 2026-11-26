@@ -12,9 +12,11 @@ public interface IPublicApiSource
     Task<IEnumerable<CargoType>> CargoTypesAsync();
     IEnumerable<string> SupportedLanguages();
     Task<IEnumerable<Meeting>> MeetingsAsync(int? countryId, string? countries);
+    /// <summary>The module standards and end profiles as a Module Draw catalogue file, limited to a scale and a country when given.</summary>
+    Task<string> CatalogueAsync(string? scale, string? country);
 }
 
-internal sealed class PublicApiSource(CargoService cargoService, ILanguageService languageService, MeetingService meetingService) : IPublicApiSource
+internal sealed class PublicApiSource(CargoService cargoService, ILanguageService languageService, MeetingService meetingService, ModuleCatalogueService catalogueService) : IPublicApiSource
 {
     public Task<IEnumerable<CargoType>> CargoTypesAsync() => cargoService.CargoTypesAsync();
 
@@ -23,4 +25,6 @@ internal sealed class PublicApiSource(CargoService cargoService, ILanguageServic
         languageService.GetSupportedLanguages().Where(l => l.IsFullySupported).Select(l => l.TwoLetterCode).ToArray();
 
     public Task<IEnumerable<Meeting>> MeetingsAsync(int? countryId, string? countries) => meetingService.GetMeetingsAsync(countryId, countries);
+
+    public Task<string> CatalogueAsync(string? scale, string? country) => catalogueService.CatalogueFileAsync(scale, country);
 }

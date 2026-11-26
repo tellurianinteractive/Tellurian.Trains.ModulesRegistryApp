@@ -32,7 +32,7 @@ public sealed class OpenApiDocumentTests
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         var paths = document.RootElement.GetProperty("paths").EnumerateObject().Select(p => p.Name).ToList();
         CollectionAssert.AreEquivalent(
-            new[] { "/api/cargoes", "/api/languages/all/supported", "/api/meetings/{countryId}" },
+            new[] { "/api/catalogue", "/api/cargoes", "/api/languages/all/supported", "/api/meetings/{countryId}" },
             paths);
         Assert.IsFalse(paths.Any(p => p.StartsWith("/app")), "The app's own /app endpoints must not be in the public API description.");
     }
@@ -51,6 +51,21 @@ public sealed class OpenApiDocumentTests
         var schema = responses.GetProperty("200").GetProperty("content").GetProperty("application/json").GetProperty("schema").GetRawText();
         StringAssert.Contains(schema, $"#/components/schemas/{schemaName}");
         Assert.IsFalse(responses.TryGetProperty("404", out _), "An empty result is 200 with an empty list, not 404.");
+    }
+
+    /// <summary>The catalogue is Module Draw's format: documented as JSON with a link to Module Draw's schema, not with a copy of it.</summary>
+    [TestMethod]
+    public async Task CatalogueIsDocumentedWithModuleDrawsSchema()
+    {
+        using var client = _factory.CreateClient();
+
+        using var document = JsonDocument.Parse(await client.GetStringAsync("openapi/v1/openapi.json"));
+
+        var get = document.RootElement.GetProperty("paths").GetProperty("/api/catalogue").GetProperty("get");
+        Assert.IsTrue(get.GetProperty("responses").GetProperty("200").GetProperty("content").TryGetProperty("application/json", out _));
+        StringAssert.Contains(get.GetProperty("description").GetString(), "schemas/catalogue.v2.json");
+        var parameters = get.GetProperty("parameters").EnumerateArray().Select(p => p.GetProperty("name").GetString()).ToList();
+        CollectionAssert.AreEquivalent(new[] { "scale", "country" }, parameters);
     }
 
     [TestMethod]

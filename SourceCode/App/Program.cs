@@ -152,6 +152,7 @@ builder.Services.AddScoped<MeetingService>();
 builder.Services.AddScoped<ModuleService>();
 builder.Services.AddScoped<ModuleOwnershipService>();
 builder.Services.AddScoped<ExternalLinkService>();
+builder.Services.AddScoped<ModuleCatalogueService>();
 builder.Services.AddScoped<ModuleEndProfileService>();
 builder.Services.AddScoped<ModuleStandardService>();
 builder.Services.AddScoped<OperatingDayService>();
@@ -169,7 +170,8 @@ builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<WaybillService>();
 builder.Services.AddScoped<WiFredThrottleService>();
 builder.Services.AddScoped<IWiFredMacAddresses>(services => services.GetRequiredService<WiFredThrottleService>());
-builder.Services.AddPublicApi();
+// Module Draw's origins, for the CORS policy of the catalogue (/api/catalogue).
+builder.Services.AddPublicApi(builder.Configuration.GetSection("ModuleDraw:Origins").Get<string[]>() ?? []);
 builder.Services.AddScoped<ILoginHandler, LoginHandler>();
 builder.Services.AddScoped<IDocumentSource, DocumentSource>();
 builder.Services.AddSingleton<PublicDocumentKeys>();
@@ -205,6 +207,7 @@ app.UseRequestLocalization(options =>
     options.FallBackToParentCultures = true;
     options.FallBackToParentUICultures = true;
 });
+app.UseCors();
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
