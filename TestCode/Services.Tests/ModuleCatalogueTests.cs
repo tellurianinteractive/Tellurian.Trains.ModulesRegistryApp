@@ -130,6 +130,16 @@ public sealed class ModuleCatalogueTests
     }
 
     [TestMethod]
+    public async Task AnExtensionRefersToTheStandardItExtendsAndHasItsEndProfiles()
+    {
+        var catalogue = await ReadAsync();
+
+        Assert.AreEqual(CatalogueIds.Standard(Mmm), catalogue.FindStandard("MMM-2R/SSM")!.ExtendsStandardId);
+        Assert.IsNull(catalogue.FindStandard("MMM-2R")!.ExtendsStandardId);
+        CollectionAssert.AreEquivalent(new[] { "MMM480" }, catalogue.EndProfilesOf(CatalogueIds.Standard(MmmSummer)).Select(p => p.Designation).ToArray());
+    }
+
+    [TestMethod]
     public async Task AnInternationalStandardAppliesEverywhere()
     {
         var fremo = (await ReadAsync()).FindStandard("FREMO/H0-RE")!;

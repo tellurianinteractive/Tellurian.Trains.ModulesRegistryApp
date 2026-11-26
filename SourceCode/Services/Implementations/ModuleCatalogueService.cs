@@ -21,7 +21,9 @@ namespace ModulesRegistry.Services.Implementations;
 /// <item>Ids: Module Draw identifies entries by GUID, which the Registry doesn't store yet; <see cref="CatalogueIds"/> derives
 /// a stable one from the Registry's id. The Registry's id is also in each entry's external reference.</item>
 /// <item>A standard has its own values, or those of the standard it extends (as the standards list shows them), and its
-/// standard document link as source. A national standard applies only in its country.</item>
+/// standard document link as source. A national standard applies only in its country. An extension refers to the standard it
+/// extends (<c>ExtendsStandardId</c>), so Module Draw gives it that standard's end profiles too; its values are stated in full
+/// anyway, for readers that don't follow the reference.</item>
 /// <item>An end profile with a drawing is the drawing, with the Registry's designation, scale and standard; one without a drawing,
 /// or with a drawing that can't be read, has no shape, only designation, scale and standard.</item>
 /// </list>
@@ -83,6 +85,7 @@ public sealed class ModuleCatalogueService(IDbContextFactory<ModulesDbContext> f
         Id = CatalogueIds.Standard(standard.Id),
         ShortName = standard.ShortName,
         Scale = ToCatalogue(standard.Scale),
+        ExtendsStandardId = standard.ExtendsStandardId is int extendedId && standardsById.ContainsKey(extendedId) ? CatalogueIds.Standard(extendedId) : null,
         TrackSystem = standard.InheritedValue(standardsById, ms => ms.TrackSystem).Value,
         Wheelset = standard.InheritedValue(standardsById, ms => FeaturesText(ms, FeatureCategories.Wheels)).Value,
         Couplings = standard.InheritedValue(standardsById, ms => FeaturesText(ms, FeatureCategories.Couplings)).Value,

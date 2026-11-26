@@ -1,6 +1,9 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.19.2
+Released 2026-11-26
+- The catalogue API states which standard an extended module standard extends, so Module Draw gives it the end profiles of that standard.
 ## Release 1.19.1
 Released 2026-11-26
 - A new user right, may manage end profiles, lets trusted users add and edit end profiles and their drawings; only global administrators grant it.
