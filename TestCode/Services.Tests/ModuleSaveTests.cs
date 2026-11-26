@@ -94,7 +94,7 @@ public sealed class ModuleSaveTests
     [TestMethod]
     public async Task WithoutAPrimaryThemeTheModuleGetsItsStandards()
     {
-        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.NorthAmerica });
         var american = Changed(0, "American");
         american.StandardId = 2;
         american.PrimaryThemeId = 0;
@@ -104,28 +104,28 @@ public sealed class ModuleSaveTests
         var addedAmerican = await Target.SaveAsync(Principal(Owner), american, ModuleOwnershipRef.Person(Owner));
         var addedEuropean = await Target.SaveAsync(Principal(Owner), european, ModuleOwnershipRef.Person(Owner));
 
-        Assert.AreEqual((int)Theme.US, (await _factory.FindAsync<Module>(addedAmerican.Entity!.Id))!.PrimaryThemeId);
+        Assert.AreEqual((int)Theme.NorthAmerica, (await _factory.FindAsync<Module>(addedAmerican.Entity!.Id))!.PrimaryThemeId);
         Assert.AreEqual((int)Theme.Europe, (await _factory.FindAsync<Module>(addedEuropean.Entity!.Id))!.PrimaryThemeId, "The standard without a theme counts as Europe.");
     }
 
     [TestMethod]
     public async Task TheOwnerChoosesTheThemes()
     {
-        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.NorthAmerica });
         var changed = Changed(OwnersModule);
         changed.StandardId = 2;
         changed.PrimaryThemeId = (int)Theme.Europe; // Another theme than the standard's.
-        changed.SecondaryThemeId = (int)Theme.US;
+        changed.SecondaryThemeId = (int)Theme.NorthAmerica;
         var same = Changed(StrangersModule);
-        same.PrimaryThemeId = (int)Theme.US;
-        same.SecondaryThemeId = (int)Theme.US;
+        same.PrimaryThemeId = (int)Theme.NorthAmerica;
+        same.SecondaryThemeId = (int)Theme.NorthAmerica;
 
         await Target.SaveAsync(Principal(Owner), changed, ModuleOwnershipRef.Person(Owner));
         await Target.SaveAsync(Principal(Stranger), same, ModuleOwnershipRef.Person(Stranger));
 
         var stored = (await _factory.FindAsync<Module>(OwnersModule))!;
         Assert.AreEqual((int)Theme.Europe, stored.PrimaryThemeId);
-        Assert.AreEqual((int)Theme.US, stored.SecondaryThemeId);
+        Assert.AreEqual((int)Theme.NorthAmerica, stored.SecondaryThemeId);
         Assert.IsNull((await _factory.FindAsync<Module>(StrangersModule))!.SecondaryThemeId, "The secondary theme is another theme than the primary.");
     }
 

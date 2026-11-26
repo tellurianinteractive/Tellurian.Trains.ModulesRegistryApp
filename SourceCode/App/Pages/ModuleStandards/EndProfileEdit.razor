@@ -28,11 +28,8 @@
         <AppInputSelectNullable Width="3" Label="ModuleStandard" Items="StandardItems" ShowNoneOption="true" @bind-Value="Form!.ModuleStandardId" />
         <AppInputSelect Width="2" Label="Scale" Items="ScaleItems" ShowPleaseSelect="true" @bind-Value="Form!.ScaleId"
                         IsDisabled="@IsScaleLocked" LockedBy="Form.ModuleStandardId" LockedValues="StandardScaleIds" />
-        <AppInputText Width="7" Label="Designation" @bind-Value="Form!.Designation" />
-        <AppInputText Width="8" Label="ReferenceDocument" @bind-Value="Form!.ReferenceDocumentHref" />
-        <AppInputNumber TValue="int?" Width="2" Label="Height" @bind-Value="Form!.HeightMillimeter" Unit="mm" />
+        <AppInputText Width="4" Label="Designation" @bind-Value="Form!.Designation" />
         <AppInputNumber TValue="int?" Width="2" Label="Width" @bind-Value="Form!.WidthMillimeter" Unit="mm" />
-        <p class="form-text">@Localizer["EndProfileHeightExplanation"]</p>
     </Inputs>
 </EditTemplate>
 

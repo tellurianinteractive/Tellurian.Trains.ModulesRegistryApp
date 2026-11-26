@@ -7,7 +7,7 @@ public enum Theme
     /// </summary>
     Any = 0,
     Europe = 1,
-    US = 2
+    NorthAmerica = 2
 }
 
 public static class ThemeIdExtensions

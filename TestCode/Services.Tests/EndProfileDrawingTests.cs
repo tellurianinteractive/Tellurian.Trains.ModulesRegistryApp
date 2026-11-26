@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging.Testing;
 using ModulesRegistry.Data;
@@ -9,6 +10,8 @@ using Tellurian.Trains.Schedules.Exporters.Drawing;
 using Tellurian.Trains.Schedules.Exporters.Interfaces;
 using Tellurian.Trains.Schedules.Importers.Drawing;
 using DrawnEndProfile = Tellurian.Trains.Schedules.Model.Layouts.EndProfiles.EndProfile;
+using GeometryPoint = Tellurian.Trains.Schedules.Model.Geometry.Point;
+using PlateShape = Tellurian.Trains.Schedules.Model.Layouts.EndProfiles.PlateShape;
 using ExternalReferences = Tellurian.Trains.Schedules.Model.Layouts.ExternalReferences;
 
 namespace ModulesRegistry.Services.Tests;
@@ -47,6 +50,22 @@ public sealed class EndProfileDrawingTests
         var profile = new DrawnEndProfile { Id = Guid.NewGuid(), Designation = "Drawn B96", Scale = "H0" };
         if (registryEndProfileId is int id) profile.ExternalReferences = ExternalReferences.WithModuleRegistryId(null, ExternalReferences.EndProfileId, id);
         return Encoding.UTF8.GetBytes(new EndProfileExporter().Write(profile, ExportOptions.Default));
+    }
+
+    /// <summary>An end profile file with a rectangular end plate: <paramref name="width"/> wide, from rail top down <paramref name="height"/>.</summary>
+    private static byte[] EndProfileFileWithPlate(double width, double height)
+    {
+        var plate = new PlateShape([new GeometryPoint(-width / 2, 0), new GeometryPoint(width / 2, 0)], -height);
+        var profile = new DrawnEndProfile { Id = Guid.NewGuid(), Designation = "Drawn B96", Scale = "H0", Plate = plate, Outline = plate.Outline(), GroundLine = plate.GroundLine() };
+        return Encoding.UTF8.GetBytes(new EndProfileExporter().Write(profile, ExportOptions.Default));
+    }
+
+    private async Task<(int? Width, int? Height)> StoredMeasuresAsync()
+    {
+        await using var dbContext = _factory.CreateDbContext();
+        return await dbContext.ModuleEndProfiles.Where(e => e.Id == EndProfileId)
+            .Select(e => new ValueTuple<int?, int?>(e.WidthMillimeter, EF.Property<int?>(e, "HeightMillimeter")))
+            .SingleAsync();
     }
 
     private static DrawnEndProfile Read(byte[] content) => new EndProfileImporter().Import(Encoding.UTF8.GetString(content)).Item;
@@ -111,6 +130,32 @@ public sealed class EndProfileDrawingTests
         Assert.AreEqual((EndProfileId, (int?)7, nameof(ModuleEndProfile)), DocumentService.DocumentedObject(new ModuleEndProfile { Id = EndProfileId, DrawingId = 7 }, EndProfileDrawings.FileExtension));
         Assert.AreEqual(nameof(ModuleEndProfile.Drawing), DocumentService.DocumentKind(new ModuleEndProfile(), EndProfileDrawings.FileExtension));
         Assert.IsTrue(new ModuleEndProfile().IsValidDocumentObject());
+    }
+
+    [TestMethod]
+    public void TheMeasuresAreThoseOfTheEndPlate()
+    {
+        Assert.AreEqual(((int?)500, (int?)96), EndProfileDrawings.Measures(EndProfileFileWithPlate(500, 96.3)));
+        Assert.AreEqual(((int?)null, (int?)null), EndProfileDrawings.Measures(EndProfileFile()), "No plate is no measures.");
+        Assert.AreEqual(((int?)null, (int?)null), EndProfileDrawings.Measures([1, 2, 3]));
+    }
+
+    [TestMethod]
+    public async Task AnUploadedDrawingGivesTheWidthAndHeight()
+    {
+        await Documents.SaveAsync(Administrator, new FakeFile(EndProfileFileWithPlate(546, 104)), new ModuleEndProfile { Id = EndProfileId }, EndProfileDrawings.FileExtension, 100_000);
+
+        Assert.AreEqual(((int?)546, (int?)104), await StoredMeasuresAsync());
+    }
+
+    [TestMethod]
+    public async Task ADrawingWithoutAPlateKeepsTheMeasures()
+    {
+        await Documents.SaveAsync(Administrator, new FakeFile(EndProfileFileWithPlate(500, 96)), new ModuleEndProfile { Id = EndProfileId }, EndProfileDrawings.FileExtension, 100_000);
+
+        await Documents.SaveAsync(Administrator, new FakeFile(EndProfileFile()), new ModuleEndProfile { Id = EndProfileId }, EndProfileDrawings.FileExtension, 100_000);
+
+        Assert.AreEqual(((int?)500, (int?)96), await StoredMeasuresAsync());
     }
 
     [TestMethod]
@@ -179,19 +224,17 @@ public sealed class EndProfileDrawingTests
     }
 
     [TestMethod]
-    public async Task TheReferenceAndMeasuresAreSavedAndTheDrawingKept()
+    public async Task TheMeasuresAreSavedAndTheDrawingKept()
     {
         await Documents.SaveAsync(Administrator, new FakeFile(EndProfileFile()), new ModuleEndProfile { Id = EndProfileId }, EndProfileDrawings.FileExtension, 100_000);
         var documentId = (await _factory.FindAsync<ModuleEndProfile>(EndProfileId))!.DrawingId;
 
         // As the page posts it: the form's fields on an entity without the document ids.
-        var (count, _, _) = await EndProfiles.SaveAsync(Administrator, new ModuleEndProfile { Id = EndProfileId, ScaleId = 1, Designation = "B96", ReferenceDocumentHref = "  https://fremo-net.eu/b96.pdf  ", HeightMillimeter = 96, WidthMillimeter = 0 });
+        var (count, _, _) = await EndProfiles.SaveAsync(Administrator, new ModuleEndProfile { Id = EndProfileId, ScaleId = 1, Designation = "B96", WidthMillimeter = 500 });
 
         var stored = (await _factory.FindAsync<ModuleEndProfile>(EndProfileId))!;
         Assert.AreEqual(1, count);
-        Assert.AreEqual("https://fremo-net.eu/b96.pdf", stored.ReferenceDocumentHref);
-        Assert.AreEqual(96, stored.HeightMillimeter);
-        Assert.IsNull(stored.WidthMillimeter, "Zero is no measure.");
+        Assert.AreEqual(500, stored.WidthMillimeter);
         Assert.AreEqual(documentId, stored.DrawingId);
     }
 

@@ -16,7 +16,7 @@ public sealed class LayoutFormTests
         Id = 5, MeetingId = 2, OrganisingGroupId = 3, ContactPersonId = 7, PrimaryModuleStandardId = 1, IsRegistrationPermitted = true,
         RegistrationOpeningDate = new DateTime(2026, 9, 1), RegistrationClosingDate = new DateTime(2027, 1, 15), ModuleRegistrationClosingDate = new DateTime(2027, 2, 1),
         ShortName = "H0 Fremo", Theme = "Sweden 1970s", Details = "# Note", FirstYear = 1965, LastYear = 1980, MaxNumberOfParticipants = 40,
-        ThemeId = (int)Theme.US,
+        ThemeId = (int)Theme.NorthAmerica,
     };
 
     private static LayoutStation ExistingStation() => new()

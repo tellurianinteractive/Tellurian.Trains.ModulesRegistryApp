@@ -50,6 +50,20 @@ public static class EndProfileDrawings
         return Encoding.UTF8.GetBytes(new EndProfileExporter().Write(profile, ExportOptions.Default));
     }
 
+    /// <summary>
+    /// The end plate's width and height in whole millimetres, as Module Draw measures them: the bounds of the plate's outline.
+    /// None for a file that can't be read, or a measure the drawing doesn't have.
+    /// </summary>
+    public static (int? Width, int? Height) Measures(byte[] content)
+    {
+        var result = new EndProfileImporter().Import(Text(content));
+        if (result.IsFailure) return (null, null);
+        var properties = Tellurian.Trains.Schedules.Model.Layouts.EndProfiles.EndProfileAnalysis.Analyze(result.Item);
+        return (Millimetres(properties.PlateWidth), Millimetres(properties.PlateHeight));
+
+        static int? Millimetres(double value) => value >= 1 ? (int)Math.Round(value) : null;
+    }
+
     /// <summary>The text of an end profile file, without a byte order mark.</summary>
     public static string Text(byte[] content) => HallDrawings.Text(content);
 }

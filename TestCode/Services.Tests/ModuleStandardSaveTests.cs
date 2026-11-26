@@ -137,7 +137,7 @@ public sealed class ModuleStandardSaveTests
 
     [TestMethod]
     [DataRow(0, 0, DisplayName = "Any")]
-    [DataRow(2, 2, DisplayName = "US")]
+    [DataRow(2, 2, DisplayName = "North America")]
     [DataRow(7, 0, DisplayName = "Not a theme")]
     public async Task AStandardIsForAnyThemeOrOne(int themeId, int expected)
     {

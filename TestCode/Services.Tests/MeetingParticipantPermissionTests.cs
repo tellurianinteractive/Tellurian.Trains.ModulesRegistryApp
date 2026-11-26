@@ -144,14 +144,14 @@ public sealed class MeetingParticipantPermissionTests
     [TestMethod]
     public async Task ALayoutWithoutThemeGetsItsStandardsAndTheOrganiserMayChooseAnother()
     {
-        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.US });
+        await _factory.SeedAsync(new ModuleStandard { Id = 2, ShortName = "USMS", ScaleId = 1, MainThemeId = (int)Theme.NorthAmerica });
         var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
         var newLayout = NewLayout(0, TheMeeting, OrganiserGroup);
         newLayout.PrimaryModuleStandardId = 2;
         newLayout.ThemeId = 0;
 
         var (_, _, added) = await target.SaveAsync(GlobalAdministrator, newLayout);
-        Assert.AreEqual((int)Theme.US, (await _factory.FindAsync<Layout>(added!.Id))!.ThemeId);
+        Assert.AreEqual((int)Theme.NorthAmerica, (await _factory.FindAsync<Layout>(added!.Id))!.ThemeId);
 
         Layout changed;
         await using (var dbContext = _factory.CreateDbContext()) changed = (await dbContext.Layouts.FindAsync(added.Id))!;
@@ -164,8 +164,8 @@ public sealed class MeetingParticipantPermissionTests
     public async Task OnlyModulesWithTheLayoutsThemeAreRegistered()
     {
         await _factory.SeedAsync(
-            new Module { Id = 2, FullName = "American", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.US },
-            new Module { Id = 3, FullName = "Both", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.US, SecondaryThemeId = (int)Theme.Europe });
+            new Module { Id = 2, FullName = "American", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.NorthAmerica },
+            new Module { Id = 3, FullName = "Both", ScaleId = 1, StandardId = 1, Length = 100, NumberOfThroughTracks = 1, PrimaryThemeId = (int)Theme.NorthAmerica, SecondaryThemeId = (int)Theme.Europe });
         var target = new LayoutService(_factory, _time, NullLogger<LayoutService>.Instance);
         var package = new ModulePackage(1, ModulePackageType.Package, "Package", "Owner", [Participant],
             [Available(2, "American"), Available(3, "Both")]);

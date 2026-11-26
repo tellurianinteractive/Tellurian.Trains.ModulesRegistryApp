@@ -23,7 +23,7 @@ A cargo flow can also have years and days of the week. Without years of its own,
 **Cargo with an NHM code** matches cargo flows at all other module stations and external stations:
 - The same type of cargo, where one sends (send or export) and the other receives (receive or import). The match is on the cargo type, so a cargo name of your own doesn't affect it.
 - In the same country, any of these directions match. Between countries, only an export matches an import.
-- Between module stations, the **main theme** (Europe or USA) must be the same, and the **scale** too. External stations have neither, so they match regardless.
+- Between module stations, the **main theme** (Europe or North America) must be the same, and the **scale** too. External stations have neither, so they match regardless.
 - The **years** of the two cargo flows must overlap, and the cargo must exist within that period. This makes the waybills historically correct.
 
 **Cargo without an NHM code**, such as general cargo, mail and express goods, doesn't match individual stations, since that would give thousands of waybills. It goes to or from the *representative station* of your station's region. A station without a region, or in a region without a representative station, gets no such waybills.

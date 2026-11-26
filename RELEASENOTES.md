@@ -1,6 +1,10 @@
 # Release Notes
 > Release notes are only published in English.
 The release notes are summaries of important changes and fixes in each release. 
+## Release 1.18.6
+Released 2026-11-26
+- The theme US is renamed North America.
+- End profiles: the width and height are taken from an uploaded drawing from Module Draw; the height and the reference document are no longer shown.
 ## Release 1.18.5
 Released 2026-11-26
 - Module standards: wheel profiles and couplings are chosen from lists, and a standard can accept several of each.

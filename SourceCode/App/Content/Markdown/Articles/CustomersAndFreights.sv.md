@@ -23,7 +23,7 @@ Ett godsflöde kan också ha årtal och veckodagar. Utan egna årtal har godsfl�
 **Gods med NHM-kod** matchas mot godsflöden på alla andra modulstationer och externa stationer:
 - Samma typ av gods, där den ena skickar (skicka eller export) och den andra tar emot (motta eller import). Matchningen görs på godstypen, så ett eget namn på godset påverkar den inte.
 - Inom samma land matchas alla dessa riktningar. Mellan länder matchas bara export mot import.
-- Mellan modulstationer måste **huvudtemat** (Europa eller USA) vara detsamma, och även **skalan**. Externa stationer har inget av dem, så de matchas ändå.
+- Mellan modulstationer måste **huvudtemat** (Europa eller Nordamerika) vara detsamma, och även **skalan**. Externa stationer har inget av dem, så de matchas ändå.
 - **Årtalen** för de två godsflödena måste överlappa, och godset måste finnas under den perioden. Det gör fraktsedlarna historiskt korrekta.
 
 **Gods utan NHM-kod**, som styckegods, post och expressgods, matchas inte mot enskilda stationer, eftersom det skulle ge tusentals fraktsedlar. Det går till eller från den *representativa stationen* i din stations region. En station utan region, eller i en region utan representativ station, får inga sådana fraktsedlar.

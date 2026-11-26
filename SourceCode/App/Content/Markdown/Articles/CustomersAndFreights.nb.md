@@ -23,7 +23,7 @@ En laststrøm kan også ha årstall og ukedager. Uten egne årstall har laststr�
 **Varer med NHM-kode** matches mot laststrømmer på alle andre modulstasjoner og eksterne stasjoner:
 - Samme varetype, der den ene sender (send eller eksport) og den andre mottar (motta eller import). Det matches på varetypen, så et eget navn på varen påvirker ikke matchingen.
 - Innenfor samme land matcher alle disse retningene. Mellom land matcher bare eksport mot import.
-- Mellom modulstasjoner må **hovedtemaet** (Europa eller USA) være det samme, og også **skalaen**. Eksterne stasjoner har ingen av dem, så de matches likevel.
+- Mellom modulstasjoner må **hovedtemaet** (Europa eller Nord-Amerika) være det samme, og også **skalaen**. Eksterne stasjoner har ingen av dem, så de matches likevel.
 - **Årstallene** for de to laststrømmene må overlappe, og varen må finnes i den perioden. Det gjør fraktbrevene historisk korrekte.
 
 **Varer uten NHM-kode**, som stykkgods, post og ekspressgods, matches ikke mot enkeltstasjoner, siden det ville gitt tusenvis av fraktbrev. De går til eller fra den *representative stasjonen* i din stasjons region. En stasjon uten region, eller i en region uten representativ stasjon, får ingen slike fraktbrev.

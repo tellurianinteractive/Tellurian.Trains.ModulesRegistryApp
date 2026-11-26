@@ -29,15 +29,6 @@ else
     {
         <span class="me-3">@Localizer["Width"]: @width mm</span>
     }
-    @if (EndProfile.HeightMillimeter is int height)
-    {
-        <span class="me-3" title="@Localizer["EndProfileHeightExplanation"]">@Localizer["Height"]: @height mm</span>
-    }
-    @* Only a web address is a link (TextRules.IsWebAddress), so a javascript: address can't run. *@
-    @if (EndProfile.ReferenceDocumentHref.HasValue && EndProfile.ReferenceDocumentHref.IsWebAddress())
-    {
-        <p><a href="@EndProfile.ReferenceDocumentHref" target="_blank" rel="noopener noreferrer"><span class="fa fa-external-link-alt"></span> @Localizer["ReferenceDocument"]</a></p>
-    }
     @if (Drawing is var (profile, sheet))
     {
         <svg class="end-profile-sheet" viewBox="@sheet.ViewBox" preserveAspectRatio="xMidYMid meet" role="img" aria-label="@EndProfile.Designation">

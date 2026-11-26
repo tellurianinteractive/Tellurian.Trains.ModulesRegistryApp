@@ -23,7 +23,7 @@ Neither **Represents from year** and **Represents to year** is mandatory.
 - If you leave **Represents from year** empty, it means before 1900.
 - If you leave **Represents to year** empty, it means *until further notice*.
 #### Themes
-- **Primary theme** is what the module is built for: *Europe* or *US*. Waybills are only made between stations whose modules have the same primary theme.
+- **Primary theme** is what the module is built for: *Europe* or *North America*. Waybills are only made between stations whose modules have the same primary theme.
 Leave it empty to use the theme of the module's standard, or *Europe* when the standard is for any theme.
 - **Secondary theme** is optional. It only lets you also register the module to layouts with that theme; it gives no waybills.
 - **Theme note** is a free text about the module's scenery.

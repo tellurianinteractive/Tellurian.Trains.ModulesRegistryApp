@@ -62,16 +62,6 @@ public class ModuleEndProfileFormData
     [OrdinaryText]
     public string Designation { get; set; } = string.Empty;
 
-    [Display(Name = "ReferenceDocument")]
-    [StringLength(500)]
-    [WebAddress]
-    public string? ReferenceDocumentHref { get; set; }
-
-    // From the track base, without the track's own height, down to the bottom of the end plate (EndProfileHeightExplanation).
-    [Display(Name = "Height")]
-    [EndPlateMillimetresOrEmpty]
-    public int? HeightMillimeter { get; set; }
-
     [Display(Name = "Width")]
     [EndPlateMillimetresOrEmpty]
     public int? WidthMillimeter { get; set; }
@@ -124,7 +114,7 @@ public static class ModuleStandardFormExtensions
     extension(ModuleEndProfile entity)
     {
         /// <summary>Entity → form data (GET: populate the form).</summary>
-        public ModuleEndProfileFormData AsFormData() => new() { ScaleId = entity.ScaleId, Designation = entity.Designation ?? string.Empty, ReferenceDocumentHref = entity.ReferenceDocumentHref, HeightMillimeter = entity.HeightMillimeter, WidthMillimeter = entity.WidthMillimeter, ModuleStandardId = entity.ModuleStandardId };
+        public ModuleEndProfileFormData AsFormData() => new() { ScaleId = entity.ScaleId, Designation = entity.Designation ?? string.Empty, WidthMillimeter = entity.WidthMillimeter, ModuleStandardId = entity.ModuleStandardId };
     }
 
     extension(ModuleEndProfileFormData form)
@@ -135,8 +125,6 @@ public static class ModuleStandardFormExtensions
             var entity = existing ?? new ModuleEndProfile();
             entity.ScaleId = form.ScaleId;
             entity.Designation = form.Designation;
-            entity.ReferenceDocumentHref = form.ReferenceDocumentHref;
-            entity.HeightMillimeter = form.HeightMillimeter;
             entity.WidthMillimeter = form.WidthMillimeter;
             entity.ModuleStandardId = form.ModuleStandardId;
             return entity;

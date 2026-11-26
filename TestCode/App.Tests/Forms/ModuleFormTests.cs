@@ -19,7 +19,7 @@ public sealed class ModuleFormTests
         IsSignalModule = false, IsUnavailable = false, HasIntegratedLocoNet = true, ObjectVisibilityId = (int)ObjectVisibility.Users,
         FunctionalState = 2, LandscapeState = 3, DwgDrawingId = 7, SkpDrawingId = 8, PdfDocumentationId = 9, Note = "A note", StationId = 4,
         FremoNumber = 123, PackageLabel = "B12", ConfigurationLabel = null, NumberOfSections = 2, SignalFeature = 1, OverheadLineFeature = 2,
-        SpeedLimit = 80, LandscapeSeason = 3, PrimaryThemeId = (int)Theme.US, SecondaryThemeId = (int)Theme.Europe,
+        SpeedLimit = 80, LandscapeSeason = 3, PrimaryThemeId = (int)Theme.NorthAmerica, SecondaryThemeId = (int)Theme.Europe,
     };
 
     private static ModuleExit ExistingExit() => new() { Id = 6, ModuleId = 3, EndProfileId = 2, Label = "East", Direction = (int)ModuleExitDirection.Eastwards };

@@ -23,7 +23,7 @@ Ein Frachtfluss kann auch Jahre und Wochentage haben. Ohne eigene Jahre hat ein 
 **Güter mit NHM-Code** werden mit Frachtflüssen aller anderen Modulbahnhöfe und externen Stationen abgeglichen:
 - Dieselbe Güterart, wobei einer sendet (Senden oder Export) und der andere empfängt (Erhalten oder Import). Abgeglichen wird die Güterart, ein eigener Name für die Ladung hat keinen Einfluss.
 - Innerhalb desselben Landes passen alle diese Richtungen zueinander. Zwischen Ländern passt nur Export zu Import.
-- Zwischen Modulbahnhöfen müssen das **Hauptthema** (Europa oder USA) und der **Maßstab** übereinstimmen. Externe Stationen haben beides nicht und passen deshalb immer.
+- Zwischen Modulbahnhöfen müssen das **Hauptthema** (Europa oder Nordamerika) und der **Maßstab** übereinstimmen. Externe Stationen haben beides nicht und passen deshalb immer.
 - Die **Jahre** der beiden Frachtflüsse müssen sich überschneiden, und die Güterart muss in diesem Zeitraum existieren. So werden die Frachtbriefe historisch korrekt.
 
 **Güter ohne NHM-Code** wie Stückgut, Post und Expressgut werden nicht mit einzelnen Bahnhöfen abgeglichen, da das Tausende von Frachtbriefen ergäbe. Sie gehen zur oder von der *repräsentativen Station* der Region Deines Bahnhofs. Ein Bahnhof ohne Region oder in einer Region ohne repräsentative Station erhält keine solchen Frachtbriefe.

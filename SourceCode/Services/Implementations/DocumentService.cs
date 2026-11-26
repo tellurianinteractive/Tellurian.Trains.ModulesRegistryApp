@@ -169,6 +169,13 @@ public sealed class DocumentService(IDbContextFactory<ModulesDbContext> factory,
         if (target is Locality && HallDrawings.ErrorKey(content) is string errorKey) return (0, errorKey, null);
         if (target is Module drawnModule && fileExtension == ModuleDrawings.FileExtension && ModuleDrawings.ErrorKey(content, drawnModule.Id) is string moduleErrorKey) return (0, moduleErrorKey, null);
         if (target is ModuleEndProfile drawnProfile && EndProfileDrawings.ErrorKey(content, drawnProfile.Id) is string profileErrorKey) return (0, profileErrorKey, null);
+        // An end profile's width and height come from its drawing (2026-11-26); a measure the drawing doesn't have is kept.
+        if (target is ModuleEndProfile measuredProfile && fileExtension == EndProfileDrawings.FileExtension)
+        {
+            var (width, height) = EndProfileDrawings.Measures(content);
+            if (width.HasValue) measuredProfile.WidthMillimeter = width;
+            if (height.HasValue) dbContext.Entry(measuredProfile).Property("HeightMillimeter").CurrentValue = height;
+        }
 
         var (_, currentDocumentId, _) = DocumentedObject(target, fileExtension);
         var document = currentDocumentId.HasValue ? await dbContext.Documents.FindAsync(currentDocumentId.Value) : null;

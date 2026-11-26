@@ -2838,8 +2838,8 @@
   <data name="Europe" xml:space="preserve">
     <value>Europa</value>
   </data>
-  <data name="US" xml:space="preserve">
-    <value>USA</value>
+  <data name="NorthAmerica" xml:space="preserve">
+    <value>Nordamerika</value>
   </data>
   <data name="ExternalLinkLanguageExists_Error" xml:space="preserve">
     <value>Der findes allerede et link med dette formål på dette sprog.</value>
@@ -2970,9 +2970,6 @@
   <data name="Any" xml:space="preserve">
     <value>Valgfrit</value>
   </data>
-  <data name="ReferenceDocument" xml:space="preserve">
-    <value>Referencedokument</value>
-  </data>
   <data name="Height" xml:space="preserve">
     <value>Højde</value>
   </data>
@@ -2981,9 +2978,6 @@
   </data>
   <data name="EndPlateMillimetresOrEmptyAttribute_Error" xml:space="preserve">
     <value>"{0}" skal være fra 1 til 2000 mm eller tomt</value>
-  </data>
-  <data name="EndProfileHeightExplanation" xml:space="preserve">
-    <value>Højden måles ved sporet: fra sporets underkant (uden selve sporets højde) ned til endepladens underkant, selv om andre dele af endeprofilen når højere eller lavere.</value>
   </data>
   <data name="InheritedFrom" xml:space="preserve">
     <value>Arvet fra {0}</value>
